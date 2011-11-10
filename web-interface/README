@@ -1,6 +1,6 @@
 sudo easy_install lettuce
 sudo easy_install selenium
-sudo easy_install pyvirtdisplay
+sudo easy_install pyvirtualdisplay
 sudo apt-get install xvfb
 cd tests
 lettuce
