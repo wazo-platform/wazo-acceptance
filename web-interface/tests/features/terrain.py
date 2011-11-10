@@ -6,8 +6,6 @@ from selenium import webdriver
 def setup_browser():
     world.browser = webdriver.Firefox()
 
-
 @after.all
 def teardown_browser(total):
-    # world.browser.quit()
-    pass
+    world.browser.quit()

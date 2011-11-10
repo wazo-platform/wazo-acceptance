@@ -8,11 +8,9 @@ from lettuce import world
 def given_that_there_is_a_xivo_installed_at(step, ip):
     world.ip = ip
 
-
 @step(u'When I start the wizard')
 def when_i_start_the_wizard(step):
     world.browser.get(world.ip)
-
 
 @step(u'Then I should see the welcome message (.*)')
 def then_i_see_the_welcome_message(step, message):
