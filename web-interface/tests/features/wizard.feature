@@ -5,8 +5,7 @@ Feature: Wizard
     Scenario Outline: Successfull completion of the wizard and a login
         Given that there is a XiVO installed at http://192.168.32.170/
         When I start the wizard
-        Then I should see the welcome message Bienvenue sur l'installateur de XiVO.
-        When I select language Anglais
+        When I select language en
         Then I should see the welcome message Welcome into the XiVO installer.
         When I click next
         Then I should be on the licence page

@@ -18,9 +18,8 @@ def then_i_see_the_welcome_message(step, message):
 
 @step(u'When I select language (.*)')
 def when_i_select(step, language):
-    language_select = world.browser.find_element_by_id('it-language')
-    language_select.send_keys(language)
-    other_elem = world.browser.find_element_by_id('lb-hl').click()
+    language_option = world.browser.find_element_by_xpath('//option[@value="%s"]' %(language))
+    language_option.click()
 
 @step(u'When I click next')
 def when_i_click_next(step):
