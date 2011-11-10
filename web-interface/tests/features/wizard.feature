@@ -6,5 +6,10 @@ Feature: Wizard
         Given that there is a XiVO installed at http://192.168.32.170/
         When I start the wizard
         Then I should see the welcome message Bienvenue sur l'installateur de XiVO.
-        When I select Anglais
-        Then I should see the welcome message Welcome into the XiVO installer.
+        When I click next
+        Then I should be on the licence page
+        When I accept the terms of the licence
+        When I click next
+        Then I should be on the ipbx page
+        When I click next
+        Then I should be on the DB page
