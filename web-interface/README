@@ -1,0 +1,5 @@
+sudo easy_install lettuce
+sudo easy_install selenium
+cd tests
+lettuce
+
