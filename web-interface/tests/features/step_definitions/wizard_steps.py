@@ -20,6 +20,7 @@ def then_i_see_the_welcome_message(step, message):
 def when_i_select(step, language):
     language_select = world.browser.find_element_by_id('it-language')
     language_select.send_keys(language)
+    other_elem = world.browser.find_element_by_id('lb-hl').click()
 
 @step(u'When I click next')
 def when_i_click_next(step):
@@ -36,8 +37,8 @@ def when_i_accept_the_terms_of_the_licence(step):
 
 @step(u'Then I should be on the ipbx page')
 def then_i_should_be_on_the_ipbx_page(step):
-    assert 'Moteur IPBX' in world.browser.page_source
+    assert 'IPBX engine' in world.browser.page_source
 
 @step(u'Then I should be on the DB page')
 def then_i_should_be_on_the_db_page(step):
-    assert u'Base de données' in world.browser.page_source
+    assert u'Database' in world.browser.page_source
