@@ -14,6 +14,7 @@ def when_i_start_the_wizard(step):
 
 @step(u'Then I should see the welcome message (.*)')
 def then_i_see_the_welcome_message(step, message):
+    world.browser.implicitly_wait(2)
     assert message in world.browser.page_source
 
 @step(u'When I select language (.*)')
@@ -27,6 +28,7 @@ def when_i_click_next(step):
 
 @step(u'Then I should be on the licence page')
 def then_i_should_be_on_the_licence_page(step):
+    world.browser.implicitly_wait(2)
     assert 'Licence' in world.browser.page_source
 
 @step(u'When I accept the terms of the licence')
@@ -36,8 +38,10 @@ def when_i_accept_the_terms_of_the_licence(step):
 
 @step(u'Then I should be on the ipbx page')
 def then_i_should_be_on_the_ipbx_page(step):
+    world.browser.implicitly_wait(2)
     assert 'IPBX engine' in world.browser.page_source
 
 @step(u'Then I should be on the DB page')
 def then_i_should_be_on_the_db_page(step):
+    world.browser.implicitly_wait(2)
     assert u'Database' in world.browser.page_source
