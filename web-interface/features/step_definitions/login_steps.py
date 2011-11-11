@@ -26,6 +26,7 @@ def when_i_login_the_webi(step, login, password, language):
     
 @step(u'Given I login as (.*) with password (.*) at (.*)')
 def given_i_login_as_with_password_at(step, user, password, url):
-    world.browser.get(url)
+    world.url = url
+    world.browser.get(world.url)
     waitForLoginPage()
     _login(user, password, 'en')

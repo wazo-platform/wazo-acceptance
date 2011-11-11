@@ -14,11 +14,11 @@ def _waitFor(elementId, message='', timeout=5):
 @before.all
 def setup_browser():
     from pyvirtualdisplay import Display
-    #Display(visible=0, size=(1024, 768)).start()
+    Display(visible=0, size=(1024, 768)).start()
     world.browser = webdriver.Firefox()
     world.waitFor = _waitFor
 
 @after.all
 def teardown_browser(total):
     pass
-    #world.browser.quit()
+    world.browser.quit()
