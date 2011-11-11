@@ -10,5 +10,4 @@ def setup_browser():
 
 @after.all
 def teardown_browser(total):
-    pass
-    #world.browser.quit()
+    world.browser.quit()

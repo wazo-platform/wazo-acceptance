@@ -5,9 +5,9 @@ from lettuce import world
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 
-def _waitFor(elementId,message=''):
+def _waitFor(elementId, message='', timeout=5):
     try:
-        WebDriverWait(world.browser, 5).until(lambda browser : browser.find_element_by_id(elementId))
+        WebDriverWait(world.browser, timeout).until(lambda browser : browser.find_element_by_id(elementId))
     except TimeoutException:
         raise Exception(elementId, message) 
     finally:
@@ -16,6 +16,10 @@ def _waitFor(elementId,message=''):
 @step(u'Given that there is a XiVO installed at (.*)')
 def given_that_there_is_a_xivo_installed_at(step, ip):
     world.ip = ip
+
+@step(u'When I open the url')
+def when_i_open_the_url(step):
+    world.browser.get(world.ip)
 
 @step(u'When I start the wizard')
 def when_i_start_the_wizard(step):
@@ -34,22 +38,59 @@ def when_i_select(step, language):
 def when_i_click_next(step):
     world.browser.find_element_by_id('it-next').click()
 
-@step(u'Then I should be on the licence page')
-def then_i_should_be_on_the_licence_page(step):
-    _waitFor('it-license-agree','license page not loaded')
-    assert 'Licence' in world.browser.page_source
+@step(u'When I click validate')
+def when_i_click_validate(step):
+    world.browser.find_element_by_id('validate').click()
 
 @step(u'When I accept the terms of the licence')
 def when_i_accept_the_terms_of_the_licence(step):
     accept_box = world.browser.find_element_by_id('it-license-agree')
     accept_box.click()
 
-@step(u'Then I should be on the ipbx page')
-def then_i_should_be_on_the_ipbx_page(step):
-    _waitFor('it-ipbxengine','ipbx choice page not loaded')
-    assert 'IPBX engine' in world.browser.page_source
+@step(u'Then I should be on the (.*) page')
+def then_i_should_be_on_page(step, page):
+    divid = 'xivo-wizard-step-%s' % (page,)
+    _waitFor(divid, '%s page not loaded' % (page,))
+    div = world.browser.find_element_by_id(divid)
+    assert div is not None
 
-@step(u'Then I should be on the DB page')
-def then_i_should_be_on_the_db_page(step):
-    _waitFor('it-dbconfig-backend','database choice page not loaded')    
-    assert u'Database' in world.browser.page_source
+@step(u'When I fill hostname (.*), domain (.*), password (.*) in the configuration page')
+def when_i_fill_the_configuration_page(step, hostname, domain, password):
+    input_hostname = world.browser.find_element_by_id('it-mainconfig-hostname')
+    input_domain = world.browser.find_element_by_id('it-mainconfig-domain')
+    input_password = world.browser.find_element_by_id('it-mainconfig-adminpasswd')
+    input_password_confirm = world.browser.find_element_by_id('it-mainconfig-confirmadminpasswd')
+    input_hostname.send_keys(hostname)
+    input_domain.send_keys(domain)
+    input_password.send_keys(password)
+    input_password_confirm.send_keys(password)
+
+@step(u'When I fill entity (.*), start (.*), end (.*)')
+def when_i_fill_the_entity_context_page(step, entity, start, end):
+    input_entity = world.browser.find_element_by_id('it-entity-displayname')
+    input_start = world.browser.find_element_by_id('it-context-internal-numberbeg')
+    input_end = world.browser.find_element_by_id('it-context-internal-numberend')
+    input_entity.send_keys(entity)
+    input_start.send_keys(start)
+    input_end.send_keys(end)
+
+@step(u'Then I should be redirected to the login page')
+def then_i_should_be_redirected_to_the_login_page(step):
+    _waitFor('it-login', 'login page not loaded', 30)
+    assert world.browser.find_element_by_id('it-login') is not None
+
+@step(u'When I login as (.*) with password (.*) in (.*)')
+def when_i_login_the_webi(step, login, password, language):
+    input_login = world.browser.find_element_by_id('it-login')
+    input_password = world.browser.find_element_by_id('it-password')
+    input_login.send_keys(login)
+    input_password.send_keys(password)
+    language_option = world.browser.find_element_by_xpath('//option[@value="%s"]' % language)
+    language_option.click()
+    world.browser.find_element_by_id('it-submit').click()
+
+@step(u'Then I should be in the monitoring window')
+def then_i_should_be_in_the_monitoring_window(step):
+    _waitFor('system-infos', 'Could not load the system info page')
+    div = world.browser.find_element_by_id('system-infos')
+    assert div is not None
