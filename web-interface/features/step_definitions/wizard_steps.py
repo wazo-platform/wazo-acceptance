@@ -2,16 +2,7 @@
 
 from lettuce import step
 from lettuce import world
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException
-
-def _waitFor(elementId, message='', timeout=5):
-    try:
-        WebDriverWait(world.browser, timeout).until(lambda browser : browser.find_element_by_id(elementId))
-    except TimeoutException:
-        raise Exception(elementId, message) 
-    finally:
-        pass
+from features.step_definitions.login_steps import waitForLoginPage
 
 @step(u'Given that there is a XiVO installed at (.*)')
 def given_that_there_is_a_xivo_installed_at(step, ip):
@@ -50,7 +41,7 @@ def when_i_accept_the_terms_of_the_licence(step):
 @step(u'Then I should be on the (.*) page')
 def then_i_should_be_on_page(step, page):
     divid = 'xivo-wizard-step-%s' % (page,)
-    _waitFor(divid, '%s page not loaded' % (page,))
+    world.waitFor(divid, '%s page not loaded' % (page,))
     div = world.browser.find_element_by_id(divid)
     assert div is not None
 
@@ -76,21 +67,12 @@ def when_i_fill_the_entity_context_page(step, entity, start, end):
 
 @step(u'Then I should be redirected to the login page')
 def then_i_should_be_redirected_to_the_login_page(step):
-    _waitFor('it-login', 'login page not loaded', 30)
+    waitForLoginPage()
     assert world.browser.find_element_by_id('it-login') is not None
 
-@step(u'When I login as (.*) with password (.*) in (.*)')
-def when_i_login_the_webi(step, login, password, language):
-    input_login = world.browser.find_element_by_id('it-login')
-    input_password = world.browser.find_element_by_id('it-password')
-    input_login.send_keys(login)
-    input_password.send_keys(password)
-    language_option = world.browser.find_element_by_xpath('//option[@value="%s"]' % language)
-    language_option.click()
-    world.browser.find_element_by_id('it-submit').click()
 
 @step(u'Then I should be in the monitoring window')
 def then_i_should_be_in_the_monitoring_window(step):
-    _waitFor('system-infos', 'Could not load the system info page')
+    world.waitFor('system-infos', 'Could not load the system info page')
     div = world.browser.find_element_by_id('system-infos')
     assert div is not None
