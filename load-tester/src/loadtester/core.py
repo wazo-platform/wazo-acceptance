@@ -19,14 +19,26 @@ def _get_session_name(scenario_name):
     return SESSION_PREFIX + scenario_name
 
 
+def _attach_to_scenario_by_name(scenario_name):
+    session_name = _get_session_name(scenario_name)
+    process = subprocess.Popen(["screen", "-r", session_name, "-x"])
+    process.communicate()
+
+
+def attach_to_first_scenario():
+    scenarios = list_running_scenarios()
+    if not scenarios:
+        raise ScenarioException("no scenario currently running")
+    else:
+        _attach_to_scenario_by_name(scenarios[0])
+
+
 def attach_to_scenario(scenario_dir):
     scenario_name = _extract_scenario_name(scenario_dir)
     if scenario_name not in list_running_scenarios():
         raise ScenarioException("scenario '%s' is not running" % scenario_name)
     else:
-        session_name = _get_session_name(scenario_name)
-        process = subprocess.Popen(["screen", "-r", session_name, "-x"])
-        process.communicate()
+        _attach_to_scenario_by_name(scenario_name)
 
 
 def start_scenario(scenario_dir):
