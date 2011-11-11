@@ -1,0 +1,23 @@
+When writing new scenarios, you might want to consider the following:
+
+
+* Keeping the network load at a minimum
+
+For scenarios where RTP streams are established, you might want to use a
+low-bitrate codec like GSM to keep the network load as low as possible.
+
+Here's some example of bandwidth requirements for different codecs:
+* GSM/8000  - 13 kbit/s
+* PCMU/8000 - 64 kbit/s
+* PCMA/8000 - 64 kbit/s
+
+Link: http://en.wikipedia.org/wiki/RTP_audio_video_profile
+
+
+* Keeping the CPU load at a minimum
+
+For scenarios where RTP streams are estalished, you might want to check that no
+transcoding is by asterisk.
+
+For example, if asterisk has to playback some files, it might make sense to
+transcode the playbacked files so that asterisk doesn't have to do transcoding.
