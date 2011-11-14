@@ -15,8 +15,6 @@ def _waitFor(elementId, message='', timeout=5):
 def setup_browser():
     from pyvirtualdisplay import Display
     Display(visible=0, size=(1024, 768)).start()
-    profile = webdriver.FirefoxProfile()
-    profile.accept_untrusted_certs(True)
     world.browser = webdriver.Firefox()
     world.waitFor = _waitFor
 
