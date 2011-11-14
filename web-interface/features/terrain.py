@@ -1,5 +1,6 @@
 from lettuce import before, after, world
 from selenium import webdriver
+
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 
@@ -20,5 +21,4 @@ def setup_browser():
 
 @after.all
 def teardown_browser(total):
-    pass
     world.browser.quit()
