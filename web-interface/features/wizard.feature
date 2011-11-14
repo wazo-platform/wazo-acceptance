@@ -3,7 +3,7 @@ Feature: Wizard
     I have to go through the wizard
 
     Scenario Outline: Successfull completion of the wizard and a login
-        Given that there is a XiVO installed at http://192.168.32.170/
+        Given that there is a XiVO installed at http://skaro-daily/
         When I start the wizard
         Then I should be on the welcome page
         When I select language en
