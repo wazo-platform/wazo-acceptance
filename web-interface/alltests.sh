@@ -1,3 +1,4 @@
 #!/bin/bash
 
-find features/ \( ! -name wizard.feature -a -name '*.feature' \) -exec lettuce --with-xunit --verbosity=3 {} \;
+# sh -c is mandatory to have basename working after the substitution of {}
+find features/ \( ! -name wizard.feature -a -name '*.feature' \) -exec sh -c 'lettuce --with-xunit --verbosity=3 {} --xunit-file=$PWD/$(basename {} .feature).xml' \;
