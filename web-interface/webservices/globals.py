@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-__version__ = "$Revision$ $Date$"
-__author__  = "Guillaume Bour <gbour@proformatique.com>"
 __license__ = """
-    Copyright (C) 2010  Proformatique
+    Copyright (C) 2011 Avencall
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +17,7 @@ __license__ = """
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
 """
 
-IP          = '192.168.32.51'
+IP          = 'skaro-daily.lan-quebec.avencall.com'
 PORT        = 443
 SSL         = True
 USERNAME    = 'admin'
