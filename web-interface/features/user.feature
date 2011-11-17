@@ -10,5 +10,5 @@ Feature: User
         |fullName|NbLines|
         |John Willis|0|
         When user is removed
-        Then user is not displayed in the list
+        Then user John Willis is not displayed in the list
     
