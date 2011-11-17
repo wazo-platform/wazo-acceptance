@@ -116,7 +116,6 @@ def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest
         _open_edit_user_form(id[0])
         _type_user_names(dest_firstname, dest_lastname)
         _submit_user_form()
-        _user_is_saved(dest_firstname, dest_lastname)
 
 def _insert_group_with_user(group_name, user_list=[]):
     from webservices import group
@@ -173,3 +172,12 @@ def given_a_user_in_group(step, firstname, lastname, group):
     _delete_user(firstname, lastname)
     _insert_user(firstname, lastname)
     _insert_group_with_user(group, _find_user_id(firstname, lastname))
+
+@step(u'Then I should be at the user list page')
+def then_i_should_be_at_the_user_list_page(step):
+    world.waitFor('bc-main', 'User list page not loaded')
+    try:
+        list = world.browser.find_element_by_name('fm-users-list')
+    except:
+        list = None
+    assert list is not None

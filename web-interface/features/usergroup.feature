@@ -7,4 +7,5 @@ Feature: User
         Given I login as root with password superpass at http://192.168.32.51/
         Given a user Bob Marley in group rastafarien
         When I rename Bob Marley to Bob Dylan
+        Then I should be at the user list page
         Then Bob Dylan is in group rastafarien
