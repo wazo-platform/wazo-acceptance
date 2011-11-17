@@ -1,0 +1,19 @@
+{
+     "groupfeatures": {
+          "name": "%(groupname)s",
+          "number": "",
+          "context": "default",
+          "timeout": "0",
+          "preprocess_subroutine": "",
+          "transfer_user": "1",
+          "transfer_call": "1",
+          "write_caller": "1",
+          "write_calling": "1"
+     },
+     "queue": {
+          "strategy": "ringall",
+          "timeout": "15",
+          "musiconhold": "default"
+     }
+     %(user_list)s
+}
