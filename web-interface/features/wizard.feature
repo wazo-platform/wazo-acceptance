@@ -19,7 +19,7 @@ Feature: Wizard
         Then I should be on the checkcomponents page
         When I click next
         Then I should be on the mainconfig page
-        When I fill hostname myhostname, domain mydomain, password superpass in the configuration page
+        When I fill hostname skaro-daily, domain lan-quebec.avencall.com, password superpass in the configuration page
         When I click next
         Then I should be on the entitycontext page
         When I fill entity xivo_entity, start 100, end 199
