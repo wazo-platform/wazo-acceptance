@@ -24,6 +24,7 @@ def _open_list_user_url():
     world.waitFor('table-main-listing', 'User list not loaded')
 
 def _type_user_names(firstName, lastName):
+    world.waitFor('it-userfeatures-firstname', 'User form not loaded')
     world.user = '%s %s' % (firstName, lastName)
     input_firtName = world.browser.find_element_by_id('it-userfeatures-firstname')
     input_lastName = world.browser.find_element_by_id('it-userfeatures-lastname')
