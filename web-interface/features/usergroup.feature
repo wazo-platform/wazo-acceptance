@@ -4,7 +4,7 @@ Feature: User
 
 
     Scenario Outline: Add a user in a group
-        Given I login as root with password superpass at http://192.168.32.51/
+        Given I login as root with password superpass at http://skaro-daily.lan-quebec.avencall.com/
         Given a user Bob Marley in group rastafarien
         When I rename Bob Marley to Bob Dylan
         Then I should be at the user list page
