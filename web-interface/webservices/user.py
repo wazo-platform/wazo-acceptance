@@ -52,5 +52,9 @@ class WsUser(object):
         (resp, data) = self.client.view(self.obj, id, data)
         return (resp.status == 200)
 
+    def clear(self):
+        (resp, data) = self.client.deleteall(self.obj)
+        return (resp.status == 200)
+
 if __name__ == '__main__':
     pass

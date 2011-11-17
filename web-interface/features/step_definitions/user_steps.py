@@ -44,8 +44,14 @@ def _type_user_in_group(groupName):
 def _submit_user_form():
     return world.browser.find_element_by_id('it-submit').click()
 
+def _delete_all_users():
+    from webservices.user import WsUser
+    wsu = WsUser()
+    wsu.clear()
+
 @step(u'When I create a user (.*) ([a-zA-Z-]+)$')
 def when_i_create_a_user(step, firstName, lastName):
+    _delete_all_users()
     _open_add_user_form()
     _type_user_names(firstName, lastName)
     _submit_user_form()
@@ -53,14 +59,18 @@ def when_i_create_a_user(step, firstName, lastName):
 def _user_is_saved(firstname, lastname):
     _open_list_user_url()
     try:
-        user = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]" % (firstname, lastname))
+        user = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s %s')]" % (firstname, lastname))
         return user is not None
     except NoSuchElementException:
         return False
 
+@step(u'Then user (.*) (.*) is displayed in the list')
+def then_user_is_displayed_in_the_list(step, firstname, lastname):
+    assert _user_is_saved(firstname, lastname)
+
 @step(u'Then user (.*) (.*) is not displayed in the list')
 def then_user_is_not_displayed_in_the_list(step, firstname, lastname):
-    assert _user_is_saved(firstname, lastname)
+    assert not _user_is_saved(firstname, lastname)
 
 @step(u'When I add user (.*) (.*) in group (.*)')
 def when_i_create_a_user_in_group(step, firstname, lastname, group):
@@ -134,6 +144,14 @@ def _is_in_group(group_name, user_id):
             if user['userid'] == user_id:
                 return True
     return False
+
+@step(u'When user (.*) (.*) is removed')
+def remove_user(step, firstname, lastname):
+    world.waitFor('table-main-listing', 'Delete button not loaded')
+    delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s %s')]//a[@title='Delete']" % (firstname, lastname))
+    delete_button.click()
+    alert = world.browser.switch_to_alert();
+    alert.accept()
 
 @step(u'Then (.*) (.*) is in group (.*)')
 def then_user_is_in_group(step, firstname, lastname, group_name):
