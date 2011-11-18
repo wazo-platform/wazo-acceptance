@@ -25,7 +25,6 @@ def _open_list_user_url():
 
 def _type_user_names(firstName, lastName):
     world.waitFor('it-userfeatures-firstname', 'User form not loaded')
-    world.user = '%s %s' % (firstName, lastName)
     input_firtName = world.browser.find_element_by_id('it-userfeatures-firstname')
     input_lastName = world.browser.find_element_by_id('it-userfeatures-lastname')
     input_firtName.clear()
@@ -79,7 +78,7 @@ def when_i_create_a_user_in_group(step, firstname, lastname, group):
     ctx.when_i_edit_a_context(step, 'default')
     ctx.when_i_add_group_interval(step, 5000, 6000)
     import group_steps as grp
-    grp.when_i_create_group(step, world.group)
+    grp.when_i_create_group(step, group)
     _open_add_user_form()
     _type_user_names(firstname, lastname)
     _type_user_in_group(group)
@@ -89,7 +88,7 @@ def when_i_create_a_user_in_group(step, firstname, lastname, group):
 def _insert_user(firstname, lastname):
     from webservices.user import WsUser
     import json
-    with open('xivojson/user.json') as f:
+    with open('xivojson/userwithline.json') as f:
         datajson = f.read()  % {'firstname': firstname,
                 'lastname': lastname}
         data = json.loads(datajson)
@@ -168,8 +167,6 @@ def _find_user_id(firstname, lastname):
 
 @step(u'Given a user (.*) (.*) in group (.*)')
 def given_a_user_in_group(step, firstname, lastname, group):
-    world.user = '%s %s' % (firstname, lastname)
-    world.group = group
     _delete_user(firstname, lastname)
     _insert_user(firstname, lastname)
     _insert_group_with_user(group, _find_user_id(firstname, lastname))

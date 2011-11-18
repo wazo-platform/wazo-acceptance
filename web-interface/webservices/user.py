@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import with_statement
 
 __license__ = """
     Copyright (C) 2011  Avencall
@@ -19,35 +18,32 @@ __license__ = """
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
 """
 import json
-from xivojson import *
+from xivojson import WebServices
 
 
 class WsUser(object):
     def __init__(self):
-        self.client = JSONClient()
-        self.obj    = 'users'
+        self._aws = WebServices(wsobj='users')
 
     def list(self):
-        (resp, data) = self.client.list(self.obj)
+        (code, data) = self._aws.list()
         if data:
             data = json.loads(data)
         return data
 
     def add(self, data):
-        (resp, data) = self.client.add(self.obj, data)
-        return (resp.status == 200)
+        (code, data) = self._aws.add(data)
+        return (code == 200)
 
     def delete(self, id):
-        (resp, data) = self.client.delete(self.obj, id)
-        return (resp.status == 200)
+        (code, data) = self._aws.delete(id)
+        return (code == 200)
 
     def edit(self, id, data):
-        (resp, data) = self.client.view(self.obj, id, data)
-        return (resp.status == 200)
+        (code, data) = self._aws.view(id, data)
+        return (code == 200)
 
     def clear(self):
-        (resp, data) = self.client.deleteall(self.obj)
-        return (resp.status == 200)
+        (code, data) = self._aws.deleteall()
+        return (code == 200)
 
-if __name__ == '__main__':
-    pass

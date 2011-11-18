@@ -17,42 +17,39 @@ __license__ = """
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
 """
-import cjson
-from xivojson import *
+
+import json
+from xivojson import WebServices
 
 
 class WsGroup(object):
     def __init__(self):
-        self.client = JSONClient()
-        self.obj    = 'groups'
+        self._aws = WebServices(wsobj='groups')
 
     def list(self):
-        (resp, data) = self.client.list(self.obj)
-        #pprint.pprint(data)
-        res = json.loads(data)
-        return res
+        (code, data) = self._aws.list()
+        if data:
+            data = json.loads(data)
+        return data
 
     def add(self, data):
-        (resp, data) = self.client.add(self.obj, data)
-        return (resp.status == 200)
-    
+        (code, data) = self._aws.add(data)
+        return (code == 200)
+
     def search(self, search):
-        (resp, data) = self.client.search(self.obj, search)
+        (code, data) = self._aws.search(search)
         res = json.loads(data)
         return res
 
     def view(self, id):
-        (resp, data) = self.client.view(self.obj, id)
+        (code, data) = self._aws.view(id)
         res = json.loads(data)
         return res
 
     def delete(self, id):
-        (resp, data) = self.client.delete(self.obj, id)
-        return (resp.status == 200)
+        (code, data) = self._aws.delete(id)
+        return (code == 200)
 
     def clear(self):
-        (resp, data) = self.client.deleteall(self.obj)
-        return (resp.status == 200)
-
-if __name__ == '__main__':
-    pass
+        (code, data) = self._aws.deleteall()
+        return (code == 200)
