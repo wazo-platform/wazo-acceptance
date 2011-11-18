@@ -46,6 +46,7 @@ def _remove_group_with_number(group_number):
 def _group_is_saved(group_name):
     _open_list_group_url()
     try:
+        world.waitFor('table-main-listing', 'Delete button not loaded')
         group = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]" % (group_name))
         return group is not None
     except NoSuchElementException:
