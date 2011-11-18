@@ -43,7 +43,8 @@ class WebServices(object):
     def get_uri(self):
         list = {
                 "users"  : "/service/ipbx/json.php/%s/pbx_settings/users",
-                "groups" : "/service/ipbx/json.php/%s/pbx_settings/groups"
+                "groups" : "/service/ipbx/json.php/%s/pbx_settings/groups",
+                "lines"  : "/service/ipbx/json.php/%s/pbx_settings/lines"
                }
         uri = [list[self.wsobj] for uri in list
                 if uri == self.wsobj]
