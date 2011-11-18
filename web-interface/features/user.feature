@@ -6,5 +6,5 @@ Feature: User
         Given I login as root with password superpass at http://skaro-daily.lan-quebec.avencall.com/
         When I create a user John Willis
         Then user John Willis is displayed in the list
-        When user John Willis is removed
+        When user John Willis is removed        
         Then user John Willis is not displayed in the list
