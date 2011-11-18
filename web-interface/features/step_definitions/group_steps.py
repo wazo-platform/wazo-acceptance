@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 from lettuce.decorators import step
 from lettuce.registry import world
@@ -12,7 +12,7 @@ def _open_add_group_url():
     URL = GROUP_URL % '?act=add'
     world.browser.get('%s%s' % (world.url, URL))
     world.waitFor('it-groupfeatures-name', 'Group form not loaded')
-    
+
 def _open_list_group_url():
     URL = GROUP_URL % ('?act=list')
     world.browser.get('%s%s' % (world.url, URL))

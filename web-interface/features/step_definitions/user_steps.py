@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 from lettuce.decorators import step
 from lettuce.registry import world
@@ -12,7 +12,7 @@ def _open_add_user_form():
     URL = USER_URL % '?act=add'
     world.browser.get('%s%s' % (world.url, URL))
     world.waitFor('it-userfeatures-firstname', 'User add form not loaded')
-    
+
 def _open_edit_user_form(id):
     URL = USER_URL % '?act=edit&id=%d'
     world.browser.get('%s%s' % (world.url, URL % id))
