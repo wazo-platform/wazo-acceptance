@@ -8,4 +8,4 @@ Feature: User
         Given a user Bob Marley in group rastafarien
         When I rename Bob Marley to Bob Dylan
         Then I should be at the user list page
-        Then Bob Dylan is in group rastafarien
+        Then Bob Dylan is in group rastaffarien
