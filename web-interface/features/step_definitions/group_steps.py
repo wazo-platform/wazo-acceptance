@@ -3,6 +3,7 @@
 from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import ElementNotVisibleException
 
 GROUP_URL = 'service/ipbx/index.php/pbx_settings/groups/%s'
 
@@ -39,7 +40,7 @@ def _remove_group_with_number(group_number):
         delete_button.click()
         alert = world.browser.switch_to_alert();
         alert.accept()
-    except NoSuchElementException:
+    except NoSuchElementException, ElementNotVisibleException:
         pass
 
 def _group_is_saved(group_name):
