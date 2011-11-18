@@ -30,9 +30,9 @@ class TestUser(unittest.TestCase):
         pass
 
     def test_add(self):
-        with open(self._aws.basepath+'/user.json') as fobj:
+        with open(self._aws.basepath + '/user.json') as fobj:
             jsonfilecontent = fobj.read()
-            jsonstr = jsonfilecontent % ({"firstname": 'Bob', 
+            jsonstr = jsonfilecontent % ({"firstname": 'Bob',
                                           "lastname" : 'Marley'})
             content = json.loads(jsonstr)
 
@@ -49,9 +49,9 @@ class TestUser(unittest.TestCase):
     def test_edit(self):
         id = self.test_add()
 
-        with open(self._aws.basepath+'/user.json') as fobj:
+        with open(self._aws.basepath + '/user.json') as fobj:
             jsonfilecontent = fobj.read()
-            jsonstr = jsonfilecontent % ({"firstname": 'Bob', 
+            jsonstr = jsonfilecontent % ({"firstname": 'Bob',
                                           "lastname" : 'Dylan'})
             content = json.loads(jsonstr)
 
