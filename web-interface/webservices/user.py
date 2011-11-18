@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 
-__version__ = "$Revision$ $Date$"
-__author__  = "Guillaume Bour <gbour@proformatique.com>"
 __license__ = """
-    Copyright (C) 2010  Proformatique
+    Copyright (C) 2011  Avencall
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,20 +20,15 @@ __license__ = """
 """
 import json
 from xivojson import *
-# define global variables
-from globals  import *
 
 
 class WsUser(object):
     def __init__(self):
-        global IP, PORT, SSL, USERNAME, PASSWORD
-
-        self.client = JSONClient(IP, PORT, SSL, USERNAME, PASSWORD)
+        self.client = JSONClient()
         self.obj    = 'users'
 
     def list(self):
         (resp, data) = self.client.list(self.obj)
-        #pprint.pprint(data)
         if data:
             data = json.loads(data)
         return data

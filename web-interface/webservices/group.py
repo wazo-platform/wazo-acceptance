@@ -20,10 +20,10 @@ __license__ = """
 import cjson
 from xivojson import *
 
+
 class WsGroup(object):
     def __init__(self):
-        global IP, PORT, SSL, USERNAME, PASSWORD
-        self.client = JSONClient(IP, PORT, SSL, USERNAME, PASSWORD)
+        self.client = JSONClient()
         self.obj    = 'groups'
 
     def list(self):

@@ -1,6 +1,8 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 __license__ = """
-    Copyright (C) 2011 Avencall
+    Copyright (C) 2011  Avencall
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,9 +19,7 @@ __license__ = """
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
 """
 
-IP          = 'skaro-daily.lan-quebec.avencall.com'
-PORT        = 443
-SSL         = True
-USERNAME    = 'admin'
-PASSWORD    = 'proformatique'
+import unittest
 
+if __name__ == '__main__':
+    unittest.main()
