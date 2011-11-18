@@ -21,6 +21,7 @@ def then_the_list_of_lines_has_the_lines(step):
 
 @step(u'When I remove this line')
 def when_i_remove_this_line(step):
+    world.waitFor('table-main-listing', 'Line list not loaded')
     delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % world.id)
     delete_button.click()
     alert = world.browser.switch_to_alert()
