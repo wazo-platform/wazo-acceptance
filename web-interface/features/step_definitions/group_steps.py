@@ -17,6 +17,7 @@ def _open_list_group_url():
     URL = GROUP_URL % ('?act=list')
     world.browser.get('%s%s' % (world.url, URL))
     world.waitFor('table-main-listing', 'Group list not loaded')
+    world.waitFor('fm-group-list', 'Group list not loaded')
 
 def _type_group_name(group_name):
     world.waitFor('it-groupfeatures-name', 'Group form not loaded')
@@ -54,6 +55,11 @@ def _group_is_saved(group_name):
         return group is not None
     except NoSuchElementException:
         return False
+    
+def _delete_all_group():
+    from webservices.group import WsGroup
+    wsg = WsGroup()
+    wsg.clear()
 
 @step(u'Given there is no group with number ([0-9]+)')
 def given_there_is_no_group_with_number(step, number):
@@ -61,6 +67,7 @@ def given_there_is_no_group_with_number(step, number):
 
 @step(u'When I create a group (.*) with number ([0-9]+)')
 def when_i_create_group_with_number(step, group_name, group_number):
+    _delete_all_group()
     import context_steps as ctx
     ctx.when_i_edit_a_context(step, 'default')
     ctx.when_i_add_group_interval(step, 5000, 6000)
