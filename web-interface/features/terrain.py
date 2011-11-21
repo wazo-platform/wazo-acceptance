@@ -1,5 +1,4 @@
 from lettuce import before, after, world
-from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 
