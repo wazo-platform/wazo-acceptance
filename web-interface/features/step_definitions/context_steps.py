@@ -9,17 +9,17 @@ CONTEXT_URL = 'service/ipbx/index.php/system_management/context/%s'
 def when_i_edit_a_context(step, context_name):
     URL = CONTEXT_URL % '?act=edit&id=%s'
     world.browser.get('%s%s' % (world.url, URL % context_name))
-    world.waitFor('fd-context-name', 'Context page not loaded')
+    world.wait_for_id('fd-context-name', 'Context page not loaded')
     group = world.browser.find_element_by_xpath("//li[@id='dwsm-tab-3']//a[@href='#group']")
     group.click()
-    world.waitFor('sb-part-group', 'Group tab not loaded')
+    world.wait_for_id('sb-part-group', 'Group tab not loaded')
     world.context = context_name
 
 @step(u'When I add group interval from (.*) to (.*)')
 def when_i_add_group_interval(step, start, end):
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-group']//a[@id='add_line_button']")
     add_button.click()
-    world.waitFor('contextnumbers-group', 'Group line not shown')
+    world.wait_for_id('contextnumbers-group', 'Group line not shown')
     start_field = world.browser.find_element_by_xpath("//tbody[@id='contextnumbers-group']//input[@name='contextnumbers[group][numberbeg][]']")
     start_field.clear()
     start_field.send_keys(start)

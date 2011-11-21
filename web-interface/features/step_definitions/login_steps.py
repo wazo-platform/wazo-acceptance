@@ -11,10 +11,10 @@ def _login(user, password, language):
     language_option = world.browser.find_element_by_xpath('//option[@value="%s"]' % language)
     language_option.click()
     world.browser.find_element_by_id('it-submit').click()
-    world.waitFor('loginbox', 'Cannot login as ' + user)
+    world.wait_for_id('loginbox', 'Cannot login as ' + user)
 
 def waitForLoginPage():
-    world.waitFor('it-login', 'login page not loaded', 30)
+    world.wait_for_id('it-login', 'login page not loaded', 30)
 
 
 @step(u'When I login as (.*) with password (.*) in (.*)')

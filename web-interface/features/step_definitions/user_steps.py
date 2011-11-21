@@ -11,20 +11,20 @@ USER_URL = 'service/ipbx/index.php/pbx_settings/users/%s'
 def _open_add_user_form():
     URL = USER_URL % '?act=add'
     world.browser.get('%s%s' % (world.url, URL))
-    world.waitFor('it-userfeatures-firstname', 'User add form not loaded')
+    world.wait_for_id('it-userfeatures-firstname', 'User add form not loaded')
 
 def _open_edit_user_form(id):
     URL = USER_URL % '?act=edit&id=%d'
     world.browser.get('%s%s' % (world.url, URL % id))
-    world.waitFor('it-userfeatures-firstname', 'User edit form not loaded')
+    world.wait_for_id('it-userfeatures-firstname', 'User edit form not loaded')
 
 def _open_list_user_url():
     URL = USER_URL % '?act=list'
     world.browser.get('%s%s' % (world.url, URL))
-    world.waitFor('table-main-listing', 'User list not loaded')
+    world.wait_for_id('table-main-listing', 'User list not loaded')
 
 def _type_user_names(firstName, lastName):
-    world.waitFor('it-userfeatures-firstname', 'User form not loaded')
+    world.wait_for_id('it-userfeatures-firstname', 'User form not loaded')
     input_firtName = world.browser.find_element_by_id('it-userfeatures-firstname')
     input_lastName = world.browser.find_element_by_id('it-userfeatures-lastname')
     input_firtName.clear()
@@ -35,7 +35,7 @@ def _type_user_names(firstName, lastName):
 def _type_user_in_group(groupName):
     group = world.browser.find_element_by_xpath("//li[@id='dwsm-tab-7']//a[@href='#groups']")
     group.click()
-    world.waitFor('sb-part-groups', 'Group tab not loaded')
+    world.wait_for_id('sb-part-groups', 'Group tab not loaded')
     select_group = world.browser.find_element_by_xpath('//select[@id="it-grouplist"]//option[@value="%s"]' % groupName)
     select_group.click()
     add_button = world.browser.find_element_by_id('bt-ingroup')
@@ -149,7 +149,7 @@ def _is_in_group(group_name, user_id):
 
 @step(u'When user (.*) (.*) is removed')
 def remove_user(step, firstname, lastname):
-    world.waitFor('table-main-listing', 'Delete button not loaded')
+    world.wait_for_id('table-main-listing', 'Delete button not loaded')
     delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s %s')]//a[@title='Delete']" % (firstname, lastname))
     delete_button.click()
     alert = world.browser.switch_to_alert();
@@ -176,7 +176,7 @@ def given_a_user_in_group(step, firstname, lastname, group):
 
 @step(u'Then I should be at the user list page')
 def then_i_should_be_at_the_user_list_page(step):
-    world.waitFor('bc-main', 'User list page not loaded')
+    world.wait_for_id('bc-main', 'User list page not loaded')
     try:
         list = world.browser.find_element_by_name('fm-users-list')
     except:
