@@ -49,9 +49,12 @@ def _delete_all_users():
     wsu = WsUser()
     wsu.clear()
 
+@step(u'Given there is no user (.*) (.*)')
+def given_there_is_no_user(step, firstname, lastname):
+    _delete_user(firstname, lastname)
+
 @step(u'When I create a user (.*) ([a-zA-Z-]+)$')
 def when_i_create_a_user(step, firstName, lastName):
-    _delete_all_users()
     _open_add_user_form()
     _type_user_names(firstName, lastName)
     _submit_user_form()
