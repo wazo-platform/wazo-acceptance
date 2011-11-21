@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Created on 2011-11-11
 
@@ -14,7 +15,7 @@ def _login(user, password, language):
     language_option = world.browser.find_element_by_xpath('//option[@value="%s"]' % language)
     language_option.click()
     world.browser.find_element_by_id('it-submit').click()
-
+    world.waitFor('loginbox', 'Cannot login as ' + user)
 
 def waitForLoginPage():
     world.waitFor('it-login', 'login page not loaded', 30)

@@ -16,7 +16,7 @@ def _open_add_group_url():
 def _open_list_group_url():
     URL = GROUP_URL % ('?act=list')
     world.browser.get('%s%s' % (world.url, URL))
-    world.waitFor('table-main-listing', 'Delete button not loaded')
+    world.waitFor('table-main-listing', 'Group list not loaded')
 
 def _type_group_name(group_name):
     world.waitFor('it-groupfeatures-name', 'Group form not loaded')
@@ -30,8 +30,12 @@ def _type_group_number(group_number):
     input_number = world.browser.find_element_by_id('it-groupfeatures-number')
     input_number.send_keys(group_number)
 
+def _type_context(context):
+    select_context = world.browser.find_element_by_xpath('//select[@id="it-groupfeatures-context"]//option[@value="%s"]' % context)
+    select_context.click()
+
 def _submit_group_form():
-    return world.browser.find_element_by_id('it-submit').click()
+    world.browser.find_element_by_id('it-submit').click()
 
 def _remove_group_with_number(group_number):
     _open_list_group_url()
@@ -46,21 +50,24 @@ def _remove_group_with_number(group_number):
 def _group_is_saved(group_name):
     _open_list_group_url()
     try:
-        world.waitFor('table-main-listing', 'Delete button not loaded')
         group = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]" % (group_name))
         return group is not None
     except NoSuchElementException:
         return False
+
+@step(u'Given there is no group with number ([0-9]+)')
+def given_there_is_no_group_with_number(step, number):
+    _remove_group_with_number(number)
 
 @step(u'When I create a group (.*) with number ([0-9]+)')
 def when_i_create_group_with_number(step, group_name, group_number):
     import context_steps as ctx
     ctx.when_i_edit_a_context(step, 'default')
     ctx.when_i_add_group_interval(step, 5000, 6000)
-    _remove_group_with_number(group_number)
     _open_add_group_url()
     _type_group_name(group_name)
     _type_group_number(group_number)
+    _type_context('default')
     _submit_group_form()
 
 @step(u'When I create a group ([\w]+)$')

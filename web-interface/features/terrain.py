@@ -19,6 +19,13 @@ def setup_browser():
     world.browser = XiVOBrowser()
     world.waitFor = _waitFor
 
+@world.absorb
+def dump_current_page(filename='/tmp/lettuce.html'):
+    world.waitFor('version-copyright', 'Page not loaded')
+    f = open(filename, 'w')
+    f.write(world.browser.page_source.encode('utf-8'))
+    f.close()
+
 @after.all
 def teardown_browser(total):
     world.browser.quit()
