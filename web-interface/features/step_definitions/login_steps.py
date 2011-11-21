@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
-Created on 2011-11-11
 
-@author: jylebleu
-'''
 from lettuce.decorators import step
 from lettuce.registry import world
 

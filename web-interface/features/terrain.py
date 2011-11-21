@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 from lettuce import before, after, world
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
