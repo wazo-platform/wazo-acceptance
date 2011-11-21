@@ -14,16 +14,16 @@ def _login(user, password, language):
     language_option = world.browser.find_element_by_xpath('//option[@value="%s"]' % language)
     language_option.click()
     world.browser.find_element_by_id('it-submit').click()
-    
+
 
 def waitForLoginPage():
-    world.waitFor('it-login', 'login page not loaded',30)
+    world.waitFor('it-login', 'login page not loaded', 30)
 
 
 @step(u'When I login as (.*) with password (.*) in (.*)')
 def when_i_login_the_webi(step, login, password, language):
-    _login(login,password,language)
-    
+    _login(login, password, language)
+
 @step(u'Given I login as (.*) with password (.*) at (.*)')
 def given_i_login_as_with_password_at(step, user, password, url):
     world.url = url
