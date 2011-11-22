@@ -28,6 +28,7 @@ def _wait_for_alert(message='No alert', timeout=5):
     while count < timeout:
         alert = world.browser.switch_to_alert();
         if alert:
+            time.sleep(1)
             return alert
         count += 1
         time.sleep(1)
