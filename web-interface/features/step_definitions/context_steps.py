@@ -23,10 +23,10 @@ def when_i_add_group_interval(step, start, end):
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-group']//a[@id='add_line_button']")
     add_button.click()
     world.wait_for_id('contextnumbers-group', 'Group line not shown')
-    start_field = world.browser.find_element_by_xpath("//tbody[@id='contextnumbers-group']//input[@name='contextnumbers[group][numberbeg][]']")
+    start_field = world.browser.find_elements_by_xpath("//tbody[@id='contextnumbers-group']//input[@name='contextnumbers[group][numberbeg][]']")[-1]
     start_field.clear()
     start_field.send_keys(start)
-    end_field = world.browser.find_element_by_xpath("//tbody[@id='contextnumbers-group']//input[@name='contextnumbers[group][numberend][]']")
+    end_field = world.browser.find_elements_by_xpath("//tbody[@id='contextnumbers-group']//input[@name='contextnumbers[group][numberend][]']")[-1]
     end_field.clear()
     end_field.send_keys(end)
     submit_button = world.browser.find_element_by_id('it-submit')

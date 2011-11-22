@@ -47,6 +47,16 @@ def _remove_group_with_number(group_number):
     except NoSuchElementException, ElementNotVisibleException:
         pass
 
+def _remove_group_with_name(group_name):
+    _open_list_group_url()
+    try:
+        delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % group_name)
+        delete_button.click()
+        alert = world.browser.switch_to_alert();
+        alert.accept()
+    except NoSuchElementException, ElementNotVisibleException:
+        pass
+
 def _group_is_saved(group_name):
     _open_list_group_url()
     try:
@@ -54,7 +64,7 @@ def _group_is_saved(group_name):
         return group is not None
     except NoSuchElementException:
         return False
-    
+
 def _delete_all_group():
     from webservices.group import WsGroup
     wsg = WsGroup()
@@ -64,9 +74,12 @@ def _delete_all_group():
 def given_there_is_no_group_with_number(step, number):
     _remove_group_with_number(number)
 
+@step(u'Given there is no group with name ([\w]+)')
+def given_there_is_no_group_with_number(step, name):
+    _remove_group_with_name(name)
+
 @step(u'When I create a group (.*) with number ([0-9]+)')
 def when_i_create_group_with_number(step, group_name, group_number):
-    _delete_all_group()
     import context_steps as ctx
     ctx.when_i_edit_a_context(step, 'default')
     ctx.when_i_edit_group_ranges(step)
