@@ -42,6 +42,7 @@ def then_i_should_see_the_group(step, group_name, context_name, start, end):
 
 @step(u'When I edit incall ranges')
 def when_i_edit_incall_ranges(step):
+    world.wait_for_id('dwsm-tab-6', 'Incall tab not loaded')
     group = world.browser.find_element_by_xpath("//li[@id='dwsm-tab-6']//a[@href='#last']")
     group.click()
     world.wait_for_id('sb-part-last', 'Incall tab not loaded')
