@@ -69,6 +69,7 @@ def when_i_create_group_with_number(step, group_name, group_number):
     _delete_all_group()
     import context_steps as ctx
     ctx.when_i_edit_a_context(step, 'default')
+    ctx.when_i_edit_group_ranges(step)
     ctx.when_i_add_group_interval(step, 5000, 6000)
     _open_add_group_url()
     _type_group_name(group_name)

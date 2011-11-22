@@ -79,6 +79,7 @@ def then_user_is_not_displayed_in_the_list(step, firstname, lastname):
 def when_i_create_a_user_in_group(step, firstname, lastname, group):
     import context_steps as ctx
     ctx.when_i_edit_a_context(step, 'default')
+    ctx.when_i_edit_group_ranges(step)
     ctx.when_i_add_group_interval(step, 5000, 6000)
     import group_steps as grp
     grp.when_i_create_group(step, group)

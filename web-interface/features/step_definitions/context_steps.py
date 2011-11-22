@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 from lettuce.decorators import step
 from lettuce.registry import world
@@ -10,10 +10,13 @@ def when_i_edit_a_context(step, context_name):
     URL = CONTEXT_URL % '?act=edit&id=%s'
     world.browser.get('%s%s' % (world.url, URL % context_name))
     world.wait_for_id('fd-context-name', 'Context page not loaded')
+    world.context = context_name
+
+@step(u'When I edit group ranges')
+def when_i_edit_group_ranges(step):
     group = world.browser.find_element_by_xpath("//li[@id='dwsm-tab-3']//a[@href='#group']")
     group.click()
     world.wait_for_id('sb-part-group', 'Group tab not loaded')
-    world.context = context_name
 
 @step(u'When I add group interval from (.*) to (.*)')
 def when_i_add_group_interval(step, start, end):
