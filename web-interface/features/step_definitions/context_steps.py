@@ -48,6 +48,7 @@ def when_i_edit_incall_ranges(step):
 
 @step(u'When I add incall interval from (.*) to (.*) with ([0-9]+) numbers')
 def when_i_add_incall_interval(step, start, end, did_length):
+    world.wait_for_id('sb-part-last', 'Context range page not loaded')
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-last']//a[@id='add_line_button']")
     add_button.click()
     world.wait_for_id('contextnumbers-incall', 'Incall line not shown')
