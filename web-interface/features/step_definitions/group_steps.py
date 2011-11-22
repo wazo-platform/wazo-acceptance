@@ -101,7 +101,7 @@ def remove_group_with_name(step, group_name):
     _open_list_group_url()
     delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % group_name)
     delete_button.click()
-    alert = world.browser.switch_to_alert();
+    alert = world.wait_for_alert('The alert never appeared')
     alert.accept()
 
 @step(u'Then group (.*) is displayed in the list')
