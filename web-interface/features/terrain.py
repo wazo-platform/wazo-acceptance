@@ -30,6 +30,8 @@ def setup_browser():
     world.wait_for_id = _wait_for_id
     world.wait_for_name = _wait_for_name
 
+# Use this if you want to debug your test
+# Call it with world.dump_current_page()
 @world.absorb
 def dump_current_page(filename='/tmp/lettuce.html'):
     world.wait_for_id('version-copyright', 'Page not loaded')

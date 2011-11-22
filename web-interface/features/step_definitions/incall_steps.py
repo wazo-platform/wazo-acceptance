@@ -1,0 +1,76 @@
+# -*- coding: utf-8 -*-
+
+from lettuce.decorators import step
+from lettuce.registry import world
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import ElementNotVisibleException
+
+INCALL_URL = 'service/ipbx/index.php/call_management/incall/%s'
+
+def _open_add_incall_url():
+    URL = INCALL_URL % '?act=add'
+    world.browser.get('%s%s' % (world.url, URL))
+    world.wait_for_id('it-incall-exten', 'Incall form not loaded')
+
+def _open_list_incall_url():
+    URL = INCALL_URL % ('?act=list')
+    world.browser.get('%s%s' % (world.url, URL))
+    world.wait_for_id('table-main-listing', 'Incall list not loaded')
+
+def _type_incall_did(incall_did):
+    world.wait_for_id('it-incall-exten', 'Incall form not loaded')
+    world.incall_did = incall_did
+    input_did = world.browser.find_element_by_id('it-incall-exten')
+    input_did.send_keys(incall_did)
+
+def _submit_incall_form():
+    world.browser.find_element_by_id('it-submit').click()
+
+def _remove_incall_with_did(incall_did):
+    _open_list_incall_url()
+    try:
+        world.dump_current_page()
+        delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % incall_did)
+        delete_button.click()
+        alert = world.browser.switch_to_alert();
+        alert.accept()
+    except NoSuchElementException, ElementNotVisibleException:
+        pass
+
+def _incall_is_saved(incall_did):
+    _open_list_incall_url()
+    try:
+        incall = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]" % (incall_did))
+        return incall is not None
+    except NoSuchElementException:
+        return False
+
+@step(u'Given there is no incall with DID ([0-9]+)')
+def given_there_is_no_incall_with_did(step, did):
+    _remove_incall_with_did(did)
+
+@step(u'When I create an incall with DID ([0-9]+)')
+def when_i_create_incall_with_did(step, incall_did):
+    import context_steps as ctx
+    ctx.when_i_edit_a_context(step, 'from-extern')
+    ctx.when_i_edit_incall_ranges(step)
+    ctx.when_i_add_incall_interval(step, 6000, 7000, '4')
+    _open_add_incall_url()
+    _type_incall_did(incall_did)
+    _submit_incall_form()
+
+@step(u'When incall ([0-9]+) is removed')
+def remove_incall_with_name(step, incall_did):
+    _open_list_incall_url()
+    delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % incall_did)
+    delete_button.click()
+    alert = world.browser.switch_to_alert();
+    alert.accept()
+
+@step(u'Then incall (.*) is displayed in the list')
+def then_incall_is_displayed_in_the_list(step, incall_did):
+    assert _incall_is_saved(incall_did)
+
+@step(u'Then incall (.*) is not displayed in the list')
+def then_incall_is_not_displayed_in_the_list(step, incall_did):
+    assert not _incall_is_saved(incall_did)

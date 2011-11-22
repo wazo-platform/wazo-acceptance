@@ -38,3 +38,29 @@ def then_i_should_see_the_group(step, group_name, context_name, start, end):
     world.browser.get('%s%s' % (world.url, URL % context_name))
     assert start in world.browser.page_source
     assert end in world.browser.page_source
+
+@step(u'When I edit incall ranges')
+def when_i_edit_incall_ranges(step):
+    group = world.browser.find_element_by_xpath("//li[@id='dwsm-tab-6']//a[@href='#last']")
+    group.click()
+    world.wait_for_id('sb-part-last', 'Incall tab not loaded')
+
+@step(u'When I add incall interval from (.*) to (.*) with ([0-9]+) numbers')
+def when_i_add_incall_interval(step, start, end, did_length):
+    add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-last']//a[@id='add_line_button']")
+    add_button.click()
+    world.wait_for_id('contextnumbers-incall', 'Incall line not shown')
+
+    # Do not erase the first line, so select the last one with find_elements...()[-1]
+    start_field = world.browser.find_elements_by_xpath("//tbody[@id='contextnumbers-incall']//input[@name='contextnumbers[incall][numberbeg][]']")[-1]
+    start_field.clear()
+    start_field.send_keys(start)
+    end_field = world.browser.find_elements_by_xpath("//tbody[@id='contextnumbers-incall']//input[@name='contextnumbers[incall][numberend][]']")[-1]
+    end_field.clear()
+    end_field.send_keys(end)
+    # Don't know why the disabled select is included in the list, so compensate with a [-2]
+    did_length_select = world.browser.find_elements_by_xpath('//select[@name="contextnumbers[incall][didlength][]"]//option[@value="%s"]' % did_length)[-2]
+    did_length_select.click()
+    world.dump_current_page()
+    submit_button = world.browser.find_element_by_id('it-submit')
+    submit_button.click()
