@@ -33,6 +33,7 @@ class WebServices(object):
         self.wsobj = wsobj
         self.basepath = os.path.normpath(JSON_DIR)
         self._path = self._compute_path(uri_prefix)
+        print self._path
         self._uri_prefix = uri_prefix
         self._opener = self._build_opener(uri_prefix, username, password)
         self._headers = {
@@ -44,7 +45,8 @@ class WebServices(object):
         list = {
                 "users"  : "/service/ipbx/json.php/%s/pbx_settings/users",
                 "groups" : "/service/ipbx/json.php/%s/pbx_settings/groups",
-                "lines"  : "/service/ipbx/json.php/%s/pbx_settings/lines"
+                "lines"  : "/service/ipbx/json.php/%s/pbx_settings/lines",
+                "meetme" : "/service/ipbx/json.php/%s/pbx_settings/meetme"
                }
         uri = [list[self.wsobj] for uri in list
                 if uri == self.wsobj]
