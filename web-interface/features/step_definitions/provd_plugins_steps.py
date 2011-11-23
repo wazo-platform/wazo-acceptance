@@ -30,7 +30,7 @@ def _plugins_error_during_update():
 
 @step(u'Given a update plugins provd with good url')
 def given_a_update_plugins_provd(step):
-    import provd_general as provdg
+    import provd_general_steps as provdg
     provdg.update_plugin_server_url('http://provd.xivo.fr/plugins/1/stable/')
     _open_list_url()
     world.browser.find_element_by_id('toolbar-bt-update').click()
@@ -38,7 +38,7 @@ def given_a_update_plugins_provd(step):
 
 @step(u'Given a update plugins provd with bad url')
 def given_a_update_plugins_provd_with_bad_url(step):
-    import provd_general as provdg
+    import provd_general_steps as provdg
     provdg.update_plugin_server_url('http://provd.xivo.fr/plugins/1/lol/')
     _open_list_url()
     world.browser.find_element_by_id('toolbar-bt-update').click()
@@ -51,5 +51,5 @@ def then_plugins_list_successfully_updated(step):
 @step(u'Then plugins list has a error during update')
 def then_plugins_list_has_error_during_update(step):
     assert _plugins_error_during_update()
-    import provd_general as provdg
+    import provd_general_steps as provdg
     provdg.update_plugin_server_url('http://provd.xivo.fr/plugins/1/stable/')
