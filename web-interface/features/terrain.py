@@ -39,16 +39,20 @@ def teardown_browser(total):
 def _wait_for_id(elementId, message='', timeout=5):
     try:
         WebDriverWait(world.browser, timeout).until(lambda browser : browser.find_element_by_id(elementId))
+        element = world.browser.find_element_by_id(elementId)
+        WebDriverWait(world.browser, timeout).until(lambda browser : element.is_displayed())
     except TimeoutException:
         raise Exception(elementId, message)
     finally:
         pass
 
-def _wait_for_name(elementId, message='', timeout=5):
+def _wait_for_name(element_name, message='', timeout=5):
     try:
-        WebDriverWait(world.browser, timeout).until(lambda browser : browser.find_element_by_name(elementId))
+        WebDriverWait(world.browser, timeout).until(lambda browser : browser.find_element_by_name(element_name))
+        element = world.browser.find_element_by_name(element_name)
+        WebDriverWait(world.browser, timeout).until(lambda browser : element.is_displayed())
     except TimeoutException:
-        raise Exception(elementId, message)
+        raise Exception(element_name, message)
     finally:
         pass
 

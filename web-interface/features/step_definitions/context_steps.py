@@ -45,10 +45,10 @@ def when_i_edit_conference_room_ranges(step):
 
 @step(u'When I add conference room interval from (.*) to (.*)')
 def when_i_add_conference_room_interval(step, start, end):
-    world.wait_for_id('add_line_button', 'Meetme range config not loaded')
+    world.wait_for_id('sb-part-meetme', 'Meetme range config not loaded')
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-meetme']//a[@id='add_line_button']")
     add_button.click()
-    world.wait_for_id('contextnumbers-group', 'Meetme line not shown')
+    world.wait_for_id('contextnumbers-meetme', 'Meetme line not shown')
     start_field = world.browser.find_elements_by_xpath("//tbody[@id='contextnumbers-meetme']//input[@name='contextnumbers[meetme][numberbeg][]']")[-1]
     start_field.clear()
     start_field.send_keys(start)
