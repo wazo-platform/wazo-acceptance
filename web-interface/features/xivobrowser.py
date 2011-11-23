@@ -14,6 +14,7 @@ class XiVOBrowser(webdriver.Firefox):
 
         # Get the page
         webdriver.Firefox.get(self, url)
+        return
 
         # Remove newline, to allow regexp substitution
         source = self.page_source.replace('\n', ' ')
