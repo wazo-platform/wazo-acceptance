@@ -5,7 +5,7 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
 
-GROUP_URL = 'service/ipbx/index.php/pbx_settings/groups/%s'
+GROUP_URL = '/service/ipbx/index.php/pbx_settings/groups/%s'
 
 
 def _open_add_group_url():
@@ -75,7 +75,7 @@ def given_there_is_no_group_with_number(step, number):
     _remove_group_with_number(number)
 
 @step(u'Given there is no group with name ([\w]+)')
-def given_there_is_no_group_with_number(step, name):
+def given_there_is_no_group_with_name(step, name):
     _remove_group_with_name(name)
 
 @step(u'When I create a group (.*) with number ([0-9]+)')

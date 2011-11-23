@@ -17,8 +17,9 @@ __license__ = """
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
 """
+
 import unittest, json
-from webservices.xivojson import WebServices
+from webservices.webservices import WebServices
 
 
 class TestUser(unittest.TestCase):

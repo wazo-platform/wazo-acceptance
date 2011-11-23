@@ -19,7 +19,7 @@ __license__ = """
 """
 
 import json
-from xivojson import WebServices
+from webservices import WebServices
 
 
 class WsGroup(object):

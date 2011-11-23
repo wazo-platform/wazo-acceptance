@@ -5,7 +5,7 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
 
-USER_URL = 'service/ipbx/index.php/pbx_settings/users/%s'
+USER_URL = '/service/ipbx/index.php/pbx_settings/users/%s'
 
 
 def _open_add_user_form():

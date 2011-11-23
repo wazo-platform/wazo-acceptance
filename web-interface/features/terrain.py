@@ -22,6 +22,14 @@ def _wait_for_name(elementId, message='', timeout=5):
     finally:
         pass
 
+def _wait_for_xpath(xpath, message='', timeout=5):
+    try:
+        WebDriverWait(world.browser, timeout).until(lambda browser : browser.find_element_by_xpath(xpath))
+    except TimeoutException:
+        raise Exception(xpath, message)
+    finally:
+        pass
+
 @before.all
 def setup_browser():
     from pyvirtualdisplay import Display
@@ -29,6 +37,7 @@ def setup_browser():
     world.browser = XiVOBrowser()
     world.wait_for_id = _wait_for_id
     world.wait_for_name = _wait_for_name
+    world.wait_for_xpath = _wait_for_xpath
 
 # Use this if you want to debug your test
 # Call it with world.dump_current_page()
