@@ -22,7 +22,7 @@ def when_i_edit_group_ranges(step):
 
 @step(u'When I add group interval from (.*) to (.*)')
 def when_i_add_group_interval(step, start, end):
-    world.wait_for_id('add_line_button', 'Group range config not loaded')
+    world.wait_for_id('sb-part-group', 'Group range config not loaded')
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-group']//a[@id='add_line_button']")
     add_button.click()
     world.wait_for_id('contextnumbers-group', 'Group line not shown')
