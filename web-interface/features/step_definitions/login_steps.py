@@ -3,6 +3,8 @@
 from lettuce.decorators import step
 from lettuce.registry import world
 
+from common.common import submit_form
+
 def _login(user, password, language):
     input_login = world.browser.find_element_by_id('it-login')
     input_password = world.browser.find_element_by_id('it-password')
@@ -10,7 +12,7 @@ def _login(user, password, language):
     input_password.send_keys(password)
     language_option = world.browser.find_element_by_xpath('//option[@value="%s"]' % language)
     language_option.click()
-    world.browser.find_element_by_id('it-submit').click()
+    submit_form()
     world.wait_for_id('loginbox', 'Cannot login as ' + user)
 
 def waitForLoginPage():

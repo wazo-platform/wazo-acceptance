@@ -5,6 +5,8 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
 
+from common.common import submit_form
+
 INCALL_URL = 'service/ipbx/index.php/call_management/incall/%s'
 
 def _open_add_incall_url():
@@ -22,9 +24,6 @@ def _type_incall_did(incall_did):
     world.incall_did = incall_did
     input_did = world.browser.find_element_by_id('it-incall-exten')
     input_did.send_keys(incall_did)
-
-def _submit_incall_form():
-    world.browser.find_element_by_id('it-submit').click()
 
 def _remove_incall_with_did(incall_did):
     _open_list_incall_url()
@@ -57,7 +56,7 @@ def when_i_create_incall_with_did(step, incall_did):
     ctx.when_i_add_incall_interval(step, 6000, 7000, '4')
     _open_add_incall_url()
     _type_incall_did(incall_did)
-    _submit_incall_form()
+    submit_form()
 
 @step(u'When incall ([0-9]+) is removed')
 def remove_incall_with_name(step, incall_did):

@@ -5,6 +5,8 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
 
+from common.common import submit_form
+
 GROUP_URL = '/service/ipbx/index.php/pbx_settings/groups/%s'
 
 
@@ -33,9 +35,6 @@ def _type_group_number(group_number):
 def _type_context(context):
     select_context = world.browser.find_element_by_xpath('//select[@id="it-groupfeatures-context"]//option[@value="%s"]' % context)
     select_context.click()
-
-def _submit_group_form():
-    world.browser.find_element_by_id('it-submit').click()
 
 def _remove_group_with_number(group_number):
     _open_list_group_url()
@@ -88,13 +87,13 @@ def when_i_create_group_with_number(step, group_name, group_number):
     _type_group_name(group_name)
     _type_group_number(group_number)
     _type_context('default')
-    _submit_group_form()
+    submit_form()
 
 @step(u'When I create a group ([\w]+)$')
 def when_i_create_group(step, group_name):
     _open_add_group_url()
     _type_group_name(group_name)
-    _submit_group_form()
+    submit_form()
 
 @step(u'When group ([\w]+) is removed')
 def remove_group_with_name(step, group_name):

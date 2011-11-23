@@ -4,6 +4,8 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
+from common.common import submit_form
+
 
 MM_URL = '/service/ipbx/index.php/pbx_settings/meetme/%s'
 
@@ -56,11 +58,6 @@ def _delete_all_meetme():
     wsm = WsMeetme()
     wsm.clear()
 
-
-def _submit_form():
-    return world.browser.find_element_by_id('it-submit').click()
-
-
 def _is_saved(name):
     _open_list_url()
     try:
@@ -92,4 +89,4 @@ def when_i_create_a_conference_room_with_name_number_max_participants(step, name
     _type_context('default')
     _type_confno(confno)
     _type_maxusers(maxusers)
-    _submit_form()
+    submit_form()

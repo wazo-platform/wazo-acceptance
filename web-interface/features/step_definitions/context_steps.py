@@ -3,6 +3,8 @@
 from lettuce.decorators import step
 from lettuce.registry import world
 
+from common.common import submit_form
+
 CONTEXT_URL = '/service/ipbx/index.php/system_management/context/%s'
 
 @step(u'When I edit a context (.*)')
@@ -32,8 +34,7 @@ def when_i_add_group_interval(step, start, end):
     end_field = world.browser.find_elements_by_xpath("//tbody[@id='contextnumbers-group']//input[@name='contextnumbers[group][numberend][]']")[-1]
     end_field.clear()
     end_field.send_keys(end)
-    submit_button = world.browser.find_element_by_id('it-submit')
-    submit_button.click()
+    submit_form()
 
 
 @step(u'When I edit conference room ranges')
@@ -55,8 +56,7 @@ def when_i_add_conference_room_interval(step, start, end):
     end_field = world.browser.find_elements_by_xpath("//tbody[@id='contextnumbers-meetme']//input[@name='contextnumbers[meetme][numberend][]']")[-1]
     end_field.clear()
     end_field.send_keys(end)
-    submit_button = world.browser.find_element_by_id('it-submit')
-    submit_button.click()
+    submit_form()
 
 
 @step(u'Then I should see the group (.*) in context (.*) with range (.*) to (.*)')
@@ -93,5 +93,4 @@ def when_i_add_incall_interval(step, start, end, did_length):
     did_length_select = world.browser.find_elements_by_xpath('//select[@name="contextnumbers[incall][didlength][]"]//option[@value="%s"]' % did_length)[-2]
     did_length_select.click()
     world.dump_current_page()
-    submit_button = world.browser.find_element_by_id('it-submit')
-    submit_button.click()
+    submit_form()

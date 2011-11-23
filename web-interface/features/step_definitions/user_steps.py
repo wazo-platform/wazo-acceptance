@@ -41,9 +41,6 @@ def _type_user_in_group(groupName):
     add_button = world.browser.find_element_by_id('bt-ingroup')
     add_button.click()
 
-def _submit_user_form():
-    return world.browser.find_element_by_id('it-submit').click()
-
 def _delete_all_users():
     from webservices.user import WsUser
     wsu = WsUser()
@@ -57,7 +54,7 @@ def given_there_is_no_user(step, firstname, lastname):
 def when_i_create_a_user(step, firstName, lastName):
     _open_add_user_form()
     _type_user_names(firstName, lastName)
-    _submit_user_form()
+    submit_form()
 
 def _user_is_saved(firstname, lastname):
     _open_list_user_url()
@@ -86,7 +83,7 @@ def when_i_create_a_user_in_group(step, firstname, lastname, group):
     _open_add_user_form()
     _type_user_names(firstname, lastname)
     _type_user_in_group(group)
-    _submit_user_form()
+    submit_form()
     _user_is_saved(firstname, lastname)
 
 def _insert_user(firstname, lastname):
@@ -110,7 +107,7 @@ def when_i_edit_user(step, firstname, lastname):
     id = _find_user_id(firstname, lastname)
     if len(id) > 0:
         _open_edit_user_form(id[0])
-        _submit_user_form()
+        submit_form()
 
 @step(u'When I rename (.*) (.*) to (.*) (.*)')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
@@ -119,7 +116,7 @@ def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest
     if len(id) > 0:
         _open_edit_user_form(id[0])
         _type_user_names(dest_firstname, dest_lastname)
-        _submit_user_form()
+        submit_form()
 
 def _insert_group_with_user(group_name, user_list=[]):
     from webservices import group

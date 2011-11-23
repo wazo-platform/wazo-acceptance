@@ -4,6 +4,8 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
+from common.common import submit_form
+
 LINE_ADD_URL = 'service/ipbx/index.php/pbx_settings/lines/?act=add&proto='
 
 @step(u'When I create a (.*) line in context (.*)')
@@ -14,7 +16,7 @@ def when_i_create_a_line_in_context(step, protocol, context):
     select_context.click()
     # Get the id to reference the line
     world.id = world.browser.find_element_by_id('it-protocol-name').get_attribute('value')
-    world.browser.find_element_by_id('it-submit').click()
+    submit_form()
 
 @step(u'Then the list of lines has the lines:')
 def then_the_list_of_lines_has_the_lines(step):
