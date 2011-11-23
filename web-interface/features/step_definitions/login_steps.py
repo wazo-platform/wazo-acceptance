@@ -27,3 +27,16 @@ def given_i_login_as_with_password_at(step, user, password, url):
     world.browser.get(world.url)
     waitForLoginPage()
     _login(user, password, 'en')
+
+@step(u'I am logged in')
+def i_am_logged_in(step):
+    # Go to the home page
+    world.browser.get(world.host)
+    try:
+        # Are we logged in ?
+        world.browser.find_element_by_id('loginbox')
+    except:
+        # If not logged in, then proceed
+        step.given('Given I login as ' + world.login
+                 + ' with password ' + world.password
+                 + ' at ' + world.host)
