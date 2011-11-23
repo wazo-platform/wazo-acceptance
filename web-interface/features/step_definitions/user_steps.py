@@ -4,6 +4,8 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
+from common.common import submit_form
+
 
 USER_URL = '/service/ipbx/index.php/pbx_settings/users/%s'
 
