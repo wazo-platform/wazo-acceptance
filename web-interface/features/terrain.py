@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import time
 
 from lettuce import before, after, world
 from selenium.webdriver.support.ui import WebDriverWait
@@ -30,6 +31,18 @@ def _wait_for_xpath(xpath, message='', timeout=5):
     finally:
         pass
 
+def _wait_for_alert(message='No alert', timeout=5):
+    count = 0
+    while count < timeout:
+        alert = world.browser.switch_to_alert();
+        if alert:
+            time.sleep(1)
+            return alert
+        count += 1
+        time.sleep(1)
+    raise Exception(message)
+
+
 @before.all
 def setup_browser():
     from pyvirtualdisplay import Display
@@ -38,6 +51,7 @@ def setup_browser():
     world.wait_for_id = _wait_for_id
     world.wait_for_name = _wait_for_name
     world.wait_for_xpath = _wait_for_xpath
+    world.wait_for_alert = _wait_for_alert
 
 # Use this if you want to debug your test
 # Call it with world.dump_current_page()

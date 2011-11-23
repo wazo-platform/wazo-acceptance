@@ -20,6 +20,7 @@ def when_i_edit_group_ranges(step):
 
 @step(u'When I add group interval from (.*) to (.*)')
 def when_i_add_group_interval(step, start, end):
+    world.wait_for_id('add_line_button', 'Group range config not loaded')
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-group']//a[@id='add_line_button']")
     add_button.click()
     world.wait_for_id('contextnumbers-group', 'Group line not shown')
@@ -41,12 +42,14 @@ def then_i_should_see_the_group(step, group_name, context_name, start, end):
 
 @step(u'When I edit incall ranges')
 def when_i_edit_incall_ranges(step):
+    world.wait_for_id('dwsm-tab-6', 'Incall tab not loaded')
     group = world.browser.find_element_by_xpath("//li[@id='dwsm-tab-6']//a[@href='#last']")
     group.click()
     world.wait_for_id('sb-part-last', 'Incall tab not loaded')
 
 @step(u'When I add incall interval from (.*) to (.*) with ([0-9]+) numbers')
 def when_i_add_incall_interval(step, start, end, did_length):
+    world.wait_for_id('sb-part-last', 'Context range page not loaded')
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-last']//a[@id='add_line_button']")
     add_button.click()
     world.wait_for_id('contextnumbers-incall', 'Incall line not shown')
