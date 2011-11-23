@@ -2,7 +2,6 @@
 
 from lettuce.decorators import step
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException
 
 from common.common import submit_form
 from ipbx_objects.user_manager import *
@@ -74,7 +73,7 @@ def then_user_is_in_group(step, firstname, lastname, group_name):
 def given_a_user_in_group(step, firstname, lastname, group):
     delete_user(firstname, lastname)
     insert_user(firstname, lastname)
-    insert_group_with_user(group, _find_user_id(firstname, lastname))
+    insert_group_with_user(group, find_user_id(firstname, lastname))
 
 @step(u'Then I should be at the user list page')
 def then_i_should_be_at_the_user_list_page(step):
