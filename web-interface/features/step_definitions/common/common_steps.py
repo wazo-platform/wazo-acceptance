@@ -3,7 +3,7 @@
 from lettuce.decorators import step
 from lettuce.registry import world
 
-from common import *
+from common.common import *
 from checkbox import Checkbox
 
 @step(u'Given the option "([^"]*)" is (not )?checked')
