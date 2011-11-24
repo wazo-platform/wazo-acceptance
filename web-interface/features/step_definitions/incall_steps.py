@@ -12,15 +12,15 @@ INCALL_URL = 'service/ipbx/index.php/call_management/incall/%s'
 def _open_add_incall_url():
     URL = INCALL_URL % '?act=add'
     world.browser.get('%s%s' % (world.url, URL))
-    world.wait_for_id('it-incall-exten', 'Incall form not loaded')
+    world.browser.find_element_by_id('it-incall-exten', 'Incall form not loaded')
 
 def _open_list_incall_url():
     URL = INCALL_URL % ('?act=list')
     world.browser.get('%s%s' % (world.url, URL))
-    world.wait_for_id('table-main-listing', 'Incall list not loaded')
+    world.browser.find_element_by_id('table-main-listing', 'Incall list not loaded')
 
 def _type_incall_did(incall_did):
-    world.wait_for_id('it-incall-exten', 'Incall form not loaded')
+    world.browser.find_element_by_id('it-incall-exten', 'Incall form not loaded')
     world.incall_did = incall_did
     input_did = world.browser.find_element_by_id('it-incall-exten')
     input_did.send_keys(incall_did)
@@ -31,7 +31,7 @@ def _remove_incall_with_did(incall_did):
         world.dump_current_page()
         delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % incall_did)
         delete_button.click()
-        alert = world.wait_for_alert()
+        alert = world.browser.switch_to_alert()
         alert.accept()
     except NoSuchElementException, ElementNotVisibleException:
         pass
@@ -63,7 +63,7 @@ def remove_incall_with_name(step, incall_did):
     _open_list_incall_url()
     delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % incall_did)
     delete_button.click()
-    alert = world.wait_for_alert()
+    alert = world.browser.switch_to_alert()
     alert.accept()
 
 @step(u'Then incall (.*) is displayed in the list')

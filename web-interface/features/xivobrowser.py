@@ -1,7 +1,12 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 import re
+import time
+
+from lettuce.registry import world
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
 
 class MissingTranslationException(Exception):
     pass
@@ -34,3 +39,77 @@ class XiVOBrowser(webdriver.Firefox):
             missing_translations_list = sorted(set(missing_translations_list))
 
             raise MissingTranslationException('\n'.join(missing_translations_list))
+
+    def find_element(self, by=id, value=None):
+        """This function is called by all find_element_by_*().
+           This implementation adds a timeout to search for Webelements."""
+        WebDriverWait(self, world.timeout).until(lambda browser : webdriver.Firefox.find_element(self, by, value))
+        element = webdriver.Firefox.find_element(self, by, value)
+        WebDriverWait(self, world.timeout).until(lambda browser : element.is_displayed())
+        # Timeout exception will be catched in find_element_by_* methods
+        return element
+
+    # Maybe the three following reimplementations could be done through a single decorator ?
+
+    def find_element_by_id(self, id, message='', timeout=None):
+        oldtimeout = world.timeout
+        if timeout is not None:
+            world.timeout = timeout
+        try:
+            ret = webdriver.Firefox.find_element_by_id(self, id)
+        except TimeoutException:
+            raise NoSuchElementException(id, message)
+        finally:
+            world.timeout = oldtimeout
+        return ret
+
+    def find_element_by_name(self, name, message='', timeout=None):
+        oldtimeout = world.timeout
+        if timeout is not None:
+            world.timeout = timeout
+        try:
+            ret = webdriver.Firefox.find_element_by_name(self, name)
+        except TimeoutException:
+            raise NoSuchElementException(name, message)
+        finally:
+            world.timeout = oldtimeout
+        return ret
+
+    def find_element_by_xpath(self, xpath, message='', timeout=None):
+        oldtimeout = world.timeout
+        if timeout is not None:
+            world.timeout = timeout
+        try:
+            ret = webdriver.Firefox.find_element_by_xpath(self, xpath)
+        except TimeoutException:
+            raise NoSuchElementException(xpath, message)
+        finally:
+            world.timeout = oldtimeout
+        return ret
+
+    def switch_to_alert(self, message='No alert', timeout=5):
+        """Adds wait time for alert."""
+        count = 0
+        while count < timeout:
+            alert = webdriver.Firefox.switch_to_alert(self);
+            time.sleep(1)
+            if alert:
+                return alert
+            count += 1
+        raise Exception(message)
+
+    def find_element_by_label(self, label):
+        """Finds the first element corresponding to the label containing the argument."""
+        webelement_label = self.find_element_by_xpath("//label[contains(.,'%s')]" % label)
+        webelement_id = webelement_label.get_attribute('for')
+        webelement = self.find_element_by_id(webelement_id)
+        return webelement
+
+    def find_elements_by_label(self, label):
+        """Finds all elements corresponding to the labels containing the argument."""
+        webelement_labels = self.find_elements_by_xpath("//label[contains(.,'%s')]" % label)
+        ret = []
+        for webelement_label in webelement_labels:
+            webelement_id = webelement_label.get_attribute('for')
+            ret += self.find_elements_by_id(webelement_id)
+        return ret

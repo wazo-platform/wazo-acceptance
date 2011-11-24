@@ -12,7 +12,7 @@ PP_URL = '/xivo/configuration/index.php/provisioning/plugin/%s'
 def _open_list_url():
     URL = PP_URL % ''
     world.browser.get('%s%s' % (world.url, URL))
-    world.wait_for_id('table-main-listing', 'Plugin list page not loaded')
+    world.browser.find_element_by_id('table-main-listing', 'Plugin list page not loaded')
 
 def _plugins_successfully_updated():
     try:
@@ -34,7 +34,7 @@ def given_a_update_plugins_provd(step):
     provdg.update_plugin_server_url('http://provd.xivo.fr/plugins/1/stable/')
     _open_list_url()
     world.browser.find_element_by_id('toolbar-bt-update').click()
-    world.wait_for_xpath("//div[@class[contains(.,'xivo-messages')]]")
+    world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-messages')]]")
 
 @step(u'Given a update plugins provd with bad url')
 def given_a_update_plugins_provd_with_bad_url(step):
@@ -42,7 +42,7 @@ def given_a_update_plugins_provd_with_bad_url(step):
     provdg.update_plugin_server_url('http://provd.xivo.fr/plugins/1/lol/')
     _open_list_url()
     world.browser.find_element_by_id('toolbar-bt-update').click()
-    world.wait_for_xpath("//div[@class[contains(.,'xivo-messages')]]")
+    world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-messages')]]")
 
 @step(u'Then plugins list successfully updated')
 def then_plugins_list_successfully_updated(step):

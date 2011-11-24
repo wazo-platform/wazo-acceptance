@@ -12,43 +12,43 @@ MM_URL = '/service/ipbx/index.php/pbx_settings/meetme/%s'
 def _open_add_form():
     URL = MM_URL % '?act=add'
     world.browser.get('%s%s' % (world.url, URL))
-    world.wait_for_id('it-meetmefeatures-name', 'Meetme add form not loaded')
+    world.browser.find_element_by_id('it-meetmefeatures-name', 'Meetme add form not loaded')
 
 
 def _open_edit_form(id):
     URL = MM_URL % '?act=edit&id=%d'
     world.browser.get('%s%s' % (world.url, URL % id))
-    world.wait_for_id('it-meetmefeatures-name', 'Meetme edit form not loaded')
+    world.browser.find_element_by_id('it-meetmefeatures-name', 'Meetme edit form not loaded')
 
 
 def _open_list_url():
     URL = MM_URL % '?act=list'
     world.browser.get('%s%s' % (world.url, URL))
-    world.wait_for_id('table-main-listing', 'Meetme list not loaded')
+    world.browser.find_element_by_id('table-main-listing', 'Meetme list not loaded')
 
 
 def _type_name(name):
-    world.wait_for_id('it-meetmefeatures-name', 'Meetme form not loaded')
+    world.browser.find_element_by_id('it-meetmefeatures-name', 'Meetme form not loaded')
     input_name = world.browser.find_element_by_id('it-meetmefeatures-name')
     input_name.clear()
     input_name.send_keys(name)
 
 
 def _type_confno(confno):
-    world.wait_for_id('it-meetmefeatures-confno', 'Meetme form not loaded')
+    world.browser.find_element_by_id('it-meetmefeatures-confno', 'Meetme form not loaded')
     input_confno = world.browser.find_element_by_id('it-meetmefeatures-confno')
     input_confno.clear()
     input_confno.send_keys(confno)
 
 
 def _type_context(context):
-    world.wait_for_id('it-meetmefeatures-context', 'Meetme form not loaded')
+    world.browser.find_element_by_id('it-meetmefeatures-context', 'Meetme form not loaded')
     language_option = world.browser.find_element_by_xpath('//select[@id="it-meetmefeatures-context"]//option[@value="%s"]' % context)
     language_option.click()
 
 
 def _type_maxusers(maxusers):
-    world.wait_for_id('it-meetmefeatures-maxusers', 'Meetme form not loaded')
+    world.browser.find_element_by_id('it-meetmefeatures-maxusers', 'Meetme form not loaded')
     input_maxusers = world.browser.find_element_by_id('it-meetmefeatures-maxusers')
     input_maxusers.clear()
     input_maxusers.send_keys(maxusers)

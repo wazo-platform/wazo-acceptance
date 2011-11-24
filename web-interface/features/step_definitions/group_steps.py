@@ -13,21 +13,21 @@ GROUP_URL = '/service/ipbx/index.php/pbx_settings/groups/%s'
 def _open_add_group_url():
     URL = GROUP_URL % '?act=add'
     world.browser.get('%s%s' % (world.url, URL))
-    world.wait_for_id('it-groupfeatures-name', 'Group form not loaded')
+    world.browser.find_element_by_id('it-groupfeatures-name', 'Group form not loaded')
 
 def _open_list_group_url():
     URL = GROUP_URL % ('?act=list')
     world.browser.get('%s%s' % (world.url, URL))
-    world.wait_for_name('fm-group-list', 'Group list not loaded')
+    world.browser.find_element_by_name('fm-group-list', 'Group list not loaded')
 
 def _type_group_name(group_name):
-    world.wait_for_id('it-groupfeatures-name', 'Group form not loaded')
+    world.browser.find_element_by_id('it-groupfeatures-name', 'Group form not loaded')
     world.group_name = group_name
     input_name = world.browser.find_element_by_id('it-groupfeatures-name')
     input_name.send_keys(group_name)
 
 def _type_group_number(group_number):
-    world.wait_for_id('it-groupfeatures-number', 'Group form not loaded')
+    world.browser.find_element_by_id('it-groupfeatures-number', 'Group form not loaded')
     world.group_number = group_number
     input_number = world.browser.find_element_by_id('it-groupfeatures-number')
     input_number.send_keys(group_number)
@@ -100,7 +100,7 @@ def remove_group_with_name(step, group_name):
     _open_list_group_url()
     delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % group_name)
     delete_button.click()
-    alert = world.wait_for_alert('The alert never appeared')
+    alert = world.browser.switch_to_alert('The alert never appeared')
     alert.accept()
 
 @step(u'Then group (.*) is displayed in the list')

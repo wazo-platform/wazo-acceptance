@@ -16,7 +16,7 @@ def then_the_option_is_checked(step, option_name, checkstate):
 
 @step(u'When I (un)?check this option')
 def when_i_check_this_option(step, checkstate):
-    option = find_element_by_label(world.last_option_label)
+    option = world.browser.find_element_by_label(world.last_option_label)
     goal_checked = (checkstate is None)
     Checkbox(option).set_checked(goal_checked)
 

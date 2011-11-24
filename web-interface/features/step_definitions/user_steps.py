@@ -50,7 +50,7 @@ def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest
 
 @step(u'When user (.*) (.*) is removed')
 def remove_user(step, firstname, lastname):
-    world.wait_for_id('table-main-listing', 'Delete button not loaded')
+    world.browser.find_element_by_id('table-main-listing', 'Delete button not loaded')
     delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s %s')]//a[@title='Delete']" % (firstname, lastname))
     delete_button.click()
     alert = world.browser.switch_to_alert();
@@ -70,7 +70,7 @@ def given_a_user_in_group(step, firstname, lastname, group):
 
 @step(u'Then I should be at the user list page')
 def then_i_should_be_at_the_user_list_page(step):
-    world.wait_for_id('bc-main', 'User list page not loaded')
+    world.browser.find_element_by_id('bc-main', 'User list page not loaded')
     try:
         list = world.browser.find_element_by_name('fm-users-list')
     except:
