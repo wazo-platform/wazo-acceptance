@@ -39,13 +39,6 @@ def when_i_create_a_user_in_group(step, firstname, lastname, group):
     submit_form()
     user_is_saved(firstname, lastname)
 
-@step(u'When I edit (.*) (.*)')
-def when_i_edit_user(step, firstname, lastname):
-    id = _find_user_id(firstname, lastname)
-    if len(id) > 0:
-        _open_edit_user_form(id[0])
-        submit_form()
-
 @step(u'When I rename (.*) (.*) to (.*) (.*)')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
     id = find_user_id(orig_firstname, orig_lastname)
