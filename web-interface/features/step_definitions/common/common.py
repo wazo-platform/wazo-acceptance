@@ -6,6 +6,7 @@ from checkbox import Checkbox
 
 def find_element_by_label(label):
     '''Finds the first element corresponding to the label containing the argument'''
+    world.wait_for_xpath("//label[contains(.,'%s')]" % label, 'Label not loaded')
     webelement_label = world.browser.find_element_by_xpath("//label[contains(.,'%s')]" % label)
     webelement_id = webelement_label.get_attribute('for')
     webelement = world.browser.find_element_by_id(webelement_id)
@@ -13,6 +14,7 @@ def find_element_by_label(label):
 
 def find_elements_by_label(label):
     '''Finds all elements corresponding to the labels containing the argument'''
+    world.wait_for_xpath("//label[contains(.,'%s')]" % label, 'Labels not loaded')
     webelement_labels = world.browser.find_elements_by_xpath("//label[contains(.,'%s')]" % label)
     ret = []
     for webelement_label in webelement_labels:
