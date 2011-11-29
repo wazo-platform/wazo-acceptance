@@ -2,6 +2,7 @@
 
 from lettuce.decorators import step
 from lettuce.registry import world
+from selenium.common.exceptions import NoSuchElementException
 
 from common.common import *
 from checkbox import Checkbox
