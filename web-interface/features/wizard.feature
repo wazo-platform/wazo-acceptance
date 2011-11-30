@@ -24,8 +24,8 @@ Feature: Wizard
         Then I should be on the entitycontext page
         When I fill entity xivo_entity, start 100, end 199
         When I click next
-        Then I should be on the ipbximportuser page
-        When I click next
+        # Then I should be on the ipbximportuser page
+        # When I click next
         Then I should be on the validate page
         When I click validate
         Then I should be redirected to the login page
