@@ -22,8 +22,10 @@ class XiVOBrowser(webdriver.Firefox):
         # Get the page
         webdriver.Firefox.get(self, url)
 
+        WebDriverWait(self, world.timeout).until(lambda browser : webdriver.Firefox.page_source)
+        source = self.page_source
         # Remove newline, to allow regexp substitution
-        source = self.page_source.replace('\n', ' ')
+        source = source.replace('\n', ' ')
         # Remove HTML comments
         source = re.sub('<!--.*-->', '', source)
         # Extract missing translations
