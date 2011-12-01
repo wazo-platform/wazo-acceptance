@@ -3,7 +3,7 @@ Feature: ProvdPluginUpdate
     I have successfully update
 
     Scenario Outline: Update plugins in provd
-        Given I login as root with password superpass at http://skaro-daily.lan-quebec.avencall.com
+        Given I am logged in
         Given a update plugins provd with good url
         Then plugins list successfully updated
         Given a update plugins provd with bad url
