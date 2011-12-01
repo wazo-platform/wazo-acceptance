@@ -30,15 +30,19 @@ def the_option_is_checked(option_label, checkstate, **kwargs):
         Checkbox(option).set_checked(goal_checked)
         submit_form()
 
+def find_form_errors():
+    """Find the box containing form errors."""
+    return world.browser.find_element_by_id('report-xivo-error')
+
 def submit_form():
     """Every (?) submit button in the Webi has the same id."""
     submit_button = world.browser.find_element_by_id('it-submit')
     submit_button.click()
     try:
-        error_element = world.browser.find_element_by_id('report-xivo-error')
-        raise FormErrorException(error_element.text)
+        error_element = find_form_errors()
     except NoSuchElementException:
-        pass
+        return
+    raise FormErrorException(error_element.text)
 
 def find_line(line_substring):
     """Return the tr webelement of a list table."""

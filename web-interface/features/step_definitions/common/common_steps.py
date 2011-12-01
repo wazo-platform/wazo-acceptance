@@ -21,10 +21,21 @@ def when_i_check_this_option(step, checkstate):
     goal_checked = (checkstate is None)
     Checkbox(option).set_checked(goal_checked)
 
-@step(u'When I submit')
+@step(u'When I submit$')
 def when_i_submit(step):
     submit_form()
+
+@step(u'When I submit with errors')
+def when_i_submit_with_errors(step):
+    try:
+        submit_form()
+    except FormErrorException:
+        pass
 
 @step(u'Then this option is (not )?checked')
 def then_this_option_is_checked(step, checkstate):
     the_option_is_checked(world.last_option_label, checkstate)
+
+@step(u'Then I get errors')
+def then_i_get_errors(step):
+    assert find_form_errors() is not None
