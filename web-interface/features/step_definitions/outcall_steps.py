@@ -72,9 +72,7 @@ def then_there_is_no_outcall(step, name):
 def i_go_to_the_outcall_tab(step, name, tab):
     _open_list_outcall_url()
     edit_line(name)
-    tab_button = world.browser.find_element_by_xpath(
-        "//div[@class='tab']//a[contains(.,'%s')]" % tab)
-    tab_button.click()
+    go_to_tab(tab)
 
 @step(u'Given I don\'t see any exten ([0-9]+)')
 def given_i_dont_see_any_exten(step, exten):

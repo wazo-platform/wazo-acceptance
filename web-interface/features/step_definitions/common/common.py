@@ -58,3 +58,9 @@ def edit_line(line_substring):
     table_line = find_line(line_substring)
     edit_button = table_line.find_element_by_xpath("//a[@title='Edit']")
     edit_button.click()
+
+def go_to_tab(tab_label):
+    """Click a tab button."""
+    tab_button = world.browser.find_element_by_xpath(
+        "//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
+    tab_button.click()
