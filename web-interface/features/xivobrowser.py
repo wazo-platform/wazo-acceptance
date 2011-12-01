@@ -5,7 +5,9 @@ import time
 
 from lettuce.registry import world
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import ElementNotVisibleException
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 
 class MissingTranslationException(Exception):
@@ -19,7 +21,6 @@ class XiVOBrowser(webdriver.Firefox):
 
         # Get the page
         webdriver.Firefox.get(self, url)
-        return
 
         # Remove newline, to allow regexp substitution
         source = self.page_source.replace('\n', ' ')
@@ -43,9 +44,15 @@ class XiVOBrowser(webdriver.Firefox):
     def find_element(self, by=id, value=None):
         """This function is called by all find_element_by_*().
            This implementation adds a timeout to search for Webelements."""
-        WebDriverWait(self, world.timeout).until(lambda browser : webdriver.Firefox.find_element(self, by, value))
+        try:
+            WebDriverWait(self, world.timeout).until(lambda browser : webdriver.Firefox.find_element(self, by, value))
+        except TimeoutException:
+            raise NoSuchElementException(value)
         element = webdriver.Firefox.find_element(self, by, value)
-        WebDriverWait(self, world.timeout).until(lambda browser : element.is_displayed())
+        try:
+            WebDriverWait(self, world.timeout).until(lambda browser : element.is_displayed())
+        except TimeoutException:
+            raise ElementNotVisibleException(value)
         # Timeout exception will be catched in find_element_by_* methods
         return element
 
@@ -57,8 +64,10 @@ class XiVOBrowser(webdriver.Firefox):
             world.timeout = timeout
         try:
             ret = webdriver.Firefox.find_element_by_id(self, id)
-        except TimeoutException:
+        except NoSuchElementException:
             raise NoSuchElementException(id, message)
+        except ElementNotVisibleException:
+            raise ElementNotVisibleException(id, message)
         finally:
             world.timeout = oldtimeout
         return ret
@@ -69,8 +78,10 @@ class XiVOBrowser(webdriver.Firefox):
             world.timeout = timeout
         try:
             ret = webdriver.Firefox.find_element_by_name(self, name)
-        except TimeoutException:
+        except NoSuchElementException:
             raise NoSuchElementException(name, message)
+        except ElementNotVisibleException:
+            raise ElementNotVisibleException(name, message)
         finally:
             world.timeout = oldtimeout
         return ret
@@ -81,8 +92,10 @@ class XiVOBrowser(webdriver.Firefox):
             world.timeout = timeout
         try:
             ret = webdriver.Firefox.find_element_by_xpath(self, xpath)
-        except TimeoutException:
+        except NoSuchElementException:
             raise NoSuchElementException(xpath, message)
+        except ElementNotVisibleException:
+            raise ElementNotVisibleException(xpath, message)
         finally:
             world.timeout = oldtimeout
         return ret

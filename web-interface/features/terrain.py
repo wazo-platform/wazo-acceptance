@@ -25,6 +25,7 @@ def dump_current_page(filename='/tmp/lettuce.html'):
     f = open(filename, 'w')
     f.write(world.browser.page_source.encode('utf-8'))
     f.close()
+    world.browser.save_screenshot(filename + '.png')
 
 @after.all
 def teardown_browser(total):
