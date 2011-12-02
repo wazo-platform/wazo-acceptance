@@ -7,7 +7,7 @@ from selenium.common.exceptions import ElementNotVisibleException
 
 from common.common import submit_form
 
-INCALL_URL = 'service/ipbx/index.php/call_management/incall/%s'
+INCALL_URL = '/service/ipbx/index.php/call_management/incall/%s'
 
 def _open_add_incall_url():
     URL = INCALL_URL % '?act=add'

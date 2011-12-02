@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import time
 
 from lettuce import before, after, world
-
 from xivobrowser import XiVOBrowser
 
 @before.all
@@ -12,11 +10,13 @@ def setup_browser():
     world.browser = XiVOBrowser()
     world.timeout = 5
 
+
 @before.all
 def setup_login_infos():
     world.login = 'root'
     world.password = 'superpass'
     world.host = 'http://skaro-daily.lan-quebec.avencall.com/'
+
 
 @world.absorb
 def dump_current_page(filename='/tmp/lettuce.html'):
@@ -26,6 +26,7 @@ def dump_current_page(filename='/tmp/lettuce.html'):
     f.write(world.browser.page_source.encode('utf-8'))
     f.close()
     world.browser.save_screenshot(filename + '.png')
+
 
 @after.all
 def teardown_browser(total):

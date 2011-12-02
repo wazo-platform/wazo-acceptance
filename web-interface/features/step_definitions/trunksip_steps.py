@@ -6,7 +6,7 @@ from lettuce.registry import world
 from common.common import *
 from ipbx_objects.user_manager import *
 
-TRUNKSIP_URL = 'service/ipbx/index.php/trunk_management/sip/%s'
+TRUNKSIP_URL = '/service/ipbx/index.php/trunk_management/sip/%s'
 
 def _open_add_trunksip_url():
     URL = TRUNKSIP_URL % '?act=add'

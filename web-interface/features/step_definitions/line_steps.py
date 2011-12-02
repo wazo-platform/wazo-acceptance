@@ -6,7 +6,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 from common.common import submit_form
 
-LINE_ADD_URL = 'service/ipbx/index.php/pbx_settings/lines/?act=add&proto='
+LINE_ADD_URL = '/service/ipbx/index.php/pbx_settings/lines/?act=add&proto='
 
 @step(u'When I create a (.*) line in context (.*)')
 def when_i_create_a_line_in_context(step, protocol, context):
