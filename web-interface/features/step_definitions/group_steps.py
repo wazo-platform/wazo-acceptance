@@ -5,7 +5,7 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
 
-from common.common import submit_form
+from common.common import *
 
 GROUP_URL = '/service/ipbx/index.php/pbx_settings/groups/%s'
 
@@ -33,33 +33,28 @@ def _type_group_number(group_number):
     input_number.send_keys(group_number)
 
 def _type_context(context):
-    select_context = world.browser.find_element_by_xpath('//select[@id="it-groupfeatures-context"]//option[@value="%s"]' % context)
+    select_context = world.browser.find_element_by_xpath(
+        '//select[@id="it-groupfeatures-context"]//option[@value="%s"]' % context)
     select_context.click()
 
 def _remove_group_with_number(group_number):
     _open_list_group_url()
     try:
-        delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % group_number)
-        delete_button.click()
-        alert = world.browser.switch_to_alert();
-        alert.accept()
-    except NoSuchElementException, ElementNotVisibleException:
+        remove_line(group_number)
+    except NoSuchElementException:
         pass
 
 def _remove_group_with_name(group_name):
     _open_list_group_url()
     try:
-        delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % group_name)
-        delete_button.click()
-        alert = world.browser.switch_to_alert();
-        alert.accept()
+        remove_line(group_name)
     except NoSuchElementException, ElementNotVisibleException:
         pass
 
 def _group_is_saved(group_name):
     _open_list_group_url()
     try:
-        group = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]" % (group_name))
+        group = find_line(group_name)
         return group is not None
     except NoSuchElementException:
         return False
@@ -69,15 +64,15 @@ def _delete_all_group():
     wsg = WsGroup()
     wsg.clear()
 
-@step(u'Given there is no group with number ([0-9]+)')
+@step(u'Given there is no group with number "([^"]*)"')
 def given_there_is_no_group_with_number(step, number):
     _remove_group_with_number(number)
 
-@step(u'Given there is no group with name ([\w]+)')
+@step(u'Given there is no group with name "([^"]*)"')
 def given_there_is_no_group_with_name(step, name):
     _remove_group_with_name(name)
 
-@step(u'When I create a group (.*) with number ([0-9]+)')
+@step(u'When I create a group "([^"]*)" with number "([^"]*)"')
 def when_i_create_group_with_number(step, group_name, group_number):
     import context_steps as ctx
     ctx.when_i_edit_a_context(step, 'default')
@@ -89,24 +84,20 @@ def when_i_create_group_with_number(step, group_name, group_number):
     _type_context('default')
     submit_form()
 
-@step(u'When I create a group ([\w]+)$')
+@step(u'When I create a group "([^"]*)"$')
 def when_i_create_group(step, group_name):
     _open_add_group_url()
     _type_group_name(group_name)
     submit_form()
 
-@step(u'When group ([\w]+) is removed')
+@step(u'When group "([^"]*)" is removed')
 def remove_group_with_name(step, group_name):
-    _open_list_group_url()
-    delete_button = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]//a[@title='Delete']" % group_name)
-    delete_button.click()
-    alert = world.browser.switch_to_alert('The alert never appeared')
-    alert.accept()
+    _remove_group_with_name(group_name)
 
-@step(u'Then group (.*) is displayed in the list')
+@step(u'Then group "([^"]*)" is displayed in the list')
 def then_group_is_displayed_in_the_list(step, group_name):
     assert _group_is_saved(group_name)
 
-@step(u'Then group (.*) is not displayed in the list')
+@step(u'Then group "([^"]*)" is not displayed in the list')
 def then_group_is_not_displayed_in_the_list(step, group_name):
     assert not _group_is_saved(group_name)

@@ -17,21 +17,21 @@ Feature: Outcall
         Given I am logged in
         Given there is an outcall "outdoor" with trunk "door"
         Given I go to the outcall "outdoor", tab "Exten"
-        Given I don't see any exten 7000
+        Given I don't see any exten "7000"
         When I go to the outcall "outdoor", tab "Exten"
         When I add an exten
-        When I set the exten to 7000
+        When I set the exten to "7000"
         When I submit
         When I go to the outcall "outdoor", tab "Exten"
-        Then I see an exten 7000
+        Then I see an exten "7000"
 
     Scenario: Remove an extension in outcall
         Given I am logged in
         Given there is an outcall "outdoor" with trunk "door"
         Given I go to the outcall "outdoor", tab "Exten"
-        Given I see an exten 7000
+        Given I see an exten "7000"
         When I go to the outcall "outdoor", tab "Exten"
-        When I remove the exten 7000
+        When I remove the exten "7000"
         When I submit
         When I go to the outcall "outdoor", tab "Exten"
-        Then I don't see any exten 7000
+        Then I don't see any exten "7000"

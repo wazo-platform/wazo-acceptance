@@ -2,7 +2,7 @@ Feature: ProvdPluginUpdate
     In order to update plugins
     I have successfully update
 
-    Scenario Outline: Update plugins in provd
+    Scenario: Update plugins in provd
         Given I am logged in
         Given a update plugins provd with good url
         Then plugins list successfully updated

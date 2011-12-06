@@ -2,6 +2,7 @@
 
 from lettuce.decorators import step
 from lettuce.registry import world
+from selenium.common.exceptions import NoSuchElementException
 
 from common.common import submit_form
 
@@ -37,7 +38,7 @@ def i_am_logged_in(step):
     try:
         # Are we logged in ?
         world.browser.find_element_by_id('loginbox')
-    except:
+    except NoSuchElementException:
         # If not logged in, then proceed
         step.given('Given I login as ' + world.login
                  + ' with password ' + world.password

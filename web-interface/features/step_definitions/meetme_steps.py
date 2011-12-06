@@ -4,7 +4,7 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
-from common.common import submit_form
+from common.common import *
 
 
 MM_URL = '/service/ipbx/index.php/pbx_settings/meetme/%s'
@@ -61,23 +61,23 @@ def _delete_all_meetme():
 def _is_saved(name):
     _open_list_url()
     try:
-        meetme = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s')]" % (name))
+        meetme = find_line(name)
         return meetme is not None
     except NoSuchElementException:
         return False
 
 
-@step(u'Then conference room (.*) is displayed in the list')
+@step(u'Then conference room "([^"]*)" is displayed in the list')
 def then_conference_room_is_displayed_in_the_list(step, name):
     assert _is_saved(name)
 
 
-@step(u'Then conference room (.*) is not displayed in the list')
+@step(u'Then conference room "([^"]*)" is not displayed in the list')
 def then_conference_room_is_not_displayed_in_the_list(step, name):
     assert not _is_saved(name)
 
 
-@step(u'When I create a conference room with name (.*) with number (\d+) with max participants (\d+)')
+@step(u'When I create a conference room with name "([^"]*)" with number "([^"]*)" with max participants "([^"]*)"')
 def when_i_create_a_conference_room_with_name_number_max_participants(step, name, confno, maxusers):
     import context_steps as ctx
     ctx.when_i_edit_a_context(step, 'default')

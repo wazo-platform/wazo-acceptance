@@ -34,7 +34,7 @@ def given_there_is_no_outcall(step, name):
 
 
 @step(u'When I create an outcall with name "([^"]*)" and trunk "([^"]*)"')
-def when_i_create_an_outcall_with_name(step, name, trunk):
+def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     _open_add_outcall_url()
     input_name = world.browser.find_element_by_id('it-outcall-name', 'Outcall form not loaded')
     input_name.send_keys(name)
@@ -55,8 +55,8 @@ def given_there_is_an_outcall(step, name, trunk):
     _open_list_outcall_url()
     try:
         find_line(name)
-    except:
-        when_i_create_an_outcall_with_name(step, name, trunk)
+    except NoSuchElementException:
+        step.given(u'When I create an outcall with name "%s" and trunk "%s"' % (name, trunk))
 
 
 @step(u'When I remove the outcall "([^"]*)"')
@@ -70,10 +70,10 @@ def then_there_is_no_outcall(step, name):
     _open_list_outcall_url()
     try:
         find_line(name)
-        # if no exception, then we have a problem
-        assert False
-    except:
+    except NoSuchElementException:
         pass
+    else:
+        assert False
 
 
 @step(u'I go to the outcall "([^"]*)", tab "([^"]*)"')
@@ -83,7 +83,7 @@ def i_go_to_the_outcall_tab(step, name, tab):
     go_to_tab(tab)
 
 
-@step(u'Given I don\'t see any exten ([0-9]+)')
+@step(u'Given I don\'t see any exten "([^"]*)"')
 def given_i_dont_see_any_exten(step, exten):
     try:
         then_i_dont_see_any_exten(step, exten)
@@ -98,21 +98,21 @@ def when_i_add_an_exten(step):
     add_button.click()
 
 
-@step(u'When I set the exten to ([0-9]+)')
+@step(u'When I set the exten to "([^"]*)"')
 def when_i_set_the_exten_to(step, exten):
     input_exten = world.browser.find_elements_by_xpath(
         "//table[@id='list_exten']//input[@name='dialpattern[exten][]']")[-1]
     input_exten.send_keys(exten)
 
 
-@step(u'Then I see an exten ([0-9]+)')
+@step(u'Then I see an exten "([^"]*)"')
 def then_i_see_an_exten(step, exten):
     exten_element = _exten_line(exten).find_element_by_xpath(
         ".//input[@name='dialpattern[exten][]']")
     assert exten_element is not None
 
 
-@step(u'Given I see an exten ([0-9]+)')
+@step(u'Given I see an exten "([^"]*)"')
 def given_i_see_an_exten(step, exten):
     try:
         then_i_see_an_exten(step, exten)
@@ -122,13 +122,13 @@ def given_i_see_an_exten(step, exten):
         submit_form()
 
 
-@step(u'When I remove the exten ([0-9]+)')
+@step(u'When I remove the exten "([^"]*)"')
 def when_i_remove_the_exten(step, exten):
     delete_button = _exten_line(exten).find_element_by_id('lnk-del-row')
     delete_button.click()
 
 
-@step(u'Then I don\'t see any exten ([0-9]+)')
+@step(u'Then I don\'t see any exten "([^"]*)"')
 def then_i_dont_see_any_exten(step, exten):
     try:
         _exten_line(exten).find_element_by_xpath(
