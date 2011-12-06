@@ -85,7 +85,7 @@ def given_i_see_a_call_limit_to_netmask_of_calls(step, destination, netmask, lim
 def when_i_remove_the_call_limits_to_netmask(step, destination, netmask):
     lines = _find_call_limit_lines(destination, netmask)
     for line in lines:
-        delete_button = line.find_element_by_xpath("//a[@title='Delete this limit']")
+        delete_button = line.find_element_by_xpath(".//a[@title='Delete this limit']")
         delete_button.click()
     submit_form()
 

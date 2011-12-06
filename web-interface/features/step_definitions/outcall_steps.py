@@ -108,7 +108,7 @@ def when_i_set_the_exten_to(step, exten):
 @step(u'Then I see an exten ([0-9]+)')
 def then_i_see_an_exten(step, exten):
     exten_element = _exten_line(exten).find_element_by_xpath(
-        "//input[@name='dialpattern[exten][]']")
+        ".//input[@name='dialpattern[exten][]']")
     assert exten_element is not None
 
 
@@ -132,7 +132,7 @@ def when_i_remove_the_exten(step, exten):
 def then_i_dont_see_any_exten(step, exten):
     try:
         _exten_line(exten).find_element_by_xpath(
-            "//input[@name='dialpattern[exten][]']")
+            ".//input[@name='dialpattern[exten][]']")
         assert False
     except NoSuchElementException:
         pass

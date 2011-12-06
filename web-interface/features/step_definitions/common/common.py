@@ -52,7 +52,7 @@ def find_line(line_substring):
 def remove_line(line_substring):
     """Remove a line in a list table."""
     table_line = find_line(line_substring)
-    delete_button = table_line.find_element_by_xpath("//a[@title='Delete']")
+    delete_button = table_line.find_element_by_xpath(".//a[@title='Delete']")
     delete_button.click()
     alert = world.browser.switch_to_alert();
     alert.accept()
@@ -60,7 +60,7 @@ def remove_line(line_substring):
 def edit_line(line_substring):
     """Edit an element of a list table."""
     table_line = find_line(line_substring)
-    edit_button = table_line.find_element_by_xpath("//a[@title='Edit']")
+    edit_button = table_line.find_element_by_xpath(".//a[@title='Edit']")
     edit_button.click()
 
 def go_to_tab(tab_label):
