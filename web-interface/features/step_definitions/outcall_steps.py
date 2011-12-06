@@ -21,7 +21,7 @@ def _open_list_outcall_url():
 def _exten_line(exten):
     """Find the line of an outcall exten in the list of an outcall extens."""
     return world.browser.find_element_by_xpath(
-        "//table[@id='list_exten']//tr/td/input[@name='dialpattern[exten][]' and @value='%s']/../.." % exten)
+        "//table[@id='list_exten']//tr[.//input[@name='dialpattern[exten][]' and @value='%s']]" % exten)
 
 
 @step(u'Given there is no outcall "([^"]*)"')
@@ -39,7 +39,7 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     input_name = world.browser.find_element_by_id('it-outcall-name', 'Outcall form not loaded')
     input_name.send_keys(name)
     input_trunk = world.browser.find_element_by_xpath(
-        "//div[@id='outcalltrunklist']//div[@class='available']//li[contains(@title, trunk)]//a")
+        "//div[@id='outcalltrunklist']//div[@class='available']//li[contains(@title, %s)]//a" % trunk)
     input_trunk.click()
     submit_form()
 
@@ -133,6 +133,7 @@ def then_i_dont_see_any_exten(step, exten):
     try:
         _exten_line(exten).find_element_by_xpath(
             ".//input[@name='dialpattern[exten][]']")
-        assert False
     except NoSuchElementException:
         pass
+    else:
+        assert False
