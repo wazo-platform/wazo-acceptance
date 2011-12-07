@@ -41,8 +41,9 @@ def submit_form():
     try:
         error_element = find_form_errors()
     except NoSuchElementException:
-        return
-    raise FormErrorException(error_element.text)
+        pass
+    else:
+        raise FormErrorException(error_element.text)
 
 def find_line(line_substring):
     """Return the tr webelement of a list table."""

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import time
+
 from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
@@ -126,13 +128,14 @@ def given_i_see_an_exten(step, exten):
 def when_i_remove_the_exten(step, exten):
     delete_button = _exten_line(exten).find_element_by_id('lnk-del-row')
     delete_button.click()
+    # Wait for the Javascript to remove the line
+    time.sleep(world.timeout)
 
 
 @step(u'Then I don\'t see any exten "([^"]*)"')
 def then_i_dont_see_any_exten(step, exten):
     try:
-        _exten_line(exten).find_element_by_xpath(
-            ".//input[@name='dialpattern[exten][]']")
+        _exten_line(exten)
     except NoSuchElementException:
         pass
     else:
