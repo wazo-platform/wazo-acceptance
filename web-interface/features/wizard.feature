@@ -12,8 +12,6 @@ Feature: Wizard
         Then I should be on the license page
         When I accept the terms of the licence
         When I click next
-        Then I should be on the dbconfig page
-        When I click next
         Then I should be on the checkcomponents page
         When I click next
         Then I should be on the mainconfig page
