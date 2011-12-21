@@ -9,19 +9,40 @@ echo "Here are the classnames, sorted from the more recently edited to the most 
 echo "You can filter automated tests in Testlink to see if some tests are missing from Testlink."
 echo
 
-# Sort the files by git modification date
-for file in $(ls features/*.feature) ; do
-    files+=$(git log -1 --format=%ct $file):$file"
-"
-done
-files=$(sort -rg <<< "$files"|cut -d: -f2)
+function add_git_date {
+    while read filename
+    do
+        git log -1 --format=%ct $filename | sed "s|\$|:$filename|"
+    done
+}
 
-# Print Feature : Scenario
-for file in $files; do
-    feature=$(grep Feature $file|cut -f2 -d:|sed 's/^ *\(.*\) *$/\1/')
-    scenarios+=$(grep Scenario $file | sed "s/ *Scenario.*:/$feature :/")"
-"
-done
+function extract_features {
+    while read filename
+    do
+        awk \
+'
+BEGIN {FS = ": "}
+/Feature/ {feature = $2}
+/Scenario/ {print feature " : " $2 }
+' \
+        $filename
+    done
+}
 
-echo "$scenarios"
-echo Total : $(wc -l <<< "$scenarios")
+# Get filenames
+ls features/*.feature | \
+
+# Add sort indicator
+add_git_date | \
+
+# Sort
+sort -rg | \
+
+# Remove sort indicator
+cut -d: -f2 | \
+
+# Print feature : scenario
+extract_features | \
+
+# Count lines and print
+tee >(wc -l | awk '{print "\nTotal : " $0}')
