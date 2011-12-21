@@ -1,13 +1,13 @@
 Feature: TrunkIAX
 
-    Scenario: Add an trunkiax
+    Scenario: Add a trunkiax
         Given I am logged in
         Given there is no trunkiax "tokyo_paris"
-        When I create an trunkiax with name "tokyo_paris"
-        Then there is an trunkiax "tokyo_paris"
+        When I create a trunkiax with name "tokyo_paris"
+        Then there is a trunkiax "tokyo_paris"
 
-    Scenario: Remove an trunkiax
+    Scenario: Remove a trunkiax
         Given I am logged in
-        Given there is an trunkiax "tokyo_paris"
+        Given there is a trunkiax "tokyo_paris"
         When I remove the trunkiax "tokyo_paris"
         Then there is no trunkiax "tokyo_paris"

@@ -36,22 +36,22 @@ def given_there_is_no_trunksip(step, name):
         pass
 
 
-@step(u'When I create an trunksip with name "([^"]*)"')
-def when_i_create_an_trunksip_with_name_and_trunk(step, name):
+@step(u'When I create a trunksip with name "([^"]*)"')
+def when_i_create_a_trunksip_with_name_and_trunk(step, name):
     _open_add_trunksip_url()
     input_name = world.browser.find_element_by_id('it-protocol-name', 'trunksip form not loaded')
     input_name.send_keys(name)
     submit_form()
 
 
-@step(u'Then there is an trunksip "([^"]*)"')
-def then_there_is_an_trunksip(step, name):
+@step(u'Then there is a trunksip "([^"]*)"')
+def then_there_is_a_trunksip(step, name):
     _open_list_trunksip_url()
     assert find_line(name) is not None
 
 
-@step(u'Given there is an trunksip "([^"]*)"')
-def given_there_is_an_trunksip(step, name):
+@step(u'Given there is a trunksip "([^"]*)"')
+def given_there_is_a_trunksip(step, name):
     _open_list_trunksip_url()
     try:
         find_line(name)
