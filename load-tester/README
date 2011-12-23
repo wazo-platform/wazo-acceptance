@@ -1,1 +1,6 @@
 If you are using python < 2.7, you need to install argparse.
+
+
+To copy the project on trafgen, you can use the following command:
+
+  rsync -v --exclude '*.pyc' --delete -rtlp * trafgen@trafgen:load-tester/
