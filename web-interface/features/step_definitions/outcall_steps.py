@@ -43,6 +43,8 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     input_trunk = world.browser.find_element_by_xpath(
         "//div[@id='outcalltrunklist']//div[@class='available']//li[contains(@title, %s)]//a" % trunk)
     input_trunk.click()
+    # Wait for the Javascript to move the trunk
+    time.sleep(world.timeout)
     submit_form()
 
 
