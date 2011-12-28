@@ -8,7 +8,7 @@
     To: <sip:[service]@[remote_ip]:[remote_port]>
     From: <sip:[field0]@[local_ip]:[local_port]>;tag=[call_number]
     Call-ID: [call_id]
-    CSeq: 1 INVITE
+    CSeq: [cseq] INVITE
     Contact: <sip:[field0]@[local_ip]:[local_port]>
     Max-Forwards: 70
     Content-Type: application/sdp
@@ -35,7 +35,7 @@
     To: <sip:[service]@[remote_ip]:[remote_port]>[peer_tag_param]
     From: <sip:[field0]@[local_ip]:[local_port]>;tag=[call_number]
     Call-ID: [call_id]
-    CSeq: 1 ACK
+    CSeq: [cseq] ACK
     Contact: <sip:[field0]@[local_ip]:[local_port]>
     Max-Forwards: 70
     Content-Length: 0
@@ -50,7 +50,7 @@
     To: <sip:[service]@[remote_ip]:[remote_port]>
     From: <sip:[field0]@[local_ip]:[local_port]>;tag=[call_number]
     Call-ID: [call_id]
-    CSeq: 2 INVITE
+    CSeq: [cseq] INVITE
     Contact: <sip:[field0]@[local_ip]:[local_port]>
     [field1]
     Max-Forwards: 70
@@ -87,7 +87,7 @@
     To: <sip:[service]@[remote_ip]:[remote_port]>[peer_tag_param]
     From: <sip:[field0]@[local_ip]:[local_port]>;tag=[call_number]
     Call-ID: [call_id]
-    CSeq: 2 ACK
+    CSeq: [cseq] ACK
     Contact: <sip:[field0]@[local_ip]:[local_port]>
     Max-Forwards: 70
     Content-Length: 0
@@ -104,7 +104,7 @@
     To: <sip:[service]@[remote_ip]:[remote_port]>[peer_tag_param]
     From: <sip:[field0]@[local_ip]:[local_port]>;tag=[call_number]
     Call-ID: [call_id]
-    CSeq: 2 BYE
+    CSeq: [cseq] BYE
     Contact: <sip:[field0]@[local_ip]:[local_port]>
     Max-Forwards: 70
     Content-Length: 0
