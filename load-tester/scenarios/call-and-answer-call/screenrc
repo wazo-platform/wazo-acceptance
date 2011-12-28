@@ -7,5 +7,5 @@ title answer-call
 sleep 1
 focus down
 resize +4
-screen sipp -inf users-call.csv -sf scenario-call.xml -s 1001 -r 1 -i 192.168.32.241 skaro-load
+screen sipp -inf users-call.csv -sf scenario-call.xml -s 1002 -r 1 -i 192.168.32.241 skaro-load
 title make-call
