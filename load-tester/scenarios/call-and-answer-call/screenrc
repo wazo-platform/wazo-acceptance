@@ -1,0 +1,5 @@
+source /etc/screenrc
+
+screen sipp -inf users-answer-call.csv -sf scenario-answer-call.xml -m 1 -r 1 -i 192.168.32.241 skaro-load
+sleep 1
+screen sipp -inf users-call.csv -sf scenario-call.xml -d 1000 -m 1 -s 1001 -r 1 -i 192.168.32.241 skaro-load
