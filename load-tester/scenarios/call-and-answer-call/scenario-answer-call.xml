@@ -1,42 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<scenario name="register with auth then answer call then wait">
-
-<send retrans="500">
-  <![CDATA[
-    REGISTER sip:[remote_ip]:[remote_port] SIP/2.0
-    Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-    To: <sip:[field0]@[remote_ip]>
-    From: <sip:[field0]@[remote_ip]>;tag=[call_number]
-    Call-ID: [call_id]
-    CSeq: 1 REGISTER
-    Contact: <sip:[field0]@[local_ip]:[local_port]>;expires=3600
-    Max-Forwards: 70
-    Content-Length: 0
-
-  ]]>
-</send>
-
-<recv response="401" auth="true">
-</recv>
-
-<send retrans="500">
-  <![CDATA[
-    REGISTER sip:[remote_ip]:[remote_port] SIP/2.0
-    Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-    To: <sip:[field0]@[remote_ip]>
-    From: <sip:[field0]@[remote_ip]>;tag=[call_number]
-    Call-ID: [call_id]
-    CSeq: 2 REGISTER
-    Contact: <sip:[field0]@[local_ip]:[local_port]>;expires=3600
-    [field1]
-    Max-Forwards: 70
-    Content-Length: 0
-
-  ]]>
-</send>
-
-<recv response="200">
-</recv>
+<scenario name="answer call then wait">
 
 <recv request="INVITE">
 </recv>
@@ -55,7 +18,7 @@
   ]]>
 </send>
 
-<pause milliseconds="1000"/>
+<pause milliseconds="500"/>
 
 <send retrans="500">
   <![CDATA[

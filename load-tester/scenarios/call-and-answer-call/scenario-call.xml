@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<scenario name="call then hangup with auth">
+<scenario name="call with auth then hangup">
 
 <send retrans="500">
   <![CDATA[
@@ -95,7 +95,7 @@
   ]]>
 </send>
 
-<pause/>
+<pause milliseconds="1000"/>
 
 <send>
   <![CDATA[
