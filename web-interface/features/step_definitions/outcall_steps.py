@@ -40,11 +40,17 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     _open_add_outcall_url()
     input_name = world.browser.find_element_by_id('it-outcall-name', 'Outcall form not loaded')
     input_name.send_keys(name)
+
+    # Wait for the Javascript to fill the trunk list
+    time.sleep(world.timeout)
+
     input_trunk = world.browser.find_element_by_xpath(
         "//div[@id='outcalltrunklist']//div[@class='available']//li[contains(@title, %s)]//a" % trunk)
     input_trunk.click()
+
     # Wait for the Javascript to move the trunk
     time.sleep(world.timeout)
+
     submit_form()
 
 
