@@ -40,6 +40,6 @@ def i_am_logged_in(step):
         world.browser.find_element_by_id('loginbox')
     except NoSuchElementException:
         # If not logged in, then proceed
-        step.given('Given I login as ' + world.login
-                 + ' with password ' + world.password
-                 + ' at ' + world.host)
+        given_i_login_as_with_password_at(step, world.login,
+                                          world.password,
+                                          world.host)

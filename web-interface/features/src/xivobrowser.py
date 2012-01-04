@@ -46,16 +46,21 @@ class XiVOBrowser(webdriver.Firefox):
     def find_element(self, by=id, value=None):
         """This function is called by all find_element_by_*().
            This implementation adds a timeout to search for Webelements."""
+        # Do not call lambda browser : browser.find_element -> infinite recursion
         try:
-            WebDriverWait(self, world.timeout).until(lambda browser : webdriver.Firefox.find_element(self, by, value))
+            WebDriverWait(self, world.timeout).until(
+                lambda browser : webdriver.Firefox.find_element(self, by, value))
         except TimeoutException:
             raise NoSuchElementException(value)
+
         element = webdriver.Firefox.find_element(self, by, value)
+
         try:
-            WebDriverWait(self, world.timeout).until(lambda browser : element.is_displayed())
+            WebDriverWait(self, world.timeout).until(
+                lambda browser : webdriver.Firefox.find_element(self, by, value).is_displayed())
         except TimeoutException:
             raise ElementNotVisibleException(value)
-        # Timeout exception will be catched in find_element_by_* methods
+
         return element
 
     # Maybe the three following reimplementations could be done through a single decorator ?
@@ -67,9 +72,9 @@ class XiVOBrowser(webdriver.Firefox):
         try:
             ret = webdriver.Firefox.find_element_by_id(self, id)
         except NoSuchElementException:
-            raise NoSuchElementException(id, message)
+            raise NoSuchElementException('%s: %s' % (id, message))
         except ElementNotVisibleException:
-            raise ElementNotVisibleException(id, message)
+            raise ElementNotVisibleException('%s: %s' % (id, message))
         finally:
             world.timeout = oldtimeout
         return ret
@@ -81,9 +86,9 @@ class XiVOBrowser(webdriver.Firefox):
         try:
             ret = webdriver.Firefox.find_element_by_name(self, name)
         except NoSuchElementException:
-            raise NoSuchElementException(name, message)
+            raise NoSuchElementException('%s: %s' % (name, message))
         except ElementNotVisibleException:
-            raise ElementNotVisibleException(name, message)
+            raise ElementNotVisibleException('%s: %s' % (name, message))
         finally:
             world.timeout = oldtimeout
         return ret
@@ -95,9 +100,9 @@ class XiVOBrowser(webdriver.Firefox):
         try:
             ret = webdriver.Firefox.find_element_by_xpath(self, xpath)
         except NoSuchElementException:
-            raise NoSuchElementException(xpath, message)
+            raise NoSuchElementException('%s: %s' % (xpath, message))
         except ElementNotVisibleException:
-            raise ElementNotVisibleException(xpath, message)
+            raise ElementNotVisibleException('%s: %s' % (xpath, message))
         finally:
             world.timeout = oldtimeout
         return ret
@@ -115,14 +120,16 @@ class XiVOBrowser(webdriver.Firefox):
 
     def find_element_by_label(self, label):
         """Finds the first element corresponding to the label containing the argument."""
-        webelement_label = self.find_element_by_xpath("//label[contains(.,'%s')]" % label)
+        webelement_label = self.find_element_by_xpath(
+            "//label[text() = '%s' or text() = '%s:']" % (label, label))
         webelement_id = webelement_label.get_attribute('for')
         webelement = self.find_element_by_id(webelement_id)
         return webelement
 
     def find_elements_by_label(self, label):
         """Finds all elements corresponding to the labels containing the argument."""
-        webelement_labels = self.find_elements_by_xpath("//label[contains(.,'%s')]" % label)
+        webelement_labels = self.find_elements_by_xpath(
+            "//label[text() = '%s' or text() = '%s:']" % (label, label))
         ret = []
         for webelement_label in webelement_labels:
             webelement_id = webelement_label.get_attribute('for')

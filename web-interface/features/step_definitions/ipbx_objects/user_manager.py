@@ -1,3 +1,5 @@
+import time
+
 from lettuce.registry import world
 
 from selenium.common.exceptions import NoSuchElementException
@@ -22,10 +24,10 @@ def open_list_user_url():
 
 def type_user_names(firstName, lastName):
     world.browser.find_element_by_id('it-userfeatures-firstname', 'User form not loaded')
-    input_firtName = world.browser.find_element_by_id('it-userfeatures-firstname')
+    input_firstName = world.browser.find_element_by_id('it-userfeatures-firstname')
     input_lastName = world.browser.find_element_by_id('it-userfeatures-lastname')
-    input_firtName.clear()
-    input_firtName.send_keys(firstName)
+    input_firstName.clear()
+    input_firstName.send_keys(firstName)
     input_lastName.clear()
     input_lastName.send_keys(lastName)
 
@@ -100,3 +102,13 @@ def insert_group_with_user(group_name, user_list=[]):
     wsg = group.WsGroup()
     wsg.clear()
     wsg.add(data)
+
+def add_line(linenumber):
+    add_button = world.browser.find_element_by_id('lnk-add-row')
+    add_button.click()
+
+    # Wait for the Javascript to insert the line
+    time.sleep(world.timeout)
+
+    input_linenumber = world.browser.find_elements_by_id('linefeatures-number')[-2]
+    input_linenumber.send_keys(linenumber)
