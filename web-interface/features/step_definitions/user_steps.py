@@ -95,3 +95,9 @@ def when_i_edit_the_line_1(step, linenumber):
 def when_i_edit_the_user_1_2(step, firstname, lastname):
     open_list_user_url()
     edit_line('%s %s' % (firstname, lastname))
+
+@step(u'Then I see the key "([^"]*)" has the value "([^"]*)"')
+def then_i_see_the_key_1_has_the_value_2(step, key, value):
+    value_cell = world.browser.find_element_by_xpath(
+        "//table//tr[td[@class = 'td-left' and text() = '%s']]//td[@class = 'td-right']" % key)
+    assert value_cell.text == value
