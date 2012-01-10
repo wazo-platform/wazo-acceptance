@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import
 
-import argparse
 import logging
 from loadtester import core
 from loadtester.bin import commands
@@ -21,31 +20,17 @@ def _init_logging():
     logger.setLevel(logging.ERROR)
 
 
-class _LoadtesterCommand(object):
-    def __init__(self):
-        self._init_subcommands()
-
-    def _init_subcommands(self):
-        self._subcommands = commands.Subcommands()
-        self._subcommands.add_subcommand(_AttachSubcommand('attach'))
-        self._subcommands.add_subcommand(_StartSubcommand('start'))
-        self._subcommands.add_subcommand(_StatusSubcommand('status'))
-
-    def new_parser(self):
-        parser = argparse.ArgumentParser()
-        self._configure_parser(parser)
-        self._subcommands.configure_parser(parser)
-        return parser
-
-    def _configure_parser(self, parser):
+class _LoadtesterCommand(commands.AbstractCommand):
+    def configure_parser(self, parser):
         parser.add_argument("-v", "--verbose", action="store_true", default=False,
                             help="increase logging verbosity")
 
-    def execute(self, parsed_args):
-        self._process_parsed_args(parsed_args)
-        self._subcommands.execute(parsed_args)
+    def configure_subcommands(self, subcommands):
+        subcommands.add_subcommand(_AttachSubcommand('attach'))
+        subcommands.add_subcommand(_StartSubcommand('start'))
+        subcommands.add_subcommand(_StatusSubcommand('status'))
 
-    def _process_parsed_args(self, parsed_args):
+    def pre_execute(self, parsed_args):
         if parsed_args.verbose:
             logger = logging.getLogger()
             logger.setLevel(logging.INFO)

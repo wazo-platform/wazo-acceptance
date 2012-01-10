@@ -13,6 +13,7 @@ def _new_parser():
 
 
 def _first_call_args(mock):
+    assert mock.called
     return mock.call_args[0][0]
 
 
@@ -20,54 +21,101 @@ class TestExecuteCommand(unittest.TestCase):
     def setUp(self):
         self.mock_parser = mock.Mock()
         self.mock_parser.parse_args.return_value = mock.sentinel.ReturnValue
-        self.mock_command = mock.Mock()
-        self.mock_command.new_parser.return_value = self.mock_parser
+        self.mock_command = mock.Mock(spec=AbstractCommand)
+        self.mock_command.create_parser.return_value = self.mock_parser
 
     def test_command_is_called_with_args_when_args_given(self):
         args = ['foo']
         execute_command(self.mock_command, args)
 
         self.mock_parser.parse_args.assert_called_once_with(args)
-        self.mock_command.execute.assert_called_once_with(mock.sentinel.ReturnValue)
+        self.mock_command.pre_execute.assert_called_once_with(mock.sentinel.ReturnValue)
 
     def test_command_is_called_with_sys_argv_when_args_not_given(self):
         execute_command(self.mock_command)
 
         self.mock_parser.parse_args.assert_called_once_with(sys.argv[1:])
-        self.mock_command.execute.assert_called_once_with(mock.sentinel.ReturnValue)
+        self.mock_command.pre_execute.assert_called_once_with(mock.sentinel.ReturnValue)
 
 
 class TestCommandExecutor(unittest.TestCase):
     def setUp(self):
-        self.mock_command = mock.Mock()
+        self.mock_parser = mock.Mock()
+        self.mock_parser.parse_args.return_value = mock.sentinel.ReturnValue
+        self.mock_subcommand = mock.Mock()
+        self.mock_command = mock.Mock(spec=AbstractCommand)
+        self.mock_command.create_parser.return_value = self.mock_parser
+        self.mock_command.create_subcommands.return_value = self.mock_subcommand
         self.command_executor = CommandExecutor(self.mock_command)
 
-    def test_execute_calls_command_new_parser(self):
-        self.mock_command.new_parser.return_value = argparse.ArgumentParser()
-
+    def test_execute_calls_command_create_parser(self):
         self.command_executor.execute([])
 
-        self.assertTrue(self.mock_command.new_parser.called)
+        self.mock_command.create_parser.assert_called_once_with()
 
-    def test_execute_calls_command_execute(self):
-        parser = _new_parser()
-        parser.add_argument('foo')
-        self.mock_command.new_parser.return_value = parser
+    def test_execute_calls_command_configure_parser(self):
+        self.command_executor.execute([])
 
-        self.command_executor.execute(['bar'])
+        self.mock_command.configure_parser.assert_called_once_with(self.mock_parser)
 
-        self.assertTrue(self.mock_command.execute.called)
-        self.assertEqual('bar', _first_call_args(self.mock_command.execute).foo)
+    def test_execute_calls_command_create_subcommands(self):
+        self.command_executor.execute([])
+
+        self.mock_command.create_subcommands.assert_called_once_with()
+
+    def test_execute_calls_command_configure_subcommands(self):
+        self.command_executor.execute([])
+
+        self.mock_command.configure_subcommands.assert_called_once_with(self.mock_subcommand)
+
+    def test_execute_calls_subcommand_configure_parser(self):
+        self.command_executor.execute([])
+
+        self.mock_subcommand.configure_parser.assert_called_once_with(self.mock_parser)
+
+    def test_execute_calls_command_pre_execute_with_parsed_args(self):
+        self.command_executor.execute([])
+
+        self.mock_command.pre_execute.assert_called_once_with(mock.sentinel.ReturnValue)
+
+    def test_execute_calls_subcommand_execute(self):
+        self.command_executor.execute([])
+
+        self.mock_subcommand.execute.assert_called_once_with(mock.sentinel.ReturnValue)
 
 
 class TestAbstractCommand(unittest.TestCase):
     def setUp(self):
         self.command = AbstractCommand()
 
-    def test_new_parser_returns_argument_parser(self):
-        parser = self.command.new_parser()
+    def test_create_parser_returns_argument_parser(self):
+        parser = self.command.create_parser()
 
         self.assertTrue(isinstance(parser, argparse.ArgumentParser))
+
+    def test_configure_parser_does_nothing(self):
+        mock_parser = mock.Mock()
+
+        self.command.configure_parser(mock_parser)
+
+        self.assertEqual([], mock_parser.method_calls)
+
+    def test_create_subcommands_returns_subcommands(self):
+        subcommands = self.command.create_subcommands()
+
+        self.assertTrue(isinstance(subcommands, Subcommands))
+
+    def test_configure_subcommands_raises_exception(self):
+        mock_subcommands = mock.Mock(spec=Subcommands)
+
+        self.assertRaises(Exception, self.command.configure_subcommands, mock_subcommands)
+
+    def test_pre_execute_does_nothing(self):
+        mock_parsed_args = mock.Mock()
+
+        self.command.pre_execute(mock_parsed_args)
+
+        self.assertEqual([], mock_parsed_args.method_calls)
 
 
 class TestSubcommands(unittest.TestCase):
@@ -90,7 +138,7 @@ class TestSubcommands(unittest.TestCase):
                                    argparse.ArgumentParser))
 
     def _new_mock_subcommand(self, name):
-        mock_subcommand = mock.Mock()
+        mock_subcommand = mock.Mock(spec=AbstractSubcommand)
         mock_subcommand.name = name
         return mock_subcommand
 
@@ -121,17 +169,22 @@ class TestSubcommands(unittest.TestCase):
 
 
 class TestAbstractSubcommand(unittest.TestCase):
-    NAME = 'foo'
+    SUBCOMMAND_NAME = 'foo'
 
     def setUp(self):
-        self.subcommand = AbstractSubcommand(self.NAME)
+        self.subcommand = AbstractSubcommand(self.SUBCOMMAND_NAME)
 
     def test_name_attribute_is_the_same_as_constructor(self):
-        self.assertEqual(self.NAME, self.subcommand.name)
+        self.assertEqual(self.SUBCOMMAND_NAME, self.subcommand.name)
 
     def test_configure_parser_does_nothing(self):
-        parser_mock = mock.Mock()
+        mock_parser = mock.Mock()
 
-        self.subcommand.configure_parser(parser_mock)
+        self.subcommand.configure_parser(mock_parser)
 
-        self.assertEqual([], parser_mock.method_calls)
+        self.assertEqual([], mock_parser.method_calls)
+
+    def test_execute_raises_exception(self):
+        mock_parsed_args = mock.Mock()
+
+        self.assertRaises(Exception, self.subcommand.execute, mock_parsed_args)

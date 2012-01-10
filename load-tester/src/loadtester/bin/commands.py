@@ -16,17 +16,33 @@ class CommandExecutor(object):
         self._command = command
 
     def execute(self, args):
-        parser = self._command.new_parser()
+        parser = self._command.create_parser()
+        self._command.configure_parser(parser)
+
+        subcommands = self._command.create_subcommands()
+        self._command.configure_subcommands(subcommands)
+        subcommands.configure_parser(parser)
+
         parsed_args = parser.parse_args(args)
-        self._command.execute(parsed_args)
+        self._command.pre_execute(parsed_args)
+        subcommands.execute(parsed_args)
 
 
 class AbstractCommand(object):
-    def new_parser(self):
+    def create_parser(self):
         return argparse.ArgumentParser()
 
-    def execute(self, parsed_args):
-        raise Exception('must be overriden in derived clas')
+    def configure_parser(self, parser):
+        pass
+
+    def create_subcommands(self):
+        return Subcommands()
+
+    def configure_subcommands(self, subcommands):
+        raise Exception('must be overriden in derived class')
+
+    def pre_execute(self, parsed_args):
+        pass
 
 
 class Subcommands(object):
@@ -40,11 +56,11 @@ class Subcommands(object):
         subparsers = parser.add_subparsers()
         for subcommand in self._subcommands:
             subcommand_parser = subparsers.add_parser(subcommand.name)
-            subcommand_parser.set_defaults(subcommand=subcommand)
+            subcommand_parser.set_defaults(_subcommand=subcommand)
             subcommand.configure_parser(subcommand_parser)
 
     def execute(self, parsed_args):
-        subcommand = parsed_args.subcommand
+        subcommand = parsed_args._subcommand
         subcommand.execute(parsed_args)
 
 
