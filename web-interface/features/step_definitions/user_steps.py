@@ -13,6 +13,11 @@ from ipbx_objects.user_manager import *
 def given_there_is_no_user(step, firstname, lastname):
     delete_user(firstname, lastname)
 
+@step(u'Given there is a user "([^"]*)" "([^"]*)"')
+def given_there_is_a_user_1_2(step, firstname, lastname):
+    delete_user(firstname, lastname)
+    insert_user(firstname, lastname)
+
 @step(u'When I create a user "([^"]*)" "([^"]*)"$')
 def when_i_create_a_user(step, firstName, lastName):
     open_add_user_form()
