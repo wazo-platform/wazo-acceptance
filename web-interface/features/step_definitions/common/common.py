@@ -1,13 +1,62 @@
 # -*- coding: utf-8 -*-
 
+import multiprocessing
+import subprocess
+import os
+import socket
+
+from lettuce import before, after
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
 from checkbox import Checkbox
 
-class FormErrorException (Exception):
+class FormErrorException(Exception):
     pass
 
+class XiVOClientProcess(multiprocessing.Process):
+    def __init__(self):
+        multiprocessing.Process.__init__(self)
+
+    def run(self):
+        xc_path = os.environ['XC_PATH'] + '/'
+        env = os.environ
+        env['LD_LIBRARY_PATH'] = '.'
+        subprocess.call('./xivoclient',
+                        cwd = xc_path,
+                        env = env)
+
+def xivoclient_step(f):
+    """Decorator that sends the function name to the XiVO Client."""
+    def xivoclient_decorator(step, *kargs):
+        world.xc_socket.send('%s,%s\n' % (f.__name__, ','.join(kargs)))
+        world.xc_response = str(world.xc_socket.recv(1024))
+        print 'XC response:', world.xc_response
+        f(step, *kargs)
+    return xivoclient_decorator
+
+def xivoclient(f):
+    """Decorator that sends the function name to the XiVO Client."""
+    def xivoclient_decorator(*kargs):
+        world.xc_socket.send('%s,%s\n' % (f.__name__, ','.join(kargs)))
+        world.xc_response = str(world.xc_socket.recv(1024))
+        print 'XC response:', world.xc_response
+        f(*kargs)
+    return xivoclient_decorator
+
+@before.each_scenario
+def setup_xivoclient_rc(scenario):
+    world.xc_process = XiVOClientProcess()
+    world.xc_socket = socket.socket(socket.AF_UNIX)
+
+@after.each_scenario
+def clean_xivoclient_rc(scenario):
+    if world.xc_process.is_alive():
+        i_stop_the_xivo_client()
+
+@xivoclient
+def i_stop_the_xivo_client():
+    assert world.xc_response == "OK"
 
 def the_option_is_checked(option_label, checkstate, **kwargs):
     """Reads or write the value of a checkbox, selected by its label text.
@@ -76,3 +125,9 @@ def go_to_tab(tab_label):
     tab_button = world.browser.find_element_by_xpath(
         "//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
     tab_button.click()
+
+def get_host_address():
+    host = world.host
+    host = host.rstrip('/')
+    host = host.partition('//')[2]
+    return host

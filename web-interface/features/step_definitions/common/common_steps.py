@@ -18,6 +18,12 @@ def given_the_option_is_checked(step, option_name, checkstate):
 def then_the_option_is_checked(step, option_name, checkstate):
     the_option_is_checked(option_name, checkstate)
 
+@step(u'When I (un)?check the option "([^"]*)"')
+def when_i_check_the_option_1(step, checkstate, option_label):
+    option = world.browser.find_element_by_label(option_label)
+    goal_checked = (checkstate is None)
+    Checkbox(option).set_checked(goal_checked)
+
 @step(u'When I (un)?check this option')
 def when_i_check_this_option(step, checkstate):
     option = world.browser.find_element_by_label(world.last_option_label)
@@ -68,3 +74,40 @@ def the_text_field_1_is_set_to_2(step, label, value):
 @step('I go to the "([^"]*)" tab')
 def i_go_to_the_1_tab(step, tab_text):
     go_to_tab(tab_text)
+
+@step(u'I start the XiVO Client')
+def i_start_the_xivo_client(step):
+    world.xc_process.start()
+
+    # Waiting for the listening socket to open
+    time.sleep(1)
+
+    world.xc_socket.connect('/tmp/xivoclient')
+
+@step(u'I go to the XiVO Client configuration')
+@xivoclient_step
+def i_go_to_the_xivo_client_configuration(step):
+    pass
+
+@step(u'I close the XiVO Client configuration')
+@xivoclient_step
+def i_close_the_xivo_client_configuration(step):
+    pass
+
+@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"')
+def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
+    i_log_in_the_xivo_client_to_host_1_as_2_pass_3(get_host_address(), login, password)
+    assert world.xc_response == 'OK'
+
+@step(u'I can\'t log in the XiVO Client as "([^"]*)", pass "([^"]*)"')
+def i_cant_log_in_the_xivo_client_as_1_pass_2(step, login, password):
+    i_log_in_the_xivo_client_to_host_1_as_2_pass_3(get_host_address(), login, password)
+    assert world.xc_response == 'KO'
+
+@xivoclient
+def i_log_in_the_xivo_client_to_host_1_as_2_pass_3(host, login, password):
+    pass
+
+@step(u'I stop the XiVO Client')
+def i_stop_the_xivo_client(step):
+    common.i_stop_the_xivo_client()
