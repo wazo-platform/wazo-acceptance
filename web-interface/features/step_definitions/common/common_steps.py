@@ -40,6 +40,8 @@ def when_i_submit_with_errors(step):
         submit_form()
     except FormErrorException:
         pass
+    else:
+        raise Exception('No error occurred')
 
 @step(u'Then this option is (not )?checked')
 def then_this_option_is_checked(step, checkstate):

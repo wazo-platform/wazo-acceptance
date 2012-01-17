@@ -24,7 +24,8 @@ import urllib
 import urllib2
 
 JSON_DIR = os.path.join(os.path.dirname(__file__), '../xivojson')
-URI = 'https://skaro-daily.lan-quebec.avencall.com:443'
+# URI = 'https://skaro-daily.lan-quebec.avencall.com:443'
+URI = 'https://192.168.0.182'
 USERNAME = 'admin'
 PASSWORD = 'proformatique'
 

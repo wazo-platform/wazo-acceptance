@@ -6,17 +6,19 @@ from xivobrowser import XiVOBrowser
 @before.all
 def setup_browser():
     from pyvirtualdisplay import Display
-    Display(visible=0, size=(1024, 768)).start()
+    # Display(visible=0, size=(1024, 768)).start()
     world.browser = XiVOBrowser()
-    world.timeout = 5
+    world.timeout = 1
 
 
 @before.all
 def setup_login_infos():
-    world.login = 'root'
+    world.login = 'test'
     world.password = 'superpass'
-    world.host = 'http://skaro-daily.lan-quebec.avencall.com/'
-
+    world.host = 'http://192.168.0.182/'
+    # world.login = 'root'
+    # world.password = 'superpass'
+    # world.host = 'http://skaro-daily.lan-quebec.avencall.com/'
 
 @world.absorb
 def dump_current_page(filename='/tmp/lettuce.html'):
