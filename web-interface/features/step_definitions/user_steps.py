@@ -18,6 +18,10 @@ def given_there_is_a_user_1_2(step, firstname, lastname):
     delete_user(firstname, lastname)
     insert_user(firstname, lastname)
 
+@step(u'I add a user$')
+def i_add_a_user(step):
+    open_add_user_form()
+
 @step(u'When I create a user "([^"]*)" "([^"]*)"$')
 def when_i_create_a_user(step, firstName, lastName):
     open_add_user_form()
@@ -106,3 +110,10 @@ def then_i_see_the_key_1_has_the_value_2(step, key, value):
     value_cell = world.browser.find_element_by_xpath(
         "//table//tr[td[@class = 'td-left' and text() = '%s']]//td[@class = 'td-right']" % key)
     assert value_cell.text == value
+
+@step(u'I enable the XiVO Client as "([^"]*)" pass "([^"]*)" profile "([^"]*)"')
+def i_enable_the_xivo_client_as_1_pass_2_profile_3(step, login, password, profile):
+    step.given('Given the option "Enable XiVO Client" is checked')
+    step.given('I set the text field "Login" to "%s"' % login)
+    step.given('I set the text field "Password" to "%s"' % password)
+    step.given('I set the select field "Profile" to "%s"' % profile)

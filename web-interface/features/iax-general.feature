@@ -4,6 +4,7 @@ Feature: IAX general parameters
         Given I am logged in
         Given I go on the General Settings > IAX Protocol page, tab "Advanced"
         Given the option "Shrink CallerID" is not checked
+        Given I submit
         When I go on the General Settings > IAX Protocol page, tab "Advanced"
         When I check this option
         When I submit
@@ -14,6 +15,7 @@ Feature: IAX general parameters
         Given I am logged in
         Given I go on the General Settings > IAX Protocol page, tab "Advanced"
         Given the option "Shrink CallerID" is checked
+        Given I submit
         When I go on the General Settings > IAX Protocol page, tab "Advanced"
         When I uncheck this option
         When I submit
@@ -24,6 +26,7 @@ Feature: IAX general parameters
         Given I am logged in
         Given I go on the General Settings > IAX Protocol page, tab "Default"
         Given the option "SRV lookup" is checked
+        Given I submit
         When I go on the General Settings > IAX Protocol page, tab "Default"
         When I check this option
         When I submit
@@ -34,6 +37,7 @@ Feature: IAX general parameters
         Given I am logged in
         Given I go on the General Settings > IAX Protocol page, tab "Default"
         Given the option "SRV lookup" is checked
+        Given I submit
         When I go on the General Settings > IAX Protocol page, tab "Default"
         When I uncheck this option
         When I submit

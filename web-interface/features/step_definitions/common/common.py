@@ -78,7 +78,6 @@ def the_option_is_checked(option_label, checkstate, **kwargs):
         assert Checkbox(option).is_checked() == goal_checked
     else:
         Checkbox(option).set_checked(goal_checked)
-        submit_form()
 
 
 def find_form_errors():

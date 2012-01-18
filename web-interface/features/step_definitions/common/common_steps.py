@@ -30,8 +30,8 @@ def when_i_check_this_option(step, checkstate):
     goal_checked = (checkstate is None)
     Checkbox(option).set_checked(goal_checked)
 
-@step(u'When I submit$')
-def when_i_submit(step):
+@step(u'I submit$')
+def i_submit(step):
     submit_form()
 
 @step(u'When I submit with errors')
