@@ -28,6 +28,7 @@ class XiVOBrowser(webdriver.Firefox):
         source = source.replace('\n', ' ')
         # Remove HTML comments
         source = re.sub('<!--.*-->', '', source)
+        source = re.sub('&lt;!--.*--&gt;', '', source)
         # Extract missing translations
         missing_translations = re.finditer("__missing_translation:([^:]*):([^:]*):", source)
 
