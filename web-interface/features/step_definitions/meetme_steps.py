@@ -53,10 +53,12 @@ def _type_maxusers(maxusers):
     input_maxusers.clear()
     input_maxusers.send_keys(maxusers)
 
+
 def _delete_all_meetme():
     from webservices.meetme import WsMeetme
     wsm = WsMeetme()
     wsm.clear()
+
 
 def _is_saved(name):
     _open_list_url()

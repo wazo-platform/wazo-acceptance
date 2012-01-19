@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import ConfigParser
+import os
 from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
+
+
+_CONFIG_FILE = os.path.join(os.path.dirname(__file__), '../config/config.ini')
+
 
 @before.all
 def setup_browser():
@@ -13,9 +19,12 @@ def setup_browser():
 
 @before.all
 def setup_login_infos():
-    world.login = 'root'
-    world.password = 'superpass'
-    world.host = 'http://skaro-daily.lan-quebec.avencall.com/'
+    _config = ConfigParser.RawConfigParser()
+    with open(_CONFIG_FILE) as fobj:
+        _config.readfp(fobj)
+    world.login = _config.get('login_infos', 'login')
+    world.password = _config.get('login_infos', 'password')
+    world.host = _config.get('login_infos', 'host')
 
 
 @world.absorb
