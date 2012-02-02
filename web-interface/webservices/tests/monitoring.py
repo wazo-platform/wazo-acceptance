@@ -18,33 +18,27 @@ __license__ = """
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
 """
 
-import json
-from webservices import WebServices
+import unittest, json
+from webservices.webservices import WebServices
 
 
-class WsUser(object):
-    def __init__(self):
-        self._aws = WebServices(wsobj='users')
+class TestMonitoring(unittest.TestCase):
+    def setUp(self):
+        self._aws = WebServices('monitoring')
 
-    def list(self):
-        (code, data) = self._aws.list()
-        if data:
-            data = json.loads(data)
-        return data
+    def tearDown(self):
+        pass
 
-    def add(self, data):
-        (code, data) = self._aws.add(data)
-        return (code == 200)
+    def test_edit(self):
+        jsonfilecontent = self._aws.get_json_file_content('monitoring');
+        content = json.loads(jsonfilecontent)
 
-    def delete(self, id):
-        (code, data) = self._aws.delete(id)
-        return (code == 200)
+        response = self._aws.edit(content, 0)
+        self.assertEqual(response.code, 200)
 
-    def edit(self, id, data):
-        (code, data) = self._aws.view(id, data)
-        return (code == 200)
+        response = self._aws.view(0)
+        self.assertEqual(response.code, 200)
 
-    def clear(self):
-        (code, data) = self._aws.deleteall()
-        return (code == 200)
 
+if __name__ == '__main__':
+    unittest.main()

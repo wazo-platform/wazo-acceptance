@@ -16,6 +16,7 @@ def _login(user, password, language):
     submit_form()
     world.browser.find_element_by_id('loginbox', 'Cannot login as ' + user)
 
+
 def waitForLoginPage():
     world.browser.find_element_by_id('it-login', 'login page not loaded', 30)
 
@@ -40,6 +41,7 @@ def i_am_logged_in(step):
         world.browser.find_element_by_id('loginbox')
     except NoSuchElementException:
         # If not logged in, then proceed
-        given_i_login_as_with_password_at(step, world.login,
+        given_i_login_as_with_password_at(step, 
+                                          world.login,
                                           world.password,
                                           world.host)

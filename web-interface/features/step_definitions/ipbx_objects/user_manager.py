@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import time
 
 from lettuce.registry import world
@@ -41,8 +43,8 @@ def type_user_in_group(groupName):
     add_button.click()
 
 def delete_all_users():
-    from webservices.user import WsUser
-    wsu = WsUser()
+    from webservices.webservices import WebServicesFactory
+    wsu = WebServicesFactory('user')
     wsu.clear()
 
 def user_is_saved(firstname, lastname):
@@ -54,31 +56,31 @@ def user_is_saved(firstname, lastname):
         return False
 
 def insert_user(firstname, lastname):
-    from webservices.user import WsUser
+    from webservices.webservices import WebServicesFactory
     import json
     with open('xivojson/userwithline.json') as f:
         datajson = f.read()  % {'firstname': firstname,
                 'lastname': lastname}
         data = json.loads(datajson)
-    wsu = WsUser()
+    wsu = WebServicesFactory('user')
     wsu.add(data)
 
 def delete_user(firstname, lastname):
-    from webservices.user import WsUser
-    wsu = WsUser()
+    from webservices.webservices import WebServicesFactory
+    wsu = WebServicesFactory('user')
     for id in find_user_id(firstname, lastname):
         wsu.delete(id)
 
 def find_user_id(firstname, lastname):
-    from webservices import user
-    wsu = user.WsUser()
+    from webservices.webservices import WebServicesFactory
+    wsu = WebServicesFactory('user')
     user_list = wsu.list()
     return [userinfo['id'] for userinfo in user_list
         if userinfo['firstname'] == firstname and userinfo['lastname'] == lastname]
 
 def is_in_group(group_name, user_id):
-    from webservices import group
-    wsg = group.WsGroup()
+    from webservices.webservices import WebServicesFactory
+    wsg = WebServicesFactory('group')
     group_list = wsg.list()
     group_id = [group['id'] for group in group_list if group['name'] == group_name]
     if len(group_id) > 0:
@@ -89,7 +91,7 @@ def is_in_group(group_name, user_id):
     return False
 
 def insert_group_with_user(group_name, user_list=[]):
-    from webservices import group
+    from webservices.webservices import WebServicesFactory
     import json
     with open('xivojson/group.json') as f:
         data = f.read()
@@ -99,7 +101,7 @@ def insert_group_with_user(group_name, user_list=[]):
         data = data % {'user_list': users,
                 'groupname': group_name}
         data = json.loads(data)
-    wsg = group.WsGroup()
+    wsg = WebServicesFactory('group')
     wsg.clear()
     wsg.add(data)
 

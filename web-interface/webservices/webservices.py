@@ -20,39 +20,71 @@ __license__ = """
 
 import json
 import os
-import urllib
 import urllib2
+import ConfigParser
 
 JSON_DIR = os.path.join(os.path.dirname(__file__), '../xivojson')
-URI = 'https://skaro-daily.lan-quebec.avencall.com:443'
-USERNAME = 'admin'
-PASSWORD = 'proformatique'
+CONFIG_FILE = os.path.join(os.path.dirname(__file__), '../config/config.ini')
+
 
 class WebServices(object):
-    def __init__(self, wsobj, uri_prefix=URI, username=USERNAME, password=PASSWORD):
-        self.wsobj = wsobj
+    def __init__(self, module, uri_prefix=None, username=None, password=None):
+        
+        _config = ConfigParser.RawConfigParser()
+        with open(CONFIG_FILE) as fobj:
+            _config.readfp(fobj)
+        if not uri_prefix:
+            uri_prefix = _config.get('webservices_infos', 'host')
+        if not username:
+            username = _config.get('webservices_infos', 'login')
+        if not password:
+            password = _config.get('webservices_infos', 'password')
+        
         self.basepath = os.path.normpath(JSON_DIR)
+        self.module = module
+        self._wsr = None
         self._path = self._compute_path(uri_prefix)
         self._uri_prefix = uri_prefix
         self._opener = self._build_opener(uri_prefix, username, password)
         self._headers = {
-            "Content-type": "application/json",
-            "Accept": "text/plain"
-        }
+                            "Content-type": "application/json",
+                            "Accept": "text/plain"
+                        }
+
+    def get_json_file_content(self, file):
+        filename = '%s.json' % file
+        abs_file_path = os.path.join(self.basepath, filename);
+        with open(abs_file_path) as fobj:
+            jsonfilecontent = fobj.read()
+        return jsonfilecontent
 
     def get_uri(self):
         list = {
                 "users"  : "/service/ipbx/json.php/%s/pbx_settings/users",
                 "groups" : "/service/ipbx/json.php/%s/pbx_settings/groups",
                 "lines"  : "/service/ipbx/json.php/%s/pbx_settings/lines",
-                "meetme" : "/service/ipbx/json.php/%s/pbx_settings/meetme"
+                "meetme" : "/service/ipbx/json.php/%s/pbx_settings/meetme",
+                
+                "incall" : "/service/ipbx/json.php/%s/call_management/incall",
+                
+                "context" : "/service/ipbx/json.php/%s/system_management/context",
+                
+                "trunksip" : "/service/ipbx/json.php/%s/trunk_management/sip",
+                
+                "agents" : "/callcenter/json.php/%s/settings/agents/",
+                
+                "entity" : "/xivo/configuration/json.php/%s/manage/entity",
+                
+                "dhcp" : "/xivo/configuration/json.php/%s/network/dhcp",
+                "mail" : "/xivo/configuration/json.php/%s/network/mail",
+                "monitoring" : "/xivo/configuration/json.php/%s/support/monitoring"
                }
-        uri = [list[self.wsobj] for uri in list
-                if uri == self.wsobj]
-        if len(uri) > 0:
-            return uri[0]
-        else:
-            raise 'uri not exist for object %s' % self.wsobj
+        module = [self.module, '%ss' % self.module]
+        for mod_exist in module:
+            if mod_exist in list:
+                return list[mod_exist]
+        
+        raise 'uri not exist for object %s' % self.module
 
     def _compute_path(self, uri_prefix):
         if 'localhost' in uri_prefix or '127.0.0.1' in uri_prefix:
@@ -70,6 +102,7 @@ class WebServices(object):
         return urllib2.build_opener(*handlers)
 
     def _build_query(self, qry):
+        import urllib
         return urllib.urlencode(qry)
 
     def _request_http(self, qry, data=None):
@@ -79,45 +112,88 @@ class WebServices(object):
             data = data.replace(' ', '').replace('\n', '')
         url = '%s%s?%s' % (self._uri_prefix, self._path, self._build_query(qry))
         request = urllib2.Request(url=url, data=data, headers=self._headers)
-        self._handle = self._opener.open(request)
-        return self._handle
+        try:
+            handle = self._opener.open(request)
+            self._wsr = WebServicesResponse(url, handle.code, handle.read())
+            handle.close()
+        except urllib2.HTTPError, e:
+            self._wsr = WebServicesResponse(url, e.code, e.read())
+        return self._wsr
 
-    def get_last_request_status(self):
-        if hasattr(self._handle, 'code'):
-            return self._handle.code, self._handle.msg
+    def get_last_response(self):
+        if self._wsr:
+            return self._wsr
 
     def list(self):
         qry = {"act": "list"}
-        fobj = self._request_http(qry)
-        return fobj.code, fobj.readline()
+        return self._request_http(qry)
 
     def add(self, content):
         qry = {"act": "add"}
-        fobj = self._request_http(qry, content)
-        return fobj.code, fobj.readline()
+        return self._request_http(qry, content)
 
     def edit(self, content, id):
         qry = {"act": "edit", "id": id}
-        fobj = self._request_http(qry, content)
-        return fobj.code, fobj.readline()
+        return self._request_http(qry, content)
 
     def view(self, id):
         qry = {"act": "view", "id": id}
-        fobj = self._request_http(qry)
-        return fobj.code, fobj.readline()
+        return self._request_http(qry)
 
     def search(self, search):
         qry = {"act": "search", "search": search}
-        fobj = self._request_http(qry)
-        return fobj.code, fobj.readline()
+        return self._request_http(qry)
 
     def delete(self, id):
         qry = {"act": "delete", "id": id}
-        fobj = self._request_http(qry)
-        return fobj.code, fobj.readline()
+        return self._request_http(qry)
 
     def deleteall(self):
         qry = {"act": "deleteall"}
-        fobj = self._request_http(qry)
-        return fobj.code, fobj.readline()
+        return self._request_http(qry)
 
+
+class WebServicesResponse(object):
+    def __init__(self, url, code, data):
+        self.url = url
+        self.code = code
+        self.data = data
+
+
+class WebServicesFactory(object):
+    def __init__(self, module):
+        self._aws = WebServices(module=module)
+
+    def list(self):
+        response = self._aws.list()
+        if response.data:
+            return json.loads(response.data)
+        return None
+
+    def search(self, search):
+        response = self._aws.search(search)
+        if response.data:
+            return json.loads(response.data)
+        return None
+
+    def view(self, id):
+        response = self._aws.view(id)
+        if response.data:
+            return json.loads(response.data)
+        return None
+
+    def add(self, data):
+        response = self._aws.add(data)
+        return (response.code == 200)
+
+    def edit(self, id, data):
+        response = self._aws.view(id, data)
+        return (response.code == 200)
+
+    def delete(self, id):
+        response = self._aws.delete(id)
+        return (response.code == 200)
+
+    def clear(self):
+        response = self._aws.deleteall()
+        return (response.code == 200)

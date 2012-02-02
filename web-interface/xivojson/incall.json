@@ -1,0 +1,16 @@
+{
+      "incall": {
+           "exten": "%(exten)s",
+           "context": "%(context)s",
+           "preprocess_subroutine": "",
+           "faxdetectenable": "1",
+           "faxdetecttimeout": "4",
+           "faxdetectemail": "fax@proformatique.com"
+      },
+      "dialaction": {
+            "answer": {
+                 "actiontype": "endcall",
+                 "action": "hangup"
+            }
+      }
+}

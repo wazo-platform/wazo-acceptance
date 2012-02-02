@@ -6,13 +6,13 @@ from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 
 
-_CONFIG_FILE = os.path.join(os.path.dirname(__file__), '../config/config.ini')
+_CONFIG_FILE = os.path.join(os.path.dirname(__file__), '../../config/config.ini')
 
 
 @before.all
 def setup_browser():
     from pyvirtualdisplay import Display
-    Display(visible=0, size=(1024, 768)).start()
+    Display(visible=1, size=(1024, 768)).start()
     world.browser = XiVOBrowser()
     world.timeout = 5
 

@@ -22,19 +22,17 @@ import unittest, json
 from webservices.webservices import WebServices
 
 
-class TestUser(unittest.TestCase):
+class TestTrunkSip(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('users')
+        self._aws = WebServices('trunksip')
         self._aws.deleteall()
 
     def tearDown(self):
         pass
 
     def test_add(self):
-        jsonfilecontent = self._aws.get_json_file_content('user');
-        jsonstr = jsonfilecontent % ({"firstname": 'Bob',
-                                      "lastname" : 'Marley'})
-        content = json.loads(jsonstr)
+        jsonfilecontent = self._aws.get_json_file_content('trunksip');
+        content = json.loads(jsonfilecontent)
 
         response = self._aws.add(content)
         self.assertEqual(response.code, 200)
@@ -43,26 +41,9 @@ class TestUser(unittest.TestCase):
         self.assertEqual(response.code, 200)
         res = json.loads(response.data)
         self.assertEqual(len(res), 1)
+
         if 'id' in res[0]:
             return res[0]['id']
-
-    def test_edit(self):
-        id = self.test_add()
-
-        jsonfilecontent = self._aws.get_json_file_content('user');
-        jsonstr = jsonfilecontent % ({"firstname": 'Bob',
-                                      "lastname" : 'Dylan'})
-        content = json.loads(jsonstr)
-
-        response = self._aws.edit(content, id)
-        self.assertEqual(response.code, 200)
-
-        response = self._aws.list()
-        self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        self.assertEqual(res[0]['firstname'], 'Bob')
-        self.assertEqual(res[0]['lastname'], 'Dylan')
 
     def test_delete(self):
         id = self.test_add()

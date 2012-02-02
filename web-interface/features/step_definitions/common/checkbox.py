@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class Checkbox:
+class Checkbox(object):
     '''Wraps checkboxes from Selenium WebElement, to make them easier to manipulate'''
     def __init__(self, webelement):
         assert(webelement.get_attribute('type') == 'checkbox')

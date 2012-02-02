@@ -22,53 +22,47 @@ import unittest, json
 from webservices.webservices import WebServices
 
 
-class TestUser(unittest.TestCase):
+class TestContext(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('users')
-        self._aws.deleteall()
+        self._aws = WebServices('context')
+        response = self._aws.search('toto')
+        if response.code == 200:
+            response = self._aws.view('toto')
+            if response.code == 200:
+                self._aws.delete('toto')
 
     def tearDown(self):
         pass
 
     def test_add(self):
-        jsonfilecontent = self._aws.get_json_file_content('user');
-        jsonstr = jsonfilecontent % ({"firstname": 'Bob',
-                                      "lastname" : 'Marley'})
+        var_replace = {
+                      "name": 'toto',
+                      "displayname" : 'Toto Corp.',
+                      "entity" : 'avencall',
+                      "contexttype": 'internal',
+                      "contextinclude": '[]',
+                      "contextnumbers_user": '"user": [{"numberbeg": "600", "numberend": "699"}]',
+                      "contextnumbers_group": '',
+                      "contextnumbers_meetme": '',
+                      "contextnumbers_queue": '',
+                      "contextnumbers_incall": ''
+                      }
+        jsonfilecontent = self._aws.get_json_file_content('context');
+        jsonstr = jsonfilecontent % (var_replace)
         content = json.loads(jsonstr)
 
         response = self._aws.add(content)
         self.assertEqual(response.code, 200)
 
-        response = self._aws.list()
+        response = self._aws.view(var_replace['name'])
         self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        if 'id' in res[0]:
-            return res[0]['id']
-
-    def test_edit(self):
-        id = self.test_add()
-
-        jsonfilecontent = self._aws.get_json_file_content('user');
-        jsonstr = jsonfilecontent % ({"firstname": 'Bob',
-                                      "lastname" : 'Dylan'})
-        content = json.loads(jsonstr)
-
-        response = self._aws.edit(content, id)
-        self.assertEqual(response.code, 200)
-
-        response = self._aws.list()
-        self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        self.assertEqual(res[0]['firstname'], 'Bob')
-        self.assertEqual(res[0]['lastname'], 'Dylan')
+        return var_replace['name']
 
     def test_delete(self):
         id = self.test_add()
         response = self._aws.delete(id)
         self.assertEqual(response.code, 200)
-        response = self._aws.list()
+        response = self._aws.search('toto')
         self.assertEqual(response.code, 204)
 
 

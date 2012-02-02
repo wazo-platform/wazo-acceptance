@@ -1,4 +1,4 @@
-import time
+# -*- coding: utf-8 -*-
 
 from lettuce.registry import world
 

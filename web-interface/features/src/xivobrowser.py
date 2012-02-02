@@ -21,7 +21,7 @@ class XiVOBrowser(webdriver.Firefox):
 
         # Get the page
         webdriver.Firefox.get(self, url)
-
+        
         WebDriverWait(self, world.timeout).until(lambda browser : webdriver.Firefox.page_source)
         source = self.page_source
         # Remove newline, to allow regexp substitution

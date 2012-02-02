@@ -20,49 +20,55 @@ __license__ = """
 
 import unittest, json
 from webservices.webservices import WebServices
+from webservices.webservices import WebServicesFactory
 
 
-class TestUser(unittest.TestCase):
+class TestIncall(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('users')
+        self._aws = WebServices('incall')
         self._aws.deleteall()
 
     def tearDown(self):
         pass
 
     def test_add(self):
-        jsonfilecontent = self._aws.get_json_file_content('user');
-        jsonstr = jsonfilecontent % ({"firstname": 'Bob',
-                                      "lastname" : 'Marley'})
+        var_context = {
+                      "name": 'toto',
+                      "displayname" : 'Toto Corp.',
+                      "entity" : 'avencall',
+                      "contexttype": 'incall',
+                      "contextinclude": '[]',
+                      "contextnumbers_user": '',
+                      "contextnumbers_group": '',
+                      "contextnumbers_meetme": '',
+                      "contextnumbers_queue": '',
+                      "contextnumbers_incall": '"incall": [{"numberbeg": "5000", "numberend": "6000", "didlength": "4"}]'
+                      }
+        jsonfilecontent = self._aws.get_json_file_content('context');
+        jsonstr = jsonfilecontent % (var_context)
+        data = json.loads(jsonstr)
+        wsctx = WebServicesFactory('context')
+        wsctx.delete('toto')
+        wsctx.add(data)
+        
+        var_incall = {
+                      "exten": '5000',
+                      "context" : var_context['name']
+                      }
+        jsonfilecontent = self._aws.get_json_file_content('incall');
+        jsonstr = jsonfilecontent % (var_incall)
         content = json.loads(jsonstr)
 
         response = self._aws.add(content)
         self.assertEqual(response.code, 200)
 
-        response = self._aws.list()
+        response = self._aws.search(var_incall['exten'])
         self.assertEqual(response.code, 200)
+        wsctx.delete(var_context['name'])
         res = json.loads(response.data)
         self.assertEqual(len(res), 1)
         if 'id' in res[0]:
             return res[0]['id']
-
-    def test_edit(self):
-        id = self.test_add()
-
-        jsonfilecontent = self._aws.get_json_file_content('user');
-        jsonstr = jsonfilecontent % ({"firstname": 'Bob',
-                                      "lastname" : 'Dylan'})
-        content = json.loads(jsonstr)
-
-        response = self._aws.edit(content, id)
-        self.assertEqual(response.code, 200)
-
-        response = self._aws.list()
-        self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        self.assertEqual(res[0]['firstname'], 'Bob')
-        self.assertEqual(res[0]['lastname'], 'Dylan')
 
     def test_delete(self):
         id = self.test_add()

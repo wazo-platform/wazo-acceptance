@@ -22,18 +22,18 @@ import unittest, json
 from webservices.webservices import WebServices
 
 
-class TestUser(unittest.TestCase):
+class TestGroup(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('users')
+        self._aws = WebServices('groups')
         self._aws.deleteall()
 
     def tearDown(self):
         pass
 
     def test_add(self):
-        jsonfilecontent = self._aws.get_json_file_content('user');
-        jsonstr = jsonfilecontent % ({"firstname": 'Bob',
-                                      "lastname" : 'Marley'})
+        jsonfilecontent = self._aws.get_json_file_content('group');
+        jsonstr = jsonfilecontent % ({"groupname": 'Accueil',
+                                      "user_list" : ', "user": []'})
         content = json.loads(jsonstr)
 
         response = self._aws.add(content)
@@ -45,24 +45,6 @@ class TestUser(unittest.TestCase):
         self.assertEqual(len(res), 1)
         if 'id' in res[0]:
             return res[0]['id']
-
-    def test_edit(self):
-        id = self.test_add()
-
-        jsonfilecontent = self._aws.get_json_file_content('user');
-        jsonstr = jsonfilecontent % ({"firstname": 'Bob',
-                                      "lastname" : 'Dylan'})
-        content = json.loads(jsonstr)
-
-        response = self._aws.edit(content, id)
-        self.assertEqual(response.code, 200)
-
-        response = self._aws.list()
-        self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        self.assertEqual(res[0]['firstname'], 'Bob')
-        self.assertEqual(res[0]['lastname'], 'Dylan')
 
     def test_delete(self):
         id = self.test_add()

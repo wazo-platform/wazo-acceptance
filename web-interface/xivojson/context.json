@@ -1,0 +1,17 @@
+{
+     "context": {
+           "name": "%(name)s",
+           "displayname": "%(displayname)s",
+           "contexttype": "%(contexttype)s",
+           "entity": "%(entity)s",
+           "description": ""
+     },
+     "contextinclude": %(contextinclude)s,
+     "contextnumbers": {
+        %(contextnumbers_user)s
+        %(contextnumbers_group)s
+        %(contextnumbers_meetme)s
+        %(contextnumbers_queue)s
+        %(contextnumbers_incall)s
+     }
+}
