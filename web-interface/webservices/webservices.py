@@ -162,7 +162,7 @@ class WebServicesResponse(object):
 
 class WebServicesFactory(object):
     def __init__(self, module):
-        self._aws = WebServices(module=module)
+        self._aws = WebServices(module)
 
     def list(self):
         response = self._aws.list()

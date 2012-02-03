@@ -40,6 +40,7 @@ def _incall_is_saved(incall_did):
     except NoSuchElementException:
         return False
 
+
 @step(u'Given there is no incall with DID "([^"]*)"')
 def given_there_is_no_incall_with_did(step, did):
     _remove_incall_with_did(did)
