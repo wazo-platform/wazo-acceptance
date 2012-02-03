@@ -55,8 +55,8 @@ def _type_maxusers(maxusers):
 
 
 def _delete_all_meetme():
-    from webservices.meetme import WsMeetme
-    wsm = WsMeetme()
+    from webservices.webservices import WebServicesFactory
+    wsm = WebServicesFactory('meetme')
     wsm.clear()
 
 
