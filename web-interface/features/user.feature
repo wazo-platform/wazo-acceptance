@@ -58,3 +58,4 @@ Feature: User
         When I set the text field "Password" to "magne"
         When I submit
         Then I log in the XiVO Client as "charles", pass "magne"
+

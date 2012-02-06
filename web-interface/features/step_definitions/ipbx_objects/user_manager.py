@@ -75,8 +75,10 @@ def find_user_id(firstname, lastname):
     from webservices.webservices import WebServicesFactory
     wsu = WebServicesFactory('user')
     user_list = wsu.list()
-    return [userinfo['id'] for userinfo in user_list
-        if userinfo['firstname'] == firstname and userinfo['lastname'] == lastname]
+    if user_list:
+        return [userinfo['id'] for userinfo in user_list
+            if userinfo['firstname'] == firstname and userinfo['lastname'] == lastname]
+    return []
 
 def is_in_group(group_name, user_id):
     from webservices.webservices import WebServicesFactory
