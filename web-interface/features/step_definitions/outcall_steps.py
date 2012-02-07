@@ -6,7 +6,7 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
-from common.common import *
+from xivo_lettuce.common import *
 
 OUTCALL_URL = '/service/ipbx/index.php/call_management/outcall/%s'
 

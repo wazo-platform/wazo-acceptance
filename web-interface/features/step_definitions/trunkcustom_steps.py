@@ -3,10 +3,11 @@
 from lettuce.decorators import step
 from lettuce.registry import world
 
-from common.common import *
-from ipbx_objects.user_manager import *
+from xivo_lettuce.common import *
+from xivo_lettuce.ipbx_objects.user_manager import *
 
 TRUNKCUSTOM_URL = '/service/ipbx/index.php/trunk_management/custom/%s'
+
 
 def _open_add_trunkcustom_url():
     URL = TRUNKCUSTOM_URL % '?act=add'

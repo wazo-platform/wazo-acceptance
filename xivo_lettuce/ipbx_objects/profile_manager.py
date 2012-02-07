@@ -3,11 +3,9 @@
 import time
 
 from lettuce.registry import world
-
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
-
-from common.common import *
+from xivo_lettuce.common import *
 
 PROFILE_URL = '/cti/index.php/profiles/%s'
 
@@ -16,17 +14,21 @@ def open_add_profile_form():
     world.browser.get('%s%s' % (world.url, URL))
     world.browser.find_element_by_id('it-profiles-name', 'Profile add form not loaded')
 
+
 def open_edit_profile_form(id):
     URL = PROFILE_URL % '?act=edit&id=%d'
     world.browser.get('%s%s' % (world.url, URL % id))
+
 
 def open_list_profile_url():
     URL = PROFILE_URL % '?act=list'
     world.browser.get('%s%s' % (world.url, URL))
 
+
 def delete_profile(profile_label):
     open_list_profile_url()
     remove_line(profile_label)
+
 
 def type_profile_names(id, display_name):
     input_id = world.browser.find_element_by_id('it-profiles-name')
@@ -36,6 +38,7 @@ def type_profile_names(id, display_name):
     input_display_name = world.browser.find_element_by_id('it-profiles-appliname')
     input_display_name.clear()
     input_display_name.send_keys(display_name)
+
 
 def add_service(service_label):
     """Add a service. If the service is already added, does nothing."""
@@ -51,6 +54,7 @@ def add_service(service_label):
     # Wait for the Javascript to add the service
     time.sleep(world.timeout)
 
+
 def remove_service(service_label):
     """Remove a service. If the service is already removed, does nothing."""
     input_services_enabled = Select(world.browser.find_element_by_xpath(
@@ -65,6 +69,7 @@ def remove_service(service_label):
     # Wait for the Javascript to add the service
     time.sleep(world.timeout)
 
+
 def remove_all_services():
     """Removes all services."""
     options = input_services_enabled = world.browser.find_elements_by_xpath(
@@ -77,6 +82,7 @@ def remove_all_services():
 
     # Wait for the Javascript to add the service
     time.sleep(world.timeout)
+
 
 def add_xlet(xlet_label):
     """Add a xlet."""

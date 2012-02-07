@@ -4,10 +4,10 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
-from common.common import *
-
+from xivo_lettuce.common import *
 
 MM_URL = '/service/ipbx/index.php/pbx_settings/meetme/%s'
+
 
 def _open_add_form():
     URL = MM_URL % '?act=add'

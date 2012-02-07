@@ -50,7 +50,7 @@ class TestIncall(unittest.TestCase):
         wsctx = WebServicesFactory('context')
         wsctx.delete('toto')
         wsctx.add(data)
-        
+
         var_incall = {
                       "exten": '5000',
                       "context" : var_context['name']

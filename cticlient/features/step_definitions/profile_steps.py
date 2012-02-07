@@ -5,8 +5,8 @@ import time
 from lettuce.decorators import step
 from lettuce.registry import world
 
-from common.common import *
-from ipbx_objects.profile_manager import *
+from xivo_lettuce.common import *
+from xivo_lettuce.ipbx_objects.profile_manager import *
 
 @step(u'Given there is no profile "([^"]*)"')
 def given_there_is_no_profile_1(step, profile_label):

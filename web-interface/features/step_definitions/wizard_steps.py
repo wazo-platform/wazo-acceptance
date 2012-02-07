@@ -2,8 +2,8 @@
 
 from lettuce import step
 from lettuce import world
-from features.step_definitions.login_steps import waitForLoginPage
 
+from xivo_lettuce.common import *
 
 @step(u'Given that there is a XiVO installed at (.*)')
 def given_that_there_is_a_xivo_installed_at(step, ip):

@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import time
-
+import json
 from lettuce.registry import world
-
 from selenium.common.exceptions import NoSuchElementException
+from webservices.webservices import WebServicesFactory
 
 USER_URL = '/service/ipbx/index.php/pbx_settings/users/%s'
+WSU = WebServicesFactory('user')
+WSG = WebServicesFactory('group')
 
 
 def open_add_user_form():
@@ -14,15 +16,18 @@ def open_add_user_form():
     world.browser.get('%s%s' % (world.url, URL))
     world.browser.find_element_by_id('it-userfeatures-firstname', 'User add form not loaded')
 
+
 def open_edit_user_form(id):
     URL = USER_URL % '?act=edit&id=%d'
     world.browser.get('%s%s' % (world.url, URL % id))
     world.browser.find_element_by_id('it-userfeatures-firstname', 'User edit form not loaded')
 
+
 def open_list_user_url():
     URL = USER_URL % '?act=list'
     world.browser.get('%s%s' % (world.url, URL))
     world.browser.find_element_by_id('table-main-listing', 'User list not loaded')
+
 
 def type_user_names(firstName, lastName):
     world.browser.find_element_by_id('it-userfeatures-firstname', 'User form not loaded')
@@ -32,6 +37,7 @@ def type_user_names(firstName, lastName):
     input_firstName.send_keys(firstName)
     input_lastName.clear()
     input_lastName.send_keys(lastName)
+
 
 def type_user_in_group(groupName):
     group = world.browser.find_element_by_xpath("//li[@id='dwsm-tab-7']//a[@href='#groups']")
@@ -43,9 +49,8 @@ def type_user_in_group(groupName):
     add_button.click()
 
 def delete_all_users():
-    from webservices.webservices import WebServicesFactory
-    wsu = WebServicesFactory('user')
-    wsu.clear()
+    WSU.clear()
+
 
 def user_is_saved(firstname, lastname):
     open_list_user_url()
@@ -55,57 +60,50 @@ def user_is_saved(firstname, lastname):
     except NoSuchElementException:
         return False
 
+
 def insert_user(firstname, lastname):
-    from webservices.webservices import WebServicesFactory
-    import json
-    with open('xivojson/userwithline.json') as f:
-        datajson = f.read()  % {'firstname': firstname,
-                'lastname': lastname}
-        data = json.loads(datajson)
-    wsu = WebServicesFactory('user')
-    wsu.add(data)
+    jsoncontent = WSU.get_json_file_content('userwithline')
+    datajson = jsoncontent  % {'firstname': firstname,
+                                         'lastname': lastname}
+    data = json.loads(datajson)
+    WSU.add(data)
+
 
 def delete_user(firstname, lastname):
-    from webservices.webservices import WebServicesFactory
-    wsu = WebServicesFactory('user')
     for id in find_user_id(firstname, lastname):
-        wsu.delete(id)
+        WSU.delete(id)
+
 
 def find_user_id(firstname, lastname):
-    from webservices.webservices import WebServicesFactory
-    wsu = WebServicesFactory('user')
-    user_list = wsu.list()
+    user_list = WSU.list()
     if user_list:
         return [userinfo['id'] for userinfo in user_list if
                 userinfo['firstname'] == firstname and userinfo['lastname'] == lastname]
     return []
 
+
 def is_in_group(group_name, user_id):
-    from webservices.webservices import WebServicesFactory
-    wsg = WebServicesFactory('group')
-    group_list = wsg.list()
+    group_list = WSG.list()
     group_id = [group['id'] for group in group_list if group['name'] == group_name]
     if len(group_id) > 0:
-        group_view = wsg.view(group_id[0])
+        group_view = WSG.view(group_id[0])
         for user in group_view['user']:
             if user['userid'] == user_id:
                 return True
     return False
 
+
 def insert_group_with_user(group_name, user_list=[]):
-    from webservices.webservices import WebServicesFactory
-    import json
-    with open('xivojson/group.json') as f:
-        data = f.read()
-        users = ""
-        if len(user_list) > 0:
-            users = r', "user": [%s]' % ', '.join(['"%s"' % str(id) for id in user_list])
-        data = data % {'user_list': users,
-                'groupname': group_name}
-        data = json.loads(data)
-    wsg = WebServicesFactory('group')
-    wsg.clear()
-    wsg.add(data)
+    data = WSG.get_json_file_content('group')
+    users = ""
+    if len(user_list) > 0:
+        users = r', "user": [%s]' % ', '.join(['"%s"' % str(id) for id in user_list])
+    data = data % {'user_list': users,
+                   'groupname': group_name}
+    data = json.loads(data)
+    WSG.clear()
+    WSG.add(data)
+
 
 def add_line(linenumber):
     add_button = world.browser.find_element_by_id('lnk-add-row')

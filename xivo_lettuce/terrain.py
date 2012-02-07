@@ -6,7 +6,8 @@ from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 
 
-_CONFIG_FILE = os.path.join(os.path.dirname(__file__), '../../config/config.ini')
+_CONFIG_FILE = os.path.join(os.path.dirname(__file__), '../config/config.ini')
+_CONFIG_FILE_LOCAL = os.path.join(os.path.dirname(__file__), '../config/config.ini.local')
 
 
 @before.all
@@ -20,7 +21,13 @@ def setup_browser():
 @before.all
 def setup_login_infos():
     _config = ConfigParser.RawConfigParser()
-    with open(_CONFIG_FILE) as fobj:
+    if os.path.exists(_CONFIG_FILE_LOCAL):
+        config_file = _CONFIG_FILE_LOCAL
+    elif os.path.exists(_CONFIG_FILE):
+        config_file = _CONFIG_FILE
+    else:
+        raise "config file doesn't exist"
+    with open(config_file) as fobj:
         _config.readfp(fobj)
     world.login = _config.get('login_infos', 'login')
     world.password = _config.get('login_infos', 'password')

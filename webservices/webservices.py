@@ -23,15 +23,21 @@ import os
 import urllib2
 import ConfigParser
 
-JSON_DIR = os.path.join(os.path.dirname(__file__), '../xivojson')
-CONFIG_FILE = os.path.join(os.path.dirname(__file__), '../config/config.ini')
+JSON_DIR = os.path.join(os.path.dirname(__file__), 'xivojson')
+_CONFIG_FILE = os.path.join(os.path.dirname(__file__), '../config/config.ini')
+_CONFIG_FILE_LOCAL = os.path.join(os.path.dirname(__file__), '../config/config.ini.local')
 
 
 class WebServices(object):
     def __init__(self, module, uri_prefix=None, username=None, password=None):
-        
         _config = ConfigParser.RawConfigParser()
-        with open(CONFIG_FILE) as fobj:
+        if os.path.exists(_CONFIG_FILE_LOCAL):
+            config_file = _CONFIG_FILE_LOCAL
+        elif os.path.exists(_CONFIG_FILE):
+            config_file = _CONFIG_FILE
+        else:
+            raise "config file doesn't exist"
+        with open(config_file) as fobj:
             _config.readfp(fobj)
         if not uri_prefix:
             uri_prefix = _config.get('webservices_infos', 'host')
@@ -117,7 +123,7 @@ class WebServices(object):
             self._wsr = WebServicesResponse(url, handle.code, handle.read())
             handle.close()
         except urllib2.HTTPError, e:
-            self._wsr = WebServicesResponse(url, e.code, e.read())
+            print url, e.code
         return self._wsr
 
     def get_last_response(self):
@@ -164,6 +170,9 @@ class WebServicesFactory(object):
     def __init__(self, module):
         self._aws = WebServices(module)
 
+    def get_json_file_content(self, file):
+        return self._aws.get_json_file_content(file)
+
     def list(self):
         response = self._aws.list()
         if response.data:
@@ -178,6 +187,8 @@ class WebServicesFactory(object):
 
     def view(self, id):
         response = self._aws.view(id)
+        if not response:
+            return None
         if response.data:
             return json.loads(response.data)
         return None
@@ -192,6 +203,8 @@ class WebServicesFactory(object):
 
     def delete(self, id):
         response = self._aws.delete(id)
+        if not response:
+            return False
         return (response.code == 200)
 
     def clear(self):

@@ -6,7 +6,7 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
-from common.common import *
+from xivo_lettuce.common import *
 
 trunkiax_URL = '/service/ipbx/index.php/trunk_management/iax/%s'
 

@@ -39,23 +39,3 @@ Feature: User
         When I go to the "Advanced" tab
         Then the select field "IP Addressing type" is set to "Static"
         Then the text field "IP address" is set to "10.0.0.1"
-
-    Scenario: Enable XiVO Client
-        Given I am logged in
-        Given there is a user "Charles" "Magne"
-        When I edit the user "Charles" "Magne"
-        When I uncheck the option "Enable XiVO Client"
-        When I submit
-        When I start the XiVO Client
-        Then I can't log in the XiVO Client as "charles", pass "magne"
-
-        When I edit the user "Charles" "Magne"
-        When I check the option "Enable XiVO Client"
-        When I set the text field "Login" to ""
-        When I set the text field "Password" to ""
-        When I submit with errors
-        When I set the text field "Login" to "charles"
-        When I set the text field "Password" to "magne"
-        When I submit
-        Then I log in the XiVO Client as "charles", pass "magne"
-

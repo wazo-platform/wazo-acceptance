@@ -5,7 +5,7 @@ import time
 from lettuce.decorators import step
 from lettuce.registry import world
 
-from common.common import submit_form
+from xivo_lettuce.common import submit_form
 
 CONTEXT_URL = '/service/ipbx/index.php/system_management/context/%s'
 
@@ -109,6 +109,7 @@ def when_i_add_incall_interval(step, start, end, did_length):
     did_length_select.click()
     submit_form()
 
+
 @step(u'When I edit user ranges')
 def when_i_edit_user_ranges(step):
     tab = world.browser.find_element_by_xpath(
@@ -117,6 +118,7 @@ def when_i_edit_user_ranges(step):
 
     # Wait for the Javascript to fill the table
     time.sleep(world.timeout)
+
 
 @step(u'When I add user interval from (.*) to (.*) with ([0-9]+) numbers')
 def when_i_add_user_interval(step, start, end):

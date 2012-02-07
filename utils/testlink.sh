@@ -30,7 +30,7 @@ BEGIN {FS = ": "}
 }
 
 # Get filenames
-ls features/*.feature | \
+ls ../web-interface/features/*.feature | \
 
 # Add sort indicator
 add_git_date | \
