@@ -23,9 +23,9 @@ import os
 import urllib2
 import ConfigParser
 
-JSON_DIR = os.path.join(os.path.dirname(__file__), 'xivojson')
-_CONFIG_FILE = os.path.join(os.path.dirname(__file__), '../config/config.ini')
-_CONFIG_FILE_LOCAL = os.path.join(os.path.dirname(__file__), '../config/config.ini.local')
+JSON_DIR = os.path.abspath('xivojson')
+_CONFIG_FILE = os.path.abspath('../config/config.ini')
+_CONFIG_FILE_LOCAL = os.path.abspath('../config/config.ini.local')
 
 
 class WebServices(object):

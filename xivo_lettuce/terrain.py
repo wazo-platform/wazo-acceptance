@@ -6,8 +6,8 @@ from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 
 
-_CONFIG_FILE = os.path.join(os.path.dirname(__file__), '../config/config.ini')
-_CONFIG_FILE_LOCAL = os.path.join(os.path.dirname(__file__), '../config/config.ini.local')
+_CONFIG_FILE = os.path.abspath('../config/config.ini')
+_CONFIG_FILE_LOCAL = os.path.abspath('../config/config.ini.local')
 
 
 @before.all
