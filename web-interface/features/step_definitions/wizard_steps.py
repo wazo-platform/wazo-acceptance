@@ -55,6 +55,14 @@ def then_i_should_be_on_page(step, page):
     assert div is not None
 
 
+@step(u'Then I see the license')
+def then_i_see_the_license(step):
+    license_textbox = world.browser.find_element_by_id('it-license')
+    license_text = license_textbox.text.strip()
+    assert license_text.startswith('GNU GENERAL PUBLIC LICENSE')
+    assert license_text.endswith('http://www.gnu.org/philosophy/why-not-lgpl.html>.')
+
+
 @step(u'When I fill hostname (.*), domain (.*), password (.*) in the configuration page')
 def when_i_fill_the_configuration_page(step, hostname, domain, password):
     input_hostname = world.browser.find_element_by_id('it-mainconfig-hostname')
