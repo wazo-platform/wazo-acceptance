@@ -65,7 +65,7 @@ def i_stop_the_xivo_client():
     assert world.xc_response == "OK"
 
 
-def login(user, password, language):
+def webi_login(user, password, language):
     input_login = world.browser.find_element_by_id('it-login')
     input_password = world.browser.find_element_by_id('it-password')
     input_login.send_keys(user)
