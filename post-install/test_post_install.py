@@ -27,3 +27,6 @@ class TestPostInstall(unittest.TestCase):
         asterisk_ids = getpwnam('asterisk')[2:4]
         file_ids = os.stat(file)[4:6]
         return asterisk_ids == file_ids
+
+    def test_fail(self):
+        self.assertTrue(False)
