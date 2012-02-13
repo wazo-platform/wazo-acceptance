@@ -130,7 +130,7 @@ def remove_line(line_substring):
     table_line = find_line(line_substring)
     delete_button = table_line.find_element_by_xpath(".//a[@title='Delete']")
     delete_button.click()
-    alert = world.browser.switch_to_alert();
+    alert = world.browser.switch_to_alert()
     alert.accept()
 
 
