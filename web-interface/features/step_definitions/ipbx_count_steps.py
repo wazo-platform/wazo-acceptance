@@ -2,8 +2,7 @@
 
 from lettuce.decorators import step
 from lettuce.registry import world
-from webservices.webservices import WebServices
-import json
+from xivo_lettuce.manager.trunksip_manager import *
 
 IPBX_COUNT_URL = '/service/ipbx/index.php'
 SIP_TRUNK_STAT_XPATH = "//div[@id='ipbx-stats']//tr[8]//td[%d]"
@@ -37,18 +36,10 @@ def _get_total_sip_trunk_count():
     element = world.browser.find_element_by_xpath(_sip_trunk_total_xpath())
     return int(element.text)
 
-def add_trunk(name):
-    ws = WebServices('trunksip')
-    jsonfilecontent = ws.get_json_file_content('trunksip')
-    content = json.loads(jsonfilecontent)
-    content['protocol']['name'] = name
-    response = ws.add(content)
-    assert(response.code == 200)
-
 @step (u'Given I have (\d+) enabled trunk')
 def given_i_have_trunk(step, count):
     for i in range(int(count)):
-        add_trunk('trunk_%s' % i)
+        add_trunksip('trunk_%s' % i)
 
 @step (u'When I open the ibpx count page')
 def when_i_open_the_ipbx_count_page(step):
