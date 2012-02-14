@@ -18,14 +18,19 @@ def when_i_login_the_webi(step, login, password, language):
 
 @step(u'Given I login as (.*) with password (.*) at (.*)')
 def given_i_login_as_with_password_at(step, user, password, url):
+    if world.logged:
+        return True
     world.url = url
     world.browser.get(world.url)
     waitForLoginPage()
     webi_login(user, password, 'en')
+    world.logged = True
 
 
 @step(u'Given I am logged in')
 def i_am_logged_in(step):
+    if world.logged:
+        return True
     # Go to the home page
     world.browser.get(world.host)
     try:
@@ -64,6 +69,7 @@ def when_i_check_this_option(step, checkstate):
 
 @step(u'I submit$')
 def i_submit(step):
+    time.sleep(1)
     submit_form()
 
 
@@ -159,4 +165,4 @@ def i_log_in_the_xivo_client_to_host_1_as_2_pass_3(host, login, password):
 
 @step(u'I stop the XiVO Client')
 def i_stop_the_xivo_client(step):
-    common.i_stop_the_xivo_client()
+    i_stop_the_xivo_client()

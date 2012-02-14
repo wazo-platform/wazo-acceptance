@@ -10,7 +10,6 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from checkbox import Checkbox
 
-
 class FormErrorException(Exception):
     pass
 
@@ -148,8 +147,16 @@ def go_to_tab(tab_label):
     tab_button.click()
 
 
+def go_to_tab_href(tab_href):
+    sb_menu = world.browser.find_element_by_class_name('sb-smenu')
+    sb_part = sb_menu.find_element_by_xpath(".//li[contains(@onclick,'sb-part-%s')]" % (tab_href))
+    href = sb_part.find_element_by_xpath(".//a[@href='#%s']" % (tab_href))
+    href.click()
+
+
 def get_host_address():
     host = world.host
     host = host.rstrip('/')
     host = host.partition('//')[2]
     return host
+

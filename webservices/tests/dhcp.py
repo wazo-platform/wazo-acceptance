@@ -24,7 +24,7 @@ from webservices.webservices import WebServices
 
 class TestDhcp(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('dhcp')
+        self._aws = WebServices('configuration/network/dhcp')
 
     def tearDown(self):
         pass

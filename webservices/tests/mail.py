@@ -24,7 +24,7 @@ from webservices.webservices import WebServices
 
 class TestMail(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('mail')
+        self._aws = WebServices('configuration/network/mail')
 
     def tearDown(self):
         pass

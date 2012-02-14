@@ -24,17 +24,100 @@ import urllib2
 import ConfigParser
 
 JSON_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'xivojson'))
-_CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 
+_CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             '../config/config.ini'))
-_CONFIG_FILE_LOCAL = os.path.abspath(os.path.join(os.path.dirname(__file__), 
-                                                  '../config/config.ini.local'))
+
+URILIST = {'ipbx': {
+                'call_management' :
+                {
+                    "incall" : "/service/ipbx/json.php/%s/call_management/incall",
+                    "outcall" : "/service/ipbx/json.php/%s/call_management/outcall",
+                    "pickup" : "/service/ipbx/json.php/%s/call_management/pickup"
+                },
+                'control_system' :
+                {
+                    "reload" : "/service/ipbx/json.php/%s/control_system/reload",
+                    "restart" : "/service/ipbx/json.php/%s/control_system/restart"
+                },
+                'general_settings' :
+                {
+                    "advanced" : "/service/ipbx/json.php/%s/general_settings/advanced",
+                    "iax" : "/service/ipbx/json.php/%s/general_settings/iax",
+                    "outboundmwi" : "/service/ipbx/json.php/%s/general_settings/outboundmwi",
+                    "phonebook" : "/service/ipbx/json.php/%s/general_settings/phonebook",
+                    "sip" : "/service/ipbx/json.php/%s/general_settings/sip",
+                    "voicemail" : "/service/ipbx/json.php/%s/general_settings/voicemail"
+                },
+                'pbx_services' :
+                {
+                    "extenfeatures" : "/service/ipbx/json.php/%s/pbx_services/extenfeatures",
+                    "phonebook" : "/service/ipbx/json.php/%s/pbx_services/phonebook"
+                },
+                'pbx_settings' :
+                {
+                    "groups" : "/service/ipbx/json.php/%s/pbx_settings/groups",
+                    "lines" : "/service/ipbx/json.php/%s/pbx_settings/lines",
+                    "meetme" : "/service/ipbx/json.php/%s/pbx_settings/meetme",
+                    "users" : "/service/ipbx/json.php/%s/pbx_settings/users",
+                    "voicemail" : "/service/ipbx/json.php/%s/pbx_settings/voicemail"
+                },
+                'phonebook' :
+                {
+                    "local" : "/service/ipbx/json.php/%s/pbx_settings/local",
+                    "menu" : "/service/ipbx/json.php/%s/pbx_settings/menu",
+                    "search" : "/service/ipbx/json.php/%s/pbx_settings/search"
+                 },
+                'system_management' :
+                {
+                    "context" : "/service/ipbx/json.php/%s/system_management/context"
+                },
+                'trunk_management' :
+                {
+                    "sip" : "/service/ipbx/json.php/%s/trunk_management/sip",
+                    "iax" : "/service/ipbx/json.php/%s/trunk_management/iax",
+                    "custom" : "/service/ipbx/json.php/%s/trunk_management/custom"
+                }
+            },
+            'callcenter' :
+            {
+                'settings' :
+                {
+                    "agents" : "/callcenter/json.php/%s/settings/agents/",
+                    "queues" : "/callcenter/json.php/%s/settings/queues/"
+                }
+            },
+            'configuration' :
+            {
+                'manage' :
+                {
+                    "entity" : "/xivo/configuration/json.php/%s/manage/entity"
+                },
+                'network' :
+                {
+                    "dhcp" : "/xivo/configuration/json.php/%s/network/dhcp",
+                    "mail" : "/xivo/configuration/json.php/%s/network/mail",
+                    "interface" : "/xivo/configuration/json.php/%s/network/interface",
+                    "resolvconf" : "/xivo/configuration/json.php/%s/network/resolvconf"
+                },
+                'provisioning' :
+                {
+                    "general" : "/xivo/configuration/json.php/%s/provisioning/general"
+                },
+                'support' :
+                {
+                    "monitoring" : "/xivo/configuration/json.php/%s/support/monitoring"
+                },
+                'check' : "/xivo/configuration/json.php/%s/check"
+            }
+       }
 
 
 class WebServices(object):
     def __init__(self, module, uri_prefix=None, username=None, password=None):
         _config = ConfigParser.RawConfigParser()
-        if os.path.exists(_CONFIG_FILE_LOCAL):
-            config_file = _CONFIG_FILE_LOCAL
+        local_config = '%s.local' % _CONFIG_FILE
+        if os.path.exists(local_config):
+            config_file = local_config
         elif os.path.exists(_CONFIG_FILE):
             config_file = _CONFIG_FILE
         else:
@@ -47,7 +130,7 @@ class WebServices(object):
             username = _config.get('webservices_infos', 'login')
         if not password:
             password = _config.get('webservices_infos', 'password')
-        
+
         self.basepath = os.path.normpath(JSON_DIR)
         self.module = module
         self._wsr = None
@@ -66,40 +149,25 @@ class WebServices(object):
             jsonfilecontent = fobj.read()
         return jsonfilecontent
 
-    def get_uri(self):
-        list = {
-                "users"  : "/service/ipbx/json.php/%s/pbx_settings/users",
-                "groups" : "/service/ipbx/json.php/%s/pbx_settings/groups",
-                "lines"  : "/service/ipbx/json.php/%s/pbx_settings/lines",
-                "meetme" : "/service/ipbx/json.php/%s/pbx_settings/meetme",
-                
-                "incall" : "/service/ipbx/json.php/%s/call_management/incall",
-                
-                "context" : "/service/ipbx/json.php/%s/system_management/context",
-                
-                "trunksip" : "/service/ipbx/json.php/%s/trunk_management/sip",
-                
-                "agents" : "/callcenter/json.php/%s/settings/agents/",
-                
-                "entity" : "/xivo/configuration/json.php/%s/manage/entity",
-                
-                "dhcp" : "/xivo/configuration/json.php/%s/network/dhcp",
-                "mail" : "/xivo/configuration/json.php/%s/network/mail",
-                "monitoring" : "/xivo/configuration/json.php/%s/support/monitoring"
-               }
-        module = [self.module, '%ss' % self.module]
-        for mod_exist in module:
-            if mod_exist in list:
-                return list[mod_exist]
+    def _get_uri(self):
+        sections = self.module.split('/')
+        tmp = URILIST
+        for sec in sections:
+            if sec in tmp:
+                tmp = tmp[sec]
         
-        raise 'uri not exist for object %s' % self.module
+        if isinstance(tmp, str):
+            return tmp
+
+        print 'uri not exist for object %s' % self.module
+        exit(0)
 
     def _compute_path(self, uri_prefix):
         if 'localhost' in uri_prefix or '127.0.0.1' in uri_prefix:
             method = 'private'
         else:
             method = 'restricted'
-        return self.get_uri() % method
+        return self._get_uri() % method
 
     def _build_opener(self, uri_prefix, username, password):
         handlers = []
@@ -125,12 +193,17 @@ class WebServices(object):
             self._wsr = WebServicesResponse(url, handle.code, handle.read())
             handle.close()
         except urllib2.HTTPError, e:
-            print url, e.code
+            self._wsr = WebServicesResponse(url, e.code, e.read())
+        except urllib2.URLError, e:
+            raise
         return self._wsr
 
     def get_last_response(self):
         if self._wsr:
             return self._wsr
+
+    def call(self):
+        return self._request_http({})
 
     def list(self):
         qry = {"act": "list"}

@@ -8,8 +8,6 @@ from xivobrowser import XiVOBrowser
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 
                                             '../config/config.ini'))
-_CONFIG_FILE_LOCAL = os.path.abspath(os.path.join(os.path.dirname(__file__), 
-                                                  '../config/config.ini.local'))
 
 
 @before.all
@@ -17,14 +15,15 @@ def setup_browser():
     from pyvirtualdisplay import Display
     Display(visible=0, size=(1024, 768)).start()
     world.browser = XiVOBrowser()
-    world.timeout = 5
+    world.timeout = 1
 
 
 @before.all
 def setup_login_infos():
     _config = ConfigParser.RawConfigParser()
-    if os.path.exists(_CONFIG_FILE_LOCAL):
-        config_file = _CONFIG_FILE_LOCAL
+    local_config = '%s.local' % _CONFIG_FILE
+    if os.path.exists(local_config):
+        config_file = local_config
     elif os.path.exists(_CONFIG_FILE):
         config_file = _CONFIG_FILE
     else:
@@ -34,6 +33,7 @@ def setup_login_infos():
     world.login = _config.get('login_infos', 'login')
     world.password = _config.get('login_infos', 'password')
     world.host = _config.get('login_infos', 'host')
+    world.logged = False
 
 
 @world.absorb

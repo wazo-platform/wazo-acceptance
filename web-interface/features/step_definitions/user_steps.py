@@ -4,8 +4,9 @@ from lettuce.decorators import step
 from lettuce.registry import world
 
 from xivo_lettuce.common import *
-from xivo_lettuce.ipbx_objects.user_manager import *
-from xivo_lettuce.ipbx_objects import line_manager
+from xivo_lettuce.manager.user_manager import *
+from xivo_lettuce.manager.context_manager import *
+from xivo_lettuce.manager import line_manager
 
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"')
@@ -43,10 +44,6 @@ def then_user_is_not_displayed_in_the_list(step, firstname, lastname):
 
 @step(u'When I add user "([^"]*)" "([^"]*)" in group "([^"]*)"')
 def when_i_create_a_user_in_group(step, firstname, lastname, group):
-    import context_steps as ctx
-    ctx.when_i_edit_a_context(step, 'default')
-    ctx.when_i_edit_group_ranges(step)
-    ctx.when_i_add_group_interval(step, 5000, 6000)
     import group_steps as grp
     grp.when_i_create_group(step, group)
     open_add_user_form()
@@ -54,6 +51,7 @@ def when_i_create_a_user_in_group(step, firstname, lastname, group):
     type_user_in_group(group)
     submit_form()
     user_is_saved(firstname, lastname)
+
 
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
@@ -73,6 +71,7 @@ def remove_user(step, firstname, lastname):
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"')
 def then_user_is_in_group(step, firstname, lastname, group_name):
     user_id_list = find_user_id(firstname, lastname)
+    time.sleep(3)
     if len(user_id_list) > 0:
         assert is_in_group(group_name, user_id_list[0])
 
@@ -92,16 +91,11 @@ def then_i_should_be_at_the_user_list_page(step):
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)"')
 def given_there_is_a_user_1_2_with_a_sip_line_3(step, firstname, lastname, linenumber):
-    import context_steps as ctx
-    ctx.when_i_edit_a_context(step, 'default')
-    ctx.when_i_edit_user_ranges(step)
-    ctx.when_i_add_user_interval(step, 100, 199)
-
+    check_context_number_in_interval('default', 'user', linenumber)
     delete_user(firstname, lastname)
     open_add_user_form()
     type_user_names(firstname, lastname)
-    go_to_tab('Lines')
-    add_line(linenumber)
+    user_form_add_line(linenumber)
     submit_form()
 
 

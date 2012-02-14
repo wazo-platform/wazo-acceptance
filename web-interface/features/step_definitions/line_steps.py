@@ -5,14 +5,12 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
 from xivo_lettuce.common import *
-
-LINE_ADD_URL = '/service/ipbx/index.php/pbx_settings/lines/?act=add&proto='
+from xivo_lettuce.manager.line_manager import *
 
 
 @step(u'When I create a "([^"]*)" line in context "([^"]*)"')
 def when_i_create_a_line_in_context(step, protocol, context):
-    world.browser.get('%s%s%s' % (world.url, LINE_ADD_URL, protocol.lower()))
-    world.browser.find_element_by_id('it-protocol-context', 'Line form not loaded')
+    open_add_line_form(protocol.lower())
     select_context = world.browser.find_element_by_xpath(
         '//select[@id="it-protocol-context"]//option[@value="%s"]' % context)
     select_context.click()

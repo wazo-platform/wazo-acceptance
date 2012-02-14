@@ -24,7 +24,7 @@ from webservices.webservices import WebServices
 
 class TestTrunkSip(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('trunksip')
+        self._aws = WebServices('ipbx/trunk_management/sip')
         self._aws.deleteall()
 
     def tearDown(self):

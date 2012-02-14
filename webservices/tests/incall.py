@@ -25,7 +25,7 @@ from webservices.webservices import WebServicesFactory
 
 class TestIncall(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('incall')
+        self._aws = WebServices('ipbx/call_management/incall')
         self._aws.deleteall()
 
     def tearDown(self):
@@ -47,7 +47,7 @@ class TestIncall(unittest.TestCase):
         jsonfilecontent = self._aws.get_json_file_content('context');
         jsonstr = jsonfilecontent % (var_context)
         data = json.loads(jsonstr)
-        wsctx = WebServicesFactory('context')
+        wsctx = WebServicesFactory('ipbx/system_management/context')
         wsctx.delete('toto')
         wsctx.add(data)
 

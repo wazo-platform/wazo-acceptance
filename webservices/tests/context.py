@@ -24,11 +24,11 @@ from webservices.webservices import WebServices
 
 class TestContext(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('context')
+        self._aws = WebServices('ipbx/system_management/context')
         response = self._aws.search('toto')
         if response.code == 200:
             response = self._aws.view('toto')
-            if response.code == 200:
+            if response:
                 self._aws.delete('toto')
 
     def tearDown(self):

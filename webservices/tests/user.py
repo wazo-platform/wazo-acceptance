@@ -24,7 +24,7 @@ from webservices.webservices import WebServices
 
 class TestUser(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('users')
+        self._aws = WebServices('ipbx/pbx_settings/users')
         self._aws.deleteall()
 
     def tearDown(self):

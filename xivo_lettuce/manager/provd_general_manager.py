@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.decorators import step
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import ElementNotVisibleException
+from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
+from webservices.webservices import WebServicesFactory
+from xivo_lettuce.common import *
+
 
 PG_URL = '/xivo/configuration/index.php/provisioning/general/%s'
+WS = WebServicesFactory('configuration/provisioning/general')
 
 
-def _open_general_url():
+def open_general_url():
     URL = PG_URL % ''
     world.browser.get('%s%s' % (world.url, URL))
     world.browser.find_element_by_id('it-submit', 'Provd general configuration page not loaded')
 
 
-def _type_plugin_server_url(url):
+def type_plugin_server_url(url):
     world.browser.find_element_by_name('plugin_server', 'plugin_server form not loaded')
     input_plugin_server = world.browser.find_element_by_name('plugin_server')
     input_plugin_server.clear()
@@ -24,5 +26,5 @@ def _type_plugin_server_url(url):
 
 
 def update_plugin_server_url(url):
-    _open_general_url()
-    _type_plugin_server_url(url)
+    open_general_url()
+    type_plugin_server_url(url)

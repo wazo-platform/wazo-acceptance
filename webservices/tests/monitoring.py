@@ -24,7 +24,7 @@ from webservices.webservices import WebServices
 
 class TestMonitoring(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('monitoring')
+        self._aws = WebServices('configuration/support/monitoring')
 
     def tearDown(self):
         pass

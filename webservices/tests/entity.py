@@ -24,7 +24,7 @@ from webservices.webservices import WebServices
 
 class TestEntity(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('entity')
+        self._aws = WebServices('configuration/manage/entity')
         self._aws.deleteall()
 
     def tearDown(self):

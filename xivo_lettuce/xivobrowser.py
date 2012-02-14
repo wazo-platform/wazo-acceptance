@@ -108,6 +108,20 @@ class XiVOBrowser(webdriver.Firefox):
             world.timeout = oldtimeout
         return ret
 
+    def find_elements_by_xpath(self, xpath, message='', timeout=None):
+        oldtimeout = world.timeout
+        if timeout is not None:
+            world.timeout = timeout
+        try:
+            ret = webdriver.Firefox.find_elements_by_xpath(self, xpath)
+        except NoSuchElementException:
+            raise NoSuchElementException('%s: %s' % (xpath, message))
+        except ElementNotVisibleException:
+            raise ElementNotVisibleException('%s: %s' % (xpath, message))
+        finally:
+            world.timeout = oldtimeout
+        return ret
+
     def switch_to_alert(self, message='No alert', timeout=5):
         """Adds wait time for alert."""
         count = 0

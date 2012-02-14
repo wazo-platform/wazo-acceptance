@@ -9,6 +9,7 @@ from xivo_lettuce.common import *
 
 PROFILE_URL = '/cti/index.php/profiles/%s'
 
+
 def open_add_profile_form():
     URL = PROFILE_URL % '?act=add'
     world.browser.get('%s%s' % (world.url, URL))

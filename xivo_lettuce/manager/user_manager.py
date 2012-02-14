@@ -5,10 +5,11 @@ import json
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from webservices.webservices import WebServicesFactory
+from xivo_lettuce.common import *
 
 USER_URL = '/service/ipbx/index.php/pbx_settings/users/%s'
-WSU = WebServicesFactory('user')
-WSG = WebServicesFactory('group')
+WSU = WebServicesFactory('ipbx/pbx_settings/users')
+WSG = WebServicesFactory('ipbx/pbx_settings/groups')
 
 
 def open_add_user_form():
@@ -47,6 +48,7 @@ def type_user_in_group(groupName):
     select_group.click()
     add_button = world.browser.find_element_by_id('bt-ingroup')
     add_button.click()
+
 
 def delete_all_users():
     WSU.clear()
@@ -105,12 +107,10 @@ def insert_group_with_user(group_name, user_list=[]):
     WSG.add(data)
 
 
-def add_line(linenumber):
+def user_form_add_line(linenumber):
+    go_to_tab('Lines')
     add_button = world.browser.find_element_by_id('lnk-add-row')
     add_button.click()
-
-    # Wait for the Javascript to insert the line
-    time.sleep(world.timeout)
-
     input_linenumber = world.browser.find_elements_by_id('linefeatures-number')[-2]
     input_linenumber.send_keys(linenumber)
+    go_to_tab('General')
