@@ -14,17 +14,13 @@ class FormErrorException(Exception):
     pass
 
 
-class XiVOClientProcess(multiprocessing.Process):
-    def __init__(self):
-        multiprocessing.Process.__init__(self)
-
-    def run(self):
-        xc_path = os.environ['XC_PATH'] + '/'
-        env = os.environ
-        env['LD_LIBRARY_PATH'] = '.'
-        subprocess.call('./xivoclient',
-                        cwd = xc_path,
-                        env = env)
+def run_xivoclient():
+    xc_path = os.environ['XC_PATH'] + '/'
+    env = os.environ
+    env['LD_LIBRARY_PATH'] = '.'
+    world.xc_process = subprocess.Popen('./xivoclient',
+                                        cwd = xc_path,
+                                        env = env)
 
 
 def xivoclient_step(f):
@@ -49,14 +45,16 @@ def xivoclient(f):
 
 @before.each_scenario
 def setup_xivoclient_rc(scenario):
-    world.xc_process = XiVOClientProcess()
+    world.xc_process = None
     world.xc_socket = socket.socket(socket.AF_UNIX)
 
 
 @after.each_scenario
 def clean_xivoclient_rc(scenario):
-    if world.xc_process.is_alive():
-        i_stop_the_xivo_client()
+    if world.xc_process:
+        world.xc_process.poll()
+        if world.xc_process.returncode is None:
+            i_stop_the_xivo_client()
 
 
 @xivoclient

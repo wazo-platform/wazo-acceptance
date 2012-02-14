@@ -127,12 +127,16 @@ def i_go_to_the_1_tab(step, tab_text):
 
 @step(u'I start the XiVO Client')
 def i_start_the_xivo_client(step):
-    world.xc_process.start()
+    run_xivoclient()
 
     # Waiting for the listening socket to open
     time.sleep(1)
 
-    world.xc_socket.connect('/tmp/xivoclient')
+    try:
+        world.xc_socket.connect('/tmp/xivoclient')
+    except:
+        world.xc_process.terminate()
+        raise
 
 
 @step(u'I go to the XiVO Client configuration')
