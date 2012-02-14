@@ -71,18 +71,18 @@ def check_context_number_in_interval(context_name, label, number):
 def create_interval_for_number(label, number):
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-%s']//a[@id='add_line_button']" % label)
     add_button.click()
-    start_field = world.browser.find_elements_by_xpath(
-                "//tbody[@id='contextnumbers-%s']//input[@name='contextnumbers[%s][numberbeg][]']" % (label, label))[-1]
-    start_field.clear()
-    start_field.send_keys(number)
-    end_field = world.browser.find_elements_by_xpath(
-                "//tbody[@id='contextnumbers-%s']//input[@name='contextnumbers[%s][numberend][]']" % (label, label))[-1]
-    end_field.clear()
-    end_field.send_keys(number)
-    if label == 'incall':
-        did_length_select = world.browser.find_elements_by_xpath(
-            '//select[@name="contextnumbers[incall][didlength][]"]//option[@value="%s"]' % len(number))[-2]
-        did_length_select.click()
+    tbody = world.browser.find_elements_by_xpath("//tbody[@id='contextnumbers-%s']" % label)
+    for tr in tbody:
+        start_field = tr.find_elements_by_xpath(".//input[@name='contextnumbers[%s][numberbeg][]']" % (label))[-1]
+        start_field.clear()
+        start_field.send_keys(number)
+        end_field = tr.find_elements_by_xpath(".//input[@name='contextnumbers[%s][numberend][]']" % (label))[-1]
+        end_field.clear()
+        end_field.send_keys(number)
+        if label == 'incall':
+            did_length_select = tr.find_elements_by_xpath(
+                './/select[@name="contextnumbers[incall][didlength][]"]//option[@value="%s"]' % len(str(number)))[-1]
+            did_length_select.click()
     submit_form()
 
 
