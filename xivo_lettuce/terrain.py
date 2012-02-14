@@ -16,6 +16,7 @@ def setup_browser():
     Display(visible=0, size=(1024, 768)).start()
     world.browser = XiVOBrowser()
     world.timeout = 1
+    world.stocked_infos = {}
 
 
 @before.all

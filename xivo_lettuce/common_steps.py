@@ -8,6 +8,7 @@ from selenium.common.exceptions import NoSuchElementException, ElementNotVisible
 from selenium.webdriver.support.select import Select
 
 from xivo_lettuce.common import *
+from xivo_lettuce.manager import context_manager
 from checkbox import Checkbox
 
 
@@ -166,3 +167,7 @@ def i_log_in_the_xivo_client_to_host_1_as_2_pass_3(host, login, password):
 @step(u'I stop the XiVO Client')
 def i_stop_the_xivo_client(step):
     i_stop_the_xivo_client()
+
+@step(u'Given there is a context interval for SIP line "([^"]*)"')
+def given_there_is_a_context_interval_for_sip_line_1(step, line_number):
+    context_manager.check_context_number_in_interval('default', 'user', line_number)

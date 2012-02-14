@@ -37,3 +37,7 @@ def then_this_line_is_not_displayed_in_the_list(step):
         pass
     else:
         assert False
+
+@step(u'Given there is no SIP line "([^"]*)"')
+def given_there_is_no_sip_line_1(step, line_number):
+    delete_line_from_number(line_number)

@@ -25,3 +25,15 @@ def open_list_line_url():
     URL = LINE_URL % '?act=list'
     world.browser.get('%s%s' % (world.url, URL))
     world.browser.find_element_by_id('table-main-listing', 'Line list not loaded')
+
+def delete_line_from_number(line_number):
+    for id in find_line_id_from_number(line_number):
+        WS.delete(id)
+
+
+def find_line_id_from_number(line_number):
+    line_list = WS.list()
+    if line_list:
+        return [lineinfo['id'] for lineinfo in line_list if
+                lineinfo['number'] == line_number]
+    return []
