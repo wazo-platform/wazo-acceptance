@@ -15,7 +15,7 @@ def given_a_update_plugins_provd(step):
     provdg.update_plugin_server_url('http://provd.xivo.fr/plugins/1/stable/')
     open_provd_plugin_list_url()
     world.browser.find_element_by_id('toolbar-bt-update').click()
-    time.sleep(5)
+    time.sleep(3)
     world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-messages')]]")
 
 
@@ -24,6 +24,7 @@ def given_a_update_plugins_provd_with_bad_url(step):
     provdg.update_plugin_server_url('http://provd.xivo.fr/plugins/1/lol/')
     open_provd_plugin_list_url()
     world.browser.find_element_by_id('toolbar-bt-update').click()
+    time.sleep(3)
     world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-messages')]]")
 
 
