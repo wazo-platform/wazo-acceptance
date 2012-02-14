@@ -7,13 +7,10 @@ from xivo_lettuce.common import *
 from xivo_lettuce.manager.user_manager import *
 from xivo_lettuce.manager.trunksip_manager import *
 
-def _delete_all_trunksip():
-    sip_trunk_ws = WebServices('trunksip')
-    return sip_trunk_ws.deleteall()
 
 @step(u'Given there is no SIP trunk')
 def given_there_is_no_sip_trunk(step):
-    _delete_all_trunksip()
+    delete_all_trunksip()
 
 
 @step(u'Given there is a SIP trunk "([^"]*)"')

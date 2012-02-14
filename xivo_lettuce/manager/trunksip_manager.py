@@ -18,3 +18,5 @@ def open_list_trunksip_url():
     URL = TRUNKSIP_URL % ('?act=list')
     world.browser.get('%s%s' % (world.url, URL))
 
+def delete_all_trunksip():
+    return WSTS.deleteall()
