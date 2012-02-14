@@ -30,7 +30,7 @@ BEGIN {FS = ": "}
 }
 
 # Get filenames
-ls ../web-interface/features/*.feature ../cticlient/features/*.feature | \
+ls ../webi/features/*.feature ../cticlient/features/*.feature | \
 
 # Add sort indicator
 add_git_date | \
