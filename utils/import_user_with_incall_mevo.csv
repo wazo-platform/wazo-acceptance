@@ -1,0 +1,2 @@
+entityid|firstname|lastname|language|phonenumber|context|protocol|outcallerid|enablehint|agentnumber|mobilephonenumber|incallexten|incallcontext|voicemailname|voicemailmailbox|voicemailpassword|voicemailemail
+1|Johnny|Peg|fr_FR|1058|default|sip|outcallerid|Y|2000|07776354267|2058|from-extern|Johnny Peg|1058|1234|cabunar@gmail.com

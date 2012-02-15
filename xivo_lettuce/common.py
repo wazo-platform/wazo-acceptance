@@ -10,6 +10,8 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from checkbox import Checkbox
 
+UTILS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils'))
+
 class FormErrorException(Exception):
     pass
 
@@ -60,6 +62,13 @@ def clean_xivoclient_rc(scenario):
 @xivoclient
 def i_stop_the_xivo_client():
     assert world.xc_response == "OK"
+
+
+def get_utils_file_content(filename):
+    abs_file_path = os.path.join(UTILS_DIR, filename);
+    with open(abs_file_path) as fobj:
+        filecontent = fobj.read()
+    return filecontent
 
 
 def webi_login(user, password, language):

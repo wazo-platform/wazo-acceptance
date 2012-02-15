@@ -26,9 +26,9 @@ def i_add_a_user(step):
 
 
 @step(u'When I create a user "([^"]*)" "([^"]*)"$')
-def when_i_create_a_user(step, firstName, lastName):
+def when_i_create_a_user(step, firstname, lastname):
     open_add_user_form()
-    type_user_names(firstName, lastName)
+    type_user_names(firstname, lastname)
     submit_form()
 
 

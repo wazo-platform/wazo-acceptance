@@ -1,0 +1,2 @@
+entityid|firstname|lastname|language|phonenumber|context|protocol|mobilephonenumber
+%(entityid)s|%(firstname)s|%(lastname)s|%(language)s|%(phonenumber)s|%(context)s|%(protocol)s|%(mobilephonenumber)s

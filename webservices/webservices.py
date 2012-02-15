@@ -184,8 +184,7 @@ class WebServices(object):
     def _request_http(self, qry, data=None):
         if data is not None:
             if isinstance(data, dict):
-                data = json.dumps(data)
-            data = data.replace(' ', '').replace('\n', '')
+                data = json.dumps(data).replace(' ', '').replace('\n', '')
         url = '%s%s?%s' % (self._uri_prefix, self._path, self._build_query(qry))
         request = urllib2.Request(url=url, data=data, headers=self._headers)
         try:
@@ -232,6 +231,9 @@ class WebServices(object):
     def deleteall(self):
         qry = {"act": "deleteall"}
         return self._request_http(qry)
+
+    def custom(self, qry, content=None):
+        return self._request_http(qry, content)
 
 
 class WebServicesResponse(object):
@@ -285,3 +287,6 @@ class WebServicesFactory(object):
     def clear(self):
         response = self._aws.deleteall()
         return (response.code == 200)
+
+    def custom(self, qry={}, data=None):
+        return self._aws.custom(qry, data)

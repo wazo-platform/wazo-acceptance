@@ -1,0 +1,2 @@
+entityid|firstname|lastname|phonenumber|context|protocol|outcallerid|enablehint|agentnumber|mobilephonenumber|incallexten|incallcontext
+1|Johnny|Peg|1058|default|sip|outcallerid|Y|2000|07776354267|2058|from-extern

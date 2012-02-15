@@ -50,10 +50,6 @@ def type_user_in_group(groupName):
     add_button.click()
 
 
-def delete_all_users():
-    WSU.clear()
-
-
 def user_is_saved(firstname, lastname):
     open_list_user_url()
     try:
@@ -74,6 +70,10 @@ def insert_user(firstname, lastname):
 def delete_user(firstname, lastname):
     for id in find_user_id(firstname, lastname):
         WSU.delete(id)
+
+
+def delete_all_users():
+    WSU.clear()
 
 
 def find_user_id(firstname, lastname):
