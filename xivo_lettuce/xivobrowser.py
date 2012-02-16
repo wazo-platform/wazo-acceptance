@@ -43,6 +43,12 @@ class XiVOBrowser(webdriver.Firefox):
             missing_translations_list = sorted(set(missing_translations_list))
 
             raise MissingTranslationException('\n'.join(missing_translations_list))
+        """
+        try:
+            world.browser.find_element_by_id('page_loaded' % act, '%s %s not loaded' % (module, act))
+        except ElementNotVisibleException:
+            pass
+        """
 
     def find_element(self, by=id, value=None):
         """This function is called by all find_element_by_*().

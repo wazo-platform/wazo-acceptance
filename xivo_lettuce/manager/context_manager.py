@@ -4,29 +4,9 @@ import json
 
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
-from webservices.webservices import WebServicesFactory
 from xivo_lettuce.common import *
 
-CONTEXT_URL = '/service/ipbx/index.php/system_management/context/%s'
-WS = WebServicesFactory('ipbx/system_management/context')
-
-
-def open_add_context_form():
-    URL = CONTEXT_URL % '?act=add'
-    world.browser.get('%s%s' % (world.url, URL))
-    world.browser.find_element_by_id('it-context-name', 'context add form not loaded')
-
-
-def open_edit_context_form(id):
-    URL = CONTEXT_URL % '?act=edit&id=%s'
-    world.browser.get('%s%s' % (world.url, URL % id))
-    world.browser.find_element_by_id('it-context-name', 'context edit form not loaded')
-
-
-def open_list_context_url():
-    URL = CONTEXT_URL % '?act=list'
-    world.browser.get('%s%s' % (world.url, URL))
-    world.browser.find_element_by_id('table-main-listing', 'context list not loaded')
+WS = get_webservices('context')
 
 
 def delete_context(name):
@@ -34,7 +14,7 @@ def delete_context(name):
 
 
 def check_context_interval(context_name, label, start, end):
-    open_edit_context_form(context_name)
+    open_url('context', 'edit', {'id': context_name})
     go_to_tab_href(label)
     tbl_user = world.browser.find_element_by_id('contextnumbers-%s' % label)
     try:
@@ -46,7 +26,7 @@ def check_context_interval(context_name, label, start, end):
 
 
 def check_context_number_in_interval(context_name, label, number):
-    open_edit_context_form(context_name)
+    open_url('context', 'edit', {'id': context_name})
     go_to_tab_href(label)
     sel_list_interval = world.browser.find_elements_by_xpath("//input[contains(@name, 'contextnumbers[%s]')]" % label)
     if sel_list_interval:

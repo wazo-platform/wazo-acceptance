@@ -9,6 +9,7 @@ from selenium.webdriver.support.select import Select
 
 from xivo_lettuce.common import *
 from xivo_lettuce.manager import context_manager
+from xivo_lettuce import manager
 from checkbox import Checkbox
 
 
@@ -66,6 +67,21 @@ def when_i_check_this_option(step, checkstate):
     option = world.browser.find_element_by_label(world.last_option_label)
     goal_checked = (checkstate is None)
     Checkbox(option).set_checked(goal_checked)
+
+
+@step(u'Given there is no ([a-z ]*) "([^"]*)"$')
+def given_there_is_no_element(step, module, search):
+    remove_element_if_exist(module, search)
+
+
+@step(u'Then ([a-z ]*) "([^"]*)" is displayed in the list$')
+def then_value_is_displayed_in_the_list(step, type, search):
+    assert element_is_in_list(type, search) is True
+
+
+@step(u'Then ([a-z ]*) "([^"]*)" is not displayed in the list$')
+def then_value_is_not_displayed_in_the_list(step, type, search):
+    assert element_is_not_in_list(type, search) is True
 
 
 @step(u'I submit$')
@@ -179,5 +195,5 @@ def given_there_is_a_context_interval_for_sip_line_1(step, line_number):
 
 
 @step(u'Given there is a context interval for queue "([^"]*)"')
-def given_there_is_a_context_interval_for_sip_line_1(step, queue_number):
+def given_there_is_a_context_interval_for_queue_1(step, queue_number):
     context_manager.check_context_number_in_interval('default', 'queue', queue_number)

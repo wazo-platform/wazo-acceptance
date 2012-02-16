@@ -1,31 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
-from webservices.webservices import WebServicesFactory
 from xivo_lettuce.common import *
 
-
-MM_URL = '/service/ipbx/index.php/pbx_settings/meetme/%s'
-WS = WebServicesFactory('ipbx/pbx_settings/meetme')
-
-
-def open_add_form():
-    URL = MM_URL % '?act=add'
-    world.browser.get('%s%s' % (world.url, URL))
-    world.browser.find_element_by_id('it-meetmefeatures-name', 'Meetme add form not loaded')
-
-
-def open_edit_form(id):
-    URL = MM_URL % '?act=edit&id=%d'
-    world.browser.get('%s%s' % (world.url, URL % id))
-    world.browser.find_element_by_id('it-meetmefeatures-name', 'Meetme edit form not loaded')
-
-
-def open_list_url():
-    URL = MM_URL % '?act=list'
-    world.browser.get('%s%s' % (world.url, URL))
-    world.browser.find_element_by_id('table-main-listing', 'Meetme list not loaded')
+WS = get_webservices('meetme')
 
 
 def type_name(name):
@@ -57,12 +35,3 @@ def type_maxusers(maxusers):
 
 def delete_all_meetme():
     WS.clear()
-
-
-def is_saved(name):
-    open_list_url()
-    try:
-        meetme = find_line(name)
-        return meetme is not None
-    except NoSuchElementException:
-        return False

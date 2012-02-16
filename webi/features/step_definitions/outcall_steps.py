@@ -12,7 +12,7 @@ from xivo_lettuce.manager.outcall_manager import *
 
 @step(u'Given there is no outcall "([^"]*)"')
 def given_there_is_no_outcall(step, name):
-    open_list_outcall_url()
+    open_url('outcall', 'list')
     try:
         remove_line(name)
     except NoSuchElementException:
@@ -21,7 +21,7 @@ def given_there_is_no_outcall(step, name):
 
 @step(u'When I create an outcall with name "([^"]*)" and trunk "([^"]*)"')
 def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
-    open_add_outcall_url()
+    open_url('outcall', 'add')
     input_name = world.browser.find_element_by_id('it-outcall-name', 'Outcall form not loaded')
     input_name.send_keys(name)
 
@@ -38,15 +38,9 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     submit_form()
 
 
-@step(u'Then there is an outcall "([^"]*)"')
-def then_there_is_an_outcall(step, name):
-    open_list_outcall_url()
-    assert find_line(name) is not None
-
-
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
 def given_there_is_an_outcall(step, name, trunk):
-    open_list_outcall_url()
+    open_url('outcall', 'list')
     try:
         find_line(name)
     except NoSuchElementException:
@@ -55,13 +49,13 @@ def given_there_is_an_outcall(step, name, trunk):
 
 @step(u'When I remove the outcall "([^"]*)"')
 def when_i_remove_the_outcall(step, name):
-    open_list_outcall_url()
+    open_url('outcall', 'list')
     remove_line(name)
 
 
 @step(u'Then there is no outcall "([^"]*)"')
 def then_there_is_no_outcall(step, name):
-    open_list_outcall_url()
+    open_url('outcall', 'list')
     try:
         find_line(name)
     except NoSuchElementException:
@@ -72,7 +66,7 @@ def then_there_is_no_outcall(step, name):
 
 @step(u'I go to the outcall "([^"]*)", tab "([^"]*)"')
 def i_go_to_the_outcall_tab(step, name, tab):
-    open_list_outcall_url()
+    open_url('outcall', 'list')
     edit_line(name)
     go_to_tab(tab)
 

@@ -10,4 +10,4 @@ Feature: Queues
         When I set the text field "Display name" to "Épicerie"
         When I set the text field "Number" to "301"
         When I submit
-        Then I see the queue "Épicerie" in the list
+        Then queue "Épicerie" is displayed in the list

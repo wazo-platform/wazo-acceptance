@@ -1,33 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import time
 import json
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
-from webservices.webservices import WebServicesFactory
 from xivo_lettuce.common import *
 
-USER_URL = '/service/ipbx/index.php/pbx_settings/users/%s'
-WSU = WebServicesFactory('ipbx/pbx_settings/users')
-WSG = WebServicesFactory('ipbx/pbx_settings/groups')
-
-
-def open_add_user_form():
-    URL = USER_URL % '?act=add'
-    world.browser.get('%s%s' % (world.url, URL))
-    world.browser.find_element_by_id('it-userfeatures-firstname', 'User add form not loaded')
-
-
-def open_edit_user_form(id):
-    URL = USER_URL % '?act=edit&id=%d'
-    world.browser.get('%s%s' % (world.url, URL % id))
-    world.browser.find_element_by_id('it-userfeatures-firstname', 'User edit form not loaded')
-
-
-def open_list_user_url():
-    URL = USER_URL % '?act=list'
-    world.browser.get('%s%s' % (world.url, URL))
-    world.browser.find_element_by_id('table-main-listing', 'User list not loaded')
+WSU = get_webservices('user')
+WSG = get_webservices('group')
 
 
 def type_user_names(firstName, lastName):
@@ -50,19 +29,12 @@ def type_user_in_group(groupName):
     add_button.click()
 
 
-def user_is_saved(firstname, lastname):
-    open_list_user_url()
-    try:
-        user = world.browser.find_element_by_xpath("//table[@id='table-main-listing']//tr[contains(.,'%s %s')]" % (firstname, lastname))
-        return user is not None
-    except NoSuchElementException:
-        return False
-
-
 def insert_user(firstname, lastname):
     jsoncontent = WSU.get_json_file_content('userwithline')
-    datajson = jsoncontent  % {'firstname': firstname,
-                                         'lastname': lastname}
+    datajson = jsoncontent  % {
+                               'firstname': firstname,
+                               'lastname': lastname
+                               }
     data = json.loads(datajson)
     WSU.add(data)
 

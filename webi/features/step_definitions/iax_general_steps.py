@@ -9,7 +9,7 @@ from xivo_lettuce.manager.iax_general_manager import *
 
 @step(u'I go on the General Settings > IAX Protocol page, tab "([^"]*)"')
 def i_go_on_the_general_settings_iax_protocol_page_tab(step, tab):
-    open_general_iax_url()
+    open_url('general_iax')
     go_to_tab(tab)
 
 

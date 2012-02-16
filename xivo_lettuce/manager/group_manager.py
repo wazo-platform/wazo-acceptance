@@ -1,24 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
-from webservices.webservices import WebServicesFactory
 from xivo_lettuce.common import *
 
-GROUP_URL = '/service/ipbx/index.php/pbx_settings/groups/%s'
-WS = WebServicesFactory('ipbx/pbx_settings/groups')
-
-
-def open_add_group_url():
-    URL = GROUP_URL % '?act=add'
-    world.browser.get('%s%s' % (world.url, URL))
-    world.browser.find_element_by_id('it-groupfeatures-name', 'Group form not loaded')
-
-
-def open_list_group_url():
-    URL = GROUP_URL % ('?act=list')
-    world.browser.get('%s%s' % (world.url, URL))
-    world.browser.find_element_by_name('fm-group-list', 'Group list not loaded')
+WS = get_webservices('group')
 
 
 def type_group_name(group_name):
@@ -42,28 +27,11 @@ def type_context(context):
 
 
 def remove_group_with_number(group_number):
-    open_list_group_url()
-    try:
-        remove_line(group_number)
-    except NoSuchElementException:
-        pass
+    remove_element_if_exist('group', group_number)
 
 
 def remove_group_with_name(group_name):
-    open_list_group_url()
-    try:
-        remove_line(group_name)
-    except NoSuchElementException, ElementNotVisibleException:
-        pass
-
-
-def group_is_saved(group_name):
-    open_list_group_url()
-    try:
-        group = find_line(group_name)
-        return group is not None
-    except NoSuchElementException:
-        return False
+    remove_element_if_exist('group', group_name)
 
 
 def delete_all_group():

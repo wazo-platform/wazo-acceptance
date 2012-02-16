@@ -1,24 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import time
-import json
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException
-from webservices.webservices import WebServicesFactory
+from xivo_lettuce.common import *
 
-QUEUE_URL = '/callcenter/index.php/settings/queues/%s'
-WS = WebServicesFactory('callcenter/settings/queues')
-
-
-def open_add_queue_form():
-    URL = QUEUE_URL % '?act=add'
-    world.browser.get('%s%s' % (world.url, URL))
-
-
-def open_list_queue_url():
-    URL = QUEUE_URL % '?act=list'
-    world.browser.get('%s%s' % (world.url, URL))
-    world.browser.find_element_by_id('table-main-listing', 'Queue list not loaded')
+WS = get_webservices('queue')
 
 
 def delete_queue_from_displayname(queue_displayname):

@@ -1,17 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
-from webservices.webservices import WebServicesFactory
 from xivo_lettuce.common import *
 
 
-IAXGENERAL_URL = '/service/ipbx/index.php/general_settings/iax/'
-WSTS = WebServicesFactory('ipbx/general_settings/iax')
-
-
-def open_general_iax_url():
-    world.browser.get('%s%s' % (world.url, IAXGENERAL_URL))
+WSTS = get_webservices('general_iax')
 
 
 def find_call_limit_line(destination=None, netmask=None, limit=None):

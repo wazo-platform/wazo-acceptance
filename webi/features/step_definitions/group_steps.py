@@ -23,7 +23,7 @@ def given_there_is_no_group_with_name(step, name):
 @step(u'When I create a group "([^"]*)" with number "([^"]*)"')
 def when_i_create_group_with_number(step, group_name, group_number):
     check_context_number_in_interval('default', 'group', group_number)
-    open_add_group_url()
+    open_url('group', 'add')
     type_group_name(group_name)
     type_group_number(group_number)
     type_context('default')
@@ -32,7 +32,7 @@ def when_i_create_group_with_number(step, group_name, group_number):
 
 @step(u'When I create a group "([^"]*)"$')
 def when_i_create_group(step, group_name):
-    open_add_group_url()
+    open_url('group', 'add')
     type_group_name(group_name)
     submit_form()
 

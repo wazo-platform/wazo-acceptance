@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import multiprocessing
+import urllib
 import subprocess
 import os
 import socket
 
 from lettuce import before, after
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from checkbox import Checkbox
+from xivo_lettuce import urls
+from webservices.webservices import WebServicesFactory
 
 UTILS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils'))
 
@@ -125,10 +127,50 @@ def submit_form():
         raise FormErrorException(error_element.text)
 
 
+def get_webservices(module):
+    return WebServicesFactory(urls.URLS[module]['ws'])
+
+
+def element_is_in_list(type, search):
+    open_url(type, 'list')
+    try:
+        find_line(search)
+    except NoSuchElementException:
+        return None
+    return True
+
+
+def element_is_not_in_list(type, search):
+    open_url(type, 'list')
+    try:
+        find_line(search)
+    except NoSuchElementException:
+        return True
+    return None
+
+
+def open_url(module, act=None, qry={}):
+    list_url = urls.URLS
+    if act:
+        qry['act'] = act
+    qry_encode = urllib.urlencode(qry)
+    url = '%s%s?%s' % (world.url, list_url[module]['web'], qry_encode)
+    world.browser.get(url)
+
+
 def find_line(line_substring):
     """Return the tr webelement of a list table."""
     return world.browser.find_element_by_xpath(
         "//table[@id='table-main-listing']//tr[contains(.,'%s')]" % line_substring)
+
+
+def remove_element_if_exist(module, search):
+    open_url(module, 'list')
+    try:
+        remove_line(search)
+    except NoSuchElementException, ElementNotVisibleException:
+        pass
+    return True
 
 
 def remove_line(line_substring):

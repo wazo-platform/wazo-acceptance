@@ -7,27 +7,9 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 from xivo_lettuce.common import *
 
-PROFILE_URL = '/cti/index.php/profiles/%s'
-
-
-def open_add_profile_form():
-    URL = PROFILE_URL % '?act=add'
-    world.browser.get('%s%s' % (world.url, URL))
-    world.browser.find_element_by_id('it-profiles-name', 'Profile add form not loaded')
-
-
-def open_edit_profile_form(id):
-    URL = PROFILE_URL % '?act=edit&id=%d'
-    world.browser.get('%s%s' % (world.url, URL % id))
-
-
-def open_list_profile_url():
-    URL = PROFILE_URL % '?act=list'
-    world.browser.get('%s%s' % (world.url, URL))
-
 
 def delete_profile(profile_label):
-    open_list_profile_url()
+    open_url('ctiprofile', 'list')
     remove_line(profile_label)
 
 

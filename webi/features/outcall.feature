@@ -5,7 +5,7 @@ Feature: Outcall
         Given there is no outcall "outdoor"
         Given there is a SIP trunk "door"
         When I create an outcall with name "outdoor" and trunk "door"
-        Then there is an outcall "outdoor"
+        Then outcall "outdoor" is displayed in the list
 
     Scenario: Remove an outcall
         Given I am logged in
