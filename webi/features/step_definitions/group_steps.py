@@ -40,13 +40,3 @@ def when_i_create_group(step, group_name):
 @step(u'When group "([^"]*)" is removed')
 def when_group_is_removed(step, group_name):
     remove_group_with_name(group_name)
-
-
-@step(u'Then group "([^"]*)" is displayed in the list')
-def then_group_is_displayed_in_the_list(step, group_name):
-    assert group_is_saved(group_name)
-
-
-@step(u'Then group "([^"]*)" is not displayed in the list')
-def then_group_is_not_displayed_in_the_list(step, group_name):
-    assert not group_is_saved(group_name)

@@ -15,6 +15,11 @@ def given_there_is_a_user_1_2(step, firstname, lastname):
     user_man.insert_user(firstname, lastname)
 
 
+@step(u'Given there is no user "([^"]*)" "([^"]*)"$')
+def given_there_is_a_no_user_1_2(step, firstname, lastname):
+    user_man.delete_user(firstname, lastname)
+
+
 @step(u'I add a user$')
 def i_add_a_user(step):
     open_url('user', 'add')
