@@ -76,12 +76,9 @@ URLS = {
                 'web': '/callcenter/index.php/settings/queues',
                 'ws': 'callcenter/settings/queues'
             },
-        'ctiprofile': 
+        'profile': 
             {
                 'web': '/cti/index.php/profiles',
                 'ws': None
             },
        }
-
-
-

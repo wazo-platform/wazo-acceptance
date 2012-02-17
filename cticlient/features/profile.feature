@@ -11,12 +11,12 @@ Feature: CTI Profile
         Given I add a XLet "Features"
         Given I submit
 
-        Given there is no user "Bill" "Washington"
+        Given there is no user "Abraham" "Washington"
         Given I add a user
-        Given I set the text field "First name" to "Bill"
+        Given I set the text field "First name" to "Abraham"
         Given I set the text field "Last name" to "Washington"
-        Given I enable the XiVO Client as "bill" pass "washington" profile "noservices"
+        Given I enable the XiVO Client as "abraham" pass "washington" profile "noservices"
         Given I submit
 
         When I start the XiVO Client
-        Then I log in the XiVO Client as "bill", pass "washington"
+        Then I log in the XiVO Client as "abraham", pass "washington"
