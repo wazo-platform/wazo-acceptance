@@ -20,6 +20,7 @@ __license__ = """
 
 import json
 import os
+import urllib
 import urllib2
 import ConfigParser
 
@@ -114,33 +115,58 @@ URILIST = {'ipbx': {
 
 class WebServices(object):
     def __init__(self, module, uri_prefix=None, username=None, password=None):
-        _config = ConfigParser.RawConfigParser()
-        local_config = '%s.local' % _CONFIG_FILE
-        if os.path.exists(local_config):
-            config_file = local_config
-        elif os.path.exists(_CONFIG_FILE):
-            config_file = _CONFIG_FILE
-        else:
-            raise "config file doesn't exist"
-        with open(config_file) as fobj:
-            _config.readfp(fobj)
+        config = ConfigParser.RawConfigParser()
+        with self._open_config_file() as fobj:
+            config.readfp(fobj)
         if not uri_prefix:
-            uri_prefix = _config.get('webservices_infos', 'host')
+            uri_prefix = config.get('webservices_infos', 'host')
         if not username:
-            username = _config.get('webservices_infos', 'login')
+            username = config.get('webservices_infos', 'login')
         if not password:
-            password = _config.get('webservices_infos', 'password')
+            password = config.get('webservices_infos', 'password')
 
         self.basepath = os.path.normpath(JSON_DIR)
         self.module = module
         self._wsr = None
         self._path = self._compute_path(uri_prefix)
         self._uri_prefix = uri_prefix
-        self._opener = self._build_opener(uri_prefix, username, password)
-        self._headers = {
-                            "Content-type": "application/json",
-                            "Accept": "text/plain"
-                        }
+        self._opener = self._build_opener(username, password)
+        self._headers = {"Content-type": "application/json",
+                         "Accept": "text/plain"}
+
+    def _open_config_file(self):
+        local_config = '%s.local' % _CONFIG_FILE
+        try:
+            return open(local_config)
+        except IOError, e:
+            return open(_CONFIG_FILE)
+
+    def _compute_path(self, uri_prefix):
+        if 'localhost' in uri_prefix or '127.0.0.1' in uri_prefix:
+            method = 'private'
+        else:
+            method = 'restricted'
+        return self._get_uri_format_string() % method
+
+    def _get_uri_format_string(self):
+        sections = self.module.split('/')
+        tmp = URILIST
+        for section in sections:
+            if section in tmp:
+                tmp = tmp[section]
+
+        if isinstance(tmp, basestring):
+            return tmp
+        else:
+            raise Exception("URI doesn't exist for module %r" % self.module)
+
+    def _build_opener(self, username, password):
+        handlers = []
+        if username is not None or password is not None:
+            pwd_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            pwd_manager.add_password(None, self._uri_prefix, username, password)
+            handlers.append(urllib2.HTTPBasicAuthHandler(pwd_manager))
+        return urllib2.build_opener(*handlers)
 
     def get_json_file_content(self, file):
         filename = '%s.json' % file
@@ -149,42 +175,9 @@ class WebServices(object):
             jsonfilecontent = fobj.read()
         return jsonfilecontent
 
-    def _get_uri(self):
-        sections = self.module.split('/')
-        tmp = URILIST
-        for sec in sections:
-            if sec in tmp:
-                tmp = tmp[sec]
-        
-        if isinstance(tmp, str):
-            return tmp
-
-        print 'uri not exist for object %s' % self.module
-        exit(0)
-
-    def _compute_path(self, uri_prefix):
-        if 'localhost' in uri_prefix or '127.0.0.1' in uri_prefix:
-            method = 'private'
-        else:
-            method = 'restricted'
-        return self._get_uri() % method
-
-    def _build_opener(self, uri_prefix, username, password):
-        handlers = []
-        if username is not None or password is not None:
-            pwd_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
-            pwd_manager.add_password(None, uri_prefix, username, password)
-            handlers.append(urllib2.HTTPBasicAuthHandler(pwd_manager))
-        return urllib2.build_opener(*handlers)
-
-    def _build_query(self, qry):
-        import urllib
-        return urllib.urlencode(qry)
-
     def _request_http(self, qry, data=None):
-        if data is not None:
-            if isinstance(data, dict):
-                data = json.dumps(data).replace(' ', '').replace('\n', '')
+        if isinstance(data, dict):
+            data = json.dumps(data)
         url = '%s%s?%s' % (self._uri_prefix, self._path, self._build_query(qry))
         request = urllib2.Request(url=url, data=data, headers=self._headers)
         try:
@@ -192,14 +185,14 @@ class WebServices(object):
             self._wsr = WebServicesResponse(url, handle.code, handle.read())
             handle.close()
         except urllib2.HTTPError, e:
-            self._wsr = WebServicesResponse(url, e.code, e.read())
-        except urllib2.URLError, e:
-            raise
+            self._wsr = WebServicesResponse(url, e.code, None)
         return self._wsr
 
+    def _build_query(self, qry):
+        return urllib.urlencode(qry)
+
     def get_last_response(self):
-        if self._wsr:
-            return self._wsr
+        return self._wsr
 
     def call(self):
         return self._request_http({})
