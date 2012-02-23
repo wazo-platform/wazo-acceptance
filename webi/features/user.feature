@@ -15,6 +15,14 @@ Feature: User
         Then I should be at the user list page
         Then "Bob" "Dylan" is in group "rastafarien"
 
+    Scenario: Update a user
+        Given I am logged in
+        Given there is no user "Bill" "Bush"
+        When I create a user "Bill" "Bush"
+        Then user "Bill Bush" is displayed in the list
+        When I rename "Bill" "Bush" to "George" "Clinton"
+        Then user "George Clinton" is displayed in the list
+
     Scenario: Save user and line forms
     # The problem is that saving the user form may erase values previously
     # set in the line form (bug #2918)
