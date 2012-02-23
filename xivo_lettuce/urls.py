@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+ALIAS = {
+         'recording file': {
+                            'module': 'sounds',
+                            'qry': {'dir': 'recordings'}
+                            }
+         
+         }
+
 URLS = {
         'user': 
             {
@@ -60,6 +68,11 @@ URLS = {
             {
                 'web': '/service/ipbx/index.php/trunk_management/iax',
                 'ws': 'ipbx/trunk_management/iax'
+            },
+        'sounds': 
+            {
+                'web': '/service/ipbx/index.php/pbx_services/sounds',
+                'ws': 'ipbx/pbx_services/sounds'
             },
         'provd_general': 
             {

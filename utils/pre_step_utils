@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+import os, sys
+import argparse
+
+
+class ActionList(object):
+    @classmethod
+    def create_recordings_file(self):
+        SOUND_REC_PATH = '/usr/share/asterisk/sounds/recordings'
+        touch(os.path.join(SOUND_REC_PATH, 'a.wav'))
+        touch(os.path.join(SOUND_REC_PATH, 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.wav'))
+        touch(os.path.join(SOUND_REC_PATH, 'rec-1316188241-166453-sip-lasotel-in-23-000158c6-out.wav.wav'))
+
+
+def touch(filename):
+    open(filename, 'w+').close()
+
+
+def main():
+    args = _parse_args(sys.argv[1:])
+
+    try:
+        func = getattr(ActionList, args.action)
+    except AttributeError:
+        print 'function not found "%s" (%s)' % (args.action)
+    else:
+        func()
+
+
+def _parse_args(args):
+    parser = _new_argument_parser()
+    parsed_args = parser.parse_args(args)
+    return parsed_args
+
+
+def _new_argument_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("action",
+                        help="Action to call")
+    return parser
+
+
+if __name__ == '__main__':
+    main()

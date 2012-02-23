@@ -131,8 +131,8 @@ def get_webservices(module):
     return WebServicesFactory(urls.URLS[module]['ws'])
 
 
-def element_is_in_list(type, search):
-    open_url(type, 'list')
+def element_is_in_list(type, search, qry={}):
+    open_url(type, 'list', qry)
     try:
         find_line(search)
     except NoSuchElementException:
@@ -140,8 +140,8 @@ def element_is_in_list(type, search):
     return True
 
 
-def element_is_not_in_list(type, search):
-    open_url(type, 'list')
+def element_is_not_in_list(type, search, qry={}):
+    open_url(type, 'list', qry)
     try:
         find_line(search)
     except NoSuchElementException:
@@ -152,9 +152,17 @@ def element_is_not_in_list(type, search):
 def open_url(module, act=None, qry={}):
     list_url = urls.URLS
     if act:
-        qry['act'] = act
+        qry.update({'act': act})
+    if module in list_url:
+        uri = list_url[module]['web']
+    elif module in urls.ALIAS:
+        module_alias = urls.ALIAS[module]['module']
+        if 'qry' in urls.ALIAS[module]:
+            qry.update(urls.ALIAS[module]['qry'])
+        uri = list_url[module_alias]['web']
+
     qry_encode = urllib.urlencode(qry)
-    url = '%s%s?%s' % (world.url, list_url[module]['web'], qry_encode)
+    url = '%s%s?%s' % (world.url, uri, qry_encode)
     world.browser.get(url)
 
 
