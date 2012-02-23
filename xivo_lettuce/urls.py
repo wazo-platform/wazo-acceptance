@@ -39,6 +39,11 @@ URLS = {
                 'web': '/service/ipbx/index.php/system_management/context',
                 'ws': 'ipbx/system_management/context'
             },
+        'configfiles': 
+            {
+                'web': '/service/ipbx/index.php/system_management/configfiles',
+                'ws': None
+            },
         'general_iax': 
             {
                 'web': '/service/ipbx/index.php/general_settings/iax',
