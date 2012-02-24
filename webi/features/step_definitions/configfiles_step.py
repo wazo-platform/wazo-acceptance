@@ -4,7 +4,6 @@ from lettuce.decorators import step
 from lettuce.registry import world
 
 from xivo_lettuce.common import *
-from xivo_lettuce.manager import configfiles_manager
 
 
 @step(u'When I create a configfiles "([^"]*)" with content "([^"]*)"')
