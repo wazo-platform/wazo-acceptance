@@ -100,6 +100,18 @@ def when_i_submit_with_errors(step):
         raise Exception('No error occurred')
 
 
+@step(u'Then I see no errors')
+def then_i_see_no_errors(step):
+    # this step is there mostly for test readability; it's a no-op in most cases
+    # since it's already checked when a form is submitted
+    try:
+        error_element = find_form_errors()
+    except NoSuchElementException:
+        pass
+    else:
+        raise FormErrorException(error_element.text)
+
+
 @step(u'Then this option is (not )?checked')
 def then_this_option_is_checked(step, checkstate):
     the_option_is_checked(world.last_option_label, checkstate)

@@ -178,7 +178,15 @@ def remove_element_if_exist(module, search):
         remove_line(search)
     except NoSuchElementException, ElementNotVisibleException:
         pass
-    return True
+
+
+def remove_all_elements(module, search):
+    open_url(module, 'list')
+    try:
+        while True:
+            remove_line(search)
+    except NoSuchElementException, ElementNotVisibleException:
+        pass
 
 
 def remove_line(line_substring):
