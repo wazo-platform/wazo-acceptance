@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 
 ALIAS = {
-         'recording file': {
-                            'module': 'sounds',
-                            'qry': {'dir': 'recordings'}
-                            }
-         
-         }
+         'recording file':
+             {
+              'module': 'sounds',
+              'qry': {'dir': 'recordings'}
+             },
+         'SIP line':
+             {
+              'module': 'line'
+             }
+        }
 
 URLS = {
         'user': 
