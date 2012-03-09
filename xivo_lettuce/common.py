@@ -32,7 +32,7 @@ def xivoclient_step(f):
     def xivoclient_decorator(step, *kargs):
         world.xc_socket.send('%s,%s\n' % (f.__name__, ','.join(kargs)))
         world.xc_response = str(world.xc_socket.recv(1024))
-        print 'XC response:', world.xc_response
+        print 'XC response:', f.__name__, world.xc_response
         f(step, *kargs)
     return xivoclient_decorator
 
@@ -42,7 +42,7 @@ def xivoclient(f):
     def xivoclient_decorator(*kargs):
         world.xc_socket.send('%s,%s\n' % (f.__name__, ','.join(kargs)))
         world.xc_response = str(world.xc_socket.recv(1024))
-        print 'XC response:', world.xc_response
+        print 'XC response:', f.__name__, world.xc_response
         f(*kargs)
     return xivoclient_decorator
 
