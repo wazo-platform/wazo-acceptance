@@ -1,3 +1,0 @@
-source /etc/screenrc
-
-screen sipp -inf users.csv -sf scenario.xml -d 1000 -s 1 -r 1 -i 192.168.32.241 skaro-load

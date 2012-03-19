@@ -24,13 +24,13 @@ There are screens on:
 
 class TestParseListOutput(unittest.TestCase):
     def test_no_session(self):
-        result = screen.parse_list_output(NO_SESSION)
+        result = screen._parse_list_output(NO_SESSION)
         self.assertEqual([], result)
 
     def test_one_session(self):
-        result = screen.parse_list_output(ONE_SESSION)
+        result = screen._parse_list_output(ONE_SESSION)
         self.assertEqual(["pts-1.trafgen"], result)
 
     def test_two_sessions(self):
-        result = screen.parse_list_output(TWO_SESSIONS)
+        result = screen._parse_list_output(TWO_SESSIONS)
         self.assertEqual(["pts-1.trafgen", "loadtester-call-and-wait"], result)

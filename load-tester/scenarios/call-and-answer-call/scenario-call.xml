@@ -95,7 +95,7 @@
   ]]>
 </send>
 
-<pause milliseconds="1000"/>
+<pause/>
 
 <send>
   <![CDATA[
