@@ -45,7 +45,7 @@ def given_there_is_a_trunkcustom(step, name):
     try:
         find_line(name)
     except NoSuchElementException:
-        step.given(u'When I create an trunkcustom with name "%s"' % (name))
+        step.given(u'When I create a trunkcustom with name "%s"' % (name))
 
 
 @step(u'When I remove the trunkcustom "([^"]*)"')
