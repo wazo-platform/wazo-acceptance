@@ -4,11 +4,12 @@ from __future__ import unicode_literals
 
 ## global configuration
 
-sipp_local_ip = '192.168.32.241'
 sipp_remote_host = 'skaro-load'
 
+sipp_local_ip = '192.168.32.241'
 sipp_call_rate = 1.0
 sipp_pause_in_ms = 1000
+sipp_rate_period_in_ms = 1000
 
 ## scenarios configuration
 

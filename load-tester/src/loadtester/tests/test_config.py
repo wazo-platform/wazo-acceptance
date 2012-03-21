@@ -11,7 +11,14 @@ class TestScenarioConfig(unittest.TestCase):
 
         config = ScenarioConfig(config_content)
 
-        self.assertEqual({'a': 'a'}, config.get_context_for_scenario('s1'))
+        expected_context = self._new_context({'a': 'a'})
+        self.assertEqual(expected_context, config.get_context_for_scenario('s1'))
+
+    def _new_context(self, context=None):
+        base_context = {'sipp_std_options': ''}
+        if base_context is not None:
+            base_context.update(context)
+        return base_context
 
     def test_config_with_undefined_name_raise_exception(self):
         config_content = "a = b\n"
@@ -28,7 +35,8 @@ class TestScenarioConfig(unittest.TestCase):
 
         config = ScenarioConfig.new_from_filename(config_filename)
 
-        self.assertEqual({'a': 'a'}, config.get_context_for_scenario('s1'))
+        expected_context = self._new_context({'a': 'a'})
+        self.assertEqual(expected_context, config.get_context_for_scenario('s1'))
 
     def test_config_using_scenarios_variable(self):
         config_content = """\
@@ -37,7 +45,8 @@ scenarios.s1.a = 's1.a'
 
         config = ScenarioConfig(config_content)
 
-        self.assertEqual({'a': 's1.a'}, config.get_context_for_scenario('s1'))
+        expected_context = self._new_context({'a': 's1.a'})
+        self.assertEqual(expected_context, config.get_context_for_scenario('s1'))
 
     def test_global_variables_doesnt_override_scenario_variable(self):
         config_content = """\
@@ -47,11 +56,26 @@ a = 'a'
 
         config = ScenarioConfig(config_content)
 
-        self.assertEqual({'a': 's1.a'}, config.get_context_for_scenario('s1'))
+        expected_context = self._new_context({'a': 's1.a'})
+        self.assertEqual(expected_context, config.get_context_for_scenario('s1'))
 
     def test_hyphen_are_converted_to_underscore(self):
         config_content = "scenarios.s_1.a = 's_1.a'\n"
 
         config = ScenarioConfig(config_content)
 
-        self.assertEqual({'a': 's_1.a'}, config.get_context_for_scenario('s-1'))
+        expected_context = self._new_context({'a': 's_1.a'})
+        self.assertEqual(expected_context, config.get_context_for_scenario('s-1'))
+
+    def test_sipp_std_options_is_built(self):
+        config_content = """\
+sipp_local_ip = 'local_ip'
+sipp_call_rate = 1.0
+sipp_pause_in_ms = 1000
+sipp_rate_period_in_ms = 1000
+"""
+
+        config = ScenarioConfig(config_content)
+
+        sipp_std_options = config.get_context_for_scenario('s1')['sipp_std_options']
+        self.assertEqual('-i local_ip -r 1.0 -d 1000 -rp 1000', sipp_std_options)
