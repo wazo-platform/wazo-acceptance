@@ -1,5 +1,21 @@
-If you are using python < 2.7, you need to install argparse.
+Dependencies
+============
 
+* screen
+  * apt-get install screen
+
+* sipp
+  * apt-get install sip-tester
+
+* argparse (if using python < 2.7)
+  * apt-get install python-argparse
+
+* jinja2
+  * apt-get install python-jinja2
+
+
+Installation
+============
 
 To copy the project on trafgen, you can use the following command:
 

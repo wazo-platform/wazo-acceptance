@@ -2,7 +2,7 @@ Feature: Wizard
     In order to get a working XiVO
     I have to go through the wizard
 
-    Scenario Outline: Successfull completion of the wizard and a login
+    Scenario: Successfull completion of the wizard and a login
         Given that there is a XiVO installed at http://skaro-daily.lan-quebec.avencall.com/
         When I start the wizard
         Then I should be on the welcome page

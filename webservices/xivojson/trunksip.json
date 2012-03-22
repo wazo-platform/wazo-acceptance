@@ -5,7 +5,7 @@
         "secret":"da1ko6ee",
         "callerid":"",
         "call-limit":"0",
-        "host":"217.64.49.10",
+        "host":"skaro-rc.lan-quebec.avencall.com",
         "type":"peer",
         "context":"from-extern",
         "language":"",
@@ -67,7 +67,7 @@
         "username":"proformatique",
         "password":"da1ko6ee",
         "authuser":"",
-        "host":"217.64.49.10",
+        "host":"skaro-rc.lan-quebec.avencall.com",
         "port":"5060",
         "contact":"",
         "expiry":""

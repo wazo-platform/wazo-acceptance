@@ -16,8 +16,9 @@ Link: http://en.wikipedia.org/wiki/RTP_audio_video_profile
 
 * Keeping the CPU load at a minimum
 
-For scenarios where RTP streams are estalished, you might want to check that no
-transcoding is by asterisk.
+For scenarios where RTP streams are established, you might want to check that no
+transcoding is done by asterisk.
 
 For example, if asterisk has to playback some files, it might make sense to
-transcode the playbacked files so that asterisk doesn't have to do transcoding.
+transcode manually the playbacked files so that asterisk doesn't have to do
+it on the fly.
