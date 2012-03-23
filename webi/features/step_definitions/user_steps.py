@@ -7,6 +7,7 @@ from lettuce.registry import world
 from xivo_lettuce.common import *
 from xivo_lettuce.manager import user_manager as user_man
 from xivo_lettuce.manager import context_manager as ctx_man
+from xivo_lettuce.manager import line_manager as line_man
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)"$')
@@ -91,8 +92,9 @@ def given_there_is_a_user_1_2_with_a_sip_line_3(step, firstname, lastname, linen
 
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
-    open_url('line', 'list')
-    edit_line(linenumber)
+    line_ids = line_man.find_line_id_from_number(linenumber)
+    if len(line_ids) > 0:
+        open_url('line', 'edit', {'id':line_ids[0]})
 
 
 @step(u'When I edit the user "([^"]*)" "([^"]*)"')

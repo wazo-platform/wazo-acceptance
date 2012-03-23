@@ -14,6 +14,6 @@ def delete_line_from_number(line_number):
 def find_line_id_from_number(line_number):
     line_list = WS.list()
     if line_list:
-        return [lineinfo['id'] for lineinfo in line_list if 
+        return [lineinfo['id'] for lineinfo in line_list if
                 lineinfo['number'] == str(line_number)]
     return []
