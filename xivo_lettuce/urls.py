@@ -6,6 +6,12 @@ ALIAS = {
               'module': 'sounds',
               'qry': {'dir': 'recordings'}
              },
+         'musiconhold file':
+             {
+              'module': 'musiconhold',
+              'qry': {'act': 'listfile',
+                      'cat': 'default'}
+             },
          'SIP line':
              {
               'module': 'line'
@@ -82,6 +88,11 @@ URLS = {
             {
                 'web': '/service/ipbx/index.php/pbx_services/sounds',
                 'ws': 'ipbx/pbx_services/sounds'
+            },
+        'musiconhold': 
+            {
+                'web': '/service/ipbx/index.php/pbx_services/musiconhold',
+                'ws': None
             },
         'provd_general': 
             {

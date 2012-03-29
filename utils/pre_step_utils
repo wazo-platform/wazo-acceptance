@@ -3,6 +3,7 @@
 
 import os, sys
 import argparse
+import subprocess
 
 
 class ActionList(object):
@@ -12,6 +13,20 @@ class ActionList(object):
         touch(os.path.join(SOUND_REC_PATH, 'a.wav'))
         touch(os.path.join(SOUND_REC_PATH, 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.wav'))
         touch(os.path.join(SOUND_REC_PATH, 'rec-1316188241-166453-sip-lasotel-in-23-000158c6-out.wav.wav'))
+
+    @classmethod
+    def create_big_backup_file(self):
+        backup_file_path = '/var/backups/pf-xivo/test_big_file.tgz'
+        cmd = ['dd', 'if=/dev/zero', 'of=%s' % backup_file_path, 'bs=1024', 'count=200240']
+        subprocess.call(cmd)
+        os.chown(backup_file_path, 0, 33)
+        os.chmod(backup_file_path, 0640)
+
+    @classmethod
+    def install_asterisk_moh_g722(self):
+        package = 'asterisk-moh-opsound-g722'
+        cmd = ['apt-get', 'install', package]
+        subprocess.call(cmd)
 
 
 def touch(filename):
