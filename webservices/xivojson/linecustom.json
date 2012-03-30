@@ -1,0 +1,8 @@
+{
+    "protocol": {
+        "interface": "%(interface)s",
+        "context": "default",
+        "protocol": "custom",
+        "pickupcontext": "default"
+    }
+}

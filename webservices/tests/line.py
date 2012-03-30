@@ -30,33 +30,20 @@ class TestLine(unittest.TestCase):
     def tearDown(self):
         self._aws.deleteall()
 
-    def test_add(self):
+    def test_add_sip(self):
         jsonfilecontent = self._aws.get_json_file_content('linesip');
         jsonstr = jsonfilecontent % ({"name": 'name',
                                       "secret" : 'secret'})
         content = json.loads(jsonstr)
+        return self._test_add(content)
 
-        response = self._aws.add(content)
-        self.assertEqual(response.code, 200)
-
-        response = self._aws.list()
-        self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        if 'id' in res[0]:
-            return res[0]['id']
-
-    def test_edit(self):
-        id = self.test_add()
-
+    def test_edit_sip(self):
         jsonfilecontent = self._aws.get_json_file_content('linesip');
         jsonstr = jsonfilecontent % ({"name": 'name2',
                                       "secret" : 'secret2'})
         content = json.loads(jsonstr)
-
-        response = self._aws.edit(content, id)
-        self.assertEqual(response.code, 200)
-
+        id = self.test_add_sip()
+        self._test_edit(id, content)
         response = self._aws.list()
         self.assertEqual(response.code, 200)
         res = json.loads(response.data)
@@ -64,8 +51,47 @@ class TestLine(unittest.TestCase):
         self.assertEqual(res[0]['name'], 'name2')
         self.assertEqual(res[0]['secret'], 'secret2')
 
-    def test_delete(self):
-        id = self.test_add()
+    def test_delete_sip(self):
+        id = self.test_add_sip()
+        self._test_delete(id)
+
+    def test_add_custom(self):
+        jsonfilecontent = self._aws.get_json_file_content('linecustom');
+        jsonstr = jsonfilecontent % ({"interface": 'dahdi/g1'})
+        content = json.loads(jsonstr)
+        return self._test_add(content)
+
+    def test_edit_custom(self):
+        jsonfilecontent = self._aws.get_json_file_content('linecustom');
+        jsonstr = jsonfilecontent % ({"interface": 'dahdi/g2'})
+        content = json.loads(jsonstr)
+        id = self.test_add_custom()
+        self._test_edit(id, content)
+        response = self._aws.list()
+        self.assertEqual(response.code, 200)
+        res = json.loads(response.data)
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0]['interface'], 'dahdi/g2')
+
+    def test_delete_custom(self):
+        id = self.test_add_custom()
+        self._test_delete(id)
+
+    def _test_add(self, content):
+        response = self._aws.add(content)
+        self.assertEqual(response.code, 200)
+        response = self._aws.list()
+        self.assertEqual(response.code, 200)
+        res = json.loads(response.data)
+        self.assertEqual(len(res), 1)
+        if 'id' in res[0]:
+            return res[0]['id']
+
+    def _test_edit(self, id, content):
+        response = self._aws.edit(content, id)
+        self.assertEqual(response.code, 200)
+
+    def _test_delete(self, id):
         response = self._aws.delete(id)
         self.assertEqual(response.code, 200)
         response = self._aws.list()
