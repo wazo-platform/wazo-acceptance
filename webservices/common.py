@@ -67,8 +67,7 @@ class WSCommon(object):
             response = self._aws.list()
             if response.code == 200:
                 res = json.loads(response.data)
-                self.assertEqual(len(res), 1)
-                if 'id' in res[0]:
+                if len(res) == 1 and 'id' in res[0]:
                     return res[0]['id']
         return False
 
