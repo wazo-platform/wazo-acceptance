@@ -50,8 +50,7 @@ class TestUser(unittest.TestCase):
         jsonstr = jsonfilecontent % ({"firstname": 'Boby',
                                       "lastname" : 'Dylan'})
         content = json.loads(jsonstr)
-        response = self._aws_user.edit(id, content)
-        self.assertEqual(response.code, 200)
+        self.assertTrue(self._aws_user.edit(id, content))
 
         res = self._aws_user.list()
         self.assertEqual(len(res), 1)
@@ -83,8 +82,7 @@ class TestUser(unittest.TestCase):
         jsonstr = jsonfilecontent % ({"firstname": 'Paul',
                                       "idlinefeatures" : lineid,
                                       "number" : 177})
-        response = self._aws_user.edit(userid, content)
-        self.assertEqual(response.code, 200)
+        self.assertTrue(self._aws_user.edit(userid, content))
 
 
 if __name__ == '__main__':

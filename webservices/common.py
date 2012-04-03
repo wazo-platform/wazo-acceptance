@@ -18,11 +18,11 @@ __license__ = """
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
 """
 
-import unittest, json
+import json
 from webservices import WebServices
 
 
-class WSCommon(unittest.TestCase):
+class WSCommon(object):
     def __init__(self, module):
         self._aws = WebServices(module)
 
@@ -51,28 +51,38 @@ class WSCommon(unittest.TestCase):
 
     def clear(self):
         response = self._aws.deleteall()
-        return (response.code == 200)
+        if response.code == 200:
+            return True
+        return False
 
     def custom(self, qry={}, data=None):
-        return self._aws.custom(qry, data)
+        response = self._aws.custom(qry, data)
+        if response.code == 200:
+            return True
+        return False
 
     def add(self, content):
         response = self._aws.add(content)
-        self.assertEqual(response.code, 200)
-        response = self._aws.list()
-        self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        if 'id' in res[0]:
-            return res[0]['id']
+        if response.code == 200:
+            response = self._aws.list()
+            if response.code == 200:
+                res = json.loads(response.data)
+                self.assertEqual(len(res), 1)
+                if 'id' in res[0]:
+                    return res[0]['id']
+        return False
 
     def edit(self, id, content):
-        return self._aws.edit(content, id)
+        response = self._aws.edit(content, id)
+        if response.code == 200:
+            return True
+        return False
 
     def delete(self, id):
         response = self._aws.delete(id)
-        self.assertEqual(response.code, 200)
-        response = self._aws.list()
-        self.assertEqual(response.code, 204)
-        return True
-        
+        if response.code == 200:
+            response = self._aws.list()
+            if response.code == 204:
+                return True
+        return False
+    
