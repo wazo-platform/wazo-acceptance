@@ -29,6 +29,15 @@ def type_user_in_group(groupName):
     add_button.click()
 
 
+def insert_user_with_no_line(firstname, lastname):
+    jsoncontent = WSU.get_json_file_content('user')
+    datajson = jsoncontent  % {
+                               'firstname': firstname,
+                               'lastname': lastname
+                               }
+    data = json.loads(datajson)
+    WSU.add(data)
+
 def insert_user(firstname, lastname):
     jsoncontent = WSU.get_json_file_content('userwithline')
     datajson = jsoncontent  % {

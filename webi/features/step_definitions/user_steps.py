@@ -16,6 +16,12 @@ def given_there_is_a_user_1_2(step, firstname, lastname):
     user_man.insert_user(firstname, lastname)
 
 
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with no line$')
+def given_there_is_a_user_1_2_with_no_line(step, firstname, lastname):
+    user_man.delete_user(firstname, lastname)
+    user_man.insert_user_with_no_line(firstname, lastname)
+
+
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
 def given_there_is_a_no_user_1_2(step, firstname, lastname):
     user_man.delete_user(firstname, lastname)

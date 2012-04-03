@@ -47,3 +47,4 @@ Feature: User
         When I go to the "Advanced" tab
         Then the select field "IP Addressing type" is set to "Static"
         Then the text field "IP address" is set to "10.0.0.1"
+        

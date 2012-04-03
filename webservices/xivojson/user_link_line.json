@@ -1,0 +1,24 @@
+{
+    "userfeatures": {
+        "entityid": "1",
+        "firstname": "%(firstname)s",
+    },
+    "dialaction": {
+        "noanswer": {
+            "actiontype": "none"
+        },
+        "busy": {
+            "actiontype": "none"
+        },
+        "congestion": {
+            "actiontype": "none"
+        },
+        "chanunavail": {
+            "actiontype": "none"
+        }
+    },
+    "linefeatures": {
+        "id": ["%(idlinefeatures)s"],
+        "number": ["%(number)s"]
+    }
+}

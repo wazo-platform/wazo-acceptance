@@ -19,57 +19,72 @@ __license__ = """
 """
 
 import unittest, json
-from webservices.webservices import WebServices
+from webservices.common import WSCommon
 
 
 class TestUser(unittest.TestCase):
     def setUp(self):
-        self._aws = WebServices('ipbx/pbx_settings/users')
-        self._aws.deleteall()
+        self._aws_user = WSCommon('ipbx/pbx_settings/users')
+        self._aws_lines = WSCommon('ipbx/pbx_settings/lines')
+        self._aws_user.clear()
+        self._aws_lines.clear()
 
     def tearDown(self):
-        pass
+        self._aws_user.clear()
+        self._aws_lines.clear()
 
     def test_add(self):
-        jsonfilecontent = self._aws.get_json_file_content('user');
+        jsonfilecontent = self._aws_user.get_json_file_content('user');
         jsonstr = jsonfilecontent % ({"firstname": 'Bob',
                                       "lastname" : 'Marley'})
         content = json.loads(jsonstr)
-
-        response = self._aws.add(content)
-        self.assertEqual(response.code, 200)
-
-        response = self._aws.list()
-        self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        if 'id' in res[0]:
-            return res[0]['id']
+        return self._aws_user.add(content)
 
     def test_edit(self):
-        id = self.test_add()
-
-        jsonfilecontent = self._aws.get_json_file_content('user');
+        jsonfilecontent = self._aws_user.get_json_file_content('user');
         jsonstr = jsonfilecontent % ({"firstname": 'Bob',
+                                      "lastname" : 'Marley'})
+        content = json.loads(jsonstr)
+        id = self._aws_user.add(content)
+        jsonfilecontent = self._aws_user.get_json_file_content('user');
+        jsonstr = jsonfilecontent % ({"firstname": 'Boby',
                                       "lastname" : 'Dylan'})
         content = json.loads(jsonstr)
-
-        response = self._aws.edit(content, id)
+        response = self._aws_user.edit(id, content)
         self.assertEqual(response.code, 200)
 
-        response = self._aws.list()
-        self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
+        res = self._aws_user.list()
         self.assertEqual(len(res), 1)
-        self.assertEqual(res[0]['firstname'], 'Bob')
+        self.assertEqual(res[0]['firstname'], 'Boby')
         self.assertEqual(res[0]['lastname'], 'Dylan')
 
     def test_delete(self):
-        id = self.test_add()
-        response = self._aws.delete(id)
+        jsonfilecontent = self._aws_user.get_json_file_content('user');
+        jsonstr = jsonfilecontent % ({"firstname": 'Bob',
+                                      "lastname" : 'Marley'})
+        content = json.loads(jsonstr)
+        id = self._aws_user.add(content)
+        self.assertTrue(self._aws_user.delete(id))
+
+    def test_associate_existant_user_with_line(self):
+        jsonfilecontent = self._aws_user.get_json_file_content('user');
+        jsonstr = jsonfilecontent % ({"firstname": 'Paul',
+                                      "lastname" : 'Castagnette'})
+        content = json.loads(jsonstr)
+        userid = self._aws_user.add(content)
+        
+        jsonfilecontent = self._aws_lines.get_json_file_content('linesip');
+        jsonstr = jsonfilecontent % ({"name": 'name',
+                                      "secret" : 'secret'})
+        content = json.loads(jsonstr)
+        lineid = self._aws_lines.add(content)
+        
+        jsonfilecontent = self._aws_user.get_json_file_content('user_link_line');
+        jsonstr = jsonfilecontent % ({"firstname": 'Paul',
+                                      "idlinefeatures" : lineid,
+                                      "number" : 177})
+        response = self._aws_user.edit(userid, content)
         self.assertEqual(response.code, 200)
-        response = self._aws.list()
-        self.assertEqual(response.code, 204)
 
 
 if __name__ == '__main__':

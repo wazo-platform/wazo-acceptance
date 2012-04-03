@@ -35,7 +35,7 @@ class TestLine(unittest.TestCase):
         jsonstr = jsonfilecontent % ({"name": 'name',
                                       "secret" : 'secret'})
         content = json.loads(jsonstr)
-        return self._test_add(content)
+        return self._add(content)
 
     def test_edit_sip(self):
         jsonfilecontent = self._aws.get_json_file_content('linesip');
@@ -43,7 +43,7 @@ class TestLine(unittest.TestCase):
                                       "secret" : 'secret2'})
         content = json.loads(jsonstr)
         id = self.test_add_sip()
-        self._test_edit(id, content)
+        self._edit(id, content)
         response = self._aws.list()
         self.assertEqual(response.code, 200)
         res = json.loads(response.data)
@@ -53,20 +53,20 @@ class TestLine(unittest.TestCase):
 
     def test_delete_sip(self):
         id = self.test_add_sip()
-        self._test_delete(id)
+        self._delete(id)
 
     def test_add_custom(self):
         jsonfilecontent = self._aws.get_json_file_content('linecustom');
         jsonstr = jsonfilecontent % ({"interface": 'dahdi/g1'})
         content = json.loads(jsonstr)
-        return self._test_add(content)
+        return self._add(content)
 
     def test_edit_custom(self):
         jsonfilecontent = self._aws.get_json_file_content('linecustom');
         jsonstr = jsonfilecontent % ({"interface": 'dahdi/g2'})
         content = json.loads(jsonstr)
         id = self.test_add_custom()
-        self._test_edit(id, content)
+        self._edit(id, content)
         response = self._aws.list()
         self.assertEqual(response.code, 200)
         res = json.loads(response.data)
@@ -75,9 +75,9 @@ class TestLine(unittest.TestCase):
 
     def test_delete_custom(self):
         id = self.test_add_custom()
-        self._test_delete(id)
+        self._delete(id)
 
-    def _test_add(self, content):
+    def _add(self, content):
         response = self._aws.add(content)
         self.assertEqual(response.code, 200)
         response = self._aws.list()
@@ -87,11 +87,11 @@ class TestLine(unittest.TestCase):
         if 'id' in res[0]:
             return res[0]['id']
 
-    def _test_edit(self, id, content):
+    def _edit(self, id, content):
         response = self._aws.edit(content, id)
         self.assertEqual(response.code, 200)
 
-    def _test_delete(self, id):
+    def _delete(self, id):
         response = self._aws.delete(id)
         self.assertEqual(response.code, 200)
         response = self._aws.list()
