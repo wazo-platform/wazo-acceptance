@@ -61,6 +61,10 @@ class WSCommon(object):
             return True
         return False
 
+    def simple_add(self, content):
+        response = self._aws.add(content)
+        return (response.code == 200)
+
     def add(self, content):
         response = self._aws.add(content)
         if response.code == 200:
@@ -84,4 +88,4 @@ class WSCommon(object):
             if response.code == 204:
                 return True
         return False
-    
+
