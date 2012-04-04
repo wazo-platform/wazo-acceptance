@@ -54,14 +54,16 @@ class TestAgentWebService(unittest.TestCase):
 
     def remove_agent(self, agent_number):
         agents = self._aws_agent.list()
-        agents_to_remove = [agent for agent in agents if agent['number'] == agent_number]
-        for agent in agents_to_remove:
-            self._aws_agent.delete(agent['id'])
+        if agents is not None:
+            agents_to_remove = [agent for agent in agents if agent['number'] == agent_number]
+            for agent in agents_to_remove:
+                self._aws_agent.delete(agent['id'])
 
     def agent_exists(self, agent_number):
         agents = self._aws_agent.list()
-        matching_agents = [agent for agent in agents if agent['number'] == agent_number]
-        return (len(matching_agents) == 1)
+        if agents is not None:
+            matching_agents = [agent for agent in agents if agent['number'] == agent_number]
+            return (len(matching_agents) == 1)
 
 
     def test_add(self):
