@@ -97,6 +97,8 @@ class TestAgentWebService(unittest.TestCase):
 
     def add_skill_if_not_exists(self, skill_name):
         skills = self._aws_skills.list()
+        if skills is None:
+            skills = []
         matching_skills = [skill for skill in skills if skill['name'] == skill_name]
         if len(matching_skills) == 0:
             skill = self.new_skill(skill_name)
