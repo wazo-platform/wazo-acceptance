@@ -15,7 +15,6 @@ sipp_rate_period_in_ms = 1000
 
 called_line = {
     'username': 'xto5ow',
-    'exten': '1002',
     'bind_port': 5060,
 }
 
@@ -26,6 +25,7 @@ calling_line = {
 
 #scenarios.call_and_answer_call.calling_line = calling_line
 #scenarios.call_and_answer_call.called_line = called_line
+scenarios.call_and_answer_call.called_exten = '1002'
 
 #scenarios.call_then_hangup.calling_line = calling_line
 scenarios.call_then_hangup.called_exten = '1'

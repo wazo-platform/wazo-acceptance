@@ -7,6 +7,6 @@ title callee
 sleep 1
 focus down
 resize +4
-screen sipp -inf users-call.csv -sf scenario-call.xml -s {{ called_line.exten }} {{ sipp_std_options }} {{ sipp_remote_host }}
+screen sipp -inf users-call.csv -sf scenario-call.xml -s {{ called_exten }} {{ sipp_std_options }} {{ sipp_remote_host }}
 title caller
 
