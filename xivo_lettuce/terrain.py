@@ -4,9 +4,10 @@ import ConfigParser
 import os
 from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
+from xivo_lettuce.ssh import SSHClient
 
 
-_CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 
+_CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             '../config/config.ini'))
 
 
@@ -20,21 +21,35 @@ def setup_browser():
 
 
 @before.all
-def setup_login_infos():
-    _config = ConfigParser.RawConfigParser()
+def initialize_from_config():
+    config = _read_config()
+    _setup_login_infos(config)
+    _setup_ssh_client(config)
+
+
+def _read_config():
+    config = ConfigParser.RawConfigParser()
     local_config = '%s.local' % _CONFIG_FILE
     if os.path.exists(local_config):
         config_file = local_config
-    elif os.path.exists(_CONFIG_FILE):
-        config_file = _CONFIG_FILE
     else:
-        raise "config file doesn't exist"
+        config_file = _CONFIG_FILE
     with open(config_file) as fobj:
-        _config.readfp(fobj)
-    world.login = _config.get('login_infos', 'login')
-    world.password = _config.get('login_infos', 'password')
-    world.host = _config.get('login_infos', 'host')
+        config.readfp(fobj)
+    return config
+
+
+def _setup_login_infos(config):
+    world.login = config.get('login_infos', 'login')
+    world.password = config.get('login_infos', 'password')
+    world.host = config.get('login_infos', 'host')
     world.logged = False
+
+
+def _setup_ssh_client(config):
+    hostname = config.get('ssh_infos', 'hostname')
+    login = config.get('ssh_infos', 'login')
+    world.ssh_client = SSHClient(hostname, login)
 
 
 @world.absorb

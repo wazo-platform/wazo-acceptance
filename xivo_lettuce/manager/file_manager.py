@@ -1,18 +1,19 @@
 # -*- coding: UTF-8 -*-
 
 import os
-
 from lettuce.registry import world
-from xivo_lettuce import common as com
-from selenium.common.exceptions import NoSuchElementException
 
 SOUND_REC_PATH = '/usr/share/asterisk/sounds/recordings'
 MOH_PATH = '/usr/share/asterisk/moh/default'
 
 
-def check_recordings_file(filename):
-    return(os.access(os.path.join(SOUND_REC_PATH, filename), os.R_OK))
+def create_recordings_file(filename):
+    _touch_remote_file(os.path.join(SOUND_REC_PATH, filename))
 
 
-def check_musiconhold_file(filename):
-    return(os.access(os.path.join(MOH_PATH, filename), os.R_OK))
+def _touch_remote_file(abs_filename):
+    world.ssh_client.check_call(['touch', abs_filename])
+
+
+def create_musiconhold_file(filename):
+    _touch_remote_file(os.path.join(MOH_PATH, filename))
