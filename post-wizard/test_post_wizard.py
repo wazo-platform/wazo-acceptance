@@ -4,15 +4,13 @@ import unittest
 import os
 import subprocess
 
-from pwd import getpwnam
-
 
 class TestDhcpdUpdate(unittest.TestCase):
 
     DHCPD_UPDATE_DIR = '/etc/dhcp/dhcpd_update'
 
     def test_have_dhcpd_update_files(self):
-        self.assertTrue(os.access(self.DHCPD_UPDATE_DIR, os.R_OK))
+        self.assertTrue(os.path.isdir(self.DHCPD_UPDATE_DIR))
         self.assertTrue(len(os.listdir(self.DHCPD_UPDATE_DIR)) > 0)
 
 
@@ -30,7 +28,6 @@ datastorage = "postgresql://asterisk:proformatique@localhost/asterisk?charset=ut
 """
 
     def test_cti_conf_generation(self):
-        self.assertTrue(os.access(self.CTI_INI_FILE, os.R_OK))
         with open(self.CTI_INI_FILE) as fobj:
             cti_ini_content = fobj.read()
         self.assertEqual(cti_ini_content, self.CTI_INI_CONTENT_RESULT)
@@ -40,5 +37,4 @@ class TestAsterisk(unittest.TestCase):
 
     def test_core_reload(self):
         retcode = subprocess.call(['asterisk', '-rx', 'core reload'])
-        assert(retcode == 0)
-
+        self.assertEqual(retcode, 0)
