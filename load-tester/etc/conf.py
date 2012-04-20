@@ -35,3 +35,6 @@ scenarios.call_then_hangup.called_exten = '1'
 
 #scenarios.call_then_wait.calling_line = calling_line
 scenarios.call_then_wait.called_exten = '1'
+
+#scenarios.multi_call_then_hangup.calling_line = calling_line
+scenarios.multi_call_then_hangup.called_extens = ['3003', '3004', '3005']
