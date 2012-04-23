@@ -66,10 +66,12 @@ class _StartSubcommand(commands.AbstractSubcommand):
     def configure_parser(self, parser):
         parser.add_argument('scenario_dir',
                             help='path to the scenario directory')
+        parser.add_argument('-c', '--conf', default=self._CONFIG_FILE,
+                            help='path to the config file')
 
     def execute(self, parsed_args):
         scenario = Scenario(parsed_args.scenario_dir)
-        scenario_config = ScenarioConfig.new_from_filename(self._CONFIG_FILE)
+        scenario_config = ScenarioConfig.new_from_filename(parsed_args.conf)
         parsed_args.scenario_runner.start_scenario(scenario, scenario_config)
 
 
