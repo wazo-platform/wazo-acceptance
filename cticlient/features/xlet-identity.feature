@@ -5,6 +5,7 @@ Feature: Xlet identity
 
         Given there is a context interval for SIP line "151"
         Given there is no user "Yoda" "Kenobi"
+        Given there is no SIP line "151"
         Given I add a user
         Given I set the text field "First name" to "Yoda"
         Given I set the text field "Last name" to "Kenobi"
@@ -26,8 +27,8 @@ Feature: Xlet identity
         Given I am logged in
 
         Given there is no user "Bail" "Tarkin"
-        Given there is no SIP line "152"
         Given there is no voicemail "152"
+        Given there is no SIP line "152"
         Given I add a user
         Given I set the text field "First name" to "Bail"
         Given I set the text field "Last name" to "Tarkin"
