@@ -181,13 +181,24 @@ def i_close_the_xivo_client_configuration(step):
 
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"')
 def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
-    i_log_in_the_xivo_client_to_host_1_as_2_pass_3(get_host_address(), login, password)
+    i_log_in_the_xivo_client_to_host_1_as_2_pass_3(get_host_address(),
+                                                   login,
+                                                   password)
+    assert world.xc_response == 'OK'
+
+@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", unlogged agent')
+def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
+    i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(get_host_address(),
+                                                                  login,
+                                                                  password)
     assert world.xc_response == 'OK'
 
 
 @step(u'I can\'t log in the XiVO Client as "([^"]*)", pass "([^"]*)"')
 def i_cant_log_in_the_xivo_client_as_1_pass_2(step, login, password):
-    i_log_in_the_xivo_client_to_host_1_as_2_pass_3(get_host_address(), login, password)
+    i_log_in_the_xivo_client_to_host_1_as_2_pass_3(get_host_address(),
+                                                   login,
+                                                   password)
     assert world.xc_response == 'KO'
 
 
@@ -195,6 +206,14 @@ def i_cant_log_in_the_xivo_client_as_1_pass_2(step, login, password):
 def i_log_in_the_xivo_client_to_host_1_as_2_pass_3(host, login, password):
     pass
 
+@xivoclient
+def i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(host, login, password):
+    pass
+
+@step(u'I log out of the XiVO Client')
+@xivoclient_step
+def i_log_out_of_the_xivo_client(step):
+    assert world.xc_response == 'OK'
 
 @step(u'I stop the XiVO Client')
 def i_stop_the_xivo_client(step):

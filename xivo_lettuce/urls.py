@@ -109,6 +109,11 @@ URLS = {
                 'web': '/callcenter/index.php/settings/queues',
                 'ws': 'callcenter/settings/queues'
             },
+        'agent': 
+            {
+                'web': '/callcenter/index.php/settings/agents',
+                'ws': 'callcenter/settings/agents'
+            },
         'profile': 
             {
                 'web': '/cti/index.php/profiles',

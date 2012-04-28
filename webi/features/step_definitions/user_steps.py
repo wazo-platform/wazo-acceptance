@@ -103,7 +103,7 @@ def when_i_edit_the_line_1(step, linenumber):
         open_url('line', 'edit', {'id':line_ids[0]})
 
 
-@step(u'When I edit the user "([^"]*)" "([^"]*)"')
+@step(u'I edit the user "([^"]*)" "([^"]*)"')
 def when_i_edit_the_user_1_2(step, firstname, lastname):
     open_url('user', 'list')
     edit_line('%s %s' % (firstname, lastname))

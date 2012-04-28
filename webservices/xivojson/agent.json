@@ -1,9 +1,9 @@
 {
 	"agentfeatures" : {
-		"firstname": "john",
-		"lastname" : "doe",
-		"number"   : "160",
-		"passwd"   : "7789",
+		"firstname": "%(firstname)s",
+		"lastname" : "%(lastname)s",
+		"number"   : "%(number)s",
+		"passwd"   : "%(passwd)s",
 		"context"  : "default",
 		"language" : "de_DE",
 		"numgroup" : "1",
@@ -22,9 +22,5 @@
 		"autologoff" : "0",
 		"wrapuptime" : "default",
 		"maxlogintries" : "3"
-	},
-	"user-select": [
-		"1"
-	]
+	}%(userlist)s
 }
-

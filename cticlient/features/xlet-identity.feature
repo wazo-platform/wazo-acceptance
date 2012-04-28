@@ -41,3 +41,28 @@ Feature: Xlet identity
         When I start the XiVO Client
         When I log in the XiVO Client as "bail", pass "tarkin"
         Then the Xlet identity shows a voicemail "152"
+
+    Scenario: Display agent icon and number
+        Given I am logged in
+
+        Given there is an agent "C3PO" with number "153"
+        Given there is a user "Darth" "Chewbacca"
+        Given I edit the user "Darth" "Chewbacca"
+        Given I enable the XiVO Client as "darth" pass "chewbacca" profile "Client"
+        Given I submit
+
+        When I edit the user "Darth" "Chewbacca"
+        When I go to the "Services" tab
+        When I set the select field "Agent" to "C3PO (153@default)"
+        When I submit
+        When I start the XiVO Client
+        When I log in the XiVO Client as "darth", pass "chewbacca", unlogged agent
+        Then the Xlet identity shows an agent "153"
+
+        When I log out of the XiVO Client
+        When I edit the user "Darth" "Chewbacca"
+        When I go to the "Services" tab
+        When I set the select field "Agent" to " "
+        When I submit
+        When I log in the XiVO Client as "darth", pass "chewbacca"
+        Then the Xlet identity does not show any agent

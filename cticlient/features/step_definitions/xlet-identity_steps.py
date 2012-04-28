@@ -1,6 +1,10 @@
+from lettuce.decorators import step
+from lettuce.registry import world
+
 from webi.features.step_definitions.user_steps import *
 from webi.features.step_definitions.voicemail_steps import *
 from webi.features.step_definitions.line_steps import *
+from webi.features.step_definitions.agent_steps import *
 
 CONFIG_URL = '/xivo/configuration/index.php'
 
@@ -42,4 +46,14 @@ def then_the_xlet_identity_shows_phone_number_as_1(step, linenumber):
 @step(u'Then the Xlet identity shows a voicemail "([^"]*)"')
 @xivoclient_step
 def then_the_xlet_identity_shows_a_voicemail_1(step, vm_number):
+    assert world.xc_response == 'OK'
+
+@step(u'Then the Xlet identity shows an agent "([^"]*)"')
+@xivoclient_step
+def then_the_xlet_identity_shows_an_agent_1(step, agent_number):
+    assert world.xc_response == 'OK'
+
+@step(u'Then the Xlet identity does not show any agent')
+@xivoclient_step
+def then_the_xlet_identity_does_not_show_any_agent(step):
     assert world.xc_response == 'OK'
