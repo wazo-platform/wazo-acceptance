@@ -30,20 +30,11 @@ scenarios.answer_then_wait.bind_port = 5060
 #scenarios.call_and_answer_call.called_line = called_line
 scenarios.call_and_answer_call.called_exten = '1002'
 
-#scenarios.call_then_cancel_on_ringing.calling_line = calling_line
-scenarios.call_then_cancel_on_ringing.called_exten = '1'
-
-#scenarios.call_then_hangup.calling_line = calling_line
-scenarios.call_then_hangup.called_exten = '1'
-
-#scenarios.call_then_wait.calling_line = calling_line
-scenarios.call_then_wait.called_exten = '1'
-
 #scenarios.multi_call_then_cancel_on_ringing.calling_line = calling_line
-scenarios.multi_call_then_cancel_on_ringing.called_extens = ['3003', '3004', '3005']
+scenarios.multi_call_then_cancel_on_ringing.called_extens = ['1']
 
 #scenarios.multi_call_then_hangup.calling_line = calling_line
-scenarios.multi_call_then_hangup.called_extens = ['3003', '3004', '3005']
+scenarios.multi_call_then_hangup.called_extens = ['1']
 
 #scenarios.multi_call_then_wait.calling_line = calling_line
-scenarios.multi_call_then_wait.called_extens = ['3003', '3004', '3005']
+scenarios.multi_call_then_wait.called_extens = ['1']
