@@ -73,9 +73,10 @@ sipp_local_ip = 'local_ip'
 sipp_call_rate = 1.0
 sipp_pause_in_ms = 1000
 sipp_rate_period_in_ms = 1000
+sipp_max_simult_calls = 3
 """
 
         config = ScenarioConfig(config_content)
 
         sipp_std_options = config.get_context_for_scenario('s1')['sipp_std_options']
-        self.assertEqual('-i local_ip -r 1.0 -d 1000 -rp 1000', sipp_std_options)
+        self.assertEqual('-i local_ip -r 1.0 -d 1000 -rp 1000 -l 3', sipp_std_options)
