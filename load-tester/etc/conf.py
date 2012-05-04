@@ -24,6 +24,8 @@ calling_line = {
     'password': 'JRPUZS',
 }
 
+scenarios.answer_then_wait.bind_port = 5060
+
 #scenarios.call_and_answer_call.calling_line = calling_line
 #scenarios.call_and_answer_call.called_line = called_line
 scenarios.call_and_answer_call.called_exten = '1002'
