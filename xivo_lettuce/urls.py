@@ -18,7 +18,11 @@ ALIAS = {
              },
          'LDAP server':
              {
-              'module': 'ldap'
+              'module': 'ldapserver'
+             },
+         'LDAP filter':
+             {
+              'module': 'ldapfilter'
              }
         }
 
@@ -123,9 +127,14 @@ URLS = {
                 'web': '/cti/index.php/profiles',
                 'ws': None
             },
-        'ldap': 
+        'ldapserver': 
             {
                 'web': '/xivo/configuration/index.php/manage/ldapserver',
+                'ws': None
+            },
+        'ldapfilter': 
+            {
+                'web': '/service/ipbx/index.php/system_management/ldapfilter',
                 'ws': None
             },
        }
