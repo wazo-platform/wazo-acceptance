@@ -11,3 +11,6 @@ Feature: Queues
         When I set the text field "Number" to "301"
         When I submit
         Then queue "Épicerie" is displayed in the list
+
+    Scenario: Test automation
+        Given I am logged in
