@@ -1,6 +1,6 @@
 Feature: Queues
 
-    Scenario: Add queue, named with non-ASCII characters
+    Scenario: Add queue named with non-ASCII characters
         Given I am logged in
         Given there is no queue "Epicerie"
         Given there is no queue with number "301"
