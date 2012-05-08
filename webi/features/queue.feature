@@ -2,15 +2,12 @@ Feature: Queues
 
     Scenario: Add queue named with non-ASCII characters
         Given I am logged in
-        Given there is no queue "Epicerie"
+        Given there is no queue "Épicerie"
         Given there is no queue with number "301"
         Given there is a context interval for queue "301"
         When I add a queue
         When I set the text field "Name" to "epicerie"
-        When I set the text field "Display name" to "Epicerie"
+        When I set the text field "Display name" to "Épicerie"
         When I set the text field "Number" to "301"
         When I submit
-        Then queue "Epicerie" is displayed in the list
-
-    Scenario: Test automation
-        Given I am logged in
+        Then queue "Épicerie" is displayed in the list
