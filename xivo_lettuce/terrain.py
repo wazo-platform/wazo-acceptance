@@ -14,7 +14,8 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 @before.all
 def setup_browser():
     from pyvirtualdisplay import Display
-    Display(visible=0, size=(1024, 768)).start()
+    world.display = Display(visible=0, size=(1024, 768))
+    world.display.start()
     world.browser = XiVOBrowser()
     world.timeout = 1
     world.stocked_infos = {}
@@ -65,3 +66,4 @@ def dump_current_page(filename='/tmp/lettuce.html'):
 @after.all
 def teardown_browser(total):
     world.browser.quit()
+    world.display.stop()

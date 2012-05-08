@@ -15,6 +15,10 @@ ALIAS = {
          'SIP line':
              {
               'module': 'line'
+             },
+         'LDAP server':
+             {
+              'module': 'ldap'
              }
         }
 
@@ -117,6 +121,11 @@ URLS = {
         'profile': 
             {
                 'web': '/cti/index.php/profiles',
+                'ws': None
+            },
+        'ldap': 
+            {
+                'web': '/xivo/configuration/index.php/manage/ldapserver',
                 'ws': None
             },
        }

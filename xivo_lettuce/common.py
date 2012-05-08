@@ -160,6 +160,8 @@ def open_url(module, act=None, qry={}):
         if 'qry' in urls.ALIAS[module]:
             qry.update(urls.ALIAS[module]['qry'])
         uri = list_url[module_alias]['web']
+    else:
+        raise Exception("Unknown module : %s" % module)
 
     qry_encode = urllib.urlencode(qry)
     url = '%s%s?%s' % (world.url, uri, qry_encode)
