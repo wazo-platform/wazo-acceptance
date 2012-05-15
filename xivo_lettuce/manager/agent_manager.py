@@ -3,22 +3,28 @@
 import json
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce.common import *
+from xivo_lettuce.common import get_webservices, edit_text_field, open_url
 
 WSA = get_webservices('agent')
 
-def type_agent_info(firstName, lastName, number):
+def _check_if_in_edit_page():
     world.browser.find_element_by_id('it-agentfeatures-firstname', 'Agent form not loaded')
-    input_firstName = world.browser.find_element_by_id('it-agentfeatures-firstname')
-    input_lastName = world.browser.find_element_by_id('it-agentfeatures-lastname')
-    input_number = world.browser.find_element_by_id('it-agentfeatures-number')
-    input_firstName.clear()
-    input_firstName.send_keys(firstName)
-    input_lastName.clear()
-    input_lastName.send_keys(lastName)
-    input_number.clear()
-    input_number.send_keys(number)
 
+def type_agent_info(firstName, lastName, number):
+    _check_if_in_edit_page()
+    edit_text_field('it-agentfeatures-firstname', firstName)
+    edit_text_field('it-agentfeatures-lastname', lastName)
+    edit_text_field('it-agentfeatures-number', number)
+
+def change_password(password):
+    _check_if_in_edit_page()
+    edit_text_field('it-agentfeatures-passwd', password)
+
+def get_password(number):
+    agent_id = find_agent_id_from_number(number)
+    open_url('agent', 'editagent', {'group':'1', 'id': agent_id})
+    current_password_item = world.browser.find_element_by_id('it-agentfeatures-passwd')
+    return current_password_item.get_attribute('value')
 
 def insert_agent(firstname, lastname, number, passwd):
     jsoncontent = WSA.get_json_file_content('agent')
@@ -34,14 +40,15 @@ def insert_agent(firstname, lastname, number, passwd):
 
 
 def delete_agent(number):
-    for agent in find_agent_id_from_number(number):
-        if not WSA.delete(agent['id']):
-            raise Exception('Unable to delete agent %s' % agent['id'])
-
+    agent_id = find_agent_id_from_number(number)
+    if agent_id is None:
+        return
+    if not WSA.delete(agent_id):
+        raise Exception('Unable to delete agent %s' % agent_id)
 
 def find_agent_id_from_number(number):
     agent_list = WSA.search(number)
-    if agent_list:
-        return agent_list
-    else:
-        return []
+    if agent_list is not None:
+        for agent in agent_list:
+            return agent['id']
+    return None

@@ -227,3 +227,8 @@ def get_host_address():
     host = host.partition('//')[2]
     return host
 
+def edit_text_field(field_id, new_value):
+    input_field = world.browser.find_element_by_id(field_id)
+    input_field.clear()
+    input_field.send_keys(new_value)
+
