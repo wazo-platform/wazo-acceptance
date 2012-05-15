@@ -23,8 +23,8 @@ def run_xivoclient():
     env = os.environ
     env['LD_LIBRARY_PATH'] = '.'
     world.xc_process = subprocess.Popen('./xivoclient',
-                                        cwd = xc_path,
-                                        env = env)
+                                        cwd=xc_path,
+                                        env=env)
 
 
 def xivoclient_step(f):
@@ -131,8 +131,8 @@ def get_webservices(module):
     return WebServicesFactory(urls.URLS[module]['ws'])
 
 
-def element_is_in_list(type, search, qry={}):
-    open_url(type, 'list', qry)
+def element_is_in_list(module, search, qry={}, action='list'):
+    open_url(module, action, qry)
     try:
         find_line(search)
     except NoSuchElementException:
@@ -140,8 +140,8 @@ def element_is_in_list(type, search, qry={}):
     return True
 
 
-def element_is_not_in_list(type, search, qry={}):
-    open_url(type, 'list', qry)
+def element_is_not_in_list(module, search, qry={}, action='list'):
+    open_url(module, action, qry)
     try:
         find_line(search)
     except NoSuchElementException:

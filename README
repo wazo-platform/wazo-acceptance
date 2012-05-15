@@ -1,3 +1,7 @@
 XiVO acceptance project
 - web interface functionnal tests
 - sipp xml scenarios
+
+You may use a config.ini.local to test on your local vm
+Use ip adresses and not names in config.ini.*
+
