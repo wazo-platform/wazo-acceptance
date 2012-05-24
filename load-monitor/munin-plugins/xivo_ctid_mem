@@ -4,7 +4,8 @@ case $1 in
     config)
         cat <<'EOM'
 graph_title XIVO CTID Memory usage
-graph_vlabel ctidmem
+graph_vlabel Bytes
+graph_category system
 ctidmem.label CTID Memory
 ctidmem.draw AREA
 EOM
