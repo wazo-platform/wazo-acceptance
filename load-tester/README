@@ -4,8 +4,8 @@ Dependencies
 * screen
   * apt-get install screen
 
-* sipp
-  * apt-get install sip-tester
+* sipp with authentication support
+  * see `compiling sipp with authentication support`_
 
 * argparse (if using python < 2.7)
   * apt-get install python-argparse
@@ -14,9 +14,33 @@ Dependencies
   * apt-get install python-jinja2
 
 
+Compiling sipp with authentication support
+------------------------------------------
+
+1. Download the sipp stable release from http://sipp.sourceforge.net/doc/reference.html#Stable+release.
+   This should be a file named "sipp.svn.tar.gz" in the latest 3.x directory.
+
+2. Extract it::
+
+      $ tar xvf sipp.svn.tar.gz
+      $ cd sipp
+
+3. Install the build dependencies::
+
+      # apt-get install build-essential libssl-dev libncurses5-dev
+
+4. Build it::
+
+      $ make ossl
+
+5. Install it::
+
+      # cp sipp /usr/local/bin
+
+
 Installation
 ============
 
-To copy the project on trafgen, you can use the following command:
+To copy the project on trafgen, you can use the following command::
 
-  rsync -v --exclude '*.pyc' --delete -rtlp * trafgen@trafgen:load-tester/
+   rsync -v --exclude '*.pyc' --delete -rtlp * trafgen@trafgen:load-tester/
