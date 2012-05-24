@@ -6,6 +6,7 @@ case $1 in
 graph_title XIVO ASTERISK file descriptors
 graph_vlabel asteriskfiledesc
 asteriskfiledesc.label Nb of Asterisk file descriptors
+asteriskfiledesc.draw AREA
 EOM
         exit 0;;
 esac

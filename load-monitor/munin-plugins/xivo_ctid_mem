@@ -6,11 +6,12 @@ case $1 in
 graph_title XIVO CTID Memory usage
 graph_vlabel ctidmem
 ctidmem.label CTID Memory
+ctidmem.draw AREA
 EOM
         exit 0;;
 esac
 
-raw_mem=`/bin/ps afxu | grep -e '/usr/bin/xivo-ctid' | grep -v 'grep' | awk -F" " '{print $6}'`
+raw_mem=`/bin/ps axu | grep -e '/usr/bin/xivo-ctid' | grep -v 'grep' | awk -F" " '{print $6}'`
 mem=$(( $raw_mem / 1024 ))
 echo "ctidmem.value" ${mem}
 

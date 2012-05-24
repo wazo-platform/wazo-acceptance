@@ -6,11 +6,12 @@ case $1 in
 graph_title XIVO ASTERISK Memory usage
 graph_vlabel asteriskmem
 asteriskmem.label Asterisk memory
+asteriskmem.draw AREA
 EOM
         exit 0;;
 esac
 
-raw_mem=`/bin/ps afxu | grep -e '/usr/sbin/asterisk' | grep -v 'grep' | awk -F" " '{print $6}'`
+raw_mem=`/bin/ps axu | grep -e '/usr/sbin/asterisk' | grep -v 'grep' | awk -F" " '{print $6}'`
 mem=$(( $raw_mem / 1024 ))
 echo "asteriskmem.value" ${mem}
 
