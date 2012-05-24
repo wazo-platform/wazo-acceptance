@@ -14,7 +14,7 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 @before.all
 def setup_browser():
     from pyvirtualdisplay import Display
-    world.display = Display(visible=1, size=(1024, 768))
+    world.display = Display(visible=0, size=(1024, 768))
     world.display.start()
     world.browser = XiVOBrowser()
     world.timeout = 1
