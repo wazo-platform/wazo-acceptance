@@ -16,3 +16,8 @@ def when_i_create_configfiles_with_content(step, filename, content):
     input_description.clear()
     input_description.send_keys(content)
     submit_form()
+
+
+@step(u'Given no config file "([^"]*)"')
+def given_i_don_t_see_any_config_file_1(step, config_file_name):
+    remove_element_if_exist("configfiles", config_file_name)
