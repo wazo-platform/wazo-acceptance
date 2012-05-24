@@ -1,0 +1,15 @@
+#!/bin/bash
+
+case $1 in
+    config)
+        cat <<'EOM'
+graph_title XIVO ASTERISK file descriptors
+graph_vlabel asteriskfiledesc
+asteriskfiledesc.label Nb of Asterisk file descriptors
+EOM
+        exit 0;;
+esac
+
+echo -n "asteriskfiledesc.value "; /usr/bin/lsof | grep -c asterisk
+
+exit 0

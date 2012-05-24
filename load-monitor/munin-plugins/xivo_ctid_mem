@@ -1,0 +1,17 @@
+#!/bin/bash
+
+case $1 in
+    config)
+        cat <<'EOM'
+graph_title XIVO CTID Memory usage
+graph_vlabel ctidmem
+ctidmem.label CTID Memory
+EOM
+        exit 0;;
+esac
+
+raw_mem=`/bin/ps afxu | grep -e '/usr/bin/xivo-ctid' | grep -v 'grep' | awk -F" " '{print $6}'`
+mem=$(( $raw_mem / 1024 ))
+echo "ctidmem.value" ${mem}
+
+exit 0
