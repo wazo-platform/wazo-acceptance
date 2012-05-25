@@ -26,7 +26,11 @@ class ScenarioConfig(object):
         ('sipp_call_rate', '-r'),
         ('sipp_pause_in_ms', '-d'),
         ('sipp_rate_period_in_ms', '-rp'),
-        ('sipp_max_simult_calls', '-l')
+        ('sipp_max_simult_calls', '-l'),
+    ]
+
+    _SIPP_STD_FLAGS = [
+        ('sipp_enable_trace_stat', '-trace_stat')
     ]
 
     def _compute_sipp_std_options(self, context):
@@ -34,6 +38,9 @@ class ScenarioConfig(object):
         for key, option_flag in self._SIPP_STD_OPTIONS:
             if key in context:
                 sipp_std_options_list.extend([option_flag, str(context[key])])
+        for key, option_flag in self._SIPP_STD_FLAGS:
+            if context.get(key, False):
+                sipp_std_options_list.extend([option_flag])
         return ' '.join(sipp_std_options_list)
 
     @classmethod
