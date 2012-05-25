@@ -35,9 +35,7 @@ Feature: User
         When I set the text field "IP address" to "10.0.0.1"
         When I submit
 
-        When I edit the line "123"
-        When I go to the "IPBX Infos" tab
-        Then I see the key "call_limit" has the value "10"
+        Then I see the line "123" has its call limit to "10"
 
         When I edit the user "George" "Clinton"
         When I submit
