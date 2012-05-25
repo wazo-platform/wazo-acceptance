@@ -4,6 +4,7 @@ import urllib
 import subprocess
 import os
 import socket
+import time
 
 from lettuce import before, after
 from lettuce.registry import world
@@ -212,6 +213,7 @@ def go_to_tab(tab_label):
     tab_button = world.browser.find_element_by_xpath(
         "//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
     tab_button.click()
+    time.sleep(1)
 
 
 def go_to_tab_href(tab_href):
