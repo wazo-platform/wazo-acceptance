@@ -3,6 +3,7 @@
 case $1 in
     config)
         cat <<'EOM'
+graph_category xivo
 graph_title XIVO ASTERISK file descriptors
 graph_vlabel File descriptors count
 asteriskfiledesc.label Nb of Asterisk file descriptors

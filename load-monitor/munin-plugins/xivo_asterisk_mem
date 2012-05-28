@@ -5,7 +5,7 @@ case $1 in
         cat <<'EOM'
 graph_title XIVO ASTERISK Memory usage
 graph_vlabel Bytes
-graph_category system
+graph_category xivo
 asteriskmem.label Asterisk memory
 asteriskmem.draw AREA
 EOM
