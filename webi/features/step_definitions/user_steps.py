@@ -109,11 +109,20 @@ def when_i_edit_the_user_1_2(step, firstname, lastname):
     edit_line('%s %s' % (firstname, lastname))
 
 
-@step(u'Then I see the key "([^"]*)" has the value "([^"]*)"')
-def then_i_see_the_key_1_has_the_value_2(step, key, value):
+@step(u'Then I see the line "([^"]*)" has its call limit to "([^"]*)"')
+def then_i_see_the_line_1_has_its_call_limit_to_2(step, line_number, call_limit):
+    line_id = line_man.find_line_id_from_number(line_number)[0]
+    open_url('line', 'edit', {'id': line_id})
+
+    go_to_tab('IPBX Infos')
+
+    key = 'call_limit'
     value_cell = world.browser.find_element_by_xpath(
-        "//table//tr[td[@class = 'td-left' and text() = '%s']]//td[@class = 'td-right']" % key)
-    assert value_cell.text == value
+        "//table"
+        "//tr[td[@class = 'td-left' and text() = '%s']]"
+        "//td[@class = 'td-right']"
+        % key)
+    assert value_cell.text == call_limit
 
 
 @step(u'I enable the XiVO Client as "([^"]*)" pass "([^"]*)" profile "([^"]*)"')
