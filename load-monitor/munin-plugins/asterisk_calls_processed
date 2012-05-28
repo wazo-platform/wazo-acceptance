@@ -1,0 +1,16 @@
+#!/bin/bash
+
+case $1 in
+    config)
+        cat <<'EOM'
+graph_category xivo
+graph_title Asterisk Calls processed
+graph_vlabel asteriskcalls
+asteriskmem.label Calls processed since last restart
+EOM
+        exit 0;;
+esac
+
+echo "asteriskcalls.value" $(/usr/sbin/asterisk -rx "core show channels" | tail -n1 | awk -F" " '{print $1}')
+
+exit 0
