@@ -6,7 +6,7 @@ case $1 in
 graph_category xivo
 graph_title Asterisk Calls processed
 graph_vlabel asteriskcalls
-asteriskmem.label Calls processed since last restart
+asteriskcalls.label Calls processed since last restart
 EOM
         exit 0;;
 esac
