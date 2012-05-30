@@ -10,3 +10,10 @@ Feature: Group
         Then group "administrative" is displayed in the list
         When group "administrative" is removed
         Then group "administrative" is not displayed in the list
+
+    Scenario: Cannot add a group with a name general
+        Given I am logged in
+        Given there is no group "5001"
+        When I set a group "general" with number "5001"
+        When I submit with errors
+        Then I get errors

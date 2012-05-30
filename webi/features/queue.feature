@@ -11,3 +11,14 @@ Feature: Queues
         When I set the text field "Number" to "301"
         When I submit
         Then queue "Épicerie" is displayed in the list
+
+    Scenario: Cannot add queue named general
+        Given I am logged in
+        Given there is no queue with number "301"
+        Given there is a context interval for queue "301"
+        When I add a queue
+        When I set the text field "Name" to "general"
+        When I set the text field "Display name" to "general"
+        When I set the text field "Number" to "301"
+        When I submit with errors
+        Then I get errors
