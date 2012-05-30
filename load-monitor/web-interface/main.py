@@ -17,7 +17,7 @@ class hello:
         logs_sip_list = functions.list_sip_tests()
         tests_status = functions.get_tests_status(logs_sip_list[0])
         if tests_status == 'RUNNING':
-            readed_log = functions.read_log_file(local_path + 'logs/sip_logs/' + logs_sip_list[0] )
+            readed_log = functions.read_log_file(local_path + '../logs/sip_logs/' + logs_sip_list[0] )
         else:
             readed_log = 'N/A'
         render = web.template.render('templates', base='template_skeleton')
