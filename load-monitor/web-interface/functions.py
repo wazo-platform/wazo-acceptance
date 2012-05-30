@@ -1,7 +1,7 @@
 import csv, os, glob, time, string
 
 def list_sip_tests():
-    folder = '../logs/sip_logs/'
+    folder = '/var/www/load-monitor/logs/sip_logs/'
     date_file_list = []
     """
     if ! os.path.exists(folder + '/*.csv'):
