@@ -1,0 +1,23 @@
+$def with (page)
+<html>
+<head>
+    <title>$page.title</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+<div id=header>
+<h1>Load Monitor</h1>
+    <div id=status>
+        Server Status : $page.tests_status
+    </div>
+</div>
+<div id=main>
+    <div id=menuTests>
+        <a href=newtest.php>Run New test</a>
+    </div>
+    <div id=results>
+$:page
+    </div>
+</div>
+</body>
+</html>
