@@ -15,20 +15,17 @@ sipp_rate_period_in_ms = 1000
 
 ## scenarios configuration
 
-called_line = {
-    'username': 'xto5ow',
-    'bind_port': 5060,
-}
+bind_port = 5060
 
 calling_line = {
     'username': 'po7pit',
     'password': 'JRPUZS',
 }
 
-scenarios.answer_then_wait.bind_port = 5060
+#scenarios.answer_then_wait.bind_port = 5060
 
+#scenarios.call_and_answer_call.bind_port = 5060
 #scenarios.call_and_answer_call.calling_line = calling_line
-#scenarios.call_and_answer_call.called_line = called_line
 scenarios.call_and_answer_call.called_exten = '1002'
 
 #scenarios.call_then_cancel_on_ringing.calling_line = calling_line

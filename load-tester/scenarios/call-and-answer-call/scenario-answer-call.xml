@@ -12,7 +12,7 @@
     [last_From:]
     [last_Call-ID:]
     [last_CSeq:]
-    Contact: <sip:[field0]@[local_ip]:[local_port]>
+    Contact: <sip:[local_ip]:[local_port]>
     Content-Length: 0
 
   ]]>
@@ -28,7 +28,7 @@
     [last_From:]
     [last_Call-ID:]
     [last_CSeq:]
-    Contact: <sip:[field0]@[local_ip]:[local_port]>
+    Contact: <sip:[local_ip]:[local_port]>
     Content-Type: application/sdp
     Content-Length: [len]
 
@@ -57,7 +57,7 @@
     [last_From:]
     [last_Call-ID:]
     [last_CSeq:]
-    Contact: <sip:[field0]@[local_ip]:[local_port]>
+    Contact: <sip:[local_ip]:[local_port]>
     Content-Length: 0
 
   ]]>

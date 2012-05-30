@@ -1,7 +1,7 @@
 source /etc/screenrc
 
 split
-screen sipp -inf users-answer-call.csv -sf scenario-answer-call.xml -p {{ called_line.bind_port }} {{ sipp_std_options }} {{ sipp_remote_host }}
+screen sipp -sf scenario-answer-call.xml -p {{ bind_port }} {{ sipp_std_options }} {{ sipp_remote_host }}
 title callee
 
 sleep 1
