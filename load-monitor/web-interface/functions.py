@@ -3,10 +3,6 @@ import csv, os, glob, time, string
 def list_sip_tests():
     folder = '/var/www/load-monitor/logs/sip_logs/'
     date_file_list = []
-    """
-    if ! os.path.exists(folder + '/*.csv'):
-        return
-    """
     for logfile in glob.glob(folder + '/*.csv'):
         # retrieves the stats for the current file as a tuple
         # (mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime)
