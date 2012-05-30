@@ -1,7 +1,7 @@
 import web, os, sys
-local_path = '/var/www/load-monitor/www/'
+local_path = '/var/www/load-monitor/'
 if local_path not in sys.path:
-    sys.path.append(local_path)
+    sys.path.append(local_path + 'www/')
 import functions
 
 os.chdir('/var/www/load-monitor/www/')
