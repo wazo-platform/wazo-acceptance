@@ -7,8 +7,13 @@ $def with (page)
 <body>
 <div id=header>
 <h1>Load Monitor</h1>
-    <div id=status>
-        Server Status : $page.tests_status
+    <div id=top_separation>
+        <div id=readed_stats>
+            Stats en cours : $page.readed_log
+        </div>
+        <div id=status>
+            Test Server Status : $page.tests_status
+        </div>
     </div>
 </div>
 <div id=main>

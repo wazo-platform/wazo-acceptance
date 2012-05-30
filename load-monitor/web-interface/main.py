@@ -15,12 +15,13 @@ class hello:
     def GET(self):
         content = 'http://192.168.32.241/munin/lan-quebec.avencall.com/xivo-business.lan-quebec.avencall.com/'
         logs_sip_list = functions.list_sip_tests()
-        try:
-            tests_status = functions.get_tests_status(logs_sip_list[0])
-        except:
-            print 'value of logs_sip_list :', logs_sip_list
-	render = web.template.render('templates', base='template_skeleton')
-        return render.template_graphs("Load Monitor :: Graphs", content, tests_status)
+        tests_status = functions.get_tests_status(logs_sip_list[0])
+        if tests_status == 'RUNNING':
+            readed_log = functions.read_log_file(local_path + 'logs/sip_logs/' + logs_sip_list[0] )
+        else:
+            readed_log = 'N/A'
+        render = web.template.render('templates', base='template_skeleton')
+        return render.template_graphs("Load Monitor :: Graphs", content, tests_status, readed_log)
 
 #application = web.application(urls, globals())
 application = web.application(urls, globals()).wsgifunc()
