@@ -131,9 +131,11 @@ class WebServices(object):
         self._wsr = None
         self._path = self._compute_path(uri_prefix)
         self._uri_prefix = uri_prefix
-        self._opener = self._build_opener(username, password)
+        import base64
+        base64string = base64.encodestring('%s:%s' % (username, password))[:-1]
         self._headers = {"Content-type": "application/json",
-                         "Accept": "text/plain"}
+                         "Accept": "text/plain",
+                         "Authorization": "Basic %s" % base64string}
 
     def _open_config_file(self):
         local_config = '%s.local' % _CONFIG_FILE
@@ -161,14 +163,6 @@ class WebServices(object):
         else:
             raise Exception("URI doesn't exist for module %r" % self.module)
 
-    def _build_opener(self, username, password):
-        handlers = []
-        if username is not None or password is not None:
-            pwd_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
-            pwd_manager.add_password(None, self._uri_prefix, username, password)
-            handlers.append(urllib2.HTTPBasicAuthHandler(pwd_manager))
-        return urllib2.build_opener(*handlers)
-
     def get_json_file_content(self, file):
         filename = '%s.json' % file
         abs_file_path = os.path.join(self.basepath, filename);
@@ -182,7 +176,7 @@ class WebServices(object):
         url = '%s%s?%s' % (self._uri_prefix, self._path, self._build_query(qry))
         request = urllib2.Request(url=url, data=data, headers=self._headers)
         try:
-            handle = self._opener.open(request)
+            handle = urllib2.urlopen(request)
             self._wsr = WebServicesResponse(url, handle.code, handle.read())
             handle.close()
         except urllib2.HTTPError, e:
