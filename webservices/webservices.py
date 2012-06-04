@@ -85,7 +85,8 @@ URILIST = {'ipbx': {
                 {
                     "agents" : "/callcenter/json.php/%s/settings/agents/",
                     "queues" : "/callcenter/json.php/%s/settings/queues/",
-                    "skills" : "/callcenter/json.php/%s/settings/queueskills/"
+                    "skills" : "/callcenter/json.php/%s/settings/queueskills/",
+                    "queueskillrules" : "/callcenter/json.php/%s/settings/queueskillrules/"
                 }
             },
             'configuration' :

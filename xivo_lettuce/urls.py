@@ -122,6 +122,11 @@ URLS = {
                 'web': '/callcenter/index.php/settings/agents',
                 'ws': 'callcenter/settings/agents'
             },
+        'skill_rule':
+            {
+                'web': '/callcenter/index.php/settings/queueskillrules',
+                'ws': 'callcenter/settings/queueskillrules'
+            },
         'profile': 
             {
                 'web': '/cti/index.php/profiles',
