@@ -132,11 +132,15 @@ class WebServices(object):
         self._wsr = None
         self._path = self._compute_path(uri_prefix)
         self._uri_prefix = uri_prefix
-        import base64
-        base64string = base64.encodestring('%s:%s' % (username, password))[:-1]
         self._headers = {"Content-type": "application/json",
-                         "Accept": "text/plain",
-                         "Authorization": "Basic %s" % base64string}
+                         "Accept": "text/plain"}
+        self._add_authentication_header(username, password)
+
+    def _add_authentication_header(self, username, password):
+        if username is not None and username != '':
+            import base64
+            base64string = base64.encodestring('%s:%s' % (username, password))[:-1]
+            self._headers["Authorization"] = "Basic %s" % base64string
 
     def _open_config_file(self):
         local_config = '%s.local' % _CONFIG_FILE
