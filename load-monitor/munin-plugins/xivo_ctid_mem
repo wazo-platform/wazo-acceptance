@@ -8,12 +8,17 @@ graph_vlabel Bytes
 graph_category xivo
 ctidmem.label CTID Memory
 ctidmem.draw AREA
+ctidmem_vsz.label CTID Virtual Memory
+ctidmem_vsz.draw LINE
 EOM
         exit 0;;
 esac
 
-raw_mem=`/bin/ps axu | grep -e '/usr/bin/xivo-ctid' | grep -v 'grep' | awk -F" " '{print $6}'`
-mem=$(( $raw_mem / 1024 ))
-echo "ctidmem.value" ${mem}
+raw_resv_mem=`/bin/ps axu | grep -e '/usr/bin/xivo-ctid' | grep -v 'grep' | awk -F" " '{print $6}'`
+raw_virt_mem=`/bin/ps axu | grep -e '/usr/bin/xivo-ctid' | grep -v 'grep' | awk -F" " '{print $5}'`
+resv_mem=$(( $raw_resv_mem / 1024 ))
+virt_mem=$(( $raw_virt_mem / 1024 ))
+echo "ctidmem.value" ${resv_mem}
+echo "ctidmem_vsz.value" ${virt_mem}
 
 exit 0
