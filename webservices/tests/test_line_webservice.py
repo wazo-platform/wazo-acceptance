@@ -25,78 +25,137 @@ from webservices.webservices import WebServices
 class TestLine(unittest.TestCase):
     def setUp(self):
         self._aws = WebServices('ipbx/pbx_settings/lines')
-        self._aws.deleteall()
 
     def tearDown(self):
-        self._aws.deleteall()
+        pass
 
     def test_add_sip(self):
-        jsonfilecontent = self._aws.get_json_file_content('linesip');
-        jsonstr = jsonfilecontent % ({"name": 'name',
-                                      "secret" : 'secret'})
-        content = json.loads(jsonstr)
-        return self._add(content)
+        new_line_attributes = {u'name': u'name_test_ws_add_sip',
+                               u'protocol': u'sip'}
+        self._remove_lines(new_line_attributes)
+        ws_query = self._prepare_query_sip_line(new_line_attributes)
+
+        response = self._aws.add(ws_query)
+
+        self.assertEqual(response.code, 200)
+        self._assert_only_one_line_with(new_line_attributes)
 
     def test_edit_sip(self):
-        jsonfilecontent = self._aws.get_json_file_content('linesip');
-        jsonstr = jsonfilecontent % ({"name": 'name2',
-                                      "secret" : 'secret2'})
-        content = json.loads(jsonstr)
-        id = self.test_add_sip()
-        self._edit(id, content)
-        response = self._aws.list()
+        line_id = self._init_sip_line({u'name': u'name_test_ws_edit_sip'})
+        edited_line_attributes = {u'name': u'name_test_ws_edit_sip_edited',
+                                  u'protocol': u'sip'}
+        self._remove_lines(edited_line_attributes)
+        ws_query = self._prepare_query_sip_line(edited_line_attributes)
+
+        response = self._aws.edit(ws_query, line_id)
+
         self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        self.assertEqual(res[0]['name'], 'name2')
-        self.assertEqual(res[0]['secret'], 'secret2')
+        self._assert_only_one_line_with(edited_line_attributes)
 
     def test_delete_sip(self):
-        id = self.test_add_sip()
-        self._delete(id)
+        line_id = self._init_sip_line({u'name': u'name_test_ws_remove_sip'})
+
+        response = self._aws.delete(line_id)
+
+        self.assertEqual(response.code, 200)
+        self._assert_no_lines_with({u'name': u'name_test_ws_remove_sip',
+                                    u'protocol': u'sip'})
 
     def test_add_custom(self):
-        jsonfilecontent = self._aws.get_json_file_content('linecustom');
-        jsonstr = jsonfilecontent % ({"interface": 'dahdi/g1'})
-        content = json.loads(jsonstr)
-        return self._add(content)
+        new_line_attributes = {u'interface': u'dahdi/g1',
+                               u'protocol': u'custom'}
+        self._remove_lines(new_line_attributes)
+        ws_query = self._prepare_query_custom_line(new_line_attributes)
+
+        response = self._aws.add(ws_query)
+
+        self.assertEqual(response.code, 200)
+        self._assert_only_one_line_with(new_line_attributes)
 
     def test_edit_custom(self):
-        jsonfilecontent = self._aws.get_json_file_content('linecustom');
-        jsonstr = jsonfilecontent % ({"interface": 'dahdi/g2'})
-        content = json.loads(jsonstr)
-        id = self.test_add_custom()
-        self._edit(id, content)
-        response = self._aws.list()
+        line_id = self._init_custom_line({u'interface': u'dahdi/g21'})
+        edited_line_attributes = {u'interface': u'dahdi/g22',
+                                  u'protocol': u'custom'}
+        self._remove_lines(edited_line_attributes)
+        ws_query = self._prepare_query_custom_line(edited_line_attributes)
+
+        response = self._aws.edit(ws_query, line_id)
+
         self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        self.assertEqual(res[0]['interface'], 'dahdi/g2')
+        self._assert_only_one_line_with(edited_line_attributes)
 
     def test_delete_custom(self):
-        id = self.test_add_custom()
-        self._delete(id)
+        line_id = self._init_custom_line({u'interface': u'dahdi/g3'})
 
-    def _add(self, content):
-        response = self._aws.add(content)
+        response = self._aws.delete(line_id)
+
         self.assertEqual(response.code, 200)
+        self._assert_no_lines_with({u'interface': 'dahdi/g3',
+                                    u'protocol': u'custom'})
+
+
+    def _init_sip_line(self, line_attributes):
+        self._remove_lines(line_attributes)
+        return self._add_sip_line(line_attributes)
+
+    def _init_custom_line(self, line_attributes):
+        self._remove_lines(line_attributes)
+        return self._add_custom_line(line_attributes)
+
+    def _add_sip_line(self, line_attributes):
+        ws_query = self._prepare_query_sip_line(line_attributes)
+        self._aws.add(ws_query)
+        lines = self._get_lines(line_attributes)
+        return lines[0]['id']
+
+    def _add_custom_line(self, line_attributes):
+        ws_query = self._prepare_query_custom_line(line_attributes)
+        self._aws.add(ws_query)
+        lines = self._get_lines(line_attributes)
+        return lines[0]['id']
+
+    def _remove_lines(self, line_filter):
+        sip_lines_to_remove = self._get_lines(line_filter)
+        for sip_line in sip_lines_to_remove:
+            self._aws.delete(sip_line['id'])
+
+    def _prepare_query_sip_line(self, sip_line_properties):
+        json_file_content = self._aws.get_json_file_content('linesip')
+        return self._prepare_query(json_file_content, sip_line_properties)
+
+    def _prepare_query_custom_line(self, custom_line_properties):
+        json_file_content = self._aws.get_json_file_content('linecustom')
+        return self._prepare_query(json_file_content, custom_line_properties)
+
+    def _prepare_query(self, json_file_content, line_properties):
+        jsonstr = json_file_content % (line_properties)
+        return json.loads(jsonstr)
+
+    def _assert_only_one_line_with(self, sip_line_filter):
+        sip_lines_filtered = self._get_lines(sip_line_filter)
+        self.assertEqual(len(sip_lines_filtered), 1)
+
+    def _assert_no_lines_with(self, sip_line_filter):
+        sip_lines_filtered = self._get_lines(sip_line_filter)
+        self.assertEqual(len(sip_lines_filtered), 0)
+
+    def _get_lines(self, line_filter):
         response = self._aws.list()
-        self.assertEqual(response.code, 200)
-        res = json.loads(response.data)
-        self.assertEqual(len(res), 1)
-        if 'id' in res[0]:
-            return res[0]['id']
+        lines = json.loads(response.data)
+        lines_filtered = self._filter_lines(lines, line_filter)
+        return lines_filtered
 
-    def _edit(self, id, content):
-        response = self._aws.edit(content, id)
-        self.assertEqual(response.code, 200)
+    def _filter_lines(self, lines, lines_filter):
+        return [line for line in lines if self._match_line(line, lines_filter)]
 
-    def _delete(self, id):
-        response = self._aws.delete(id)
-        self.assertEqual(response.code, 200)
-        response = self._aws.list()
-        self.assertEqual(response.code, 204)
-
+    def _match_line(self, line, line_filter):
+        try:
+            for line_property in line_filter:
+                if line[line_property] != line_filter[line_property]:
+                    return False
+            return True
+        except KeyError:
+            return False
 
 if __name__ == '__main__':
     unittest.main()
