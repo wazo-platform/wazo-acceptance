@@ -11,8 +11,7 @@ div#top_separation{
 	bottom:0;
 	left:14.8%;
 	height:30px;
-	width:85.2%
-	}
+	width:85.2% }
 	
 div#readed_stats {
 	background-color:orange;
@@ -54,5 +53,9 @@ div#results {
 div#footer {
 	background-color:#ffffff;
 	text-align:center;
-	clear:both;
-}
+	clear:both }
+
+h1 {
+	position:absolute;
+	left:1%;
+	top:10% }
