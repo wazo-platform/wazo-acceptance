@@ -19,9 +19,9 @@ def print_mem(n, name, title):
             print 'xc_mem_rss.draw AREA'
             print 'xc_mem_vms.label Xivoclient Virtual memory'
             print 'xc_mem_vms.draw LINE2'
-        if sys.platform == 'win32':
-            print '.'
-            exit()
+            if sys.platform == 'win32':
+                print '.'
+                exit()
         elif arguments[1] == 'name':
             print name
             exit()
@@ -39,7 +39,8 @@ def print_mem(n, name, title):
     if len(xc_pid) < n + 1:
         print 'xc_mem_rss.value 0'
         print 'xc_mem_vms.value 0'
-        print '.'
+        if sys.platform == 'win32':
+            print '.'
         exit()
 
     handler = psutil.Process(xc_pid[n])
