@@ -6,10 +6,19 @@ if sys.platform == 'win32':
 
 arguments = sys.argv
 
+if 'xivoclient_mem' in arguments[0]:
+    n = 0
+    name = 'xivoclientmem'
+    title = 'XiVO Client Memory usage'
+elif 'xivoclient2_mem' in arguments[0]:
+    n = 1
+    name = 'xivoclientmem2'
+    title = 'XiVO Client 2 Memory usage'
+
 if len(arguments) > 1:
     if arguments[1] == 'config':
         print 'graph_order xc_mem_rss xc_mem_vms'
-        print 'graph_title XiVO Client Memory usage'
+        print 'graph_title ' + title
         print 'graph_args --vertical-label MBytes'
         print 'graph_category xivo'
         print 'graph_info This graph the memory consumption of xivoclient'
@@ -21,7 +30,7 @@ if len(arguments) > 1:
             print '.'
         exit()
     elif arguments[1] == 'name':
-        print 'xivoclientmem'
+        print name
         exit()
 
 if sys.platform == 'win32':
@@ -41,11 +50,6 @@ except NameError:
     print 'xc_mem_vms.value 0'
     print '.'
     exit()
-
-if 'xivoclient_mem' in arguments[0]:
-    n=0
-elif 'xivoclient2_mem' in arguments[0]:
-    n=1
 
 handler = psutil.Process(xc_pid[n])
 if sys.platform == 'win32':
