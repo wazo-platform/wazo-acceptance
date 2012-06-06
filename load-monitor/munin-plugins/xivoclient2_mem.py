@@ -1,8 +1,8 @@
 import sys, xivoclient_mem_base
 
-n = 0
-name = 'xivoclientmem'
-title = 'XiVO Client Memory usage'
+n = 1
+name = 'xivoclientmem2'
+title = 'XiVO Client 2 Memory usage'
 
 xivoclient_mem_base.print_mem(n, name, title)
 
