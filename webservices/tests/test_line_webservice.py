@@ -141,9 +141,12 @@ class TestLine(unittest.TestCase):
 
     def _get_lines(self, line_filter):
         response = self._aws.list()
-        lines = json.loads(response.data)
-        lines_filtered = self._filter_lines(lines, line_filter)
-        return lines_filtered
+        if response.code == 204:
+            return []
+        else:
+            lines = json.loads(response.data)
+            lines_filtered = self._filter_lines(lines, line_filter)
+            return lines_filtered
 
     def _filter_lines(self, lines, lines_filter):
         return [line for line in lines if self._match_line(line, lines_filter)]
