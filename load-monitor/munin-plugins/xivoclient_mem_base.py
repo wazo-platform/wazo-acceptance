@@ -26,15 +26,19 @@ def print_mem(n, name, title):
             print name
             exit()
 
-    if sys.platform == 'win32':
-        PROCNAME = "xivoclient.exe"
-    else:
-        PROCNAME = 'xivoclient'
-
     xc_pid = []
-    for proc in psutil.process_iter():
-        if proc.name == PROCNAME:
-            xc_pid.append(proc.pid)
+    if sys.platform == 'win32':
+        proc_name = 'xivoclient.exe'
+        for proc in psutil.process_iter():
+            if proc.name == proc_name:
+                xc_pid.append(proc.pid)
+    else:
+        proc_name = 'xivoclient'
+        proc_cmdline = './xivoclient'
+        for proc in psutil.process_iter():
+            if proc.name == proc_name:
+                if proc.cmdline[0] == proc_cmdline:
+                    xc_pid.append(proc.pid)
 
     if len(xc_pid) < n + 1:
         print 'xc_mem_rss.value 0'
