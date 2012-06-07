@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys, xivoclient_mem_base
 
 n = 0
