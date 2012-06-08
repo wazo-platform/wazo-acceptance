@@ -30,11 +30,9 @@ class XivoClientMem(MuninPlugin):
     def execute(self):
         xc_pid = []
         proc_name = 'xivoclient'
-        proc_cmdline = './xivoclient'
         for proc in psutil.process_iter():
             if proc.name == proc_name:
-                if proc.cmdline[0] == proc_cmdline:
-                    xc_pid.append(proc.pid)
+                xc_pid.append(proc.pid)
 
         if len(xc_pid) <  1:
             print 'xc_mem_res.value 0'
