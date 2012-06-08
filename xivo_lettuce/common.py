@@ -83,6 +83,11 @@ def webi_login(user, password, language):
     language_option.click()
     submit_form()
     world.browser.find_element_by_id('loginbox', 'Cannot login as ' + user)
+    world.logged = True
+
+
+def webi_login_as_default():
+    webi_login(world.login, world.password, 'en')
 
 
 def waitForLoginPage():
@@ -165,7 +170,7 @@ def open_url(module, act=None, qry={}):
         raise Exception("Unknown module : %s" % module)
 
     qry_encode = urllib.urlencode(qry)
-    url = '%s%s?%s' % (world.url, uri, qry_encode)
+    url = '%s%s?%s' % (world.host, uri, qry_encode)
     world.browser.get(url)
 
 
@@ -229,8 +234,23 @@ def get_host_address():
     host = host.partition('//')[2]
     return host
 
+
 def edit_text_field(field_id, new_value):
     input_field = world.browser.find_element_by_id(field_id)
     input_field.clear()
     input_field.send_keys(new_value)
 
+
+def go_to_home_page():
+    world.browser.get(world.host)
+
+
+def logged():
+    if world.logged:
+        return True
+    else:
+        try:
+            world.browser.find_element_by_id('loginbox')
+            return True
+        except NoSuchElementException:
+            return False

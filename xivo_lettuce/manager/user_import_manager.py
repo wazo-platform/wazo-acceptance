@@ -16,7 +16,7 @@ WSU = WebServicesFactory('ipbx/pbx_settings/users')
 
 def open_import_user_form():
     URL = USER_URL % '?act=import'
-    world.browser.get('%s%s' % (world.url, URL))
+    world.browser.get('%s%s' % (world.host, URL))
     world.browser.find_element_by_id('it-import', 'User import form not loaded')
 
 

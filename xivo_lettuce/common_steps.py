@@ -13,38 +13,6 @@ from xivo_lettuce import manager
 from checkbox import Checkbox
 
 
-@step(u'When I login as (.*) with password (.*) in (.*)')
-def when_i_login_the_webi(step, login, password, language):
-    webi_login(login, password, language)
-
-
-@step(u'Given I login as (.*) with password (.*) at (.*)')
-def given_i_login_as_with_password_at(step, user, password, url):
-    if world.logged:
-        return True
-    world.url = url
-    world.browser.get(world.url)
-    waitForLoginPage()
-    webi_login(user, password, 'en')
-    world.logged = True
-
-
-@step(u'Given I am logged in')
-def i_am_logged_in(step):
-    if world.logged:
-        return True
-    # Go to the home page
-    world.browser.get(world.host)
-    try:
-        # Are we logged in ?
-        world.browser.find_element_by_id('loginbox')
-    except NoSuchElementException:
-        # If not logged in, then proceed
-        given_i_login_as_with_password_at(step, 
-                                          world.login,
-                                          world.password,
-                                          world.host)
-
 @step(u'Given the option "([^"]*)" is (not )?checked')
 def given_the_option_is_checked(step, option_name, checkstate):
     the_option_is_checked(option_name, checkstate, given = True)
