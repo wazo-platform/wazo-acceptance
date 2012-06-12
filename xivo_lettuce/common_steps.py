@@ -7,6 +7,7 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from selenium.webdriver.support.select import Select
 
+from webi.features.step_definitions import connection_steps
 from xivo_lettuce.common import *
 from xivo_lettuce.manager import context_manager
 from xivo_lettuce import manager
