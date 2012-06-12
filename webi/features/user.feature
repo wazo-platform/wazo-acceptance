@@ -5,7 +5,7 @@ Feature: User
         Given there is no user "John" "Willis"
         When I create a user "John" "Willis"
         Then user "John Willis" is displayed in the list
-        When user "John" "Willis" is removed
+        When I remove user "John" "Willis"
         Then user "John Willis" is not displayed in the list
 
     Scenario: Add a user in a group
@@ -20,8 +20,8 @@ Feature: User
         Given there is no user "Bill" "Bush"
         When I create a user "Bill" "Bush"
         Then user "Bill Bush" is displayed in the list
-        When I rename "Bill" "Bush" to "George" "Clinton"
-        Then user "George Clinton" is displayed in the list
+        When I rename "Bill" "Bush" to "George" "Orwell"
+        Then user "George Orwell" is displayed in the list
 
     Scenario: Save user and line forms
     # The problem is that saving the user form may erase values previously
@@ -63,3 +63,10 @@ Feature: User
         Then user "Tom Sawyer" is displayed in the list
         # Last step needed to avoid eventual problems from bug #3396.
         Given there is no voicemail "1515"
+
+    Scenario: Delete user in group
+        Given I am logged in
+        Given there is a group "american_dream" number "5000" with no users
+        Given there is a user "Tom" "Sawyer" with a SIP line "654" in group "american_dream"
+        When I remove user "Tom" "Sawyer"
+        Then I see a group "american_dream" with no users
