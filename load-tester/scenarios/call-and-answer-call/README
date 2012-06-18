@@ -1,5 +1,0 @@
-* The "host" option must be set for the sipp instance receiving the calls
-* The option "directmedia" must be set to "no" for at least one of the two
-  peers.
-* The "call-limit" must be increased if you want to pass more than 2 calls
-  per seconds.
