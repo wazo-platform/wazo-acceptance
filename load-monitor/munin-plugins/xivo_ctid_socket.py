@@ -45,9 +45,8 @@ class XivoCtidSocket(MuninPlugin):
             print host + " on port: " + str(port)
             """
 
-        print 'ctid_socket %s' % str(ctid_socket_status)
+        print 'ctid_socket.value %s' % str(ctid_socket_status)
 
 if __name__ == "__main__":
     XivoCtidSocket().run()
-
 
