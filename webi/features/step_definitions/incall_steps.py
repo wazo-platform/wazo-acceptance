@@ -13,11 +13,12 @@ def given_there_is_no_incall_with_did(step, did):
     incall_man.remove_incall_with_did(did)
 
 
-@step(u'When I create an incall with DID "([^"]*)"')
-def when_i_create_incall_with_did(step, incall_did):
+@step(u'When I create an incall with DID "([^"]*)" in context "([^"]*)"')
+def when_i_create_incall_with_did(step, incall_did, context):
     ctx_man.check_context_number_in_interval('from-extern', 'incall', incall_did)
     open_url('incall', 'add')
     incall_man.type_incall_did(incall_did)
+    incall_man.type_incall_context(context)
     submit_form()
 
 

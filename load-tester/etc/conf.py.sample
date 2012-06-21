@@ -8,8 +8,8 @@ sipp_remote_host = 'skaro-load'
 
 sipp_local_ip = '192.168.32.241'
 sipp_call_rate = 1.0
-sipp_pause_in_ms = 1000
 sipp_rate_period_in_ms = 1000
+sipp_pause_in_ms = 1000
 #sipp_max_simult_calls = 3
 #sipp_enable_trace_stat = True
 
@@ -18,15 +18,11 @@ sipp_rate_period_in_ms = 1000
 bind_port = 5060
 
 calling_line = {
-    'username': 'po7pit',
-    'password': 'JRPUZS',
+    'username': 'loadtester',
+    'password': 'loadtester',
 }
 
 #scenarios.answer_then_wait.bind_port = 5060
-
-#scenarios.call_and_answer_call.bind_port = 5060
-#scenarios.call_and_answer_call.calling_line = calling_line
-scenarios.call_and_answer_call.called_exten = '1002'
 
 #scenarios.call_then_cancel_on_ringing.calling_line = calling_line
 scenarios.call_then_cancel_on_ringing.called_extens = ['1']

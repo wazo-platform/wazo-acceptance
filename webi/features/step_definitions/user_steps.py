@@ -60,7 +60,7 @@ def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest
         submit_form()
 
 
-@step(u'When user "([^"]*)" "([^"]*)" is removed')
+@step(u'When I remove user "([^"]*)" "([^"]*)"')
 def remove_user(step, firstname, lastname):
     remove_line('%s %s' % (firstname, lastname))
 
@@ -92,6 +92,17 @@ def given_there_is_a_user_1_2_with_a_sip_line_3(step, firstname, lastname, linen
     user_man.delete_user(firstname, lastname)
     open_url('user', 'add')
     user_man.type_user_names(firstname, lastname)
+    user_man.user_form_add_line(linenumber)
+    submit_form()
+
+
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)" in group "([^"]*)"')
+def given_there_is_a_user_1_2_with_a_sip_line_3_in_group_4(step, firstname, lastname, linenumber, group_name):
+    ctx_man.check_context_number_in_interval('default', 'user', linenumber)
+    user_man.delete_user(firstname, lastname)
+    open_url('user', 'add')
+    user_man.type_user_names(firstname, lastname)
+    user_man.type_user_in_group(group_name)
     user_man.user_form_add_line(linenumber)
     submit_form()
 
@@ -144,3 +155,5 @@ def i_add_a_voicemail_1_on_2(step, vm_num):
     step.given('I set the select field "Voice Mail" to "Asterisk"')
     step.given('Given the option "Enable voicemail" is checked')
     step.given('I set the text field "Voicemail" to "%s"' % vm_num)
+
+

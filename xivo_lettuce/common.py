@@ -15,6 +15,7 @@ from webservices.webservices import WebServicesFactory
 
 UTILS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils'))
 
+
 class FormErrorException(Exception):
     pass
 
@@ -154,6 +155,14 @@ def element_is_not_in_list(module, search, qry={}, action='list'):
         return True
     return None
 
+def element_in_list_matches_field(module, search, class_name, value, qry={}, action='list'):
+    open_url(module, action, qry)
+    try:
+        line = find_line_and_fetch_col(search, class_name)
+        assert int(line.text) == value
+    except NoSuchElementException:
+        return None
+
 
 def open_url(module, act=None, qry={}):
     list_url = urls.URLS
@@ -178,6 +187,12 @@ def find_line(line_substring):
     """Return the tr webelement of a list table."""
     return world.browser.find_element_by_xpath(
         "//table[@id='table-main-listing']//tr[contains(.,'%s')]" % line_substring)
+
+
+def find_line_and_fetch_col(line_substring, class_name):
+    """Return the tr webelement of a list table."""
+    return world.browser.find_element_by_xpath(
+       ".//*[@id='table-main-listing']/tbody/tr[contains(.,'%s')]/td[@class='%s']"  % (line_substring, class_name))
 
 
 def remove_element_if_exist(module, search):

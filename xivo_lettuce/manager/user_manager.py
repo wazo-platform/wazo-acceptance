@@ -20,7 +20,7 @@ def type_user_names(firstName, lastName):
 
 
 def type_user_in_group(groupName):
-    group = world.browser.find_element_by_xpath("//li[@id='dwsm-tab-7']//a[@href='#groups']")
+    group = world.browser.find_element_by_xpath("//li[@id='dwsm-tab-6']//a[@href='#groups']")
     group.click()
     world.browser.find_element_by_id('sb-part-groups', 'Group tab not loaded')
     select_group = world.browser.find_element_by_xpath('//select[@id="it-grouplist"]//option[@value="%s"]' % groupName)
