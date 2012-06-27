@@ -30,6 +30,11 @@ pause = {
 #    'min': 3000,
 #    'max': 7000,
 #}
+#pause = {
+#    'distribution': 'normal',
+#    'mean': 5000,
+#    'stdev': 1000,
+#}
 
 #scenarios.answer_then_wait.bind_port = 5060
 

@@ -4,8 +4,8 @@ Dependencies
 * screen
   * apt-get install screen
 
-* sipp with authentication support
-  * see `compiling sipp with authentication support`_
+* sipp with authentication support and gsl
+  * see `compiling sipp with authentication support and gsl`_
 
 * argparse (if using python < 2.7)
   * apt-get install python-argparse
@@ -14,8 +14,8 @@ Dependencies
   * apt-get install python-jinja2
 
 
-Compiling sipp with authentication support
-------------------------------------------
+Compiling sipp with authentication support and gsl
+--------------------------------------------------
 
 1. Download the sipp stable release from http://sipp.sourceforge.net/doc/reference.html#Stable+release.
    This should be a file named "sipp.svn.tar.gz" in the latest 3.x directory.
@@ -27,13 +27,15 @@ Compiling sipp with authentication support
 
 3. Install the build dependencies::
 
-      # apt-get install build-essential libssl-dev libncurses5-dev
+      # apt-get install build-essential libssl-dev libncurses5-dev libgsl0-dev
 
-4. Build it::
+4. Uncomment all the lines except the first one in the "local.mk" file.
+
+5. Build it::
 
       $ make ossl
 
-5. Install it::
+6. Install it::
 
       # cp sipp /usr/local/bin
 
