@@ -9,7 +9,6 @@ sipp_remote_host = 'skaro-load'
 sipp_local_ip = '192.168.32.241'
 sipp_call_rate = 1.0
 sipp_rate_period_in_ms = 1000
-sipp_pause_in_ms = 1000
 #sipp_max_simult_calls = 3
 #sipp_enable_trace_stat = True
 
@@ -21,6 +20,16 @@ calling_line = {
     'username': 'loadtester',
     'password': 'loadtester',
 }
+
+pause = {
+    'distribution': 'fixed',
+    'value': 5000,
+}
+#pause = {
+#    'distribution': 'uniform',
+#    'min': 3000,
+#    'max': 7000,
+#}
 
 #scenarios.answer_then_wait.bind_port = 5060
 

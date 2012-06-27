@@ -1,5 +1,10 @@
 # -*- coding: UTF-8 -*-
 
+import logging
+import time
+
+logger = logging.getLogger(__name__)
+
 
 class ScenarioConfig(object):
     def __init__(self, config_content):
@@ -19,6 +24,7 @@ class ScenarioConfig(object):
         scenario_object = getattr(self._scenarios, attribute_name)
         context.update(scenario_object.__dict__)
         context['sipp_std_options'] = self._compute_sipp_std_options(context)
+        self._emit_deprecation_warning(context)
         return context
 
     _SIPP_STD_OPTIONS = [
@@ -42,6 +48,11 @@ class ScenarioConfig(object):
             if context.get(key, False):
                 sipp_std_options_list.extend([option_flag])
         return ' '.join(sipp_std_options_list)
+
+    def _emit_deprecation_warning(self, context):
+        if 'sipp_pause_in_ms' in context:
+            logger.warning('deprecated config key "sipp_pause_in_ms": please use "pause"')
+            time.sleep(3)
 
     @classmethod
     def new_from_filename(cls, filename):

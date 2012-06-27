@@ -17,9 +17,9 @@ def main():
 def _init_logging():
     logger = logging.getLogger()
     handler = logging.StreamHandler()
-    handler.setFormatter(logging.Formatter('%(message)s'))
+    handler.setFormatter(logging.Formatter('%(levelname)s:%(message)s'))
     logger.addHandler(handler)
-    logger.setLevel(logging.ERROR)
+    logger.setLevel(logging.WARNING)
 
 
 class _LoadtesterCommand(commands.AbstractCommand):

@@ -74,26 +74,10 @@
 <recv response="100" optional="true">
 </recv>
 
-<recv response="180">
+<recv response="180" optional="true">
 </recv>
 
-<pause/>
-
-<send>
-  <![CDATA[
-    CANCEL sip:[field2]@[remote_ip]:[remote_port] SIP/2.0
-    Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-    Max-Forwards: 70
-    To: <sip:[field2]@[remote_ip]:[remote_port]>[peer_tag_param]
-    From: <sip:[field0]@[local_ip]:[local_port]>;tag=[call_number]
-    Call-ID: [call_id]
-    CSeq: [cseq] CANCEL
-    Content-Length: 0
-
-  ]]>
-</send>
-
-<recv response="487">
+<recv response="183" optional="true">
 </recv>
 
 <recv response="200">
@@ -112,5 +96,24 @@
 
   ]]>
 </send>
+
+<pause{% for k, v in pause|default({}).iteritems() %} {{ k }}="{{ v }}"{% endfor %}/>
+
+<send>
+  <![CDATA[
+    BYE sip:[field2]@[remote_ip]:[remote_port] SIP/2.0
+    Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+    Max-Forwards: 70
+    To: <sip:[field2]@[remote_ip]:[remote_port]>[peer_tag_param]
+    From: <sip:[field0]@[local_ip]:[local_port]>;tag=[call_number]
+    Call-ID: [call_id]
+    CSeq: [cseq] BYE
+    Content-Length: 0
+
+  ]]>
+</send>
+
+<recv response="200">
+</recv>
 
 </scenario>
