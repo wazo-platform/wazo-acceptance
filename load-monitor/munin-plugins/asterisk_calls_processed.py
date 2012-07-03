@@ -46,8 +46,8 @@ def print_output(results):
     print 'asteriskcalls.value %s' % results
 
 class XivoCtidSocket(MuninPlugin):
-    title = 'Xivo CTID socket'
-    vlabel = 'Boolean'
+    title = 'Asterisk calls processed'
+    vlabel = 'Nb of Calls'
     scaled = False
     category = 'xivo'
 
