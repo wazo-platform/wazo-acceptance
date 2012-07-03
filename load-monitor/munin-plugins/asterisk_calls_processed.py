@@ -62,7 +62,7 @@ class XivoCtidSocket(MuninPlugin):
                 min = '0'))]
 
     def execute(self):
-        host = '10.42.0.253'
+        host = '127.0.0.1'
         username = 'xivo_munin_user'
         password = 'jeSwupAd0'
         command = 'core show channels'
