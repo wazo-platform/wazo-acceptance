@@ -70,20 +70,6 @@ class ServerSelect:
         graphs =  render.template_graphs(content)
         return render.template_skeleton(unicode(header), unicode(left_menu), unicode(graphs))
 
-"""
-class formulaire:
-
-        def GET(self):
-            form = myform()
-            return render.formtest(form)
-
-        def POST(self):
-            form = myform()
-            if not form.validates():
-                return render.formtest(form)
-            else:
-                return "Success! mydrop: %s" % (form.d.mydrop)
-"""
 #application = web.application(urls, globals())
 application = web.application(urls, globals()).wsgifunc()
 
