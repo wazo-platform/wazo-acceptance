@@ -1,0 +1,13 @@
+#!/usr/bin/python
+
+# Replace $$SERVER_NAME$$ by the server to be watched
+# Replace $$WATCHER_IP$$ by the ip of the munin server that graphs $$SERVER_NAME$$
+# Replace $$DOMAIN$$ by the domain defined for $$SERVER_NAME$$ on the munin configuration
+# Note : only support 2 servers for the moment, not less, not more.
+
+server_list = {,
+        'server1': {'name': '$$SERVER_NAME$$', 'watcher_ip': '$$WATCHER_IP$$'},
+        'server2': {'name': '$$SERVER_NAME$$', 'watcher_ip': '$$WATCHER_IP$$'},
+        }
+
+domain = '$$DOMAIN$$'
