@@ -1,28 +1,16 @@
-$def with (page)
+$def with (header, left, page)
 <html>
 <head>
-    <title>$page.title</title>
+    <title>Load Monitor</title>
     <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
 <div id=header>
-<h1>Load Monitor</h1>
-    <div id=top_separation>
-        <div id=readed_stats>
-            Stats en cours : $page.readed_log
-        </div>
-        <div id=status>
-            Test Server Status : $page.tests_status
-        </div>
-    </div>
+    $:header
 </div>
 <div id=main>
-    <div id=menuTests>
-        <a href=newtest.php>Run New test</a>
-    </div>
-    <div id=results>
-$:page
-    </div>
+    $:left
+    $:page
 </div>
 </body>
 </html>
