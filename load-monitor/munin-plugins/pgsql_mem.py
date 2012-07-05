@@ -34,7 +34,6 @@ class PgsqlMem(MuninPlugin):
             if proc.name.find(proc_name) >= 0 :
                 pg_pid.append(proc.pid)
 
-        print pg_pid
         if len(pg_pid) <  1:
             print 'pg_mem_res.value 0'
             print 'pg_mem_virt.value 0'
