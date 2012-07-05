@@ -7,8 +7,9 @@ from munin import MuninPlugin
 """
 
 class PgsqlMem(MuninPlugin):
+    args = '--base 1024 -l 0'
     title = 'Pgsql mem'
-    vlabel = 'MBytes'
+    vlabel = 'Bytes'
     scaled = False
     category = 'postgresql'
 
@@ -46,8 +47,10 @@ class PgsqlMem(MuninPlugin):
             pg_mem_res += handler.get_memory_info()[0]
             pg_mem_virt += handler.get_memory_info()[1]
 
-        print 'pg_mem_res.value %s' % str(pg_mem_res/1024/1024)
-        print 'pg_mem_virt.value %s' % str(pg_mem_virt/1024/1024)
+#        print 'pg_mem_res.value %s' % str(pg_mem_res/1024/1024)
+#        print 'pg_mem_virt.value %s' % str(pg_mem_virt/1024/1024)
+        print 'pg_mem_res.value %s' % str(pg_mem_res)
+        print 'pg_mem_virt.value %s' % str(pg_mem_virt)
         
 
 if __name__ == "__main__":
