@@ -14,14 +14,14 @@ class PgsqlMem(MuninPlugin):
 
     @property
     def fields(self):
-        return [('pgsql_mem_res', dict(
-                    label = 'pgsql_mem_res',
+        return [('pg_mem_res', dict(
+                    label = 'pg_mem_res',
                     info = 'Postgresql resident memory consumption',
                     type = 'GAUGE',
                     draw = 'AREA',
                     min = '0')),
-                ('pgsql_mem_virt', dict(
-                    label = 'pgsql_mem_virt',
+                ('pg_mem_virt', dict(
+                    label = 'pg_mem_virt',
                     info = 'Postgresql virtual memory consumption',
                     type = 'GAUGE',
                     draw = 'LINE2',
