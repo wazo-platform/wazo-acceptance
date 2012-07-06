@@ -108,6 +108,8 @@ def insert_adv_user_full_infos(firstname, lastname, linenumber, incallexten):
                     'phonenumber': linenumber,
                     'context': 'default',
                     'protocol': 'sip',
+                    'linename': '123456',
+                    'password': '654321',
                     'incallexten': incallexten,
                     'incallcontext': 'from-extern',
                     'mailbox_passwd': '1234',
