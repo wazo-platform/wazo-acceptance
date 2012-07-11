@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import json
+from xivo_lettuce.common import get_webservices, go_to_tab
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce.common import *
 
 WSU = get_webservices('user')
 WSG = get_webservices('group')
@@ -31,19 +30,20 @@ def type_user_in_group(groupName):
 
 def insert_user_with_no_line(firstname, lastname):
     jsoncontent = WSU.get_json_file_content('user')
-    datajson = jsoncontent  % {
-                               'firstname': firstname,
-                               'lastname': lastname
-                               }
+    datajson = jsoncontent % {
+                              'firstname': firstname,
+                              'lastname': lastname
+                             }
     data = json.loads(datajson)
     WSU.add(data)
 
+
 def insert_user(firstname, lastname):
     jsoncontent = WSU.get_json_file_content('userwithline')
-    datajson = jsoncontent  % {
-                               'firstname': firstname,
-                               'lastname': lastname
-                               }
+    datajson = jsoncontent % {
+                              'firstname': firstname,
+                              'lastname': lastname
+                             }
     data = json.loads(datajson)
     WSU.add(data)
 

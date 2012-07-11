@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.decorators import step
-from lettuce.registry import world
-
-from xivo_lettuce.common import *
 from xivo_lettuce.manager import queue_manager
+from xivo_lettuce.common import open_url
 
 
 @step(u'Given there is no queue "([^"]*)"')
