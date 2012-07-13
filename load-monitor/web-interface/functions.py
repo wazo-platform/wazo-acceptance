@@ -1,7 +1,7 @@
 import csv, os, glob, time, string
 
-def list_sip_tests():
-    folder = '/var/www/load-monitor/logs/sip_logs/'
+def list_sip_tests(server_name):
+    folder = '/var/www/load-monitor/logs/sip_logs/%s/' % server_name
     date_file_list = []
     for logfile in glob.glob(folder + '/*.csv'):
         # retrieves the stats for the current file as a tuple
@@ -32,12 +32,13 @@ def get_tests_status(log_file_name):
         process_state = 'NOT RUNNING'
     return process_state
 
-def read_log_file( scenario_file ):
-	handler = csv.reader(open(scenario_file), delimiter=';', quotechar='"')
-	csvrows = []
-	for row in handler:
-		csvrows.append(row)
-	return csvrows
+def read_log_file(local_path, server_name, logs_sip):
+    scenario_file = local_path + 'logs/sip_logs/' + server_name + '/' + logs_sip
+    handler = csv.reader(open(scenario_file), delimiter=';', quotechar='"')
+    csvrows = []
+    for row in handler:
+        csvrows.append(row)
+    return csvrows
 
 #readed = read_log_file("/home/hsbzh/Work/Apache/load-tester-results/csv/scenario_18402_.csv")
 

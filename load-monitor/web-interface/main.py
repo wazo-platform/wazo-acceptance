@@ -13,6 +13,9 @@ urls = (
 '/ServerSelect', 'ServerSelect',
 )
 
+global broken_robot, working_robot
+broken_robot = 'robot-bleu.jpg'
+
 render = web.template.render('templates/')
 
 class index:
@@ -31,16 +34,11 @@ class ServerSelect:
                 watcher_ip = value['watcher_ip']
         content = 'http://' + watcher_ip + '/munin/' + conf.domain + '/' + server_name + '.' + conf.domain
         # liste des logs de sipp
-        logs_sip_list = functions.list_sip_tests()
+        logs_sip_list = functions.list_sip_tests(server_name)
         # status d'un test en cours ou non : RUNNING ou NOT RUNNING
         # si un test est en cours, on veut afficher des stats en rapport
         tests_status = functions.get_tests_status(logs_sip_list[0])
-        if tests_status == 'RUNNING':
-            readed_log = functions.read_log_file(local_path + 'logs/sip_logs/' + logs_sip_list[0] )
-        else:
-            readed_log = 'N/A'
         # index des valeurs dans le fichier csv
-        readed_file = functions.read_log_file(local_path + 'logs/sip_logs/' + logs_sip_list[0] )
         starting_time = 0
         elapsed_time = 3
         target_rate = 5
@@ -52,6 +50,13 @@ class ServerSelect:
         successful_call = 14
         failed_call = 16
         call_length = 60
+        if tests_status == 'RUNNING':
+            readed_log = functions.read_log_file(local_path, server_name, logs_sip_list[0])
+            test_stats = (readed_log[-1][current_call], readed_log[-1][total_call_created])
+        else:
+            readed_log = 'N/A'
+            test_stats = ('N/A', 'N/A')
+            img_file = broken_robot
         # formulaire
         # Creation du formulaire de selection du serveur a monitorer
         nb_conf_servers = len(conf.server_list)
@@ -66,10 +71,7 @@ class ServerSelect:
         form_server_select = ''.join([input.render() for input in form_select_server.inputs])
         # appelle la creation de la page web
         #render = web.template.render('templates', base='template_skeleton')
-        header = render.template_header(server_name,
-                readed_file[-1][current_call],
-                readed_file[-1][total_call_created],
-                tests_status)
+        header = render.template_header(server_name, test_stats, tests_status, img_file)
         left_menu = render.template_left(form_server_select)
         graphs =  render.template_graphs(content)
         return render.template_skeleton(unicode(header), unicode(left_menu), unicode(graphs))
