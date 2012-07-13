@@ -15,6 +15,7 @@ urls = (
 
 global broken_robot, working_robot
 broken_robot = 'robot-bleu.jpg'
+working_robot = 'robot-vert.jpg'
 
 render = web.template.render('templates/')
 
@@ -53,6 +54,7 @@ class ServerSelect:
         if tests_status == 'RUNNING':
             readed_log = functions.read_log_file(local_path, server_name, logs_sip_list[0])
             test_stats = (readed_log[-1][current_call], readed_log[-1][total_call_created])
+            img_file = working_robot
         else:
             readed_log = 'N/A'
             test_stats = ('N/A', 'N/A')
