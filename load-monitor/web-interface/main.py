@@ -15,20 +15,21 @@ urls = (
 
 render = web.template.render('templates/')
 
-global server1, server2
-server1 = conf.server_list['server1']
-server2 = conf.server_list['server2']
-
 class index:
     def GET(self):
-        raise web.redirect('/ServerSelect?server_select=%s' % server1['name'])
+        raise web.redirect('/ServerSelect?server_select=%s' % conf.server_list[0]['name'])
 
 class ServerSelect:
     def GET(self):
         # lecture depuis l'uri
-        server_name = web.input()['server_select']
+        web_input = web.input()
+        server_name = web_input.server_select
+        # print 'DEBUG : server_name = %s ' % server_name
         # lien pour trouver la page munin du server generant les graphs
-        content = 'http://' + server1['watcher_ip'] + '/munin/' + conf.domain + '/' + server_name + '.' + conf.domain
+        for value in conf.server_list:
+            if value['name'] == server_name:
+                watcher_ip = value['watcher_ip']
+        content = 'http://' + watcher_ip + '/munin/' + conf.domain + '/' + server_name + '.' + conf.domain
         # liste des logs de sipp
         logs_sip_list = functions.list_sip_tests()
         # status d'un test en cours ou non : RUNNING ou NOT RUNNING
@@ -53,10 +54,13 @@ class ServerSelect:
         call_length = 60
         # formulaire
         # Creation du formulaire de selection du serveur a monitorer
+        nb_conf_servers = len(conf.server_list)
+        select_box = []
+        for offset in range(0, nb_conf_servers):
+            server = conf.server_list[offset]['name']
+            select_box.append((server, server))
         form_select_server = form.Form(
-            form.Dropdown('server_select', 
-                [(server1['name'], server1['name']),
-                (server2['name'], server2['name'])]),
+            form.Dropdown('server_select', select_box),
             form.Button("submit", type="submit", description="Submit"),
             )
         form_server_select = ''.join([input.render() for input in form_select_server.inputs])
