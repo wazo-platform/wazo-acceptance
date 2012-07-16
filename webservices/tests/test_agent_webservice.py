@@ -132,6 +132,23 @@ class TestAgentWebService(unittest.TestCase):
         self.assertIsNotNone(agent_created, 'agent was not properly created')
         self.assertAgentHasSkill(agent_created, skill_name)
 
+    def test_delete_all(self):
+        agent = self.new_agent('John', 'Doe', '4277')
+        self._aws_agent.simple_add(agent)
+
+        self.assertTrue(self._get_nb_of_agents() > 0)
+
+        self._aws_agent.custom({'act': 'deleteall'})
+
+        self.assertEqual(0, self._get_nb_of_agents())
+
+    def _get_nb_of_agents(self):
+        agent_list = self._aws_agent.list()
+        if agent_list is None:
+            return 0
+        else:
+            return len(agent_list)
+
 
 if __name__ == '__main__':
     unittest.main()
