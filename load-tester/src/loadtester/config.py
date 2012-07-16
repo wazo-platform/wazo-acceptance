@@ -37,6 +37,9 @@ class ScenarioConfig(object):
     ]
 
     _SIPP_STD_FLAGS = [
+        ('sipp_enable_trace_calldebug', '-trace_calldebug'),
+        ('sipp_enable_trace_err', '-trace_err'),
+        ('sipp_enable_trace_shortmsg', '-trace_shortmsg'),
         ('sipp_enable_trace_stat', '-trace_stat')
     ]
 

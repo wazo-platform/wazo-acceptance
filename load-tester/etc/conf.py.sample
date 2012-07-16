@@ -10,6 +10,9 @@ sipp_local_ip = '192.168.32.241'
 sipp_call_rate = 1.0
 sipp_rate_period_in_ms = 1000
 #sipp_max_simult_calls = 3
+#sipp_enable_trace_calldebug = True
+#sipp_enable_trace_err = True
+#sipp_enable_trace_shortmsg = True
 #sipp_enable_trace_stat = True
 
 ## scenarios configuration

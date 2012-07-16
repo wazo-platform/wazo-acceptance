@@ -73,6 +73,9 @@ sipp_local_ip = 'local_ip'
 sipp_call_rate = 1.0
 sipp_rate_period_in_ms = 1000
 sipp_max_simult_calls = 3
+sipp_enable_trace_calldebug = True
+sipp_enable_trace_err = True
+sipp_enable_trace_shortmsg = True
 sipp_enable_trace_stat = True
 sipp_nb_of_calls_before_exit = 4
 """
@@ -80,11 +83,14 @@ sipp_nb_of_calls_before_exit = 4
         config = ScenarioConfig(config_content)
 
         sipp_std_options = config.get_context_for_scenario('s1')['sipp_std_options']
-        self.assertEqual('-i local_ip -r 1.0 -rp 1000 -l 3 -m 4 -trace_stat',
+        self.assertEqual('-i local_ip -r 1.0 -rp 1000 -l 3 -m 4 -trace_calldebug -trace_err -trace_shortmsg -trace_stat',
                          sipp_std_options)
 
-    def test_sipp_std_option_when_sipp_enable_trace_stat_is_false(self):
+    def test_sipp_std_option_when_sipp_enable_traces_are_false(self):
         config_content = """\
+sipp_enable_trace_calldebug = False
+sipp_enable_trace_err = False
+sipp_enable_trace_shortmsg = False
 sipp_enable_trace_stat = False
 """
 
