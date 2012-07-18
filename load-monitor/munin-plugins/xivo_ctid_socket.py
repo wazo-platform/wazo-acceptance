@@ -24,7 +24,7 @@ class XivoCtidSocket(MuninPlugin):
 
     def execute(self):
 
-        host = '192.168.32.126'
+        host = '127.0.0.1'
         port = 5003
 
         # UDP port by changing "socket.SOCK_STREAM" to "socket.SOCK_DGRAM"
