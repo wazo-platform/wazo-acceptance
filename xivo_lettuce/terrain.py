@@ -50,6 +50,7 @@ def _setup_login_infos(config):
 def _setup_ssh_client(config):
     hostname = config.get('ssh_infos', 'hostname')
     login = config.get('ssh_infos', 'login')
+    world.remote_host = hostname
     world.ssh_client = SSHClient(hostname, login)
 
 

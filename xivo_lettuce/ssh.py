@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import subprocess
-from subprocess import PIPE
+from subprocess import PIPE, STDOUT
 
 
 class SSHClient(object):
@@ -12,21 +12,6 @@ class SSHClient(object):
     def call(self, remote_command):
         return self._exec_ssh_command(remote_command)
 
-    def _exec_ssh_command(self, remote_command):
-        command = self._format_ssh_command(remote_command)
-        return subprocess.call(command)
-
-    def _exec_ssh_command_with_return(self, remote_command):
-        command = self._format_ssh_command(remote_command)
-        p = subprocess.Popen(command,
-                             stdout=PIPE,
-                             stderr=PIPE,
-                             close_fds=True)
-
-        (stdoutdata, stderrdata) = p.communicate()
-
-        return stdoutdata
-
     def _format_ssh_command(self, remote_command):
         ssh_command = ['ssh',
                        '-o', 'PreferredAuthentications=publickey',
@@ -36,6 +21,22 @@ class SSHClient(object):
                        self._hostname]
         ssh_command.extend(remote_command)
         return ssh_command
+
+    def _exec_ssh_command(self, remote_command):
+        command = self._format_ssh_command(remote_command)
+        return subprocess.call(command)
+
+    def _exec_ssh_command_with_return(self, remote_command):
+        command = self._format_ssh_command(remote_command)
+
+        p = subprocess.Popen(command,
+                             stdin=PIPE,
+                             stdout=PIPE,
+                             stderr=STDOUT,
+                             close_fds=True)
+
+        (stdoutdata, stderrdata) = p.communicate()
+        return stdoutdata
 
     def check_call(self, remote_command):
         retcode = self._exec_ssh_command(remote_command)
