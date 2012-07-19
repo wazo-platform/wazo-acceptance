@@ -1,22 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import time
-
 from lettuce.decorators import step
-from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from selenium.webdriver.support.select import Select
 
-from webi.features.step_definitions import connection_steps
 from xivo_lettuce.common import *
 from xivo_lettuce.manager import context_manager
-from xivo_lettuce import manager
-from checkbox import Checkbox
 
 
 @step(u'Given the option "([^"]*)" is (not )?checked')
 def given_the_option_is_checked(step, option_name, checkstate):
-    the_option_is_checked(option_name, checkstate, given = True)
+    the_option_is_checked(option_name, checkstate, given=True)
 
 
 @step(u'Then the option "([^"]*)" is (not )?checked')
@@ -155,6 +148,7 @@ def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
                                                    password)
     assert world.xc_response == 'OK'
 
+
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", unlogged agent')
 def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
     i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(get_host_address(),
@@ -175,14 +169,17 @@ def i_cant_log_in_the_xivo_client_as_1_pass_2(step, login, password):
 def i_log_in_the_xivo_client_to_host_1_as_2_pass_3(host, login, password):
     pass
 
+
 @xivoclient
 def i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(host, login, password):
     pass
+
 
 @step(u'I log out of the XiVO Client')
 @xivoclient_step
 def i_log_out_of_the_xivo_client(step):
     assert world.xc_response == 'OK'
+
 
 @step(u'I stop the XiVO Client')
 def i_stop_the_xivo_client(step):
