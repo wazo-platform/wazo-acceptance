@@ -49,3 +49,9 @@ scenarios.call_then_hangup.called_extens = ['1']
 
 #scenarios.call_then_wait.calling_line = calling_line
 scenarios.call_then_wait.called_extens = ['1']
+
+scenarios.send_sip_register.lines = [
+    {'username': 'ztb4uv', 'password': 'VG8RVR'},
+    {'username': '1m9o7d', 'password': 'ORHHI1'},
+]
+scenarios.send_sip_register.expires = 120
