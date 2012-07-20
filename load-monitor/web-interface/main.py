@@ -38,7 +38,10 @@ class ServerSelect:
         logs_sip_list = functions.list_sip_tests(server_name)
         # status d'un test en cours ou non : RUNNING ou NOT RUNNING
         # si un test est en cours, on veut afficher des stats en rapport
-        tests_status = functions.get_tests_status(logs_sip_list[0])
+        try:
+            tests_status = functions.get_tests_status(logs_sip_list[0])
+        except:
+            tests_status = 'NEVER RUNNED'
         # index des valeurs dans le fichier csv
         starting_time = 0
         elapsed_time = 3
