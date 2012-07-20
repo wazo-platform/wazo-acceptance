@@ -32,22 +32,22 @@ class TestAgentWebService(unittest.TestCase):
 
     def new_agent(self, firstname, lastname, number):
         return {
-                "agentfeatures" : {
+                "agentfeatures": {
                     "firstname": unicode(firstname),
-                    "lastname" : unicode(lastname),
-                    "number"   : unicode(number),
-                    "passwd"   : "7789",
-                    "context"  : "default",
-                    "numgroup" : "1",
+                    "lastname": unicode(lastname),
+                    "number": unicode(number),
+                    "passwd": "7789",
+                    "context": "default",
+                    "numgroup": "1",
                     "autologoff": "0",
                     "ackcall": "no",
                     "wrapuptime": "0",
-                    "enddtmf" : "*",
-                    "acceptdtmf" : "#",
+                    "enddtmf": "*",
+                    "acceptdtmf": "#",
                  },
                 "agentoptions": {
-                    "musiconhold" : "default",
-                    "maxlogintries":"3",
+                    "musiconhold": "default",
+                    "maxlogintries": "3",
                 }
         }
 
@@ -55,8 +55,8 @@ class TestAgentWebService(unittest.TestCase):
         agent = self.new_agent(firstname, lastname, number)
         agent.update({"queueskills":
                             [{
-                              "weight" : unicode(weight),
-                              "id" : unicode(skill_id)}
+                              "weight": unicode(weight),
+                              "id": unicode(skill_id)}
                              ]})
         return agent
 
@@ -122,14 +122,14 @@ class TestAgentWebService(unittest.TestCase):
         agent_number = "99543"
         weight = 87
         self.remove_agent(agent_number)
-        skill_id = self.add_skill_if_not_exists(skill_name);
+        skill_id = self.add_skill_if_not_exists(skill_name)
 
         agent = self.new_skilled_agent("Jacktest", "AddWithSkillWs", agent_number, skill_id, weight)
 
         self.assertTrue(self._aws_agent.simple_add(agent))
 
         agent_created = self.get_agent(agent_number)
-        self.assertIsNotNone(agent_created, 'agent was not properly created')
+        self.assertNotEqual(agent_created, None, 'agent was not properly created')
         self.assertAgentHasSkill(agent_created, skill_name)
 
     def test_delete_all(self):
