@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class Checkbox(object):
     '''Wraps checkboxes from Selenium WebElement, to make them easier to manipulate'''
     def __init__(self, webelement):

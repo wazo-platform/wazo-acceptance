@@ -10,8 +10,10 @@ from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 
+
 class MissingTranslationException(Exception):
     pass
+
 
 class XiVOBrowser(webdriver.Firefox):
 
@@ -21,8 +23,8 @@ class XiVOBrowser(webdriver.Firefox):
 
         # Get the page
         webdriver.Firefox.get(self, url)
-        
-        WebDriverWait(self, world.timeout).until(lambda browser : webdriver.Firefox.page_source)
+
+        WebDriverWait(self, world.timeout).until(lambda browser: webdriver.Firefox.page_source)
         source = self.page_source
         # Remove newline, to allow regexp substitution
         source = source.replace('\n', ' ')
@@ -38,7 +40,7 @@ class XiVOBrowser(webdriver.Firefox):
             missing_translations_list.append(missing_translation.group(1) + ":" + missing_translation.group(2))
 
         # Raise exception if necessary
-        if missing_translations_list :
+        if missing_translations_list:
             # Uniquify
             missing_translations_list = sorted(set(missing_translations_list))
 
@@ -56,7 +58,7 @@ class XiVOBrowser(webdriver.Firefox):
         # Do not call lambda browser : browser.find_element -> infinite recursion
         try:
             WebDriverWait(self, world.timeout).until(
-                lambda browser : webdriver.Firefox.find_element(self, by, value))
+                lambda browser: webdriver.Firefox.find_element(self, by, value))
         except TimeoutException:
             raise NoSuchElementException(value)
 
@@ -64,7 +66,7 @@ class XiVOBrowser(webdriver.Firefox):
 
         try:
             WebDriverWait(self, world.timeout).until(
-                lambda browser : webdriver.Firefox.find_element(self, by, value).is_displayed())
+                lambda browser: webdriver.Firefox.find_element(self, by, value).is_displayed())
         except TimeoutException:
             raise ElementNotVisibleException(value)
 
@@ -132,7 +134,7 @@ class XiVOBrowser(webdriver.Firefox):
         """Adds wait time for alert."""
         count = 0
         while count < timeout:
-            alert = webdriver.Firefox.switch_to_alert(self);
+            alert = webdriver.Firefox.switch_to_alert(self)
             time.sleep(1)
             if alert:
                 return alert

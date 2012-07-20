@@ -69,7 +69,7 @@ def i_stop_the_xivo_client():
 
 
 def get_utils_file_content(filename):
-    abs_file_path = os.path.join(UTILS_DIR, filename);
+    abs_file_path = os.path.join(UTILS_DIR, filename)
     with open(abs_file_path) as fobj:
         filecontent = fobj.read()
     return filecontent
@@ -155,6 +155,7 @@ def element_is_not_in_list(module, search, qry={}, action='list'):
         return True
     return None
 
+
 def element_in_list_matches_field(module, search, class_name, value, qry={}, action='list'):
     open_url(module, action, qry)
     try:
@@ -192,7 +193,7 @@ def find_line(line_substring):
 def find_line_and_fetch_col(line_substring, class_name):
     """Return the tr webelement of a list table."""
     return world.browser.find_element_by_xpath(
-       ".//*[@id='table-main-listing']/tbody/tr[contains(.,'%s')]/td[@class='%s']"  % (line_substring, class_name))
+       ".//*[@id='table-main-listing']/tbody/tr[contains(.,'%s')]/td[@class='%s']" % (line_substring, class_name))
 
 
 def remove_element_if_exist(module, search):
