@@ -186,7 +186,7 @@ class ManageDataset(object):
             incall = Incall()
             incall.number = self.incalls_first_line + int(queue_nb) - self.queues_first_context
             incall.context = 'from-extern'
-            incall.destination = IncallQueueDestination(queue_id)
+            incall.destination = QueueDestination(queue_id)
             print 'Adding incall %s %s...' % (incall.number, incall.destination)
             self.xs.incall.add(incall)
 
