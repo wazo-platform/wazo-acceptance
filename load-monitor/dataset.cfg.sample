@@ -1,0 +1,30 @@
+[example]
+# IP of XiVO server
+host = 192.168.0.1
+# Web services username
+user = xivo-ws
+# Web services username's password
+secret = xivo-ws
+# Number of users to add
+nb_users = 250
+# First line number defined in the context
+users_first_line = 1100
+
+# Number of agents to add
+nb_agents = 250
+# First agent number to use
+agents_first_id = 9000
+
+# Number of agents to add, was used to add agents even if no
+# users were created ( association to previously created users)
+# Not relevant anymore
+available_agents_cnf = 250
+# Number of agents in a queue
+nb_agent_by_queue = 30
+# Number of agents in queue n and in queue n+1
+queue_member_overlap = 5
+# First queue number defined on the context
+queues_first_context = 11000
+
+# First incoming call number defined in context
+incalls_first_line = 1500
