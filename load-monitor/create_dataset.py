@@ -10,7 +10,7 @@ from xivo_ws import UserLine
 from xivo_ws import Agent
 from xivo_ws import Queue
 from xivo_ws import Incall
-from xivo_ws import IncallQueueDestination
+from xivo_ws import QueueDestination
 
 def main():
     parsed_args = _parse_args()
