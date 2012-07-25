@@ -38,7 +38,7 @@ def insert_agent(firstname, lastname, number, passwd):
                                'lastname': lastname,
                                'number': number,
                                'passwd': passwd,
-                               'userlist': ', "user-select" : []'
+                               'userlist': ''
                                }
     data = json.loads(datajson)
     WSA.add(data)

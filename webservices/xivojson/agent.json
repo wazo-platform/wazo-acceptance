@@ -1,5 +1,5 @@
 {
-	"agentfeatures" : {
+	"agentfeatures": {
 		"firstname": "%(firstname)s",
 		"lastname" : "%(lastname)s",
 		"number"   : "%(number)s",
@@ -22,5 +22,6 @@
 		"autologoff" : "0",
 		"wrapuptime" : "default",
 		"maxlogintries" : "3"
-	}%(userlist)s
+	},
+	"user-select": [%(userlist)s]
 }

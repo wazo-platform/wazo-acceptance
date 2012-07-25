@@ -40,5 +40,5 @@ def then_i_should_see_nb_group1_calls_in_queue_group2_in_the_queue_log(step, exp
 
 
 @step(u'Given I wait ([0-9]+) seconds for the dialplan to be reloaded')
-def given_i_wait_5_seconds_for_the_dialplan_to_be_reloaded(step, count):
+def given_i_wait_n_seconds_for_the_dialplan_to_be_reloaded(step, count):
     time.sleep(int(count))
