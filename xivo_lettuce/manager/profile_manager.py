@@ -35,7 +35,7 @@ def add_service(service_label):
     input_add_button.click()
 
     # Wait for the Javascript to add the service
-    time.sleep(world.timeout)
+    time.sleep(1)
 
 
 def remove_service(service_label):
@@ -50,12 +50,12 @@ def remove_service(service_label):
     input_remove_button.click()
 
     # Wait for the Javascript to add the service
-    time.sleep(world.timeout)
+    time.sleep(1)
 
 
 def remove_all_services():
     """Removes all services."""
-    options = input_services_enabled = world.browser.find_elements_by_xpath(
+    options = world.browser.find_elements_by_xpath(
         "//select[@id = 'it-services']/option")
     for option in options:
         option.click()
@@ -64,7 +64,7 @@ def remove_all_services():
     input_remove_button.click()
 
     # Wait for the Javascript to add the service
-    time.sleep(world.timeout)
+    time.sleep(1)
 
 
 def add_xlet(xlet_label):
@@ -72,7 +72,7 @@ def add_xlet(xlet_label):
     add_button = world.browser.find_element_by_xpath(
         "//table[tbody[@id = 'xlets']]//th[@class = 'th-right']/a")
     add_button.click()
-    time.sleep(world.timeout)
+    time.sleep(1)
     input_line = world.browser.find_elements_by_xpath(
         "//tbody[@id='xlets']//tr")[-1]
     input_xlet_name = Select(input_line.find_element_by_xpath(

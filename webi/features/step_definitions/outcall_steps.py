@@ -26,14 +26,14 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     input_name.send_keys(name)
 
     # Wait for the Javascript to fill the trunk list
-    time.sleep(world.timeout)
+    time.sleep(1)
 
     input_trunk = world.browser.find_element_by_xpath(
         "//div[@id='outcalltrunklist']//div[@class='available']//li[contains(@title, %s)]//a" % trunk)
     input_trunk.click()
 
     # Wait for the Javascript to move the trunk
-    time.sleep(world.timeout)
+    time.sleep(1)
 
     submit_form()
 
@@ -115,7 +115,7 @@ def when_i_remove_the_exten(step, exten):
     delete_button = exten_line(exten).find_element_by_id('lnk-del-row')
     delete_button.click()
     # Wait for the Javascript to remove the line
-    time.sleep(world.timeout)
+    time.sleep(1)
 
 
 @step(u'Then I don\'t see any exten "([^"]*)"')
