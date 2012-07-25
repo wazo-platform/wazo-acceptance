@@ -121,7 +121,7 @@ class WebServices(object):
         with self._open_config_file() as fobj:
             config.readfp(fobj)
         if not uri_prefix:
-            uri_prefix = config.get('webservices_infos', 'host')
+            uri_prefix = 'https://%s:443' % config.get('general', 'hostname')
         if not username:
             username = config.get('webservices_infos', 'login')
         if not password:

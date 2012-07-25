@@ -3,7 +3,6 @@ Feature: Wizard
     I have to go through the wizard
 
     Scenario: Successfull completion of the wizard and a login
-        Given that there is a XiVO installed at http://skaro-daily.lan-quebec.avencall.com/
         When I start the wizard
         Then I should be on the welcome page
         When I select language en

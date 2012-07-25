@@ -41,14 +41,14 @@ def _read_config():
 
 
 def _setup_login_infos(config):
+    world.host = 'http://%s/' % config.get('general', 'hostname')
     world.login = config.get('login_infos', 'login')
     world.password = config.get('login_infos', 'password')
-    world.host = config.get('login_infos', 'host')
     world.logged = False
 
 
 def _setup_ssh_client(config):
-    hostname = config.get('ssh_infos', 'hostname')
+    hostname = config.get('general', 'hostname')
     login = config.get('ssh_infos', 'login')
     world.remote_host = hostname
     world.ssh_client = SSHClient(hostname, login)
