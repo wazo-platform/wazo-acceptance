@@ -26,6 +26,7 @@ def initialize_from_config():
     config = _read_config()
     _setup_login_infos(config)
     _setup_ssh_client(config)
+    _set_jenkins(config)
 
 
 def _read_config():
@@ -38,6 +39,10 @@ def _read_config():
     with open(config_file) as fobj:
         config.readfp(fobj)
     return config
+
+
+def _set_jenkins(config):
+    world.jenkins_hostname = config.get('jenkins', 'hostname')
 
 
 def _setup_login_infos(config):

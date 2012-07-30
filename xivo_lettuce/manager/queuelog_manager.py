@@ -32,7 +32,7 @@ def execute_call_event_full(count, queuename, number):
                '-e', 'full',
                '-nb', count,
                '-rh', world.remote_host,
-               '-li', socket.gethostbyname(socket.gethostname()),
+               '-li', socket.gethostbyname(world.jenkins_hostname),
                '-ce', number]
     p = Popen(command,
               stdout=PIPE,
