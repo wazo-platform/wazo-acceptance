@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from lettuce import world
 
 class Checkbox(object):
     '''Wraps checkboxes from Selenium WebElement, to make them easier to manipulate'''
@@ -19,3 +20,8 @@ class Checkbox(object):
 
     def uncheck(self):
         self.set_checked(False)
+
+    @classmethod
+    def from_label(cls, label):
+        option_element = world.browser.find_element_by_label(label)
+        return cls(option_element)

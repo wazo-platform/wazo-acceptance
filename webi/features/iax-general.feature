@@ -22,27 +22,13 @@ Feature: IAX general parameters
         When I go on the General Settings > IAX Protocol page, tab "Advanced"
         Then this option is not checked
 
-    Scenario: Enable SRV lookup
+    Scenario: Toggle SRV lookup
         Given I am logged in
-        Given I go on the General Settings > IAX Protocol page, tab "Default"
-        Given the option "SRV lookup" is checked
-        Given I submit
-        When I go on the General Settings > IAX Protocol page, tab "Default"
-        When I check this option
-        When I submit
-        When I go on the General Settings > IAX Protocol page, tab "Default"
-        Then this option is checked
-
-    Scenario: Disable SRV lookup
-        Given I am logged in
-        Given I go on the General Settings > IAX Protocol page, tab "Default"
-        Given the option "SRV lookup" is checked
-        Given I submit
-        When I go on the General Settings > IAX Protocol page, tab "Default"
-        When I uncheck this option
-        When I submit
-        When I go on the General Settings > IAX Protocol page, tab "Default"
-        Then this option is not checked
+        Given the SRV lookup option is disabled
+        When I enable the SRV lookup option
+        Then the SRV lookup option is enabled
+        When I disable the SRV lookup option
+        Then the SRV lookup option is disabled
 
     Scenario: Add a call limit
         Given I am logged in
