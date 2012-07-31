@@ -1,7 +1,6 @@
 Feature: Stat
 
     Scenario: Call a queue that is saturated
-        Given I am logged in
         Given there is no queue "q1"
         Given there is no "FULL" entry in queue "q1"
         Given there is a queue "q1" with number "5200" that is statured

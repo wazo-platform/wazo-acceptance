@@ -3,7 +3,6 @@
 import json
 
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from xivo_lettuce.common import *
 
 WS = get_webservices('context')
@@ -76,16 +75,21 @@ def add_context_incall(name, displayname, numberbeg, numberend, didlength):
     return _add_context(name, displayname, 'incall', contextnumbers_incall=contextnumbers_incall)
 
 
-def _add_context(name, displayname, contexttype, 
-                 contextnumbers_user='', 
-                 contextnumbers_group='', 
-                 contextnumbers_meetme='', 
-                 contextnumbers_queue='', 
+def add_context_queue(name, displayname, numberbeg, numberend):
+    contextnumbers_queue = '"queue": [{"numberbeg": "%s", "numberend": "%s"}]' % (numberbeg, numberend)
+    return _add_context(name, displayname, 'internal', contextnumbers_queue=contextnumbers_queue)
+
+
+def _add_context(name, displayname, contexttype,
+                 contextnumbers_user='',
+                 contextnumbers_group='',
+                 contextnumbers_meetme='',
+                 contextnumbers_queue='',
                  contextnumbers_incall=''):
     var_context = {
                   "name": name,
-                  "displayname" : displayname,
-                  "entity" : 'avencall',
+                  "displayname": displayname,
+                  "entity": 'xivo_entity',
                   "contexttype": contexttype,
                   "contextinclude": '[]',
                   "contextnumbers_user": '',
@@ -94,20 +98,20 @@ def _add_context(name, displayname, contexttype,
                   "contextnumbers_queue": '',
                   "contextnumbers_incall": ''
                   }
-    
+
     # '"user": [{"numberbeg": "600", "numberend": "699"}]'
     if contextnumbers_user:
-        var_context["contextnumbers_user"] = contextnumbers_user 
+        var_context["contextnumbers_user"] = contextnumbers_user
     if contextnumbers_group:
-        var_context["contextnumbers_group"] = contextnumbers_group 
+        var_context["contextnumbers_group"] = contextnumbers_group
     if contextnumbers_meetme:
-        var_context["contextnumbers_meetme"] = contextnumbers_meetme 
+        var_context["contextnumbers_meetme"] = contextnumbers_meetme
     if contextnumbers_queue:
-        var_context["contextnumbers_queue"] = contextnumbers_queue 
+        var_context["contextnumbers_queue"] = contextnumbers_queue
     if contextnumbers_incall:
-        var_context["contextnumbers_incall"] = contextnumbers_incall 
-    
-    jsonfilecontent = WS.get_json_file_content('context');
+        var_context["contextnumbers_incall"] = contextnumbers_incall
+
+    jsonfilecontent = WS.get_json_file_content('context')
     jsonstr = jsonfilecontent % (var_context)
     content = json.loads(jsonstr)
 

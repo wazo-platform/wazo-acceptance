@@ -37,6 +37,7 @@ def insert_queue(data):
     datajson = jsoncontent % {
                               'name': data['name'],
                               'number': data['number'],
+                              'context': data['context'],
                               'maxlen': data['maxlen'],
                               'agents': data['agents']
                              }

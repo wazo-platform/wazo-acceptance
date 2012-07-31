@@ -1,7 +1,6 @@
 Feature: Stat
 
     Scenario: Call a queue that is normally
-        Given I am logged in
         Given there is no queue "q5"
         Given there is no "ENTERQUEUE" entry in queue "q5"
         Given there is a queue "q5" with number "5500"

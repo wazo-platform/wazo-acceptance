@@ -2,7 +2,7 @@
     "queuefeatures": {
         "name": "%(name)s",
         "number": "%(number)s",
-        "context": "default",
+        "context": "%(context)s",
         "preprocess_subroutine": "",
         "timeout": "0",
         "hitting_caller": "1",
