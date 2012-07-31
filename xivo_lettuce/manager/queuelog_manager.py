@@ -34,9 +34,27 @@ def execute_call_event_full(count, queuename, number):
                '-rh', world.remote_host,
                '-li', socket.gethostbyname(world.jenkins_hostname),
                '-ce', number]
+    _exec_cmd(command)
+
+
+def execute_call_event_enterqueue(count, queuename, number):
+    command = ['xivo-callgen', 'queue_log_event',
+               '-e', 'enterqueue',
+               '-nb', count,
+               '-rh', world.remote_host,
+               '-li', socket.gethostbyname(world.jenkins_hostname),
+               '-ce', number]
+    _exec_cmd(command)
+
+
+def _exec_cmd(command):
     p = Popen(command,
               stdout=PIPE,
               stderr=STDOUT,
               close_fds=True)
+    output = p.communicate()[0]
 
-    p.communicate()
+    if p.returncode != 0:
+        print output
+
+    return output
