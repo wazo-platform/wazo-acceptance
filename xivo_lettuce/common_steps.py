@@ -7,6 +7,18 @@ from xivo_lettuce.common import *
 from xivo_lettuce.manager import context_manager
 
 
+@step(u'When I login as (.*) with password (.*) in (.*)')
+def when_i_login_the_webi(step, login, password, language):
+    webi_login(login, password, language)
+
+
+@step(u'Given I am logged in')
+def i_am_logged_in(step):
+    if not logged():
+        go_to_home_page()
+        webi_login_as_default()
+
+
 @step(u'Given the option "([^"]*)" is (not )?checked')
 def given_the_option_is_checked(step, option_name, checkstate):
     the_option_is_checked(option_name, checkstate, given=True)

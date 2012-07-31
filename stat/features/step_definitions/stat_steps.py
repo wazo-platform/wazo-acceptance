@@ -7,7 +7,7 @@ from xivo_lettuce.manager import queue_manager, queuelog_manager, agent_manager
 from xivo_lettuce.manager.context_manager import check_context_number_in_interval
 
 
-_ACCEPTANCE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../'))
+_ACCEPTANCE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 
 
 @step(u'Given there is a queue "([^"]*)" with number "([^"]*)" that is statured$')
