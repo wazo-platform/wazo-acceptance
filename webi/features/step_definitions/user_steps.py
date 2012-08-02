@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
+import xivo_ws
 from lettuce.decorators import step
 from lettuce.registry import world
 
@@ -86,7 +87,7 @@ def then_i_should_be_at_the_user_list_page(step):
     world.browser.find_element_by_name('fm-users-list')
 
 
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)"')
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)"$')
 def given_there_is_a_user_1_2_with_a_sip_line_3(step, firstname, lastname, linenumber):
     ctx_man.check_context_number_in_interval('default', 'user', linenumber)
     user_man.delete_user(firstname, lastname)
@@ -157,3 +158,61 @@ def i_add_a_voicemail_1_on_2(step, vm_num):
     step.given('I set the text field "Voicemail" to "%s"' % vm_num)
 
 
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)", voicemail and CTI profile "([^"]*)"')
+def given_i_there_is_a_user_1_2_with_a_sip_line_3_voicemail_and_cti_4_profile(step, first_name, last_name, line_number, cti_profile):
+    user = xivo_ws.User()
+    user.firstname = first_name
+    user.lastname = last_name
+    user.language = 'en_US'
+    user.line = xivo_ws.UserLine(number=int(line_number),
+                                 context='default')
+    user.voicemail = xivo_ws.UserVoicemail(number=int(line_number),
+                                           name=line_number)
+    user.enable_client = True
+    user.client_username = first_name.lower()
+    user.client_password = last_name.lower()
+    user.client_profile = cti_profile
+
+    world.ws.users.add(user)
+
+@step(u'Given the user "([^"]*)" "([^"]*)" has a XiVO Client with "([^"]*)" profile')
+def given_the_user_group1_group2_has_a_xivo_client_with_group3_profile(step, group1, group2, group3):
+    assert False, 'This step must be implemented'
+
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)" and CTI profile "([^"]*)"')
+def given_there_is_a_user_1_2_with_a_sip_line_3_and_cti_profile_4(step, first_name, last_name, line_number, cti_profile):
+    user = xivo_ws.User()
+    user.firstname = first_name
+    user.lastname = last_name
+    user.line = xivo_ws.UserLine(number=int(line_number.strip().translate(None, '"')),
+                                 context='default')
+    user.enable_client = True
+    user.client_username = first_name.lower()
+    user.client_password = last_name.lower()
+    user.client_profile = cti_profile
+
+    world.ws.users.add(user)
+
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with an agent "([^"]*)" and CTI profile "([^"]*)"')
+def given_there_is_a_user_1_2_with_an_agent_3_and_cti_profile_4(step, first_name, last_name, agent_number, cti_profile):
+    user = xivo_ws.User()
+    user.firstname = first_name
+    user.lastname = last_name
+    user.enable_client = True
+    user.client_username = first_name.lower()
+    user.client_password = last_name.lower()
+    user.client_profile = cti_profile
+    user_id = world.ws.users.add(user)
+
+    agent = xivo_ws.Agent()
+    agent.firstname = first_name
+    agent.lastname = last_name
+    agent.number = int(agent_number)
+    agent.context = 'default'
+    agent.users = [int(user_id)]
+    world.ws.agents.add(agent)
+
+@step(u'When I delete agent number "([^"]*)"')
+def when_i_delete_agent_number_1(step, agent_number):
+    agent = world.ws.agents.search(agent_number)[0]
+    world.ws.agents.delete(agent.id)
