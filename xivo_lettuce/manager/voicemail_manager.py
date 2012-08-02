@@ -6,6 +6,10 @@ from xivo_lettuce.common import *
 WS_VOICEMAIL = get_webservices('voicemail')
 
 
+def delete(voicemail_id):
+    WS_VOICEMAIL.delete(voicemail_id)
+
+
 def delete_voicemail_from_number(voicemail_number):
     for id in find_voicemail_id_from_number(voicemail_number):
         WS_VOICEMAIL.delete(id)

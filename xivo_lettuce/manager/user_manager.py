@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import json
+import xivo_ws
+import voicemail_manager
 from xivo_lettuce.common import get_webservices, go_to_tab
 from lettuce.registry import world
+
 
 WSU = get_webservices('user')
 WSG = get_webservices('group')
@@ -49,9 +52,11 @@ def insert_user(firstname, lastname):
 
 
 def delete_user(firstname, lastname):
-    for id in find_user_id(firstname, lastname):
-        WSU.delete(id)
-
+    users = world.ws.user.search('%s %s' % (firstname, lastname))
+    for user in users:
+        if user.voicemail:
+            voicemail_manager.delete(user.voicemail.id)
+        world.ws.user.delete(user.id)
 
 def delete_all_users():
     WSU.clear()

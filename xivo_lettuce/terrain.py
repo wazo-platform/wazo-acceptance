@@ -2,6 +2,7 @@
 
 import ConfigParser
 import os
+import xivo_ws
 from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 from xivo_lettuce.ssh import SSHClient
@@ -27,6 +28,7 @@ def initialize_from_config():
     _setup_login_infos(config)
     _setup_ssh_client(config)
     _set_jenkins(config)
+    _setup_ws(config)
 
 
 def _read_config():
@@ -57,6 +59,13 @@ def _setup_ssh_client(config):
     login = config.get('ssh_infos', 'login')
     world.remote_host = hostname
     world.ssh_client = SSHClient(hostname, login)
+
+
+def _setup_ws(config):
+    hostname = config.get('general', 'hostname')
+    login = config.get('webservices_infos', 'login')
+    password = config.get('webservices_infos', 'password')
+    world.ws = xivo_ws.XivoServer(hostname, login, password)
 
 
 @world.absorb
