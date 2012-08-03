@@ -112,7 +112,7 @@ def given_there_is_a_user_1_2_with_a_sip_line_3_in_group_4(step, firstname, last
 def when_i_edit_the_line_1(step, linenumber):
     line_ids = line_man.find_line_id_from_number(linenumber)
     if len(line_ids) > 0:
-        open_url('line', 'edit', {'id':line_ids[0]})
+        open_url('line', 'edit', {'id': line_ids[0]})
 
 
 @step(u'I edit the user "([^"]*)" "([^"]*)"')
@@ -175,9 +175,11 @@ def given_i_there_is_a_user_1_2_with_a_sip_line_3_voicemail_and_cti_4_profile(st
 
     world.ws.users.add(user)
 
+
 @step(u'Given the user "([^"]*)" "([^"]*)" has a XiVO Client with "([^"]*)" profile')
 def given_the_user_group1_group2_has_a_xivo_client_with_group3_profile(step, group1, group2, group3):
     assert False, 'This step must be implemented'
+
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)" and CTI profile "([^"]*)"')
 def given_there_is_a_user_1_2_with_a_sip_line_3_and_cti_profile_4(step, first_name, last_name, line_number, cti_profile):
@@ -192,6 +194,7 @@ def given_there_is_a_user_1_2_with_a_sip_line_3_and_cti_profile_4(step, first_na
     user.client_profile = cti_profile
 
     world.ws.users.add(user)
+
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with an agent "([^"]*)" and CTI profile "([^"]*)"')
 def given_there_is_a_user_1_2_with_an_agent_3_and_cti_profile_4(step, first_name, last_name, agent_number, cti_profile):
@@ -211,6 +214,7 @@ def given_there_is_a_user_1_2_with_an_agent_3_and_cti_profile_4(step, first_name
     agent.context = 'default'
     agent.users = [int(user_id)]
     world.ws.agents.add(agent)
+
 
 @step(u'When I delete agent number "([^"]*)"')
 def when_i_delete_agent_number_1(step, agent_number):

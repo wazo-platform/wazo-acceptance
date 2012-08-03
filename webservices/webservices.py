@@ -29,18 +29,18 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             '../config/config.ini'))
 
 URILIST = {'ipbx': {
-                'call_management' :
+                'call_management':
                 {
                     "incall" : "/service/ipbx/json.php/%s/call_management/incall",
                     "outcall" : "/service/ipbx/json.php/%s/call_management/outcall",
                     "pickup" : "/service/ipbx/json.php/%s/call_management/pickup"
                 },
-                'control_system' :
+                'control_system':
                 {
                     "reload" : "/service/ipbx/json.php/%s/control_system/reload",
                     "restart" : "/service/ipbx/json.php/%s/control_system/restart"
                 },
-                'general_settings' :
+                'general_settings':
                 {
                     "advanced" : "/service/ipbx/json.php/%s/general_settings/advanced",
                     "iax" : "/service/ipbx/json.php/%s/general_settings/iax",
@@ -49,12 +49,12 @@ URILIST = {'ipbx': {
                     "sip" : "/service/ipbx/json.php/%s/general_settings/sip",
                     "voicemail" : "/service/ipbx/json.php/%s/general_settings/voicemail"
                 },
-                'pbx_services' :
+                'pbx_services':
                 {
                     "extenfeatures" : "/service/ipbx/json.php/%s/pbx_services/extenfeatures",
                     "phonebook" : "/service/ipbx/json.php/%s/pbx_services/phonebook"
                 },
-                'pbx_settings' :
+                'pbx_settings':
                 {
                     "groups" : "/service/ipbx/json.php/%s/pbx_settings/groups",
                     "lines" : "/service/ipbx/json.php/%s/pbx_settings/lines",
@@ -62,26 +62,26 @@ URILIST = {'ipbx': {
                     "users" : "/service/ipbx/json.php/%s/pbx_settings/users",
                     "voicemail" : "/service/ipbx/json.php/%s/pbx_settings/voicemail"
                 },
-                'phonebook' :
+                'phonebook':
                 {
                     "local" : "/service/ipbx/json.php/%s/pbx_settings/local",
                     "menu" : "/service/ipbx/json.php/%s/pbx_settings/menu",
                     "search" : "/service/ipbx/json.php/%s/pbx_settings/search"
                  },
-                'system_management' :
+                'system_management':
                 {
                     "context" : "/service/ipbx/json.php/%s/system_management/context"
                 },
-                'trunk_management' :
+                'trunk_management':
                 {
                     "sip" : "/service/ipbx/json.php/%s/trunk_management/sip",
                     "iax" : "/service/ipbx/json.php/%s/trunk_management/iax",
                     "custom" : "/service/ipbx/json.php/%s/trunk_management/custom"
                 }
             },
-            'callcenter' :
+            'callcenter':
             {
-                'settings' :
+                'settings':
                 {
                     "agents" : "/callcenter/json.php/%s/settings/agents/",
                     "queues" : "/callcenter/json.php/%s/settings/queues/",
@@ -89,28 +89,28 @@ URILIST = {'ipbx': {
                     "queueskillrules" : "/callcenter/json.php/%s/settings/queueskillrules/"
                 }
             },
-            'configuration' :
+            'configuration':
             {
-                'manage' :
+                'manage':
                 {
                     "entity" : "/xivo/configuration/json.php/%s/manage/entity"
                 },
-                'network' :
+                'network':
                 {
                     "dhcp" : "/xivo/configuration/json.php/%s/network/dhcp",
                     "mail" : "/xivo/configuration/json.php/%s/network/mail",
                     "interface" : "/xivo/configuration/json.php/%s/network/interface",
                     "resolvconf" : "/xivo/configuration/json.php/%s/network/resolvconf"
                 },
-                'provisioning' :
+                'provisioning':
                 {
                     "general" : "/xivo/configuration/json.php/%s/provisioning/general"
                 },
-                'support' :
+                'support':
                 {
                     "monitoring" : "/xivo/configuration/json.php/%s/support/monitoring"
                 },
-                'check' : "/xivo/configuration/json.php/%s/check"
+                'check': "/xivo/configuration/json.php/%s/check"
             }
        }
 
@@ -146,7 +146,7 @@ class WebServices(object):
         local_config = '%s.local' % _CONFIG_FILE
         try:
             return open(local_config)
-        except IOError, e:
+        except IOError:
             return open(_CONFIG_FILE)
 
     def _compute_path(self, uri_prefix):
@@ -170,7 +170,7 @@ class WebServices(object):
 
     def get_json_file_content(self, file):
         filename = '%s.json' % file
-        abs_file_path = os.path.join(self.basepath, filename);
+        abs_file_path = os.path.join(self.basepath, filename)
         with open(abs_file_path) as fobj:
             jsonfilecontent = fobj.read()
         return jsonfilecontent
