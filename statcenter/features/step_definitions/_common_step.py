@@ -2,7 +2,21 @@
 
 import time
 from lettuce.decorators import step
-from xivo_lettuce.manager import queuelog_manager, queue_manager
+from xivo_lettuce.manager import queuelog_manager, queue_manager, agent_manager
+from xivo_lettuce.manager.context_manager import add_contextnumbers_queue
+
+
+@step(u'Given there is a queue "([^"]*)" in context "([^"]*)" with number "([^"]*)"$')
+def given_there_is_a_queue_in_context_with_number(step, name, context, number):
+    add_contextnumbers_queue(context, number, number)
+    agent_manager.insert_agent('test', 'test', '7878', '')
+    agent_id = agent_manager.find_agent_id_from_number('7878')
+    data = {'name': name,
+            'number': number,
+            'context': context,
+            'maxlen': 0,
+            'agents': agent_id}
+    queue_manager.insert_queue(data)
 
 
 @step(u'Given there is no queue with name "([^"]+)"')
