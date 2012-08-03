@@ -268,7 +268,7 @@ class WebServicesFactory(object):
         return (response.code == 200)
 
     def edit(self, id, data):
-        response = self._aws.view(id, data)
+        response = self._aws.edit(data, id)
         return (response.code == 200)
 
     def delete(self, id):

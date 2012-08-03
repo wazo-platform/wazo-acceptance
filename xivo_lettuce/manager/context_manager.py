@@ -4,6 +4,8 @@ import json
 
 from lettuce.registry import world
 from xivo_lettuce.common import *
+from pprint import pprint
+from utils.func import _rec_update_dict
 
 WS = get_webservices('context')
 
@@ -65,6 +67,24 @@ def create_interval_for_number(label, number):
     submit_form()
 
 
+def get_context(name):
+    response = WS.view(name)
+    if response:
+        return response
+
+
+def add_contextnumbers_queue(name, numberbeg, numberend):
+    context_dict = get_context(name)
+    contextnumbers_queue = '"queue": [{"numberbeg": "%s", "numberend": "%s"}]' % (numberbeg, numberend)
+    contextnumbers = '{"contextnumbers": {%s}}' % contextnumbers_queue
+    if not context_dict:
+        _add_context(name, name, 'internal', contextnumbers_queue=contextnumbers_queue)
+    else:
+        data = json.loads(contextnumbers)
+        _rec_update_dict(context_dict, data)
+        _edit_context(name, context_dict)
+
+
 def add_context_user(name, displayname, numberbeg, numberend):
     contextnumbers_user = '"user": [{"numberbeg": "%s", "numberend": "%s"}]' % (numberbeg, numberend)
     return _add_context(name, displayname, 'internal', contextnumbers_user=contextnumbers_user)
@@ -80,7 +100,12 @@ def add_context_queue(name, displayname, numberbeg, numberend):
     return _add_context(name, displayname, 'internal', contextnumbers_queue=contextnumbers_queue)
 
 
+def _edit_context(name, data_dict):
+    WS.edit(data_dict['context']['name'], data_dict)
+
+
 def _add_context(name, displayname, contexttype,
+                 contextinclude=[],
                  contextnumbers_user='',
                  contextnumbers_group='',
                  contextnumbers_meetme='',
@@ -99,6 +124,8 @@ def _add_context(name, displayname, contexttype,
                   "contextnumbers_incall": ''
                   }
 
+    if contextinclude:
+        var_context["contextinclude"] = contextinclude
     # '"user": [{"numberbeg": "600", "numberend": "699"}]'
     if contextnumbers_user:
         var_context["contextnumbers_user"] = contextnumbers_user

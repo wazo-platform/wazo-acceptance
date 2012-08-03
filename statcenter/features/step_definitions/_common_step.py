@@ -2,7 +2,17 @@
 
 import time
 from lettuce.decorators import step
-from xivo_lettuce.manager import queuelog_manager
+from xivo_lettuce.manager import queuelog_manager, queue_manager
+
+
+@step(u'Given there is no queue with name "([^"]+)"')
+def given_there_is_no_queue_with_name(step, queue_name):
+    queue_manager.delete_queue_from_displayname(queue_name)
+
+
+@step(u'Given there is no queue with number "([^"]*)"')
+def given_there_is_no_queue_with_number(step, queue_number):
+    queue_manager.delete_queue_from_number(queue_number)
 
 
 @step(u'Given there is no "([^"]*)" entry in queue "([^"]*)')

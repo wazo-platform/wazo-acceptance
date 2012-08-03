@@ -6,16 +6,15 @@ from xivo_lettuce.manager.context_manager import add_context_queue, \
     delete_context
 
 
-@step(u'Given there is a queue "([^"]*)" with number "([^"]*)"$')
-def given_there_is_a_queue_that_is_statured(step, name, number):
-    context_name = 'ctx_%s' % name.lower()
-    delete_context(context_name)
-    add_context_queue(context_name, context_name, number, number)
+@step(u'Given there is a queue "([^"]*)" in context "([^"]*)" with number "([^"]*)"$')
+def given_there_is_a_queue_in_context_with_number(step, name, context, number):
+    delete_context(context)
+    add_context_queue(context, context, number, number)
     agent_manager.insert_agent('test', 'test', '7878', '')
     agent_id = agent_manager.find_agent_id_from_number('7878')
     data = {'name': name,
             'number': number,
-            'context': context_name,
+            'context': context,
             'maxlen': 0,
             'agents': agent_id}
     queue_manager.insert_queue(data)
