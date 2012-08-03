@@ -184,7 +184,7 @@ def given_there_is_a_user_1_2_with_a_sip_line_3_and_cti_profile_4(step, first_na
     user = xivo_ws.User()
     user.firstname = first_name
     user.lastname = last_name
-    user.line = xivo_ws.UserLine(number=int(line_number.strip().translate(None, '"')),
+    user.line = xivo_ws.UserLine(number=int(line_number),
                                  context='default')
     user.enable_client = True
     user.client_username = first_name.lower()

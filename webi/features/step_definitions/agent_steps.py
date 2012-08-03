@@ -49,8 +49,8 @@ def then_the_agent_password_is(step, number, password):
     current_password = agent_manager.get_password(number)
     assert current_password == password, 'passord was not changed : expected : %s current %s' % (password, current_password)
 
-@step(u'Given there is no agent number "([^"]*)"')
-def given_there_is_no_agent_number_1(step, number):
+@step(u'Given no agent number "([^"]*)"')
+def given_no_agent_number_1(step, number):
     agents = world.ws.agents.search(number)
     agents_to_remove = [agent.id for agent in agents if agent.number == number]
     for agent_id in agents_to_remove:
