@@ -8,7 +8,6 @@ Feature: Agent
         When I remove agent "Mary" "Stuart"
         Then agent "Mary Stuart" is not displayed in the list of default agent group
 
-
     Scenario: Agent modification
         Given I am logged in
         Given an agent "John" "Wayne" "24000" "" in group default

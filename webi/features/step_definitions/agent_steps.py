@@ -7,7 +7,7 @@ from xivo_lettuce.common import open_url, submit_form, element_is_in_list, \
 
 
 @step(u'Given an agent "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)" in group default')
-def givent_an_agent_in_group_default(step, firstname, lastname, number, password):
+def given_an_agent_in_group_default(step, firstname, lastname, number, password):
     agent_manager.delete_agent(number)
     agent_manager.insert_agent(firstname, lastname, number, password)
 
