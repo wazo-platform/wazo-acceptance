@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*_
+# -*- coding: UTF-8 -*-
 
 from lettuce.decorators import step
 from xivo_lettuce.manager import agent_manager

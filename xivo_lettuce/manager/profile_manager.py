@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import time
-
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
-from xivo_lettuce.common import *
+from xivo_lettuce.common import open_url, remove_line
 
 
 def delete_profile(profile_label):
