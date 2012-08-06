@@ -8,13 +8,13 @@ from xivo_lettuce.common import open_url, submit_form, element_is_in_list, \
 
 @step(u'Given an agent "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)" in group default')
 def given_an_agent_in_group_default(step, firstname, lastname, number, password):
-    agent_manager.delete_agent(number)
+    agent_manager.delete_agent_by_number(number)
     agent_manager.insert_agent(firstname, lastname, number, password)
 
 
 @step(u'Given no agent number "([^"]*)"')
 def given_no_agent_number_1(step, number):
-    agent_manager.delete_agent(number)
+    agent_manager.delete_agent_by_number(number)
 
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)"')

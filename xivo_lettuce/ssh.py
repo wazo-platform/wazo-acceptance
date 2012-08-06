@@ -36,6 +36,10 @@ class SSHClient(object):
                              close_fds=True)
 
         (stdoutdata, stderrdata) = p.communicate()
+
+        if p.returncode != 0:
+            print stderrdata
+
         return stdoutdata
 
     def check_call(self, remote_command):
