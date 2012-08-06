@@ -2,8 +2,7 @@
 
 from lettuce.decorators import step
 from lettuce.registry import world
-
-from xivo_lettuce.common import *
+from xivo_lettuce.common import open_url, submit_form, remove_element_if_exist
 
 
 @step(u'When I create a configfiles "([^"]*)" with content "([^"]*)"')
@@ -19,5 +18,5 @@ def when_i_create_configfiles_with_content(step, filename, content):
 
 
 @step(u'Given no config file "([^"]*)"')
-def given_i_don_t_see_any_config_file_1(step, config_file_name):
-    remove_element_if_exist("configfiles", config_file_name)
+def given_no_config_file_1(step, config_file_name):
+    remove_element_if_exist('configfiles', config_file_name)
