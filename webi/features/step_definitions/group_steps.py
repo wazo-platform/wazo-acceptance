@@ -5,7 +5,8 @@ from xivo_lettuce.common import open_url, element_in_list_matches_field, \
     submit_form
 from xivo_lettuce.manager.context_manager import check_context_number_in_interval
 from xivo_lettuce.manager.group_manager import remove_group_with_number, \
-    remove_group_with_name, type_group_name, type_group_number, type_context
+    remove_group_with_name, remove_group_with_name_via_ws, type_group_name,\
+    type_group_number, type_context
 
 
 @step(u'Given there is no group with number "([^"]*)"')
@@ -15,7 +16,7 @@ def given_there_is_no_group_with_number(step, number):
 
 @step(u'Given there is no group with name "([^"]*)"')
 def given_there_is_no_group_with_name(step, name):
-    remove_group_with_name(name)
+    remove_group_with_name_via_ws(name)
 
 
 @step(u'When I create a group "([^"]*)" with number "([^"]*)"')

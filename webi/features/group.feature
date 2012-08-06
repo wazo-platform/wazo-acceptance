@@ -1,6 +1,4 @@
 Feature: Group
-    In order to get a group
-    I have to create a group
 
     Scenario: Add a group with name and number and remove it
         Given I am logged in
