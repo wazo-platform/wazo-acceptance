@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.decorators import step
-from lettuce.registry import world
-from xivo_lettuce.manager.trunksip_manager import *
+from lettuce import step, world
+from xivo_lettuce.manager.trunksip_manager import add_trunksip
 
 IPBX_COUNT_URL = '/service/ipbx/index.php'
 SIP_TRUNK_STAT_XPATH = "//div[@id='ipbx-stats']//tr[8]//td[%d]"

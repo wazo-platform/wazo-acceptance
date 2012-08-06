@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from lettuce import step
-from lettuce import world
-from xivo_lettuce.common import *
+from lettuce import step, world
+from xivo_lettuce.common import waitForLoginPage
 
 
 @step(u'When I open the url')

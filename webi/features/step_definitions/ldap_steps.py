@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-from lettuce import step
-from xivo_lettuce.common import *
+
+from lettuce import step, world
+from xivo_lettuce.common import open_url, element_is_not_in_list,\
+    submit_form
 from xivo_lettuce.manager import ldap_manager as ldap_man
+
 
 @step(u'I create an LDAP server with name "([^"]*)" and host "([^"]*)"')
 def i_create_an_ldap_server_with_name_1_and_host_2(step, name, host):

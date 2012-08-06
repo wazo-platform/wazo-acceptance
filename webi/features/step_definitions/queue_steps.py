@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.decorators import step
+from lettuce import step
 from xivo_lettuce.manager import queue_manager
 from xivo_lettuce.common import open_url
 

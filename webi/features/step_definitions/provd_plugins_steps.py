@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import time
-from lettuce.decorators import step
-from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import ElementNotVisibleException
+from lettuce import step, world
 
-from xivo_lettuce.manager.provd_plugins_manager import *
+from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import provd_general_manager as provdg
+from xivo_lettuce.manager.provd_plugins_manager import plugins_error_during_update,\
+    plugins_successfully_updated
 
 
 @step(u'Given a update plugins provd with good url')

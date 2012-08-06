@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from lettuce.decorators import step
 from xivo_lettuce.manager import skill_rule_manager
 from xivo_lettuce.common import open_url

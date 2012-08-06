@@ -6,8 +6,9 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
-from xivo_lettuce.common import *
-from xivo_lettuce.manager.outcall_manager import *
+from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url,\
+    remove_line, submit_form
+from xivo_lettuce.manager.outcall_manager import exten_line
 
 
 @step(u'Given there is no outcall "([^"]*)"')

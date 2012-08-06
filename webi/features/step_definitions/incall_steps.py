@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.decorators import step
-from lettuce.registry import world
+from lettuce import step
 
-from xivo_lettuce.common import *
+from xivo_lettuce.common import open_url, submit_form
 from xivo_lettuce.manager import context_manager as ctx_man
 from xivo_lettuce.manager import incall_manager as incall_man
 

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.decorators import step
-from lettuce.registry import world
+from lettuce import step
 
-from xivo_lettuce.common import *
-from xivo_lettuce.manager.user_import_manager import *
+from xivo_lettuce.manager.user_import_manager import insert_simple_user,\
+    insert_adv_user_with_mevo, insert_adv_user_with_incall,\
+    insert_adv_user_full_infos
 
 
 @step(u'When I import a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)"$')

@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.decorators import step
-from lettuce.registry import world
+from lettuce import step, world
 
-from xivo_lettuce.common import *
-from xivo_lettuce.manager.user_manager import *
-from xivo_lettuce.manager.trunkcustom_manager import *
+from selenium.common.exceptions import NoSuchElementException
+from xivo_lettuce.common import find_line, open_url, remove_line, submit_form
 
 
 @step(u'Given there is a custom trunk "([^"]*)"')

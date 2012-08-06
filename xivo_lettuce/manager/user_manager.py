@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import json
-import xivo_ws
 import voicemail_manager
 from xivo_lettuce.common import get_webservices, go_to_tab
 from lettuce.registry import world

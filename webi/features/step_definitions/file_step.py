@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.decorators import step
-
-from xivo_lettuce.common import *
+from lettuce import step
 from xivo_lettuce.manager import file_manager
 
 

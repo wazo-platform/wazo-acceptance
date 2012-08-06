@@ -2,8 +2,7 @@
 
 import time
 import xivo_ws
-from lettuce.decorators import step
-from lettuce.registry import world
+from lettuce import step, world
 
 from xivo_lettuce.common import *
 from xivo_lettuce.manager import user_manager as user_man

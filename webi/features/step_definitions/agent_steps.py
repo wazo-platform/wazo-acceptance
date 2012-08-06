@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-from lettuce.decorators import step
+from lettuce import step
 from xivo_lettuce.manager import agent_manager
 from xivo_lettuce.common import open_url, submit_form, element_is_in_list, \
     remove_line, element_is_not_in_list

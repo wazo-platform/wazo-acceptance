@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.decorators import step
-from lettuce.registry import world
+from lettuce import step, world
 from xivo_lettuce.common import open_url, submit_form, remove_element_if_exist
 
 

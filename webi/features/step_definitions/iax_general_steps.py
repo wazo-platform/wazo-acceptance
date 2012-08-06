@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.decorators import step
-from lettuce.registry import world
+from lettuce import step, world
 
-from xivo_lettuce.common import *
-from xivo_lettuce.manager.iax_general_manager import *
+from selenium.common.exceptions import NoSuchElementException
+from xivo_lettuce.checkbox import Checkbox
+from xivo_lettuce.common import go_to_tab, open_url, submit_form
+from xivo_lettuce.manager.iax_general_manager import find_call_limit_line,\
+    find_call_limit_lines
 
 
 @step(u'I go on the General Settings > IAX Protocol page, tab "([^"]*)"')
