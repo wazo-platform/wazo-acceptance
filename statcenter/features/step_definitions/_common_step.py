@@ -9,6 +9,7 @@ from xivo_lettuce.manager.context_manager import add_contextnumbers_queue
 @step(u'Given there is a queue "([^"]*)" in context "([^"]*)" with number "([^"]*)"$')
 def given_there_is_a_queue_in_context_with_number(step, name, context, number):
     add_contextnumbers_queue(context, number, number)
+    agent_manager.delete_agent_by_number('7878')
     agent_manager.insert_agent('test', 'test', '7878', '')
     agent_id = agent_manager.find_agent_id_from_number('7878')
     data = {'name': name,

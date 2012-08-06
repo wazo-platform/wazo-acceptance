@@ -36,7 +36,7 @@ def insert_agent(firstname, lastname, number, passwd):
     world.ws.agents.add(agent)
 
 
-def delete_agent(number):
+def delete_agent_by_number(number):
     agents = world.ws.agents.search_agents_by_number(number)
     for agent in agents:
         world.ws.agents.delete(agent.id)
