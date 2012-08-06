@@ -200,7 +200,7 @@ def remove_element_if_exist(module, search):
     open_url(module, 'list')
     try:
         remove_line(search)
-    except NoSuchElementException, ElementNotVisibleException:
+    except (NoSuchElementException, ElementNotVisibleException):
         pass
 
 
@@ -209,7 +209,7 @@ def remove_all_elements(module, search):
     try:
         while True:
             remove_line(search)
-    except NoSuchElementException, ElementNotVisibleException:
+    except (NoSuchElementException, ElementNotVisibleException):
         pass
 
 
