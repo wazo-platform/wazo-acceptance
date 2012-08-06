@@ -22,7 +22,7 @@ def change_password(password):
 
 
 def get_password(number):
-    agent = world.ws.agents.search_one_agent_by_number(number)
+    agent = world.ws.agents.find_one_by_number(number)
     return agent.password
 
 
@@ -37,11 +37,11 @@ def insert_agent(firstname, lastname, number, passwd):
 
 
 def delete_agent(number):
-    agents = world.ws.agents.search_agents_by_number(number)
+    agents = world.ws.agents.search_by_number(number)
     for agent in agents:
         world.ws.agents.delete(agent.id)
 
 
 def find_agent_id_from_number(number):
-    agent = world.ws.agents.search_one_agent_by_number(number)
+    agent = world.ws.agents.find_one_by_number(number)
     return agent.id
