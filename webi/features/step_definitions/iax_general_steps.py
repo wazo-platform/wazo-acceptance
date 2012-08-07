@@ -87,26 +87,26 @@ def then_i_don_t_see_a_call_limit_to_group1_netmask_group2(step, destination, ne
 
 @step(u'Given the SRV lookup option is disabled')
 def given_the_srv_lookup_option_is_disabled(step):
-    option = _get_srv_lookup_option
+    option = _get_srv_lookup_option()
 
     if option.is_checked():
         option.uncheck()
         submit_form()
 
-        option = _get_srv_lookup_option
+        option = _get_srv_lookup_option()
         assert not option.is_checked()
 
 
 @step(u'When I enable the SRV lookup option')
 def when_i_enable_the_srv_lookup_option(step):
-    option = _get_srv_lookup_option
+    option = _get_srv_lookup_option()
     option.check()
     submit_form()
 
 
 @step(u'Then the SRV lookup option is enabled')
 def then_the_srv_lookup_option_is_enabled(step):
-    option = _get_srv_lookup_option
+    option = _get_srv_lookup_option()
     assert option.is_checked()
 
 
