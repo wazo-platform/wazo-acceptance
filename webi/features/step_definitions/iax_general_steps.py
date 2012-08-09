@@ -110,6 +110,19 @@ def then_the_srv_lookup_option_is_enabled(step):
     assert option.is_checked()
 
 
+@step(u'When I disable the SRV lookup option')
+def when_i_enable_the_srv_lookup_option(step):
+    option = _get_srv_lookup_option()
+    option.uncheck()
+    submit_form()
+
+
+@step(u'Then the SRV lookup option is disabled')
+def then_the_srv_lookup_option_is_disabled(step):
+    option = _get_srv_lookup_option()
+    assert not option.is_checked()
+
+
 def _get_srv_lookup_option():
     open_url('general_iax')
     go_to_tab('Default')
