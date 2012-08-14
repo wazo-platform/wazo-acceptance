@@ -8,7 +8,7 @@ from xivo_lettuce.common import open_url, remove_line
 
 
 def delete_profile(profile_label):
-    open_url('ctiprofile', 'list')
+    open_url('profile', 'list')
     remove_line(profile_label)
 
 
