@@ -41,8 +41,8 @@ class WSCommon(object):
             return json.loads(response.data)
         return None
 
-    def view(self, id):
-        response = self._aws.view(id)
+    def view(self, id_to_view):
+        response = self._aws.view(id_to_view)
         if not response:
             return None
         if response.data:
@@ -77,9 +77,7 @@ class WSCommon(object):
 
     def edit(self, id_to_edit, content):
         response = self._aws.edit(content, id_to_edit)
-        if response.code == 200:
-            return True
-        return False
+        return (response.code == 200)
 
     def simple_delete(self, id_to_delete):
         response = self._aws.delete(id_to_delete)
