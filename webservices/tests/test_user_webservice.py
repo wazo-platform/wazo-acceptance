@@ -41,22 +41,22 @@ class TestUser(unittest.TestCase):
         self._remove_users(*user_names)
         self._remove_users(*changed_names)
         user = self._add_user(*user_names)
-        added_user_id = user['id']
+        added_user_id = user['userfeatures']['id']
 
         mod_user_json = self._new_user(*changed_names)
 
         self.assertTrue(self._aws_user.edit(added_user_id, mod_user_json))
 
         user = self._get_user(*changed_names)
-        self.assertEqual(user['id'], added_user_id)
-        self.assertEqual(user['firstname'], 'Boby')
-        self.assertEqual(user['lastname'], 'Dylan')
+        self.assertEqual(user['userfeatures']['id'], added_user_id)
+        self.assertEqual(user['userfeatures']['firstname'], 'Boby')
+        self.assertEqual(user['userfeatures']['lastname'], 'Dylan')
 
     def test_delete(self):
         user_names = ('Alice', 'DeleteName')
         self._remove_users(*user_names)
         user = self._add_user(*user_names)
-        self.assertTrue(self._aws_user.simple_delete(user['id']))
+        self.assertTrue(self._aws_user.simple_delete(user['userfeatures']['id']))
         user = self._get_user(*user_names)
         self.assertEqual(user, None, 'Unable to delete user')
 
