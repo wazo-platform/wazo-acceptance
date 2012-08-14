@@ -174,7 +174,7 @@ def i_cant_log_in_the_xivo_client_as_1_pass_2(step, login, password):
     i_log_in_the_xivo_client_to_host_1_as_2_pass_3(get_host_address(),
                                                    login,
                                                    password)
-    assert world.xc_response == 'KO'
+    assert world.xc_response != 'OK'
 
 
 @xivoclient
