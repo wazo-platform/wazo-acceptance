@@ -23,7 +23,7 @@ Feature: Xlet identity
 
         Given there is no user "Bail" "Tarkin"
         Given there is no SIP line "152"
-        Given there is a user "Bail" "Tarkin" with a SIP line "152", voicemail and CTI profile "client"
+        Given there is a user "Bail" "Tarkin" with a SIP line "152", voicemail and CTI profile "Client"
 
         When I start the XiVO Client
         When I log in the XiVO Client as "bail", pass "tarkin"

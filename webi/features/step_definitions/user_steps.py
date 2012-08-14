@@ -174,10 +174,7 @@ def given_i_there_is_a_user_1_2_with_a_sip_line_3_voicemail_and_cti_4_profile(st
 
     world.ws.users.add(user)
 
-
-@step(u'Given the user "([^"]*)" "([^"]*)" has a XiVO Client with "([^"]*)" profile')
-def given_the_user_group1_group2_has_a_xivo_client_with_group3_profile(step, group1, group2, group3):
-    assert False, 'This step must be implemented'
+    time.sleep(world.timeout)
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)" and CTI profile "([^"]*)"')
@@ -193,6 +190,8 @@ def given_there_is_a_user_1_2_with_a_sip_line_3_and_cti_profile_4(step, first_na
     user.client_profile = cti_profile
 
     world.ws.users.add(user)
+
+    time.sleep(world.timeout)
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with an agent "([^"]*)" and CTI profile "([^"]*)"')
@@ -212,10 +211,14 @@ def given_there_is_a_user_1_2_with_an_agent_3_and_cti_profile_4(step, first_name
     agent.number = int(agent_number)
     agent.context = 'default'
     agent.users = [int(user_id)]
+
     world.ws.agents.add(agent)
 
+    time.sleep(world.timeout)
 
 @step(u'When I delete agent number "([^"]*)"')
 def when_i_delete_agent_number_1(step, agent_number):
     agent = world.ws.agents.search(agent_number)[0]
     world.ws.agents.delete(agent.id)
+
+    time.sleep(world.timeout)
