@@ -1,10 +1,7 @@
 from lettuce.decorators import step
 from lettuce.registry import world
 
-from webi.features.step_definitions.user_steps import *
-from webi.features.step_definitions.voicemail_steps import *
-from webi.features.step_definitions.line_steps import *
-from webi.features.step_definitions.agent_steps import *
+from xivo_lettuce.common import xivoclient, xivoclient_step
 
 CONFIG_URL = '/xivo/configuration/index.php'
 

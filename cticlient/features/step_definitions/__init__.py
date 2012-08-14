@@ -2,4 +2,4 @@
 
 from xivo_lettuce import terrain
 from xivo_lettuce.common_steps import *
-from webi.features.step_definitions import connection_steps
+from webi.features.step_definitions import connection_steps, user_steps, agent_steps
