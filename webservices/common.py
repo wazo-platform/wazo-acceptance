@@ -75,17 +75,21 @@ class WSCommon(object):
                     return res[0]['id']
         return False
 
-    def edit(self, id, content):
-        response = self._aws.edit(content, id)
+    def edit(self, id_to_edit, content):
+        response = self._aws.edit(content, id_to_edit)
         if response.code == 200:
             return True
         return False
 
-    def delete(self, id):
-        response = self._aws.delete(id)
+    def simple_delete(self, id_to_delete):
+        response = self._aws.delete(id_to_delete)
+        return (response.code == 200)
+
+    def delete(self, id_to_delete):
+        response = self._aws.delete(id_to_delete)
         if response.code == 200:
             response = self._aws.list()
+            print response.data
             if response.code == 204:
                 return True
         return False
-
