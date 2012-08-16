@@ -32,12 +32,17 @@ def given_there_is_no_queue_with_number(step, queue_number):
     queue_manager.delete_queue_from_number(queue_number)
 
 
-@step(u'Given there is no "([^"]*)" entry in queue "([^"]*)')
+@step(u'^Given there is no "([A-Z_]+)" entry in queue "([a-zA-Z0-9_]+)"$')
 def given_there_is_no_event_entry_in_queue_log_table_in_queue_queue(step, event, queue_name):
     queuelog_manager.delete_event_by_queue(event, queue_name)
 
 
-@step(u'Then i should see ([0-9]+) "([^"]*)" event in queue "([^"]*)" in the queue log')
+@step(u'^Given there is no "([A-Z_]+)" entry in queue "([a-zA-Z0-9_]+)" between "(.*)" and "(.*)"$')
+def given_there_is_no_event_entry_in_queue_log_table_in_queue_queue_between(step, event, queue_name, start, end):
+    queuelog_manager.delete_event_by_queue_between(event, queue_name, start, end)
+
+
+@step(u'Then i should see ([0-9]+) "([^"]*)" calls in queue "([^"]*)" in the queue log')
 def then_i_should_see_nb_group1_calls_in_queue_group2_in_the_queue_log(step, expected_count, event, queue_name):
     count = queuelog_manager.get_event_count_queue(event, queue_name)
 
