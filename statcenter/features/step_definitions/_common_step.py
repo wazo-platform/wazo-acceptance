@@ -32,17 +32,17 @@ def given_there_is_no_queue_with_number(step, queue_number):
     queue_manager.delete_queue_from_number(queue_number)
 
 
-@step(u'^Given there is no "([A-Z_]+)" entry in queue "([a-zA-Z0-9_]+)"$')
+@step(u'^Given there is no "([A-Z_]+)" entry in queue "(\S+)"$')
 def given_there_is_no_event_entry_in_queue_log_table_in_queue_queue(step, event, queue_name):
     queuelog_manager.delete_event_by_queue(event, queue_name)
 
 
-@step(u'^Given there is no "([A-Z_]+)" entry in queue "([a-zA-Z0-9_]+)" between "(.*)" and "(.*)"$')
+@step(u'^Given there is no "([A-Z_]+)" entry in queue "(\S+)" between "(.+)" and "(.+)"$')
 def given_there_is_no_event_entry_in_queue_log_table_in_queue_queue_between(step, event, queue_name, start, end):
     queuelog_manager.delete_event_by_queue_between(event, queue_name, start, end)
 
 
-@step(u'Then i should see ([0-9]+) "([^"]*)" calls in queue "([^"]*)" in the queue log')
+@step(u'Then i should see ([0-9]+) "([^"]*)" calls in queue "(\S+)" in the queue log')
 def then_i_should_see_nb_group1_calls_in_queue_group2_in_the_queue_log(step, expected_count, event, queue_name):
     count = queuelog_manager.get_event_count_queue(event, queue_name)
 
@@ -52,3 +52,26 @@ def then_i_should_see_nb_group1_calls_in_queue_group2_in_the_queue_log(step, exp
 @step(u'Given I wait ([0-9]+) seconds .*')
 def given_i_wait_n_seconds(step, count):
     time.sleep(int(count))
+
+
+@step(u'^Given there is a statistic configuration "(\S+)" from "(\d+)" to "(\d+)" with queue "(\S+)"$')
+def given_there_is_a_configuration_with(step, config_name, start, end, queue_name):
+    print 'Config', config_name, start, end, queue_name
+
+
+@step(u'^Given I have to following queue_log entries:$')
+def given_i_have_the_following_queue_log_entries(step):
+    for entry in step.hashes:
+        print entry
+
+
+@step(u'^Given I clear and generate the statistics cache$')
+def given_i_clear_and_generate_the_statistics_cache(step):
+    pass
+
+
+@step(u'^Then I should have the following statististics on "(.+)" on "(.+)" on configuration "(\S+)":$')
+def then_i_should_have_stats_for_config(step, queue_name, day, config_name):
+    print 'I should have', queue_name, day, config_name
+    for line in step.hashes:
+        print line
