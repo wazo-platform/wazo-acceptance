@@ -102,8 +102,8 @@ class TestUser(unittest.TestCase):
         users = self._aws_user.list()
         if users is not None:
             matching_users = [user for user in users if user['firstname'] == firstname and user['lastname'] == lastname]
-        for user in matching_users:
-            self._aws_user.simple_delete(user['id'])
+            for user in matching_users:
+                self._aws_user.simple_delete(user['id'])
 
     def _new_line(self, name, secret):
         return {
