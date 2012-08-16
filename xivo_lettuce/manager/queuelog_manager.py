@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
-from subprocess import Popen, PIPE, STDOUT
-import socket
 
 
 def create_pgpass_on_remote_host():
@@ -25,36 +23,3 @@ def get_event_count_queue(event, queuename):
     command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
     res = world.ssh_client.out_call(command)
     return int(res.split('\n')[-4].strip())
-
-
-def execute_call_event_full(count, queuename, number):
-    command = ['xivo-callgen', 'queue_log_event',
-               '-e', 'full',
-               '-nb', count,
-               '-rh', world.remote_host,
-               '-li', socket.gethostbyname(world.jenkins_hostname),
-               '-ce', number]
-    _exec_cmd(command)
-
-
-def execute_call_event_enterqueue(count, queuename, number):
-    command = ['xivo-callgen', 'queue_log_event',
-               '-e', 'enterqueue',
-               '-nb', count,
-               '-rh', world.remote_host,
-               '-li', socket.gethostbyname(world.jenkins_hostname),
-               '-ce', number]
-    _exec_cmd(command)
-
-
-def _exec_cmd(command):
-    p = Popen(command,
-              stdout=PIPE,
-              stderr=STDOUT,
-              close_fds=True)
-    output = p.communicate()[0]
-
-    if p.returncode != 0:
-        print output
-
-    return output

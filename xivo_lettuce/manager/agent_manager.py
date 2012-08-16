@@ -26,6 +26,15 @@ def get_password(number):
     return agent.password
 
 
+def insert_agent_if_not_exist(firstname, lastname, number, passwd):
+    try:
+        find_agent_id_from_number(number)
+    except Exception:
+        insert_agent(firstname, lastname, number, passwd)
+    agent = world.ws.agents.find_one_by_number(number)
+    return agent.id
+
+
 def insert_agent(firstname, lastname, number, passwd):
     agent = Agent()
     agent.firstname = firstname

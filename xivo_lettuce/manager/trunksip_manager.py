@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 
-import json
+from xivo_ws.objects.siptrunk import SIPTrunk
 from lettuce.registry import world
-from xivo_lettuce.common import *
-
-WSTS = get_webservices('trunksip')
 
 
-def delete_all_trunksip():
-    return WSTS.clear()
+def add_trunksip(host, name, context='default'):
+    sip_trunk = SIPTrunk()
+    sip_trunk.name = name
+    sip_trunk.username = sip_trunk.name
+    sip_trunk.secret = sip_trunk.name
+    sip_trunk.context = context
+    sip_trunk.host = host
+    sip_trunk.type = 'friend'
+    insert_id = world.ws.sip_trunk.add(sip_trunk)
+    return insert_id
 
 
-def add_trunksip(name):
-    jsonfilecontent = WSTS.get_json_file_content('trunksip')
-    content = json.loads(jsonfilecontent)
-    content['protocol']['name'] = name
-    assert(WSTS.add(content))
+def del_trunksip(trunk_id):
+    world.ws.sip_trunk.delete(trunk_id)
