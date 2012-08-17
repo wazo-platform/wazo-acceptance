@@ -44,6 +44,23 @@ def delete_event_by_queue_between(event, queuename, start, end):
         queue_log_dao.delete_event_by_queue_between(event, queuename, start, end)
 
 
+def insert_entries(entries):
+    with asterisk_connection():
+        for entry in entries:
+            queue_log_dao.insert_entry(
+                entry['time'],
+                entry['callid'],
+                entry['queuename'],
+                entry['agent'],
+                entry['event'],
+                entry['data1'],
+                entry['data2'],
+                entry['data3'],
+                entry['data4'],
+                entry['data5']
+                )
+
+
 def get_event_count_queue(event, queuename):
     create_pgpass_on_remote_host()
     pg_command = '"SELECT COUNT(*) FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'"' % (queuename, event)

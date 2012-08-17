@@ -2,8 +2,8 @@
 
 import time
 from lettuce.decorators import step
-from xivo_lettuce.manager import queuelog_manager, queue_manager, agent_manager, \
-    statscall_manager
+from xivo_lettuce.manager import queuelog_manager, queue_manager, agent_manager
+from xivo_lettuce.manager import stat_manager, statscall_manager
 
 
 @step(u'Given there is a queue "([^"]*)" in context "([^"]*)" with number "([^"]*)"$')
@@ -54,24 +54,23 @@ def given_i_wait_n_seconds(step, count):
     time.sleep(int(count))
 
 
-@step(u'^Given there is a statistic configuration "(\S+)" from "(\d+)" to "(\d+)" with queue "(\S+)"$')
+@step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with queue "(\S+)"$')
 def given_there_is_a_configuration_with(step, config_name, start, end, queue_name):
-    print 'Config', config_name, start, end, queue_name
+    stat_manager.create_configuration(config_name, start, end, queue_name)
 
 
 @step(u'^Given I have to following queue_log entries:$')
 def given_i_have_the_following_queue_log_entries(step):
-    for entry in step.hashes:
-        print entry
+    queuelog_manager.insert_entries(step.hashes)
 
 
 @step(u'^Given I clear and generate the statistics cache$')
 def given_i_clear_and_generate_the_statistics_cache(step):
-    pass
+    stat_manager.regenerate_cache()
 
 
 @step(u'^Then I should have the following statististics on "(.+)" on "(.+)" on configuration "(\S+)":$')
 def then_i_should_have_stats_for_config(step, queue_name, day, config_name):
     print 'I should have', queue_name, day, config_name
-    for line in step.hashes:
-        print line
+    stat_manager.open_queue_stat_page_on_day(queue_name, day, config_name)
+    stat_manager.check_queue_statistic(step.hashes)
