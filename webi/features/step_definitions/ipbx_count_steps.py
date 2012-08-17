@@ -48,9 +48,26 @@ def given_i_have_trunk(step, count):
         add_trunksip('169.10.0.54', 'trunk_%s' % i)
 
 
+@step(u'Given i remember the number of available trunk as "([^"]*)"')
+def given_i_remember_the_number__of_available_trunk_as(step, name_var):
+    _open_ipbx_count_url()
+    if not hasattr(world, 'remember_string'):
+        world.remember_string = dict()
+    world.remember_string[name_var] = _get_total_sip_trunk_count()
+
+
 @step(u'When I open the ibpx count page')
 def when_i_open_the_ipbx_count_page(step):
     _open_ipbx_count_url()
+
+
+@step(u'Then I should have (\d+) more then remembered value "([^"]*)"')
+def then_i_should_have_n_more_then_remembered_calue(step, count, name_var):
+    try:
+        nb_exist_trunk = world.remember_string[name_var]
+    except Exception:
+        assert(False)
+    assert((int(nb_exist_trunk) + int(count)) == _get_total_sip_trunk_count())
 
 
 @step(u'Then I should have (\d+) ([a-z]+) sip trunk')

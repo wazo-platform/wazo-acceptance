@@ -4,12 +4,6 @@ from lettuce import step, world
 
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce.common import find_line, open_url, remove_line, submit_form
-from xivo_lettuce.manager.trunksip_manager import delete_all_trunksip
-
-
-@step(u'Given there is no SIP trunk')
-def given_there_is_no_sip_trunk(step):
-    delete_all_trunksip()
 
 
 @step(u'Given there is a SIP trunk "([^"]*)"')
