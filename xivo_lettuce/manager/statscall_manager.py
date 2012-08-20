@@ -5,17 +5,30 @@ from lettuce.registry import world
 import socket
 
 
-def execute_n_calls_to(count, number, username='to_statscenter', password='to_statscenter', close='hangup', duration=2000):
+def execute_n_calls_then_hangup(count, number, username='to_statscenter', password='to_statscenter', duration=2000):
     command = ['xivo-callgen',
                '-bg',
                '-li', socket.gethostbyname(world.jenkins_hostname),
                '-rh', world.remote_host,
-               'call-then-%s' % close,
+               'call-then-hangup',
                '-nc', count,
                '-ce', number,
                '-clu', username,
                '-clp', password,
                '-cd', duration]
+    _exec_cmd(command)
+
+
+def execute_n_calls_then_wait(count, number, username='to_statscenter', password='to_statscenter'):
+    command = ['xivo-callgen',
+               '-bg',
+               '-li', socket.gethostbyname(world.jenkins_hostname),
+               '-rh', world.remote_host,
+               'call-then-wait',
+               '-nc', count,
+               '-ce', number,
+               '-clu', username,
+               '-clp', password]
     _exec_cmd(command)
 
 

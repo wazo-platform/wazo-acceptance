@@ -97,18 +97,20 @@ def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, e
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
 def given_i_log_the_phone(step, agent_number, extension):
     lines = [line for line in world.ws.lines.search(extension)]
+    if not lines:
+        assert(False)
     statscall_manager.execute_sip_register(lines[0].name, lines[0].secret)
-    statscall_manager.execute_n_calls_to(1, '*31%s' % agent_number, lines[0].name, lines[0].secret)
+    statscall_manager.execute_n_calls_then_wait(1, '*31%s' % agent_number, lines[0].name, lines[0].secret)
 
 
 @step(u'Given there is ([0-9]+) calls to extension "([^"]+)" and wait$')
 def given_there_is_a_n_calls_to_extension_and_wait(step, count, number):
-    statscall_manager.execute_n_calls_to(count, number, close='wait')
+    statscall_manager.execute_n_calls_then_wait(count, number)
 
 
 @step(u'Given there is ([0-9]+) calls to extension "([^"]+)"$')
 def given_there_is_a_n_calls_to_extension_and_hangup(step, count, number):
-    statscall_manager.execute_n_calls_to(count, number)
+    statscall_manager.execute_n_calls_then_hangup(count, number)
 
 
 @step(u'Given I wait call then hangup after "([0-9]+)s"')
