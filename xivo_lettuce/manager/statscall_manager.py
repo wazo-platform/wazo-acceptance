@@ -39,6 +39,15 @@ def execute_answer_then_hangup(duration=5000):
     _exec_cmd(command)
 
 
+def execute_answer_then_wait(duration=5000):
+    command = ['xivo-callgen',
+               '-bg',
+               '-rh', world.remote_host,
+               'answer-then-wait',
+               '-cd', duration]
+    _exec_cmd(command)
+
+
 def _exec_cmd(command):
     cmds = []
     for arg in command:
