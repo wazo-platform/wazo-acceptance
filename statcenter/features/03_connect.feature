@@ -11,7 +11,7 @@ Feature: Stat
         Given there is a queue "q3" in context "statscenter" with number "5003" with agent "003"
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "003" on extension "1003"
-        Given I wait 3 seconds for the calls processing
+        Given I wait 5 seconds for the calls processing
         Given I wait call then hangup after "2s"
         Given there is 1 calls to extension "5003" and wait
         Given I wait 10 seconds for the calls processing
