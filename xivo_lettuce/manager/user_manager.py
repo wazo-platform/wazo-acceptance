@@ -30,22 +30,33 @@ def type_user_in_group(groupName):
     add_button.click()
 
 
-def insert_user_with_no_line(firstname, lastname):
+def _fill_json_user_data(jsoncontent, data_dict):
+    if 'firstname' not in data_dict:
+        data_dict['firstname'] = 'firstname'
+    if 'lastname' not in data_dict:
+        data_dict['lastname'] = 'lastname'
+    if 'agentid' not in data_dict:
+        data_dict['agentid'] = ''
+
+    return jsoncontent % data_dict
+
+
+def insert_user_with_no_line(firstname, lastname, agentid=''):
     jsoncontent = WSU.get_json_file_content('user')
-    datajson = jsoncontent % {
-                              'firstname': firstname,
-                              'lastname': lastname
-                             }
+    data_dict = {'firstname': firstname,
+                 'lastname': lastname,
+                 'agentid': agentid}
+    datajson = _fill_json_user_data(jsoncontent, data_dict)
     data = json.loads(datajson)
     WSU.add(data)
 
 
-def insert_user(firstname, lastname):
+def insert_user(firstname, lastname, agentid=''):
     jsoncontent = WSU.get_json_file_content('userwithline')
-    datajson = jsoncontent % {
-                              'firstname': firstname,
-                              'lastname': lastname
-                             }
+    data_dict = {'firstname': firstname,
+                 'lastname': lastname,
+                 'agentid': agentid}
+    datajson = _fill_json_user_data(jsoncontent, data_dict)
     data = json.loads(datajson)
     WSU.add(data)
 
@@ -56,6 +67,7 @@ def delete_user(firstname, lastname):
         if user.voicemail:
             voicemail_manager.delete(user.voicemail.id)
         world.ws.user.delete(user.id)
+
 
 def delete_all_users():
     WSU.clear()

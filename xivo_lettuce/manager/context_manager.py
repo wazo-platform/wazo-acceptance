@@ -85,6 +85,18 @@ def add_contextnumbers_queue(name, numberbeg, numberend):
         _edit_context(name, context_dict)
 
 
+def add_contextnumbers_user(name, numberbeg, numberend):
+    context_dict = get_context(name)
+    contextnumbers_user = '"user": [{"numberbeg": "%s", "numberend": "%s"}]' % (numberbeg, numberend)
+    contextnumbers = '{"contextnumbers": {%s}}' % contextnumbers_user
+    if not context_dict:
+        _add_context(name, name, 'internal', contextnumbers_user=contextnumbers_user)
+    else:
+        data = json.loads(contextnumbers)
+        _rec_update_dict(context_dict, data)
+        _edit_context(name, context_dict)
+
+
 def add_context_user(name, displayname, numberbeg, numberend):
     contextnumbers_user = '"user": [{"numberbeg": "%s", "numberend": "%s"}]' % (numberbeg, numberend)
     return _add_context(name, displayname, 'internal', contextnumbers_user=contextnumbers_user)

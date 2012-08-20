@@ -1,6 +1,6 @@
 Feature: Stat
 
-    Scenario: Call a queue that is saturated
+    Scenario: Generation of event "FULL"
         Given there is no queue with name "q1"
         Given there is no queue with number "5001"
         Given there is no "FULL" entry in queue "q1"

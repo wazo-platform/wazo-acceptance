@@ -26,23 +26,23 @@ def get_password(number):
     return agent.password
 
 
-def insert_agent_if_not_exist(firstname, lastname, number, passwd):
+def insert_agent(firstname, lastname, number, passwd, context='default', user_id=[]):
     try:
-        find_agent_id_from_number(number)
+        agent = world.ws.agents.find_one_by_number(number)
     except Exception:
-        insert_agent(firstname, lastname, number, passwd)
-    agent = world.ws.agents.find_one_by_number(number)
-    return agent.id
-
-
-def insert_agent(firstname, lastname, number, passwd):
-    agent = Agent()
+        agent = Agent()
+    else:
+        delete_agent_by_number(number)
     agent.firstname = firstname
     agent.lastname = lastname
     agent.password = passwd
     agent.number = number
-    agent.context = 'default'
+    agent.context = context
+    if user_id:
+        agent.users = user_id
     world.ws.agents.add(agent)
+    agent = world.ws.agents.find_one_by_number(number)
+    return agent.id
 
 
 def delete_agent_by_number(number):

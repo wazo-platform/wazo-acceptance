@@ -20,7 +20,7 @@
         "enablednd": "0",
         "mobilephonenumber": "",
         "bsfilter": "no",
-        "agentid": "",
+        "agentid": "%(agentid)s",
         "enablerna": "0",
         "destrna": "",
         "enablebusy": "0",

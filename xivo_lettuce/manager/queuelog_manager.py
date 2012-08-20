@@ -25,23 +25,47 @@ class asterisk_connection(object):
         dbconnection.unregister_db_connection_pool()
 
 
-def create_pgpass_on_remote_host():
-    cmd = ['echo', '*:*:asterisk:asterisk:proformatique', '>', '.pgpass']
-    world.ssh_client.check_call(cmd)
-    cmd = ['chmod', '600', '.pgpass']
-    world.ssh_client.check_call(cmd)
-
-
 def delete_event_by_queue(event, queuename):
-    create_pgpass_on_remote_host()
     pg_command = '"DELETE FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'"' % (queuename, event)
-    command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
-    world.ssh_client.check_call(command)
+    _exec_pgsql_request(pg_command)
+
+
+def delete_event_by_agent_number(event, agent_number):
+    agent_number = _build_agent_db_tag_from_number(agent_number)
+    pg_command = '"DELETE FROM queue_log WHERE agent = \'%s\' and event = \'%s\'"' % (agent_number, event)
+    _exec_pgsql_request(pg_command)
 
 
 def delete_event_by_queue_between(event, queuename, start, end):
     with asterisk_connection():
         queue_log_dao.delete_event_by_queue_between(event, queuename, start, end)
+
+
+def get_event_count_queue(event, queuename):
+    pg_command = '"SELECT COUNT(*) FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'"' % (queuename, event)
+    res = _exec_pgsql_request_with_return(pg_command)
+    return int(res.split('\n')[-4].strip())
+
+
+def get_event_count_agent(event, agent_number):
+    agent_number = _build_agent_db_tag_from_number(agent_number)
+    pg_command = '"SELECT COUNT(*) FROM queue_log WHERE agent = \'%s\' and event = \'%s\'"' % (agent_number, event)
+    res = _exec_pgsql_request_with_return(pg_command)
+    return int(res.split('\n')[-4].strip())
+
+
+def _build_agent_db_tag_from_number(agent_number):
+    return 'Agent/%s' % agent_number
+
+
+def _exec_pgsql_request(pg_command):
+    command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
+    world.ssh_client.check_call(command)
+
+
+def _exec_pgsql_request_with_return(pg_command):
+    command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
+    return world.ssh_client.out_call(command)
 
 
 def insert_entries(entries):
@@ -59,11 +83,3 @@ def insert_entries(entries):
                 entry['data4'],
                 entry['data5']
                 )
-
-
-def get_event_count_queue(event, queuename):
-    create_pgpass_on_remote_host()
-    pg_command = '"SELECT COUNT(*) FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'"' % (queuename, event)
-    command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
-    res = world.ssh_client.out_call(command)
-    return int(res.split('\n')[-4].strip())

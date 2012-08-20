@@ -11,6 +11,9 @@ def _rec_update_dict(base_dict, overlay_dict):
                 base_dict[k] = {}
                 _rec_update_dict(base_dict[k], v)
         elif isinstance(v, list):
-            base_dict[k].extend(v)
+            if k in base_dict:
+                base_dict[k].extend(v)
+            else:
+                base_dict[k] = v
         else:
             base_dict[k].append(v)
