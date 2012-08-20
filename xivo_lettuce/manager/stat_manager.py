@@ -36,7 +36,7 @@ def regenerate_cache():
 def open_queue_stat_page_on_day(queue_name, day, config_name):
     conf_id = world.ws.statconfs.search(config_name)[0].id
     qid = world.ws.queues.search(queue_name)[0].id
-    host = '10.37.0.252'
+    host = world.remote_host
 
     url = '''https://%s/statistics/call_center/index.php/data/stats1?confid=%s&key=queue-%s&axetype=day&dbeg=%s&dend=%s&dday=%s&dweek=2012-08-17&dmonth=2012-08&dyear=2012''' % (host, conf_id, qid, day, day, day)
 
