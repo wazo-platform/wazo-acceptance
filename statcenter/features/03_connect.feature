@@ -12,7 +12,7 @@ Feature: Stat
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "003" on extension "1003"
         Given I wait 5 seconds for the calls processing
-        Given I wait call then hangup after "2s"
+        Given I wait call then hangup after "3s"
         Given there is 1 calls to extension "5003" and wait
         Given I wait 10 seconds for the calls processing
         Then i should see 1 "CONNECT" event in queue "q3" in the queue log

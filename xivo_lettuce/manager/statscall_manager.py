@@ -35,6 +35,7 @@ def execute_n_calls_then_wait(count, number, username='to_statscenter', password
 def execute_sip_register(username, password, expires=120):
     command = ['xivo-callgen',
                '-bg',
+               '-li', socket.gethostbyname(world.callgen_host),
                '-rh', world.xivo_host,
                'send-sip-register',
                '-u', username,
@@ -46,6 +47,7 @@ def execute_sip_register(username, password, expires=120):
 def execute_answer_then_hangup(duration=5000):
     command = ['xivo-callgen',
                '-bg',
+               '-li', socket.gethostbyname(world.callgen_host),
                '-rh', world.xivo_host,
                'answer-then-hangup',
                '-cd', duration]
@@ -55,6 +57,7 @@ def execute_answer_then_hangup(duration=5000):
 def execute_answer_then_wait(duration=10000):
     command = ['xivo-callgen',
                '-bg',
+               '-li', socket.gethostbyname(world.callgen_host),
                '-rh', world.xivo_host,
                'answer-then-wait',
                '-cd', duration]
