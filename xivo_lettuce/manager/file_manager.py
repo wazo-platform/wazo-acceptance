@@ -12,7 +12,7 @@ def create_recordings_file(filename):
 
 
 def _touch_remote_file(abs_filename):
-    world.ssh_client.check_call(['touch', abs_filename])
+    world.ssh_client_xivo.check_call(['touch', abs_filename])
 
 
 def create_musiconhold_file(filename):

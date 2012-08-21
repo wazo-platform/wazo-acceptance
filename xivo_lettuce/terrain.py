@@ -25,9 +25,10 @@ def setup_browser():
 @before.all
 def initialize_from_config():
     config = _read_config()
-    _setup_login_infos(config)
-    _setup_ssh_client(config)
     _set_jenkins(config)
+    _setup_login_infos(config)
+    _setup_ssh_client_xivo(config)
+    _setup_ssh_client_callgen(config)
     _setup_ws(config)
 
 
@@ -44,25 +45,32 @@ def _read_config():
 
 
 def _set_jenkins(config):
-    world.jenkins_hostname = config.get('jenkins', 'hostname')
+    world.jenkins_host = config.get('jenkins', 'hostname')
 
 
 def _setup_login_infos(config):
-    world.host = 'http://%s/' % config.get('general', 'hostname')
+    world.host = 'http://%s/' % config.get('xivo', 'hostname')
     world.login = config.get('login_infos', 'login')
     world.password = config.get('login_infos', 'password')
     world.logged = False
 
 
-def _setup_ssh_client(config):
-    hostname = config.get('general', 'hostname')
+def _setup_ssh_client_xivo(config):
+    hostname = config.get('xivo', 'hostname')
     login = config.get('ssh_infos', 'login')
-    world.remote_host = hostname
-    world.ssh_client = SSHClient(hostname, login)
+    world.xivo_host = hostname
+    world.ssh_client_xivo = SSHClient(hostname, login)
+
+
+def _setup_ssh_client_callgen(config):
+    hostname = config.get('callgen', 'hostname')
+    login = config.get('ssh_infos', 'login')
+    world.callgen_host = hostname
+    world.ssh_client_callgen = SSHClient(hostname, login)
 
 
 def _setup_ws(config):
-    hostname = config.get('general', 'hostname')
+    hostname = config.get('xivo', 'hostname')
     login = config.get('webservices_infos', 'login')
     password = config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)

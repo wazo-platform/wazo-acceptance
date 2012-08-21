@@ -18,7 +18,7 @@ class asterisk_connection(object):
         db_connection_pool = dbconnection.DBConnectionPool(dbconnection.DBConnection)
         dbconnection.register_db_connection_pool(db_connection_pool)
 
-        uri = 'postgresql://asterisk:proformatique@%s/asterisk' % world.remote_host
+        uri = 'postgresql://asterisk:proformatique@%s/asterisk' % world.xivo_host
         dbconnection.add_connection_as(uri, 'asterisk')
 
     def __exit__(self, t, v, tr):
@@ -60,12 +60,12 @@ def _build_agent_db_tag_from_number(agent_number):
 
 def _exec_pgsql_request(pg_command):
     command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
-    world.ssh_client.check_call(command)
+    world.ssh_client_xivo.check_call(command)
 
 
 def _exec_pgsql_request_with_return(pg_command):
     command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
-    return world.ssh_client.out_call(command)
+    return world.ssh_client_xivo.out_call(command)
 
 
 def insert_entries(entries):

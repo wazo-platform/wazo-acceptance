@@ -8,8 +8,8 @@ import socket
 def execute_n_calls_then_hangup(count, number, username='to_statscenter', password='to_statscenter', duration=2000):
     command = ['xivo-callgen',
                '-bg',
-               '-li', socket.gethostbyname(world.jenkins_hostname),
-               '-rh', world.remote_host,
+               '-li', socket.gethostbyname(world.callgen_host),
+               '-rh', world.xivo_host,
                'call-then-hangup',
                '-nc', count,
                '-ce', number,
@@ -22,8 +22,8 @@ def execute_n_calls_then_hangup(count, number, username='to_statscenter', passwo
 def execute_n_calls_then_wait(count, number, username='to_statscenter', password='to_statscenter'):
     command = ['xivo-callgen',
                '-bg',
-               '-li', socket.gethostbyname(world.jenkins_hostname),
-               '-rh', world.remote_host,
+               '-li', socket.gethostbyname(world.callgen_host),
+               '-rh', world.xivo_host,
                'call-then-wait',
                '-nc', count,
                '-ce', number,
@@ -35,7 +35,7 @@ def execute_n_calls_then_wait(count, number, username='to_statscenter', password
 def execute_sip_register(username, password, expires=120):
     command = ['xivo-callgen',
                '-bg',
-               '-rh', world.remote_host,
+               '-rh', world.xivo_host,
                'send-sip-register',
                '-u', username,
                '-p', password,
@@ -46,16 +46,16 @@ def execute_sip_register(username, password, expires=120):
 def execute_answer_then_hangup(duration=5000):
     command = ['xivo-callgen',
                '-bg',
-               '-rh', world.remote_host,
+               '-rh', world.xivo_host,
                'answer-then-hangup',
                '-cd', duration]
     _exec_cmd(command)
 
 
-def execute_answer_then_wait(duration=5000):
+def execute_answer_then_wait(duration=10000):
     command = ['xivo-callgen',
                '-bg',
-               '-rh', world.remote_host,
+               '-rh', world.xivo_host,
                'answer-then-wait',
                '-cd', duration]
     _exec_cmd(command)
@@ -68,7 +68,15 @@ def _exec_cmd(command):
         arg.encode('utf8')
         cmds.append(arg)
 
-    p = Popen(cmds,
+    ssh_command = ['ssh',
+                   '-o', 'PreferredAuthentications=publickey',
+                   '-o', 'StrictHostKeyChecking=no',
+                   '-o', 'UserKnownHostsFile=/dev/null',
+                   '-l', 'root',
+                   '192.168.32.229']
+    ssh_command.extend(cmds)
+
+    p = Popen(ssh_command,
               stdout=PIPE,
               stderr=STDOUT,
               close_fds=True)
