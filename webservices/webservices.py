@@ -31,84 +31,84 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 URILIST = {'ipbx': {
                 'call_management':
                 {
-                    "incall" : "/service/ipbx/json.php/%s/call_management/incall",
-                    "outcall" : "/service/ipbx/json.php/%s/call_management/outcall",
-                    "pickup" : "/service/ipbx/json.php/%s/call_management/pickup"
+                    "incall": "/service/ipbx/json.php/%s/call_management/incall",
+                    "outcall": "/service/ipbx/json.php/%s/call_management/outcall",
+                    "pickup": "/service/ipbx/json.php/%s/call_management/pickup"
                 },
                 'control_system':
                 {
-                    "reload" : "/service/ipbx/json.php/%s/control_system/reload",
-                    "restart" : "/service/ipbx/json.php/%s/control_system/restart"
+                    "reload": "/service/ipbx/json.php/%s/control_system/reload",
+                    "restart": "/service/ipbx/json.php/%s/control_system/restart"
                 },
                 'general_settings':
                 {
-                    "advanced" : "/service/ipbx/json.php/%s/general_settings/advanced",
-                    "iax" : "/service/ipbx/json.php/%s/general_settings/iax",
-                    "outboundmwi" : "/service/ipbx/json.php/%s/general_settings/outboundmwi",
-                    "phonebook" : "/service/ipbx/json.php/%s/general_settings/phonebook",
-                    "sip" : "/service/ipbx/json.php/%s/general_settings/sip",
-                    "voicemail" : "/service/ipbx/json.php/%s/general_settings/voicemail"
+                    "advanced": "/service/ipbx/json.php/%s/general_settings/advanced",
+                    "iax": "/service/ipbx/json.php/%s/general_settings/iax",
+                    "outboundmwi": "/service/ipbx/json.php/%s/general_settings/outboundmwi",
+                    "phonebook": "/service/ipbx/json.php/%s/general_settings/phonebook",
+                    "sip": "/service/ipbx/json.php/%s/general_settings/sip",
+                    "voicemail": "/service/ipbx/json.php/%s/general_settings/voicemail"
                 },
                 'pbx_services':
                 {
-                    "extenfeatures" : "/service/ipbx/json.php/%s/pbx_services/extenfeatures",
-                    "phonebook" : "/service/ipbx/json.php/%s/pbx_services/phonebook"
+                    "extenfeatures": "/service/ipbx/json.php/%s/pbx_services/extenfeatures",
+                    "phonebook": "/service/ipbx/json.php/%s/pbx_services/phonebook"
                 },
                 'pbx_settings':
                 {
-                    "groups" : "/service/ipbx/json.php/%s/pbx_settings/groups",
-                    "lines" : "/service/ipbx/json.php/%s/pbx_settings/lines",
-                    "meetme" : "/service/ipbx/json.php/%s/pbx_settings/meetme",
-                    "users" : "/service/ipbx/json.php/%s/pbx_settings/users",
-                    "voicemail" : "/service/ipbx/json.php/%s/pbx_settings/voicemail"
+                    "groups": "/service/ipbx/json.php/%s/pbx_settings/groups",
+                    "lines": "/service/ipbx/json.php/%s/pbx_settings/lines",
+                    "meetme": "/service/ipbx/json.php/%s/pbx_settings/meetme",
+                    "users": "/service/ipbx/json.php/%s/pbx_settings/users",
+                    "voicemail": "/service/ipbx/json.php/%s/pbx_settings/voicemail"
                 },
                 'phonebook':
                 {
-                    "local" : "/service/ipbx/json.php/%s/pbx_settings/local",
-                    "menu" : "/service/ipbx/json.php/%s/pbx_settings/menu",
-                    "search" : "/service/ipbx/json.php/%s/pbx_settings/search"
+                    "local": "/service/ipbx/json.php/%s/pbx_settings/local",
+                    "menu": "/service/ipbx/json.php/%s/pbx_settings/menu",
+                    "search": "/service/ipbx/json.php/%s/pbx_settings/search"
                  },
                 'system_management':
                 {
-                    "context" : "/service/ipbx/json.php/%s/system_management/context"
+                    "context": "/service/ipbx/json.php/%s/system_management/context"
                 },
                 'trunk_management':
                 {
-                    "sip" : "/service/ipbx/json.php/%s/trunk_management/sip",
-                    "iax" : "/service/ipbx/json.php/%s/trunk_management/iax",
-                    "custom" : "/service/ipbx/json.php/%s/trunk_management/custom"
+                    "sip": "/service/ipbx/json.php/%s/trunk_management/sip",
+                    "iax": "/service/ipbx/json.php/%s/trunk_management/iax",
+                    "custom": "/service/ipbx/json.php/%s/trunk_management/custom"
                 }
             },
             'callcenter':
             {
                 'settings':
                 {
-                    "agents" : "/callcenter/json.php/%s/settings/agents/",
-                    "queues" : "/callcenter/json.php/%s/settings/queues/",
-                    "skills" : "/callcenter/json.php/%s/settings/queueskills/",
-                    "queueskillrules" : "/callcenter/json.php/%s/settings/queueskillrules/"
+                    "agents": "/callcenter/json.php/%s/settings/agents/",
+                    "queues": "/callcenter/json.php/%s/settings/queues/",
+                    "skills": "/callcenter/json.php/%s/settings/queueskills/",
+                    "queueskillrules": "/callcenter/json.php/%s/settings/queueskillrules/"
                 }
             },
             'configuration':
             {
                 'manage':
                 {
-                    "entity" : "/xivo/configuration/json.php/%s/manage/entity"
+                    "entity": "/xivo/configuration/json.php/%s/manage/entity"
                 },
                 'network':
                 {
-                    "dhcp" : "/xivo/configuration/json.php/%s/network/dhcp",
-                    "mail" : "/xivo/configuration/json.php/%s/network/mail",
-                    "interface" : "/xivo/configuration/json.php/%s/network/interface",
-                    "resolvconf" : "/xivo/configuration/json.php/%s/network/resolvconf"
+                    "dhcp": "/xivo/configuration/json.php/%s/network/dhcp",
+                    "mail": "/xivo/configuration/json.php/%s/network/mail",
+                    "interface": "/xivo/configuration/json.php/%s/network/interface",
+                    "resolvconf": "/xivo/configuration/json.php/%s/network/resolvconf"
                 },
                 'provisioning':
                 {
-                    "general" : "/xivo/configuration/json.php/%s/provisioning/general"
+                    "general": "/xivo/configuration/json.php/%s/provisioning/general"
                 },
                 'support':
                 {
-                    "monitoring" : "/xivo/configuration/json.php/%s/support/monitoring"
+                    "monitoring": "/xivo/configuration/json.php/%s/support/monitoring"
                 },
                 'check': "/xivo/configuration/json.php/%s/check"
             }
