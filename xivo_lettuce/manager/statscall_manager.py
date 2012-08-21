@@ -5,7 +5,7 @@ from lettuce.registry import world
 import socket
 
 
-def execute_n_calls_then_hangup(count, number, username='to_statscenter', password='to_statscenter', duration=2000):
+def execute_n_calls_then_hangup(count, number, username='to_statscenter', password='to_statscenter', duration=3000):
     command = ['xivo-callgen',
                '-bg',
                '-li', socket.gethostbyname(world.callgen_host),
@@ -44,23 +44,24 @@ def execute_sip_register(username, password, expires=120):
     _exec_cmd(command)
 
 
-def execute_answer_then_hangup(duration=5000):
+def execute_answer_then_hangup(duration=5000, ring_time=2000):
     command = ['xivo-callgen',
                '-bg',
                '-li', socket.gethostbyname(world.callgen_host),
                '-rh', world.xivo_host,
                'answer-then-hangup',
-               '-cd', duration]
+               '-cd', duration,
+               '-rt', ring_time]
     _exec_cmd(command)
 
 
-def execute_answer_then_wait(duration=10000):
+def execute_answer_then_wait(ring_time=2000):
     command = ['xivo-callgen',
                '-bg',
                '-li', socket.gethostbyname(world.callgen_host),
                '-rh', world.xivo_host,
                'answer-then-wait',
-               '-cd', duration]
+               '-rt', ring_time]
     _exec_cmd(command)
 
 
