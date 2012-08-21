@@ -34,8 +34,9 @@ class Prerequisite(object):
         self._setup_ssh_client(config)
 
     def add_trunksip(self, host, name, context):
-        if self.has_trunksip(name):
-            return
+        trunksip_exist = self.has_trunksip(name)
+        if len(trunksip_exist) == 1:
+            self.del_trunksip(trunksip_exist[0].id)
         sip_trunk = SIPTrunk()
         sip_trunk.name = name
         sip_trunk.username = sip_trunk.name
@@ -47,6 +48,9 @@ class Prerequisite(object):
 
     def has_trunksip(self, name):
         return self.ws.sip_trunk.search(name)
+
+    def del_trunksip(self, trunk_id):
+        self.ws.sip_trunk.delete(trunk_id)
 
     def _setup_ssh_client(self, config):
         login = config.get('ssh_infos', 'login')
