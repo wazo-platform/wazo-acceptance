@@ -142,4 +142,9 @@ URLS = {
                 'web': '/service/ipbx/index.php/system_management/ldapfilter',
                 'ws': None
             },
+        'backups':
+            {
+                'web': '/service/ipbx/index.php/system_management/backupfiles',
+                'ws': 'ipbx/pbx_services/sounds'
+            },
        }

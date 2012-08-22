@@ -6,6 +6,7 @@ import xivo_ws
 from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 from xivo_lettuce.ssh import SSHClient
+from selenium.webdriver import FirefoxProfile
 
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -15,9 +16,10 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 @before.all
 def setup_browser():
     from pyvirtualdisplay import Display
+    profile = _setup_browser_profile()
     world.display = Display(visible=0, size=(1024, 768))
     world.display.start()
-    world.browser = XiVOBrowser()
+    world.browser = XiVOBrowser(firefox_profile=profile)
     world.timeout = 5
     world.stocked_infos = {}
 
@@ -75,6 +77,15 @@ def _setup_ws(config):
     password = config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)
 
+def _setup_browser_profile():
+    fp = FirefoxProfile()
+
+    fp.set_preference("browser.download.folderList",2)
+    fp.set_preference("browser.download.manager.showWhenStarting",False)
+    fp.set_preference("browser.download.dir","/tmp/")
+    fp.set_preference("browser.helperApps.neverAsk.saveToDisk","application/force-download")
+
+    return fp
 
 @world.absorb
 def dump_current_page(filename='/tmp/lettuce.html'):
