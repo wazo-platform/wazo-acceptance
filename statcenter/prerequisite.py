@@ -54,7 +54,7 @@ class Prerequisite(object):
 
     def _setup_ssh_client(self, config):
         login = config.get('ssh_infos', 'login')
-        ssh_client = SSHClient(self.callgen_host, login)
+        ssh_client = SSHClient(self.xivo_host, login)
         self._create_pgpass_on_remote_host(ssh_client)
 
     def _create_pgpass_on_remote_host(self, ssh_client):
