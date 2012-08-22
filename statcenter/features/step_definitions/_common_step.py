@@ -104,19 +104,31 @@ def given_i_log_the_phone(step, agent_number, extension):
 
 
 @step(u'Given there is ([0-9]+) calls to extension "([^"]+)" and wait$')
-def given_there_is_a_n_calls_to_extension_and_wait(step, count, number):
+def given_there_is_n_calls_to_extension_and_wait(step, count, number):
     statscall_manager.execute_n_calls_then_wait(count, number)
 
 
 @step(u'Given there is ([0-9]+) calls to extension "([^"]+)"$')
-def given_there_is_a_n_calls_to_extension_and_hangup(step, count, number):
+def given_there_is_n_calls_to_extension_and_hangup(step, count, number):
     statscall_manager.execute_n_calls_then_hangup(count, number)
 
 
+@step(u'Given there is ([0-9]+) calls to extension "([^"]*)" of a duration of ([0-9]+) seconds')
+def given_there_is_n_calls_to_extension_of_a_duration_of_n_seconds(step, count, number, call_duration):
+    call_duration_ms = int(call_duration) * 1000
+    statscall_manager.execute_n_calls_then_hangup(count, number, duration=call_duration_ms)
+
+
 @step(u'Given I wait call then hangup after "([0-9]+)s"')
-def given_i_wait_call_then_hangup_afert_x_seconds(step, call_duration):
+def given_i_wait_call_then_hangup_after_x_seconds(step, call_duration):
     call_duration_ms = int(call_duration) * 1000
     statscall_manager.execute_answer_then_hangup(call_duration_ms)
+
+
+@step(u'Given I wait call then answer after "([0-9]+)s"')
+def given_i_wait_call_then_answer_after_x_seconds(step, ring_time):
+    ring_time_ms = int(ring_time) * 1000
+    statscall_manager.execute_answer_then_hangup(ring_time=ring_time_ms)
 
 
 @step(u'Given I wait call then wait')

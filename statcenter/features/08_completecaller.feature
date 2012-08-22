@@ -14,6 +14,6 @@ Feature: Stat
         Given I wait 5 seconds for the calls processing
         Given I wait call then wait
         Given I wait 2 seconds for the calls processing
-        Given there is 1 calls to extension "5008"
+        Given there is 1 calls to extension "5008" of a duration of 5 seconds
         Given I wait 10 seconds for the calls processing
         Then i should see 1 "COMPLETECALLER" event in queue "q8" in the queue log
