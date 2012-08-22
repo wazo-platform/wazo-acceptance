@@ -121,7 +121,7 @@ class WebServices(object):
         config = ConfigParser.RawConfigParser()
         with self._open_config_file() as fobj:
             config.readfp(fobj)
-        hostname = config.get('general', 'hostname')
+        hostname = config.get('xivo', 'hostname')
         uri_prefix = 'https://%s:443' % hostname
         username = config.get('webservices_infos', 'login')
         password = config.get('webservices_infos', 'password')
