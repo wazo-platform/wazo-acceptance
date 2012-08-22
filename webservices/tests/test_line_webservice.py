@@ -18,27 +18,42 @@ __license__ = """
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
 """
 
-import unittest, json
+import unittest
+import json
+import xivo_ws
 from webservices.webservices import WebServices
-
 
 class TestLine(unittest.TestCase):
     def setUp(self):
         self._aws = WebServices('ipbx/pbx_settings/lines')
+        self._xivo_ws = self._aws.ws
 
     def tearDown(self):
         pass
 
     def test_add_sip(self):
-        new_line_attributes = {u'name': u'name_test_ws_add_sip',
-                               u'protocol': u'sip'}
-        self._remove_lines(new_line_attributes)
-        ws_query = self._prepare_query_sip_line(new_line_attributes)
+        new_sip_line = xivo_ws.Line(protocol=u'sip')
+        new_sip_line.name = u'name_test_ws_add_sip'
+        self._delete_lines_with_name(new_sip_line.name)
 
-        response = self._aws.add(ws_query)
+        self._xivo_ws.lines.add(new_sip_line)
 
-        self.assertEqual(response.code, 200)
-        self._assert_only_one_line_with(new_line_attributes)
+        self.assertEqual(self._nb_lines_with_name(new_sip_line.name), 1)
+
+    def _delete_lines_with_name(self, name_to_delete):
+        for listed_line in self._lines_with_name(name_to_delete):
+            self._xivo_ws.lines.delete(listed_line.id)
+
+        self.assertEqual(self._nb_lines_with_name(name_to_delete), 0)
+
+    def _nb_lines_with_name(self, line_name):
+        lines_with_name = self._lines_with_name(line_name)
+        return len(lines_with_name)
+
+    def _lines_with_name(self, name_filter):
+        lines = self._xivo_ws.lines.list()
+        lines_with_name = [line for line in lines if line.name == name_filter]
+        return lines_with_name
 
     def test_edit_sip(self):
         line_id = self._init_sip_line({u'name': u'name_test_ws_edit_sip'})
@@ -46,7 +61,6 @@ class TestLine(unittest.TestCase):
                                   u'protocol': u'sip'}
         self._remove_lines(edited_line_attributes)
         ws_query = self._prepare_query_sip_line(edited_line_attributes)
-
         response = self._aws.edit(ws_query, line_id)
 
         self.assertEqual(response.code, 200)

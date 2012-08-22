@@ -23,6 +23,7 @@ import os
 import urllib
 import urllib2
 import ConfigParser
+import xivo_ws
 
 JSON_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'xivojson'))
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -116,16 +117,14 @@ URILIST = {'ipbx': {
 
 
 class WebServices(object):
-    def __init__(self, module, uri_prefix=None, username=None, password=None):
+    def __init__(self, module):
         config = ConfigParser.RawConfigParser()
         with self._open_config_file() as fobj:
             config.readfp(fobj)
-        if not uri_prefix:
-            uri_prefix = 'https://%s:443' % config.get('xivo', 'hostname')
-        if not username:
-            username = config.get('webservices_infos', 'login')
-        if not password:
-            password = config.get('webservices_infos', 'password')
+        hostname = config.get('general', 'hostname')
+        uri_prefix = 'https://%s:443' % hostname
+        username = config.get('webservices_infos', 'login')
+        password = config.get('webservices_infos', 'password')
 
         self.basepath = os.path.normpath(JSON_DIR)
         self.module = module
@@ -135,6 +134,8 @@ class WebServices(object):
         self._headers = {"Content-type": "application/json",
                          "Accept": "text/plain"}
         self._add_authentication_header(username, password)
+
+        self.ws = xivo_ws.XivoServer(hostname, username, password)
 
     def _add_authentication_header(self, username, password):
         if username is not None and username != '':

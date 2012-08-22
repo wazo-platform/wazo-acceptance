@@ -87,7 +87,6 @@ class WSCommon(object):
         response = self._aws.delete(id_to_delete)
         if response.code == 200:
             response = self._aws.list()
-            print response.data
             if response.code == 204:
                 return True
         return False
