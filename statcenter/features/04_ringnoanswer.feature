@@ -1,8 +1,7 @@
 Feature: Stat
 
     Scenario: Generation of event RINGNOANSWER
-        Given there is no queue with name "q04"
-        Given there is no queue with number "5004"
+        Given there is no queue with name "q04" or number "5004"
         Given there is no agent with number "004"
         Given there is no user "User" "004"
         Given there is no "RINGNOANSWER" entry in queue "q04"
@@ -12,7 +11,7 @@ Feature: Stat
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "004" on extension "1004"
         Given I wait 5 seconds for the calls processing
-        Given there is 1 calls to extension "5004" of a duration of 3 seconds
+        Given there is 1 calls to extension "5004" then i hang up after "3s"
         Given I logout agent "004" on extension "1004"
         Given I wait 5 seconds for the calls processing
         Then i should see 1 "RINGNOANSWER" event in queue "q04" in the queue log

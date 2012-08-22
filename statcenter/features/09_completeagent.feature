@@ -1,8 +1,7 @@
 Feature: Stat
 
     Scenario: Generation of event COMPLETEAGENT
-        Given there is no queue with name "q09"
-        Given there is no queue with number "5009"
+        Given there is no queue with name "q09" or number "5009"
         Given there is no agent with number "009"
         Given there is no user "User" "009"
         Given there is no "COMPLETEAGENT" entry in queue "q09"
@@ -12,7 +11,7 @@ Feature: Stat
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "009" on extension "1009"
         Given I wait 5 seconds for the calls processing
-        Given I wait call then hangup after "2s"
+        Given I wait call then i answer then i hang up after "2s"
         Given I wait 2 seconds for the calls processing
         Given there is 1 calls to extension "5009" and wait
         Given I wait 9 seconds for the calls processing

@@ -60,6 +60,12 @@ def given_there_is_no_queue_with_number(step, queue_number):
     queue_manager.delete_queue_from_number(queue_number)
 
 
+@step(u'Given there is no queue with name "([^"]+)" or number "([^"]*)"')
+def given_there_is_no_queue_with_name_or_number(step, queue_name, queue_number):
+    queue_manager.delete_queue_from_displayname(queue_name)
+    queue_manager.delete_queue_from_number(queue_number)
+
+
 @step(u'Given there is no agent with number "([^"]*)"')
 def given_there_is_no_agent_with_number(step, agent_number):
     agent_manager.delete_agent_by_number(agent_number)
@@ -78,20 +84,6 @@ def given_there_is_no_entry_in_queue_queue(step, event, queue_name):
 @step(u'^Given there is no "([A-Z_]+)" entry in queue "(\S+)" between "(.+)" and "(.+)"$')
 def given_there_is_no_event_entry_in_queue_log_table_in_queue_queue_between(step, event, queue_name, start, end):
     queuelog_manager.delete_event_by_queue_between(event, queue_name, start, end)
-
-
-@step(u'Then i should see ([0-9]+) "([^"]*)" event in queue "([^"]*)" in the queue log')
-def then_i_should_see_nb_n_event_in_queue_in_the_queue_log(step, expected_count, event, queue_name):
-    count = queuelog_manager.get_event_count_queue(event, queue_name)
-
-    assert(count == int(expected_count))
-
-
-@step(u'Then i should see ([0-9]+) "([^"]*)" event for agent "([^"]*)" in the queue log')
-def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, event, agent_number):
-    count = queuelog_manager.get_event_count_agent(event, agent_number)
-
-    assert(count == int(expected_count))
 
 
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
@@ -121,32 +113,48 @@ def given_there_is_n_calls_to_extension_and_hangup(step, count, number):
     statscall_manager.execute_n_calls_then_hangup(count, number)
 
 
-@step(u'Given there is ([0-9]+) calls to extension "([^"]*)" of a duration of ([0-9]+) seconds')
-def given_there_is_n_calls_to_extension_of_a_duration_of_n_seconds(step, count, number, call_duration):
+@step(u'Given there is ([0-9]+) calls to extension "([^"]*)" then i hang up after "([0-9]+)s"')
+def given_there_is_n_calls_to_extension_then_i_hangup_after_n_seconds(step, count, number, call_duration):
     call_duration_ms = int(call_duration) * 1000
     statscall_manager.execute_n_calls_then_hangup(count, number, duration=call_duration_ms)
 
 
-@step(u'Given I wait call then hangup after "([0-9]+)s"')
-def given_i_wait_call_then_hangup_after_x_seconds(step, call_duration):
+@step(u'Given I wait call then i answer then i hang up after "([0-9]+)s"')
+def given_i_wait_call_then_i_answer_then_hangup_after_n_seconds(step, call_duration):
     call_duration_ms = int(call_duration) * 1000
     statscall_manager.execute_answer_then_hangup(call_duration_ms)
 
 
-@step(u'Given I wait call then answer after "([0-9]+)s"')
-def given_i_wait_call_then_answer_after_x_seconds(step, ring_time):
+@step(u'Given I wait call then i answer after "([0-9]+)s" then i hang up after "([0-9]+)s"')
+def given_i_wait_call_then_answer_after_x_seconds_then_i_hangup_after_n_second(step, ring_time, call_duration):
     ring_time_ms = int(ring_time) * 1000
-    statscall_manager.execute_answer_then_hangup(ring_time=ring_time_ms)
+    call_duration_ms = int(call_duration) * 1000
+    statscall_manager.execute_answer_then_hangup(call_duration_ms, ring_time_ms)
 
 
-@step(u'Given I wait call then wait')
-def given_i_wait_call_then_wait(step):
-    statscall_manager.execute_answer_then_wait()
+@step(u'Given I wait call then i answer after "([0-9]+)s" then i wait')
+def given_i_wait_then_i_answer_after_n_second_then_i_wait(step, ring_time):
+    ring_time_ms = int(ring_time) * 1000
+    statscall_manager.execute_answer_then_wait(ring_time_ms)
 
 
 @step(u'Given I wait ([0-9]+) seconds .*')
 def given_i_wait_n_seconds(step, count):
     time.sleep(int(count))
+
+
+@step(u'Then i should see ([0-9]+) "([^"]*)" event in queue "([^"]*)" in the queue log')
+def then_i_should_see_nb_n_event_in_queue_in_the_queue_log(step, expected_count, event, queue_name):
+    count = queuelog_manager.get_event_count_queue(event, queue_name)
+
+    assert(count == int(expected_count))
+
+
+@step(u'Then i should see ([0-9]+) "([^"]*)" event for agent "([^"]*)" in the queue log')
+def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, event, agent_number):
+    count = queuelog_manager.get_event_count_agent(event, agent_number)
+
+    assert(count == int(expected_count))
 
 
 @step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with queue "(\S+)"$')

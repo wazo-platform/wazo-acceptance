@@ -1,8 +1,7 @@
 Feature: Stat
 
     Scenario: Generation of event CONNECT
-        Given there is no queue with name "q03"
-        Given there is no queue with number "5003"
+        Given there is no queue with name "q03" or number "5003"
         Given there is no agent with number "003"
         Given there is no user "User" "003"
         Given there is no "CONNECT" entry in queue "q03"
@@ -12,7 +11,7 @@ Feature: Stat
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "003" on extension "1003"
         Given I wait 5 seconds for the calls processing
-        Given I wait call then hangup after "3s"
+        Given I wait call then i answer then i hang up after "3s"
         Given there is 1 calls to extension "5003" and wait
         Given I wait 10 seconds for the calls processing
         Then i should see 1 "CONNECT" event in queue "q03" in the queue log
