@@ -5,7 +5,7 @@ from lettuce.registry import world
 import socket
 
 
-def execute_n_calls_then_hangup(count, number, username='to_statscenter', password='to_statscenter', duration=3000):
+def execute_n_calls_then_hangup(count, number, username='to_statscenter', password='to_statscenter', duration=5000):
     command = ['xivo-callgen',
                '-bg',
                '-li', socket.gethostbyname(world.callgen_host),
