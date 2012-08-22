@@ -9,5 +9,5 @@ Feature: Stat
         Given there is a queue "q2" in context "statscenter" with number "5002" with agent "002"
         Given I wait 5 seconds for the dialplan to be reloaded
         Given there is 3 calls to extension "5002"
-        Given I wait 5 seconds for the calls processing
+        Given I wait 6 seconds for the calls processing
         Then i should see 3 "ABANDON" event in queue "q2" in the queue log
