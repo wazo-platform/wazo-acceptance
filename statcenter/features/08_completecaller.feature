@@ -1,6 +1,6 @@
 Feature: Stat
 
-    Scenario: Generation of event "COMPLETECALLER"
+    Scenario: Generation of event COMPLETECALLER
         Given there is no queue with name "q8"
         Given there is no queue with number "5008"
         Given there is no agent with number "008"

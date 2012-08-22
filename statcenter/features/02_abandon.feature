@@ -1,6 +1,6 @@
 Feature: Stat
 
-    Scenario: Generation of event "ABANDON"
+    Scenario: Generation of event ABANDON
         Given there is no queue with name "q2"
         Given there is no queue with number "5002"
         Given there is no agent with number "002"

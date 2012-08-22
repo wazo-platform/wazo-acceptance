@@ -1,6 +1,6 @@
 Feature: Stat
 
-    Scenario: Generation of event "ENTERQUEUE"
+    Scenario: Generation of event ENTERQUEUE
         Given there is no queue with name "q5"
         Given there is no queue with number "5005"
         Given there is no agent with number "005"

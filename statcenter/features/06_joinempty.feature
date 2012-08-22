@@ -1,6 +1,6 @@
 Feature: Stat
 
-    Scenario: Generation of event "JOINEMPTY"
+    Scenario: Generation of event JOINEMPTY
         Given there is no queue with name "q6"
         Given there is no queue with number "5006"
         Given there is no "JOINEMPTY" entry in queue "q6"

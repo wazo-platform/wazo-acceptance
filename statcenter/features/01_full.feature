@@ -1,6 +1,6 @@
 Feature: Stat
 
-    Scenario: Generation of event "FULL"
+    Scenario: Generation of event FULL
         Given there is no queue with name "q1"
         Given there is no queue with number "5001"
         Given there is no agent with number "001"

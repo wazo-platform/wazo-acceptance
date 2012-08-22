@@ -1,6 +1,6 @@
 Feature: Stat
 
-    Scenario: Generation of event "CONNECT"
+    Scenario: Generation of event CONNECT
         Given there is no queue with name "q3"
         Given there is no queue with number "5003"
         Given there is no agent with number "003"
