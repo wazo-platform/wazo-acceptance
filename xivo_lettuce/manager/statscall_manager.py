@@ -77,7 +77,7 @@ def _exec_cmd(command):
                    '-o', 'StrictHostKeyChecking=no',
                    '-o', 'UserKnownHostsFile=/dev/null',
                    '-l', 'root',
-                   '192.168.32.229']
+                   socket.gethostbyname(world.callgen_host)]
     ssh_command.extend(cmds)
 
     p = Popen(ssh_command,
