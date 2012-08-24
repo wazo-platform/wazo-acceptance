@@ -2,10 +2,9 @@
 
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
-
-from xivo_lettuce.common import find_line, open_url, remove_all_elements,\
+from xivo_lettuce.common import find_line, open_url, remove_all_elements, \
     remove_line
-from xivo_lettuce.common_steps import i_submit
+from xivo_lettuce.common_steps_webi import i_submit
 
 
 @step(u'Given there is no custom lines')

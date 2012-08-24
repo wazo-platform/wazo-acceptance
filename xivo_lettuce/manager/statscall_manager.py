@@ -1,11 +1,21 @@
 # -*- coding: UTF-8 -*-
 
-from subprocess import Popen, PIPE, STDOUT
-from lettuce.registry import world
 import socket
 
+from subprocess import Popen, PIPE, STDOUT
+from lettuce.registry import world
+from utils.func import extract_number_and_context_from_extension
 
-def execute_n_calls_then_hangup(count, number, username='to_statscenter', password='to_statscenter', duration=3000):
+
+def execute_n_calls_then_hangup(count, extension, duration=3000, username='', password=''):
+    number, context = extract_number_and_context_from_extension(extension)
+    if not username or not password:
+        callto_user = 'to_%s' % context
+        callto_pass = 'to_%s' % context
+    else:
+        callto_user = username
+        callto_pass = password
+
     command = ['xivo-callgen',
                '-bg',
                '-li', socket.gethostbyname(world.callgen_host),
@@ -13,13 +23,21 @@ def execute_n_calls_then_hangup(count, number, username='to_statscenter', passwo
                'call-then-hangup',
                '-nc', count,
                '-ce', number,
-               '-clu', username,
-               '-clp', password,
+               '-clu', callto_user,
+               '-clp', callto_pass,
                '-cd', duration]
     _exec_cmd(command)
 
 
-def execute_n_calls_then_wait(count, number, username='to_statscenter', password='to_statscenter'):
+def execute_n_calls_then_wait(count, extension, username='', password=''):
+    number, context = extract_number_and_context_from_extension(extension)
+    if not username or not password:
+        callto_user = 'to_%s' % context
+        callto_pass = 'to_%s' % context
+    else:
+        callto_user = username
+        callto_pass = password
+
     command = ['xivo-callgen',
                '-bg',
                '-li', socket.gethostbyname(world.callgen_host),
@@ -27,8 +45,8 @@ def execute_n_calls_then_wait(count, number, username='to_statscenter', password
                'call-then-wait',
                '-nc', count,
                '-ce', number,
-               '-clu', username,
-               '-clp', password]
+               '-clu', callto_user,
+               '-clp', callto_pass]
     _exec_cmd(command)
 
 
