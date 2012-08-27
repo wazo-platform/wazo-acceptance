@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
-from xivo_lettuce.common import *
-
-
-WSTS = get_webservices('general_iax')
 
 
 def find_call_limit_line(destination=None, netmask=None, limit=None):

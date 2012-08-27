@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
-from xivo_lettuce.common import *
 
 
 def type_ldap_name_and_host(name, host):
