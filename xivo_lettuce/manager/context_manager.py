@@ -22,7 +22,7 @@ def add_contextnumbers_group(name, numberbeg, numberend):
     if not context:
         _add_context(name, name, 'internal', contextnumbers_group=contextnumbers)
     else:
-        context.users.append(contextnumbers)
+        context.groups.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
@@ -32,7 +32,7 @@ def add_contextnumbers_queue(name, numberbeg, numberend):
     if not context:
         _add_context(name, name, 'internal', contextnumbers_queue=contextnumbers)
     else:
-        context.users.append(contextnumbers)
+        context.queues.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
@@ -42,7 +42,7 @@ def add_contextnumbers_meetme(name, numberbeg, numberend):
     if not context:
         _add_context(name, name, 'internal', contextnumbers_meetme=contextnumbers)
     else:
-        context.users.append(contextnumbers)
+        context.conf_rooms.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
@@ -52,7 +52,7 @@ def add_contextnumbers_incall(name, numberbeg, numberend, didlength):
     if not context:
         _add_context(name, name, 'incall', contextnumbers_incall=contextnumbers)
     else:
-        context.users.append(contextnumbers)
+        context.incalls.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
