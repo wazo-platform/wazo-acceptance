@@ -70,3 +70,9 @@ Feature: User
         Given there is a user "Tom" "Sawyer" with a SIP line "654" in group "american_dream"
         When I remove user "Tom" "Sawyer"
         Then I see a group "american_dream" with no users
+
+   Scenario: Add user with function keys
+       Given I am logged in
+       When I add a user "Tom" "Sawyer" with a function key with type Customized and extension "1234"
+       Then I see the user "Tom" "Sawyer" exists
+       Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"

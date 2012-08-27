@@ -4,6 +4,7 @@ import json
 import voicemail_manager
 from xivo_lettuce.common import get_webservices, go_to_tab
 from lettuce.registry import world
+from selenium.webdriver.support.select import Select
 
 
 WSU = get_webservices('user')
@@ -28,6 +29,16 @@ def type_user_in_group(groupName):
     select_group.click()
     add_button = world.browser.find_element_by_id('bt-ingroup')
     add_button.click()
+
+
+def type_func_key(func_key_kind, destination):
+    go_to_tab('Func Keys')
+    add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-funckeys']//a[@id='add_funckey_button']")
+    add_button.click()
+    type_field = Select(world.browser.find_element_by_id('it-phonefunckey-type-1'))
+    type_field.select_by_visible_text(func_key_kind)
+    destination_field = world.browser.find_element_by_id('it-phonefunckey-custom-typeval-1')
+    destination_field.send_keys(destination)
 
 
 def _fill_json_user_data(jsoncontent, data_dict):

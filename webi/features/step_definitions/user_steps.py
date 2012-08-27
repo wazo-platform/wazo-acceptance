@@ -3,6 +3,7 @@
 import time
 import xivo_ws
 from lettuce import step, world
+from selenium.webdriver.support.select import Select
 
 from xivo_lettuce.common import *
 from xivo_lettuce.manager import user_manager as user_man
@@ -222,3 +223,30 @@ def when_i_delete_agent_number_1(step, agent_number):
     world.ws.agents.delete(agent.id)
 
     time.sleep(world.timeout)
+
+
+@step(u'When I add a user "([^"]*)" "([^"]*)" with a function key with type Customized and extension "([^"]*)"')
+def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastname, extension):
+    user_man.delete_user(firstname, lastname)
+    open_url('user', 'add')
+
+    user_man.type_user_names(firstname, lastname)
+    user_man.type_func_key('Customized', extension)
+
+    submit_form()
+
+@step(u'Then I see the user "([^"]*)" "([^"]*)" exists')
+def then_i_see_the_user_group1_group2_exists(step, firstname, lastname):
+    open_url('user', 'list')
+    user_line = find_line("%s %s" % (firstname, lastname))
+    assert user_line is not None
+
+@step(u'Then i see user with username "([^"]*)" "([^"]*)" has a function key with type Customized and extension "([^"]*)"')
+def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstname, lastname, extension):
+    edit_line("%s %s" % (firstname, lastname))
+    go_to_tab('Func Keys')
+    destination_field = world.browser.find_element_by_id('it-phonefunckey-custom-typeval-0')
+    assert destination_field.get_attribute('value') == extension
+    type_field = Select(world.browser.find_element_by_id('it-phonefunckey-type-0'))
+    assert type_field.first_selected_option.text == "Customized"
+
