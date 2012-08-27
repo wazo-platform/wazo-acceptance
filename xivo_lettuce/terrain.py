@@ -14,19 +14,9 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 
 
 @before.all
-def setup_browser():
-    from pyvirtualdisplay import Display
-    profile = _setup_browser_profile()
-    world.display = Display(visible=0, size=(1024, 768))
-    world.display.start()
-    world.browser = XiVOBrowser(firefox_profile=profile)
-    world.timeout = 5
-    world.stocked_infos = {}
-
-
-@before.all
 def initialize_from_config():
     config = _read_config()
+    _setup_browser(config)
     _set_jenkins(config)
     _setup_login_infos(config)
     _setup_ssh_client_xivo(config)
@@ -44,6 +34,19 @@ def _read_config():
     with open(config_file) as fobj:
         config.readfp(fobj)
     return config
+
+
+def _setup_browser(config):
+    visible = config.getboolean('browser', 'visible')
+    timeout = config.getint('browser', 'timeout')
+
+    from pyvirtualdisplay import Display
+    profile = _setup_browser_profile()
+    world.display = Display(visible=visible, size=(1024, 768))
+    world.display.start()
+    world.browser = XiVOBrowser(firefox_profile=profile)
+    world.timeout = timeout
+    world.stocked_infos = {}
 
 
 def _set_jenkins(config):
@@ -77,23 +80,24 @@ def _setup_ws(config):
     password = config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)
 
+
 def _setup_browser_profile():
     fp = FirefoxProfile()
 
-    fp.set_preference("browser.download.folderList",2)
-    fp.set_preference("browser.download.manager.showWhenStarting",False)
-    fp.set_preference("browser.download.dir","/tmp/")
-    fp.set_preference("browser.helperApps.neverAsk.saveToDisk","application/force-download")
+    fp.set_preference("browser.download.folderList", 2)
+    fp.set_preference("browser.download.manager.showWhenStarting", False)
+    fp.set_preference("browser.download.dir", "/tmp/")
+    fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download")
 
     return fp
+
 
 @world.absorb
 def dump_current_page(filename='/tmp/lettuce.html'):
     """Use this if you want to debug your test
        Call it with world.dump_current_page()"""
-    f = open(filename, 'w')
-    f.write(world.browser.page_source.encode('utf-8'))
-    f.close()
+    with open(filename, 'w') as fobj:
+        fobj.write(world.browser.page_source.encode('utf-8'))
     world.browser.save_screenshot(filename + '.png')
 
 
