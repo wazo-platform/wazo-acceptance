@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import time
 import xivo_ws
-from lettuce import step, world
-from selenium.webdriver.support.select import Select
+import time
 
-from xivo_lettuce.common import *
+from lettuce import step
+from lettuce.registry import world
+from selenium.webdriver.support.select import Select
 from xivo_lettuce.manager import user_manager as user_man
-from xivo_lettuce.manager import context_manager as ctx_man
 from xivo_lettuce.manager import line_manager as line_man
+from xivo_lettuce.common import open_url, submit_form, element_is_in_list, \
+    remove_line, edit_line, go_to_tab, find_line
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)"$')
@@ -89,7 +90,6 @@ def then_i_should_be_at_the_user_list_page(step):
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)"$')
 def given_there_is_a_user_1_2_with_a_sip_line_3(step, firstname, lastname, linenumber):
-    ctx_man.check_context_number_in_interval('default', 'user', linenumber)
     user_man.delete_user(firstname, lastname)
     open_url('user', 'add')
     user_man.type_user_names(firstname, lastname)
@@ -99,7 +99,6 @@ def given_there_is_a_user_1_2_with_a_sip_line_3(step, firstname, lastname, linen
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)" in group "([^"]*)"')
 def given_there_is_a_user_1_2_with_a_sip_line_3_in_group_4(step, firstname, lastname, linenumber, group_name):
-    ctx_man.check_context_number_in_interval('default', 'user', linenumber)
     user_man.delete_user(firstname, lastname)
     open_url('user', 'add')
     user_man.type_user_names(firstname, lastname)
@@ -110,7 +109,7 @@ def given_there_is_a_user_1_2_with_a_sip_line_3_in_group_4(step, firstname, last
 
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
-    line_ids = line_man.find_line_id_from_number(linenumber)
+    line_ids = line_man.find_line_id_from_number(linenumber, 'default')
     if len(line_ids) > 0:
         open_url('line', 'edit', {'id': line_ids[0]})
 
@@ -123,7 +122,7 @@ def when_i_edit_the_user_1_2(step, firstname, lastname):
 
 @step(u'Then I see the line "([^"]*)" has its call limit to "([^"]*)"')
 def then_i_see_the_line_1_has_its_call_limit_to_2(step, line_number, call_limit):
-    line_id = line_man.find_line_id_from_number(line_number)[0]
+    line_id = line_man.find_line_id_from_number(line_number, 'default')[0]
     open_url('line', 'edit', {'id': line_id})
 
     go_to_tab('IPBX Infos')
@@ -217,6 +216,7 @@ def given_there_is_a_user_1_2_with_an_agent_3_and_cti_profile_4(step, first_name
 
     time.sleep(world.timeout)
 
+
 @step(u'When I delete agent number "([^"]*)"')
 def when_i_delete_agent_number_1(step, agent_number):
     agent = world.ws.agents.search(agent_number)[0]
@@ -235,11 +235,13 @@ def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastnam
 
     submit_form()
 
+
 @step(u'Then I see the user "([^"]*)" "([^"]*)" exists')
 def then_i_see_the_user_group1_group2_exists(step, firstname, lastname):
     open_url('user', 'list')
     user_line = find_line("%s %s" % (firstname, lastname))
     assert user_line is not None
+
 
 @step(u'Then i see user with username "([^"]*)" "([^"]*)" has a function key with type Customized and extension "([^"]*)"')
 def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstname, lastname, extension):
@@ -249,4 +251,3 @@ def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstna
     assert destination_field.get_attribute('value') == extension
     type_field = Select(world.browser.find_element_by_id('it-phonefunckey-type-0'))
     assert type_field.first_selected_option.text == "Customized"
-

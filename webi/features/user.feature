@@ -27,20 +27,20 @@ Feature: User
     # The problem is that saving the user form may erase values previously
     # set in the line form (bug #2918)
         Given I am logged in
-        Given there is a user "George" "Clinton" with a SIP line "123"
-        When I edit the line "123"
+        Given there is a user "George" "Clinton" with a SIP line "1000"
+        When I edit the line "1000"
         When I set the select field "NAT" to "No"
         When I go to the "Advanced" tab
         When I set the select field "IP Addressing type" to "Static"
         When I set the text field "IP address" to "10.0.0.1"
         When I submit
 
-        Then I see the line "123" has its call limit to "10"
+        Then I see the line "1000" has its call limit to "10"
 
         When I edit the user "George" "Clinton"
         When I submit
 
-        When I edit the line "123"
+        When I edit the line "1000"
         Then the select field "NAT" is set to "No"
         When I go to the "Advanced" tab
         Then the select field "IP Addressing type" is set to "Static"
@@ -48,8 +48,8 @@ Feature: User
 
     Scenario: Save user and voicemail forms
         Given I am logged in
-        Given there is a user "Tom" "Sawyer" with a SIP line "456"
-        Given there is no voicemail "1515"
+        Given there is a user "Tom" "Sawyer" with a SIP line "1001"
+        Given there is no voicemail "1001"
         When I edit the user "Tom" "Sawyer"
         When I set the select field "Language" to "en_US"
         When I go to the "Voicemail" tab
@@ -58,16 +58,16 @@ Feature: User
         When I set the text field "Voicemail" to ""
         When I submit with errors
         When I go to the "Voicemail" tab
-        When I set the text field "Voicemail" to "1515"
+        When I set the text field "Voicemail" to "1001"
         When I submit
         Then user "Tom Sawyer" is displayed in the list
         # Last step needed to avoid eventual problems from bug #3396.
-        Given there is no voicemail "1515"
+        Given there is no voicemail "1001"
 
     Scenario: Delete user in group
         Given I am logged in
-        Given there is a group "american_dream" number "5000" with no users
-        Given there is a user "Tom" "Sawyer" with a SIP line "654" in group "american_dream"
+        Given there is a group "american_dream" number "2000" with no users
+        Given there is a user "Tom" "Sawyer" with a SIP line "1001" in group "american_dream"
         When I remove user "Tom" "Sawyer"
         Then I see a group "american_dream" with no users
 

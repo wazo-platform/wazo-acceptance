@@ -8,7 +8,6 @@ from xivo_lettuce.manager import context_manager
 
 @step(u'When I create a conference room with name "([^"]*)" with number "([^"]*)"')
 def when_i_create_a_conference_room_with_name_number(step, name, confno):
-    context_manager.check_context_number_in_interval('default', 'meetme', confno)
     meetme_manager.delete_all_meetme()
     open_url('meetme', 'add')
     meetme_manager.type_name(name)
@@ -19,7 +18,6 @@ def when_i_create_a_conference_room_with_name_number(step, name, confno):
 
 @step(u'When I create a conference room with name "([^"]*)" with number "([^"]*)" with max participants "([^"]*)"')
 def when_i_create_a_conference_room_with_name_number_max_participants(step, name, confno, maxusers):
-    context_manager.check_context_number_in_interval('default', 'meetme', confno)
     meetme_manager.delete_all_meetme()
     open_url('meetme', 'add')
     meetme_manager.type_name(name)

@@ -115,10 +115,12 @@ def insert_group_with_user(group_name, user_list=[]):
     WSG.add(data)
 
 
-def user_form_add_line(linenumber):
+def user_form_add_line(linenumber, context='default'):
     go_to_tab('Lines')
     add_button = world.browser.find_element_by_id('lnk-add-row')
     add_button.click()
+    input_context = world.browser.find_elements_by_id('linefeatures-context')[-2]
+    input_context.send_keys(context)
     input_linenumber = world.browser.find_elements_by_id('linefeatures-number')[-2]
     input_linenumber.send_keys(linenumber)
     go_to_tab('General')

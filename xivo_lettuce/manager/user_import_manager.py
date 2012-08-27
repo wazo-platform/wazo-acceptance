@@ -21,9 +21,8 @@ def open_import_user_form():
 
 
 def insert_simple_user(firstname, lastname, linenumber):
-    check_context_number_in_interval('default', 'user', linenumber)
     data = get_utils_file_content('import_user.csv')
-    data = data  % {
+    data = data % {
                     'entityid': 1,
                     'firstname': firstname,
                     'lastname': lastname,
@@ -38,12 +37,11 @@ def insert_simple_user(firstname, lastname, linenumber):
 
 
 def insert_adv_user_with_mevo(firstname, lastname, linenumber):
-    check_context_number_in_interval('default', 'user', linenumber)
     delete_voicemail_from_number(linenumber)
     delete_user(firstname, lastname)
-    delete_line_from_number(linenumber)
+    delete_line_from_number(linenumber, 'default')
     data = get_utils_file_content('import_user_with_mevo.csv')
-    data = data  % {
+    data = data % {
                     'entityid': 1,
                     'firstname': firstname,
                     'lastname': lastname,
@@ -60,14 +58,12 @@ def insert_adv_user_with_mevo(firstname, lastname, linenumber):
 
 
 def insert_adv_user_with_incall(firstname, lastname, linenumber, incallexten):
-    check_context_number_in_interval('default', 'user', linenumber)
-    check_context_number_in_interval('from-extern', 'incall', incallexten)
     delete_voicemail_from_number(linenumber)
     delete_user(firstname, lastname)
-    delete_line_from_number(linenumber)
+    delete_line_from_number(linenumber, 'default')
     remove_incall_with_did(incallexten)
     data = get_utils_file_content('import_user_with_incall.csv')
-    data = data  % {
+    data = data % {
                     'entityid': 1,
                     'firstname': firstname,
                     'lastname': lastname,
@@ -84,14 +80,12 @@ def insert_adv_user_with_incall(firstname, lastname, linenumber, incallexten):
 
 
 def insert_adv_user_full_infos(firstname, lastname, linenumber, incallexten):
-    check_context_number_in_interval('default', 'user', linenumber)
-    check_context_number_in_interval('from-extern', 'incall', incallexten)
     delete_voicemail_from_number(linenumber)
-    delete_line_from_number(linenumber)
+    delete_line_from_number(linenumber, 'default')
     delete_user(firstname, lastname)
     remove_incall_with_did(incallexten)
     data = get_utils_file_content('import_user_full_infos.csv')
-    data = data  % {
+    data = data % {
                     'entityid': 1,
                     'firstname': firstname,
                     'lastname': lastname,

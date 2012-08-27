@@ -3,7 +3,7 @@
 import time
 from lettuce.decorators import step
 from xivo_lettuce.manager import queuelog_manager, queue_manager, agent_manager, \
-    user_manager
+    user_manager, line_manager
 from xivo_lettuce.manager import statscall_manager
 from lettuce.registry import world
 from xivo_ws.objects.user import UserLine, User
@@ -54,12 +54,15 @@ def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, ext
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)"')
 def given_there_is_a_user_1_2(step, firstname, lastname, extension):
     number, context = extract_number_and_context_from_extension(extension)
+    user_manager.delete_user(firstname, lastname)
+    line_manager.delete_line_from_number(number, context)
     user_ids = [user.id for user in world.ws.users.search('%s %s' % (firstname, lastname))]
     for user_id in user_ids:
         world.ws.users.delete(user_id)
     u = User(firstname=firstname, lastname=lastname)
     u.line = UserLine(context=context, number=number)
     world.ws.users.add(u)
+    given_i_wait_n_seconds(step, 5)
 
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"')
@@ -127,6 +130,11 @@ def given_there_is_n_calls_to_extension_and_wait(step, count, extension):
     statscall_manager.execute_n_calls_then_wait(count, extension)
 
 
+@step(u'When i call extension "([^"]+)"$')
+def when_i_call_extension(step, extension):
+    statscall_manager.execute_n_calls_then_wait(1, extension)
+
+
 @step(u'Given there is ([0-9]+) calls to extension "([^"]+)"$')
 def given_there_is_n_calls_to_extension_and_hangup(step, count, extension):
     statscall_manager.execute_n_calls_then_hangup(count, extension)
@@ -157,6 +165,7 @@ def given_i_wait_then_i_answer_after_n_second_then_i_wait(step, ring_time):
     statscall_manager.execute_answer_then_wait(ring_time_ms)
 
 
+@step(u'When I wait ([0-9]+) seconds .*')
 @step(u'Given I wait ([0-9]+) seconds .*')
 def given_i_wait_n_seconds(step, count):
     time.sleep(int(count))
