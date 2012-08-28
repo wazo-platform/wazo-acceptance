@@ -43,4 +43,4 @@ def find_meetme_id_from_confno(confno):
     if list:
         return [meetme['id'] for meetme in list if
                 meetme['confno'] == confno]
-    return None
+    return []
