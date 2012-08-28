@@ -110,7 +110,7 @@ def given_there_is_a_user_1_2_with_a_sip_line_3_in_group_4(step, firstname, last
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
     line_ids = line_man.find_line_id_from_number(linenumber, 'default')
-    if len(line_ids) > 0:
+    if line_ids:
         open_url('line', 'edit', {'id': line_ids[0]})
 
 

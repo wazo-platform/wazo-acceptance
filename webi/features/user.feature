@@ -27,20 +27,20 @@ Feature: User
     # The problem is that saving the user form may erase values previously
     # set in the line form (bug #2918)
         Given I am logged in
-        Given there is a user "George" "Clinton" with a SIP line "1000"
-        When I edit the line "1000"
+        Given there is a user "Tom" "Sawyer" with a SIP line "1001"
+        When I edit the line "1001"
         When I set the select field "NAT" to "No"
         When I go to the "Advanced" tab
         When I set the select field "IP Addressing type" to "Static"
         When I set the text field "IP address" to "10.0.0.1"
         When I submit
 
-        Then I see the line "1000" has its call limit to "10"
+        Then I see the line "1001" has its call limit to "10"
 
-        When I edit the user "George" "Clinton"
+        When I edit the user "Tom" "Sawyer"
         When I submit
 
-        When I edit the line "1000"
+        When I edit the line "1001"
         Then the select field "NAT" is set to "No"
         When I go to the "Advanced" tab
         Then the select field "IP Addressing type" is set to "Static"
