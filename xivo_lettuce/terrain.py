@@ -7,6 +7,8 @@ from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 from xivo_lettuce.ssh import SSHClient
 from selenium.webdriver import FirefoxProfile
+from webi import prerequisite as webi_prerequisites
+from statcenter import prerequisite as statcenter_prerequisites
 
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -17,11 +19,12 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 def initialize_from_config():
     config = _read_config()
     _setup_browser(config)
-    _set_jenkins(config)
     _setup_login_infos(config)
-    _setup_ssh_client_xivo(config)
+    ssh_xivo = _setup_ssh_client_xivo(config)
     _setup_ssh_client_callgen(config)
     _setup_ws(config)
+    webi_prerequisites.setup()
+    statcenter_prerequisites.setup(ssh_xivo)
 
 
 def _read_config():
@@ -49,8 +52,15 @@ def _setup_browser(config):
     world.stocked_infos = {}
 
 
-def _set_jenkins(config):
-    world.jenkins_host = config.get('jenkins', 'hostname')
+def _setup_browser_profile():
+    fp = FirefoxProfile()
+
+    fp.set_preference("browser.download.folderList", 2)
+    fp.set_preference("browser.download.manager.showWhenStarting", False)
+    fp.set_preference("browser.download.dir", "/tmp/")
+    fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download")
+
+    return fp
 
 
 def _setup_login_infos(config):
@@ -65,6 +75,7 @@ def _setup_ssh_client_xivo(config):
     login = config.get('ssh_infos', 'login')
     world.xivo_host = hostname
     world.ssh_client_xivo = SSHClient(hostname, login)
+    return world.ssh_client_xivo
 
 
 def _setup_ssh_client_callgen(config):
@@ -79,17 +90,6 @@ def _setup_ws(config):
     login = config.get('webservices_infos', 'login')
     password = config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)
-
-
-def _setup_browser_profile():
-    fp = FirefoxProfile()
-
-    fp.set_preference("browser.download.folderList", 2)
-    fp.set_preference("browser.download.manager.showWhenStarting", False)
-    fp.set_preference("browser.download.dir", "/tmp/")
-    fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download")
-
-    return fp
 
 
 @world.absorb
