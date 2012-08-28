@@ -251,3 +251,21 @@ def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstna
     assert destination_field.get_attribute('value') == extension
     type_field = Select(world.browser.find_element_by_id('it-phonefunckey-type-0'))
     assert type_field.first_selected_option.text == "Customized"
+
+
+@step(u'When I remove line "([^"]*)" from user')
+def when_i_remove_line_from_user(step, lineNumber):
+    go_to_tab('Lines')
+    select_line = world.browser.find_element_by_xpath("//table[@id='list_linefeatures']/tbody/tr//input[@id='linefeatures-number' and @value='%s']" % lineNumber)
+    delete_button = select_line.find_element_by_xpath("//a[@title='Delete this line']")
+    delete_button.click()
+    time.sleep(world.timeout)
+
+
+@step(u'When I remove line "([^"]*)" from lines')
+def when_i_remove_line_from_lines(step, line_number):
+    open_url('line')
+    line_man.search_line_number(line_number)
+    remove_line(line_number)
+    time.sleep(world.timeout)
+    line_man.unsearch_line()

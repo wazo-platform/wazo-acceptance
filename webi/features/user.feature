@@ -71,8 +71,27 @@ Feature: User
         When I remove user "Tom" "Sawyer"
         Then I see a group "american_dream" with no users
 
+
    Scenario: Add user with function keys
        Given I am logged in
        When I add a user "Tom" "Sawyer" with a function key with type Customized and extension "1234"
        Then I see the user "Tom" "Sawyer" exists
        Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"
+
+
+    Scenario: Delete line from user with voicemail (X-398)
+        #Given there is a user "Abraham" "Maharba" with a SIP line "1456", voicemail and CTI profile "client"
+        Given I am logged in
+        Given there is a user "Abraham" "Maharba" with a SIP line "1456"
+        When I edit the user "Abraham" "Maharba"
+        When I set the select field "Language" to "en_US"
+        When I go to the "Voicemail" tab
+        When I set the select field "Voice Mail" to "Asterisk"
+        When I check the option "Enable voicemail"
+        When I set the text field "Voicemail" to "1456"
+        When I submit
+        When I edit the user "Abraham" "Maharba"
+        When I remove line "1456" from user
+        When I submit with errors
+        When I remove line "1456" from lines
+        Then I get errors
