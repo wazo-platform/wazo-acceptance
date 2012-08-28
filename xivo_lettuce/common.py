@@ -270,3 +270,7 @@ def logged():
             return True
         except NoSuchElementException:
             return False
+
+
+def assert_form_errors():
+    assert find_form_errors() is not None

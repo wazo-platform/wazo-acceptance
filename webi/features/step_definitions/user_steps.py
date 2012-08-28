@@ -9,7 +9,7 @@ from selenium.webdriver.support.select import Select
 from xivo_lettuce.manager import user_manager as user_man
 from xivo_lettuce.manager import line_manager as line_man
 from xivo_lettuce.common import open_url, submit_form, element_is_in_list, \
-    remove_line, edit_line, go_to_tab, find_line
+    remove_line, edit_line, go_to_tab, find_line, assert_form_errors
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)"$')
@@ -262,10 +262,10 @@ def when_i_remove_line_from_user(step, lineNumber):
     time.sleep(world.timeout)
 
 
-@step(u'When I remove line "([^"]*)" from lines')
+@step(u'When I remove line "([^"]*)" from lines with errors')
 def when_i_remove_line_from_lines(step, line_number):
     open_url('line')
     line_man.search_line_number(line_number)
     remove_line(line_number)
-    time.sleep(world.timeout)
+    assert_form_errors()
     line_man.unsearch_line()

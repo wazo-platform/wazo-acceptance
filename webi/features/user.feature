@@ -80,7 +80,6 @@ Feature: User
 
 
     Scenario: Delete line from user with voicemail (X-398)
-        #Given there is a user "Abraham" "Maharba" with a SIP line "1456", voicemail and CTI profile "client"
         Given I am logged in
         Given there is a user "Abraham" "Maharba" with a SIP line "1456"
         When I edit the user "Abraham" "Maharba"
@@ -93,5 +92,4 @@ Feature: User
         When I edit the user "Abraham" "Maharba"
         When I remove line "1456" from user
         When I submit with errors
-        When I remove line "1456" from lines
-        Then I get errors
+        When I remove line "1456" from lines with errors

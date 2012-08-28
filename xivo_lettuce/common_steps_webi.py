@@ -93,7 +93,7 @@ def then_this_option_is_checked(step, checkstate):
 
 @step(u'Then I get errors')
 def then_i_get_errors(step):
-    assert find_form_errors() is not None
+    assert_form_errors()
 
 
 @step(u'I set the select field "([^"]*)" to "([^"]*)"')
