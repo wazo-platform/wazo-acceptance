@@ -1,13 +1,12 @@
 Feature: Saturated calls
 
     Scenario: Generate stats for saturated calls
-        Given there is no queue with name "q1"
-        Given there is no queue with number "5001"
+        Given there is no queue with name "q1" and number "5001"
         Given there is no "FULL" entry in queue "q1" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is no "FULL" entry in queue "q2" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is no "DIVERT_CA_RATIO" entry in queue "q1" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is no "DIVERT_HOLDTIME" entry in queue "q1" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
-        Given there is a queue "q1" in context "statscenter" with number "5001"
+        Given there is a queue "q1" with extension "5001@statscenter"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q1"
         Given I have to following queue_log entries:
           | time                       | callid      | queuename | agent | event           | data1 | data2 | data3 | data4 | data5 |
