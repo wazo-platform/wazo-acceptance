@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from lettuce.registry import world
 from xivo_ws.objects.context import Context, ContextRange
+from xivo_ws.exception import WebServiceRequestError
 
 
 def add_contextnumbers_user(name, numberbeg, numberend):
@@ -61,7 +62,10 @@ def delete_context(name):
 
 
 def get_context(name):
-    return world.ws.contexts.view(name)
+    try:
+        return world.ws.contexts.view(name)
+    except WebServiceRequestError:
+        return False
 
 
 def _add_context(name, display_name, context_type,
@@ -79,16 +83,16 @@ def _add_context(name, display_name, context_type,
     context.entity = 'xivo_entity'
 
     if context_include:
-        context.context_include = context_include
+        context.context_include = [context_include]
     if contextnumbers_user:
-        context.users = contextnumbers_user
+        context.users = [contextnumbers_user]
     if contextnumbers_group:
-        context.groups = contextnumbers_group
+        context.groups = [contextnumbers_group]
     if contextnumbers_queue:
-        context.queues = contextnumbers_queue
+        context.queues = [contextnumbers_queue]
     if contextnumbers_meetme:
-        context.conf_rooms = contextnumbers_meetme
+        context.conf_rooms = [contextnumbers_meetme]
     if contextnumbers_incall:
-        context.incalls = contextnumbers_incall
+        context.incalls = [contextnumbers_incall]
 
     world.ws.contexts.add(context)
