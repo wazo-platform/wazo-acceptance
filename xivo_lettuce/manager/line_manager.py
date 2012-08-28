@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
 from lettuce.registry import world
+from xivo_lettuce.common import open_url
 
 
 def delete_line_from_number(number, context):
