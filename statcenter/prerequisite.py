@@ -3,6 +3,7 @@
 import socket
 import xivo_ws
 
+from lettuce.registry import world
 from xivo_lettuce.terrain import _read_config
 from xivo_ws.objects.siptrunk import SIPTrunk
 from xivo_lettuce.manager.context_manager import add_contextnumbers_queue, \
@@ -18,16 +19,16 @@ def main():
 class Prerequisite(object):
 
     def __init__(self, config):
-        self.callgen_host = config.get('callgen', 'hostname')
-        self.xivo_host = config.get('xivo', 'hostname')
+        world.callgen_host = config.get('callgen', 'hostname')
+        world.xivo_host = config.get('xivo', 'hostname')
         login = config.get('webservices_infos', 'login')
         password = config.get('webservices_infos', 'password')
-        self.ws = xivo_ws.XivoServer(self.xivo_host, login, password)
+        world.ws = xivo_ws.XivoServer(world.xivo_host, login, password)
 
         add_contextnumbers_queue('statscenter', 5000, 5100)
         add_contextnumbers_user('statscenter', 1000, 1100)
 
-        callgen_ip = socket.gethostbyname(self.callgen_host)
+        callgen_ip = socket.gethostbyname(world.callgen_host)
         self.add_trunksip(callgen_ip, 'to_default', 'default')
         self.add_trunksip(callgen_ip, 'to_statscenter', 'statscenter')
 
@@ -44,17 +45,17 @@ class Prerequisite(object):
         sip_trunk.context = context
         sip_trunk.host = host
         sip_trunk.type = 'friend'
-        self.ws.sip_trunk.add(sip_trunk)
+        world.ws.sip_trunk.add(sip_trunk)
 
     def has_trunksip(self, name):
-        return self.ws.sip_trunk.search(name)
+        return world.ws.sip_trunk.search(name)
 
     def del_trunksip(self, trunk_id):
-        self.ws.sip_trunk.delete(trunk_id)
+        world.ws.sip_trunk.delete(trunk_id)
 
     def _setup_ssh_client(self, config):
         login = config.get('ssh_infos', 'login')
-        ssh_client = SSHClient(self.xivo_host, login)
+        ssh_client = SSHClient(world.xivo_host, login)
         self._create_pgpass_on_remote_host(ssh_client)
 
     def _create_pgpass_on_remote_host(self, ssh_client):
