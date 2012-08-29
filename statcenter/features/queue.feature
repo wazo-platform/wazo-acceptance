@@ -1,7 +1,7 @@
 Feature: WEBI Queue Stats
 
     Scenario: Generate stats for saturated calls
-        Given there is no queue with name "q01" and number "5001"
+        Given there is no queue with name "q01" or number "5001"
         Given there is no "FULL" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is no "FULL" entry in queue "q02" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is no "DIVERT_CA_RATIO" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"

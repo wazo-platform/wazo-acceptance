@@ -11,47 +11,6 @@ from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
     user_manager_ws, line_manager_ws
 
 
-@step(u'Given there is a queue "([^"]+)" with extension "([^"]+)"$')
-def given_there_is_a_queue_in_context_with_number(step, name, extension):
-    number, context = extract_number_and_context_from_extension(extension)
-    data = {'name': name,
-            'number': number,
-            'context': context,
-            'maxlen': 0,
-            'agents': ''}
-    queue_manager_ws.add_queue(data)
-
-
-@step(u'Given there is a queue "([^"]+)" with extension "([^"]+)" with agent "([^"]*)"$')
-def given_there_is_a_queue_in_context_with_number_with_agent(step, name, extension, agent_number):
-    queue_number, context = extract_number_and_context_from_extension(extension)
-    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
-    data = {'name': name,
-            'number': queue_number,
-            'context': context,
-            'maxlen': 0,
-            'agents': agent_id}
-    queue_manager_ws.add_queue(data)
-
-
-@step(u'Given there is a queue "([^"]+)" statured with extension "([^"]+)" with agent "([^"]+)"$')
-def given_there_is_a_queue_statured_in_context_with_number_with_agent(step, name, extension, agent_number):
-    queue_number, context = extract_number_and_context_from_extension(extension)
-    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
-    data = {'name': name,
-            'number': queue_number,
-            'context': context,
-            'maxlen': 1,
-            'agents': agent_id}
-    queue_manager_ws.add_queue(data)
-
-
-@step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
-def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, extension):
-    number, context = extract_number_and_context_from_extension(extension)
-    world.agent_id = agent_manager_ws.add_agent(firstname, lastname, number, '', context)
-
-
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)"')
 def given_there_is_a_user_1_2(step, firstname, lastname, extension):
     number, context = extract_number_and_context_from_extension(extension)
@@ -66,28 +25,23 @@ def given_there_is_a_user_1_2(step, firstname, lastname, extension):
     given_i_wait_n_seconds(step, 5)
 
 
-@step(u'Given there is no user "([^"]*)" "([^"]*)"')
+@step(u'Given there is no user "([^"]*)" "([^"]*)"$')
 def given_there_is_no_user_with_number(step, firstname, lastname):
     user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
 
 
-@step(u'Given there is no queue with name "([^"]+)"')
+@step(u'Given there is no queue with name "([^"]+)"$')
 def given_there_is_no_queue_with_name(step, queue_name):
     queue_manager_ws.delete_queue_with_displayname(queue_name)
 
 
-@step(u'Given there is no queue with number "([^"]*)"')
-def given_there_is_no_queue_with_number(step, queue_number):
-    queue_manager_ws.delete_queue_with_number(queue_number)
-
-
-@step(u'Given there is no queue with name "([^"]+)" or number "([^"]*)"')
+@step(u'Given there is no queue with name "([^"]+)" or number "([^"]*)"$')
 def given_there_is_no_queue_with_name_or_number(step, queue_name, queue_number):
     queue_manager_ws.delete_queue_with_displayname(queue_name)
     queue_manager_ws.delete_queue_with_number(queue_number)
 
 
-@step(u'Given there is no agent with number "([^"]*)"')
+@step(u'Given there is no agent with number "([^"]*)"$')
 def given_there_is_no_agent_with_number(step, agent_number):
     agent_manager_ws.delete_agent_with_number(agent_number)
 

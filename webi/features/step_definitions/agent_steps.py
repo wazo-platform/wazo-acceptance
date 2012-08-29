@@ -1,10 +1,11 @@
 # -*- coding: UTF-8 -*-
 
-from lettuce import step
+from lettuce import step, world
 from xivo_lettuce.manager import agent_manager
 from xivo_lettuce.manager_ws import agent_manager_ws
 from xivo_lettuce.common import open_url, submit_form, element_is_in_list, \
     remove_line, element_is_not_in_list
+from utils import func
 
 
 @step(u'Given an agent "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)" in group default')
@@ -16,6 +17,12 @@ def given_an_agent_in_group_default(step, firstname, lastname, number, password)
 @step(u'Given no agent number "([^"]*)"')
 def given_no_agent_number_1(step, number):
     agent_manager_ws.delete_agent_with_number(number)
+
+
+@step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
+def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, extension):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    world.agent_id = agent_manager_ws.add_agent(firstname, lastname, number, '', context)
 
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)"')

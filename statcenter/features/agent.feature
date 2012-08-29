@@ -1,7 +1,7 @@
 Feature: WEBI Agent Stats
 
     Scenario: Generate stats for answered calls
-        Given there is no queue with name "q01" and number "5001"
+        Given there is no queue with name "q01" or number "5001"
         Given there is no agent with number "1"
         Given there is no "COMPLETECALLER" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is no "CONNECT" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
@@ -33,7 +33,7 @@ Feature: WEBI Agent Stats
           | Total   |        3 |
 
     Scenario: Generate stats for total conversation time
-        Given there is no queue with name "q02" and number "5002"
+        Given there is no queue with name "q02" or number "5002"
         Given there is no agent with number "2"
         Given there is no "COMPLETECALLER" entry in queue "q02" between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is no "COMPLETEAGENT" entry in queue "q02" between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
