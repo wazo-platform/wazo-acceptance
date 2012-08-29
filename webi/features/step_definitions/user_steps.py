@@ -11,6 +11,7 @@ from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
     line_manager_ws
 from xivo_lettuce.common import open_url, submit_form, element_is_in_list, \
     remove_line, edit_line, go_to_tab, find_line, assert_form_errors
+from utils import func
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)"$')
@@ -98,6 +99,20 @@ def given_there_is_a_user_1_2_with_a_sip_line_3(step, firstname, lastname, linen
     user_manager.type_user_names(firstname, lastname)
     user_manager.user_form_add_line(linenumber)
     submit_form()
+
+
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)"')
+def given_there_is_a_user_1_2(step, firstname, lastname, extension):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
+    line_manager_ws.delete_line_with_number(number, context)
+    user_ids = [user.id for user in world.ws.users.search('%s %s' % (firstname, lastname))]
+    for user_id in user_ids:
+        world.ws.users.delete(user_id)
+    u = xivo_ws.User(firstname=firstname, lastname=lastname)
+    u.line = xivo_ws.UserLine(context=context, number=number)
+    world.ws.users.add(u)
+    time.sleep(5)
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)" in group "([^"]*)"')

@@ -16,6 +16,12 @@ def given_there_is_no_queue_with_number_1(step, queue_number):
     queue_manager_ws.delete_queue_with_number(queue_number)
 
 
+@step(u'Given there is no queue with name "([^"]+)" or number "([^"]*)"$')
+def given_there_is_no_queue_with_name_or_number(step, queue_name, queue_number):
+    queue_manager_ws.delete_queue_with_displayname(queue_name)
+    queue_manager_ws.delete_queue_with_number(queue_number)
+
+
 @step(u'Given there is a queue "([^"]+)" with extension "([^"]+)"$')
 def given_there_is_a_queue_in_context_with_number(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)

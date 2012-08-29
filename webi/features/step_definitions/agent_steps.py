@@ -14,7 +14,7 @@ def given_an_agent_in_group_default(step, firstname, lastname, number, password)
     agent_manager_ws.add_agent(firstname, lastname, number, password)
 
 
-@step(u'Given no agent number "([^"]*)"')
+@step(u'Given there is no agent with number "([^"]*)"$')
 def given_no_agent_number_1(step, number):
     agent_manager_ws.delete_agent_with_number(number)
 

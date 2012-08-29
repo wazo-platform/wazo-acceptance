@@ -32,7 +32,7 @@ Feature: Xlet identity
         Given I am logged in
 
         Given there is no user "Darth" "Chewbacca"
-        Given no agent number "1153"
+        Given there is no agent with number "1153"
         Given there is a user "Darth" "Chewbacca" with an agent "1153" and CTI profile "Client"
 
         When I start the XiVO Client

@@ -11,41 +11,6 @@ from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
     user_manager_ws, line_manager_ws
 
 
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)"')
-def given_there_is_a_user_1_2(step, firstname, lastname, extension):
-    number, context = extract_number_and_context_from_extension(extension)
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
-    line_manager_ws.delete_line_with_number(number, context)
-    user_ids = [user.id for user in world.ws.users.search('%s %s' % (firstname, lastname))]
-    for user_id in user_ids:
-        world.ws.users.delete(user_id)
-    u = User(firstname=firstname, lastname=lastname)
-    u.line = UserLine(context=context, number=number)
-    world.ws.users.add(u)
-    given_i_wait_n_seconds(step, 5)
-
-
-@step(u'Given there is no user "([^"]*)" "([^"]*)"$')
-def given_there_is_no_user_with_number(step, firstname, lastname):
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
-
-
-@step(u'Given there is no queue with name "([^"]+)"$')
-def given_there_is_no_queue_with_name(step, queue_name):
-    queue_manager_ws.delete_queue_with_displayname(queue_name)
-
-
-@step(u'Given there is no queue with name "([^"]+)" or number "([^"]*)"$')
-def given_there_is_no_queue_with_name_or_number(step, queue_name, queue_number):
-    queue_manager_ws.delete_queue_with_displayname(queue_name)
-    queue_manager_ws.delete_queue_with_number(queue_number)
-
-
-@step(u'Given there is no agent with number "([^"]*)"$')
-def given_there_is_no_agent_with_number(step, agent_number):
-    agent_manager_ws.delete_agent_with_number(agent_number)
-
-
 @step(u'Given there is no "([A-Z_]+)" entry for agent "([^"]*)"')
 def given_there_is_no_entry_for_agent(step, event, agent_number):
     queuelog_manager.delete_event_by_agent_number(event, agent_number)
