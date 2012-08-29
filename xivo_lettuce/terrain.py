@@ -22,9 +22,10 @@ def initialize_from_config():
     _setup_login_infos(config)
     ssh_xivo = _setup_ssh_client_xivo(config)
     _setup_ssh_client_callgen(config)
-    _setup_ws(config)
-    #webi_prerequisites.setup()
-    #statcenter_prerequisites.setup(ssh_xivo)
+    ws = _setup_ws(config)
+    if ws.check_ws():
+        webi_prerequisites.setup()
+        statcenter_prerequisites.setup(ssh_xivo)
 
 
 def _read_config():
@@ -90,6 +91,7 @@ def _setup_ws(config):
     login = config.get('webservices_infos', 'login')
     password = config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)
+    return world.ws
 
 
 @world.absorb
