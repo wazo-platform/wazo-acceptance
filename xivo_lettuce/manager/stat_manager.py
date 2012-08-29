@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
+from xivo_lettuce.manager_ws import agent_manager_ws, queue_manager_ws, \
+    statconfs_manager_ws
 
 
 def regenerate_cache():
@@ -9,18 +11,18 @@ def regenerate_cache():
 
 
 def open_queue_stat_page_on_day(queue_name, day, config_name):
-    conf_id = world.ws.statconfs.search(config_name)[0].id
-    qid = world.ws.queues.search(queue_name)[0].id
+    conf_id = statconfs_manager_ws.get_conf_id_with_name(config_name)
+    queue_id = queue_manager_ws.get_queue_id_with_queue_name(queue_name)
     host = world.xivo_host
 
-    url = '''https://%s/statistics/call_center/index.php/data/stats1?confid=%s&key=queue-%s&axetype=day&dbeg=%s&dend=%s&dday=%s&dweek=2012-08-17&dmonth=2012-08&dyear=2012''' % (host, conf_id, qid, day, day, day)
+    url = '''https://%s/statistics/call_center/index.php/data/stats1?confid=%s&key=queue-%s&axetype=day&dbeg=%s&dend=%s&dday=%s&dweek=2012-08-17&dmonth=2012-08&dyear=2012''' % (host, conf_id, queue_id, day, day, day)
 
     world.browser.get(url)
 
 
 def open_agent_stat_page_on_day(agent_number, day, config_name):
-    conf_id = world.ws.statconfs.search(config_name)[0].id
-    agent_id = world.ws.agents.search(agent_number)[0].id
+    conf_id = statconfs_manager_ws.get_conf_id_with_name(config_name)
+    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     host = world.xivo_host
 
     url = '''https://%s/statistics/call_center/index.php/data/stats2?confid=%s&key=agent-%s&axetype=day&dbeg=%s&dend=%s&dday=%s&dweek=2012-08-17&dmonth=2012-08&dyear=2012''' % (host, conf_id, agent_id, day, day, day)

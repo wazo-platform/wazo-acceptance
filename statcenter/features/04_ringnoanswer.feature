@@ -1,6 +1,7 @@
 Feature: Stat
 
     Scenario: Generation of event RINGNOANSWER
+        Given there are no calls running
         Given there is no queue with name "q04" or number "5004"
         Given there is no agent with number "004"
         Given there is no user "User" "004"

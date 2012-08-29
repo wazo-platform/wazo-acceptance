@@ -1,6 +1,7 @@
 Feature: Stat
 
     Scenario: Generation of event ENTERQUEUE
+        Given there are no calls running
         Given there is no queue with name "q05" or number "5005"
         Given there is no agent with number "005"
         Given there is no "ENTERQUEUE" entry in queue "q05"

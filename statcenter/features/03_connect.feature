@@ -1,6 +1,7 @@
 Feature: Stat
 
     Scenario: Generation of event CONNECT
+        Given there are no calls running
         Given there is no queue with name "q03" or number "5003"
         Given there is no agent with number "003"
         Given there is no user "User" "003"

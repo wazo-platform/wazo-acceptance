@@ -1,8 +1,14 @@
 # -*- coding: UTF-8 -*-
 
 from lettuce.decorators import step
-from xivo_lettuce.manager import stat_manager, queuelog_manager
+from xivo_lettuce.manager import stat_manager, queuelog_manager, \
+    statscall_manager
 from xivo_lettuce.manager_ws import statconfs_manager_ws
+
+
+@step(u'Given there are no calls running')
+def given_there_are_no_calls_running(step):
+    statscall_manager.killall_process_sipp()
 
 
 @step(u'Then i should see ([0-9]+) "([^"]*)" event in queue "([^"]*)" in the queue log')
@@ -21,12 +27,12 @@ def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, e
 
 @step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with queue "(\S+)"$')
 def given_there_is_a_configuration_with(step, config_name, start, end, queue_name):
-    statconfs_manager_ws.add_configuration(config_name, start, end, queue_name)
+    statconfs_manager_ws.add_configuration_with_queue(config_name, start, end, queue_name)
 
 
 @step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with queue "(\S+)" and agent "(\S+)"$')
 def given_there_is_a_configuration_with_queue_and_agent(step, config_name, start, end, queue_name, agent_number):
-    statconfs_manager_ws.add_configuration(config_name, start, end, queue_name, agent_number)
+    statconfs_manager_ws.add_configuration_with_queue_and_agent(config_name, start, end, queue_name, agent_number)
 
 
 @step(u'^Given I have to following queue_log entries:$')

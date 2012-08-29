@@ -1,6 +1,7 @@
 Feature: Stat
 
     Scenario: Generation of event AGENTCALLBACKLOGIN
+        Given there are no calls running
         Given there is no agent with number "007"
         Given there is no user "User" "007"
         Given there is no "AGENTCALLBACKLOGIN" entry for agent "007"

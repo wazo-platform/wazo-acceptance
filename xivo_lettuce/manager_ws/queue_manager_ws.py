@@ -2,8 +2,17 @@
 
 import json
 from xivo_lettuce.common import get_webservices
+from lettuce.registry import world
 
 WSQ = get_webservices('queue')
+
+
+def get_queue_id_with_queue_name(queue_name):
+    queues = world.ws.queues.search(queue_name)
+    for queue in queues:
+        if queue.name == str(queue_name):
+            return queue.id
+    raise Exception('no queue with queue name %s' % queue_name)
 
 
 def delete_queue_with_displayname(queue_displayname):
