@@ -23,8 +23,8 @@ def initialize_from_config():
     ssh_xivo = _setup_ssh_client_xivo(config)
     _setup_ssh_client_callgen(config)
     _setup_ws(config)
-    webi_prerequisites.setup()
-    statcenter_prerequisites.setup(ssh_xivo)
+    #webi_prerequisites.setup()
+    #statcenter_prerequisites.setup(ssh_xivo)
 
 
 def _read_config():
