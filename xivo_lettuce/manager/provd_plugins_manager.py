@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
-from xivo_lettuce.common import *
+from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 
 
 def plugins_successfully_updated():

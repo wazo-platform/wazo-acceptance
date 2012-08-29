@@ -12,21 +12,20 @@ def add_trunksip(host, name, context='default'):
     sip_trunk.context = context
     sip_trunk.host = host
     sip_trunk.type = 'friend'
-    insert_id = world.ws.sip_trunk.add(sip_trunk)
-    return insert_id
+    world.ws.sip_trunk.add(sip_trunk)
 
 
 def add_or_replace_trunksip(host, name, context='default'):
-    trunksips = trunksips_with_name(name)
+    trunksips = find_trunksip_with_name(name)
     if len(trunksips) == 1:
         trunksip = trunksips[0]
-        del_trunksip(trunksip.id)
+        delete_trunksip_with_id(trunksip.id)
     add_trunksip(host, name, context)
 
 
-def trunksips_with_name(name):
+def find_trunksip_with_name(name):
     return world.ws.sip_trunk.search(name)
 
 
-def del_trunksip(trunk_id):
+def delete_trunksip_with_id(trunk_id):
     world.ws.sip_trunk.delete(trunk_id)

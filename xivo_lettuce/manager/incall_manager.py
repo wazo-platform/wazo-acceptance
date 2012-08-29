@@ -19,9 +19,3 @@ def type_incall_context(incall_context):
 
 def remove_incall_with_did(incall_did):
     remove_element_if_exist('incall', incall_did)
-
-
-def remove_incall_with_did_via_ws(incall_did):
-    incalls = world.ws.incalls.search_by_number(incall_did)
-    for incall in incalls:
-        world.ws.incalls.delete(incall.id)

@@ -3,19 +3,20 @@
 from lettuce import step
 from xivo_lettuce.common import open_url, element_in_list_matches_field, \
     submit_form
-from xivo_lettuce.manager.group_manager import remove_group_with_number, \
-    remove_group_with_name, remove_group_with_name_via_ws, type_group_name, \
-    type_group_number, type_context
+from xivo_lettuce.manager.group_manager import remove_group_with_name, \
+    type_group_name, type_group_number, type_context
+
+from xivo_lettuce.manager_ws import group_manager_ws
 
 
 @step(u'Given there is no group with number "([^"]*)"')
 def given_there_is_no_group_with_number(step, number):
-    remove_group_with_number(number)
+    group_manager_ws.delete_group_with_number(number)
 
 
 @step(u'Given there is no group with name "([^"]*)"')
 def given_there_is_no_group_with_name(step, name):
-    remove_group_with_name_via_ws(name)
+    group_manager_ws.delete_group_with_name(name)
 
 
 @step(u'When I create a group "([^"]*)" with number "([^"]*)"')

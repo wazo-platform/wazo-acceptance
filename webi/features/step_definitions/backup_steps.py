@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-from lettuce import step, world
-from xivo_lettuce.common import open_url, find_line
+
 import time
 import os
+from lettuce import step, world
+from xivo_lettuce.common import open_url, find_line
 
 
 @step(u'Given there is a backup file "([^"]*)"')
@@ -21,7 +22,7 @@ def when_i_download_backup_file(step, filename):
 
 @step(u'Then a non-empty file "([^"]*)" is present on disk')
 def then_a_non_empty_file_is_present_on_disk(step, filename):
-    path = os.path.join('/','tmp',filename)
+    path = os.path.join('/', 'tmp', filename)
     filesize = 0
     for x in range(30):
         time.sleep(1)
@@ -29,10 +30,9 @@ def then_a_non_empty_file_is_present_on_disk(step, filename):
         if is_file:
             try:
                 filesize = os.path.getsize(path)
-                if(filesize > 0 ):
+                if(filesize > 0):
                     break
             except OSError:
                 raise Exception("Unknown file : %s" % path)
 
     assert filesize > 0, 'filesize : %s' % filesize
-

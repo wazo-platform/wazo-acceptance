@@ -1,0 +1,3 @@
+entityid|firstname|lastname|language|outcallerid|enableclient|username|password|profileclient|enablehint|agentnumber|mobilephonenumber|bosssecretary|phonenumber|context|protocol|incallexten|incallcontext|voicemailname|voicemailmailbox|voicemailpassword|voicemailemail
+1|Francis|Lalannix|en_US|outcallerid|True|francis|password|client|True|2000|0033123456789||1900|default|sip|1900|from-extern|Francis Lalannix|1900|1234|dev@avencall.com
+1|Bob|Marley|en_US|outcallerid|True|bob|password|client|True|2000|0033123456789||1901|default|sip|1901|from-extern|Bob Marley|1901|1234|dev@avencall.com

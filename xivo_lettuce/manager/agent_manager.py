@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
-from xivo_ws import Agent
 from xivo_lettuce.common import edit_text_field
 
 
@@ -19,38 +18,3 @@ def type_agent_info(firstName, lastName, number):
 def change_password(password):
     _check_if_in_edit_page()
     edit_text_field('it-agentfeatures-passwd', password)
-
-
-def get_password(number):
-    agent = world.ws.agents.find_one_by_number(number)
-    return agent.password
-
-
-def insert_agent(firstname, lastname, number, passwd, context='default', user_id=[]):
-    try:
-        agent = world.ws.agents.find_one_by_number(number)
-    except Exception:
-        agent = Agent()
-    else:
-        delete_agent_by_number(number)
-    agent.firstname = firstname
-    agent.lastname = lastname
-    agent.password = passwd
-    agent.number = number
-    agent.context = context
-    if user_id:
-        agent.users = user_id
-    world.ws.agents.add(agent)
-    agent = world.ws.agents.find_one_by_number(number)
-    return agent.id
-
-
-def delete_agent_by_number(number):
-    agents = world.ws.agents.search_by_number(number)
-    for agent in agents:
-        world.ws.agents.delete(agent.id)
-
-
-def find_agent_id_from_number(number):
-    agent = world.ws.agents.find_one_by_number(number)
-    return agent.id

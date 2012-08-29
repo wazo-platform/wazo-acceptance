@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import time
-    
 from lettuce.registry import world
-from xivo_lettuce.common import *
-
-
-WS = get_webservices('provd_general')
+from xivo_lettuce.common import open_url
 
 
 def type_plugin_server_url(url):

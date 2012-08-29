@@ -7,68 +7,68 @@ from xivo_ws.objects.context import Context, ContextRange
 from xivo_ws.exception import WebServiceRequestError
 
 
-def add_contextnumbers_user(name, numberbeg, numberend):
-    context = get_context(name)
+def update_contextnumbers_user(name, numberbeg, numberend):
+    context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        _add_context(name, name, 'internal', contextnumbers_user=contextnumbers)
+        add_context(name, name, 'internal', contextnumbers_user=contextnumbers)
     else:
         context.users.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def add_contextnumbers_group(name, numberbeg, numberend):
-    context = get_context(name)
+def update_contextnumbers_group(name, numberbeg, numberend):
+    context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        _add_context(name, name, 'internal', contextnumbers_group=contextnumbers)
+        add_context(name, name, 'internal', contextnumbers_group=contextnumbers)
     else:
         context.groups.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def add_contextnumbers_queue(name, numberbeg, numberend):
-    context = get_context(name)
+def update_contextnumbers_queue(name, numberbeg, numberend):
+    context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        _add_context(name, name, 'internal', contextnumbers_queue=contextnumbers)
+        add_context(name, name, 'internal', contextnumbers_queue=contextnumbers)
     else:
         context.queues.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def add_contextnumbers_meetme(name, numberbeg, numberend):
-    context = get_context(name)
+def update_contextnumbers_meetme(name, numberbeg, numberend):
+    context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        _add_context(name, name, 'internal', contextnumbers_meetme=contextnumbers)
+        add_context(name, name, 'internal', contextnumbers_meetme=contextnumbers)
     else:
         context.conf_rooms.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def add_contextnumbers_incall(name, numberbeg, numberend, didlength):
-    context = get_context(name)
+def update_contextnumbers_incall(name, numberbeg, numberend, didlength):
+    context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend), did_length=didlength)
     if not context:
-        _add_context(name, name, 'incall', contextnumbers_incall=contextnumbers)
+        add_context(name, name, 'incall', contextnumbers_incall=contextnumbers)
     else:
         context.incalls.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def delete_context(name):
+def delete_context_with_name(name):
     world.ws.contexts.delete(name)
 
 
-def get_context(name):
+def get_context_with_name(name):
     try:
         return world.ws.contexts.view(name)
     except WebServiceRequestError:
         return False
 
 
-def _add_context(name, display_name, context_type,
+def add_context(name, display_name, context_type,
                  context_include=[],
                  contextnumbers_user='',
                  contextnumbers_group='',

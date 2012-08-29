@@ -5,7 +5,7 @@ from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce.checkbox import Checkbox
 from xivo_lettuce.common import go_to_tab, open_url, submit_form
-from xivo_lettuce.manager.iax_general_manager import find_call_limit_line,\
+from xivo_lettuce.manager.iax_general_manager import find_call_limit_line, \
     find_call_limit_lines
 
 
@@ -18,7 +18,7 @@ def i_go_on_the_general_settings_iax_protocol_page_tab(step, tab):
 @step(u'Given I don\'t see any call limit to "([^"]*)" netmask "([^"]*)"')
 def given_i_don_t_see_any_call_limit_to_netmask_(step, destination, netmask):
     try:
-        lines = find_call_limit_lines(destination, netmask)
+        find_call_limit_lines(destination, netmask)
     except NoSuchElementException:
         return
     when_i_remove_the_call_limits_to_netmask(step, destination, netmask)
@@ -111,7 +111,7 @@ def then_the_srv_lookup_option_is_enabled(step):
 
 
 @step(u'When I disable the SRV lookup option')
-def when_i_enable_the_srv_lookup_option(step):
+def when_i_disable_the_srv_lookup_option(step):
     option = _get_srv_lookup_option()
     option.uncheck()
     submit_form()

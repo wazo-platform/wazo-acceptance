@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 
+import time
+
 from lettuce.decorators import step
 from selenium.webdriver.support.select import Select
-
-from xivo_lettuce.common import *
-from xivo_lettuce.manager import context_manager
+from xivo_lettuce.common import webi_login, logged, go_to_home_page, \
+    webi_login_as_default, the_option_is_checked, remove_element_if_exist, \
+    element_is_in_list, element_is_not_in_list, submit_form, FormErrorException, \
+    find_form_errors, assert_form_errors, go_to_tab, run_xivoclient, \
+    xivoclient_step, get_host_address, xivoclient
+from lettuce.registry import world
+from xivo_lettuce.checkbox import Checkbox
+from selenium.common.exceptions import NoSuchElementException
 
 
 @step(u'When I login as (.*) with password (.*) in (.*)')

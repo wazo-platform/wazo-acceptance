@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
-from xivo_lettuce.common import get_webservices
-
-WS = get_webservices('meetme')
 
 
 def type_name(name):
@@ -31,16 +28,3 @@ def type_maxusers(maxusers):
     input_maxusers = world.browser.find_element_by_id('it-meetmefeatures-maxusers')
     input_maxusers.clear()
     input_maxusers.send_keys(maxusers)
-
-
-def delete_meetme_by_confno(confno):
-    for id in find_meetme_id_from_confno(confno):
-        WS.delete(id)
-
-
-def find_meetme_id_from_confno(confno):
-    list = WS.search(confno)
-    if list:
-        return [meetme['id'] for meetme in list if
-                meetme['confno'] == confno]
-    return []
