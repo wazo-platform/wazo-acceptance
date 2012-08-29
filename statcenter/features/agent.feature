@@ -2,11 +2,13 @@ Feature: WEBI Agent Stats
 
     Scenario: Generate stats for answered calls
         Given there is no queue with name "q01" and number "5001"
+        Given there is no agent with number "1"
         Given there is no "COMPLETECALLER" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is no "CONNECT" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is no "TRANSFER" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is no "ENTERQUEUE" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is a queue "q01" with extension "5001@statscenter"
+        Given there is a agent "Agent" "1" with extension "1@statscenter"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01" and agent "1"
         Given I have to following queue_log entries:
           | time                       | callid      | queuename | agent     | event               | data1 | data2          | data3 | data4 | data5 |
