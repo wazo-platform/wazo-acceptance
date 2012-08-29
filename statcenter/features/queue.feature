@@ -25,4 +25,3 @@ Feature: WEBI Queue Stats
           | 9h-10h  |         2 |
           | 10h-11h |         0 |
           | Total   |         5 |
-
