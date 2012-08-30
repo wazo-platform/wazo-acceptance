@@ -57,7 +57,7 @@ def given_there_is_a_queue_in_context_with_extension_with_agent(step, name, exte
     _remove_queues_with_name_or_number_if_exist(name, number)
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     data = {'name': name,
-            'number': queue_number,
+            'number': number,
             'context': context,
             'agents': [agent_id]}
     queue_manager_ws.add_queue(data)
@@ -69,7 +69,7 @@ def given_there_is_a_queue_saturated_in_context_with_extension_with_agent(step, 
     _remove_queues_with_name_or_number_if_exist(name, number)
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     data = {'name': name,
-            'number': queue_number,
+            'number': number,
             'context': context,
             'maxlen': 1,
             'agents': [agent_id]}
