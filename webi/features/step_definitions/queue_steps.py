@@ -29,7 +29,7 @@ def given_there_is_a_queue_in_context_with_number(step, name, extension):
             'number': number,
             'context': context,
             'maxlen': 0,
-            'agents': ''}
+            'agents': []}
     queue_manager_ws.add_queue(data)
 
 
@@ -41,8 +41,9 @@ def given_there_is_a_queue_in_context_with_number_with_agent(step, name, extensi
             'number': queue_number,
             'context': context,
             'maxlen': 0,
-            'agents': agent_id}
+            'agents': [agent_id]}
     queue_manager_ws.add_queue(data)
+
 
 @step(u'Given there is a queue "([^"]+)" saturated with extension "([^"]+)" with agent "([^"]+)"$')
 def given_there_is_a_queue_saturated_in_context_with_number_with_agent(step, name, extension, agent_number):
@@ -52,7 +53,7 @@ def given_there_is_a_queue_saturated_in_context_with_number_with_agent(step, nam
             'number': queue_number,
             'context': context,
             'maxlen': 1,
-            'agents': agent_id}
+            'agents': [agent_id]}
     queue_manager_ws.add_queue(data)
 
 
