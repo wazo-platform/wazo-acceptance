@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import json
-from xivo_lettuce.common import get_webservices
 from lettuce.registry import world
-
-WSQ = get_webservices('queue')
+from xivo_ws.objects.queue import Queue
 
 
 def get_queue_id_with_queue_name(queue_name):
@@ -15,40 +12,48 @@ def get_queue_id_with_queue_name(queue_name):
     raise Exception('no queue with queue name %s' % queue_name)
 
 
+def get_queue_id_with_number(queue_number):
+    queues = world.ws.queues.search(queue_number)
+    for queue in queues:
+        if queue.name == str(queue_number):
+            return queue.id
+    raise Exception('no queue with queue number %s' % queue_number)
+
+
 def delete_queue_with_displayname(queue_displayname):
-    for id in find_queue_id_with_displayname(queue_displayname):
-        WSQ.delete(id)
+    try:
+        world.ws.queues.delete(get_queue_id_with_queue_name(queue_displayname))
+    except Exception:
+        pass
 
 
 def delete_queue_with_number(queue_number):
-    for id in find_queue_id_with_number(queue_number):
-        WSQ.delete(id)
+    try:
+        world.ws.queues.delete(get_queue_id_with_number(queue_number))
+    except Exception:
+        pass
 
 
 def find_queue_id_with_displayname(queue_displayname):
-    queue_list = WSQ.list()
-    if queue_list:
-        return [queueinfo['id'] for queueinfo in queue_list if
-                queueinfo['displayname'] == queue_displayname]
+    queues = world.ws.queues.search(queue_displayname)
+    if queues:
+        return [queue.id for queue in queues]
     return []
 
 
 def find_queue_id_with_number(queue_number):
-    queue_list = WSQ.list()
-    if queue_list:
-        return [queueinfo['id'] for queueinfo in queue_list if
-                queueinfo['number'] == queue_number]
+    queues = world.ws.queues.search(queue_number)
+    if queues:
+        return [queue.id for queue in queues]
     return []
 
 
 def add_queue(data):
-    jsoncontent = WSQ.get_json_file_content('queue')
-    datajson = jsoncontent % {
-                              'name': data['name'],
-                              'number': data['number'],
-                              'context': data['context'],
-                              'maxlen': data['maxlen'],
-                              'agents': data['agents']
-                             }
-    data = json.loads(datajson)
-    WSQ.add(data)
+    queue = Queue()
+    queue.name = data['name']
+    queue.display_name = data['name']
+    queue.number = data['number']
+    queue.context = data['context']
+    queue.maxlen = data['maxlen']
+    queue.agents = data['agents']
+    world.ws.queues.add(queue)
