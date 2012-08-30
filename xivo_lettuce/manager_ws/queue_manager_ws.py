@@ -5,7 +5,7 @@ from xivo_ws.objects.queue import Queue
 
 
 def get_queue_id_with_queue_name(queue_name):
-    queues = world.ws.queues.search(queue_name)
+    queues = world.ws.queues.list()
     for queue in queues:
         if queue.name == str(queue_name):
             return queue.id
@@ -20,18 +20,22 @@ def get_queue_id_with_number(queue_number):
     raise Exception('no queue with queue number %s' % queue_number)
 
 
-def delete_queue_with_displayname(queue_displayname):
+def delete_queue_with_name_if_exists(queue_displayname):
     try:
-        world.ws.queues.delete(get_queue_id_with_queue_name(queue_displayname))
+        queue_id = get_queue_id_with_queue_name(queue_displayname)
     except Exception:
         pass
+    else:
+        world.ws.queues.delete(queue_id)
 
 
-def delete_queue_with_number(queue_number):
+def delete_queue_with_number_if_exists(queue_number):
     try:
-        world.ws.queues.delete(get_queue_id_with_number(queue_number))
+        queue_id = get_queue_id_with_number(queue_number)
     except Exception:
         pass
+    else:
+        world.ws.queues.delete(queue_id)
 
 
 def find_queue_id_with_displayname(queue_displayname):

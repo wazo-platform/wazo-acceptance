@@ -9,6 +9,7 @@ from xivo_lettuce.common import webi_login, logged, go_to_home_page, \
     element_is_in_list, element_is_not_in_list, submit_form, FormErrorException, \
     find_form_errors, assert_form_errors, go_to_tab, run_xivoclient, \
     xivoclient_step, get_host_address, xivoclient
+from xivo_lettuce import form
 from lettuce.registry import world
 from xivo_lettuce.checkbox import Checkbox
 from selenium.common.exceptions import NoSuchElementException
@@ -73,12 +74,7 @@ def i_submit(step):
 
 @step(u'When I submit with errors')
 def when_i_submit_with_errors(step):
-    try:
-        submit_form()
-    except FormErrorException:
-        pass
-    else:
-        raise Exception('No error occurred')
+    form.submit_form_with_errors()
 
 
 @step(u'Then I see no errors')

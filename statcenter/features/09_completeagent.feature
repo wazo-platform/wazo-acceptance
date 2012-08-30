@@ -2,7 +2,6 @@ Feature: Stat
 
     Scenario: Generation of event COMPLETEAGENT
         Given there are no calls running
-        Given there is no queue with name "q09" or number "5009"
         Given there is no agent with number "009"
         Given there is no user "User" "009"
         Given there is no "COMPLETEAGENT" entry in queue "q09"

@@ -2,7 +2,6 @@ Feature: Stat
 
     Scenario: Generation of event FULL
         Given there are no calls running
-        Given there is no queue with name "q01" or number "5001"
         Given there is no agent with number "001"
         Given there is no "FULL" entry in queue "q01"
         Given there is a agent "Agent" "001" with extension "001@statscenter"
