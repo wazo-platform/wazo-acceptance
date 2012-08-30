@@ -27,26 +27,45 @@ def given_there_is_a_queue_in_context_with_number(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     data = {'name': name,
             'number': number,
+            'context': context}
+    queue_manager_ws.add_queue(data)
+
+
+@step(u'Given there is a queue "([^"]+)" joinempty with extension "([^"]+)"$')
+def given_there_is_a_queue_joinempty_with_extension(step, name, extension):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    data = {'name': name,
+            'number': number,
             'context': context,
-            'maxlen': 0,
-            'agents': []}
+            'joinempty': 'unavailable'}
+    queue_manager_ws.add_queue(data)
+
+
+@step(u'Given there is a queue "([^"]+)" leaveempty with extension "([^"]+)" with agent "([^"]+)"$')
+def given_there_is_a_queue_leaveempty_with_extension(step, name, extension, agent_number):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    data = {'name': name,
+            'number': number,
+            'context': context,
+            'leavewhenempty': 'unavailable, pause',
+            'agents': [agent_id]}
     queue_manager_ws.add_queue(data)
 
 
 @step(u'Given there is a queue "([^"]+)" with extension "([^"]+)" with agent "([^"]*)"$')
-def given_there_is_a_queue_in_context_with_number_with_agent(step, name, extension, agent_number):
+def given_there_is_a_queue_in_context_with_extension_with_agent(step, name, extension, agent_number):
     queue_number, context = func.extract_number_and_context_from_extension(extension)
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     data = {'name': name,
             'number': queue_number,
             'context': context,
-            'maxlen': 0,
             'agents': [agent_id]}
     queue_manager_ws.add_queue(data)
 
 
 @step(u'Given there is a queue "([^"]+)" saturated with extension "([^"]+)" with agent "([^"]+)"$')
-def given_there_is_a_queue_saturated_in_context_with_number_with_agent(step, name, extension, agent_number):
+def given_there_is_a_queue_saturated_in_context_with_extension_with_agent(step, name, extension, agent_number):
     queue_number, context = func.extract_number_and_context_from_extension(extension)
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     data = {'name': name,

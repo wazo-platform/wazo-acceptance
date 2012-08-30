@@ -41,6 +41,11 @@ def delete_event_by_queue_between(event, queuename, start, end):
         queue_log_dao.delete_event_by_queue_between(event, queuename, start, end)
 
 
+def delete_event_between(start, end):
+    with asterisk_connection():
+        queue_log_dao.delete_event_between(start, end)
+
+
 def get_event_count_queue(event, queuename):
     pg_command = '"SELECT COUNT(*) FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'"' % (queuename, event)
     res = _exec_pgsql_request_with_return(pg_command)

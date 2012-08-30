@@ -12,7 +12,7 @@ def add_configuration_with_queue(config_name, work_start, work_end, queue_name):
     conf = _build_base_configuration(config_name, work_start, work_end)
 
     conf.queue = [queue_id]
-    conf.queue_qos = [10]
+    conf.queue_qos = {queue_id: 10}
 
     world.ws.statconfs.add(conf)
 
@@ -25,8 +25,8 @@ def add_configuration_with_queue_and_agent(config_name, work_start, work_end, qu
     conf = _build_base_configuration(config_name, work_start, work_end)
 
     conf.queue = [queue_id]
+    conf.queue_qos = {queue_id: 10}
     conf.agent = [agent_id]
-    conf.queue_qos = [10]
 
     world.ws.statconfs.add(conf)
 

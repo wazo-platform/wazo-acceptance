@@ -19,8 +19,13 @@ def given_there_is_no_entry_in_queue_queue(step, event, queue_name):
 
 
 @step(u'^Given there is no "([A-Z_]+)" entry in queue "(\S+)" between "(.+)" and "(.+)"$')
-def given_there_is_no_event_entry_in_queue_log_table_in_queue_queue_between(step, event, queue_name, start, end):
+def given_there_is_no_event_entry_in_queue_log_table_in_queue_between(step, event, queue_name, start, end):
     queuelog_manager.delete_event_by_queue_between(event, queue_name, start, end)
+
+
+@step(u'^Given there is no entries in queue_log between "(.+)" and "(.+)"$')
+def given_there_is_no_entries_in_queue_log_table_between(step, start, end):
+    queuelog_manager.delete_event_between(start, end)
 
 
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')

@@ -3,6 +3,8 @@
 from lettuce.registry import world
 from xivo_lettuce.manager_ws import agent_manager_ws, queue_manager_ws, \
     statconfs_manager_ws
+import copy
+from pprint import pprint
 
 
 def regenerate_cache():
@@ -37,36 +39,45 @@ def open_agent_stat_page_on_day(agent_number, day, config_name):
 
 
 def check_queue_statistic(stats):
-    table = world.browser.find_element_by_id('queue').text
-    lines = [l.strip() for l in table.split('\n')]
-    headers = lines[1].split(' ')
-    values = lines[2:]
-
-    expected_headers = stats[0].keys()[1:]
-    expected_values = [stat.values() for stat in stats]
-
-    for row in expected_values:
-        matching_result_row = [line for line in values if line.split(' ')[0] == row[0]][0].split(' ')
-        for expected_index, column in enumerate(expected_headers):
-            index = headers.index(column) + 1
-            result = matching_result_row[index]
-            expected = row[expected_index + 1]
-            assert result == expected, 'Result does not match expectations'
+    table = world.browser.find_element_by_id('queue')
+    _check_table_statistic(table, stats)
 
 
 def check_agent_statistic(stats):
-    table = world.browser.find_element_by_id('agent').text
-    lines = [l.strip() for l in table.split('\n')]
-    headers = lines[1].split(' ')
-    values = lines[2:]
+    table = world.browser.find_element_by_id('agent')
+    _check_table_statistic(table, stats)
 
-    expected_headers = stats[0].keys()[1:]
-    expected_values = [stat.values() for stat in stats]
 
-    for row in expected_values:
-        matching_result_row = [line for line in values if line.split(' ')[0] == row[0]][0].split(' ')
-        for expected_index, column in enumerate(expected_headers):
-            index = headers.index(column) + 1
-            result = matching_result_row[index]
-            expected = row[expected_index + 1]
-            assert result == expected, 'Result does not match expectations'
+def _check_table_statistic(table, stats):
+    list_tr = table.find_elements_by_tag_name('tr')
+
+    list_tr.pop(0)
+    headers_line = list_tr.pop(0)
+    headers = _extract_th_from_tr_element(headers_line)
+    expected_headers = stats[0].keys()
+    values = _extract_td_from_tr_elements(list_tr, headers, expected_headers)
+
+    assert(stats == values)
+
+
+def _extract_td_from_tr_elements(list_tr, headers, expected_headers):
+    lines = list()
+    for tr_element in list_tr:
+        td_elements = tr_element.find_elements_by_tag_name('td')
+        td_elements_text = [td_element.text.strip() for td_element in td_elements]
+        line_dict = dict(zip(headers, td_elements_text))
+        _filter_key_dict(line_dict, expected_headers)
+        lines.append(line_dict)
+    return lines
+
+
+def _filter_key_dict(line_dict, filter_keys):
+    ref_line_dict = copy.deepcopy(line_dict.keys())
+    for key in ref_line_dict:
+        if key not in filter_keys:
+            del(line_dict[key])
+
+
+def _extract_th_from_tr_element(tr_element):
+    header_th = tr_element.find_elements_by_tag_name('th')
+    return [header.text.strip() for header in header_th]

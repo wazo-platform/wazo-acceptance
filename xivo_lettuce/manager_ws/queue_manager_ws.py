@@ -54,6 +54,12 @@ def add_queue(data):
     queue.display_name = data['name']
     queue.number = data['number']
     queue.context = data['context']
-    queue.maxlen = data['maxlen']
-    queue.agents = data['agents']
+    if 'maxlen' in data:
+        queue.maxlen = data['maxlen']
+    if 'agents' in data:
+        queue.agents = data['agents']
+    if 'joinempty' in data:
+        queue.joinempty = data['joinempty']
+    if 'leavewhenempty' in data:
+        queue.leavewhenempty = data['leavewhenempty']
     world.ws.queues.add(queue)
