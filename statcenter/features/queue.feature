@@ -91,6 +91,30 @@ Feature: WEBI Queue Stats
           | Total   |         5 |         5 |
 
 
+    Scenario: Generate stats for closed queue
+        Given there is no queue with name "q01" or number "5001"
+        Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
+        Given there is a queue "q01" with extension "5001@statscenter"
+        Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
+        Given I have to following queue_log entries:
+          | time                       | callid     | queuename | agent | event   | data1 | data2 | data3 | data4 | data5 |
+          | 2012-07-01 08:00:00.000000 | received_1 | q01       | NONE  | CLOSED  |       |       |       |       |       |
+          | 2012-07-01 08:00:00.000001 | received_6 | q01       | NONE  | CLOSED  |       |       |       |       |       |
+          | 2012-07-01 08:00:00.000001 | received_3 | q02       | NONE  | CLOSED  |       |       |       |       |       |
+          | 2012-07-01 08:59:59.999999 | received_2 | q01       | NONE  | CLOSED  |       |       |       |       |       |
+          | 2012-07-01 09:00:00.000000 | received_4 | q01       | NONE  | CLOSED  |       |       |       |       |       |
+          | 2012-07-01 09:59:59.999999 | received_5 | q01       | NONE  | CLOSED  |       |       |       |       |       |
+        Given I clear and generate the statistics cache
+        Given I am logged in
+        Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+          |         | Received  | Closed  |
+          | 8h-9h   |         3 |       3 |
+          | 9h-10h  |         2 |       2 |
+          | 10h-11h |         0 |       0 |
+          | 11h-12h |         0 |       0 |
+          | Total   |         5 |       5 |
+
+
     Scenario: Generate stats for saturated calls
         Given there is no queue with name "q01" or number "5001"
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
