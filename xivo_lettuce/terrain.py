@@ -23,7 +23,8 @@ def initialize_from_config():
     ssh_xivo = _setup_ssh_client_xivo(config)
     _setup_ssh_client_callgen(config)
     ws = _setup_ws(config)
-    if ws.check_ws():
+    enable_prerequisites = config.getboolean('prerequisites', 'enable')
+    if enable_prerequisites and ws.check_ws():
         webi_prerequisites.setup()
         statcenter_prerequisites.setup(ssh_xivo)
 
