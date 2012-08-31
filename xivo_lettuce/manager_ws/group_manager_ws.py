@@ -4,12 +4,13 @@ from lettuce import world
 from xivo_ws.objects.group import Group
 
 
-def add_group(group_name, number='', context='default', user_list=[]):
+def add_group(group_name, number='', context='default', user_ids=[]):
     group = Group()
     group.name = group_name
     group.number = number
     group.context = context
-    group.user_ids = user_list
+    if user_ids:
+        group.user_ids = user_ids
     world.ws.groups.add(group)
 
 

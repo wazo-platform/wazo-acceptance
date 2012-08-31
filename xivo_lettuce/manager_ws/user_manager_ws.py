@@ -1,44 +1,49 @@
 # -*- coding: utf-8 -*-
 
-import json
 import voicemail_manager_ws
 from lettuce.registry import world
 from xivo_lettuce.common import get_webservices
+from xivo_ws.objects.user import User, UserLine, UserVoicemail
+from xivo_lettuce.manager_ws import line_manager_ws
 
 
-WSU = get_webservices('user')
 WSG = get_webservices('group')
 
 
-def _fill_json_user_data(jsoncontent, data_dict):
-    if 'firstname' not in data_dict:
-        data_dict['firstname'] = 'firstname'
-    if 'lastname' not in data_dict:
-        data_dict['lastname'] = 'lastname'
-    if 'agentid' not in data_dict:
-        data_dict['agentid'] = ''
+def add_user(data_dict):
+    user = User()
+    user.firstname = data_dict['firstname']
 
-    return jsoncontent % data_dict
+    if 'lastname' in data_dict:
+        user.lastname = data_dict['lastname']
+    if 'agentid' in data_dict:
+        user.agent_id = int(data_dict['agentid'])
+    if 'language' in data_dict:
+        user.language = data_dict['language']
+    if 'enable_client' in data_dict:
+        user.enable_client = bool(data_dict['enable_client'])
+    if 'client_username' in data_dict:
+        user.client_username = data_dict['client_username']
+    if 'client_password' in data_dict:
+        user.client_password = data_dict['client_password']
+    if 'client_profile' in data_dict:
+        user.client_profile = data_dict['client_profile']
 
+    if 'line_number' in data_dict and 'line_context' in data_dict:
+        user.line = UserLine()
+        user.line.number = data_dict['line_number']
+        user.line.context = data_dict['line_context']
 
-def add_user_with_no_line(firstname, lastname, agentid=''):
-    jsoncontent = WSU.get_json_file_content('user')
-    data_dict = {'firstname': firstname,
-                 'lastname': lastname,
-                 'agentid': agentid}
-    datajson = _fill_json_user_data(jsoncontent, data_dict)
-    data = json.loads(datajson)
-    WSU.add(data)
+    if 'voicemail_name' in data_dict and 'voicemail_number' in data_dict:
+        user.voicemail = UserVoicemail()
+        user.voicemail.name = data_dict['voicemail_name']
+        user.voicemail.number = data_dict['voicemail_number']
 
+    ret = world.ws.users.add(user)
+    if not ret:
+        return False
 
-def add_user(firstname, lastname, agentid=''):
-    jsoncontent = WSU.get_json_file_content('userwithline')
-    data_dict = {'firstname': firstname,
-                 'lastname': lastname,
-                 'agentid': agentid}
-    datajson = _fill_json_user_data(jsoncontent, data_dict)
-    data = json.loads(datajson)
-    WSU.add(data)
+    return int(ret)
 
 
 def delete_user_with_firstname_lastname(firstname, lastname):
@@ -46,14 +51,34 @@ def delete_user_with_firstname_lastname(firstname, lastname):
     for user in users:
         if user.voicemail:
             voicemail_manager_ws.delete_voicemail_with_id(user.voicemail.id)
+        if user.line:
+            line_manager_ws.delete_line_with_number(user.line.number)
         world.ws.user.delete(user.id)
 
 
+def delete_user_with_firstname(firstname):
+    users = world.ws.user.search(firstname)
+    for user in users:
+        if user.voicemail:
+            voicemail_manager_ws.delete_voicemail_with_id(user.voicemail.id)
+        if user.line:
+            line_manager_ws.delete_line_with_number(user.line.number)
+        world.ws.user.delete(user.id)
+
+
+def get_user_id_with_with_firstname_lastname(firstname, lastname):
+    users = world.ws.user.search('%s %s' % (firstname, lastname))
+    for user in users:
+        if user.firstname == str(firstname) and user.lastname == str(lastname):
+            return user.id
+    raise Exception('no user with fullname "%s %s"', firstname, lastname)
+
+
 def find_user_id_with_firstname_lastname(firstname, lastname):
-    user_list = WSU.list()
-    if user_list:
-        return [userinfo['id'] for userinfo in user_list if
-                userinfo['firstname'] == firstname and userinfo['lastname'] == lastname]
+    users = world.ws.user.search('%s %s' % (firstname, lastname))
+    if users:
+        return [user.id for user in users if
+                user.firstname == firstname and user.lastname == lastname]
     return []
 
 

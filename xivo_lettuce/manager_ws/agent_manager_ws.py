@@ -23,20 +23,19 @@ def delete_agent_with_number(number):
         world.ws.agents.delete(agent.id)
 
 
-def add_agent(firstname, lastname, number, passwd, context='default', user_id=[]):
-    try:
-        agent = world.ws.agents.find_one_by_number(number)
-    except Exception:
-        agent = Agent()
-    else:
-        delete_agent_with_number(number)
-    agent.firstname = firstname
-    agent.lastname = lastname
-    agent.password = passwd
-    agent.number = number
-    agent.context = context
-    if user_id:
-        agent.users = user_id
+def add_agent(data_dict):
+    agent = Agent()
+    agent.firstname = data_dict['firstname']
+    agent.number = data_dict['number']
+    agent.context = data_dict['context']
+
+    if 'lastname' in data_dict:
+        agent.lastname = data_dict['lastname']
+    if 'passwd' in data_dict:
+        agent.passwd = data_dict['passwd']
+    if 'users' in data_dict:
+        agent.users = data_dict['users']
+
     world.ws.agents.add(agent)
-    agent = world.ws.agents.find_one_by_number(number)
-    return agent.id
+    agent = world.ws.agents.find_one_by_number(data_dict['number'])
+    return int(agent.id)

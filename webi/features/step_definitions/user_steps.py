@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import xivo_ws
 import time
 
 from lettuce import step
@@ -8,22 +7,107 @@ from lettuce.registry import world
 from selenium.webdriver.support.select import Select
 from xivo_lettuce.manager import user_manager, line_manager
 from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
-    line_manager_ws
+    line_manager_ws, agent_manager_ws, voicemail_manager_ws
 from xivo_lettuce.common import open_url, submit_form, element_is_in_list, \
     remove_line, edit_line, go_to_tab, find_line, assert_form_errors
 from utils import func
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)"$')
-def given_there_is_a_user_1_2(step, firstname, lastname):
+def given_there_is_a_user(step, firstname, lastname):
     user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
-    user_manager_ws.add_user(firstname, lastname)
+    user_data = {'firstname': firstname,
+                 'lastname': lastname}
+    user_manager_ws.add_user(user_data)
 
 
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with no line$')
-def given_there_is_a_user_1_2_with_no_line(step, firstname, lastname):
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)"$')
+def given_there_is_a_user_with_extension(step, firstname, lastname, extension):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    voicemail_manager_ws.delete_voicemail_with_number(number)
+    line_manager_ws.delete_line_with_number(number, context)
     user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
-    user_manager_ws.add_user_with_no_line(firstname, lastname)
+    user_data = {'firstname': firstname,
+                'lastname': lastname,
+                'line_context': context,
+                'line_number': number}
+    user_manager_ws.add_user(user_data)
+
+
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" in group "([^"]*)"$')
+def given_there_is_a_user_with_a_sip_line_in_group(step, firstname, lastname, extension, group_name):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    voicemail_manager_ws.delete_voicemail_with_number(number)
+    line_manager_ws.delete_line_with_number(number, context)
+    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
+    user_data = {'firstname': firstname,
+                'lastname': lastname,
+                'line_context': context,
+                'line_number': number}
+    user_id = user_manager_ws.add_user(user_data)
+    group_manager_ws.delete_group_with_name(group_name)
+    group_manager_ws.add_group(group_name, user_ids=[user_id])
+
+
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" and CTI profile "([^"]*)"$')
+def given_there_is_a_user_with_extension_and_cti_profile(step, firstname, lastname, extension, cti_profile):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    voicemail_manager_ws.delete_voicemail_with_number(number)
+    line_manager_ws.delete_line_with_number(number, context)
+    user_manager_ws.delete_user_with_firstname(firstname)
+    user_data = {'firstname': firstname,
+                 'lastname': lastname,
+                 'language': 'en_US',
+                 'line_number': number,
+                 'line_context': context,
+                 'enable_client': True,
+                 'client_username': firstname.lower(),
+                 'client_password': lastname.lower(),
+                 'client_profile': cti_profile
+                 }
+    user_manager_ws.add_user(user_data)
+
+
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)", voicemail and CTI profile "([^"]*)"$')
+def given_i_there_is_a_user_with_extension_with_voicemail_and_cti_profile(step, firstname, lastname, extension, cti_profile):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    voicemail_manager_ws.delete_voicemail_with_number(number)
+    line_manager_ws.delete_line_with_number(number, context)
+    user_manager_ws.delete_user_with_firstname(firstname)
+    user_data = {'firstname': firstname,
+                 'lastname': lastname,
+                 'language': 'en_US',
+                 'line_number': number,
+                 'line_context': context,
+                 'voicemail_name': number,
+                 'voicemail_number': number,
+                 'enable_client': True,
+                 'client_username': firstname.lower(),
+                 'client_password': lastname.lower(),
+                 'client_profile': cti_profile
+                 }
+    user_manager_ws.add_user(user_data)
+
+
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with an agent "([^"]*)" and CTI profile "([^"]*)"$')
+def given_there_is_a_user_with_an_agent_and_cti_profile(step, firstname, lastname, agent_number, cti_profile):
+    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
+    agent_manager_ws.delete_agent_with_number(agent_number)
+    user_data = {'firstname': firstname,
+                 'lastname': lastname,
+                 'enable_client': True,
+                 'client_username': firstname.lower(),
+                 'client_password': lastname.lower(),
+                 'client_profile': cti_profile
+                 }
+    user_id = user_manager_ws.add_user(user_data)
+    agent_data = {'firstname': firstname,
+                 'lastname': lastname,
+                 'number': agent_number,
+                 'context': 'default',
+                 'users': [int(user_id)]
+                 }
+    agent_manager_ws.add_agent(agent_data)
 
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
@@ -43,7 +127,7 @@ def when_i_create_a_user(step, firstname, lastname):
     submit_form()
 
 
-@step(u'When I add user "([^"]*)" "([^"]*)" in group "([^"]*)"')
+@step(u'When I add user "([^"]*)" "([^"]*)" in group "([^"]*)"$')
 def when_i_create_a_user_in_group(step, firstname, lastname, group):
     import group_steps as grp
     grp.when_i_create_group(step, group)
@@ -66,6 +150,7 @@ def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest
 
 @step(u'When I remove user "([^"]*)" "([^"]*)"')
 def remove_user(step, firstname, lastname):
+    open_url('user', 'list')
     remove_line('%s %s' % (firstname, lastname))
 
 
@@ -77,52 +162,10 @@ def then_user_is_in_group(step, firstname, lastname, group_name):
         assert user_manager_ws.user_id_is_in_group_name(group_name, user_id_list[0])
 
 
-@step(u'Given a user "([^"]*)" "([^"]*)" in group "([^"]*)"')
-def given_a_user_in_group(step, firstname, lastname, group):
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
-    user_manager_ws.add_user(firstname, lastname)
-    user_list = user_manager_ws.find_user_id_with_firstname_lastname(firstname, lastname)
-    group_manager_ws.delete_group_with_name(group)
-    group_manager_ws.add_group(group, user_list=user_list)
-
-
 @step(u'Then I should be at the user list page')
 def then_i_should_be_at_the_user_list_page(step):
     world.browser.find_element_by_id('bc-main', 'User list page not loaded')
     world.browser.find_element_by_name('fm-users-list')
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)"$')
-def given_there_is_a_user_1_2_with_a_sip_line_3(step, firstname, lastname, linenumber):
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
-    open_url('user', 'add')
-    user_manager.type_user_names(firstname, lastname)
-    user_manager.user_form_add_line(linenumber)
-    submit_form()
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)"')
-def given_there_is_a_user_1_2(step, firstname, lastname, extension):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
-    line_manager_ws.delete_line_with_number(number, context)
-    user_ids = [user.id for user in world.ws.users.search('%s %s' % (firstname, lastname))]
-    for user_id in user_ids:
-        world.ws.users.delete(user_id)
-    u = xivo_ws.User(firstname=firstname, lastname=lastname)
-    u.line = xivo_ws.UserLine(context=context, number=number)
-    world.ws.users.add(u)
-    time.sleep(5)
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)" in group "([^"]*)"')
-def given_there_is_a_user_1_2_with_a_sip_line_3_in_group_4(step, firstname, lastname, linenumber, group_name):
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
-    open_url('user', 'add')
-    user_manager.type_user_names(firstname, lastname)
-    user_manager.type_user_in_group(group_name)
-    user_manager.user_form_add_line(linenumber)
-    submit_form()
 
 
 @step(u'When I edit the line "([^"]*)"')
@@ -173,66 +216,6 @@ def i_add_a_voicemail_1_on_2(step, vm_num):
     step.given('I set the select field "Voice Mail" to "Asterisk"')
     step.given('Given the option "Enable voicemail" is checked')
     step.given('I set the text field "Voicemail" to "%s"' % vm_num)
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)", voicemail and CTI profile "([^"]*)"')
-def given_i_there_is_a_user_1_2_with_a_sip_line_3_voicemail_and_cti_4_profile(step, first_name, last_name, line_number, cti_profile):
-    user = xivo_ws.User()
-    user.firstname = first_name
-    user.lastname = last_name
-    user.language = 'en_US'
-    user.line = xivo_ws.UserLine(number=int(line_number),
-                                 context='default')
-    user.voicemail = xivo_ws.UserVoicemail(number=int(line_number),
-                                           name=line_number)
-    user.enable_client = True
-    user.client_username = first_name.lower()
-    user.client_password = last_name.lower()
-    user.client_profile = cti_profile
-
-    world.ws.users.add(user)
-
-    time.sleep(world.timeout)
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with a SIP line "([^"]*)" and CTI profile "([^"]*)"')
-def given_there_is_a_user_1_2_with_a_sip_line_3_and_cti_profile_4(step, first_name, last_name, line_number, cti_profile):
-    user = xivo_ws.User()
-    user.firstname = first_name
-    user.lastname = last_name
-    user.line = xivo_ws.UserLine(number=int(line_number),
-                                 context='default')
-    user.enable_client = True
-    user.client_username = first_name.lower()
-    user.client_password = last_name.lower()
-    user.client_profile = cti_profile
-
-    world.ws.users.add(user)
-
-    time.sleep(world.timeout)
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with an agent "([^"]*)" and CTI profile "([^"]*)"')
-def given_there_is_a_user_1_2_with_an_agent_3_and_cti_profile_4(step, first_name, last_name, agent_number, cti_profile):
-    user = xivo_ws.User()
-    user.firstname = first_name
-    user.lastname = last_name
-    user.enable_client = True
-    user.client_username = first_name.lower()
-    user.client_password = last_name.lower()
-    user.client_profile = cti_profile
-    user_id = world.ws.users.add(user)
-
-    agent = xivo_ws.Agent()
-    agent.firstname = first_name
-    agent.lastname = last_name
-    agent.number = int(agent_number)
-    agent.context = 'default'
-    agent.users = [int(user_id)]
-
-    world.ws.agents.add(agent)
-
-    time.sleep(world.timeout)
 
 
 @step(u'When I delete agent number "([^"]*)"')

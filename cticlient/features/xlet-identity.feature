@@ -5,7 +5,7 @@ Feature: Xlet identity
 
         Given there is no user "Yoda" "Kenobi"
         Given there is no SIP line "1151"
-        Given there is a user "Yoda" "Kenobi" with a SIP line "1151" and CTI profile "Client"
+        Given there is a user "Yoda" "Kenobi" with extension "1151@default" and CTI profile "Client"
 
         Given I go to the "Resolver" configuration page
         Given I read the field "Hostname"
@@ -22,7 +22,7 @@ Feature: Xlet identity
 
         Given there is no user "Bail" "Tarkin"
         Given there is no SIP line "1152"
-        Given there is a user "Bail" "Tarkin" with a SIP line "1152", voicemail and CTI profile "Client"
+        Given there is a user "Bail" "Tarkin" with extension "1152@default", voicemail and CTI profile "Client"
 
         When I start the XiVO Client
         When I log in the XiVO Client as "bail", pass "tarkin"
