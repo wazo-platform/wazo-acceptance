@@ -66,4 +66,10 @@ def add_queue(data):
         queue.joinempty = data['joinempty']
     if 'leavewhenempty' in data:
         queue.leavewhenempty = data['leavewhenempty']
+    if 'waittime' in data:
+        queue.waittime = data['waittime']
+    if 'waitratio' in data:
+        queue.waitratio = data['waitratio']
+    if 'schedule_id' in data:
+        queue.schedule_id = data['schedule_id']
     world.ws.queues.add(queue)
