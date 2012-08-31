@@ -72,4 +72,6 @@ def add_queue(data):
         queue.waitratio = data['waitratio']
     if 'schedule_id' in data:
         queue.schedule_id = data['schedule_id']
+    if 'ringing_time' in data:
+        queue.ringing_time = int(data['ringing_time'])
     world.ws.queues.add(queue)
