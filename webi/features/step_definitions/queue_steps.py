@@ -52,8 +52,8 @@ def given_there_is_a_queue_diverted_with_extension_with_agent(step, name, extens
     queue_manager_ws.add_queue(data)
 
 
-@step(u'Given there is a queue "([^"]+)" closed with extension "([^"]+)" with agent "([^"]+)"$')
-def given_there_is_a_queue_closed_with_extension_with_agent(step, name, extension, agent_number):
+@step(u'Given there is a queue "([^"]+)" closed with extension "([^"]+)"$')
+def given_there_is_a_queue_closed_with_extension_with_agent(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     _remove_queues_with_name_or_number_if_exist(name, number)
     opened = {'hours': '00:00-00:01',
