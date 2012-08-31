@@ -2,9 +2,6 @@ Feature: Stat
 
     Scenario: Generation of event CLOSED
         Given there are no calls running
-        Given there is no queue with name "q11" or number "5011"
-        Given there is no agent with number "011"
-        Given there is no user "User" "011"
         Given there is no "CLOSED" entry in queue "q11"
         Given there is a user "User" "011" with extension "1011@statscenter"
         Given there is a agent "Agent" "011" with extension "011@statscenter"

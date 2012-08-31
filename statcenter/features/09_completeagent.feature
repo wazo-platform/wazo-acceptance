@@ -2,8 +2,6 @@ Feature: Stat
 
     Scenario: Generation of event COMPLETEAGENT
         Given there are no calls running
-        Given there is no agent with number "009"
-        Given there is no user "User" "009"
         Given there is no "COMPLETEAGENT" entry in queue "q09"
         Given there is a user "User" "009" with extension "1009@statscenter"
         Given there is a agent "Agent" "009" with extension "009@statscenter"

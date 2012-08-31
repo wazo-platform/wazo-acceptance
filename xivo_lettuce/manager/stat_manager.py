@@ -4,7 +4,6 @@ from lettuce.registry import world
 from xivo_lettuce.manager_ws import agent_manager_ws, queue_manager_ws, \
     statconfs_manager_ws
 import copy
-from pprint import pprint
 
 
 def regenerate_cache():

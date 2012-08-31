@@ -2,7 +2,6 @@ Feature: Stat
 
     Scenario: Generation of event ABANDON
         Given there are no calls running
-        Given there is no agent with number "002"
         Given there is no "ABANDON" entry in queue "q02"
         Given there is a agent "Agent" "002" with extension "002@statscenter"
         Given there is a queue "q02" with extension "5002@statscenter" with agent "002"

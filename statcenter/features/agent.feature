@@ -1,11 +1,7 @@
 Feature: WEBI Agent Stats
 
     Scenario: Generate stats for answered calls
-        Given there is no agent with number "1"
-        Given there is no "COMPLETECALLER" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
-        Given there is no "CONNECT" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
-        Given there is no "TRANSFER" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
-        Given there is no "ENTERQUEUE" entry in queue "q01" between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
+        Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is a queue "q01" with extension "5001@statscenter"
         Given there is a agent "Agent" "1" with extension "1@statscenter"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01" and agent "1"
@@ -32,12 +28,7 @@ Feature: WEBI Agent Stats
           | Total   |        3 |
 
     Scenario: Generate stats for total conversation time
-        Given there is no agent with number "2"
-        Given there is no "COMPLETECALLER" entry in queue "q02" between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is no "COMPLETEAGENT" entry in queue "q02" between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is no "CONNECT" entry in queue "q02" between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is no "TRANSFER" entry in queue "q02" between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is no "ENTERQUEUE" entry in queue "q02" between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
+        Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is a queue "q02" with extension "5002@statscenter"
         Given there is a agent "Agent" "2" with extension "2@statscenter"
         Given there is a statistic configuration "test_talktime" from "8:00" to "12:00" with queue "q02" and agent "2"

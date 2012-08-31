@@ -14,15 +14,16 @@ def given_an_agent_in_group_default(step, firstname, lastname, number, password)
     agent_manager_ws.add_agent(firstname, lastname, number, password)
 
 
-@step(u'Given there is no agent with number "([^"]*)"$')
-def given_no_agent_number_1(step, number):
-    agent_manager_ws.delete_agent_with_number(number)
-
-
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
 def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
+    agent_manager_ws.delete_agent_with_number(number)
     world.agent_id = agent_manager_ws.add_agent(firstname, lastname, number, '', context)
+
+
+@step(u'Given there is no agent with number "([^"]*)"$')
+def given_no_agent_number_1(step, number):
+    agent_manager_ws.delete_agent_with_number(number)
 
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)"')
