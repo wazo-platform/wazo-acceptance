@@ -16,7 +16,6 @@ Feature: WEBI Agent Stats
           | 2012-07-01 08:54:23.674291 | answered_3  | q01       | Agent/1   | COMPLETECALLER      | 1     | 5              | 1     |       |       |
           | 2012-07-01 08:54:18.711465 | answered_3  | q01       | Agent/1   | CONNECT             | 1     | 1346165657.444 | 1     |       |       |
           | 2012-07-01 08:54:17.039559 | answered_3  | q01       | NONE      | ENTERQUEUE          |       | 1201           | 1     |       |       |
-
         Given I clear and generate the statistics cache
         Given I am logged in
         Then I should have the following statististics on agent "1" on "2012-07-01" on configuration "test":
@@ -27,8 +26,9 @@ Feature: WEBI Agent Stats
           | 11h-12h |        0 |
           | Total   |        3 |
 
+
     Scenario: Generate stats for total conversation time
-        Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
+        Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a queue "q02" with extension "5002@statscenter"
         Given there is a agent "Agent" "2" with extension "2@statscenter"
         Given there is a statistic configuration "test_talktime" from "8:00" to "12:00" with queue "q02" and agent "2"
@@ -43,13 +43,12 @@ Feature: WEBI Agent Stats
           | 2012-01-01 09:03:06.555555 | talk_time_3 | q02       | Agent/2  | ENTERQUEUE     |       |              |       |       |       |
           | 2012-01-01 09:03:06.666666 | talk_time_3 | q02       | Agent/2  | CONNECT        | 6     | 2222456.435  |       |       |       |
           | 2012-01-01 09:03:10.777777 | talk_time_3 | q02       | Agent/2  | TRANSFER       | 4     | 0            | 0     | 22    |       |
-
         Given I clear and generate the statistics cache
         Given I am logged in
         Then I should have the following statististics on agent "2" on "2012-01-01" on configuration "test_talktime":
-          |         | Conversation |
-          | 8h-9h   |     00:00:00 |
-          | 9h-10h  |     00:00:39 |
-          | 10h-11h |     00:00:00 |
-          | 11h-12h |     00:00:00 |
-          | Total   |     00:00:39 |
+          |         | Answered | Conversation |
+          | 8h-9h   |        0 |     00:00:00 |
+          | 9h-10h  |        3 |     00:00:39 |
+          | 10h-11h |        0 |     00:00:00 |
+          | 11h-12h |        0 |     00:00:00 |
+          | Total   |        3 |     00:00:39 |
