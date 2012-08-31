@@ -8,8 +8,8 @@ from xivo_lettuce import common, form
 
 
 @step(u'Given there is no queue "([^"]*)"')
-def given_there_is_no_queue_1(step, queue_displayname):
-    queue_manager_ws.delete_queue_with_displayname_if_exists(queue_displayname)
+def given_there_is_no_queue_1(step, queue_name):
+    queue_manager_ws.delete_queue_with_name_if_exists(queue_name)
 
 
 @step(u'Given there is no queue with number "([^"]*)"')
