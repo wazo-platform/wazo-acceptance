@@ -94,7 +94,6 @@ def given_there_is_a_queue_with_ringing_time_with_extension_with_agent(step, nam
             'number': number,
             'context': context,
             'ringing_time': ringing_time,
-            'leavewhenempty': 'unavailable, pause',
             'agents': [agent_id]}
     queue_manager_ws.add_queue(data)
 
