@@ -80,7 +80,7 @@ def given_there_is_a_queue_leaveempty_with_extension_with_agent(step, name, exte
     data = {'name': name,
             'number': number,
             'context': context,
-            'leavewhenempty': 'unavailable, pause',
+            'leavewhenempty': 'unavailable,paused',
             'agents': [agent_id]}
     queue_manager_ws.add_queue(data)
 
