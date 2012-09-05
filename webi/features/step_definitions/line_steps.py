@@ -4,20 +4,11 @@ from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce.common import find_line, open_url, remove_all_elements, \
     remove_line
-from xivo_lettuce.common_steps_webi import i_submit
 
 
 @step(u'Given there is no custom lines')
 def given_there_is_no_custom_lines(step):
     remove_all_elements('line', 'Customized')
-
-
-@step(u'Given there is a "([^"]*)" line$')
-def given_there_is_a_sip_line(step, protocol):
-    when_i_add_a_line(step, protocol.lower())
-    when_i_set_the_context(step, 'default')
-    world.id = world.browser.find_element_by_id('it-protocol-name').get_attribute('value')
-    i_submit(step)
 
 
 @step(u'When I add a "([^"]*)" line')

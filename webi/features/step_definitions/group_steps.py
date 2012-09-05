@@ -5,7 +5,6 @@ from xivo_lettuce.common import open_url, element_in_list_matches_field, \
     submit_form
 from xivo_lettuce.manager.group_manager import remove_group_with_name, \
     type_group_name, type_group_number, type_context
-
 from xivo_lettuce.manager_ws import group_manager_ws
 
 
@@ -46,12 +45,6 @@ def when_i_create_group(step, group_name):
 @step(u'When group "([^"]*)" is removed')
 def when_group_is_removed(step, group_name):
     remove_group_with_name(group_name)
-
-
-@step(u'Given there is a group "([^"]*)" number "([^"]*)" with no users')
-def given_there_is_a_group_1_number_2_with_no_users(step, group_name, group_number):
-    step.given('Given there is no group with name "%s"' % group_name)
-    step.given('When I create a group "%s" with number "%s"' % (group_name, group_number))
 
 
 @step(u'Then I see a group "([^"]*)" with no users')

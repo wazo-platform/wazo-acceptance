@@ -6,9 +6,37 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 
-from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url,\
+from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url, \
     remove_line, submit_form
 from xivo_lettuce.manager.outcall_manager import exten_line
+
+
+@step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
+def given_there_is_an_outcall(step, name, trunk):
+    open_url('outcall', 'list')
+    try:
+        find_line(name)
+    except NoSuchElementException:
+        step.given(u'When I create an outcall with name "%s" and trunk "%s"' % (name, trunk))
+
+
+@step(u'Given I don\'t see any exten "([^"]*)"')
+def given_i_dont_see_any_exten(step, exten):
+    try:
+        then_i_dont_see_any_exten(step, exten)
+    except AssertionError:
+        when_i_remove_the_exten(step, exten)
+        submit_form()
+
+
+@step(u'Given I see an exten "([^"]*)"')
+def given_i_see_an_exten(step, exten):
+    try:
+        then_i_see_an_exten(step, exten)
+    except NoSuchElementException:
+        when_i_add_an_exten(step)
+        when_i_set_the_exten_to(step, exten)
+        submit_form()
 
 
 @step(u'Given there is no outcall "([^"]*)"')
@@ -39,15 +67,6 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     submit_form()
 
 
-@step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
-def given_there_is_an_outcall(step, name, trunk):
-    open_url('outcall', 'list')
-    try:
-        find_line(name)
-    except NoSuchElementException:
-        step.given(u'When I create an outcall with name "%s" and trunk "%s"' % (name, trunk))
-
-
 @step(u'When I remove the outcall "([^"]*)"')
 def when_i_remove_the_outcall(step, name):
     open_url('outcall', 'list')
@@ -72,15 +91,6 @@ def i_go_to_the_outcall_tab(step, name, tab):
     go_to_tab(tab)
 
 
-@step(u'Given I don\'t see any exten "([^"]*)"')
-def given_i_dont_see_any_exten(step, exten):
-    try:
-        then_i_dont_see_any_exten(step, exten)
-    except AssertionError:
-        when_i_remove_the_exten(step, exten)
-        submit_form()
-
-
 @step(u'When I add an exten')
 def when_i_add_an_exten(step):
     add_button = world.browser.find_element_by_id('lnk-add-row', 'Can\'t add an exten')
@@ -99,16 +109,6 @@ def then_i_see_an_exten(step, exten):
     exten_element = exten_line(exten).find_element_by_xpath(
         ".//input[@name='dialpattern[exten][]']")
     assert exten_element is not None
-
-
-@step(u'Given I see an exten "([^"]*)"')
-def given_i_see_an_exten(step, exten):
-    try:
-        then_i_see_an_exten(step, exten)
-    except NoSuchElementException:
-        when_i_add_an_exten(step)
-        when_i_set_the_exten_to(step, exten)
-        submit_form()
 
 
 @step(u'When I remove the exten "([^"]*)"')

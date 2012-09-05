@@ -4,6 +4,11 @@ from lettuce import step, world
 from xivo_lettuce.common import open_url, submit_form, remove_element_if_exist
 
 
+@step(u'Given no config file "([^"]*)"')
+def given_no_config_file_1(step, config_file_name):
+    remove_element_if_exist('configfiles', config_file_name)
+
+
 @step(u'When I create a configfiles "([^"]*)" with content "([^"]*)"')
 def when_i_create_configfiles_with_content(step, filename, content):
     open_url('configfiles', 'add')
@@ -14,8 +19,3 @@ def when_i_create_configfiles_with_content(step, filename, content):
     input_description.clear()
     input_description.send_keys(content)
     submit_form()
-
-
-@step(u'Given no config file "([^"]*)"')
-def given_no_config_file_1(step, config_file_name):
-    remove_element_if_exist('configfiles', config_file_name)

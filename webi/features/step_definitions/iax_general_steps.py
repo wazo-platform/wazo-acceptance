@@ -9,12 +9,6 @@ from xivo_lettuce.manager.iax_general_manager import find_call_limit_line, \
     find_call_limit_lines
 
 
-@step(u'I go on the General Settings > IAX Protocol page, tab "([^"]*)"')
-def i_go_on_the_general_settings_iax_protocol_page_tab(step, tab):
-    open_url('general_iax')
-    go_to_tab(tab)
-
-
 @step(u'Given I don\'t see any call limit to "([^"]*)" netmask "([^"]*)"')
 def given_i_don_t_see_any_call_limit_to_netmask_(step, destination, netmask):
     try:
@@ -23,6 +17,36 @@ def given_i_don_t_see_any_call_limit_to_netmask_(step, destination, netmask):
         return
     when_i_remove_the_call_limits_to_netmask(step, destination, netmask)
     submit_form()
+
+
+@step(u'Given I see a call limit to "([^"]*)" netmask "([^"]*)" of "([^"]*)" calls')
+def given_i_see_a_call_limit_to_netmask_of_calls(step, destination, netmask, limit):
+    try:
+        find_call_limit_line(destination, netmask, limit)
+    except NoSuchElementException:
+        when_i_add_a_call_limit(step)
+        when_i_set_the_destination_to(step, destination)
+        when_i_set_the_netmask_to(step, netmask)
+        when_i_set_the_call_limit_to(step, limit)
+        submit_form()
+
+
+@step(u'Given the SRV lookup option is disabled')
+def given_the_srv_lookup_option_is_disabled(step):
+    option = _get_srv_lookup_option()
+
+    if option.is_checked():
+        option.uncheck()
+        submit_form()
+
+        option = _get_srv_lookup_option()
+        assert not option.is_checked()
+
+
+@step(u'I go on the General Settings > IAX Protocol page, tab "([^"]*)"')
+def i_go_on_the_general_settings_iax_protocol_page_tab(step, tab):
+    open_url('general_iax')
+    go_to_tab(tab)
 
 
 @step(u'When I add a call limit')
@@ -55,18 +79,6 @@ def then_i_see_a_call_limit_to_netmask_of_calls(step, destination, netmask, limi
     find_call_limit_line(destination, netmask, limit)
 
 
-@step(u'Given I see a call limit to "([^"]*)" netmask "([^"]*)" of "([^"]*)" calls')
-def given_i_see_a_call_limit_to_netmask_of_calls(step, destination, netmask, limit):
-    try:
-        find_call_limit_line(destination, netmask, limit)
-    except NoSuchElementException:
-        when_i_add_a_call_limit(step)
-        when_i_set_the_destination_to(step, destination)
-        when_i_set_the_netmask_to(step, netmask)
-        when_i_set_the_call_limit_to(step, limit)
-        submit_form()
-
-
 @step(u'When I remove the call limits to "([^"]*)" netmask "([^"]*)"')
 def when_i_remove_the_call_limits_to_netmask(step, destination, netmask):
     lines = find_call_limit_lines(destination, netmask)
@@ -83,18 +95,6 @@ def then_i_don_t_see_a_call_limit_to_group1_netmask_group2(step, destination, ne
         assert False, 'the call limit has not been removed'
     except NoSuchElementException:
         pass
-
-
-@step(u'Given the SRV lookup option is disabled')
-def given_the_srv_lookup_option_is_disabled(step):
-    option = _get_srv_lookup_option()
-
-    if option.is_checked():
-        option.uncheck()
-        submit_form()
-
-        option = _get_srv_lookup_option()
-        assert not option.is_checked()
 
 
 @step(u'When I enable the SRV lookup option')

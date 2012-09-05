@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-from lettuce import step, world
+from lettuce import step
 from xivo_lettuce.manager import agent_manager
 from xivo_lettuce.manager_ws import agent_manager_ws
 from xivo_lettuce.common import open_url, submit_form, element_is_in_list, \
