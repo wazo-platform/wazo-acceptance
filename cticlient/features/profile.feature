@@ -1,7 +1,6 @@
 Feature: CTI Profile
 
     Scenario: Start XiVO Client without any services enabled
-        Given I am logged in
         Given there is no profile "noservices"
         Given I add a profile
         Given I set the text field "Name" to "noservices"

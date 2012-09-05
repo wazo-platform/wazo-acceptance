@@ -1,7 +1,6 @@
 Feature: SkillRules
 
     Scenario: Add a skill rule with one rule
-        Given I am logged in
         Given I remove skill rule "anthropology"
         When I create a skill rule "anthropology"
         When I add a rule "anthropology > 70"
@@ -9,7 +8,6 @@ Feature: SkillRules
         Then "anthropology > 70" is displayed in the list
 
     Scenario: Add a skill rule with more than one rule
-        Given I am logged in
         Given I remove skill rule "geo"
         When I create a skill rule "geo"
         When I add a rule "geology > 90"

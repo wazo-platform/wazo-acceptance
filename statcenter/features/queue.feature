@@ -20,7 +20,6 @@ Feature: WEBI Queue Stats
           | 2012-07-01 09:59:59.999999 | received_5 | q01       | NONE  | ENTERQUEUE |       |       |       |       |       |
           | 2012-07-01 10:59:59.999999 | received_5 | q01       | NONE  | ABANDON    | 1     | 4     | 2     |       |       |
         Given I clear and generate the statistics cache
-        Given I am logged in
         Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
           |         | Received  | Abandoned | AWT      | Answered rate | QoS   |
           | 8h-9h   |         3 |         3 | 00:00:03 |           0 % |       |
@@ -55,7 +54,6 @@ Feature: WEBI Queue Stats
           | 2012-07-01 08:00:02.999999 | received_5 | q01       | Agent/001 | CONNECT        | 3     |       |       |       |       |
           | 2012-07-01 08:00:05.999999 | received_5 | q01       | Agent/001 | COMPLETECALLER | 3     | 7     | 1     |       |       |
         Given I clear and generate the statistics cache
-        Given I am logged in
         Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
           |         | Received  | Answered  | AWT      | Answered rate | QoS   |
           | 8h-9h   |         3 |         3 | 00:00:03 |         100 % | 100 % |
@@ -78,7 +76,6 @@ Feature: WEBI Queue Stats
           | 2012-07-01 09:00:00.000000 | received_4 | q01       | NONE  | JOINEMPTY  |       |       |       |       |       |
           | 2012-07-01 09:59:59.999999 | received_5 | q01       | NONE  | JOINEMPTY  |       |       |       |       |       |
         Given I clear and generate the statistics cache
-        Given I am logged in
         Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
           |         | Received  | Blocking  |
           | 8h-9h   |         3 |         3 |
@@ -101,7 +98,6 @@ Feature: WEBI Queue Stats
           | 2012-07-01 09:00:00.000000 | received_4 | q01       | NONE  | CLOSED  |       |       |       |       |       |
           | 2012-07-01 09:59:59.999999 | received_5 | q01       | NONE  | CLOSED  |       |       |       |       |       |
         Given I clear and generate the statistics cache
-        Given I am logged in
         Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
           |         | Received  | Closed  |
           | 8h-9h   |         3 |       3 |
@@ -124,7 +120,6 @@ Feature: WEBI Queue Stats
           | 2012-07-01 09:59:59.999999 | saturated_5 | q01       | NONE  | DIVERT_HOLDTIME |       |       |       |       |       |
           | 2012-07-01 08:00:00.000001 | saturated_6 | q01       | NONE  | DIVERT_HOLDTIME |       |       |       |       |       |
         Given I clear and generate the statistics cache
-        Given I am logged in
         Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
           |         | Received  | Saturated |
           | 8h-9h   |         3 |         3 |

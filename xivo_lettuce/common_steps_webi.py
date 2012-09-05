@@ -4,8 +4,7 @@ import time
 
 from lettuce.decorators import step
 from selenium.webdriver.support.select import Select
-from xivo_lettuce.common import webi_login, logged, go_to_home_page, \
-    webi_login_as_default, the_option_is_checked, remove_element_if_exist, \
+from xivo_lettuce.common import webi_login, the_option_is_checked, remove_element_if_exist, \
     element_is_in_list, element_is_not_in_list, submit_form, FormErrorException, \
     find_form_errors, assert_form_errors, go_to_tab, run_xivoclient, \
     xivoclient_step, get_host_address, xivoclient
@@ -18,13 +17,6 @@ from selenium.common.exceptions import NoSuchElementException
 @step(u'When I login as (.*) with password (.*) in (.*)')
 def when_i_login_the_webi(step, login, password, language):
     webi_login(login, password, language)
-
-
-@step(u'Given I am logged in')
-def i_am_logged_in(step):
-    if not logged():
-        go_to_home_page()
-        webi_login_as_default()
 
 
 @step(u'Given the option "([^"]*)" is (not )?checked')

@@ -1,7 +1,6 @@
 Feature: IAX general parameters
 
     Scenario: Enable shrink Caller ID
-        Given I am logged in
         Given I go on the General Settings > IAX Protocol page, tab "Advanced"
         Given the option "Shrink CallerID" is not checked
         Given I submit
@@ -12,7 +11,6 @@ Feature: IAX general parameters
         Then this option is checked
 
     Scenario: Disable shrink Caller ID
-        Given I am logged in
         Given I go on the General Settings > IAX Protocol page, tab "Advanced"
         Given the option "Shrink CallerID" is checked
         Given I submit
@@ -23,7 +21,6 @@ Feature: IAX general parameters
         Then this option is not checked
 
     Scenario: Toggle SRV lookup
-        Given I am logged in
         Given the SRV lookup option is disabled
         When I enable the SRV lookup option
         Then the SRV lookup option is enabled
@@ -31,7 +28,6 @@ Feature: IAX general parameters
         Then the SRV lookup option is disabled
 
     Scenario: Add a call limit
-        Given I am logged in
         Given I go on the General Settings > IAX Protocol page, tab "Call limits"
         Given I don't see any call limit to "10.0.0.1" netmask "255.255.255.255"
         When I go on the General Settings > IAX Protocol page, tab "Call limits"
@@ -49,7 +45,6 @@ Feature: IAX general parameters
         Then I see a call limit to "10.0.0.1" netmask "255.255.255.255" of "1" calls
 
     Scenario: Remove a call limit
-        Given I am logged in
         Given I go on the General Settings > IAX Protocol page, tab "Call limits"
         Given I see a call limit to "10.0.0.1" netmask "255.255.255.255" of "1" calls
         When I go on the General Settings > IAX Protocol page, tab "Call limits"

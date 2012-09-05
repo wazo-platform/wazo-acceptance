@@ -1,7 +1,6 @@
 Feature: User Import
 
     Scenario: Import user from CSV file
-        Given I am logged in
         When I import a list of users:
         | firstname | lastname | linenumber |
         | Francis   | Lalannix | 1900       |
@@ -12,7 +11,6 @@ Feature: User Import
         Then line "1901" is displayed in the list
 
     Scenario: Import user with voicemail from CSV file
-        Given I am logged in
         When I import a list of users with voicemail:
         | firstname | lastname | linenumber | voicemail |
         | Francis   | Lalannix | 1900       | 1900      |
@@ -25,7 +23,6 @@ Feature: User Import
         Then voicemail "1901" is displayed in the list
 
     Scenario: Import user with voicemail and incall from CSV file
-        Given I am logged in
         When I import a list of users with incall:
         | firstname | lastname | linenumber | incall |
         | Francis   | Lalannix | 1900       | 1900   |
@@ -38,7 +35,6 @@ Feature: User Import
         Then incall "1901" is displayed in the list
 
     Scenario: Import user with full infos from CSV file
-        Given I am logged in
         When I import a list of users with incall and voicemail - full:
         | firstname | lastname | linenumber | voicemail | incall |
         | Francis   | Lalannix | 1900       | 1900      | 1900   |

@@ -17,7 +17,6 @@ Feature: WEBI Agent Stats
           | 2012-07-01 08:54:18.711465 | answered_3  | q01       | Agent/1   | CONNECT             | 1     | 1346165657.444 | 1     |       |       |
           | 2012-07-01 08:54:17.039559 | answered_3  | q01       | NONE      | ENTERQUEUE          |       | 1201           | 1     |       |       |
         Given I clear and generate the statistics cache
-        Given I am logged in
         Then I should have the following statististics on agent "1" on "2012-07-01" on configuration "test":
           |         | Answered |
           | 8h-9h   |        1 |
@@ -44,7 +43,6 @@ Feature: WEBI Agent Stats
           | 2012-01-01 09:03:06.666666 | talk_time_3 | q02       | Agent/2  | CONNECT        | 6     | 2222456.435  |       |       |       |
           | 2012-01-01 09:03:10.777777 | talk_time_3 | q02       | Agent/2  | TRANSFER       | 4     | 0            | 0     | 22    |       |
         Given I clear and generate the statistics cache
-        Given I am logged in
         Then I should have the following statististics on agent "2" on "2012-01-01" on configuration "test_talktime":
           |         | Answered | Conversation |
           | 8h-9h   |        0 |     00:00:00 |

@@ -9,6 +9,7 @@ from xivo_lettuce.ssh import SSHClient
 from selenium.webdriver import FirefoxProfile
 from webi import prerequisite as webi_prerequisites
 from statcenter import prerequisite as statcenter_prerequisites
+from xivo_lettuce.common import webi_login_as_default, go_to_home_page
 
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -27,6 +28,12 @@ def initialize_from_config():
     if enable_prerequisites and ws.check_ws():
         webi_prerequisites.setup()
         statcenter_prerequisites.setup(ssh_xivo)
+    _log_on_webi()
+
+
+def _log_on_webi():
+    go_to_home_page()
+    webi_login_as_default()
 
 
 def _read_config():

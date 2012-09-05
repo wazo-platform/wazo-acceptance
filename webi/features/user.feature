@@ -2,7 +2,6 @@ Feature: User
 
     Scenario: Add a user with first name and last name and remove it
         Given there is no user "John" "Willis"
-        Given I am logged in
         When I create a user "John" "Willis"
         Then user "John Willis" is displayed in the list
         When I remove user "John" "Willis"
@@ -10,14 +9,12 @@ Feature: User
 
     Scenario: Add a user in a group
         Given there is a user "Bob" "Marley" with extension "1101@default" in group "rastafarien"
-        Given I am logged in
         When I rename "Bob" "Marley" to "Bob" "Dylan"
         Then I should be at the user list page
         Then "Bob" "Dylan" is in group "rastafarien"
 
     Scenario: Update a user
         Given there is no user "Bill" "Bush"
-        Given I am logged in
         When I create a user "Bill" "Bush"
         Then user "Bill Bush" is displayed in the list
         When I rename "Bill" "Bush" to "George" "Orwell"
@@ -26,7 +23,6 @@ Feature: User
     Scenario: Save user and line forms
     # The problem is that saving the user form may erase values previously
     # set in the line form (bug #2918)
-        Given I am logged in
         Given there is a user "Tom" "Sawyer" with extension "1405@default"
         When I edit the line "1405"
         When I set the select field "NAT" to "No"
@@ -47,7 +43,6 @@ Feature: User
         Then the text field "IP address" is set to "10.0.0.1"
 
     Scenario: Save user and voicemail forms
-        Given I am logged in
         Given there is a user "Tom" "Sawyer" with extension "1405@default"
         Given there is no voicemail "1405"
         When I edit the user "Tom" "Sawyer"
@@ -65,19 +60,16 @@ Feature: User
         Given there is no voicemail "1405"
 
     Scenario: Delete user in group
-        Given I am logged in
         Given there is a user "Tom" "Sawyer" with extension "1405@default" in group "american_dream"
         When I remove user "Tom" "Sawyer"
         Then I see a group "american_dream" with no users
 
    Scenario: Add user with function keys
-       Given I am logged in
        When I add a user "Tom" "Sawyer" with a function key with type Customized and extension "1234"
        Then I see the user "Tom" "Sawyer" exists
        Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"
 
     Scenario: Delete line from user with voicemail (X-398)
-        Given I am logged in
         Given there is a user "Abraham" "Maharba" with extension "1456@default"
         When I edit the user "Abraham" "Maharba"
         When I set the select field "Language" to "en_US"

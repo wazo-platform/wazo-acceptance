@@ -1,7 +1,6 @@
 Feature: User
 
     Scenario: Enable XiVO Client
-        Given I am logged in
         Given there is a user "Charles" "Magne"
         When I edit the user "Charles" "Magne"
         When I uncheck the option "Enable XiVO Client"

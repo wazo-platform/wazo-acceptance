@@ -1,7 +1,6 @@
 Feature: Profile
 
     Scenario: Add a CTI profile
-        Given I am logged in
         Given there is no profile "test"
         Given there is no profile "TEST"
         When I add a CTI profile
