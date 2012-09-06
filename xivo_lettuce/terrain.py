@@ -28,7 +28,8 @@ def initialize_from_config():
     if enable_prerequisites and ws.check_ws():
         webi_prerequisites.setup()
         statcenter_prerequisites.setup(ssh_xivo)
-    _log_on_webi()
+    if _webi_configured:
+        _log_on_webi()
 
 
 def _log_on_webi():
@@ -100,6 +101,11 @@ def _setup_ws(config):
     password = config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)
     return world.ws
+
+
+def _webi_configured():
+    command = ['test', '-e', '/etc/pf-xivo/web-interface/xivo.ini']
+    return not world.ssh_client_xivo.check_call(command)
 
 
 @world.absorb
