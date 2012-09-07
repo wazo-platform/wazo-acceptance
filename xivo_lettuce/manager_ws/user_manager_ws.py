@@ -2,12 +2,8 @@
 
 import voicemail_manager_ws
 from lettuce.registry import world
-from xivo_lettuce.common import get_webservices
 from xivo_ws.objects.user import User, UserLine, UserVoicemail
-from xivo_lettuce.manager_ws import line_manager_ws
-
-
-WSG = get_webservices('group')
+from xivo_lettuce.manager_ws import line_manager_ws, group_manager_ws
 
 
 def add_user(data_dict):
@@ -83,11 +79,13 @@ def find_user_id_with_firstname_lastname(firstname, lastname):
 
 
 def user_id_is_in_group_name(group_name, user_id):
-    group_list = WSG.list()
-    group_id = [group['id'] for group in group_list if group['name'] == group_name]
-    if len(group_id) > 0:
-        group_view = WSG.view(group_id[0])
-        for user in group_view['user']:
-            if user['userid'] == user_id:
+    try:
+        group_id = group_manager_ws.get_group_id_with_name(group_name)
+    except Exception:
+        return False
+    else:
+        group = group_manager_ws.get_group_with_id(group_id)
+        for id in group.user_ids:
+            if id == user_id:
                 return True
     return False
