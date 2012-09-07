@@ -19,7 +19,6 @@ __license__ = """
 """
 
 import unittest
-import json
 from webservices.common import WSCommon
 
 
@@ -36,8 +35,8 @@ class TestUser(unittest.TestCase):
         self.assertNotEqual(user, None, 'Unable to add user')
 
     def test_edit(self):
-        user_names = ('Bob', 'Marley')
-        changed_names = ('Boby', 'Dylan')
+        user_names = ('unit', 'test')
+        changed_names = ('unitx', 'testx')
         self._remove_users(*user_names)
         self._remove_users(*changed_names)
         user = self._add_user(*user_names)
@@ -49,8 +48,8 @@ class TestUser(unittest.TestCase):
 
         user = self._get_user(*changed_names)
         self.assertEqual(user['userfeatures']['id'], added_user_id)
-        self.assertEqual(user['userfeatures']['firstname'], 'Boby')
-        self.assertEqual(user['userfeatures']['lastname'], 'Dylan')
+        self.assertEqual(user['userfeatures']['firstname'], 'unitx')
+        self.assertEqual(user['userfeatures']['lastname'], 'testx')
 
     def test_delete(self):
         user_names = ('Alice', 'DeleteName')
