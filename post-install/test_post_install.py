@@ -5,6 +5,7 @@ import os
 import subprocess
 import pwd
 import grp
+import sys
 
 from pwd import getpwnam
 
@@ -51,17 +52,7 @@ class TestMohFilesPermission(unittest.TestCase):
 
     def test_files_are_installed(self):
         command = ['apt-get', 'install', self.MOH_PKG]
-
-        p = subprocess.Popen(command,
-                             stdin=subprocess.PIPE,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.STDOUT,
-                             close_fds=True)
-
-        (stdoutdata, stderrdata) = p.communicate()
-
-        if p.returncode != 0:
-            print stderrdata
+        _exec_local_cmd(command)
 
     def test_files_owned_by_asterisk(self):
         files = os.listdir(self.MOH_PATH)
@@ -79,3 +70,61 @@ class TestMohFilesPermission(unittest.TestCase):
 
     def _find_gid(self, file):
         return grp.getgrgid(os.stat(file).st_gid).gr_name
+
+
+class TestBackupLogRotate(unittest.TestCase):
+
+    BACKUP_DIR = '/var/backups/pf-xivo/'
+
+    def setUp(self):
+        files = os.listdir(self.BACKUP_DIR)
+        for file in files:
+            file_path = os.path.join(self.BACKUP_DIR, file)
+            os.remove(file_path)
+        data_file = os.path.join(self.BACKUP_DIR, 'data.tgz')
+        db_file = os.path.join(self.BACKUP_DIR, 'db.tgz')
+        open(data_file, 'w+')
+        open(db_file, 'w+')
+        del sys.path
+
+    def test_backup_rotate_files(self):
+        self._exec_logrotate_backup()
+        expected_files = ['data.tgz', 'data.tgz.1', 'db.tgz', 'db.tgz.1']
+
+        for expected_file in expected_files:
+            file_path = os.path.join(self.BACKUP_DIR, expected_file)
+            self.assertTrue(self._is_file_exist(file_path))
+
+        self._exec_logrotate_backup()
+        expected_files.extend(['data.tgz.2', 'db.tgz.2'])
+
+        for expected_file in expected_files:
+            file_path = os.path.join(self.BACKUP_DIR, expected_file)
+            self.assertTrue(self._is_file_exist(file_path))
+
+    def _exec_logrotate_backup(self):
+        command = ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/pf-xivo-backup']
+        _exec_local_cmd(command)
+
+    def _is_file_exist(self, path):
+        print path
+        try:
+           with open(path) as f:
+               return True
+        except IOError as e:
+           return False
+
+
+def _exec_local_cmd(cmd):
+        p = subprocess.Popen(cmd,
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT,
+                             close_fds=True)
+
+        (stdoutdata, stderrdata) = p.communicate()
+
+        if p.returncode != 0:
+            print stdoutdata
+            print stderrdata
+            assert(False)
