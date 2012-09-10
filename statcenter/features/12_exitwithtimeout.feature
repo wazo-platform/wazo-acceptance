@@ -13,3 +13,9 @@ Feature: Stat
         Given I wait 35 seconds for the calls processing
         Then i should see 2 "EXITWITHTIMEOUT" event in queue "q12" in the queue log
 
+
+    Scenario: Generate corrupt stats with EXITWITHTIMEOUT event
+        Given there are a corrupt entry in queue_log
+        When execute xivo-stat
+        Then I don't should not have an error
+
