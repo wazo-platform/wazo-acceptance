@@ -122,7 +122,7 @@ def i_go_to_the_1_tab(step, tab_text):
     go_to_tab(tab_text)
 
 
-@step(u'I start the XiVO Client')
+@step(u'When I start the XiVO Client')
 def i_start_the_xivo_client(step):
     run_xivoclient()
 
