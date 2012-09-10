@@ -1,4 +1,0 @@
-entityid|firstname|lastname|language|outcallerid|enableclient|username|password|profileclient|enablehint|agentnumber|mobilephonenumber|bosssecretary|phonenumber|context|protocol|incallexten|incallcontext|voicemailname|voicemailmailbox|voicemailpassword|voicemailemail
-{% for user in users -%}
-{{ user.entityid }}|{{ user.firstname }}|{{ user.lastname }}|{{ user.language }}|{{ user.outcallerid }}|{{ user.enableclient }}|{{ user.username }}|{{ user.password }}|{{ user.profileclient }}|{{ user.enablehint }}|{{ user.agentnumber }}|{{ user.mobilephonenumber }}|{{ user.bosssecretary }}|{{ user.phonenumber }}|{{ user.context }}|{{ user.protocol }}|{{ user.incallexten }}|{{ user.incallcontext }}|{{ user.firstname }} {{ user.lastname }}|{{ user.mailbox }}|{{ user.mailbox_passwd }}|{{ user.mailbox_mail }}
-{% endfor %}
