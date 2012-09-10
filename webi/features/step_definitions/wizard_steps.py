@@ -45,7 +45,7 @@ def when_i_accept_the_terms_of_the_licence(step):
 def then_i_should_be_on_page(step, page):
     divid = 'xivo-wizard-step-%s' % (page,)
     world.browser.find_element_by_id(divid, '%s page not loaded' % (page,))
-    div = world.browser.find_element_by_id(divid)
+    div = world.browser.find_element_by_id(divid, timeout=10)
     assert div is not None
 
 
