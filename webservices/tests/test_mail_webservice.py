@@ -18,7 +18,8 @@ __license__ = """
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
 """
 
-import unittest, json
+import unittest
+import json
 from webservices.webservices import WebServices
 
 
@@ -27,10 +28,19 @@ class TestMail(unittest.TestCase):
         self._aws = WebServices('configuration/network/mail')
 
     def tearDown(self):
-        pass
+        reset_data = {
+            "mydomain": "",
+            "origin": "",
+            "relayhost": "",
+            "fallback_relayhost": "",
+            "canonical": ''
+        }
+
+        response = self._aws.edit(reset_data, 0)
+        self.assertEqual(response.code, 200)
 
     def test_edit(self):
-        jsonfilecontent = self._aws.get_json_file_content('mail');
+        jsonfilecontent = self._aws.get_json_file_content('mail')
         content = json.loads(jsonfilecontent)
 
         response = self._aws.edit(content, 0)
