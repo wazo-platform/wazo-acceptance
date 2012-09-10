@@ -11,6 +11,11 @@ def regenerate_cache():
     world.ssh_client_xivo.check_call(['xivo-stat', 'fill_db'])
 
 
+def generate_cache():
+    ret = world.ssh_client_xivo.check_call(['xivo-stat', 'fill_db'])
+    assert(ret == 0)
+
+
 def open_queue_stat_page_on_day(queue_name, day, config_name):
     conf_id = statconfs_manager_ws.get_conf_id_with_name(config_name)
     queue_id = queue_manager_ws.get_queue_id_with_queue_name(queue_name)

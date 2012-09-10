@@ -46,6 +46,11 @@ def delete_event_between(start, end):
         queue_log_dao.delete_event_between(start, end)
 
 
+def insert_corrupt_data():
+    pg_command = '"INSERT INTO queue_log(time, callid, queuename, agent, event, data1) VALUES (cast (localtimestamp - interval \'1 hour\' as text), \'test_exitwithtimeout\', \'q1\', \'NONE\', \'EXITWITHTIMEOUT\', \'1\')"'
+    _exec_pgsql_request(pg_command)
+
+
 def get_event_count_queue(event, queuename):
     pg_command = '"SELECT COUNT(*) FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'"' % (queuename, event)
     res = _exec_pgsql_request_with_return(pg_command)
