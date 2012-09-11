@@ -168,33 +168,10 @@ def then_i_should_be_at_the_user_list_page(step):
     world.browser.find_element_by_name('fm-users-list')
 
 
-@step(u'When I edit the line "([^"]*)"')
-def when_i_edit_the_line_1(step, linenumber):
-    line_ids = line_manager_ws.find_line_id_with_number(linenumber, 'default')
-    if line_ids:
-        open_url('line', 'edit', {'id': line_ids[0]})
-
-
 @step(u'I edit the user "([^"]*)" "([^"]*)"')
 def when_i_edit_the_user_1_2(step, firstname, lastname):
     open_url('user', 'list')
     edit_line('%s %s' % (firstname, lastname))
-
-
-@step(u'Then I see the line "([^"]*)" has its call limit to "([^"]*)"')
-def then_i_see_the_line_1_has_its_call_limit_to_2(step, line_number, call_limit):
-    line_id = line_manager_ws.find_line_id_with_number(line_number, 'default')[0]
-    open_url('line', 'edit', {'id': line_id})
-
-    go_to_tab('IPBX Infos')
-
-    key = 'call_limit'
-    value_cell = world.browser.find_element_by_xpath(
-        "//table"
-        "//tr[td[@class = 'td-left' and text() = '%s']]"
-        "//td[@class = 'td-right']"
-        % key)
-    assert value_cell.text == call_limit
 
 
 @step(u'I enable the XiVO Client as "([^"]*)" pass "([^"]*)" profile "([^"]*)"')

@@ -3,7 +3,9 @@
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce.common import find_line, open_url, remove_all_elements, \
-    remove_line
+    remove_line, go_to_tab
+from xivo_lettuce.manager_ws import line_manager_ws
+from xivo_lettuce.manager import line_manager
 
 
 @step(u'Given there is no custom lines')
@@ -36,6 +38,13 @@ def when_i_remove_this_line(step):
     remove_line(world.id)
 
 
+@step(u'When I edit the line "([^"]*)"')
+def when_i_edit_the_line_1(step, linenumber):
+    line_ids = line_manager_ws.find_line_id_with_number(linenumber, 'default')
+    if line_ids:
+        open_url('line', 'edit', {'id': line_ids[0]})
+
+
 @step(u'Then this line is displayed in the list')
 def then_this_line_is_displayed_in_the_list(step):
     assert find_line(world.id) is not None
@@ -49,3 +58,18 @@ def then_this_line_is_not_displayed_in_the_list(step):
         pass
     else:
         assert False
+
+
+@step(u'Then I see the line "([^"]*)" has its call limit to "([^"]*)"')
+def then_i_see_the_line_1_has_its_call_limit_to_2(step, line_number, call_limit):
+    line_id = line_manager_ws.find_line_id_with_number(line_number, 'default')[0]
+    open_url('line', 'edit', {'id': line_id})
+
+    expected_var_val = line_manager.get_value_from_ipbx_infos_tab('call_limit')
+    assert expected_var_val == call_limit
+
+
+@step(u'^Then I see in IPBX Infos tab value "([^"]*)" has set to (.*)$')
+def then_i_see_the_value_has_set_to(step, var_name, var_val):
+    expected_var_val = line_manager.get_value_from_ipbx_infos_tab(var_name)
+    assert expected_var_val == var_val

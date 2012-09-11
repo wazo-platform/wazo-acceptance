@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
-from xivo_lettuce.common import open_url
+from xivo_lettuce.common import open_url, go_to_tab
 
 
 def search_line_number(line_number):
@@ -21,3 +21,13 @@ def unsearch_line():
     text_input.clear()
     submit_button = world.browser.find_element_by_id('it-toolbar-subsearch')
     submit_button.click()
+
+
+def get_value_from_ipbx_infos_tab(var_name):
+    go_to_tab('IPBX Infos')
+    value_cell = world.browser.find_element_by_xpath(
+        "//table"
+        "//tr[td[@class = 'td-left' and text() = '%s']]"
+        "//td[@class = 'td-right']"
+        % var_name)
+    return value_cell.text
