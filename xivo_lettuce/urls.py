@@ -152,4 +152,9 @@ URLS = {
                 'web': '/service/ipbx/index.php/system_management/backupfiles',
                 'ws': 'ipbx/pbx_services/sounds'
             },
+        'certificat':
+            {
+                'web': '/xivo/configuration/index.php/manage/certificate',
+                'ws' : None
+            },
        }
