@@ -76,7 +76,7 @@ class TestAsteriskRestart(unittest.TestCase):
             "ctid did not restart after stopping service")
 
     def test_monit_restarts_xivo_services(self):
-        min_timestamp = datetime.datetime.now() - datetime.timedelta(seconds = self.WAIT_SECS)
+        min_timestamp = datetime.datetime.now() - datetime.timedelta(seconds = self.WAIT_SECS * self.NB_TRIES)
 
         monit_restarted = False
         loglines = self._read_last_log_lines(self.DAEMON_LOGFILE, min_timestamp)
