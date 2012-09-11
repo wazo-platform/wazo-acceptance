@@ -43,7 +43,8 @@ class TestAsterisk(unittest.TestCase):
 
 class TestAsteriskRestart(unittest.TestCase):
 
-    WAIT_SECS = 120
+    WAIT_SECS = 10
+    NB_TRIES = 12
     ASTERISK_PIDFILE = '/var/run/asterisk/asterisk.pid'
     CTI_PIDFILE = '/var/run/xivo-ctid.pid'
     DAEMON_LOGFILE = '/var/log/daemon.log'
@@ -64,15 +65,15 @@ class TestAsteriskRestart(unittest.TestCase):
             "ctid is still running after stopping asterisk")
 
         #Wait and check that asterisk and CTI are back up
-        time.sleep(self.WAIT_SECS)
+        self._wait_service_restart(self.CTI_PIDFILE, self.NB_TRIES)
 
         self.assertTrue(
             self._is_process_running(self.ASTERISK_PIDFILE),
-            "asterisk did not restart after waiting %s seconds" % str(self.WAIT_SECS))
+            "asterisk did not restart after stopping service")
 
         self.assertTrue(
             self._is_process_running(self.CTI_PIDFILE),
-            "ctid did not restart after waiting %s seconds" % str(self.WAIT_SECS))
+            "ctid did not restart after stopping service")
 
     def test_monit_restarts_xivo_services(self):
         min_timestamp = datetime.datetime.now() - datetime.timedelta(seconds = self.WAIT_SECS)
@@ -85,6 +86,17 @@ class TestAsteriskRestart(unittest.TestCase):
 
         self.assertTrue(monit_restarted, "monit did not restart xivo-services")
 
+    def _wait_service_restart(self, pidfile, maxtries):
+
+        nbtries = 0
+        restarted = self._is_process_running(pidfile)
+        while nbtries < maxtries and not restarted:
+            time.sleep(self.WAIT_SECS)
+            restarted = self._is_process_running(pidfile)
+            nbtries += 1
+
+        return restarted
+
     def _stop_asterisk(self):
         retcode = subprocess.call(['service', 'asterisk', 'stop'])
         self.assertEqual(retcode, 0)
@@ -96,7 +108,7 @@ class TestAsteriskRestart(unittest.TestCase):
             return False
 
         pid = open(pidfile).read().strip()
-
+        
         return os.path.exists("/proc/%s" % pid)
 
     def _read_last_log_lines(self, log_filepath, min_timestamp):
@@ -121,3 +133,4 @@ class TestAsteriskRestart(unittest.TestCase):
                 lines.append(line)
 
         return lines
+
