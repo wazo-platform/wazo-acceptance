@@ -67,6 +67,11 @@ URLS = {
                 'web': '/service/ipbx/index.php/general_settings/iax',
                 'ws': 'ipbx/general_settings/iax'
             },
+        'general_sip':
+            {
+                'web': '/service/ipbx/index.php/general_settings/sip',
+                'ws': 'ipbx/general_settings/sip'
+            },
         'incall':
             {
                 'web': '/service/ipbx/index.php/call_management/incall',
