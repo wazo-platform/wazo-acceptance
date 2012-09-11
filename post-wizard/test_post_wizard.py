@@ -3,6 +3,8 @@
 import unittest
 import os
 import subprocess
+import time
+import datetime
 
 
 class TestDhcpdUpdate(unittest.TestCase):
@@ -38,3 +40,84 @@ class TestAsterisk(unittest.TestCase):
     def test_core_reload(self):
         retcode = subprocess.call(['asterisk', '-rx', 'core reload'])
         self.assertEqual(retcode, 0)
+
+class TestAsteriskRestart(unittest.TestCase):
+
+    WAIT_SECS = 120
+    ASTERISK_PIDFILE = '/var/run/asterisk/asterisk.pid'
+    CTI_PIDFILE = '/var/run/xivo-ctid.pid'
+    DAEMON_LOGFILE = '/var/log/daemon.log'
+    XIVO_RESTART_LINE = "start: /usr/bin/xivo-service"
+    DATE_FORMAT = "%b %d %H:%M:%S"
+
+    def test_asterisk_and_cti_restart(self):
+
+        self._stop_asterisk()
+
+        #Check that asterisk and CTI are not running
+        self.assertFalse(
+            self._is_process_running(self.ASTERISK_PIDFILE),
+            "asterisk is still running after stopping service")
+
+        self.assertFalse(
+            self._is_process_running(self.CTI_PIDFILE),
+            "ctid is still running after stopping asterisk")
+
+        #Wait and check that asterisk and CTI are back up
+        time.sleep(self.WAIT_SECS)
+
+        self.assertTrue(
+            self._is_process_running(self.ASTERISK_PIDFILE),
+            "asterisk did not restart after waiting %s seconds" % str(self.WAIT_SECS))
+
+        self.assertTrue(
+            self._is_process_running(self.CTI_PIDFILE),
+            "ctid did not restart after waiting %s seconds" % str(self.WAIT_SECS))
+
+    def test_monit_restarts_xivo_services(self):
+        min_timestamp = datetime.datetime.now() - datetime.timedelta(seconds = self.WAIT_SECS)
+
+        monit_restarted = False
+        loglines = self._read_last_log_lines(self.DAEMON_LOGFILE, min_timestamp)
+        for line in loglines:
+            if self.XIVO_RESTART_LINE in line:
+                monit_restarted = True
+
+        self.assertTrue(monit_restarted, "monit did not restart xivo-services")
+
+    def _stop_asterisk(self):
+        retcode = subprocess.call(['service', 'asterisk', 'stop'])
+        self.assertEqual(retcode, 0)
+        time.sleep(1)
+
+    def _is_process_running(self, pidfile):
+
+        if not os.path.exists(pidfile):
+            return False
+
+        pid = open(pidfile).read().strip()
+
+        return os.path.exists("/proc/%s" % pid)
+
+    def _read_last_log_lines(self, log_filepath, min_timestamp):
+
+        current_year = datetime.datetime.now().year
+
+        lines = []
+        for line in open(log_filepath):
+            datetext = line[0:15]
+
+            timestamp = datetime.datetime.strptime(datetext, self.DATE_FORMAT)
+            #Needed so that the timestamp has the right year
+            timestamp = datetime.datetime(
+                year = current_year,
+                month = timestamp.month,
+                day = timestamp.day,
+                hour = timestamp.hour,
+                minute = timestamp.minute,
+                second = timestamp.second)
+
+            if timestamp >= min_timestamp:
+                lines.append(line)
+
+        return lines
