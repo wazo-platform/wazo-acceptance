@@ -5,23 +5,24 @@ import time
 from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
-
 from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url, \
     remove_line, submit_form
 from xivo_lettuce.manager.outcall_manager import exten_line
+from xivo_lettuce.manager_ws import trunksip_manager_ws, outcall_manager_ws
 
 
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
-def given_there_is_an_outcall(step, name, trunk):
-    open_url('outcall', 'list')
-    try:
-        find_line(name)
-    except NoSuchElementException:
-        step.given(u'When I create an outcall with name "%s" and trunk "%s"' % (name, trunk))
+def given_there_is_an_outcall(step, outcall_name, trunk_name):
+    trunksip_manager_ws.add_or_replace_trunksip('host', trunk_name)
+    trunk_id = trunksip_manager_ws.get_trunk_id_with_name(trunk_name)
+    data = {'name': outcall_name,
+            'context': 'to-extern',
+            'trunks': [trunk_id]}
+    outcall_manager_ws.add_outcall(data)
 
 
-@step(u'Given I don\'t see any exten "([^"]*)"')
-def given_i_dont_see_any_exten(step, exten):
+@step(u'Given I don\'t see any exten "([^"]*)" with trunk "([^"]*)"')
+def given_i_dont_see_any_exten(step, exten, trunk_name):
     try:
         then_i_dont_see_any_exten(step, exten)
     except AssertionError:
@@ -29,8 +30,8 @@ def given_i_dont_see_any_exten(step, exten):
         submit_form()
 
 
-@step(u'Given I see an exten "([^"]*)"')
-def given_i_see_an_exten(step, exten):
+@step(u'Given I see an exten "([^"]*)" with trunk "([^"]*)"')
+def given_i_see_an_exten(step, exten, trunk_name):
     try:
         then_i_see_an_exten(step, exten)
     except NoSuchElementException:
@@ -41,11 +42,7 @@ def given_i_see_an_exten(step, exten):
 
 @step(u'Given there is no outcall "([^"]*)"')
 def given_there_is_no_outcall(step, name):
-    open_url('outcall', 'list')
-    try:
-        remove_line(name)
-    except NoSuchElementException:
-        pass
+    outcall_manager_ws.delete_outcall_with_name_if_exists(name)
 
 
 @step(u'When I create an outcall with name "([^"]*)" and trunk "([^"]*)"')
@@ -71,17 +68,6 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
 def when_i_remove_the_outcall(step, name):
     open_url('outcall', 'list')
     remove_line(name)
-
-
-@step(u'Then there is no outcall "([^"]*)"')
-def then_there_is_no_outcall(step, name):
-    open_url('outcall', 'list')
-    try:
-        find_line(name)
-    except NoSuchElementException:
-        pass
-    else:
-        assert False
 
 
 @step(u'I go to the outcall "([^"]*)", tab "([^"]*)"')
@@ -123,6 +109,17 @@ def when_i_remove_the_exten(step, exten):
 def then_i_dont_see_any_exten(step, exten):
     try:
         exten_line(exten)
+    except NoSuchElementException:
+        pass
+    else:
+        assert False
+
+
+@step(u'Then there is no outcall "([^"]*)"')
+def then_there_is_no_outcall(step, name):
+    open_url('outcall', 'list')
+    try:
+        find_line(name)
     except NoSuchElementException:
         pass
     else:

@@ -23,6 +23,14 @@ def add_or_replace_trunksip(host, name, context='default'):
     add_trunksip(host, name, context)
 
 
+def get_trunk_id_with_name(name):
+    sip_trunks = find_trunksip_with_name(name)
+    for sip_trunk in sip_trunks:
+        if sip_trunk.name == str(name):
+            return sip_trunk.id
+    raise Exception('no sip_trunk with name "%s"', name)
+
+
 def find_trunksip_with_name(name):
     return world.ws.sip_trunk.search(name)
 

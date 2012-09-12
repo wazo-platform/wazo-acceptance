@@ -62,7 +62,7 @@ def delete_user_with_firstname(firstname):
         world.ws.user.delete(user.id)
 
 
-def get_user_id_with_with_firstname_lastname(firstname, lastname):
+def get_user_id_with_firstname_lastname(firstname, lastname):
     users = world.ws.user.search('%s %s' % (firstname, lastname))
     for user in users:
         if user.firstname == str(firstname) and user.lastname == str(lastname):

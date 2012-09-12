@@ -7,11 +7,13 @@ Feature: Outcall
         Then outcall "outdoor" is displayed in the list
 
     Scenario: Remove an outcall
+        Given there is no outcall "outdoor"
         Given there is an outcall "outdoor" with trunk "door"
         When I remove the outcall "outdoor"
         Then there is no outcall "outdoor"
 
     Scenario: Add an extension in outcall
+        Given there is no outcall "outdoor"
         Given there is an outcall "outdoor" with trunk "door"
         Given I go to the outcall "outdoor", tab "Exten"
         Given I don't see any exten "7000"
@@ -23,6 +25,7 @@ Feature: Outcall
         Then I see an exten "7000"
 
     Scenario: Remove an extension in outcall
+        Given there is no outcall "outdoor"
         Given there is an outcall "outdoor" with trunk "door"
         Given I go to the outcall "outdoor", tab "Exten"
         Given I see an exten "7000"
