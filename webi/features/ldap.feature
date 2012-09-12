@@ -1,8 +1,5 @@
 Feature: ldap
 
-    Test X-238
-    Test X-239
-
     Scenario: Add LDAP Server
         Given there is no LDAP server "test-ldap-server"
         When I create an LDAP server with name "test-ldap-server" and host "test-ldap-server"
