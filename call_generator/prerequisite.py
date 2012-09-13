@@ -5,7 +5,7 @@ from lettuce import world
 from xivo_lettuce.manager_ws import context_manager_ws, trunksip_manager_ws
 
 
-def setup(ssh_xivo):
+def setup():
     context_manager_ws.update_contextnumbers_user('default', 1000, 1100)
 
     callgen_ip = socket.gethostbyname(world.callgen_host)

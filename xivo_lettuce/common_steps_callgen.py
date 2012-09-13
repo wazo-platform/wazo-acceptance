@@ -28,6 +28,15 @@ def given_there_is_no_entries_in_queue_log_table_between(step, start, end):
     queuelog_manager.delete_event_between(start, end)
 
 
+@step(u'Given I register extension "([^"]*)"')
+def given_i_register_extension(step, extension):
+    number, context = extract_number_and_context_from_extension(extension)
+    lines = [line for line in world.ws.lines.search(number)]
+    if not lines:
+        assert(False)
+    statscall_manager.execute_sip_register(lines[0].name, lines[0].secret)
+
+
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
 def given_i_log_the_phone(step, agent_number, extension):
     number, context = extract_number_and_context_from_extension(extension)
@@ -66,6 +75,11 @@ def given_there_is_n_calls_to_extension_and_hangup(step, count, extension):
 def given_there_is_n_calls_to_extension_then_i_hangup_after_n_seconds(step, count, extension, call_duration):
     call_duration_ms = int(call_duration) * 1000
     statscall_manager.execute_n_calls_then_hangup(count, extension, duration=call_duration_ms)
+
+
+@step(u'Given I wait call then i answer and wait')
+def given_i_wait_call_then_i_answer_then_i_answer_and_wait(step):
+    statscall_manager.execute_answer_then_wait()
 
 
 @step(u'Given I wait call then i answer then i hang up after "([0-9]+)s"')

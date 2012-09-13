@@ -82,6 +82,11 @@ URLS = {
                 'web': '/service/ipbx/index.php/call_management/outcall',
                 'ws': 'ipbx/call_management/outcall'
             },
+        'cel':
+            {
+                'web': '/service/ipbx/index.php/call_management/cel',
+                'ws': 'ipbx/call_management/cel'
+            },
         'trunkcustom':
             {
                 'web': '/service/ipbx/index.php/trunk_management/custom',
