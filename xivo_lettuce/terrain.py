@@ -7,9 +7,6 @@ from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 from xivo_lettuce.ssh import SSHClient
 from selenium.webdriver import FirefoxProfile
-from webi import prerequisite as webi_prerequisites
-from statcenter import prerequisite as statcenter_prerequisites
-from call_generator import prerequisite as call_generator_prequisites
 from xivo_lettuce.common import webi_login_as_default, go_to_home_page
 
 
@@ -22,14 +19,9 @@ def initialize_from_config():
     config = _read_config()
     _setup_browser(config)
     _setup_login_infos(config)
-    ssh_xivo = _setup_ssh_client_xivo(config)
+    _setup_ssh_client_xivo(config)
     _setup_ssh_client_callgen(config)
-    ws = _setup_ws(config)
-    enable_prerequisites = config.getboolean('prerequisites', 'enable')
-    if enable_prerequisites and ws.check_ws():
-        webi_prerequisites.setup()
-        statcenter_prerequisites.setup(ssh_xivo)
-        call_generator_prequisites.setup()
+    _setup_ws(config)
     if _webi_configured():
         _log_on_webi()
 
