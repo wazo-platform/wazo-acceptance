@@ -21,8 +21,8 @@ def given_there_is_an_outcall(step, outcall_name, trunk_name):
     outcall_manager_ws.add_outcall(data)
 
 
-@step(u'Given I don\'t see any exten "([^"]*)" with trunk "([^"]*)"')
-def given_i_dont_see_any_exten(step, exten, trunk_name):
+@step(u'Given I don\'t see any exten "([^"]*)"')
+def given_i_dont_see_any_exten(step, exten):
     try:
         then_i_dont_see_any_exten(step, exten)
     except AssertionError:
@@ -30,8 +30,8 @@ def given_i_dont_see_any_exten(step, exten, trunk_name):
         submit_form()
 
 
-@step(u'Given I see an exten "([^"]*)" with trunk "([^"]*)"')
-def given_i_see_an_exten(step, exten, trunk_name):
+@step(u'Given I see an exten "([^"]*)"')
+def given_i_see_an_exten(step, exten):
     try:
         then_i_see_an_exten(step, exten)
     except NoSuchElementException:
