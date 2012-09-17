@@ -1,5 +1,4 @@
 {
-    "maintenance"           : false,
     "alert_emails"          : [
         "toto@gmail.com",
         "john.doe@gov.fr"

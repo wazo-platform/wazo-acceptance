@@ -13,7 +13,7 @@ from xivo_lettuce.manager_ws import trunksip_manager_ws, outcall_manager_ws
 
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
 def given_there_is_an_outcall(step, outcall_name, trunk_name):
-    trunksip_manager_ws.add_or_replace_trunksip('host', trunk_name)
+    trunksip_manager_ws.add_or_replace_trunksip('192.168.32.254', trunk_name)
     trunk_id = trunksip_manager_ws.get_trunk_id_with_name(trunk_name)
     data = {'name': outcall_name,
             'context': 'to-extern',

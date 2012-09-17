@@ -29,8 +29,7 @@ class TestMonitoring(unittest.TestCase):
 
     def tearDown(self):
         reset_data = {
-            "maintenance": 'false',
-            "alert_emails": '',
+            "alert_emails": 'tests-reports@avencall.com',
             "dahdi_monitor_ports": ''
         }
 
