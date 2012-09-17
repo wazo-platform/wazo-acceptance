@@ -18,6 +18,7 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 def initialize_from_config():
     config = _read_config()
     _setup_browser(config)
+    _setup_xivo_client(config)
     _setup_login_infos(config)
     _setup_ssh_client_xivo(config)
     _setup_ssh_client_callgen(config)
@@ -65,6 +66,10 @@ def _setup_browser_profile():
     fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download")
 
     return fp
+
+
+def _setup_xivo_client(config):
+    world.xc_login_timeout = config.getint('xivo_client', 'login_timeout')
 
 
 def _setup_login_infos(config):

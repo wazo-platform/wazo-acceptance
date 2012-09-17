@@ -174,12 +174,12 @@ def i_cant_log_in_the_xivo_client_as_1_pass_2(step, login, password):
 
 @xivoclient
 def i_log_in_the_xivo_client_to_host_1_as_2_pass_3(host, login, password):
-    pass
+    time.sleep(world.xc_login_timeout)
 
 
 @xivoclient
 def i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(host, login, password):
-    pass
+    time.sleep(world.xc_login_timeout)
 
 
 @step(u'I log out of the XiVO Client')
