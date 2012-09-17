@@ -60,6 +60,13 @@ def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, e
     assert(count == int(expected_count))
 
 
+@step(u'Then the last event "([A-Z]+)" for agent "([^"]*)" should not have a callid "([^"]*)"')
+def then_the_last_event_for_agent_should_not_have_a_callid(step, event, agent, callid):
+    result = queuelog_manager.get_last_callid(event, agent)
+
+    assert(result != callid)
+
+
 @step(u'^Then I should have the following statististics on "(.+)" on "(.+)" on configuration "(\S+)":$')
 def then_i_should_have_stats_for_config(step, queue_name, day, config_name):
     stat_manager.open_queue_stat_page_on_day(queue_name, day, config_name)
