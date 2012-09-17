@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.decorators import step
-from reportbug.urlutils import open_url
+from lettuce import step
+from xivo_lettuce.common import open_url
 from xivo_lettuce.manager.profile_manager import remove_all_services, add_xlet, \
     delete_profile
 from selenium.common.exceptions import NoSuchElementException
