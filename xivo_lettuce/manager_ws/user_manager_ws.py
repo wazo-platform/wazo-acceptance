@@ -43,27 +43,34 @@ def add_user(data_dict):
 
 
 def delete_user_with_firstname_lastname(firstname, lastname):
-    users = world.ws.user.search('%s %s' % (firstname, lastname))
+    users = world.ws.users.search('%s %s' % (firstname, lastname))
     for user in users:
         if user.voicemail:
             voicemail_manager_ws.delete_voicemail_with_id(user.voicemail.id)
         if user.line:
             line_manager_ws.delete_line_with_number(user.line.number)
-        world.ws.user.delete(user.id)
+        world.ws.users.delete(user.id)
 
 
 def delete_user_with_firstname(firstname):
-    users = world.ws.user.search(firstname)
+    users = world.ws.users.search(firstname)
     for user in users:
         if user.voicemail:
             voicemail_manager_ws.delete_voicemail_with_id(user.voicemail.id)
         if user.line:
             line_manager_ws.delete_line_with_number(user.line.number)
-        world.ws.user.delete(user.id)
+        world.ws.users.delete(user.id)
+
+
+def delete_users_with_profile(profile):
+    users = world.ws.users.list()
+    for user in users:
+        if user.client_profile == profile:
+            world.ws.users.delete(user.id)
 
 
 def get_user_id_with_firstname_lastname(firstname, lastname):
-    users = world.ws.user.search('%s %s' % (firstname, lastname))
+    users = world.ws.users.search('%s %s' % (firstname, lastname))
     for user in users:
         if user.firstname == str(firstname) and user.lastname == str(lastname):
             return user.id
@@ -71,7 +78,7 @@ def get_user_id_with_firstname_lastname(firstname, lastname):
 
 
 def find_user_id_with_firstname_lastname(firstname, lastname):
-    users = world.ws.user.search('%s %s' % (firstname, lastname))
+    users = world.ws.users.search('%s %s' % (firstname, lastname))
     if users:
         return [user.id for user in users if
                 user.firstname == firstname and user.lastname == lastname]
