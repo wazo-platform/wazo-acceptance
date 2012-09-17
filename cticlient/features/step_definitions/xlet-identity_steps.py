@@ -1,5 +1,6 @@
-from lettuce.decorators import step
-from lettuce.registry import world
+# -*- coding: UTF-8 -*-
+
+from lettuce import step, world
 
 from xivo_lettuce.common import xivoclient, xivoclient_step
 
