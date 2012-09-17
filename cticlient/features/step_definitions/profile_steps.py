@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import time
-
 from lettuce.decorators import step
-from lettuce.registry import world
-
-from xivo_lettuce.common import *
-from xivo_lettuce.manager.profile_manager import *
+from reportbug.urlutils import open_url
+from xivo_lettuce.manager.profile_manager import remove_all_services, add_xlet, \
+    delete_profile
+from selenium.common.exceptions import NoSuchElementException
 
 
 @step(u'Given there is no profile "([^"]*)"')

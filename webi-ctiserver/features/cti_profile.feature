@@ -10,3 +10,7 @@ Feature: Profile
         When I set the profile name to "test"
         When I submit
         Then I see no errors
+
+    Scenario: Remove a CTI profile that is associated with a user
+        Given there is a user "Alfredo" "Buenanote" with extension "1482@default" and CTI profile "Client"
+        Then I can't remove profile "Client"
