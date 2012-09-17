@@ -65,12 +65,12 @@ def get_event_count_agent(event, agent_number):
 
 
 def get_last_callid(event, agent_number):
-    agent_number = _build_agent_db_tag_from_number(agent_number)
-    pg_command = '"SELECT callid FROM queue_log WHERE agent = \'%s\' and event = \'%s\' ORDER BY time desc limit 1"' % (agent_number, event)
-
-    res = _exec_pgsql_request_with_return(pg_command)
-
-    return res.split('\n')[-4].strip()
+    with asterisk_connection():
+        callid = queue_log_dao.get_last_callid_with_event_for_agent(
+            event,
+            _build_agent_db_tag_from_number(agent_number)
+            )
+        return callid
 
 
 def _build_agent_db_tag_from_number(agent_number):
