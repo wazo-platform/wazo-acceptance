@@ -91,7 +91,7 @@ def execute_answer_then_wait(ring_time=2000):
 def _exec_cmd(command):
     cmds = []
     for arg in command:
-        arg = str(arg)
+        arg = '"' + str(arg) + '"'
         arg.encode('utf8')
         cmds.append(arg)
 
@@ -99,7 +99,7 @@ def _exec_cmd(command):
                    '-o', 'PreferredAuthentications=publickey',
                    '-o', 'StrictHostKeyChecking=no',
                    '-o', 'UserKnownHostsFile=/dev/null',
-                   '-l', 'root',
+                   '-l', world.callgen_login,
                    socket.gethostbyname(world.callgen_host)]
     ssh_command.extend(cmds)
 

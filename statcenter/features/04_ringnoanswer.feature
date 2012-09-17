@@ -9,7 +9,7 @@ Feature: Stat
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "004" on extension "1004@statscenter"
         Given I wait 5 seconds for the calls processing
-        Given there is 1 calls to extension "5004@statscenter" then i hang up after "3s"
+        Given there is 1 calls to extension "5004@statscenter" then i hang up after "10s"
         Given I logout agent "004" on extension "1004@statscenter"
         Given I wait 5 seconds for the calls processing
-        Then i should see 1 "RINGNOANSWER" event in queue "q04" in the queue log
+        Then I should see 1 "RINGNOANSWER" event in queue "q04" in the queue log

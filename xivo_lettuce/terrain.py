@@ -84,8 +84,9 @@ def _setup_ssh_client_xivo(config):
 
 def _setup_ssh_client_callgen(config):
     hostname = config.get('callgen', 'hostname')
-    login = config.get('ssh_infos', 'login')
+    login = config.get('callgen', 'login')
     world.callgen_host = hostname
+    world.callgen_login = login
     world.ssh_client_callgen = SSHClient(hostname, login)
 
 
