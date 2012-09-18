@@ -15,7 +15,7 @@ def get_queue_id_with_queue_name(queue_name):
 def get_queue_id_with_number(queue_number):
     queues = world.ws.queues.search(queue_number)
     for queue in queues:
-        if queue.name == str(queue_number):
+        if queue.number == str(queue_number):
             return queue.id
     raise Exception('no queue with queue number %s' % queue_number)
 
