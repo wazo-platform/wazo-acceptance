@@ -18,7 +18,7 @@
   ]]>
 </send>
 
-<pause milliseconds="500"/>
+<pause{% for k, v in (pause|default({})).iteritems() %} {{ k }}="{{ v }}"{% endfor %}/>
 
 <send retrans="500">
   <![CDATA[
