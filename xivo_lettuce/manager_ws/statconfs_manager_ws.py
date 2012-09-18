@@ -5,6 +5,18 @@ from xivo_ws import Statconf
 from xivo_lettuce.manager_ws import agent_manager_ws, queue_manager_ws
 
 
+
+def add_configuration_with_agent(config_name, work_start, work_end, agent_number):
+    delete_conf_with_name_if_exists(config_name)
+    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+
+    conf = _build_base_configuration(config_name, work_start, work_end)
+
+    conf.agent = [agent_id]
+
+    world.ws.statconfs.add(conf)
+
+
 def add_configuration_with_queue(config_name, work_start, work_end, queue_name):
     delete_conf_with_name_if_exists(config_name)
     queue_id = queue_manager_ws.get_queue_id_with_queue_name(queue_name)

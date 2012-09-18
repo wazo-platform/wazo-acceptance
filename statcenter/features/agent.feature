@@ -50,3 +50,22 @@ Feature: WEBI Agent Stats
           | 10h-11h |        0 |     00:00:00 |
           | 11h-12h |        0 |     00:00:00 |
           | Total   |        3 |     00:00:39 |
+
+
+    Scenario: Generate stats for total login time
+        Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
+        Given there is a agent "Agent" "2" with extension "2@statscenter"
+        Given there is a statistic configuration "test_login_time" from "8:00" to "12:00" with agent "2"
+        Given I have to following queue_log entries:
+          | time                       | callid       | queuename | agent    | event               | data1            | data2 | data3         | data4 | data5 |
+          | 2012-01-01 09:10:10.777777 | login_time_1 | NONE      | Agent/2  | AGENTCALLBACKLOGIN  | 1002@default     |       |               |       |       |
+          | 2012-01-01 09:25:10.777777 | login_time_2 | NONE      | Agent/2  | AGENTCALLBACKLOGOFF | 1001@statscenter | 900   | CommandLogoff |       |       |
+          | 2012-01-01 09:25:11.555555 | login_time_3 | NONE      | Agent/2  | UNPAUSEALL          |                  |       |               |       |       |
+        Given I clear and generate the statistics cache
+        Then I should have the following statististics on agent "2" on "2012-01-01" on configuration "test_login_time":
+          |         | Login    |
+          | 8h-9h   | 00:00:00 |
+          | 9h-10h  | 00:15:00 |
+          | 10h-11h | 00:00:00 |
+          | 11h-12h | 00:00:00 |
+          | Total   | 00:15:00 |

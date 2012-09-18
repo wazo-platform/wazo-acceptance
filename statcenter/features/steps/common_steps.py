@@ -16,6 +16,11 @@ def given_there_are_a_corrupt_entry_in_queue_log(step):
     queuelog_manager.insert_corrupt_data()
 
 
+@step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with agent "(\S+)"$')
+def given_there_is_a_configuration_with_agent(step, config_name, start, end, agent_number):
+    statconfs_manager_ws.add_configuration_with_agent(config_name, start, end, agent_number)
+
+
 @step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with queue "(\S+)"$')
 def given_there_is_a_configuration_with(step, config_name, start, end, queue_name):
     statconfs_manager_ws.add_configuration_with_queue(config_name, start, end, queue_name)
