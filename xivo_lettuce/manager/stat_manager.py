@@ -52,7 +52,25 @@ def check_agent_statistic(stats):
     _check_table_statistic(table, stats)
 
 
+def check_partial_agent_statistic(stats):
+    table = world.browser.find_element_by_id('agent')
+    _check_partial_table_statistic(table, stats)
+
+
 def _check_table_statistic(table, stats):
+    values = _get_statistics(table, stats)
+
+    assert(stats == values)
+
+
+def _check_partial_table_statistic(table, stats):
+    values = _get_statistics(table, stats)
+
+    for stat_line in stats:
+        assert stat_line in values
+
+
+def _get_statistics(table, stats):
     list_tr = table.find_elements_by_tag_name('tr')
 
     list_tr.pop(0)
@@ -60,8 +78,7 @@ def _check_table_statistic(table, stats):
     headers = _extract_th_from_tr_element(headers_line)
     expected_headers = stats[0].keys()
     values = _extract_td_from_tr_elements(list_tr, headers, expected_headers)
-
-    assert(stats == values)
+    return values
 
 
 def _extract_td_from_tr_elements(list_tr, headers, expected_headers):
@@ -85,3 +102,12 @@ def _filter_key_dict(line_dict, filter_keys):
 def _extract_th_from_tr_element(tr_element):
     header_th = tr_element.find_elements_by_tag_name('th')
     return [header.text.strip() for header in header_th]
+
+
+def check_agent_login_time(login_time, period_start):
+    expected_stats = [
+        {'': '%sh-%sh' % (period_start.hour, period_start.hour + 1),
+         'Login': login_time}
+        ]
+
+    check_partial_agent_statistic(expected_stats)

@@ -6,6 +6,7 @@ from lettuce.registry import world
 from xivo_lettuce.manager import queuelog_manager
 from xivo_lettuce.manager import statscall_manager
 from utils.func import extract_number_and_context_from_extension
+from datetime import datetime
 
 
 @step(u'Given there is no "([A-Z_]+)" entry for agent "([^"]*)"')
@@ -26,6 +27,17 @@ def given_there_is_no_event_entry_in_queue_log_table_in_queue_between(step, even
 @step(u'^Given there is no entries in queue_log between "(.+)" and "(.+)"$')
 def given_there_is_no_entries_in_queue_log_table_between(step, start, end):
     queuelog_manager.delete_event_between(start, end)
+
+
+@step(u'Given there is no entries in queue_log in the last hour')
+def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
+    now = datetime.now()
+    last_hour = datetime(now.year, now.month, now.day, now.hour - 1, 0, 0, 0)
+
+    queuelog_manager.delete_event_between(
+        last_hour.strftime("%Y-%m-%d %H:%M:%S.%f"),
+        now.strftime("%Y-%m-%d %H:%M:%S.%f")
+        )
 
 
 @step(u'Given I register extension "([^"]*)"')

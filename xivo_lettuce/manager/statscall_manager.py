@@ -2,7 +2,7 @@
 
 import socket
 
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import Popen, PIPE
 from lettuce.registry import world
 from utils.func import extract_number_and_context_from_extension
 

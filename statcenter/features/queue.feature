@@ -5,7 +5,7 @@ Feature: WEBI Queue Stats
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is a queue "q01" with extension "5001@statscenter"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid     | queuename | agent | event      | data1 | data2 | data3 | data4 | data5 |
           | 2012-07-01 08:00:00.000000 | received_1 | q01       | NONE  | ENTERQUEUE |       |       |       |       |       |
           | 2012-07-01 08:10:00.000000 | received_1 | q01       | NONE  | ABANDON    | 1     | 1     | 4     |       |       |
@@ -33,7 +33,7 @@ Feature: WEBI Queue Stats
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is a queue "q01" with extension "5001@statscenter"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid     | queuename | agent     | event          | data1 | data2 | data3 | data4 | data5 |
           | 2012-07-01 08:00:00.000000 | received_1 | q01       | NONE      | ENTERQUEUE     |       |       |       |       |       |
           | 2012-07-01 08:00:03.000000 | received_1 | q01       | Agent/001 | CONNECT        | 3     |       |       |       |       |
@@ -67,7 +67,7 @@ Feature: WEBI Queue Stats
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is a queue "q01" with extension "5001@statscenter"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid     | queuename | agent | event      | data1 | data2 | data3 | data4 | data5 |
           | 2012-07-01 08:00:00.000000 | received_1 | q01       | NONE  | JOINEMPTY  |       |       |       |       |       |
           | 2012-07-01 08:00:00.000001 | received_6 | q01       | NONE  | JOINEMPTY  |       |       |       |       |       |
@@ -89,7 +89,7 @@ Feature: WEBI Queue Stats
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is a queue "q01" with extension "5001@statscenter"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid     | queuename | agent | event   | data1 | data2 | data3 | data4 | data5 |
           | 2012-07-01 08:00:00.000000 | received_1 | q01       | NONE  | CLOSED  |       |       |       |       |       |
           | 2012-07-01 08:00:00.000001 | received_6 | q01       | NONE  | CLOSED  |       |       |       |       |       |
@@ -111,7 +111,7 @@ Feature: WEBI Queue Stats
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there is a queue "q01" with extension "5001@statscenter"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid      | queuename | agent | event           | data1 | data2 | data3 | data4 | data5 |
           | 2012-07-01 08:00:00.000000 | saturated_1 | q01       | NONE  | DIVERT_CA_RATIO |       |       |       |       |       |
           | 2012-07-01 08:59:59.999999 | saturated_2 | q01       | NONE  | FULL            |       |       |       |       |       |

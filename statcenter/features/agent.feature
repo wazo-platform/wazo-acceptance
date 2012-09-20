@@ -5,7 +5,7 @@ Feature: WEBI Agent Stats
         Given there is a queue "q01" with extension "5001@statscenter"
         Given there is a agent "Agent" "1" with extension "1@statscenter"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01" and agent "1"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid      | queuename | agent     | event               | data1 | data2          | data3 | data4 | data5 |
           | 2012-07-01 10:58:39.750413 | answered_1  | q01       | Agent/1   | COMPLETECALLER      | 1     | 6              | 1     |       |       |
           | 2012-07-01 10:58:33.643463 | answered_1  | q01       | Agent/1   | CONNECT             | 1     | 1346165912.457 | 1     |       |       |
@@ -31,7 +31,7 @@ Feature: WEBI Agent Stats
         Given there is a queue "q02" with extension "5002@statscenter"
         Given there is a agent "Agent" "2" with extension "2@statscenter"
         Given there is a statistic configuration "test_talktime" from "8:00" to "12:00" with queue "q02" and agent "2"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid      | queuename | agent    | event          | data1 | data2        | data3 | data4 | data5 |
           | 2012-01-01 09:01:06.555555 | talk_time_1 | q02       | Agent/2  | ENTERQUEUE     |       |              |       |       |       |
           | 2012-01-01 09:01:06.666666 | talk_time_1 | q02       | Agent/2  | CONNECT        | 4     | 123456.435   |       |       |       |
@@ -56,9 +56,9 @@ Feature: WEBI Agent Stats
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "3" with extension "3@statscenter"
         Given there is a statistic configuration "test_login_time_1" from "8:00" to "12:00" with agent "3"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent    | event               | data1            | data2 | data3         | data4 | data5 |
-          | 2012-01-01 09:10:10.777777 | login_time_1 | NONE      | Agent/3  | AGENTCALLBACKLOGIN  | 1002@default     |       |               |       |       |
+          | 2012-01-01 09:10:10.777777 | login_time_1 | NONE      | Agent/3  | AGENTCALLBACKLOGIN  | 1001@statscenter     |       |               |       |       |
           | 2012-01-01 09:25:10.777777 | login_time_2 | NONE      | Agent/3  | AGENTCALLBACKLOGOFF | 1001@statscenter | 900   | CommandLogoff |       |       |
           | 2012-01-01 09:25:11.555555 | login_time_3 | NONE      | Agent/3  | UNPAUSEALL          |                  |       |               |       |       |
         Given I clear and generate the statistics cache
@@ -74,7 +74,7 @@ Feature: WEBI Agent Stats
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "4" with extension "4@statscenter"
         Given there is a statistic configuration "test_login_time_2" from "8:00" to "12:00" with agent "4"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
           | 2012-01-01 09:01:00.000000 | login_time_1 | NONE      | Agent/4 | AGENTCALLBACKLOGIN  | 1003@default       |       |               |       |       |
           | 2012-01-01 09:01:06.000000 | login_time_2 | NONE      | Agent/4 | AGENTCALLBACKLOGOFF | 1003@default       |     6 | CommandLogoff |       |       |
@@ -96,7 +96,7 @@ Feature: WEBI Agent Stats
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "5" with extension "5@statscenter"
         Given there is a statistic configuration "test_login_time_3" from "8:00" to "12:00" with agent "5"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
           | 2012-01-01 08:50:00.999999 | login_time_1 | NONE      | Agent/5 | AGENTCALLBACKLOGIN  | 1003@default       |       |               |       |       |
           | 2012-01-01 09:01:06.000000 | login_time_2 | NONE      | Agent/5 | AGENTCALLBACKLOGOFF | 1003@default       |   666 | CommandLogoff |       |       |
@@ -117,7 +117,7 @@ Feature: WEBI Agent Stats
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-03 23:59:59"
         Given there is a agent "Agent" "6" with extension "6@statscenter"
         Given there is a statistic configuration "test_login_time_4" from "8:00" to "12:00" with agent "6"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
           | 2012-01-01 08:50:00.999999 | login_time_1 | NONE      | Agent/6 | AGENTCALLBACKLOGIN  | 1003@default       |       |               |       |       |
           | 2012-01-03 09:01:06.000000 | login_time_2 | NONE      | Agent/6 | AGENTCALLBACKLOGOFF | 1003@default       |   666 | CommandLogoff |       |       |
@@ -141,7 +141,7 @@ Feature: WEBI Agent Stats
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 23:59:59"
         Given there is no "AGENTCALLBACKLOGIN" entry for agent "7"
         Given there is no "AGENTLOGIN" entry for agent "7"
-        Given I have to following queue_log entries:
+        Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event         | data1 |        data2 | data3 | data4 | data5 |
           | 2012-01-01 08:12:34.999999 | login_time_1 | q07       | NONE    | ENTERQUEUE    |       |       123456 |       |       |       |
           | 2012-01-01 08:13:34.999999 | login_time_1 | q07       | Agent/7 | CONNECT       |    60 | 1111111111.1 |     0 |       |       |
@@ -154,3 +154,16 @@ Feature: WEBI Agent Stats
           | 10h-11h | 01:00:00 |
           | 11h-12h | 01:00:00 |
           | Total   | 04:00:00 |
+
+
+    Scenario: Generate stats twice
+        Given there is no entries in queue_log in the last hour
+        Given there is a agent "Agent" "8" with extension "8@statscenter"
+        Given there is a statistic configuration "test_login_time_6" from "8:00" to "12:00" with agent "8"
+        Given I have the following queue_log entries in the last hour:
+          |         time | callid       | queuename | agent   | event               | data1            | data2 | data3         | data4 | data5 |
+          | 10:10.777777 | login_time_1 | NONE      | Agent/8 | AGENTCALLBACKLOGIN  | 1002@statscenter |       |               |       |       |
+          | 25:10.777777 | login_time_2 | NONE      | Agent/8 | AGENTCALLBACKLOGOFF | 1002@statscenter |   900 | CommandLogoff |       |       |
+          | 25:11.555555 | login_time_8 | NONE      | Agent/8 | UNPAUSEALL          |                  |       |               |       |       |
+        Given I clear and generate the statistics cache twice
+        Then I should have "00:15:00" minutes login in the last hour on agent "8" on configuration "test_login_time_6":
