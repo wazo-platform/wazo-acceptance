@@ -57,10 +57,10 @@ Feature: WEBI Agent Stats
         Given there is a agent "Agent" "3" with extension "3@statscenter"
         Given there is a statistic configuration "test_login_time_1" from "8:00" to "12:00" with agent "3"
         Given I have the following queue_log entries:
-          | time                       | callid       | queuename | agent    | event               | data1            | data2 | data3         | data4 | data5 |
-          | 2012-01-01 09:10:10.777777 | login_time_1 | NONE      | Agent/3  | AGENTCALLBACKLOGIN  | 1001@statscenter     |       |               |       |       |
-          | 2012-01-01 09:25:10.777777 | login_time_2 | NONE      | Agent/3  | AGENTCALLBACKLOGOFF | 1001@statscenter | 900   | CommandLogoff |       |       |
-          | 2012-01-01 09:25:11.555555 | login_time_3 | NONE      | Agent/3  | UNPAUSEALL          |                  |       |               |       |       |
+          | time                       | callid       | queuename | agent   | event               | data1            | data2 | data3         | data4 | data5 |
+          | 2012-01-01 09:10:10.777777 | login_time_1 | NONE      | Agent/3 | AGENTCALLBACKLOGIN  | 1001@statscenter |       |               |       |       |
+          | 2012-01-01 09:25:10.777777 | login_time_2 | NONE      | Agent/3 | AGENTCALLBACKLOGOFF | 1001@statscenter |   900 | CommandLogoff |       |       |
+          | 2012-01-01 09:25:11.555555 | login_time_3 | NONE      | Agent/3 | UNPAUSEALL          |                  |       |               |       |       |
         Given I clear and generate the statistics cache
         Then I should have the following statististics on agent "3" on "2012-01-01" on configuration "test_login_time_1":
           |         | Login    |
@@ -169,3 +169,24 @@ Feature: WEBI Agent Stats
           | 25:11.555555 | login_time_8 | NONE      | Agent/8 | UNPAUSEALL          |                  |       |               |       |       |
         Given I clear and generate the statistics cache twice
         Then I should have "00:15:00" minutes login in the last hour on agent "8" on configuration "test_login_time_6":
+
+
+    Scenario: Login during the hour, logout after the hour
+        Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
+        Given there is a agent "Agent" "9" with extension "9@statscenter"
+        Given there is a statistic configuration "test_login_time_9" from "8:00" to "12:00" with agent "9"
+        Given I have the following queue_log entries:
+          | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
+          | 2012-01-01 09:07:00.999999 | login_time_1 | NONE      | Agent/9 | AGENTCALLBACKLOGIN  | 1003@default       |       |               |       |       |
+          | 2012-01-01 09:12:06.000000 | login_time_2 | NONE      | Agent/9 | AGENTCALLBACKLOGOFF | 1003@default       |   666 | CommandLogoff |       |       |
+          | 2012-01-01 09:45:00.000000 | login_time_3 | NONE      | Agent/9 | AGENTLOGIN          | SIP/aaaaa-00000001 |       |               |       |       |
+          | 2012-01-01 10:02:30.000000 | login_time_3 | NONE      | Agent/9 | AGENTLOGOFF         | SIP/aaaaa-00000001 |    30 | CommandLogoff |       |       |
+
+        Given I clear and generate the statistics cache
+        Then I should have the following statististics on agent "9" on "2012-01-01" on configuration "test_login_time_9":
+          |         |    Login |
+          | 8h-9h   | 00:00:00 |
+          | 9h-10h  | 00:20:05 |
+          | 10h-11h | 00:02:30 |
+          | 11h-12h | 00:00:00 |
+          | Total   | 00:22:35 |
