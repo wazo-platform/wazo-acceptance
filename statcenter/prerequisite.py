@@ -3,26 +3,29 @@
 import socket
 from lettuce import world
 from xivo_lettuce.manager_ws import context_manager_ws, trunksip_manager_ws
-from xivo_lettuce.terrain import initialize_from_config
+from xivo_lettuce.terrain import initialize, deinitialize
 
 
 def main():
     print 'Initializing ...'
-    initialize_from_config()
-    print 'Adding queue extensions interval'
-    context_manager_ws.update_contextnumbers_queue('statscenter', 5000, 5100)
-    print 'Adding user extensions interval'
-    context_manager_ws.update_contextnumbers_user('statscenter', 1000, 1100)
+    initialize()
+    try:
+        print 'Adding queue extensions interval'
+        context_manager_ws.update_contextnumbers_queue('statscenter', 5000, 5100)
+        print 'Adding user extensions interval'
+        context_manager_ws.update_contextnumbers_user('statscenter', 1000, 1100)
 
-    callgen_ip = socket.gethostbyname(world.callgen_host)
-    print 'Adding default SIP trunk'
-    trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')
-    print 'Adding statscenter SIP trunk'
-    trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_statscenter', 'statscenter')
+        callgen_ip = socket.gethostbyname(world.callgen_host)
+        print 'Adding default SIP trunk'
+        trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')
+        print 'Adding statscenter SIP trunk'
+        trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_statscenter', 'statscenter')
 
-    print 'Configuring PostgreSQL on XiVO'
-    _create_pgpass_on_remote_host()
-    _allow_remote_access_to_pgsql()
+        print 'Configuring PostgreSQL on XiVO'
+        _create_pgpass_on_remote_host()
+        _allow_remote_access_to_pgsql()
+    finally:
+        deinitialize()
 
 
 def _create_pgpass_on_remote_host():

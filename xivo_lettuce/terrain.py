@@ -15,8 +15,17 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 
 
 @before.all
-def initialize_from_config():
-    config = _read_config()
+def xivo_lettuce_before_all():
+    initialize()
+
+
+@after.all
+def xivo_lettuce_after_all(total):
+    deinitialize()
+
+
+def initialize():
+    config = read_config()
     _setup_browser(config)
     _setup_xivo_client(config)
     _setup_login_infos(config)
@@ -27,12 +36,7 @@ def initialize_from_config():
         _log_on_webi()
 
 
-def _log_on_webi():
-    go_to_home_page()
-    webi_login_as_default()
-
-
-def _read_config():
+def read_config():
     config = ConfigParser.RawConfigParser()
     local_config = '%s.local' % _CONFIG_FILE
     if os.path.exists(local_config):
@@ -113,6 +117,20 @@ def _webi_configured():
         return True
 
 
+def _log_on_webi():
+    go_to_home_page()
+    webi_login_as_default()
+
+
+def deinitialize():
+    _teardown_browser()
+
+
+def _teardown_browser():
+    world.browser.quit()
+    world.display.stop()
+
+
 @world.absorb
 def dump_current_page(filename='/tmp/lettuce.html'):
     """Use this if you want to debug your test
@@ -120,9 +138,3 @@ def dump_current_page(filename='/tmp/lettuce.html'):
     with open(filename, 'w') as fobj:
         fobj.write(world.browser.page_source.encode('utf-8'))
     world.browser.save_screenshot(filename + '.png')
-
-
-@after.all
-def teardown_browser(total):
-    world.browser.quit()
-    world.display.stop()
