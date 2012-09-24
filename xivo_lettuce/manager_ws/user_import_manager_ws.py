@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from lettuce import world
 from xivo_lettuce.manager_ws.voicemail_manager_ws import delete_voicemail_with_number
 from xivo_lettuce.manager_ws.user_manager_ws import delete_user_with_firstname_lastname
 from xivo_lettuce.manager_ws.line_manager_ws import delete_line_with_number
 from xivo_lettuce.manager_ws.incall_manager_ws import delete_incall_with_did
 from xivo_ws.objects.user import User, UserLine, UserVoicemail, UserIncall
-from lettuce.registry import world
 
 
 def insert_simple_user(entries):
