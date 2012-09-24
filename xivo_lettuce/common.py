@@ -143,7 +143,7 @@ def element_is_in_list(module, search, qry={}, action='list'):
     try:
         find_line(search)
     except NoSuchElementException:
-        return None
+        return False
     return True
 
 
@@ -153,7 +153,7 @@ def element_is_not_in_list(module, search, qry={}, action='list'):
         find_line(search)
     except NoSuchElementException:
         return True
-    return None
+    return False
 
 
 def element_in_list_matches_field(module, search, class_name, value, qry={}, action='list'):

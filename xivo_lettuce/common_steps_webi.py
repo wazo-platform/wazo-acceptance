@@ -50,12 +50,12 @@ def given_there_is_no_element(step, module, search):
 
 @step(u'Then ([a-z ]*) "([^"]*)" is displayed in the list$')
 def then_value_is_displayed_in_the_list(step, type, search):
-    assert element_is_in_list(type, search) is True
+    assert element_is_in_list(type, search)
 
 
 @step(u'Then ([a-z ]*) "([^"]*)" is not displayed in the list$')
 def then_value_is_not_displayed_in_the_list(step, type, search):
-    assert element_is_not_in_list(type, search) is True
+    assert element_is_not_in_list(type, search)
 
 
 @step(u'I submit$')

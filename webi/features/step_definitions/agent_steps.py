@@ -59,12 +59,12 @@ def when_i_change_the_agent_password_to_group1(step, number, password):
 
 @step(u'Then agent "([^"]*)" is displayed in the list of default agent group')
 def then_agent_is_displayed_in_the_list_of_agent_group(step, agent):
-    assert element_is_in_list('agent', agent, {'group': '1'}, 'listagent') is True
+    assert element_is_in_list('agent', agent, {'group': '1'}, 'listagent')
 
 
 @step(u'Then agent "([^"]*)" is not displayed in the list of default agent group')
 def then_agent_is_not_displayed_in_the_list_of_default_agent_group(step, agent):
-    assert element_is_not_in_list('agent', agent, {'group': '1'}, 'listagent') is True
+    assert element_is_not_in_list('agent', agent, {'group': '1'}, 'listagent')
 
 
 @step(u'Then the agent "([^"]*)" password is "([^"]*)"')
