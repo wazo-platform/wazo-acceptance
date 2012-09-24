@@ -43,7 +43,7 @@ def _allow_remote_access_to_pgsql():
     _add_line_to_remote_file('host all all 10.0.0.0/8 md5', hba_file)
     _add_line_to_remote_file("listen_addresses = '*'", postgres_conf_file)
 
-    _restart_postgres()
+    _reload_postgresql()
 
 
 def _add_line_to_remote_file(line_text, file_name):
@@ -51,8 +51,8 @@ def _add_line_to_remote_file(line_text, file_name):
     world.ssh_client_xivo.check_call(command)
 
 
-def _restart_postgres():
-    command = ['service', 'postgresql', 'restart']
+def _reload_postgresql():
+    command = ['service', 'postgresql', 'reload']
     world.ssh_client_xivo.check_call(command)
 
 
