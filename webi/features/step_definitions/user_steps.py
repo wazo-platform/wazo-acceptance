@@ -8,8 +8,8 @@ from selenium.webdriver.support.select import Select
 from xivo_lettuce.manager import user_manager, line_manager
 from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
     line_manager_ws, agent_manager_ws, voicemail_manager_ws
-from xivo_lettuce.common import open_url, submit_form, element_is_in_list, \
-    remove_line, edit_line, go_to_tab, find_line, assert_form_errors
+from xivo_lettuce.common import open_url, submit_form, remove_line, \
+    edit_line, go_to_tab, find_line, assert_form_errors
 from utils import func
 
 
@@ -135,7 +135,6 @@ def when_i_create_a_user_in_group(step, firstname, lastname, group):
     user_manager.type_user_names(firstname, lastname)
     user_manager.type_user_in_group(group)
     submit_form()
-    element_is_in_list('user', '%s %s' % (firstname, lastname))
 
 
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"')
