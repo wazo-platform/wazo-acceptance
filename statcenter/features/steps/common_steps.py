@@ -8,11 +8,6 @@ from datetime import datetime
 from datetime import timedelta
 
 
-@step(u'Given there are no calls running')
-def given_there_are_no_calls_running(step):
-    statscall_manager.killall_process_sipp()
-
-
 @step(u'^Given there are a corrupt entry in queue_log$')
 def given_there_are_a_corrupt_entry_in_queue_log(step):
     queuelog_manager.insert_corrupt_data()

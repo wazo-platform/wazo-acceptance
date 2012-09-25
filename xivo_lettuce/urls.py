@@ -133,5 +133,9 @@ URLS = {
     'dhcp': {
         'web': '/xivo/configuration/index.php/network/dhcp',
         'ws': 'configuration/network/dhcp'
+    },
+    'sheet': {
+        'web': 'cti/index.php/sheetactions/',
+        'ws': None
     }
 }

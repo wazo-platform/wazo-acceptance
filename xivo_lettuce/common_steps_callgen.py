@@ -68,6 +68,11 @@ def given_i_logout_the_phone(step, agent_number, extension):
     statscall_manager.execute_n_calls_then_wait(1, '*32%s' % agent_number, username=lines[0].name, password=lines[0].secret)
 
 
+@step(u'Given there are no calls running')
+def given_there_are_no_calls_running(step):
+    statscall_manager.killall_process_sipp()
+
+
 @step(u'Given there is ([0-9]+) calls to extension "([^"]+)" and wait$')
 def given_there_is_n_calls_to_extension_and_wait(step, count, extension):
     statscall_manager.execute_n_calls_then_wait(count, extension)
