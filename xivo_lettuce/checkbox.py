@@ -26,3 +26,8 @@ class Checkbox(object):
     def from_label(cls, label):
         option_element = world.browser.find_element_by_label(label)
         return cls(option_element)
+
+    @classmethod
+    def from_id(cls, id):
+        option_element = world.browser.find_element_by_id(id)
+        return cls(option_element)

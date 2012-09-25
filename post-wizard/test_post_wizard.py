@@ -76,7 +76,7 @@ class TestAsteriskRestart(unittest.TestCase):
             "ctid did not restart after stopping service")
 
     def test_monit_restarts_xivo_services(self):
-        min_timestamp = datetime.datetime.now() - datetime.timedelta(seconds = self.WAIT_SECS * self.NB_TRIES)
+        min_timestamp = datetime.datetime.now() - datetime.timedelta(seconds=self.WAIT_SECS * self.NB_TRIES)
 
         monit_restarted = False
         loglines = self._read_last_log_lines(self.DAEMON_LOGFILE, min_timestamp)
@@ -108,7 +108,7 @@ class TestAsteriskRestart(unittest.TestCase):
             return False
 
         pid = open(pidfile).read().strip()
-        
+
         return os.path.exists("/proc/%s" % pid)
 
     def _read_last_log_lines(self, log_filepath, min_timestamp):
@@ -122,15 +122,14 @@ class TestAsteriskRestart(unittest.TestCase):
             timestamp = datetime.datetime.strptime(datetext, self.DATE_FORMAT)
             #Needed so that the timestamp has the right year
             timestamp = datetime.datetime(
-                year = current_year,
-                month = timestamp.month,
-                day = timestamp.day,
-                hour = timestamp.hour,
-                minute = timestamp.minute,
-                second = timestamp.second)
+                year=current_year,
+                month=timestamp.month,
+                day=timestamp.day,
+                hour=timestamp.hour,
+                minute=timestamp.minute,
+                second=timestamp.second)
 
             if timestamp >= min_timestamp:
                 lines.append(line)
 
         return lines
-

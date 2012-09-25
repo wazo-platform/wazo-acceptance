@@ -162,4 +162,9 @@ URLS = {
                 'web': '/xivo/configuration/index.php/manage/certificate',
                 'ws' : None
             },
+        'dhcp':
+            {
+                'web': '/xivo/configuration/index.php/network/dhcp',
+                'ws' : 'configuration/network/dhcp'
+            }
        }
