@@ -9,7 +9,7 @@ from xivo_lettuce.terrain import initialize, deinitialize
 def main():
     initialize()
     try:
-        context_manager_ws.update_contextnumbers_user('default', 1000, 1100)
+        context_manager_ws.update_contextnumbers_user('default', 1000, 1999)
 
         callgen_ip = socket.gethostbyname(world.callgen_host)
         trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')
