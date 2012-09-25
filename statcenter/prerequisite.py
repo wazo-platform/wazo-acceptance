@@ -47,7 +47,7 @@ def _allow_remote_access_to_pgsql():
 
 
 def _add_line_to_remote_file(line_text, file_name):
-    command = ['grep "%s" %s' % (line_text, file_name), '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
+    command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
     world.ssh_client_xivo.check_call(command)
 
 
