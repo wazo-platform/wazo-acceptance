@@ -8,7 +8,7 @@ from xivo_lettuce import form
 def given_i_have_a_sheet_model_named_group1_with_the_variables(step, sheet_name):
     common.remove_element_if_exist('sheet', sheet_name)
     common.open_url('sheet', 'add')
-    form.set_text_field('Name', sheet_name)
+    form.set_text_field('Name :', sheet_name)
     common.go_to_tab('Sheet')
     for line in step.hashes:
         _add_sheet_variable(line['variable'])
@@ -19,7 +19,7 @@ def _add_sheet_variable(variable_name):
     add_button = world.browser.find_element_by_id('add_variable')
     add_button.click()
     new_variable_line = world.browser.find_element_by_xpath(
-        "//tbody[@id='screens']/tr[-1]"
+        "//tbody[@id='screens']/tr[last()]"
     )
     new_variable_name_input = new_variable_line.find_element_by_xpath(".//input[@name='screencol1[]']")
     new_variable_name_input.send_keys(variable_name)
