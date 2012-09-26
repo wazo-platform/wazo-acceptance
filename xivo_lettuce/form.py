@@ -3,7 +3,6 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 from lettuce import world
-from xivo_lettuce import common
 
 
 class FormErrorException(Exception):
@@ -28,8 +27,8 @@ def set_select_field_by_id(field_id, value):
 
 def submit_form_with_errors():
     try:
-        common.submit_form()
-    except common.FormErrorException:
+        submit_form()
+    except FormErrorException:
         pass
     else:
         raise Exception('No error occurred')
