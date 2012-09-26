@@ -4,7 +4,8 @@ from lettuce import step
 from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
     context_manager_ws, schedule_manager_ws
 from utils import func
-from xivo_lettuce import common, form
+from xivo_lettuce import common
+from xivo_lettuce import form
 
 
 @step(u'Given there is no queue "([^"]*)"')
@@ -57,10 +58,9 @@ def given_there_is_a_queue_closed_with_extension_with_agent(step, name, extensio
     number, context = func.extract_number_and_context_from_extension(extension)
     _remove_queues_with_name_or_number_if_exist(name, number)
     opened = {'hours': '00:00-00:01',
-               'weekdays': '1-1',
-               'monthdays': '1-1',
-               'months': '1-1'
-               }
+              'weekdays': '1-1',
+              'monthdays': '1-1',
+              'months': '1-1'}
     schedule_manager_ws.delete_schedule_with_name('always_closed')
     schedule_manager_ws.add_schedule('always_closed', opened)
     schedule_id = schedule_manager_ws.get_schedule_id_with_name('always_closed')
@@ -128,7 +128,7 @@ def when_i_add_the_queue_1_with_display_name_2_with_extension_3_in_4(step, name,
     _remove_queues_with_name_or_number_if_exist(name, extension)
     common.open_url('queue', 'add')
     _type_queue_name_display_name_number_context(name, display_name, extension, context)
-    common.submit_form()
+    form.submit_form()
 
 
 @step(u'When I add the queue "([^"]*)" with display name "([^"]*)" with extension "([^"]*)" in "([^"]*)" with errors$')

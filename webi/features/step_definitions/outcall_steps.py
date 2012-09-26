@@ -6,7 +6,7 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url, \
-    remove_line, submit_form
+    remove_line
 from xivo_lettuce.manager.outcall_manager import exten_line
 from xivo_lettuce.manager_ws import trunksip_manager_ws, outcall_manager_ws
 
@@ -27,7 +27,7 @@ def given_i_dont_see_any_exten(step, exten):
         then_i_dont_see_any_exten(step, exten)
     except AssertionError:
         when_i_remove_the_exten(step, exten)
-        submit_form()
+        form.submit_form()
 
 
 @step(u'Given I see an exten "([^"]*)"')
@@ -37,7 +37,7 @@ def given_i_see_an_exten(step, exten):
     except NoSuchElementException:
         when_i_add_an_exten(step)
         when_i_set_the_exten_to(step, exten)
-        submit_form()
+        form.submit_form()
 
 
 @step(u'Given there is no outcall "([^"]*)"')
@@ -61,7 +61,7 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     # Wait for the Javascript to move the trunk
     time.sleep(1)
 
-    submit_form()
+    form.submit_form()
 
 
 @step(u'When I remove the outcall "([^"]*)"')

@@ -2,7 +2,8 @@
 
 from lettuce import step, world
 
-from xivo_lettuce.common import open_url, remove_line, submit_form
+from xivo_lettuce import form
+from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce.manager_ws import trunkcustom_manager_ws
 
 
@@ -25,7 +26,7 @@ def when_i_create_a_trunkcustom_with_name_and_trunk(step, name):
     input_name.send_keys(name)
     input_interface = world.browser.find_element_by_id('it-protocol-interface', 'trunkcustom form not loaded')
     input_interface.send_keys('misdn//xivo')
-    submit_form()
+    form.submit_form()
 
 
 @step(u'When I remove the trunkcustom "([^"]*)"')

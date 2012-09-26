@@ -5,11 +5,12 @@ import time
 from lettuce import step
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
+from xivo_lettuce import form
 from xivo_lettuce.manager import user_manager, line_manager
 from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
     line_manager_ws, agent_manager_ws, voicemail_manager_ws
-from xivo_lettuce.common import open_url, submit_form, remove_line, \
-    edit_line, go_to_tab, find_line, assert_form_errors
+from xivo_lettuce.common import open_url, remove_line, \
+    edit_line, go_to_tab, find_line
 from utils import func
 
 
@@ -28,9 +29,9 @@ def given_there_is_a_user_with_extension(step, firstname, lastname, extension):
     line_manager_ws.delete_line_with_number(number, context)
     user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
     user_data = {'firstname': firstname,
-                'lastname': lastname,
-                'line_context': context,
-                'line_number': number}
+                 'lastname': lastname,
+                 'line_context': context,
+                 'line_number': number}
     user_manager_ws.add_user(user_data)
 
 
@@ -41,9 +42,9 @@ def given_there_is_a_user_with_a_sip_line_in_group(step, firstname, lastname, ex
     line_manager_ws.delete_line_with_number(number, context)
     user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
     user_data = {'firstname': firstname,
-                'lastname': lastname,
-                'line_context': context,
-                'line_number': number}
+                 'lastname': lastname,
+                 'line_context': context,
+                 'line_number': number}
     user_id = user_manager_ws.add_user(user_data)
     group_manager_ws.delete_group_with_name(group_name)
     group_manager_ws.add_group(group_name, user_ids=[user_id])
@@ -102,11 +103,11 @@ def given_there_is_a_user_with_an_agent_and_cti_profile(step, firstname, lastnam
                  }
     user_id = user_manager_ws.add_user(user_data)
     agent_data = {'firstname': firstname,
-                 'lastname': lastname,
-                 'number': agent_number,
-                 'context': 'default',
-                 'users': [int(user_id)]
-                 }
+                  'lastname': lastname,
+                  'number': agent_number,
+                  'context': 'default',
+                  'users': [int(user_id)]
+    }
     agent_manager_ws.add_agent(agent_data)
 
 
@@ -124,7 +125,7 @@ def i_add_a_user(step):
 def when_i_create_a_user(step, firstname, lastname):
     open_url('user', 'add')
     user_manager.type_user_names(firstname, lastname)
-    submit_form()
+    form.submit_form()
 
 
 @step(u'When I add user "([^"]*)" "([^"]*)" in group "([^"]*)"$')
@@ -134,7 +135,7 @@ def when_i_create_a_user_in_group(step, firstname, lastname, group):
     open_url('user', 'add')
     user_manager.type_user_names(firstname, lastname)
     user_manager.type_user_in_group(group)
-    submit_form()
+    form.submit_form()
 
 
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"')
@@ -144,7 +145,7 @@ def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest
     if len(id) > 0:
         open_url('user', 'edit', {'id': id[0]})
         user_manager.type_user_names(dest_firstname, dest_lastname)
-        submit_form()
+        form.submit_form()
 
 
 @step(u'When I remove user "([^"]*)" "([^"]*)"')
@@ -210,7 +211,7 @@ def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastnam
     user_manager.type_user_names(firstname, lastname)
     user_manager.type_func_key('Customized', extension)
 
-    submit_form()
+    form.submit_form()
 
 
 @step(u'Then I see the user "([^"]*)" "([^"]*)" exists')
@@ -244,5 +245,5 @@ def when_i_remove_line_from_lines(step, line_number):
     open_url('line')
     line_manager.search_line_number(line_number)
     remove_line(line_number)
-    assert_form_errors()
+    form.assert_form_errors()
     line_manager.unsearch_line()

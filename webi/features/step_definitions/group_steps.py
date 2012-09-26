@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import step
-from xivo_lettuce.common import open_url, element_in_list_matches_field, \
-    submit_form
+from xivo_lettuce import form
+from xivo_lettuce.common import open_url, element_in_list_matches_field
 from xivo_lettuce.manager.group_manager import remove_group_with_name, \
     type_group_name, type_group_number, type_context
 from xivo_lettuce.manager_ws import group_manager_ws
@@ -24,7 +24,7 @@ def when_i_create_group_with_number(step, group_name, group_number):
     type_group_name(group_name)
     type_group_number(group_number)
     type_context('default')
-    submit_form()
+    form.submit_form()
 
 
 @step(u'When I set a group "([^"]*)" with number "([^"]*)"')
@@ -39,7 +39,7 @@ def when_i_set_a_group_with_number_(step, group_name, group_number):
 def when_i_create_group(step, group_name):
     open_url('group', 'add')
     type_group_name(group_name)
-    submit_form()
+    form.submit_form()
 
 
 @step(u'When group "([^"]*)" is removed')

@@ -4,7 +4,8 @@ from lettuce.decorators import step
 from lettuce.registry import world
 from datetime import datetime
 from utils.func import extract_number_and_context_from_extension
-from xivo_lettuce.common import submit_form, open_url
+from xivo_lettuce.common import open_url
+from xivo_lettuce import form
 
 
 @step(u'Then I see rejected call to extension "([^"]+)" in asterisk log')
@@ -22,7 +23,7 @@ def then_i_see_rejected_call_in_asterisk_log(step, extension):
 @step(u'Then i see the called extension "([^"]*)" in call logs page')
 def then_i_see_the_called_extension_in_call_logs_page(step, exten):
     open_url('cel')
-    submit_form()
+    form.submit_form()
 
     expected_exten = world.browser.find_element_by_xpath("//div[@id='sb-part-result']/div/table/tbody/tr[2]/td[3]").text
     assert expected_exten == exten

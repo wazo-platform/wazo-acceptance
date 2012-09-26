@@ -5,8 +5,7 @@ import time
 from lettuce.decorators import step
 from selenium.webdriver.support.select import Select
 from xivo_lettuce.common import webi_login, the_option_is_checked, remove_element_if_exist, \
-    element_is_in_list, element_is_not_in_list, submit_form, FormErrorException, \
-    find_form_errors, assert_form_errors, go_to_tab, run_xivoclient, \
+    element_is_in_list, element_is_not_in_list, go_to_tab, run_xivoclient, \
     xivoclient_step, get_host_address, xivoclient
 from xivo_lettuce import form
 from lettuce.registry import world
@@ -61,7 +60,7 @@ def then_value_is_not_displayed_in_the_list(step, type, search):
 @step(u'I submit$')
 def i_submit(step):
     time.sleep(1)
-    submit_form()
+    form.submit_form()
 
 
 @step(u'When I submit with errors')
@@ -74,11 +73,11 @@ def then_i_see_no_errors(step):
     # this step is there mostly for test readability; it's a no-op in most cases
     # since it's already checked when a form is submitted
     try:
-        error_element = find_form_errors()
+        error_element = form.find_form_errors()
     except NoSuchElementException:
         pass
     else:
-        raise FormErrorException(error_element.text)
+        raise form.FormErrorException(error_element.text)
 
 
 @step(u'Then this option is (not )?checked')
@@ -88,7 +87,7 @@ def then_this_option_is_checked(step, checkstate):
 
 @step(u'Then I get errors')
 def then_i_get_errors(step):
-    assert_form_errors()
+    form.assert_form_errors()
 
 
 @step(u'I set the select field "([^"]*)" to "([^"]*)"')

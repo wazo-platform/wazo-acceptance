@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import step
+from xivo_lettuce import form
 from xivo_lettuce.checkbox import Checkbox
-from xivo_lettuce.common import go_to_tab, open_url, submit_form
+from xivo_lettuce.common import go_to_tab, open_url
 from xivo_lettuce.manager import asterisk_manager
 
 
@@ -16,14 +17,14 @@ def i_go_on_the_general_settings_sip_protocol_page_tab(step, tab):
 def when_i_enable_the_sip_encryption_option(step):
     option = _get_sip_encryption_option()
     option.check()
-    submit_form()
+    form.submit_form()
 
 
 @step(u'When I disable the SIP encryption option')
 def when_i_disable_the_sip_encryption_option(step):
     option = _get_sip_encryption_option()
     option.uncheck()
-    submit_form()
+    form.submit_form()
 
 
 @step(u'Then the SIP encryption option is enabled')

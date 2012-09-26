@@ -2,7 +2,8 @@
 
 from lettuce import step, world
 
-from xivo_lettuce.common import open_url, remove_line, submit_form
+from xivo_lettuce import form
+from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce.manager_ws import trunkiax_manager_ws
 
 
@@ -23,7 +24,7 @@ def when_i_create_a_trunkiax_with_name_and_trunk(step, name):
     open_url('trunkiax', 'add')
     input_name = world.browser.find_element_by_id('it-protocol-name', 'trunkiax form not loaded')
     input_name.send_keys(name)
-    submit_form()
+    form.submit_form()
 
 
 @step(u'When I remove the trunkiax "([^"]*)"')

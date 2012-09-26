@@ -11,13 +11,10 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from checkbox import Checkbox
 from xivo_lettuce import urls
+from xivo_lettuce import form
 from webservices.webservices import WebServicesFactory
 
 UTILS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils'))
-
-
-class FormErrorException(Exception):
-    pass
 
 
 def run_xivoclient():
@@ -82,7 +79,7 @@ def webi_login(user, password, language):
     input_password.send_keys(password)
     language_option = world.browser.find_element_by_xpath('//option[@value="%s"]' % language)
     language_option.click()
-    submit_form()
+    form.submit_form()
     world.browser.find_element_by_id('loginbox', 'Cannot login as ' + user)
     world.logged = True
 
@@ -115,23 +112,6 @@ def the_option_is_checked(option_label, checkstate, **kwargs):
         assert Checkbox(option).is_checked() == goal_checked
     else:
         Checkbox(option).set_checked(goal_checked)
-
-
-def find_form_errors():
-    """Find the box containing form errors."""
-    return world.browser.find_element_by_id('report-xivo-error')
-
-
-def submit_form():
-    """Every (?) submit button in the Webi has the same id."""
-    submit_button = world.browser.find_element_by_id('it-submit')
-    submit_button.click()
-    try:
-        error_element = find_form_errors()
-    except NoSuchElementException:
-        pass
-    else:
-        raise FormErrorException(error_element.text)
 
 
 def get_webservices(module):
@@ -270,7 +250,3 @@ def logged():
             return True
         except NoSuchElementException:
             return False
-
-
-def assert_form_errors():
-    assert find_form_errors() is not None

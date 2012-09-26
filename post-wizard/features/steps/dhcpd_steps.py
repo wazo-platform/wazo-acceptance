@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
 
-from lettuce.decorators import step
-from lettuce.registry import world
+from lettuce import step
+from xivo_lettuce import form
 from xivo_lettuce.terrain import _webi_configured
 from xivo_lettuce.manager import dhcpd_manager, commonconf_manager
-from xivo_lettuce.common import open_url, submit_form
+from xivo_lettuce.common import open_url
 from xivo_lettuce.checkbox import Checkbox
 
 
@@ -18,15 +18,15 @@ def when_i_activate_dhcpd_server(step):
     open_url('dhcp')
     Checkbox.from_id('it-active').check()
     dhcpd_manager.type_pool_start_end('192.168.0.15', '192.168.0.20')
-    submit_form()
+    form.submit_form()
     commonconf_manager.webi_exec_commonconf()
 
 
 @step(u'When I desactivate dhcpd server')
-def when_i_activate_dhcpd_server(step):
+def when_i_desactivate_dhcpd_server(step):
     open_url('dhcp')
     Checkbox.from_id('it-active').uncheck()
-    submit_form()
+    form.submit_form()
     commonconf_manager.webi_exec_commonconf()
 
 

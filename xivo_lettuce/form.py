@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
-
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.select import Select
 from lettuce import world
 from xivo_lettuce import common
-from selenium.webdriver.support.select import Select
+
+
+class FormErrorException(Exception):
+    pass
 
 
 def set_text_field(field_label, value):
@@ -17,6 +21,11 @@ def set_select_field(field_label, value):
     Select(select_input).select_by_visible_text(value)
 
 
+def set_select_field_by_id(field_id, value):
+    select_input = world.browser.find_element_by_id(field_id)
+    Select(select_input).select_by_visible_text(value)
+
+
 def submit_form_with_errors():
     try:
         common.submit_form()
@@ -24,3 +33,22 @@ def submit_form_with_errors():
         pass
     else:
         raise Exception('No error occurred')
+
+
+def submit_form():
+    submit_button = world.browser.find_element_by_id('it-submit')
+    submit_button.click()
+    try:
+        error_element = find_form_errors()
+    except NoSuchElementException:
+        pass
+    else:
+        raise FormErrorException(error_element.text)
+
+
+def assert_form_errors():
+    assert find_form_errors() is not None
+
+
+def find_form_errors():
+    return world.browser.find_element_by_id('report-xivo-error')

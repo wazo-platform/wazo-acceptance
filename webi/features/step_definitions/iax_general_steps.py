@@ -3,8 +3,9 @@
 from lettuce import step, world
 
 from selenium.common.exceptions import NoSuchElementException
+from xivo_lettuce import form
 from xivo_lettuce.checkbox import Checkbox
-from xivo_lettuce.common import go_to_tab, open_url, submit_form
+from xivo_lettuce.common import go_to_tab, open_url
 from xivo_lettuce.manager.iax_general_manager import find_call_limit_line, \
     find_call_limit_lines
 
@@ -16,7 +17,7 @@ def given_i_don_t_see_any_call_limit_to_netmask_(step, destination, netmask):
     except NoSuchElementException:
         return
     when_i_remove_the_call_limits_to_netmask(step, destination, netmask)
-    submit_form()
+    form.submit_form()
 
 
 @step(u'Given I see a call limit to "([^"]*)" netmask "([^"]*)" of "([^"]*)" calls')
@@ -28,7 +29,7 @@ def given_i_see_a_call_limit_to_netmask_of_calls(step, destination, netmask, lim
         when_i_set_the_destination_to(step, destination)
         when_i_set_the_netmask_to(step, netmask)
         when_i_set_the_call_limit_to(step, limit)
-        submit_form()
+        form.submit_form()
 
 
 @step(u'Given the SRV lookup option is disabled')
@@ -37,7 +38,7 @@ def given_the_srv_lookup_option_is_disabled(step):
 
     if option.is_checked():
         option.uncheck()
-        submit_form()
+        form.submit_form()
 
         option = _get_srv_lookup_option()
         assert not option.is_checked()
@@ -85,7 +86,7 @@ def when_i_remove_the_call_limits_to_netmask(step, destination, netmask):
     for line in lines:
         delete_button = line.find_element_by_xpath(".//a[@title='Delete this limit']")
         delete_button.click()
-    submit_form()
+    form.submit_form()
 
 
 @step(u'Then I don\'t see a call limit to "([^"]*)" netmask "([^"]*)"')
@@ -101,7 +102,7 @@ def then_i_don_t_see_a_call_limit_to_group1_netmask_group2(step, destination, ne
 def when_i_enable_the_srv_lookup_option(step):
     option = _get_srv_lookup_option()
     option.check()
-    submit_form()
+    form.submit_form()
 
 
 @step(u'Then the SRV lookup option is enabled')
@@ -114,7 +115,7 @@ def then_the_srv_lookup_option_is_enabled(step):
 def when_i_disable_the_srv_lookup_option(step):
     option = _get_srv_lookup_option()
     option.uncheck()
-    submit_form()
+    form.submit_form()
 
 
 @step(u'Then the SRV lookup option is disabled')

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import step, world
-from xivo_lettuce.common import open_url, submit_form, remove_element_if_exist
+from xivo_lettuce import form
+from xivo_lettuce.common import open_url, remove_element_if_exist
 
 
 @step(u'Given no config file "([^"]*)"')
@@ -18,4 +19,4 @@ def when_i_create_configfiles_with_content(step, filename, content):
     input_description = world.browser.find_element_by_id('it-configfile-description')
     input_description.clear()
     input_description.send_keys(content)
-    submit_form()
+    form.submit_form()
