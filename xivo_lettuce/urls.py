@@ -137,5 +137,9 @@ URLS = {
     'sheet': {
         'web': 'cti/index.php/sheetactions/',
         'ws': None
+    },
+    'sheetevent': {
+        'web': 'cti/index.php/sheetevents/',
+        'ws': None
     }
 }
