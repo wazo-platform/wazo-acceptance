@@ -3,6 +3,7 @@
 import os
 import subprocess
 import socket
+import json
 from lettuce import before, after, world
 
 
@@ -18,8 +19,8 @@ def run_xivoclient():
 def xivoclient_step(f):
     """Decorator that sends the function name to the XiVO Client."""
     def xivoclient_decorator(step, *kargs):
-        world.xc_socket.send('%s,%s\n' % (f.__name__, ','.join(kargs)))
-        world.xc_response = str(world.xc_socket.recv(1024))
+        formatted_command = _format_command(f.__name__, kargs)
+        _send_and_receive_command(formatted_command)
         print 'XC response: %s %r' % (f.__name__, world.xc_response)
         f(step, *kargs)
     return xivoclient_decorator
@@ -28,11 +29,23 @@ def xivoclient_step(f):
 def xivoclient(f):
     """Decorator that sends the function name to the XiVO Client."""
     def xivoclient_decorator(*kargs):
-        world.xc_socket.send('%s,%s\n' % (f.__name__, ','.join(kargs)))
-        world.xc_response = str(world.xc_socket.recv(1024))
+        formatted_command = _format_command(f.__name__, kargs)
+        _send_and_receive_command(formatted_command)
         print 'XC response: %s %r' % (f.__name__, world.xc_response)
         f(*kargs)
     return xivoclient_decorator
+
+
+def _format_command(function_name, arguments):
+    command = {'function_name': function_name,
+               'arguments': arguments}
+    formatted_command = json.dumps(command)
+    return formatted_command
+
+
+def _send_and_receive_command(formatted_command):
+    world.xc_socket.send('%s\n' % formatted_command)
+    world.xc_response = str(world.xc_socket.recv(1024))
 
 
 @before.each_scenario
