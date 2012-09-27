@@ -13,7 +13,7 @@ def given_i_have_a_sheet_model_named_group1_with_the_variables(step, sheet_name)
     common.go_to_tab('Sheet')
     for line in step.hashes:
         _add_sheet_variable(line['variable'])
-    common.submit_form()
+    form.submit_form()
 
 
 def _add_sheet_variable(variable_name):
@@ -37,4 +37,4 @@ def given_i_assign_the_sheet_group1_to_the_agent_linked_event(step, sheet_name):
     common.open_url('sheetevent')
     agent_linked_select = world.browser.find_element_by_id('it-agentlinked')
     Select(agent_linked_select).select_by_visible_text(sheet_name)
-    common.submit_form()
+    form.submit_form()

@@ -29,7 +29,7 @@ def given_there_is_an_incall_group1_in_context_group2_to_the_queue_group3(step, 
     incall_man.type_incall_context(context)
     incall_man.type_incall_queue(queue)
     incall_man.type_incall_caller_id('"%s" <%s>' % (caller_id_name, caller_id_number))
-    submit_form()
+    form.submit_form()
 
 
 @step(u'When incall "([^"]*)" is removed')

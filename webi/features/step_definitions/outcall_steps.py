@@ -9,6 +9,7 @@ from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url, \
     remove_line
 from xivo_lettuce.manager.outcall_manager import exten_line
 from xivo_lettuce.manager_ws import trunksip_manager_ws, outcall_manager_ws
+from xivo_lettuce import form
 
 
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
