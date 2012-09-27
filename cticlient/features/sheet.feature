@@ -24,7 +24,6 @@ Feature: Sheet
         Given I log agent "1153" on extension "1153@default"
         Given I wait 5 seconds for the calls processing
         Given I wait call then i answer then i hang up after "3s"
-# Rename to calls to extension "3001" on trunk "incall" and wait
         When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
 
         Given I wait 10 seconds for the calls processing

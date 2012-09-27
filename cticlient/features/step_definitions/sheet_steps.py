@@ -16,5 +16,5 @@ def then_i_see_a_sheet_with_the_following_values(step):
     @xivoclient
     def then_i_see_a_sheet_with_variables_and_values(variable_map):
         pass
-    then_i_see_a_sheet_with_variables_and_values(json.dumps(step.hashes))
+    then_i_see_a_sheet_with_variables_and_values(step.hashes)
     assert world.xc_response == 'OK'
