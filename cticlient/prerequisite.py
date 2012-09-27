@@ -12,6 +12,7 @@ def main():
     try:
         context_manager_ws.update_contextnumbers_user('default', 1000, 1999)
         context_manager_ws.update_contextnumbers_queue('default', 3000, 3999)
+        context_manager_ws.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
         callgen_ip = socket.gethostbyname(world.callgen_host)
         print 'Adding default SIP trunk'

@@ -79,6 +79,14 @@ def given_there_is_n_calls_to_extension_and_wait(step, count, extension):
     statscall_manager.execute_n_calls_then_wait(count, extension)
 
 
+@step(u'When there is ([0-9]+) calls to extension "([^"]+)" on trunk "([^"]+)" and wait$')
+def given_there_is_n_calls_to_extension_on_trunk_and_wait(step, count, extension, trunk_name):
+    statscall_manager.execute_n_calls_then_wait(count,
+                                                extension,
+                                                username=trunk_name,
+                                                password=trunk_name)
+
+
 @step(u'When i call extension "([^"]+)"$')
 def when_i_call_extension(step, extension):
     statscall_manager.execute_n_calls_then_wait(1, extension)
