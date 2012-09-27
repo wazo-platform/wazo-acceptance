@@ -70,6 +70,7 @@ Feature: WEBI Agent Stats
           | 11h-12h | 00:00:00 |
           | Total   | 00:15:00 |
 
+
     Scenario: Two login session during the same hour
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "4" with extension "4@statscenter"
@@ -190,3 +191,32 @@ Feature: WEBI Agent Stats
           | 10h-11h | 00:02:30 |
           | 11h-12h | 00:00:00 |
           | Total   | 00:22:35 |
+
+
+    Scenario: Generate stats for total pause time
+        Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
+        Given there is a agent "Agent" "10" with extension "10@statscenter"
+        Given there is a statistic configuration "test_pause_time_1" from "8:00" to "12:00" with agent "10"
+        Given I have the following queue_log entries:
+          | time                       | callid | queuename | agent    | event      | data1 | data2 | data3 | data4 | data5 |
+          | 2012-01-01 10:46:00.000000 | NONE   | NONE      | Agent/10 | UNPAUSEALL |       |       |       |       |       |
+          | 2012-01-01 09:41:10.000000 | NONE   | NONE      | Agent/10 | PAUSEALL   |       |       |       |       |       |
+          | 2012-01-01 08:54:09.000000 | NONE   | NONE      | Agent/10 | UNPAUSEALL |       |       |       |       |       |
+          | 2012-01-01 08:50:59.000000 | NONE   | NONE      | Agent/10 | UNPAUSEALL |       |       |       |       |       |
+          | 2012-01-01 08:50:46.000000 | NONE   | NONE      | Agent/10 | UNPAUSEALL |       |       |       |       |       |
+          | 2012-01-01 08:48:45.000000 | NONE   | NONE      | Agent/10 | PAUSEALL   |       |       |       |       |       |
+          | 2012-01-01 08:47:18.000000 | NONE   | NONE      | Agent/10 | PAUSEALL   |       |       |       |       |       |
+          | 2012-01-01 08:47:17.000000 | NONE   | NONE      | Agent/10 | PAUSEALL   |       |       |       |       |       |
+          | 2012-01-01 08:47:16.000000 | NONE   | NONE      | Agent/10 | PAUSEALL   |       |       |       |       |       |
+          | 2012-01-01 08:46:38.000000 | NONE   | NONE      | Agent/10 | UNPAUSEALL |       |       |       |       |       |
+          | 2012-01-01 08:41:30.000000 | NONE   | NONE      | Agent/10 | PAUSEALL   |       |       |       |       |       |
+          | 2012-01-01 08:41:09.000000 | NONE   | NONE      | Agent/10 | UNPAUSEALL |       |       |       |       |       |
+
+        Given I clear and generate the statistics cache
+        Then I should have the following statististics on agent "10" on "2012-01-01" on configuration "test_pause_time_1":
+          |         | Pause    |
+          | 8h-9h   | 00:08:38 |
+          | 9h-10h  | 00:18:50 |
+          | 10h-11h | 00:46:00 |
+          | 11h-12h | 00:00:00 |
+          | Total   | 01:13:28 |
