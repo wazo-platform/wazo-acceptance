@@ -33,5 +33,3 @@ Feature: Sheet
         | Variable          | Value           |
         | xivo-calleridnum  | 1234            |
         | xivo-calleridname | Laurent Demange |
-
-        When I log out of the XiVO Client

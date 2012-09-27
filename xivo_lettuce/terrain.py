@@ -8,6 +8,7 @@ from xivobrowser import XiVOBrowser
 from xivo_lettuce.ssh import SSHClient
 from selenium.webdriver import FirefoxProfile
 from xivo_lettuce.common import webi_login_as_default, go_to_home_page
+from xivo_lettuce.manager import asterisk_manager
 
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -17,6 +18,11 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 @before.all
 def xivo_lettuce_before_all():
     initialize()
+
+
+@after.each_scenario
+def xivo_lettuce_after_each(scenario):
+    _logout_agents()
 
 
 @after.all
@@ -34,6 +40,7 @@ def initialize():
     _setup_ws(config)
     if _webi_configured():
         _log_on_webi()
+    world.logged_agents = []
 
 
 def read_config():
@@ -120,6 +127,11 @@ def _webi_configured():
 def _log_on_webi():
     go_to_home_page()
     webi_login_as_default()
+
+
+def _logout_agents():
+    asterisk_manager.logoff_agents(world.logged_agents)
+    world.logged_agents = []
 
 
 def deinitialize():

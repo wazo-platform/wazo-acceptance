@@ -26,9 +26,9 @@ class SSHClient(object):
         command = self._format_ssh_command(remote_command)
 
         return subprocess.call(command,
-                             stdout=PIPE,
-                             stderr=STDOUT,
-                             close_fds=True)
+                               stdout=PIPE,
+                               stderr=STDOUT,
+                               close_fds=True)
 
     def _exec_ssh_command_with_return(self, remote_command):
         command = self._format_ssh_command(remote_command)

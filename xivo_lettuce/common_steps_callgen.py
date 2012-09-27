@@ -37,7 +37,7 @@ def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
     queuelog_manager.delete_event_between(
         last_hour.strftime("%Y-%m-%d %H:%M:%S.%f"),
         now.strftime("%Y-%m-%d %H:%M:%S.%f")
-        )
+    )
 
 
 @step(u'Given I register extension "([^"]*)"')
@@ -57,6 +57,7 @@ def given_i_log_the_phone(step, agent_number, extension):
         assert(False)
     statscall_manager.execute_sip_register(lines[0].name, lines[0].secret)
     statscall_manager.execute_n_calls_then_wait(1, '*31%s' % agent_number, username=lines[0].name, password=lines[0].secret)
+    world.logged_agents.append(agent_number)
 
 
 @step(u'Given I logout agent "([^"]*)" on extension "([^"]*)"')
