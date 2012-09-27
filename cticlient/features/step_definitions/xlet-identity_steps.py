@@ -2,9 +2,10 @@
 
 from lettuce import step, world
 
-from xivo_lettuce.common import xivoclient, xivoclient_step
+from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
 
 CONFIG_URL = '/xivo/configuration/index.php'
+
 
 @step(u'Given I go to the "([^"]*)" configuration page')
 def given_i_go_to_the_1_configuration_page(step, section_name):
@@ -46,10 +47,12 @@ def then_the_xlet_identity_shows_phone_number_as_1(step, linenumber):
 def then_the_xlet_identity_shows_a_voicemail_1(step, vm_number):
     assert world.xc_response == 'OK'
 
+
 @step(u'Then the Xlet identity shows an agent "([^"]*)"')
 @xivoclient_step
 def then_the_xlet_identity_shows_an_agent_1(step, agent_number):
     assert world.xc_response == 'OK'
+
 
 @step(u'Then the Xlet identity does not show any agent')
 @xivoclient_step

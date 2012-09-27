@@ -2,7 +2,7 @@
 import json
 
 from lettuce import step, world
-from xivo_lettuce.common import xivoclient_step, xivoclient
+from xivo_lettuce.xivoclient import xivoclient_step, xivoclient
 
 
 @step(u'When I enable screen pop-up')

@@ -2,11 +2,10 @@
 
 import time
 
-from lettuce.decorators import step
+from lettuce import step
 from selenium.webdriver.support.select import Select
 from xivo_lettuce.common import webi_login, the_option_is_checked, remove_element_if_exist, \
-    element_is_in_list, element_is_not_in_list, go_to_tab, run_xivoclient, \
-    xivoclient_step, get_host_address, xivoclient
+    element_is_in_list, element_is_not_in_list, go_to_tab
 from xivo_lettuce import form
 from lettuce.registry import world
 from xivo_lettuce.checkbox import Checkbox
@@ -119,74 +118,3 @@ def the_text_field_1_is_set_to_2(step, label, value):
 @step('I go to the "([^"]*)" tab')
 def i_go_to_the_1_tab(step, tab_text):
     go_to_tab(tab_text)
-
-
-@step(u'When I start the XiVO Client')
-def i_start_the_xivo_client(step):
-    run_xivoclient()
-
-    # Waiting for the listening socket to open
-    time.sleep(1)
-
-    try:
-        world.xc_socket.connect('/tmp/xivoclient')
-    except:
-        world.xc_process.terminate()
-        raise
-
-
-@step(u'I go to the XiVO Client configuration')
-@xivoclient_step
-def i_go_to_the_xivo_client_configuration(step):
-    pass
-
-
-@step(u'I close the XiVO Client configuration')
-@xivoclient_step
-def i_close_the_xivo_client_configuration(step):
-    pass
-
-
-@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"')
-def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
-    i_log_in_the_xivo_client_to_host_1_as_2_pass_3(get_host_address(),
-                                                   login,
-                                                   password)
-    assert world.xc_response == 'OK'
-
-
-@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", unlogged agent')
-def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
-    i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(get_host_address(),
-                                                                  login,
-                                                                  password)
-    assert world.xc_response == 'OK'
-
-
-@step(u'I can\'t log in the XiVO Client as "([^"]*)", pass "([^"]*)"')
-def i_cant_log_in_the_xivo_client_as_1_pass_2(step, login, password):
-    i_log_in_the_xivo_client_to_host_1_as_2_pass_3(get_host_address(),
-                                                   login,
-                                                   password)
-    assert world.xc_response != 'OK'
-
-
-@xivoclient
-def i_log_in_the_xivo_client_to_host_1_as_2_pass_3(host, login, password):
-    time.sleep(world.xc_login_timeout)
-
-
-@xivoclient
-def i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(host, login, password):
-    time.sleep(world.xc_login_timeout)
-
-
-@step(u'I log out of the XiVO Client')
-@xivoclient_step
-def i_log_out_of_the_xivo_client(step):
-    assert world.xc_response == 'OK'
-
-
-@step(u'I stop the XiVO Client')
-def i_stop_the_xivo_client(step):
-    i_stop_the_xivo_client()
