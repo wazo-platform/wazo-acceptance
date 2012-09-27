@@ -1,8 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from lettuce.decorators import step
-from xivo_lettuce.manager import stat_manager, queuelog_manager, \
-    statscall_manager
+from xivo_lettuce.manager import stat_manager, queuelog_manager
 from xivo_lettuce.manager_ws import statconfs_manager_ws
 from datetime import datetime
 from datetime import timedelta
