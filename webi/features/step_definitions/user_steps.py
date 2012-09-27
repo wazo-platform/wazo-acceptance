@@ -98,6 +98,7 @@ def given_i_there_is_a_user_with_extension_with_voicemail_and_cti_profile(step, 
 def given_there_is_a_user_with_an_agent_and_cti_profile(step, firstname, lastname, number_at_context, cti_profile):
     user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
     number, context = number_at_context.split('@', 1)[:]
+    line_manager_ws.delete_line_with_number(number, context)
     agent_manager_ws.delete_agent_with_number(number)
     user_data = {'firstname': firstname,
                  'lastname': lastname,

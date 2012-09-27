@@ -27,7 +27,7 @@ Feature: Xlet identity
     Scenario: Display agent icon and number
         Given there is no user "Darth" "Chewbacca"
         Given there is no agent with number "1153"
-        Given there is a user "Darth" "Chewbacca" with an agent "1153" and CTI profile "Client"
+        Given there is a user "Darth" "Chewbacca" with an agent "1153@default" and CTI profile "Client"
 
         When I start the XiVO Client
         When I log in the XiVO Client as "darth", pass "chewbacca", unlogged agent
