@@ -52,7 +52,7 @@ def _add_line_to_remote_file(line_text, file_name):
 
 
 def _xivo_service_restart():
-    command = ['xivo-service', 'restart']
+    command = ['xivo-service', 'restart', 'all']
     world.ssh_client_xivo.check_call(command)
 
 
