@@ -93,7 +93,7 @@ Feature: WEBI Agent Stats
           | Total   | 02:10:36 |
 
 
-    Scenario: Login before the hour, logout during the hour
+    Scenario: Login before the hour logout during the hour
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "5" with extension "5@statscenter"
         Given there is a statistic configuration "test_login_time_3" from "8:00" to "12:00" with agent "5"
@@ -114,7 +114,7 @@ Feature: WEBI Agent Stats
           | Total   | 00:11:35 |
 
 
-    Scenario: Login before the day, logout after the day
+    Scenario: Login before the day logout after the day
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-03 23:59:59"
         Given there is a agent "Agent" "6" with extension "6@statscenter"
         Given there is a statistic configuration "test_login_time_4" from "8:00" to "12:00" with agent "6"
@@ -135,7 +135,7 @@ Feature: WEBI Agent Stats
           | Total   | 04:00:00 |
 
 
-    Scenario: Agent implicitly logged in, because he answered calls
+    Scenario: Agent implicitly logged in because he answered calls
         Given there is a agent "Agent" "7" with extension "7@statscenter"
         Given there is a queue "q07" with extension "5007@statscenter"
         Given there is a statistic configuration "test_login_time_5" from "8:00" to "12:00" with queue "q07" and agent "7"
@@ -172,7 +172,7 @@ Feature: WEBI Agent Stats
         Then I should have "00:15:00" minutes login in the last hour on agent "8" on configuration "test_login_time_6":
 
 
-    Scenario: Login during the hour, logout after the hour
+    Scenario: Login during the hour logout after the hour
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "9" with extension "9@statscenter"
         Given there is a statistic configuration "test_login_time_9" from "8:00" to "12:00" with agent "9"
