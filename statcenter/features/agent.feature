@@ -16,6 +16,7 @@ Feature: WEBI Agent Stats
           | 2012-07-01 08:54:23.674291 | answered_3  | q01       | Agent/1   | COMPLETECALLER      | 1     | 5              | 1     |       |       |
           | 2012-07-01 08:54:18.711465 | answered_3  | q01       | Agent/1   | CONNECT             | 1     | 1346165657.444 | 1     |       |       |
           | 2012-07-01 08:54:17.039559 | answered_3  | q01       | NONE      | ENTERQUEUE          |       | 1201           | 1     |       |       |
+
         Given I clear and generate the statistics cache
         Then I should have the following statististics on agent "1" on "2012-07-01" on configuration "test":
           |         | Answered |
@@ -42,6 +43,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 09:03:06.555555 | talk_time_3 | q02       | Agent/2  | ENTERQUEUE     |       |              |       |       |       |
           | 2012-01-01 09:03:06.666666 | talk_time_3 | q02       | Agent/2  | CONNECT        | 6     | 2222456.435  |       |       |       |
           | 2012-01-01 09:03:10.777777 | talk_time_3 | q02       | Agent/2  | TRANSFER       | 4     | 0            | 0     | 22    |       |
+
         Given I clear and generate the statistics cache
         Then I should have the following statististics on agent "2" on "2012-01-01" on configuration "test_talktime":
           |         | Answered | Conversation |
@@ -61,6 +63,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 09:10:10.777777 | login_time_1 | NONE      | Agent/3 | AGENTCALLBACKLOGIN  | 1001@statscenter |       |               |       |       |
           | 2012-01-01 09:25:10.777777 | login_time_2 | NONE      | Agent/3 | AGENTCALLBACKLOGOFF | 1001@statscenter |   900 | CommandLogoff |       |       |
           | 2012-01-01 09:25:11.555555 | login_time_3 | NONE      | Agent/3 | UNPAUSEALL          |                  |       |               |       |       |
+
         Given I clear and generate the statistics cache
         Then I should have the following statististics on agent "3" on "2012-01-01" on configuration "test_login_time_1":
           |         | Login    |
@@ -149,6 +152,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 08:14:34.999999 | login_time_1 | q07       | Agent/7 | COMPLETEAGENT       | 60               |           60 |             1 |       |       |
           | 2012-01-01 09:15:00.000000 | NONE         | NONE      | Agent/7 | AGENTCALLBACKLOGOFF | 1002@statscenter |          900 | CommandLogoff |       |       |
           | 2012-01-01 09:20:00.000000 | NONE         | NONE      | Agent/7 | AGENTCALLBACKLOGIN  | 1002@statscenter |              |               |       |       |
+
         Given I clear and generate the statistics cache
         Then I should have the following statististics on agent "7" on "2012-01-01" on configuration "test_login_time_5":
           |         |    Login |
@@ -162,12 +166,13 @@ Feature: WEBI Agent Stats
     Scenario: Generate stats twice
         Given there is no entries in queue_log in the last hour
         Given there is a agent "Agent" "8" with extension "8@statscenter"
-        Given there is a statistic configuration "test_login_time_6" from "8:00" to "12:00" with agent "8"
+        Given there is a statistic configuration "test_login_time_6" from "00:00" to "24:00" with agent "8"
         Given I have the following queue_log entries in the last hour:
-          |         time | callid       | queuename | agent   | event               | data1            | data2 | data3         | data4 | data5 |
+          | time         | callid       | queuename | agent   | event               | data1            | data2 | data3         | data4 | data5 |
           | 10:10.777777 | login_time_1 | NONE      | Agent/8 | AGENTCALLBACKLOGIN  | 1002@statscenter |       |               |       |       |
           | 25:10.777777 | login_time_2 | NONE      | Agent/8 | AGENTCALLBACKLOGOFF | 1002@statscenter |   900 | CommandLogoff |       |       |
-          | 25:11.555555 | login_time_8 | NONE      | Agent/8 | UNPAUSEALL          |                  |       |               |       |       |
+          | 25:11.555555 | login_time_3 | NONE      | Agent/8 | UNPAUSEALL          |                  |       |               |       |       |
+
         Given I clear and generate the statistics cache twice
         Then I should have "00:15:00" minutes login in the last hour on agent "8" on configuration "test_login_time_6":
 

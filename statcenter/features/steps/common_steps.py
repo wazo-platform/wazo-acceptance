@@ -32,7 +32,7 @@ def given_i_have_the_following_queue_log_entries(step):
     queuelog_manager.insert_entries(step.hashes)
 
 
-@step(u'Given I have the following queue_log entries in the last hour:')
+@step(u'^Given I have the following queue_log entries in the last hour:$')
 def given_i_have_to_following_queue_log_entries_in_the_last_hour(step):
     now = datetime.now()
     last_hour = datetime(now.year, now.month, now.day, now.hour - 1, 0, 0, 0)
