@@ -141,5 +141,9 @@ URLS = {
     'sheetevent': {
         'web': 'cti/index.php/sheetevents/',
         'ws': None
+    },
+    'sccpgeneralsettings': {
+        'web': '/service/ipbx/index.php/general_settings/sccp',
+        'ws': 'service/ipbx/json.php/restricted/general_settings/sccp'
     }
 }
