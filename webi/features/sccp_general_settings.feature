@@ -5,14 +5,14 @@ Feature: SCCP General
         Given I am on the SCCP General Settings page
         When I click the directmedia checkbox
         When I submit the form
-        Then the option "directmedia" is at "yes" in sccp.conf
+        Then the option "directmedia" is at "1" in sccp.conf
 
     Scenario: Disable directmedia
         Given the directmedia option is enabled
         Given I am on the SCCP General Settings page
         When I click the directmedia checkbox
         When I submit the form
-        Then the option "directmedia" is at "no" in sccp.conf
+        Then the option "directmedia" is at "0" in sccp.conf
 
     Scenario: Change dial timeout
         Given the dial timeout is at 1 seconds
