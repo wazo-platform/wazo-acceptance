@@ -3,7 +3,7 @@
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce.common import find_line, open_url, remove_all_elements, \
-    remove_line, go_to_tab
+    remove_line
 from xivo_lettuce.manager_ws import line_manager_ws
 from xivo_lettuce.manager import line_manager
 
@@ -47,7 +47,9 @@ def when_i_edit_the_line_1(step, linenumber):
 
 @step(u'Then this line is displayed in the list')
 def then_this_line_is_displayed_in_the_list(step):
+    open_url('line', 'search', {'search': world.id})
     assert find_line(world.id) is not None
+    open_url('line', 'search', {'search': ''})
 
 
 @step(u'Then this line is not displayed in the list')
