@@ -44,7 +44,7 @@ class TestAsterisk(unittest.TestCase):
 class TestAsteriskRestart(unittest.TestCase):
 
     WAIT_SECS = 10
-    NB_TRIES = 12
+    NB_TRIES = 15
     ASTERISK_PIDFILE = '/var/run/asterisk/asterisk.pid'
     CTI_PIDFILE = '/var/run/xivo-ctid.pid'
     DAEMON_LOGFILE = '/var/log/daemon.log'
