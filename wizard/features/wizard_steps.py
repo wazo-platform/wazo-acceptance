@@ -4,6 +4,12 @@ from lettuce import step, world
 from xivo_lettuce.common import waitForLoginPage
 
 
+@step(u'Given there is XiVO not configured')
+def given_there_is_xivo_not_configured(step):
+    cmd = ['rm', '-f', '/etc/pf-xivo/web-interface/xivo.ini']
+    world.ssh_client_xivo.check_call(cmd)
+
+
 @step(u'When I open the url')
 def when_i_open_the_url(step):
     world.browser.get(world.host)
@@ -43,9 +49,9 @@ def when_i_accept_the_terms_of_the_licence(step):
 
 @step(u'Then I should be on the (.*) page')
 def then_i_should_be_on_page(step, page):
-    divid = 'xivo-wizard-step-%s' % (page,)
-    world.browser.find_element_by_id(divid, '%s page not loaded' % (page,))
-    div = world.browser.find_element_by_id(divid, timeout=10)
+    divid = 'xivo-wizard-step-%s' % page
+    world.browser.find_element_by_id(divid, '%s page not loaded' % page)
+    div = world.browser.find_element_by_id(divid, timeout=20)
     assert div is not None
 
 

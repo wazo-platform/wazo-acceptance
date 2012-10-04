@@ -3,6 +3,7 @@ Feature: Wizard
     I have to go through the wizard
 
     Scenario: Successfull completion of the wizard and a login
+        Given there is XiVO not configured
         When I start the wizard
         Then I should be on the welcome page
         When I select language en
