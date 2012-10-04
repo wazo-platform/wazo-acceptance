@@ -40,6 +40,11 @@ def when_i_remove_this_line(step):
     remove_line(world.id)
 
 
+@step(u'When I search for this line')
+def when_i_search_for_this_line(step):
+    line_manager.search_line_number(world.id)
+
+
 @step(u'When I edit this line')
 def when_i_edit_this_line(step):
     edit_line(world.id)

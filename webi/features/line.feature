@@ -31,6 +31,7 @@ Feature: Line
         When I add the codec "Siren14 (G.722.1C) (Audio)"
         When I submit
         Then the codec "siren14" appears after typing 'sip show peer' in asterisk
+        When I search for this line
         When I edit this line
         When I go to the "Signalling" tab
         When I deactivate custom codecs
