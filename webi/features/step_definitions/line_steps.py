@@ -3,9 +3,11 @@
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce.common import find_line, open_url, remove_all_elements, \
-    remove_line
+    remove_line, edit_line
 from xivo_lettuce.manager_ws import line_manager_ws
 from xivo_lettuce.manager import line_manager
+from xivo_lettuce.checkbox import Checkbox
+from xivo_lettuce.list_pane import ListPane
 
 
 @step(u'Given there is no custom lines')
@@ -38,11 +40,50 @@ def when_i_remove_this_line(step):
     remove_line(world.id)
 
 
+@step(u'When I edit this line')
+def when_i_edit_this_line(step):
+    edit_line(world.id)
+
+
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
     line_ids = line_manager_ws.find_line_id_with_number(linenumber, 'default')
     if line_ids:
         open_url('line', 'edit', {'id': line_ids[0]})
+
+
+@step(u'When I activate custom codecs')
+def when_i_activate_custom_codecs(step):
+    Checkbox.from_label("Customize codecs:").check()
+
+
+@step(u'When I deactivate custom codecs')
+def when_i_deactivate_custom_codecs(step):
+    Checkbox.from_label("Customize codecs:").uncheck()
+
+
+@step(u'When I add the codec "([^"]*)"')
+def when_i_add_the_codec(step, codec):
+    webelement = world.browser.find_element_by_id("codeclist")
+    list_pane = ListPane(webelement)
+    list_pane.add(codec)
+
+
+def check_codec_for_sip_line(peer, codec):
+    command = ['asterisk', '-rx', '"sip show peer %s"' % peer]
+    output = world.ssh_client_xivo.out_call(command)
+    codec_line = [x for x in output.split("\n") if 'Codecs' in x][0]
+    return ('(%s)' % codec) in codec_line
+
+
+@step(u'Then the codec "([^"]*)" appears after typing \'sip show peer\' in asterisk')
+def then_the_codec_appears_after_typing_sip_show_peer_in_asterisk(step, codec):
+    assert check_codec_for_sip_line(world.id, codec) == True
+
+
+@step(u'Then the codec "([^"]*)" does not appear after typing \'sip show peer\' in asterisk')
+def then_the_codec_does_not_appear_after_typing_sip_show_peer_in_asterisk(step, codec):
+    assert check_codec_for_sip_line(world.id, codec) == False
 
 
 @step(u'Then this line is displayed in the list')

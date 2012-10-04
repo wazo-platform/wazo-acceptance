@@ -21,3 +21,19 @@ Feature: Line
         When I edit the line "1801"
         When I go to the "IPBX Infos" tab
         Then I see in IPBX Infos tab value "callerid" has set to "André óíúéåäë" <1801>
+
+    #Test X-325
+    Scenario: Choose custom SIP codec
+        When I add a "sip" line
+        When I set the context to "default"
+        When I go to the "Signalling" tab
+        When I activate custom codecs
+        When I add the codec "Siren14 (G.722.1C) (Audio)"
+        When I submit
+        Then the codec "siren14" appears after typing 'sip show peer' in asterisk
+        When I edit this line
+        When I go to the "Signalling" tab
+        When I deactivate custom codecs
+        When I submit
+        Then the codec "siren14" does not appear after typing 'sip show peer' in asterisk
+
