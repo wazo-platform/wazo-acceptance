@@ -90,6 +90,10 @@ URLS = {
         'web': '/service/ipbx/index.php/pbx_services/musiconhold',
         'ws': None
     },
+    'extenfeatures': {
+        'web': '/service/ipbx/index.php/pbx_services/extenfeatures',
+        'ws': None
+    },
     'provd_general': {
         'web': '/xivo/configuration/index.php/provisioning/general',
         'ws': 'configuration/provisioning/general'
