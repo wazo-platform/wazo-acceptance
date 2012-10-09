@@ -36,7 +36,7 @@ class SSHClient(object):
         p = subprocess.Popen(command,
                              stdin=PIPE,
                              stdout=PIPE,
-                             stderr=STDOUT,
+                             stderr=PIPE,
                              close_fds=True)
 
         (stdoutdata, stderrdata) = p.communicate()
