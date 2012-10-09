@@ -10,7 +10,7 @@ Feature: Certificates
           | Cert | test@test.com | yes                      |
         Then I see no errors
 
-    Scenario: Create a certificate with valid info
+    Scenario: Create a certificate for SIP TLS
         Given I create a certificate with following valid info and the server's hostname as common name:
           | name      | email           | valid date in the future | certificate authority | autosigned |
           | phones    | foo@example.org | yes                      | no                    | yes        |
