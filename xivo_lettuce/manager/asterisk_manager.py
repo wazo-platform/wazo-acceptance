@@ -19,9 +19,15 @@ def logoff_agents(agent_numbers):
 
 def logoff_agent(agent_number):
     asterisk_command = 'agent logoff Agent/%s' % (agent_number)
-    _send_to_asterisk_cli(asterisk_command)
+    send_to_asterisk_cli(asterisk_command)
 
 
-def _send_to_asterisk_cli(asterisk_command):
+def send_to_asterisk_cli(asterisk_command):
+    check_output_asterisk_cli(asterisk_command)
+
+
+def check_output_asterisk_cli(asterisk_command):
     shell_command = ['asterisk', '-rx', '"%s"' % asterisk_command]
-    world.ssh_client_xivo.call(shell_command)
+    output = world.ssh_client_xivo.out_call(shell_command)
+    return output
+
