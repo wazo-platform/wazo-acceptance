@@ -34,7 +34,7 @@ Feature: IAX general parameters
         When I add a call limit
         When I set the destination to "10.0.0.1"
         When I submit with errors
-        Then I get errors
+        Then I see errors
         When I go on the General Settings > IAX Protocol page, tab "Call limits"
         When I add a call limit
         When I set the destination to "10.0.0.1"

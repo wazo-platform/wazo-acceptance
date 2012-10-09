@@ -12,4 +12,4 @@ Feature: Group
         Given there is no group "2001"
         When I set a group "general" with number "2001"
         When I submit with errors
-        Then I get errors
+        Then I see errors

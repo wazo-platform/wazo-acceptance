@@ -84,8 +84,8 @@ def then_this_option_is_checked(step, checkstate):
     the_option_is_checked(world.last_option_label, checkstate)
 
 
-@step(u'Then I get errors')
-def then_i_get_errors(step):
+@step(u'Then I see errors')
+def then_i_see_errors(step):
     form.assert_form_errors()
 
 

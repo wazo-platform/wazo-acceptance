@@ -6,4 +6,4 @@ Feature: Queues
 
     Scenario: Cannot add queue named general
         When I add the queue "general" with display name "general" with extension "3001" in "default" with errors
-        Then I get errors
+        Then I see errors

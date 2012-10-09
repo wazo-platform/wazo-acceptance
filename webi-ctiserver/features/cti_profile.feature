@@ -6,7 +6,7 @@ Feature: Profile
         When I add a CTI profile
         When I set the profile name to "TEST"
         When I submit with errors
-        Then I get errors
+        Then I see errors
         When I set the profile name to "test"
         When I submit
         Then I see no errors
