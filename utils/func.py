@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import re
+import datetime
 
 
 def _rec_update_dict(base_dict, overlay_dict):
@@ -30,3 +31,32 @@ def extract_number_and_context_from_extension(extension, default_context='defaul
     else:
         ret = (extension, default_context)
     return ret
+
+
+def read_last_log_lines(logs,
+                        min_timestamp,
+                        date_format="%b %d %H:%M:%S",
+                        date_pattern="^[\w]{3} [\d ]{2} [\d]{2}:[\d]{2}:[\d]{2}"):
+    now = datetime.datetime.now()
+    current_year = now.year
+    date_match = re.compile(date_pattern, re.I)
+
+    lines = []
+    for line in logs:
+        if line == '' or not date_match.match(line):
+            continue
+        datetext = line[0:15]
+        timestamp = datetime.datetime.strptime(datetext, date_format)
+        #Needed so that the timestamp has the right year
+        timestamp = datetime.datetime(
+            year=current_year,
+            month=timestamp.month,
+            day=timestamp.day,
+            hour=timestamp.hour,
+            minute=timestamp.minute,
+            second=timestamp.second)
+
+        if timestamp >= min_timestamp:
+            lines.append(line)
+
+    return lines

@@ -149,5 +149,9 @@ URLS = {
     'sccpgeneralsettings': {
         'web': '/service/ipbx/index.php/general_settings/sccp',
         'ws': 'service/ipbx/json.php/restricted/general_settings/sccp'
+    },
+    'general_settings': {
+        'web': '/xivo/configuration/index.php/manage/general',
+        'ws': None
     }
 }
