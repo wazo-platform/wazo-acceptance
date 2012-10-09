@@ -138,31 +138,6 @@ Feature: WEBI Agent Stats
           | Total   | 04:00:00 |
 
 
-    Scenario: Agent implicitly logged in because he answered calls
-        Given there is a agent "Agent" "7" with extension "7@statscenter"
-        Given there is a queue "q07" with extension "5007@statscenter"
-        Given there is a statistic configuration "test_login_time_5" from "8:00" to "12:00" with queue "q07" and agent "7"
-        Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 23:59:59"
-        Given there is no "AGENTCALLBACKLOGIN" entry for agent "7"
-        Given there is no "AGENTLOGIN" entry for agent "7"
-        Given I have the following queue_log entries:
-          | time                       | callid       | queuename | agent   | event               | data1            |        data2 |         data3 | data4 | data5 |
-          | 2012-01-01 08:12:34.999999 | login_time_1 | q07       | NONE    | ENTERQUEUE          |                  |       123456 |               |       |       |
-          | 2012-01-01 08:13:34.999999 | login_time_1 | q07       | Agent/7 | CONNECT             | 60               | 1111111111.1 |             0 |       |       |
-          | 2012-01-01 08:14:34.999999 | login_time_1 | q07       | Agent/7 | COMPLETEAGENT       | 60               |           60 |             1 |       |       |
-          | 2012-01-01 09:15:00.000000 | NONE         | NONE      | Agent/7 | AGENTCALLBACKLOGOFF | 1002@statscenter |          900 | CommandLogoff |       |       |
-          | 2012-01-01 09:20:00.000000 | NONE         | NONE      | Agent/7 | AGENTCALLBACKLOGIN  | 1002@statscenter |              |               |       |       |
-
-        Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "7" on "2012-01-01" on configuration "test_login_time_5":
-          |         |    Login |
-          | 8h-9h   | 01:00:00 |
-          | 9h-10h  | 00:55:00 |
-          | 10h-11h | 01:00:00 |
-          | 11h-12h | 01:00:00 |
-          | Total   | 03:55:00 |
-
-
     Scenario: Generate stats twice
         Given there is no entries in queue_log in the last hour
         Given there is a agent "Agent" "8" with extension "8@statscenter"
