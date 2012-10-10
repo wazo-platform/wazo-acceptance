@@ -122,11 +122,11 @@ Feature: WEBI Agent Stats
         Given there is a agent "Agent" "6" with extension "6@statscenter"
         Given there is a statistic configuration "test_login_time_4" from "8:00" to "12:00" with agent "6"
         Given I have the following queue_log entries:
-          | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
-          | 2012-01-01 08:50:00.999999 | login_time_1 | NONE      | Agent/6 | AGENTCALLBACKLOGIN  | 1003@default       |       |               |       |       |
-          | 2012-01-03 09:01:06.000000 | login_time_2 | NONE      | Agent/6 | AGENTCALLBACKLOGOFF | 1003@default       |   666 | CommandLogoff |       |       |
-          | 2012-01-03 09:02:00.000000 | login_time_3 | NONE      | Agent/6 | AGENTLOGIN          | SIP/aaaaa-00000001 |       |               |       |       |
-          | 2012-01-03 09:02:30.000000 | login_time_3 | NONE      | Agent/6 | AGENTLOGOFF         | SIP/aaaaa-00000001 |    30 | CommandLogoff |       |       |
+          | time                       | callid       | queuename | agent   | event               | data1              |  data2 | data3         | data4 | data5 |
+          | 2012-01-01 08:50:00.999999 | login_time_1 | NONE      | Agent/6 | AGENTCALLBACKLOGIN  | 1003@default       |        |               |       |       |
+          | 2012-01-03 09:01:06.000000 | login_time_2 | NONE      | Agent/6 | AGENTCALLBACKLOGOFF | 1003@default       | 173941 | CommandLogoff |       |       |
+          | 2012-01-03 09:02:00.000000 | login_time_3 | NONE      | Agent/6 | AGENTLOGIN          | SIP/aaaaa-00000001 |        |               |       |       |
+          | 2012-01-03 09:02:30.000000 | login_time_3 | NONE      | Agent/6 | AGENTLOGOFF         | SIP/aaaaa-00000001 |     30 | CommandLogoff |       |       |
 
         Given I clear and generate the statistics cache
         Then I should have the following statististics on agent "6" on "2012-01-02" on configuration "test_login_time_4":
