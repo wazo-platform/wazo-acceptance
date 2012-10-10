@@ -159,9 +159,9 @@ Feature: WEBI Agent Stats
         Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
           | 2012-01-01 09:07:00.999999 | login_time_1 | NONE      | Agent/9 | AGENTCALLBACKLOGIN  | 1003@default       |       |               |       |       |
-          | 2012-01-01 09:12:06.000000 | login_time_2 | NONE      | Agent/9 | AGENTCALLBACKLOGOFF | 1003@default       |   666 | CommandLogoff |       |       |
+          | 2012-01-01 09:12:06.000000 | login_time_2 | NONE      | Agent/9 | AGENTCALLBACKLOGOFF | 1003@default       |   305 | CommandLogoff |       |       |
           | 2012-01-01 09:45:00.000000 | login_time_3 | NONE      | Agent/9 | AGENTLOGIN          | SIP/aaaaa-00000001 |       |               |       |       |
-          | 2012-01-01 10:02:30.000000 | login_time_3 | NONE      | Agent/9 | AGENTLOGOFF         | SIP/aaaaa-00000001 |    30 | CommandLogoff |       |       |
+          | 2012-01-01 10:02:30.000000 | login_time_3 | NONE      | Agent/9 | AGENTLOGOFF         | SIP/aaaaa-00000001 |  1050 | CommandLogoff |       |       |
 
         Given I clear and generate the statistics cache
         Then I should have the following statististics on agent "9" on "2012-01-01" on configuration "test_login_time_9":
