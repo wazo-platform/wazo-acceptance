@@ -28,9 +28,7 @@ class _LoadtesterCommand(commands.AbstractCommand):
                             help='increase logging verbosity')
 
     def configure_subcommands(self, subcommands):
-        subcommands.add_subcommand(_AttachSubcommand('attach'))
         subcommands.add_subcommand(_StartSubcommand('start'))
-        subcommands.add_subcommand(_StatusSubcommand('status'))
 
     def pre_execute(self, parsed_args):
         self._set_logging_verbosity(parsed_args)
@@ -43,20 +41,6 @@ class _LoadtesterCommand(commands.AbstractCommand):
 
     def _set_scenario_runner(self, parsed_args):
         parsed_args.scenario_runner = ScenarioRunner()
-
-
-class _AttachSubcommand(commands.AbstractSubcommand):
-    def configure_parser(self, parser):
-        parser.add_argument('scenario_dir', nargs='?',
-                            help='path to the scenario directory')
-
-    def execute(self, parsed_args):
-        scenario_runner = parsed_args.scenario_runner
-        if parsed_args.scenario_dir:
-            scenario = Scenario(parsed_args.scenario_dir)
-            scenario_runner.attach_to_scenario(scenario)
-        else:
-            scenario_runner.attach_to_first_scenario()
 
 
 class _StartSubcommand(commands.AbstractSubcommand):
@@ -73,17 +57,6 @@ class _StartSubcommand(commands.AbstractSubcommand):
         scenario = Scenario(parsed_args.scenario_dir)
         scenario_config = ScenarioConfig.new_from_filename(parsed_args.conf)
         parsed_args.scenario_runner.start_scenario(scenario, scenario_config)
-
-
-class _StatusSubcommand(commands.AbstractSubcommand):
-    def execute(self, parsed_args):
-        scenario_names = parsed_args.scenario_runner.list_running_scenarios()
-        if scenario_names:
-            print '%s tests running' % (len(scenario_names))
-            for scenario_name in sorted(scenario_names):
-                print '    %s' % scenario_name
-        else:
-            print 'No test running'
 
 
 if __name__ == '__main__':
