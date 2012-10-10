@@ -6,7 +6,8 @@ import logging
 import os.path
 from loadtester.bin import commands
 from loadtester.config import ScenarioConfig
-from loadtester.scenario import ScenarioRunner, Scenario
+from loadtester.runner import ScenarioRunner
+from loadtester.scenario import Scenario
 
 
 def main():

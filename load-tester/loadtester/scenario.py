@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 
 import os.path
-import subprocess
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 
@@ -48,12 +47,3 @@ class _TemplatesProcessor(object):
     def _get_template_destination(self, tpl_filename):
         filename = tpl_filename[:-self._TEMPLATE_SUFFIX_LENGTH]
         return os.path.join(self._directory, filename)
-
-
-class ScenarioRunner(object):
-
-    def start_scenario(self, scenario, scenario_config):
-        context = scenario_config.get_context_for_scenario(scenario.name)
-        scenario.prepare_start(context)
-        process = subprocess.Popen(['sh', 'start.sh'], cwd=scenario.directory)
-        process.communicate()
