@@ -103,7 +103,7 @@ Feature: WEBI Agent Stats
         Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
           | 2012-01-01 08:50:00.999999 | login_time_1 | NONE      | Agent/5 | AGENTCALLBACKLOGIN  | 1003@default       |       |               |       |       |
-          | 2012-01-01 09:01:06.000000 | login_time_2 | NONE      | Agent/5 | AGENTCALLBACKLOGOFF | 1003@default       |   666 | CommandLogoff |       |       |
+          | 2012-01-01 09:01:06.000000 | login_time_2 | NONE      | Agent/5 | AGENTCALLBACKLOGOFF | 1003@default       |   665 | CommandLogoff |       |       |
           | 2012-01-01 09:02:00.000000 | login_time_3 | NONE      | Agent/5 | AGENTLOGIN          | SIP/aaaaa-00000001 |       |               |       |       |
           | 2012-01-01 09:02:30.000000 | login_time_3 | NONE      | Agent/5 | AGENTLOGOFF         | SIP/aaaaa-00000001 |    30 | CommandLogoff |       |       |
 
