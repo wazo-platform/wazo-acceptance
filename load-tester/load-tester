@@ -1,5 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 
-export PYTHONPATH="src:$PYTHONPATH"
-
-python -m loadtester.bin.loadtester "$@"
+from loadtester.bin.loadtester import main
+main()

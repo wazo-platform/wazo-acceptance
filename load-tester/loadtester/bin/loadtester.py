@@ -60,7 +60,7 @@ class _AttachSubcommand(commands.AbstractSubcommand):
 
 
 class _StartSubcommand(commands.AbstractSubcommand):
-    _CONFIG_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../etc'))
+    _CONFIG_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../etc'))
     _CONFIG_FILE = os.path.join(_CONFIG_DIR, 'conf.py')
 
     def configure_parser(self, parser):
