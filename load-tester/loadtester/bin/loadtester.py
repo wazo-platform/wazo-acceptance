@@ -64,10 +64,10 @@ class _StartSubcommand(commands.AbstractSubcommand):
     _CONFIG_FILE = os.path.join(_CONFIG_DIR, 'conf.py')
 
     def configure_parser(self, parser):
-        parser.add_argument('scenario_dir',
-                            help='path to the scenario directory')
         parser.add_argument('-c', '--conf', default=self._CONFIG_FILE,
                             help='path to the config file')
+        parser.add_argument('scenario_dir',
+                            help='path to the scenario directory')
 
     def execute(self, parsed_args):
         scenario = Scenario(parsed_args.scenario_dir)
