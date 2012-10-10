@@ -42,6 +42,8 @@ pause = {
 
 #scenarios.answer_then_wait.bind_port = 5060
 
+#scenarios.answer_then_wait_with_rtp.bind_port = 5060
+
 #scenarios.call_then_cancel_on_ringing.calling_line = calling_line
 scenarios.call_then_cancel_on_ringing.called_extens = ['1']
 

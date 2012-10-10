@@ -1,9 +1,6 @@
 Dependencies
 ============
 
-* screen
-  * apt-get install screen
-
 * sipp with authentication support, PCAP play and gsl
   * see `compiling sipp with authentication support, PCAP play and gsl`_
 
@@ -46,3 +43,10 @@ Installation
 To copy the project on trafgen, you can use the following command::
 
    rsync -v --exclude '*.pyc' --delete -rtlp * trafgen@trafgen:load-tester/
+
+
+Usage
+=====
+
+Note that scenarios with RTP might require to be started as root, or you could
+get the following error: "Can't create raw socket (need to run as root?)".
