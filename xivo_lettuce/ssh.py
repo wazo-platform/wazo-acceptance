@@ -30,7 +30,7 @@ class SSHClient(object):
                                stderr=STDOUT,
                                close_fds=True)
 
-    def _exec_ssh_command_with_return(self, remote_command):
+    def _exec_ssh_command_with_return_stdout(self, remote_command):
         command = self._format_ssh_command(remote_command)
 
         p = subprocess.Popen(command,
@@ -46,6 +46,19 @@ class SSHClient(object):
 
         return stdoutdata
 
+    def _exec_ssh_command_with_return_stdout_stderr(self, remote_command):
+        command = self._format_ssh_command(remote_command)
+
+        p = subprocess.Popen(command,
+                             stdin=PIPE,
+                             stdout=PIPE,
+                             stderr=STDOUT,
+                             close_fds=True)
+
+        (stdoutdata, stderrdata) = p.communicate()
+
+        return stdoutdata
+
     def check_call(self, remote_command):
         retcode = self._exec_ssh_command(remote_command)
         if retcode != 0:
@@ -54,4 +67,7 @@ class SSHClient(object):
         return retcode
 
     def out_call(self, remote_command):
-        return self._exec_ssh_command_with_return(remote_command)
+        return self._exec_ssh_command_with_return_stdout(remote_command)
+
+    def out_err_call(self, remote_command):
+        return self._exec_ssh_command_with_return_stdout_stderr(remote_command)

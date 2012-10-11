@@ -3,6 +3,9 @@
 from lettuce import world
 import time
 
+MAX_RETRIES_TO_CONTACT_MONIT = 30
+SECONDS_BETWEEN_RETRIES_TO_CONTACT_MONIT = 10
+
 
 def type_pool_start_end(start, end):
     input_start = world.browser.find_element_by_id('it-pool_start', 'DHCP form not loaded')
@@ -14,7 +17,7 @@ def type_pool_start_end(start, end):
 
 
 def process_monitored(process_name):
-    _wait_monit_restart(10)
+    _wait_monit_restart(MAX_RETRIES_TO_CONTACT_MONIT)
     result = get_monit_status()
     for line in result:
         if line == "Process '%s'" % process_name:
@@ -26,7 +29,7 @@ def _wait_monit_restart(maxtries):
     nbtries = 0
     _ready = is_monit_started()
     while nbtries < maxtries and not _ready:
-        time.sleep(5)
+        time.sleep(SECONDS_BETWEEN_RETRIES_TO_CONTACT_MONIT)
         _ready = True if is_monit_started() else False
         nbtries += 1
 
@@ -42,5 +45,5 @@ def is_monit_started():
 
 def get_monit_status():
     command = ['monit', 'status']
-    result = world.ssh_client_xivo.out_call(command)
+    result = world.ssh_client_xivo.out_err_call(command)
     return result.split('\n')
