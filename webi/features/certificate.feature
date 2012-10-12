@@ -6,8 +6,8 @@ Feature: Certificates
           | Cert | test@test@test.com | yes                      |
         Then I see errors
         When I create a certificate with following valid info:
-          | name | email         | valid date in the future |
-          | Cert | test@test.com | yes                      |
+          | name | email         | valid date in the future | autosigned |
+          | Cert | test@test.com | yes                      | yes        |
         Then I see no errors
 
     Scenario: Create a certificate for SIP TLS
