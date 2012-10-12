@@ -35,11 +35,12 @@ datastorage = "postgresql://asterisk:proformatique@localhost/asterisk?charset=ut
         self.assertEqual(cti_ini_content, self.CTI_INI_CONTENT_RESULT)
 
 
-class TestAsterisk(unittest.TestCase):
+class TestAsteriskCommand(unittest.TestCase):
 
     def test_core_reload(self):
         retcode = subprocess.call(['asterisk', '-rx', 'core reload'])
         self.assertEqual(retcode, 0)
+
 
 class TestAsteriskRestart(unittest.TestCase):
 
@@ -55,7 +56,7 @@ class TestAsteriskRestart(unittest.TestCase):
 
         self._stop_asterisk()
 
-        #Check that asterisk and CTI are not running
+        # Check that asterisk and CTI are not running
         self.assertFalse(
             self._is_process_running(self.ASTERISK_PIDFILE),
             "asterisk is still running after stopping service")
@@ -64,12 +65,15 @@ class TestAsteriskRestart(unittest.TestCase):
             self._is_process_running(self.CTI_PIDFILE),
             "ctid is still running after stopping asterisk")
 
-        #Wait and check that asterisk and CTI are back up
-        self._wait_service_restart(self.CTI_PIDFILE, self.NB_TRIES)
+        # Wait and check that asterisk is back up
+        self._wait_service_restart(self.ASTERISK_PIDFILE, self.NB_TRIES)
 
         self.assertTrue(
             self._is_process_running(self.ASTERISK_PIDFILE),
             "asterisk did not restart after stopping service")
+
+        # Wait and check that  CTI is back up
+        self._wait_service_restart(self.CTI_PIDFILE, self.NB_TRIES)
 
         self.assertTrue(
             self._is_process_running(self.CTI_PIDFILE),
@@ -120,7 +124,7 @@ class TestAsteriskRestart(unittest.TestCase):
             datetext = line[0:15]
 
             timestamp = datetime.datetime.strptime(datetext, self.DATE_FORMAT)
-            #Needed so that the timestamp has the right year
+            # Needed so that the timestamp has the right year
             timestamp = datetime.datetime(
                 year=current_year,
                 month=timestamp.month,
