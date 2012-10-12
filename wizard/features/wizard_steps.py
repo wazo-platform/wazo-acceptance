@@ -92,6 +92,5 @@ def then_i_should_be_redirected_to_the_login_page(step):
 
 @step(u'Then I should be in the monitoring window')
 def then_i_should_be_in_the_monitoring_window(step):
-    world.browser.find_element_by_id('system-infos', 'Could not load the system info page')
-    div = world.browser.find_element_by_id('system-infos')
+    div = world.browser.find_element_by_id('system-infos', 'Could not load the system info page')
     assert div is not None
