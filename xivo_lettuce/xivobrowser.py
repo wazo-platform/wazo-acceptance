@@ -9,6 +9,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 
 
 class MissingTranslationException(Exception):
@@ -52,94 +53,63 @@ class XiVOBrowser(webdriver.Firefox):
             pass
         """
 
-    def find_element(self, by=id, value=None):
+    def find_element(self, by=By.ID, value=None, message='', timeout=None):
         """This function is called by all find_element_by_*().
            This implementation adds a timeout to search for Webelements."""
         # Do not call lambda browser : browser.find_element -> infinite recursion
+        if timeout is None:
+            timeout = world.timeout
+
         try:
-            WebDriverWait(self, world.timeout).until(
+            WebDriverWait(self, timeout).until(
                 lambda browser: webdriver.Firefox.find_element(self, by, value))
         except TimeoutException:
-            raise NoSuchElementException(value)
+            raise NoSuchElementException('%s: %s' % (value, message))
 
         element = webdriver.Firefox.find_element(self, by, value)
 
         try:
-            WebDriverWait(self, world.timeout).until(
+            WebDriverWait(self, timeout).until(
                 lambda browser: webdriver.Firefox.find_element(self, by, value).is_displayed())
         except TimeoutException:
-            raise ElementNotVisibleException(value)
+            raise ElementNotVisibleException('%s: %s' % (value, message))
 
         return element
 
-    # Maybe the three following reimplementations could be done through a single decorator ?
-
     def find_element_by_id(self, id, message='', timeout=None):
-        oldtimeout = world.timeout
-        if timeout is not None:
-            world.timeout = timeout
-        try:
-            ret = webdriver.Firefox.find_element_by_id(self, id)
-        except NoSuchElementException:
-            raise NoSuchElementException('%s: %s' % (id, message))
-        except ElementNotVisibleException:
-            raise ElementNotVisibleException('%s: %s' % (id, message))
-        finally:
-            world.timeout = oldtimeout
-        return ret
+        return self.find_element(By.ID, id, message, timeout)
 
     def find_element_by_name(self, name, message='', timeout=None):
-        oldtimeout = world.timeout
-        if timeout is not None:
-            world.timeout = timeout
-        try:
-            ret = webdriver.Firefox.find_element_by_name(self, name)
-        except NoSuchElementException:
-            raise NoSuchElementException('%s: %s' % (name, message))
-        except ElementNotVisibleException:
-            raise ElementNotVisibleException('%s: %s' % (name, message))
-        finally:
-            world.timeout = oldtimeout
-        return ret
+        return self.find_element(By.NAME, name, message, timeout)
 
     def find_element_by_xpath(self, xpath, message='', timeout=None):
-        oldtimeout = world.timeout
-        if timeout is not None:
-            world.timeout = timeout
+        return self.find_element(By.XPATH, xpath, message, timeout)
+
+    def find_elements(self, by=By.ID, value=None, message='', timeout=None):
+        """This function is called by all find_element_by_*().
+           This implementation adds a timeout to search for Webelements."""
+        # Do not call lambda browser : browser.find_element -> infinite recursion
+        if timeout is None:
+            timeout = world.timeout
+
         try:
-            ret = webdriver.Firefox.find_element_by_xpath(self, xpath)
-        except NoSuchElementException:
-            raise NoSuchElementException('%s: %s' % (xpath, message))
-        except ElementNotVisibleException:
-            raise ElementNotVisibleException('%s: %s' % (xpath, message))
-        finally:
-            world.timeout = oldtimeout
-        return ret
+            WebDriverWait(self, timeout).until(
+                lambda browser: webdriver.Firefox.find_elements(self, by, value))
+        except TimeoutException:
+            raise NoSuchElementException('%s: %s' % (value, message))
+
+        element = webdriver.Firefox.find_elements(self, by, value)
+
+        try:
+            WebDriverWait(self, timeout).until(
+                lambda browser: webdriver.Firefox.find_elements(self, by, value).is_displayed())
+        except TimeoutException:
+            raise ElementNotVisibleException('%s: %s' % (value, message))
+
+        return element
 
     def find_elements_by_xpath(self, xpath, message='', timeout=None):
-        oldtimeout = world.timeout
-        if timeout is not None:
-            world.timeout = timeout
-        try:
-            ret = webdriver.Firefox.find_elements_by_xpath(self, xpath)
-        except NoSuchElementException:
-            raise NoSuchElementException('%s: %s' % (xpath, message))
-        except ElementNotVisibleException:
-            raise ElementNotVisibleException('%s: %s' % (xpath, message))
-        finally:
-            world.timeout = oldtimeout
-        return ret
-
-    def switch_to_alert(self, message='No alert', timeout=5):
-        """Adds wait time for alert."""
-        count = 0
-        while count < timeout:
-            alert = webdriver.Firefox.switch_to_alert(self)
-            time.sleep(1)
-            if alert:
-                return alert
-            count += 1
-        raise Exception(message)
+        return self.find_elements(By.XPATH, xpath, message, timeout)
 
     def find_element_by_label(self, label):
         """Finds the first element corresponding to the label containing the argument."""
@@ -158,3 +128,14 @@ class XiVOBrowser(webdriver.Firefox):
             webelement_id = webelement_label.get_attribute('for')
             ret += self.find_elements_by_id(webelement_id)
         return ret
+
+    def switch_to_alert(self, message='No alert', timeout=5):
+        """Adds wait time for alert."""
+        count = 0
+        while count < timeout:
+            alert = webdriver.Firefox.switch_to_alert(self)
+            time.sleep(1)
+            if alert:
+                return alert
+            count += 1
+        raise Exception(message)
