@@ -23,3 +23,9 @@ Feature: Certificates
         Then SIP tls connections use the "phones" certificate for encryption
         Then there are no warnings when reloading sip configuration
 
+    Scenario: Creating a certificate for the CTI server
+        When I create a certificate with following valid info and the server's hostname as common name:
+           | name      | email           | valid date in the future | certificate authority | autosigned |
+           | xivo-ctid | foo@example.com | yes                      | no                    | yes        |
+        Then I see no errors
+
