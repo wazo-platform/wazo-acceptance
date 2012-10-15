@@ -10,14 +10,24 @@ from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url, \
 from xivo_lettuce.manager.outcall_manager import exten_line
 from xivo_lettuce.manager_ws import trunksip_manager_ws, outcall_manager_ws
 from xivo_lettuce import form
+from selenium.webdriver.support.select import Select
 
 
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
-def given_there_is_an_outcall(step, outcall_name, trunk_name):
+def given_there_is_an_outcall_with_trunk(step, outcall_name, trunk_name):
     trunksip_manager_ws.add_or_replace_trunksip('192.168.32.254', trunk_name)
     trunk_id = trunksip_manager_ws.get_trunk_id_with_name(trunk_name)
     data = {'name': outcall_name,
             'context': 'to-extern',
+            'trunks': [trunk_id]}
+    outcall_manager_ws.add_outcall(data)
+
+
+@step(u'Given there is an outcall "([^"]*)" in context "([^"]*)" with trunk "([^"]*)"')
+def given_there_is_an_outcall_in_context_with_trunk(step, outcall_name, outcall_context, trunk_name):
+    trunk_id = trunksip_manager_ws.get_trunk_id_with_name(trunk_name)
+    data = {'name': outcall_name,
+            'context': outcall_context,
             'trunks': [trunk_id]}
     outcall_manager_ws.add_outcall(data)
 
@@ -62,6 +72,15 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     # Wait for the Javascript to move the trunk
     time.sleep(1)
 
+    form.submit_form()
+
+
+@step(u'When i edit the outcall "([^"]*)" and set context to "([^"]*)"')
+def when_i_edit_the_outcall_and_set_context(step, name, context):
+    open_url('outcall', 'list')
+    edit_line(name)
+    type_field = Select(world.browser.find_element_by_id('it-outcall-context', 'Outcall form not loaded'))
+    type_field.select_by_value(context)
     form.submit_form()
 
 

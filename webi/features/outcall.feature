@@ -34,3 +34,12 @@ Feature: Outcall
         When I submit
         When I go to the outcall "outdoor", tab "Exten"
         Then I don't see any exten "7000"
+
+    Scenario: Edit an outcall and change the context
+        Given there is no outcall "linguini"
+        Given there is a SIP trunk "pasta"
+        Given there is no context "interco"
+        Given there is a outcall context "interco"
+        Given there is an outcall "linguini" in context "interco" with trunk "pasta"
+        When i edit the outcall "linguini" and set context to "to-extern"
+        Then outcall "linguini" is displayed in the list
