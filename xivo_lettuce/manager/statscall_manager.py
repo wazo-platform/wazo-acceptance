@@ -97,7 +97,7 @@ def execute_pickup_call(number, username, password):
                '-clu', username,
                '-clp', password,
                '-cd', 5000]
-    return _exec_cmd(command, ['-t'])
+    return _exec_cmd(command, ['-tt'])
 
 
 def _exec_cmd(command, extra_ssh_args=None):
