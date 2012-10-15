@@ -9,6 +9,7 @@ from xivo_lettuce.ssh import SSHClient
 from selenium.webdriver import FirefoxProfile
 from xivo_lettuce.common import webi_login_as_default, go_to_home_page
 from xivo_lettuce.manager import asterisk_manager
+from xivo_lettuce.manager import general_settings_manager
 
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -18,6 +19,7 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 @before.all
 def xivo_lettuce_before_all():
     initialize()
+    _activate_live_reload()
 
 
 @after.each_scenario
@@ -41,6 +43,10 @@ def initialize():
     if _webi_configured():
         _log_on_webi()
     world.logged_agents = []
+
+
+def _activate_live_reload():
+    general_settings_manager.enable_live_reload()
 
 
 def read_config():
