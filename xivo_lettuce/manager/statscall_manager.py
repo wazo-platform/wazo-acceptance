@@ -117,13 +117,11 @@ def _exec_cmd(command, extra_ssh_args=None):
     ssh_command.append(socket.gethostbyname(world.callgen_host))
     ssh_command.extend(cmds)
 
-    print ssh_command
     p = Popen(ssh_command,
               stdout=PIPE,
               stderr=PIPE,
               close_fds=True)
     output = p.communicate()[0]
-    print p.returncode
 
     if p.returncode != 0:
         print output
