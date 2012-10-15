@@ -1,8 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import time
-from lettuce.decorators import step
-from lettuce.registry import world
+from lettuce import step, world
 from xivo_lettuce.manager import queuelog_manager
 from xivo_lettuce.manager import statscall_manager
 from utils.func import extract_number_and_context_from_extension

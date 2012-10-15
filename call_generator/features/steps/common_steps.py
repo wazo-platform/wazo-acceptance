@@ -2,8 +2,7 @@
 
 import time
 
-from lettuce.decorators import step
-from lettuce.registry import world
+from lettuce import step, world
 from utils.func import extract_number_and_context_from_extension
 from xivo_lettuce.common import open_url, element_is_in_list
 from xivo_lettuce import form
