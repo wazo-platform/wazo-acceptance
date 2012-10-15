@@ -44,7 +44,7 @@ def read_last_log_lines(logs,
         try:
             m = date_match.search(line)
             datetext = m.group(1)
-        except AttributeError, IndexError:
+        except (AttributeError, IndexError):
             continue
         timestamp = datetime.datetime.strptime(datetext, date_format)
         # Needed so that the timestamp has the right year
