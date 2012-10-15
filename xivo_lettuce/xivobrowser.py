@@ -98,15 +98,7 @@ class XiVOBrowser(webdriver.Firefox):
         except TimeoutException:
             raise NoSuchElementException('%s: %s' % (value, message))
 
-        element = webdriver.Firefox.find_elements(self, by, value)
-
-        try:
-            WebDriverWait(self, timeout).until(
-                lambda browser: webdriver.Firefox.find_elements(self, by, value).is_displayed())
-        except TimeoutException:
-            raise ElementNotVisibleException('%s: %s' % (value, message))
-
-        return element
+        return webdriver.Firefox.find_elements(self, by, value)
 
     def find_elements_by_xpath(self, xpath, message='', timeout=None):
         return self.find_elements(By.XPATH, xpath, message, timeout)
