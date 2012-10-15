@@ -52,9 +52,8 @@ def when_i_edit_this_line(step):
 
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
-    line_ids = line_manager_ws.find_line_id_with_number(linenumber, 'default')
-    if line_ids:
-        open_url('line', 'edit', {'id': line_ids[0]})
+    line_id = line_manager_ws.find_line_id_with_number(linenumber, 'default')
+    open_url('line', 'edit', {'id': line_id})
 
 
 @step(u'When I activate custom codecs')
@@ -112,7 +111,7 @@ def then_this_line_is_not_displayed_in_the_list(step):
 
 @step(u'Then I see the line "([^"]*)" has its call limit to "([^"]*)"')
 def then_i_see_the_line_1_has_its_call_limit_to_2(step, line_number, call_limit):
-    line_id = line_manager_ws.find_line_id_with_number(line_number, 'default')[0]
+    line_id = line_manager_ws.find_line_id_with_number(line_number, 'default')
     open_url('line', 'edit', {'id': line_id})
 
     expected_var_val = line_manager.get_value_from_ipbx_infos_tab('call_limit')
