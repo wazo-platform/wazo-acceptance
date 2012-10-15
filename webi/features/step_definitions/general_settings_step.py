@@ -6,6 +6,7 @@ from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import general_settings_manager
 from xivo_lettuce.manager.sys_manager import search_str_in_daemon_log
 
+
 @step(u'Given a live reload configuration is enable')
 def given_a_live_reload_configuration_is_enable(step):
     general_settings_manager.enable_live_reload()
@@ -22,13 +23,14 @@ def when_i_enable_live_reload_configuration(step):
     general_settings_manager.disable_live_reload()
 
 
-@step(u'Then i see messages in daemon log file')
+@step(u'Then i see live reload request in daemon log file')
 def then_i_see_messages_in_daemon_log_file(step):
     expression = "'POST /exec_request_handlers HTTP/1.1' 200"
     assert search_str_in_daemon_log(expression)
 
 
-@step(u'Then i see no messages in daemon log file')
+@step(u'Then i see no live reload request in daemon log file')
 def then_i_see_no_messages_in_daemon_log_file(step):
     expression = "'POST /exec_request_handlers HTTP/1.1' 200"
     assert not search_str_in_daemon_log(expression)
+    general_settings_manager.enable_live_reload()
