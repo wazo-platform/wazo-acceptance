@@ -62,6 +62,7 @@ def update_sip_configuration(info):
 
     form.set_select_field("Server certificate", info['server certificate'])
     form.set_select_field("CA certificate", info['ca certificate'])
+    form.submit_form()
 
 
 @step(u'When I create a certificate with the following invalid info:')
@@ -77,8 +78,8 @@ def when_i_create_a_certificate_with_following_valid_info(step):
         form.submit_form()
 
 
-@step(u'Given I create a certificate with following valid info and the server\'s hostname as common name:')
-def given_i_create_a_certificate_with_following_valid_info_and_the_server_s_hostname_as_common_name(step):
+@step(u'I create a certificate with following valid info and the server\'s hostname as common name:$')
+def i_create_a_certificate_with_following_valid_info_and_the_server_s_hostname_as_common_name(step):
     for info in step.hashes:
         create_or_replace_certificate(info)
         insert_hostname_into_form()
