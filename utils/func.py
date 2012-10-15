@@ -23,14 +23,12 @@ def _rec_update_dict(base_dict, overlay_dict):
 
 
 def extract_number_and_context_from_extension(extension, default_context='default'):
-    if re.search('@', extension):
-        exten = extension.split('@')
-        number = exten[0]
-        context = exten[1]
-        ret = (number, context)
+    if '@' in extension:
+        number, context = extension.split('@', 1)
     else:
-        ret = (extension, default_context)
-    return ret
+        number = extension
+        context = default_context
+    return number, context
 
 
 def read_last_log_lines(logs,
