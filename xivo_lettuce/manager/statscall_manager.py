@@ -88,7 +88,19 @@ def execute_answer_then_wait(ring_time=2000):
     _exec_cmd(command)
 
 
-def _exec_cmd(command):
+def execute_pickup_call(number, username, password):
+    command = ['xivo-callgen',
+               '-li', socket.gethostbyname(world.callgen_host),
+               '-rh', world.xivo_host,
+               'call-then-hangup',
+               '-ce', number,
+               '-clu', username,
+               '-clp', password,
+               '-cd', 5000]
+    return _exec_cmd(command, ['-t'])
+
+
+def _exec_cmd(command, extra_ssh_args=None):
     cmds = []
     for arg in command:
         arg = '"' + str(arg) + '"'
@@ -99,17 +111,21 @@ def _exec_cmd(command):
                    '-o', 'PreferredAuthentications=publickey',
                    '-o', 'StrictHostKeyChecking=no',
                    '-o', 'UserKnownHostsFile=/dev/null',
-                   '-l', world.callgen_login,
-                   socket.gethostbyname(world.callgen_host)]
+                   '-l', world.callgen_login]
+    if extra_ssh_args:
+        ssh_command.extend(extra_ssh_args)
+    ssh_command.append(socket.gethostbyname(world.callgen_host))
     ssh_command.extend(cmds)
 
+    print ssh_command
     p = Popen(ssh_command,
               stdout=PIPE,
               stderr=PIPE,
               close_fds=True)
     output = p.communicate()[0]
+    print p.returncode
 
     if p.returncode != 0:
         print output
 
-    return output
+    return p.returncode

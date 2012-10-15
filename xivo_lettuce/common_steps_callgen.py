@@ -39,8 +39,8 @@ def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
     )
 
 
-@step(u'Given I register extension "([^"]*)"')
-def given_i_register_extension(step, extension):
+@step(u'I register extension "([^"]*)"')
+def i_register_extension(step, extension):
     line = find_line_with_extension(extension)
     statscall_manager.execute_sip_register(line.name, line.secret)
 
@@ -64,8 +64,8 @@ def given_there_are_no_calls_running(step):
     statscall_manager.killall_process_sipp()
 
 
-@step(u'Given there is ([0-9]+) calls to extension "([^"]+)" and wait$')
-def given_there_is_n_calls_to_extension_and_wait(step, count, extension):
+@step(u'there is ([0-9]+) calls to extension "([^"]+)" and wait$')
+def there_is_n_calls_to_extension_and_wait(step, count, extension):
     statscall_manager.execute_n_calls_then_wait(count, extension)
 
 
