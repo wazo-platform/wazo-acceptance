@@ -4,11 +4,11 @@ import time
 
 from lettuce.decorators import step
 from lettuce.registry import world
-from datetime import datetime
 from utils.func import extract_number_and_context_from_extension
 from xivo_lettuce.common import open_url, element_is_in_list
 from xivo_lettuce import form
 from xivo_lettuce.checkbox import Checkbox
+from xivo_lettuce.manager.sys_manager import search_str_in_asterisk_log
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
@@ -33,13 +33,8 @@ def then_i_not_see_recording_file_of_this_call_in_monitoring_audio_files_page(st
 @step(u'Then I see rejected call to extension "([^"]+)" in asterisk log')
 def then_i_see_rejected_call_in_asterisk_log(step, extension):
     number, context = extract_number_and_context_from_extension(extension)
-    d = datetime.now()
-    regex_date = d.strftime("%b %d %H:%M:([0-9]{2})")
-    line_search = "\[%s\] NOTICE\[716\] chan_sip.c: Call from (.+) to extension '%s' rejected because extension not found in context '%s'." % (regex_date, number, context)
-    command = ['less', '/var/log/asterisk/messages', '|', 'grep', '-E', '"%s"' % line_search]
-    result = world.ssh_client_xivo.out_call(command)
-    if not result:
-        assert(False)
+    expression = "to extension '%s' rejected because extension not found in context '%s'" % (number, context)
+    assert search_str_in_asterisk_log(expression)
 
 
 @step(u'Then i see the called extension "([^"]*)" in call logs page')
