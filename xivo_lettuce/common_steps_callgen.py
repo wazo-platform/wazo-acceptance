@@ -4,7 +4,7 @@ import time
 from lettuce import step, world
 from xivo_lettuce.manager import queuelog_manager
 from xivo_lettuce.manager import statscall_manager
-from utils.func import extract_number_and_context_from_extension
+from utils.func import extract_number_from_extension
 from datetime import datetime
 
 
@@ -41,19 +41,19 @@ def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
 
 @step(u'Given I register extension "([^"]*)"')
 def given_i_register_extension(step, extension):
-    number, context = extract_number_and_context_from_extension(extension)
-    lines = [line for line in world.ws.lines.search(number)]
+    number = extract_number_from_extension(extension)
+    lines = world.ws.lines.search_by_number(number)
     if not lines:
-        assert(False)
+        raise AssertionError('No line with number %s' % number)
     statscall_manager.execute_sip_register(lines[0].name, lines[0].secret)
 
 
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
 def given_i_log_the_phone(step, agent_number, extension):
-    number, context = extract_number_and_context_from_extension(extension)
-    lines = [line for line in world.ws.lines.search(number)]
+    number = extract_number_from_extension(extension)
+    lines = world.ws.lines.search_by_number(number)
     if not lines:
-        assert(False)
+        raise AssertionError('No line with number %s' % number)
     statscall_manager.execute_sip_register(lines[0].name, lines[0].secret)
     statscall_manager.execute_n_calls_then_wait(1, '*31%s' % agent_number, username=lines[0].name, password=lines[0].secret)
     world.logged_agents.append(agent_number)
@@ -61,10 +61,10 @@ def given_i_log_the_phone(step, agent_number, extension):
 
 @step(u'Given I logout agent "([^"]*)" on extension "([^"]*)"')
 def given_i_logout_the_phone(step, agent_number, extension):
-    number, context = extract_number_and_context_from_extension(extension)
-    lines = [line for line in world.ws.lines.search(number)]
+    number = extract_number_from_extension(extension)
+    lines = world.ws.lines.search_by_number(number)
     if not lines:
-        assert(False)
+        raise AssertionError('No line with number %s' % number)
     statscall_manager.execute_n_calls_then_wait(1, '*32%s' % agent_number, username=lines[0].name, password=lines[0].secret)
 
 
@@ -126,7 +126,6 @@ def given_i_wait_then_i_answer_after_n_second_then_i_wait(step, ring_time):
     statscall_manager.execute_answer_then_wait(ring_time_ms)
 
 
-@step(u'When I wait ([0-9]+) seconds .*')
-@step(u'Given I wait ([0-9]+) seconds .*')
+@step(u'I wait (\d+) seconds')
 def given_i_wait_n_seconds(step, count):
     time.sleep(int(count))
