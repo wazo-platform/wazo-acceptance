@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import world
+from utils.func import extract_number_and_context_from_extension
 
 
 def delete_line_with_number(number, context):
@@ -19,6 +20,11 @@ def find_line_with_number(number, context):
         raise Exception('expecting 1 line with number %r and context %r; found %s' %
                         (number, context, len(lines)))
     return lines[0]
+
+
+def find_line_with_extension(extension):
+    number, context = extract_number_and_context_from_extension(extension)
+    return find_line_with_number(number, context)
 
 
 def find_line_id_with_number(number, context):

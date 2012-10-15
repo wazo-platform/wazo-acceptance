@@ -1,11 +1,11 @@
 # -*- coding: UTF-8 -*-
 
 import time
+from datetime import datetime
 from lettuce import step, world
 from xivo_lettuce.manager import queuelog_manager
 from xivo_lettuce.manager import statscall_manager
-from utils.func import extract_number_from_extension
-from datetime import datetime
+from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
 
 
 @step(u'Given there is no "([A-Z_]+)" entry for agent "([^"]*)"')
@@ -41,31 +41,22 @@ def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
 
 @step(u'Given I register extension "([^"]*)"')
 def given_i_register_extension(step, extension):
-    number = extract_number_from_extension(extension)
-    lines = world.ws.lines.search_by_number(number)
-    if not lines:
-        raise AssertionError('No line with number %s' % number)
-    statscall_manager.execute_sip_register(lines[0].name, lines[0].secret)
+    line = find_line_with_extension(extension)
+    statscall_manager.execute_sip_register(line.name, line.secret)
 
 
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
 def given_i_log_the_phone(step, agent_number, extension):
-    number = extract_number_from_extension(extension)
-    lines = world.ws.lines.search_by_number(number)
-    if not lines:
-        raise AssertionError('No line with number %s' % number)
-    statscall_manager.execute_sip_register(lines[0].name, lines[0].secret)
-    statscall_manager.execute_n_calls_then_wait(1, '*31%s' % agent_number, username=lines[0].name, password=lines[0].secret)
+    line = find_line_with_extension(extension)
+    statscall_manager.execute_sip_register(line.name, line.secret)
+    statscall_manager.execute_n_calls_then_wait(1, '*31%s' % agent_number, username=line.name, password=line.secret)
     world.logged_agents.append(agent_number)
 
 
 @step(u'Given I logout agent "([^"]*)" on extension "([^"]*)"')
 def given_i_logout_the_phone(step, agent_number, extension):
-    number = extract_number_from_extension(extension)
-    lines = world.ws.lines.search_by_number(number)
-    if not lines:
-        raise AssertionError('No line with number %s' % number)
-    statscall_manager.execute_n_calls_then_wait(1, '*32%s' % agent_number, username=lines[0].name, password=lines[0].secret)
+    line = find_line_with_extension(extension)
+    statscall_manager.execute_n_calls_then_wait(1, '*32%s' % agent_number, username=line.name, password=line.secret)
 
 
 @step(u'Given there are no calls running')

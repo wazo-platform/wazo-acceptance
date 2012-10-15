@@ -31,10 +31,6 @@ def extract_number_and_context_from_extension(extension, default_context='defaul
     return number, context
 
 
-def extract_number_from_extension(extension):
-    return extract_number_and_context_from_extension(extension)[0]
-
-
 def read_last_log_lines(logs,
                         min_timestamp,
                         date_format="%b %d %H:%M:%S",
