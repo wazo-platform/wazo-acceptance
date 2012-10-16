@@ -13,29 +13,29 @@ def i_go_on_the_general_settings_sip_protocol_page_tab(step, tab):
     go_to_tab(tab)
 
 
-@step(u'When I enable the SIP encryption option')
-def when_i_enable_the_sip_encryption_option(step):
-    option = _get_sip_encryption_option()
+@step(u'When I enable the "([^"]*)" option')
+def when_i_enable_the_sip_encryption_option(step, label):
+    option = _get_sip_option(label)
     option.check()
     form.submit_form()
 
 
-@step(u'When I disable the SIP encryption option')
-def when_i_disable_the_sip_encryption_option(step):
-    option = _get_sip_encryption_option()
+@step(u'When I disable the "([^"]*)" option')
+def when_i_disable_the_sip_encryption_option(step, label):
+    option = _get_sip_option(label)
     option.uncheck()
     form.submit_form()
 
 
-@step(u'Then the SIP encryption option is enabled')
-def then_the_sip_encryption_option_is_enabled(step):
-    option = _get_sip_encryption_option()
+@step(u'Then the "([^"]*)" option is enabled')
+def then_the_sip_encryption_option_is_enabled(step, label):
+    option = _get_sip_option(label)
     assert option.is_checked()
 
 
-@step(u'Then the SIP encryption option is disabled')
-def then_the_sip_encryption_option_is_disabled(step):
-    option = _get_sip_encryption_option()
+@step(u'Then the "([^"]*)" option is disabled')
+def then_the_sip_encryption_option_is_disabled(step, label):
+    option = _get_sip_option(label)
     assert not option.is_checked()
 
 
@@ -45,9 +45,7 @@ def then_i_see_sip_encryption_in_file(step, var_name, expected_var_val, file):
     assert(expected_var_val == var_val)
 
 
-def _get_sip_encryption_option():
-    open_url('general_sip')
-    go_to_tab('Security')
-    option = Checkbox.from_label('Encryption')
+def _get_sip_option(label):
+    option = Checkbox.from_label(label)
 
     return option
