@@ -117,11 +117,10 @@ def find_user_id_with_number(number, context='default'):
     user_ids = []
     users = world.ws.users.search(number)
     for user in users:
-        if user.context == context:
+        if user.line and user.line.context == context:
             user_ids.append(user.id)
 
     return user_ids
-
 
 
 def user_id_is_in_group_name(group_name, user_id):
