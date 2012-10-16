@@ -115,10 +115,10 @@ def _search_users_with_firstname_lastname(firstname, lastname):
 
 def find_user_id_with_number(number, context='default'):
     user_ids = []
-    users = world.ws.users.search(number)
-    for user in users:
-        if user.line and user.line.context == context:
-            user_ids.append(user.id)
+    lines = world.ws.lines.list()
+    for line in lines:
+        if line.number == number and line.context == context:
+            user_ids.append(line.user_id)
 
     return user_ids
 
