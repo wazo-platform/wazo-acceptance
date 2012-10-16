@@ -96,11 +96,10 @@ def _search_users_with_firstname_lastname(firstname, lastname):
 
 def user_id_is_in_group_name(group_name, user_id):
     try:
-        group_id = group_manager_ws.get_group_id_with_name(group_name)
+        group = group_manager_ws.find_group_with_name(group_name)
     except Exception:
         return False
     else:
-        group = group_manager_ws.get_group_with_id(group_id)
         for id in group.user_ids:
             if id == user_id:
                 return True

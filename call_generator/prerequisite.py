@@ -10,6 +10,7 @@ def main():
     initialize()
     try:
         context_manager_ws.update_contextnumbers_user('default', 1000, 1999)
+        context_manager_ws.update_contextnumbers_group('default', 2000, 2999)
 
         callgen_ip = socket.gethostbyname(world.callgen_host)
         trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')
