@@ -10,8 +10,8 @@ Feature: General Settings SIP
 
     Scenario: ISDN compatibility
         I go on the General Settings > SIP Protocol page, tab "Signaling"
-        When I enable the "ISDN compatibility" option
+        When I enable the "ISDN compatibility (early media)" option
         Then I should see "prematuremedia" to "no" in "sip.conf"
         I go on the General Settings > SIP Protocol page, tab "Signaling"
-        When I disable the "ISDN compatibility" option
+        When I disable the "ISDN compatibility (early media)" option
         Then I should see "prematuremedia" to "yes" in "sip.conf"
