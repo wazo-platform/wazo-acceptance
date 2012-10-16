@@ -42,6 +42,25 @@ def add_user(data_dict):
     return int(ret)
 
 
+def add_or_replace_user(data_dict):
+    firstname = data_dict['firstname']
+    lastname = data_dict.get('lastname', '')
+    delete_user_with_firstname_lastname(firstname, lastname)
+
+    if 'line_number' in data_dict:
+        number = data_dict['line_number']
+        context = data_dict.get('line_context', 'default')
+        delete_user_with_number(number, context)
+
+    return add_user(data_dict)
+
+
+def delete_user_with_number(number, context='default'):
+    user_ids = find_user_id_with_number(number, context)
+    for user_id in user_ids:
+        world.ws.users.delete(user_id)
+
+
 def delete_user_with_firstname_lastname(firstname, lastname):
     users = world.ws.users.search('%s %s' % (firstname, lastname))
     for user in users:
@@ -92,6 +111,17 @@ def _search_users_with_firstname_lastname(firstname, lastname):
     return [user for user in users if
             user.firstname == firstname and
             user.lastname == lastname]
+
+
+def find_user_id_with_number(number, context='default'):
+    user_ids = []
+    users = world.ws.users.search(number)
+    for user in users:
+        if user.context == context:
+            user_ids.append(user.id)
+
+    return user_ids
+
 
 
 def user_id_is_in_group_name(group_name, user_id):

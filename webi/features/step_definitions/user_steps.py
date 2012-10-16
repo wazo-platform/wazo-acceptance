@@ -16,50 +16,57 @@ from utils import func
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)"$')
 def given_there_is_a_user(step, firstname, lastname):
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
-    user_data = {'firstname': firstname,
-                 'lastname': lastname}
-    user_manager_ws.add_user(user_data)
+    user_data = {
+        'firstname': firstname,
+        'lastname': lastname
+    }
+    user_manager_ws.add_or_replace_user(user_data)
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)"$')
 def given_there_is_a_user_with_extension(step, firstname, lastname, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     voicemail_manager_ws.delete_voicemail_with_number(number)
-    line_manager_ws.delete_line_with_number(number, context)
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
     user_data = {
         'firstname': firstname,
         'lastname': lastname,
         'line_context': context,
         'line_number': number
     }
-    user_manager_ws.add_user(user_data)
+    user_manager_ws.add_or_replace_user(user_data)
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" in group "([^"]*)"$')
 def given_there_is_a_user_with_a_sip_line_in_group(step, firstname, lastname, extension, group_name):
     number, context = func.extract_number_and_context_from_extension(extension)
     voicemail_manager_ws.delete_voicemail_with_number(number)
-    line_manager_ws.delete_line_with_number(number, context)
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
     user_data = {
         'firstname': firstname,
         'lastname': lastname,
         'line_context': context,
         'line_number': number
     }
-    user_id = user_manager_ws.add_user(user_data)
-    group_manager_ws.delete_group_with_name(group_name)
-    group_manager_ws.add_group(group_name, user_ids=[user_id])
+    user_id = user_manager_ws.add_or_replace_user(user_data)
+    group_manager_ws.add_or_replace_group(group_name, user_ids=[user_id])
+
+
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with CTI profile "([^"]*)"$')
+def given_there_is_a_user_with_cti_profile(step, firstname, lastname, cti_profile):
+    user_data = {
+        'firstname': firstname,
+        'lastname': lastname,
+        'enable_client': True,
+        'client_username': firstname.lower(),
+        'client_password': lastname.lower(),
+        'client_profile': cti_profile
+    }
+    user_manager_ws.add_or_replace_user(user_data)
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" and CTI profile "([^"]*)"$')
 def given_there_is_a_user_with_extension_and_cti_profile(step, firstname, lastname, extension, cti_profile):
     number, context = func.extract_number_and_context_from_extension(extension)
     voicemail_manager_ws.delete_voicemail_with_number(number)
-    line_manager_ws.delete_line_with_number(number, context)
-    user_manager_ws.delete_user_with_firstname(firstname)
     user_data = {'firstname': firstname,
                  'lastname': lastname,
                  'language': 'en_US',
@@ -70,15 +77,13 @@ def given_there_is_a_user_with_extension_and_cti_profile(step, firstname, lastna
                  'client_password': lastname.lower(),
                  'client_profile': cti_profile
                  }
-    user_manager_ws.add_user(user_data)
+    user_manager_ws.add_or_replace_user(user_data)
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)", voicemail and CTI profile "([^"]*)"$')
 def given_i_there_is_a_user_with_extension_with_voicemail_and_cti_profile(step, firstname, lastname, extension, cti_profile):
     number, context = func.extract_number_and_context_from_extension(extension)
     voicemail_manager_ws.delete_voicemail_with_number(number)
-    line_manager_ws.delete_line_with_number(number, context)
-    user_manager_ws.delete_user_with_firstname(firstname)
     user_data = {'firstname': firstname,
                  'lastname': lastname,
                  'language': 'en_US',
@@ -91,7 +96,7 @@ def given_i_there_is_a_user_with_extension_with_voicemail_and_cti_profile(step, 
                  'client_password': lastname.lower(),
                  'client_profile': cti_profile
                  }
-    user_manager_ws.add_user(user_data)
+    user_manager_ws.add_or_replace_user(user_data)
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with an agent "([^"]*)" and CTI profile "([^"]*)"$')
