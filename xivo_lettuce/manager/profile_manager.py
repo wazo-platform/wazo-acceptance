@@ -56,8 +56,12 @@ def remove_service(service_label):
 
 def remove_all_services():
     """Removes all services."""
-    options = world.browser.find_elements_by_xpath(
-        "//select[@id = 'it-services']/option")
+    try:
+        options = world.browser.find_elements_by_xpath(
+            "//select[@id = 'it-services']/option")
+    except NoSuchElementException:
+        return
+
     for option in options:
         option.click()
 
