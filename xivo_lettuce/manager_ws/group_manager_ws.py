@@ -4,29 +4,6 @@ from lettuce import world
 from xivo_ws.objects.group import Group
 
 
-def get_group_with_id(id):
-    group = world.ws.groups.view(id)
-    if group:
-        return group
-    raise Exception('no group with id %s' % id)
-
-
-def get_group_id_with_number(number, context):
-    groups = world.ws.groups.search_by_number(number)
-    for group in groups:
-        if group.number == str(number) and group.context == str(context):
-            return group.id
-    raise Exception('no group with number %s' % number)
-
-
-def get_group_id_with_name(name):
-    groups = world.ws.groups.search_by_name(name)
-    for group in groups:
-        if group.name == str(name):
-            return group.id
-    raise Exception('no group with name %s' % group)
-
-
 def add_group(group_name, number='', context='default', user_ids=None):
     if not user_ids:
         user_ids = []
