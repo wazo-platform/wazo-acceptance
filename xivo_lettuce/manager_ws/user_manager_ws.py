@@ -70,22 +70,28 @@ def delete_users_with_profile(profile):
 
 
 def is_user_with_name_exists(firstname, lastname):
-    user_ids = find_user_id_with_firstname_lastname(firstname, lastname)
-    return bool(user_ids)
+    users = _search_users_with_firstname_lastname(firstname, lastname)
+    return bool(users)
 
 
-def get_user_id_with_firstname_lastname(firstname, lastname):
-    user_ids = find_user_id_with_firstname_lastname(firstname, lastname)
-    if not user_ids:
-        raise Exception('no user with name %r %r' % (firstname, lastname))
-    else:
-        return user_ids[0]
+def find_user_with_firstname_lastname(firstname, lastname):
+    users = _search_users_with_firstname_lastname(firstname, lastname)
+    if len(users) != 1:
+        raise Exception('expecting 1 user with name %r %r; found %s' %
+                        (firstname, lastname, len(users)))
+    return users[0]
 
 
 def find_user_id_with_firstname_lastname(firstname, lastname):
+    user = find_user_with_firstname_lastname(firstname, lastname)
+    return user.id
+
+
+def _search_users_with_firstname_lastname(firstname, lastname):
     users = world.ws.users.search('%s %s' % (firstname, lastname))
-    return [user.id for user in users if
-            user.firstname == firstname and user.lastname == lastname]
+    return [user for user in users if
+            user.firstname == firstname and
+            user.lastname == lastname]
 
 
 def user_id_is_in_group_name(group_name, user_id):

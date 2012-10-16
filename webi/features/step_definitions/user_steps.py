@@ -148,12 +148,11 @@ def when_i_create_a_user_in_group(step, firstname, lastname, group):
 
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
-    id = user_manager_ws.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
+    user_id = user_manager_ws.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
     user_manager_ws.delete_user_with_firstname_lastname(dest_firstname, dest_lastname)
-    if len(id) > 0:
-        open_url('user', 'edit', {'id': id[0]})
-        user_manager.type_user_names(dest_firstname, dest_lastname)
-        form.submit_form()
+    open_url('user', 'edit', {'id': user_id})
+    user_manager.type_user_names(dest_firstname, dest_lastname)
+    form.submit_form()
 
 
 @step(u'When I remove user "([^"]*)" "([^"]*)"')
@@ -164,10 +163,9 @@ def remove_user(step, firstname, lastname):
 
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"')
 def then_user_is_in_group(step, firstname, lastname, group_name):
-    user_id_list = user_manager_ws.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_manager_ws.find_user_id_with_firstname_lastname(firstname, lastname)
     time.sleep(3)
-    if len(user_id_list) > 0:
-        assert user_manager_ws.user_id_is_in_group_name(group_name, user_id_list[0])
+    assert user_manager_ws.user_id_is_in_group_name(group_name, user_id)
 
 
 @step(u'Then I should be at the user list page')
