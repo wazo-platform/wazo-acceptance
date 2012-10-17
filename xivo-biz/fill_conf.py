@@ -35,16 +35,23 @@ class Prerequisite(object):
         world.ws = xivo_ws.XivoServer(hostname, login, password)
 
         self._init_webservices()
-
         self._create_pgpass_on_remote_host()
+
         self._check_configuration_dahdi()
         self._configuration_dahdi()
 
-        context_manager_ws.update_contextnumbers_incall('from-extern', 1000, 2000, 4)
+        self._prepare_context()
         self._prepare_trunk()
         self._prepare_user()
-        self._prepare_incall()
         self._prepare_outcall()
+        self._prepare_incall()
+
+        print 'Configuration finished.'
+
+    def _prepare_context(self):
+        print 'Configuring Context..'
+        context_manager_ws.update_contextnumbers_user('default', 100, 199)
+        context_manager_ws.update_contextnumbers_incall('from-extern', 1000, 2000, 4)
 
     def _prepare_trunk(self):
         print 'Configuring Trunk..'
@@ -69,26 +76,28 @@ class Prerequisite(object):
                     'line_number': '101',
                     'client_username': 'user1'}
         user_data.update(user_data_tpl)
-        user_exist = user_manager_ws.find_user_id_with_firstname_lastname('user', '1')
+        user_exist = user_manager_ws.is_user_with_name_exists('user', '1')
         if not user_exist:
             user_manager_ws.add_user(user_data)
         user_data = {'lastname': '2',
                     'line_number': '102',
                     'client_username': 'user2'}
         user_data.update(user_data_tpl)
-        user_exist = user_manager_ws.find_user_id_with_firstname_lastname('user', '2')
+        user_exist = user_manager_ws.is_user_with_name_exists('user', '2')
         if not user_exist:
             user_manager_ws.add_user(user_data)
 
         line1 = world.ws.lines.search('101')
         line2 = world.ws.lines.search('102')
 
+        print
         print 'User1 line infos:'
         print 'Name: %s' % line1[0].name
         print 'Secret: %s' % line1[0].secret
         print 'User2 line infos:'
         print 'Name: %s' % line2[0].name
         print 'Secret: %s' % line2[0].secret
+        print
 
     def _prepare_incall(self):
         print 'Configuring Incall..'
@@ -132,7 +141,7 @@ class Prerequisite(object):
         world.ssh_client_xivo.check_call(cmd)
 
     def _configuration_dahdi(self):
-        print 'Configuring Dahdi'
+        print 'Configuring Dahdi..'
         cmd = ['dahdi_genconf']
         world.ssh_client_xivo.check_call(cmd)
         cmd = ['sed', '-i', '"s/,crc4//g"', '/etc/dahdi/system.conf']
@@ -147,7 +156,6 @@ class Prerequisite(object):
         world.ssh_client_xivo.check_call(cmd)
         cmd = ['sed', '-i', '"23s/pri_cpe/pri_net/"', '/etc/asterisk/dahdi-channels.conf']
         world.ssh_client_xivo.check_call(cmd)
-        print 'Configuration finished.'
         cmd = ['xivo-service', 'restart']
         print 'Wait during xivo-service restart'
         world.ssh_client_xivo.check_call(cmd)
