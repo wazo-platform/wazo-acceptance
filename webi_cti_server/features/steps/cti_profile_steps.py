@@ -5,8 +5,6 @@ from lettuce import step
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce.common import open_url, find_line
 from xivo_lettuce.manager import profile_manager
-from webi.features.step_definitions import user_steps
-from xivo_lettuce.manager.profile_manager import delete_profile
 
 
 @step(u'When I add a CTI profile')
