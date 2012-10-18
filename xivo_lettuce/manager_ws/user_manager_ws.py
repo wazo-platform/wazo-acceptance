@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from lettuce import world
 import voicemail_manager_ws
-from lettuce.registry import world
 from xivo_ws.objects.user import User, UserLine, UserVoicemail
-from xivo_lettuce.manager_ws import line_manager_ws, group_manager_ws
+from xivo_lettuce.manager_ws import group_manager_ws
 
 
 def add_user(data_dict):
@@ -55,37 +55,40 @@ def add_or_replace_user(data_dict):
     return add_user(data_dict)
 
 
-def delete_user_with_number(number, context='default'):
-    user_ids = find_user_id_with_number(number, context)
+def delete_user_with_number(number, context):
+    user_ids = _search_user_ids_with_number(number, context)
     for user_id in user_ids:
-        world.ws.users.delete(user_id)
+        _delete_user_with_id(user_id)
 
 
 def delete_user_with_firstname_lastname(firstname, lastname):
-    users = world.ws.users.search('%s %s' % (firstname, lastname))
+    users = _search_users_with_firstname_lastname(firstname, lastname)
     for user in users:
-        if user.voicemail:
-            voicemail_manager_ws.delete_voicemail_with_id(user.voicemail.id)
-        if user.line:
-            line_manager_ws.delete_line_with_number(user.line.number)
-        world.ws.users.delete(user.id)
+        _delete_user(user)
 
 
 def delete_user_with_firstname(firstname):
     users = world.ws.users.search(firstname)
     for user in users:
-        if user.voicemail:
-            voicemail_manager_ws.delete_voicemail_with_id(user.voicemail.id)
-        if user.line:
-            line_manager_ws.delete_line_with_number(user.line.number)
-        world.ws.users.delete(user.id)
+        _delete_user(user)
 
 
 def delete_users_with_profile(profile):
     users = world.ws.users.list()
     for user in users:
         if user.client_profile == profile:
-            world.ws.users.delete(user.id)
+            _delete_user(user)
+
+
+def _delete_user_with_id(user_id):
+    user = world.ws.users.view(user_id)
+    _delete_user(user)
+
+
+def _delete_user(user):
+    if user.voicemail:
+        voicemail_manager_ws.delete_voicemail_with_id(user.voicemail.id)
+    world.ws.users.delete(user.id)
 
 
 def is_user_with_name_exists(firstname, lastname):
@@ -113,23 +116,14 @@ def _search_users_with_firstname_lastname(firstname, lastname):
             user.lastname == lastname]
 
 
-def find_user_id_with_number(number, context='default'):
-    user_ids = []
-    lines = world.ws.lines.list()
-    for line in lines:
-        if line.number == number and line.context == context:
-            user_ids.append(line.user_id)
-
-    return user_ids
+def _search_user_ids_with_number(number, context):
+    lines = world.ws.lines.search_by_number(number)
+    return [line.user_id for line in lines if line.context == context]
 
 
 def user_id_is_in_group_name(group_name, user_id):
-    try:
-        group = group_manager_ws.view_group_with_name(group_name)
-    except Exception:
-        return False
-    else:
-        for id in group.user_ids:
-            if id == user_id:
-                return True
+    group = group_manager_ws.view_group_with_name(group_name)
+    for id in group.user_ids:
+        if id == user_id:
+            return True
     return False
