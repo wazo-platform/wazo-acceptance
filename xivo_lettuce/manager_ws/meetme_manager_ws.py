@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from xivo_lettuce.common import get_webservices
-
-WS = get_webservices('meetme')
+from lettuce import world
 
 
 def delete_meetme_with_confno(confno):
-    for id in find_meetme_id_with_confno(confno):
-        WS.delete(id)
+    for meetme in _search_meetmes_by_confno(confno):
+        world.ws.confrooms.delete(meetme.id)
 
 
-def find_meetme_id_with_confno(confno):
-    list = WS.search(confno)
-    if list:
-        return [meetme['id'] for meetme in list if
-                meetme['confno'] == confno]
-    return []
+def _search_meetmes_by_confno(confno):
+    return world.ws.confrooms.search_by_number(confno)
