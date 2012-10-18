@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.registry import world
+from lettuce import world
 
 
 def delete_voicemail_with_id(voicemail_id):
     world.ws.voicemails.delete(voicemail_id)
 
 
-def delete_voicemail_with_number(voicemail_number):
-    for id in find_voicemail_id_with_number(voicemail_number):
-        delete_voicemail_with_id(id)
+def delete_all_voicemails_with_number(voicemail_number):
+    for voicemail in _search_voicemails_with_number(voicemail_number):
+        delete_voicemail_with_id(voicemail.id)
 
 
-def find_voicemail_id_with_number(voicemail_number):
-    voicemail_list = world.ws.voicemails.search(voicemail_number)
-    if voicemail_list:
-        return [voicemail.id for voicemail in voicemail_list if
-                voicemail.mailbox == str(voicemail_number)]
-    return []
+def _search_voicemails_with_number(number):
+    number = str(number)
+
+    voicemails = world.ws.voicemails.search(number)
+    return [voicemail for voicemail in voicemails if voicemail.mailbox == number]

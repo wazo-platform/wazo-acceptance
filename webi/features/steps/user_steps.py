@@ -26,7 +26,7 @@ def given_there_is_a_user(step, firstname, lastname):
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)"$')
 def given_there_is_a_user_with_extension(step, firstname, lastname, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_voicemail_with_number(number)
+    voicemail_manager_ws.delete_all_voicemails_with_number(number)
     user_data = {
         'firstname': firstname,
         'lastname': lastname,
@@ -39,7 +39,7 @@ def given_there_is_a_user_with_extension(step, firstname, lastname, extension):
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" in group "([^"]*)"$')
 def given_there_is_a_user_with_a_sip_line_in_group(step, firstname, lastname, extension, group_name):
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_voicemail_with_number(number)
+    voicemail_manager_ws.delete_all_voicemails_with_number(number)
     user_data = {
         'firstname': firstname,
         'lastname': lastname,
@@ -66,7 +66,7 @@ def given_there_is_a_user_with_cti_profile(step, firstname, lastname, cti_profil
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" and CTI profile "([^"]*)"$')
 def given_there_is_a_user_with_extension_and_cti_profile(step, firstname, lastname, extension, cti_profile):
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_voicemail_with_number(number)
+    voicemail_manager_ws.delete_all_voicemails_with_number(number)
     user_data = {'firstname': firstname,
                  'lastname': lastname,
                  'language': 'en_US',
@@ -83,7 +83,7 @@ def given_there_is_a_user_with_extension_and_cti_profile(step, firstname, lastna
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)", voicemail and CTI profile "([^"]*)"$')
 def given_i_there_is_a_user_with_extension_with_voicemail_and_cti_profile(step, firstname, lastname, extension, cti_profile):
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_voicemail_with_number(number)
+    voicemail_manager_ws.delete_all_voicemails_with_number(number)
     user_data = {'firstname': firstname,
                  'lastname': lastname,
                  'language': 'en_US',
