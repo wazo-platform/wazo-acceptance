@@ -153,5 +153,9 @@ URLS = {
     'general_settings': {
         'web': '/xivo/configuration/index.php/manage/general',
         'ws': None
+    },
+    'phonebook': {
+        'web': '/service/ipbx/index.php/pbx_services/phonebook',
+        'ws': None
     }
 }
