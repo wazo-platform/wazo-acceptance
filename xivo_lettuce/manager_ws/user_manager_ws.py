@@ -81,8 +81,7 @@ def delete_users_with_profile(profile):
 
 
 def _delete_user_with_id(user_id):
-    user = world.ws.users.view(user_id)
-    _delete_user(user)
+    world.ws.users.delete(user_id)
 
 
 def _delete_user(user):
