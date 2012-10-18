@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import step
-from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
-    context_manager_ws, schedule_manager_ws
+from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, schedule_manager_ws
 from utils import func
 from xivo_lettuce import common
 from xivo_lettuce import form
+from xivo_lettuce.manager.queue_manager import type_queue_name_display_name_number_context, \
+    remove_queues_with_name_or_number_if_exist, type_queue_ring_strategy
+from xivo_lettuce.manager_ws.queue_manager_ws import get_queue_id_with_queue_name
 
 
 @step(u'Given there is no queue "([^"]*)"')
@@ -21,7 +23,7 @@ def given_there_is_no_queue_with_number_1(step, queue_number):
 @step(u'Given there is a queue "([^"]+)" with extension "([^"]+)"$')
 def given_there_is_a_queue_in_context_with_number(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    _remove_queues_with_name_or_number_if_exist(name, number)
+    remove_queues_with_name_or_number_if_exist(name, number)
     data = {'name': name,
             'number': number,
             'context': context}
@@ -31,7 +33,7 @@ def given_there_is_a_queue_in_context_with_number(step, name, extension):
 @step(u'Given there is a queue "([^"]+)" joinempty with extension "([^"]+)"$')
 def given_there_is_a_queue_joinempty_with_extension(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    _remove_queues_with_name_or_number_if_exist(name, number)
+    remove_queues_with_name_or_number_if_exist(name, number)
     data = {'name': name,
             'number': number,
             'context': context,
@@ -42,7 +44,7 @@ def given_there_is_a_queue_joinempty_with_extension(step, name, extension):
 @step(u'Given there is a queue "([^"]+)" diverted with extension "([^"]+)" with agent "([^"]+)"$')
 def given_there_is_a_queue_diverted_with_extension_with_agent(step, name, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)
-    _remove_queues_with_name_or_number_if_exist(name, number)
+    remove_queues_with_name_or_number_if_exist(name, number)
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     data = {'name': name,
             'number': number,
@@ -56,7 +58,7 @@ def given_there_is_a_queue_diverted_with_extension_with_agent(step, name, extens
 @step(u'Given there is a queue "([^"]+)" closed with extension "([^"]+)"$')
 def given_there_is_a_queue_closed_with_extension_with_agent(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    _remove_queues_with_name_or_number_if_exist(name, number)
+    remove_queues_with_name_or_number_if_exist(name, number)
     opened = {'hours': '00:00-00:01',
               'weekdays': '1-1',
               'monthdays': '1-1',
@@ -75,7 +77,7 @@ def given_there_is_a_queue_closed_with_extension_with_agent(step, name, extensio
 @step(u'Given there is a queue "([^"]+)" leaveempty with extension "([^"]+)" with agent "([^"]+)"$')
 def given_there_is_a_queue_leaveempty_with_extension_with_agent(step, name, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)
-    _remove_queues_with_name_or_number_if_exist(name, number)
+    remove_queues_with_name_or_number_if_exist(name, number)
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     data = {'name': name,
             'number': number,
@@ -88,7 +90,7 @@ def given_there_is_a_queue_leaveempty_with_extension_with_agent(step, name, exte
 @step(u'Given there is a queue "([^"]+)" with ringing time of "([0-9]+)s" with extension "([^"]+)" with agent "([^"]+)"')
 def given_there_is_a_queue_with_ringing_time_with_extension_with_agent(step, name, ringing_time, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)
-    _remove_queues_with_name_or_number_if_exist(name, number)
+    remove_queues_with_name_or_number_if_exist(name, number)
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     data = {'name': name,
             'number': number,
@@ -101,7 +103,7 @@ def given_there_is_a_queue_with_ringing_time_with_extension_with_agent(step, nam
 @step(u'Given there is a queue "([^"]+)" with extension "([^"]+)" with agent "([^"]*)"$')
 def given_there_is_a_queue_in_context_with_extension_with_agent(step, name, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)
-    _remove_queues_with_name_or_number_if_exist(name, number)
+    remove_queues_with_name_or_number_if_exist(name, number)
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     data = {'name': name,
             'number': number,
@@ -113,7 +115,7 @@ def given_there_is_a_queue_in_context_with_extension_with_agent(step, name, exte
 @step(u'Given there is a queue "([^"]+)" saturated with extension "([^"]+)" with agent "([^"]+)"$')
 def given_there_is_a_queue_saturated_in_context_with_extension_with_agent(step, name, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)
-    _remove_queues_with_name_or_number_if_exist(name, number)
+    remove_queues_with_name_or_number_if_exist(name, number)
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     data = {'name': name,
             'number': number,
@@ -125,29 +127,48 @@ def given_there_is_a_queue_saturated_in_context_with_extension_with_agent(step, 
 
 @step(u'When I add the queue "([^"]*)" with display name "([^"]*)" with extension "([^"]*)" in "([^"]*)"$')
 def when_i_add_the_queue_1_with_display_name_2_with_extension_3_in_4(step, name, display_name, extension, context):
-    _remove_queues_with_name_or_number_if_exist(name, extension)
+    remove_queues_with_name_or_number_if_exist(name, extension)
     common.open_url('queue', 'add')
-    _type_queue_name_display_name_number_context(name, display_name, extension, context)
+    type_queue_name_display_name_number_context(name, display_name, extension, context)
     form.submit_form()
 
 
 @step(u'When I add the queue "([^"]*)" with display name "([^"]*)" with extension "([^"]*)" in "([^"]*)" with errors$')
 def when_i_add_the_queue_1_with_display_name_2_with_extension_3_in_4_with_errors(step, name, display_name, extension, context):
-    _remove_queues_with_name_or_number_if_exist(name, extension)
+    remove_queues_with_name_or_number_if_exist(name, extension)
     common.open_url('queue', 'add')
-    _type_queue_name_display_name_number_context(name, display_name, extension, context)
+    type_queue_name_display_name_number_context(name, display_name, extension, context)
     form.submit_form_with_errors()
 
 
-def _remove_queues_with_name_or_number_if_exist(queue_name, queue_number):
-    queue_manager_ws.delete_queue_with_name_if_exists(queue_name)
-    queue_manager_ws.delete_queue_with_number_if_exists(queue_number)
+@step(u'When I add the queue "([^"]*)" with extension "([^"]*)" with ring strategy at "([^"]*)"$')
+def when_i_add_the_queue_group1_with_extension_group2_with_ring_strategy_at_group3(step, queue_name, extension, ring_strategy):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    remove_queues_with_name_or_number_if_exist(queue_name, number)
+    common.open_url('queue', 'add')
+    type_queue_name_display_name_number_context(queue_name, queue_name, number, context)
+    type_queue_ring_strategy(ring_strategy)
+    form.submit_form()
 
 
-def _type_queue_name_display_name_number_context(name, display_name, extension, context):
-    form.set_text_field('Name', name)
-    form.set_text_field('Display name', display_name)
-    form.set_text_field('Number', extension)
-    context = context_manager_ws.get_context_with_name(context)
-    context_field_value = '%s (%s)' % (context.display_name, context.name)
-    form.set_select_field('Context', context_field_value)
+@step(u'When I edit the queue "([^"]*)"$')
+def when_i_edit_the_queue_group1(step, queue_name):
+    queue_id = get_queue_id_with_queue_name(queue_name)
+    common.open_url('queue', 'edit', {'id': queue_id})
+    form.submit_form()
+
+
+@step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)"$')
+def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_name, ring_strategy):
+    queue_id = get_queue_id_with_queue_name(queue_name)
+    common.open_url('queue', 'edit', {'id': queue_id})
+    type_queue_ring_strategy(ring_strategy)
+    form.submit_form()
+
+
+@step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)" with errors$')
+def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(step, queue_name, ring_strategy):
+    queue_id = get_queue_id_with_queue_name(queue_name)
+    common.open_url('queue', 'edit', {'id': queue_id})
+    type_queue_ring_strategy(ring_strategy)
+    form.submit_form_with_errors()
