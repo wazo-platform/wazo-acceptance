@@ -8,6 +8,9 @@ sudo apt-get install xvfb
 
 Example:
 
+/!\ Important
+You must execute "utils/prerequisite.py" before testing !
+
 Start a test using :
 
 cd webi
