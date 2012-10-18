@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
 
 from lettuce import step, world
 from xivo_lettuce.xivoclient import xivoclient_step, xivoclient

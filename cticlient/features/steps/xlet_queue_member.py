@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from lettuce import step, world
-from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
+from xivo_lettuce.xivoclient import xivoclient_step
 
 
 @step(u'Then the Queue members xlet is empty')
