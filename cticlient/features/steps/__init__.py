@@ -5,5 +5,5 @@ import xivo_lettuce.common_steps_webi
 import xivo_lettuce.common_steps_callgen
 import xivo_lettuce.common_steps_xivoclient
 from webi.features.steps import user_steps, incall_steps, group_steps
-from cti_server.features.steps import sheet_steps
+from features.cti_server.steps import sheet_steps
 from features.call_center.steps import agent_steps, queue_steps
