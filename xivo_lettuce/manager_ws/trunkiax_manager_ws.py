@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from xivo_ws.objects.iaxtrunk import IAXTrunk
-from lettuce.registry import world
+from lettuce import world
+from xivo_ws import IAXTrunk
 
 
 def get_trunkiax_id_with_name(name):

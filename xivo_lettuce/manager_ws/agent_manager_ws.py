@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.registry import world
+from lettuce import world
 from xivo_ws import Agent
 
 

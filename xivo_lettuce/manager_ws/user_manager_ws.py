@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from lettuce import world
 import voicemail_manager_ws
-from xivo_ws.objects.user import User, UserLine, UserVoicemail
+from lettuce import world
+from xivo_ws import User, UserLine, UserVoicemail
 from xivo_lettuce.manager_ws import group_manager_ws
 
 

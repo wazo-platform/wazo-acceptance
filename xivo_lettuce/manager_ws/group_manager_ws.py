@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import world
-from xivo_ws.objects.group import Group
+from xivo_ws import Group
 
 
 def add_group(group_name, number='', context='default', user_ids=None):

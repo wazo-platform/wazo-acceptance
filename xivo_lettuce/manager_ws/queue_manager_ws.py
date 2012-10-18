@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.registry import world
-from xivo_ws.objects.queue import Queue
+from lettuce import world
+from xivo_ws import Queue
 
 
 def get_queue_id_with_queue_name(queue_name):

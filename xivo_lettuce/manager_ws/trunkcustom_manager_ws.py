@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from xivo_ws.objects.customtrunk import CustomTrunk
-from lettuce.registry import world
+from lettuce import world
+from xivo_ws import CustomTrunk
 
 
 def get_trunkcustom_id_with_name(name):

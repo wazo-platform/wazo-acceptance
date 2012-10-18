@@ -2,9 +2,8 @@
 
 from __future__ import unicode_literals
 
-from lettuce.registry import world
-from xivo_ws.objects.context import Context, ContextRange
-from xivo_ws.exception import WebServiceRequestError
+from lettuce import world
+from xivo_ws import Context, ContextRange, WebServiceRequestError
 
 
 def update_contextnumbers_user(name, numberbeg, numberend):

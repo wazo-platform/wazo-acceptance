@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.registry import world
+from lettuce import world
 from xivo_ws import Statconf
 from xivo_lettuce.manager_ws import agent_manager_ws, queue_manager_ws
 

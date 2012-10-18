@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import world
-from xivo_ws.objects.outcall import Outcall, OutcallExten
+from xivo_ws import Outcall, OutcallExten
 
 
 def get_outcall_id_with_outcall_name(name):
