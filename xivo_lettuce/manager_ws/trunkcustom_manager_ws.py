@@ -36,6 +36,4 @@ def _find_trunkcustom_with_name(name):
 
 
 def _search_trunkcustom_with_name(name):
-    custom_trunks = world.ws.custom_trunks.search(name)
-    return [custom_trunk for custom_trunk in custom_trunks if
-            custom_trunk.name == name]
+    return world.ws.custom_trunks.search_by_name(name)

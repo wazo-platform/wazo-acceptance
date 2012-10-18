@@ -13,7 +13,4 @@ def delete_all_voicemails_with_number(voicemail_number):
 
 
 def _search_voicemails_with_number(number):
-    number = str(number)
-
-    voicemails = world.ws.voicemails.search(number)
-    return [voicemail for voicemail in voicemails if voicemail.mailbox == number]
+    return world.ws.voicemails.search_by_number(number)

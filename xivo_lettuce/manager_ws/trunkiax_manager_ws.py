@@ -23,5 +23,4 @@ def delete_trunkiax_with_name(name):
 
 
 def _search_trunkiax_with_name(name):
-    iax_trunks = world.ws.iax_trunks.search(name)
-    return [iax_trunk for iax_trunk in iax_trunks if iax_trunk.name == name]
+    return world.ws.iax_trunks.search_by_name(name)

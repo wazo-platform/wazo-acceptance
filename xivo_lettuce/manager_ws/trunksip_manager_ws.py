@@ -12,7 +12,7 @@ def add_trunksip(host, name, context='default'):
     sip_trunk.context = context
     sip_trunk.host = host
     sip_trunk.type = 'friend'
-    world.ws.sip_trunk.add(sip_trunk)
+    world.ws.sip_trunks.add(sip_trunk)
 
 
 def add_or_replace_trunksip(host, name, context='default'):
@@ -23,7 +23,7 @@ def add_or_replace_trunksip(host, name, context='default'):
 def delete_trunksip_with_name(name):
     sip_trunks = _search_trunksip_with_name(name)
     for sip_trunk in sip_trunks:
-        world.ws.sip_trunk.delete(sip_trunk.id)
+        world.ws.sip_trunks.delete(sip_trunk.id)
 
 
 def find_trunksip_id_with_name(name):
@@ -40,5 +40,4 @@ def _find_trunksip_with_name(name):
 
 
 def _search_trunksip_with_name(name):
-    sip_trunks = world.ws.sip_trunk.search(name)
-    return [sip_trunk for sip_trunk in sip_trunks if sip_trunk.name == name]
+    return world.ws.sip_trunks.search_by_name(name)
