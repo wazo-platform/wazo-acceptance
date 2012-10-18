@@ -1,6 +1,6 @@
 Feature: Phonebook
 
-    Scenario: Search for a contact in the phonnebook
+    Scenario: Search for a contact in the phonebook
         Given "John Doe" is not in the phonebook
         When I add the following entries to the phonebook:
           | first name | last name | phone |
