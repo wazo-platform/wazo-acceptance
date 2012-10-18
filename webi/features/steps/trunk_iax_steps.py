@@ -11,12 +11,12 @@ from xivo_lettuce.manager_ws import trunkiax_manager_ws
 def given_there_is_a_trunkiax(step, name):
     data = {'name': name,
             'context': 'default'}
-    trunkiax_manager_ws.add_or_replace_iaxtrunk(data)
+    trunkiax_manager_ws.add_or_replace_trunkiax(data)
 
 
 @step(u'Given there is no trunkiax "([^"]*)"')
 def given_there_is_no_trunkiax(step, name):
-    trunkiax_manager_ws.delete_iaxtrunk_with_name_if_exists(name)
+    trunkiax_manager_ws.delete_trunkiax_with_name(name)
 
 
 @step(u'When I create a trunkiax with name "([^"]*)"')
