@@ -11,12 +11,12 @@ from xivo_lettuce.manager_ws import trunkcustom_manager_ws
 def given_there_is_a_trunkcustom(step, name):
     data = {'name': name,
             'interface': name}
-    trunkcustom_manager_ws.add_or_replace_customtrunk(data)
+    trunkcustom_manager_ws.add_or_replace_trunkcustom(data)
 
 
 @step(u'Given there is no trunkcustom "([^"]*)"')
 def given_there_is_no_trunkcustom(step, name):
-    trunkcustom_manager_ws.delete_customtrunk_with_name_if_exists(name)
+    trunkcustom_manager_ws.delete_trunkcustom_with_name(name)
 
 
 @step(u'When I create a trunkcustom with name "([^"]*)"')

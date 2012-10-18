@@ -16,7 +16,7 @@ from selenium.webdriver.support.select import Select
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
 def given_there_is_an_outcall_with_trunk(step, outcall_name, trunk_name):
     trunksip_manager_ws.add_or_replace_trunksip('192.168.32.254', trunk_name)
-    trunk_id = trunksip_manager_ws.get_trunk_id_with_name(trunk_name)
+    trunk_id = trunksip_manager_ws.find_trunksip_id_with_name(trunk_name)
     data = {'name': outcall_name,
             'context': 'to-extern',
             'trunks': [trunk_id]}
@@ -26,7 +26,7 @@ def given_there_is_an_outcall_with_trunk(step, outcall_name, trunk_name):
 @step(u'Given there is an outcall "([^"]*)" in context "([^"]*)" with trunk "([^"]*)"')
 def given_there_is_an_outcall_in_context_with_trunk(step, outcall_name, outcall_context, trunk_name):
     trunksip_manager_ws.add_or_replace_trunksip('192.168.32.254', trunk_name)
-    trunk_id = trunksip_manager_ws.get_trunk_id_with_name(trunk_name)
+    trunk_id = trunksip_manager_ws.find_trunksip_id_with_name(trunk_name)
     data = {'name': outcall_name,
             'context': outcall_context,
             'trunks': [trunk_id]}

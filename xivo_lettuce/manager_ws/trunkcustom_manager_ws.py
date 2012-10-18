@@ -4,42 +4,38 @@ from lettuce import world
 from xivo_ws import CustomTrunk
 
 
-def get_trunkcustom_id_with_name(name):
-    customtrunks = world.ws.custom_trunks.list()
-    for customtrunk in customtrunks:
-        if customtrunk.name == str(name):
-            return customtrunk.id
-    raise Exception('no trunkcustom with name %s' % name)
-
-
-def add_customtrunk(data):
+def add_trunkcustom(data):
     customtrunk = CustomTrunk()
     customtrunk.name = data['name']
     customtrunk.interface = data['interface']
     world.ws.custom_trunks.add(customtrunk)
 
 
-def add_or_replace_customtrunk(data):
-    delete_customtrunk_with_name_if_exists(data['name'])
-    add_customtrunk(data)
+def add_or_replace_trunkcustom(data):
+    delete_trunkcustom_with_name(data['name'])
+    add_trunkcustom(data)
 
 
-def find_customtrunk_id_with_name(name):
-    customtrunks = world.ws.custom_trunks.list()
-    if customtrunks:
-        return [customtrunk.id for customtrunk in customtrunks if
-                customtrunk.name == str(name)]
-    return []
+def delete_trunkcustom_with_name(name):
+    custom_trunks = _search_trunkcustom_with_name(name)
+    for custom_trunk in custom_trunks:
+        world.ws.custom_trunks.delete(custom_trunk.id)
 
 
-def delete_customtrunk_with_id(trunk_id):
-    world.ws.custom_trunks.delete(trunk_id)
+def find_trunkcustom_id_with_name(name):
+    custom_trunk = _find_trunkcustom_with_name(name)
+    return custom_trunk.id
 
 
-def delete_customtrunk_with_name_if_exists(name):
-    try:
-        customtrunk_id = get_trunkcustom_id_with_name(name)
-    except Exception:
-        pass
-    else:
-        delete_customtrunk_with_id(customtrunk_id)
+def _find_trunkcustom_with_name(name):
+    custom_trunks = _search_trunkcustom_with_name(name)
+    if len(custom_trunks) != 1:
+        raise Exception('expecting 1 custom trunk with name %r; found %s' %
+                        (name, len(custom_trunks)))
+    return custom_trunks[0]
+
+
+def _search_trunkcustom_with_name(name):
+    custom_trunks = world.ws.custom_trunks.search(name)
+    return [custom_trunk for custom_trunk in custom_trunks if
+            custom_trunk.name == name]
