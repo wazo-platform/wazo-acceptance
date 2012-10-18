@@ -17,6 +17,12 @@ def get_agent_id_with_number(number):
     raise Exception('no agent with number %s' % number)
 
 
+def get_agent_with_number(number):
+    agent_id = get_agent_id_with_number(number)
+    agent = world.ws.agents.view(agent_id)
+    return agent
+
+
 def delete_agent_with_number(number):
     agents = world.ws.agents.search_by_number(number)
     for agent in agents:

@@ -2,7 +2,7 @@
 
 from lettuce import step
 from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
-    context_manager_ws, schedule_manager_ws
+    context_manager_ws, schedule_manager_ws, user_manager_ws
 from utils import func
 from xivo_lettuce import common
 from xivo_lettuce import form
@@ -127,6 +127,14 @@ def given_there_is_a_queue_saturated_in_context_with_extension_with_agent(step, 
 def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(step, queue_name, queue_number, queue_context):
     agent_ids = []
     for agent_data in step.hashes:
+        user_data = {
+            'firstname': agent_data['firstname'],
+            'lastname': agent_data['lastname'],
+            'line_number': agent_data['number'],
+            'line_context': agent_data['context'],
+        }
+        user_id = user_manager_ws.add_or_replace_user(user_data)
+        agent_data['users'] = [user_id]
         agent_id = agent_manager_ws.add_or_replace_agent(agent_data)
         agent_ids.append(agent_id)
 

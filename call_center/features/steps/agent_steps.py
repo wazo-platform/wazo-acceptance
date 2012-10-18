@@ -2,8 +2,8 @@
 
 from lettuce import step
 from xivo_lettuce import form
-from xivo_lettuce.manager import agent_manager
-from xivo_lettuce.manager_ws import agent_manager_ws
+from xivo_lettuce.manager import agent_manager, agent_status_manager
+from xivo_lettuce.manager_ws import agent_manager_ws, user_manager_ws
 from xivo_lettuce.common import open_url, element_is_in_list, \
     remove_line, element_is_not_in_list
 from utils import func
@@ -35,9 +35,39 @@ def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, ext
     agent_manager_ws.add_agent(agent_data)
 
 
+@step(u'Given there is a logged agent "([^"]*)" "([^"]*)" with number "([^"]*)" in "([^"]*)"')
+def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastname, number, context):
+    user_data = {
+        'firstname': firstname,
+        'lastname': lastname,
+        'line_number': number,
+        'line_context': context,
+    }
+    user_id = user_manager_ws.add_or_replace_user(user_data)
+    agent_data = {
+        'firstname': firstname,
+        'lastname': lastname,
+        'number': number,
+        'context': context,
+        'users': [user_id],
+    }
+    agent_manager_ws.add_or_replace_agent(agent_data)
+    agent_status_manager.log_agent_on_user(number)
+
+
 @step(u'Given there is no agent with number "([^"]*)"$')
 def given_no_agent_number_1(step, number):
     agent_manager_ws.delete_agent_with_number(number)
+
+
+@step(u'When I log agent "([^"]*)"')
+def when_i_log_agent_1(step, agent_number):
+    agent_status_manager.log_agent_on_user(agent_number)
+
+
+@step(u'When I unlog agent "([^"]*)"')
+def when_i_unlog_agent_group1(step, agent_number):
+    agent_status_manager.unlog_agent_from_user(agent_number)
 
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)"')

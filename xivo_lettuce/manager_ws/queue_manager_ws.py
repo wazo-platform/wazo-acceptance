@@ -54,7 +54,7 @@ def find_queue_id_with_number(queue_number):
 
 def add_queue(data):
     queue = Queue()
-    queue.name = data['name']
+    queue.name = data['name'].lower()
     queue.display_name = data['name']
     queue.number = data['number']
     queue.context = data['context']
