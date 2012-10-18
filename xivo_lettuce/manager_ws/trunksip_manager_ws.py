@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from xivo_ws.objects.siptrunk import SIPTrunk
-from lettuce.registry import world
+from lettuce import world
+from xivo_ws import SIPTrunk
 
 
 def add_trunksip(host, name, context='default'):
@@ -16,24 +16,29 @@ def add_trunksip(host, name, context='default'):
 
 
 def add_or_replace_trunksip(host, name, context='default'):
-    trunksips = find_trunksip_with_name(name)
-    if len(trunksips) == 1:
-        trunksip = trunksips[0]
-        delete_trunksip_with_id(trunksip.id)
+    _delete_trunksip_with_name(name)
     add_trunksip(host, name, context)
 
 
-def get_trunk_id_with_name(name):
-    sip_trunks = find_trunksip_with_name(name)
+def _delete_trunksip_with_name(name):
+    sip_trunks = _search_trunksip_with_name(name)
     for sip_trunk in sip_trunks:
-        if sip_trunk.name == str(name):
-            return sip_trunk.id
-    raise Exception('no sip_trunk with name "%s"', name)
+        world.ws.sip_trunk.delete(sip_trunk.id)
 
 
-def find_trunksip_with_name(name):
-    return world.ws.sip_trunk.search(name)
+def get_trunk_id_with_name(name):
+    sip_trunk = _find_trunksip_with_name(name)
+    return sip_trunk.id
 
 
-def delete_trunksip_with_id(trunk_id):
-    world.ws.sip_trunk.delete(trunk_id)
+def _find_trunksip_with_name(name):
+    sip_trunks = _search_trunksip_with_name(name)
+    if len(sip_trunks) != 1:
+        raise Exception('expecting 1 sip trunk with name %r; found %s' %
+                        (name, len(sip_trunks)))
+    return sip_trunks[0]
+
+
+def _search_trunksip_with_name(name):
+    sip_trunks = world.ws.sip_trunk.search(name)
+    return [sip_trunk for sip_trunk in sip_trunks if sip_trunk.name == name]
