@@ -123,6 +123,23 @@ def given_there_is_a_queue_saturated_in_context_with_extension_with_agent(step, 
     queue_manager_ws.add_queue(data)
 
 
+@step(u'Given there is a queue "([^"]*)" with number "([^"]*)" in "([^"]*)" and unlogged members:')
+def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(step, queue_name, queue_number, queue_context):
+    agent_ids = []
+    for agent_data in step.hashes:
+        agent_id = agent_manager_ws.add_or_replace_agent(agent_data)
+        agent_ids.append(agent_id)
+
+    queue_data = {
+        'name': queue_name,
+        'number': queue_number,
+        'context': queue_context,
+        'agents': agent_ids,
+    }
+
+    queue_manager_ws.add_or_replace_queue(queue_data)
+
+
 @step(u'When I add the queue "([^"]*)" with display name "([^"]*)" with extension "([^"]*)" in "([^"]*)"$')
 def when_i_add_the_queue_1_with_display_name_2_with_extension_3_in_4(step, name, display_name, extension, context):
     _remove_queues_with_name_or_number_if_exist(name, extension)

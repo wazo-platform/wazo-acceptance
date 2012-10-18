@@ -39,3 +39,10 @@ def add_agent(data_dict):
     world.ws.agents.add(agent)
     agent = world.ws.agents.find_one_by_number(data_dict['number'])
     return int(agent.id)
+
+
+def add_or_replace_agent(data_dict):
+    agent_number = data_dict['number']
+    delete_agent_with_number(agent_number)
+
+    return add_agent(data_dict)

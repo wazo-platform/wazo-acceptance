@@ -75,3 +75,10 @@ def add_queue(data):
     if 'ringing_time' in data:
         queue.ringing_time = int(data['ringing_time'])
     world.ws.queues.add(queue)
+
+
+def add_or_replace_queue(queue_data):
+    queue_number = queue_data['number']
+    delete_queue_with_number_if_exists(queue_number)
+
+    add_queue(queue_data)
