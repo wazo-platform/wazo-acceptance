@@ -4,28 +4,28 @@ from lettuce import step, world
 from xivo_lettuce import form
 from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import asterisk_manager
-from xivo_lettuce.manager_ws import sccp_general_settings_manager_ws as sccp_manager
+from xivo_lettuce.manager_ws import general_settings_sccp_manager_ws as sccp_manager_ws
 from selenium.webdriver.support.select import Select
 
 
 @step('Given the directmedia option is disabled')
 def given_the_directmedia_option_is_disabled(step):
-    sccp_manager.disable_directmedia()
+    sccp_manager_ws.disable_directmedia()
 
 
 @step('Given the directmedia option is enabled')
 def given_the_directmedia_option_is_enabled(step):
-    sccp_manager.enable_directmedia()
+    sccp_manager_ws.enable_directmedia()
 
 
 @step('Given the dial timeout is at (\d+) seconds')
 def given_the_dial_timeout_is_at_x_seconds(step, timeout):
-    sccp_manager.set_dialtimeout(timeout)
+    sccp_manager_ws.set_dialtimeout(timeout)
 
 
 @step('Given the language option is at "([^"]*)"')
 def given_the_language_option_is_at(step, language):
-    sccp_manager.set_language(language)
+    sccp_manager_ws.set_language(language)
 
 
 @step('Given I am on the SCCP General Settings page')

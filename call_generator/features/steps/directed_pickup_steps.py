@@ -2,7 +2,7 @@
 
 from lettuce import step, world
 from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
-from xivo_lettuce.manager.statscall_manager import execute_n_calls_then_wait, \
+from xivo_lettuce.manager.call_manager import execute_n_calls_then_wait, \
     execute_pickup_call, execute_answer_then_wait
 
 _PICKUP_PREFIX = '*8'

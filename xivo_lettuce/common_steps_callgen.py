@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 from lettuce import step, world
 from xivo_lettuce.manager import queuelog_manager
-from xivo_lettuce.manager import statscall_manager
+from xivo_lettuce.manager import call_manager
 from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
 
 
@@ -42,36 +42,36 @@ def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
 @step(u'I register extension "([^"]*)"')
 def i_register_extension(step, extension):
     line = find_line_with_extension(extension)
-    statscall_manager.execute_sip_register(line.name, line.secret)
+    call_manager.execute_sip_register(line.name, line.secret)
 
 
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
 def given_i_log_the_phone(step, agent_number, extension):
     line = find_line_with_extension(extension)
-    statscall_manager.execute_sip_register(line.name, line.secret)
-    statscall_manager.execute_n_calls_then_wait(1, '*31%s' % agent_number, username=line.name, password=line.secret)
+    call_manager.execute_sip_register(line.name, line.secret)
+    call_manager.execute_n_calls_then_wait(1, '*31%s' % agent_number, username=line.name, password=line.secret)
     world.logged_agents.append(agent_number)
 
 
 @step(u'Given I logout agent "([^"]*)" on extension "([^"]*)"')
 def given_i_logout_the_phone(step, agent_number, extension):
     line = find_line_with_extension(extension)
-    statscall_manager.execute_n_calls_then_wait(1, '*32%s' % agent_number, username=line.name, password=line.secret)
+    call_manager.execute_n_calls_then_wait(1, '*32%s' % agent_number, username=line.name, password=line.secret)
 
 
 @step(u'Given there are no calls running')
 def given_there_are_no_calls_running(step):
-    statscall_manager.killall_process_sipp()
+    call_manager.killall_process_sipp()
 
 
 @step(u'there is ([0-9]+) calls to extension "([^"]+)" and wait$')
 def there_is_n_calls_to_extension_and_wait(step, count, extension):
-    statscall_manager.execute_n_calls_then_wait(count, extension)
+    call_manager.execute_n_calls_then_wait(count, extension)
 
 
 @step(u'When there is ([0-9]+) calls to extension "([^"]+)" on trunk "([^"]+)" and wait$')
 def given_there_is_n_calls_to_extension_on_trunk_and_wait(step, count, extension, trunk_name):
-    statscall_manager.execute_n_calls_then_wait(count,
+    call_manager.execute_n_calls_then_wait(count,
                                                 extension,
                                                 username=trunk_name,
                                                 password=trunk_name)
@@ -79,42 +79,42 @@ def given_there_is_n_calls_to_extension_on_trunk_and_wait(step, count, extension
 
 @step(u'When I call extension "([^"]+)"$')
 def when_i_call_extension(step, extension):
-    statscall_manager.execute_n_calls_then_wait(1, extension)
+    call_manager.execute_n_calls_then_wait(1, extension)
 
 
 @step(u'Given there is ([0-9]+) calls to extension "([^"]+)"$')
 def given_there_is_n_calls_to_extension_and_hangup(step, count, extension):
-    statscall_manager.execute_n_calls_then_hangup(count, extension)
+    call_manager.execute_n_calls_then_hangup(count, extension)
 
 
 @step(u'Given there is ([0-9]+) calls to extension "([^"]*)" then i hang up after "([0-9]+)s"')
 def given_there_is_n_calls_to_extension_then_i_hangup_after_n_seconds(step, count, extension, call_duration):
     call_duration_ms = int(call_duration) * 1000
-    statscall_manager.execute_n_calls_then_hangup(count, extension, duration=call_duration_ms)
+    call_manager.execute_n_calls_then_hangup(count, extension, duration=call_duration_ms)
 
 
 @step(u'Given I wait call then I answer and wait')
 def given_i_wait_call_then_i_answer_then_i_answer_and_wait(step):
-    statscall_manager.execute_answer_then_wait()
+    call_manager.execute_answer_then_wait()
 
 
 @step(u'Given I wait call then I answer then I hang up after "([0-9]+)s"')
 def given_i_wait_call_then_i_answer_then_hangup_after_n_seconds(step, call_duration):
     call_duration_ms = int(call_duration) * 1000
-    statscall_manager.execute_answer_then_hangup(call_duration_ms)
+    call_manager.execute_answer_then_hangup(call_duration_ms)
 
 
 @step(u'Given I wait call then I answer after "([0-9]+)s" then I hang up after "([0-9]+)s"')
 def given_i_wait_call_then_answer_after_x_seconds_then_i_hangup_after_n_second(step, ring_time, call_duration):
     ring_time_ms = int(ring_time) * 1000
     call_duration_ms = int(call_duration) * 1000
-    statscall_manager.execute_answer_then_hangup(call_duration_ms, ring_time_ms)
+    call_manager.execute_answer_then_hangup(call_duration_ms, ring_time_ms)
 
 
 @step(u'Given I wait call then I answer after "([0-9]+)s" then I wait')
 def given_i_wait_then_i_answer_after_n_second_then_i_wait(step, ring_time):
     ring_time_ms = int(ring_time) * 1000
-    statscall_manager.execute_answer_then_wait(ring_time_ms)
+    call_manager.execute_answer_then_wait(ring_time_ms)
 
 
 @step(u'I wait (\d+) seconds')

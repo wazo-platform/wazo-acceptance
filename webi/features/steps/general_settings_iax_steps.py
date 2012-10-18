@@ -6,7 +6,7 @@ from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import form
 from xivo_lettuce.checkbox import Checkbox
 from xivo_lettuce.common import go_to_tab, open_url
-from xivo_lettuce.manager.iax_general_manager import find_call_limit_line, \
+from xivo_lettuce.manager.general_settings_iax_manager import find_call_limit_line, \
     find_call_limit_lines
 
 
