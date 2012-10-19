@@ -8,6 +8,7 @@ from xivo_lettuce.common import open_url, element_is_in_list
 from xivo_lettuce import form
 from xivo_lettuce.checkbox import Checkbox
 from xivo_lettuce.manager.sys_manager import search_str_in_asterisk_log
+from xivo_lettuce.table import extract_webi_talbe_to_dict
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
@@ -36,10 +37,13 @@ def then_i_see_rejected_call_in_asterisk_log(step, extension):
     assert search_str_in_asterisk_log(expression)
 
 
-@step(u'Then i see the called extension "([^"]*)" in call logs page')
-def then_i_see_the_called_extension_in_call_logs_page(step, exten):
+@step(u'Then i see the called extension "([^"]*)" by "([^"]*)" in call logs page')
+def then_i_see_the_called_extension_in_call_logs_page(step, called, caller):
     open_url('cel')
     form.submit_form()
 
-    expected_exten = world.browser.find_element_by_xpath("//div[@id='sb-part-result']/div/table/tbody/tr[2]/td[3]").text
-    assert expected_exten == exten
+    table = world.browser.find_element_by_xpath("//div[@id='sb-part-result']/div/table")
+    lines = extract_webi_talbe_to_dict(table)
+
+    last_call = lines.pop()
+    assert last_call['Called'] == called
