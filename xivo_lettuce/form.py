@@ -34,8 +34,8 @@ def submit_form_with_errors():
         raise Exception('No error occurred')
 
 
-def submit_form():
-    submit_button = world.browser.find_element_by_id('it-submit')
+def submit_form(input_id='it-submit'):
+    submit_button = world.browser.find_element_by_id(input_id)
     submit_button.click()
     try:
         error_element = find_form_errors()

@@ -5,7 +5,7 @@ from xivo_lettuce import form
 from xivo_lettuce.manager import agent_manager
 from xivo_lettuce.manager_ws import agent_manager_ws
 from xivo_lettuce.common import open_url, element_is_in_list, \
-    remove_line, element_is_not_in_list
+    remove_line, element_is_not_in_list, edit_text_field
 from utils import func
 
 
@@ -45,6 +45,13 @@ def when_i_create_an_agent(step, firstname, lastname, number):
     open_url('agent', 'addagent', {'group': '1'})
     agent_manager.type_agent_info(firstname, lastname, number)
     form.submit_form()
+
+
+@step(u'When I search an agent "([^"]*)"')
+def when_i_search_an_agent_group1(step, search):
+    open_url('agent', 'listagent', {'group': '1'})
+    edit_text_field('it-toolbar-search', search)
+    form.submit_form('it-toolbar-subsearch')
 
 
 @step(u'When I remove agent "([^"]*)" "([^"]*)"')

@@ -23,3 +23,12 @@ Feature: Agent
         Given I log agent "666" on extension "1666@default"
         Given I wait 5 seconds for the calls processing
         Then I should see 1 "AGENTCALLBACKLOGIN" event for agent "666" in the queue log
+
+    Scenario: Agent search
+        Given an agent "Il" "buono" "24000" "" in group default
+        Given an agent "Il" "brutto" "25000" "" in group default
+        Given an agent "Il" "cattivo" "26000" "" in group default
+        When I search an agent "25000"
+        Then agent "25000" is displayed in the list of default agent group
+        When I search an agent "cattivo"
+        Then agent "cattivo" is displayed in the list of default agent group
