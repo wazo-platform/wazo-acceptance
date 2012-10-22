@@ -10,6 +10,9 @@ ALIAS = {
         'qry': {'act': 'listfile',
                 'cat': 'default'}
     },
+    'agent group': {
+        'module': 'agent'
+    },
     'SIP line': {
         'module': 'line'
     },
