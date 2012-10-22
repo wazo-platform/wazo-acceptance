@@ -20,6 +20,12 @@ def get_queue_id_with_number(queue_number):
     raise Exception('no queue with queue number %s' % queue_number)
 
 
+def get_queue_with_name(queue_name):
+    queue_id = get_queue_id_with_queue_name(queue_name)
+    queue = world.ws.queues.view(queue_id)
+    return queue
+
+
 def delete_queue_with_name_if_exists(queue_displayname):
     try:
         queue_id = get_queue_id_with_queue_name(queue_displayname)
@@ -54,7 +60,7 @@ def find_queue_id_with_number(queue_number):
 
 def add_queue(data):
     queue = Queue()
-    queue.name = data['name']
+    queue.name = data['name'].lower()
     queue.display_name = data['name']
     queue.number = data['number']
     queue.context = data['context']
@@ -75,3 +81,10 @@ def add_queue(data):
     if 'ringing_time' in data:
         queue.ringing_time = int(data['ringing_time'])
     world.ws.queues.add(queue)
+
+
+def add_or_replace_queue(queue_data):
+    queue_number = queue_data['number']
+    delete_queue_with_number_if_exists(queue_number)
+
+    add_queue(queue_data)

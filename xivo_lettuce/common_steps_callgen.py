@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 from lettuce import step, world
 from xivo_lettuce.manager import queuelog_manager
-from xivo_lettuce.manager import call_manager
+from xivo_lettuce.manager import call_manager, agent_status_manager
 from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
 
 
@@ -47,16 +47,12 @@ def i_register_extension(step, extension):
 
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
 def given_i_log_the_phone(step, agent_number, extension):
-    line = find_line_with_extension(extension)
-    call_manager.execute_sip_register(line.name, line.secret)
-    call_manager.execute_n_calls_then_wait(1, '*31%s' % agent_number, username=line.name, password=line.secret)
-    world.logged_agents.append(agent_number)
+    agent_status_manager.log_agent(agent_number, extension)
 
 
 @step(u'Given I logout agent "([^"]*)" on extension "([^"]*)"')
 def given_i_logout_the_phone(step, agent_number, extension):
-    line = find_line_with_extension(extension)
-    call_manager.execute_n_calls_then_wait(1, '*32%s' % agent_number, username=line.name, password=line.secret)
+    agent_status_manager.unlog_agent(agent_number, extension)
 
 
 @step(u'Given there are no calls running')
@@ -72,9 +68,9 @@ def there_is_n_calls_to_extension_and_wait(step, count, extension):
 @step(u'When there is ([0-9]+) calls to extension "([^"]+)" on trunk "([^"]+)" and wait$')
 def given_there_is_n_calls_to_extension_on_trunk_and_wait(step, count, extension, trunk_name):
     call_manager.execute_n_calls_then_wait(count,
-                                                extension,
-                                                username=trunk_name,
-                                                password=trunk_name)
+                                           extension,
+                                           username=trunk_name,
+                                           password=trunk_name)
 
 
 @step(u'When I call extension "([^"]+)"$')

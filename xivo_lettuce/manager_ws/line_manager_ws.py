@@ -27,6 +27,13 @@ def find_line_with_extension(extension):
     return find_line_with_number(number, context)
 
 
+def find_line_with_user(user_id):
+    lines = world.ws.lines.list()
+    for line in lines:
+        if line.user_id == user_id:
+            return line
+
+
 def find_line_id_with_number(number, context):
     line = find_line_with_number(number, context)
     return line.id

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from lettuce import step
-from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, schedule_manager_ws
+import time
+from lettuce import step, world
+from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
+    context_manager_ws, schedule_manager_ws, user_manager_ws
 from utils import func
 from xivo_lettuce import common
 from xivo_lettuce import form
@@ -125,6 +127,31 @@ def given_there_is_a_queue_saturated_in_context_with_extension_with_agent(step, 
     queue_manager_ws.add_queue(data)
 
 
+@step(u'Given there is a queue "([^"]*)" with number "([^"]*)" in "([^"]*)" and unlogged members:')
+def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(step, queue_name, queue_number, queue_context):
+    agent_ids = []
+    for agent_data in step.hashes:
+        user_data = {
+            'firstname': agent_data['firstname'],
+            'lastname': agent_data['lastname'],
+            'line_number': agent_data['number'],
+            'line_context': agent_data['context'],
+        }
+        user_id = user_manager_ws.add_or_replace_user(user_data)
+        agent_data['users'] = [user_id]
+        agent_id = agent_manager_ws.add_or_replace_agent(agent_data)
+        agent_ids.append(agent_id)
+
+    queue_data = {
+        'name': queue_name,
+        'number': queue_number,
+        'context': queue_context,
+        'agents': agent_ids,
+    }
+
+    queue_manager_ws.add_or_replace_queue(queue_data)
+
+
 @step(u'When I add the queue "([^"]*)" with display name "([^"]*)" with extension "([^"]*)" in "([^"]*)"$')
 def when_i_add_the_queue_1_with_display_name_2_with_extension_3_in_4(step, name, display_name, extension, context):
     remove_queues_with_name_or_number_if_exist(name, extension)
@@ -166,9 +193,32 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_nam
     form.submit_form()
 
 
+@step(u'When I add agent "([^"]*)" to "([^"]*)"')
+def when_i_add_agent_1_to_2(step, agent_number, queue_name):
+    queue = queue_manager_ws.get_queue_with_name(queue_name)
+    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    queue.agents.append(agent_id)
+    world.ws.queues.edit(queue)
+    time.sleep(5)
+
+
+@step(u'When I remove agent "([^"]*)" from "([^"]*)"')
+def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
+    queue = queue_manager_ws.get_queue_with_name(queue_name)
+    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    queue.agents.remove(agent_id)
+    world.ws.queues.edit(queue)
+    time.sleep(5)
+
+
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)" with errors$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(step, queue_name, ring_strategy):
     queue_id = get_queue_id_with_queue_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     type_queue_ring_strategy(ring_strategy)
     form.submit_form_with_errors()
+
+
+def _remove_queues_with_name_or_number_if_exist(queue_name, queue_number):
+    queue_manager_ws.delete_queue_with_name_if_exists(queue_name)
+    queue_manager_ws.delete_queue_with_number_if_exists(queue_number)
