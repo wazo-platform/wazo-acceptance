@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from lettuce import step
+import time
+from lettuce import step, world
 from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
     context_manager_ws, schedule_manager_ws, user_manager_ws
 from utils import func
@@ -162,6 +163,24 @@ def when_i_add_the_queue_1_with_display_name_2_with_extension_3_in_4_with_errors
     common.open_url('queue', 'add')
     _type_queue_name_display_name_number_context(name, display_name, extension, context)
     form.submit_form_with_errors()
+
+
+@step(u'When I add agent "([^"]*)" to "([^"]*)"')
+def when_i_add_agent_1_to_2(step, agent_number, queue_name):
+    queue = queue_manager_ws.get_queue_with_name(queue_name)
+    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    queue.agents.append(agent_id)
+    world.ws.queues.edit(queue)
+    time.sleep(5)
+
+
+@step(u'When I remove agent "([^"]*)" from "([^"]*)"')
+def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
+    queue = queue_manager_ws.get_queue_with_name(queue_name)
+    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    queue.agents.remove(agent_id)
+    world.ws.queues.edit(queue)
+    time.sleep(5)
 
 
 def _remove_queues_with_name_or_number_if_exist(queue_name, queue_number):

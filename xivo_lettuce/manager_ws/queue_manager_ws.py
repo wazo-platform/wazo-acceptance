@@ -20,6 +20,12 @@ def get_queue_id_with_number(queue_number):
     raise Exception('no queue with queue number %s' % queue_number)
 
 
+def get_queue_with_name(queue_name):
+    queue_id = get_queue_id_with_queue_name(queue_name)
+    queue = world.ws.queues.view(queue_id)
+    return queue
+
+
 def delete_queue_with_name_if_exists(queue_displayname):
     try:
         queue_id = get_queue_id_with_queue_name(queue_displayname)

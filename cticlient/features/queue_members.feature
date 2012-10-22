@@ -28,7 +28,7 @@ Feature: Queue Member xlet
         When I unlog agent "1001"
         Then the Queue members xlet for queue "superqueue" is empty
 
-        When I add agent "1003" the to "superqueue"
+        When I add agent "1003" to "superqueue"
         Then the Queue members xlet for queue "superqueue" should display agents:
          | number |
          |   1003 |
