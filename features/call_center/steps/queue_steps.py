@@ -3,7 +3,7 @@
 import time
 from lettuce import step, world
 from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
-    context_manager_ws, schedule_manager_ws, user_manager_ws
+    schedule_manager_ws, user_manager_ws
 from utils import func
 from xivo_lettuce import common
 from xivo_lettuce import form
@@ -208,7 +208,7 @@ def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     queue.agents.remove(agent_id)
     world.ws.queues.edit(queue)
-    time.sleep(5)
+    time.sleep(10)
 
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)" with errors$')
