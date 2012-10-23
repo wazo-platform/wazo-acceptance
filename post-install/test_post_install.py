@@ -103,7 +103,7 @@ class TestBackupLogRotate(unittest.TestCase):
             self.assertTrue(self._is_file_exist(file_path))
 
     def _exec_logrotate_backup(self):
-        command = ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/pf-xivo-backup']
+        command = ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup']
         _exec_local_cmd(command)
 
     def _is_file_exist(self, path):
