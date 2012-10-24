@@ -7,6 +7,8 @@ import pwd
 import grp
 import sys
 
+from os import path
+
 from pwd import getpwnam
 
 
@@ -15,7 +17,7 @@ class TestVoiceMailEmpty(unittest.TestCase):
     ASTERISK_VM_PATH = '/var/spool/asterisk/voicemail'
 
     def test_voicemail_dir_empty(self):
-        self.assertTrue(os.path.isdir(self.ASTERISK_VM_PATH))
+        self.assertTrue(path.isdir(self.ASTERISK_VM_PATH))
         self.assertEqual(len(os.listdir(self.ASTERISK_VM_PATH)), 0)
 
 
@@ -24,7 +26,7 @@ class TestSoundsInstalled(unittest.TestCase):
     ASTERISK_SOUND_PATH = '/usr/share/asterisk/sounds/en'
 
     def test_sounds_file_are_installed(self):
-        self.assertTrue(os.path.isdir(self.ASTERISK_SOUND_PATH))
+        self.assertTrue(path.isdir(self.ASTERISK_SOUND_PATH))
         self.assertTrue(len(os.listdir(self.ASTERISK_SOUND_PATH)) > 0)
 
 
@@ -33,9 +35,9 @@ class TestAsteriskOwnsDahdi(unittest.TestCase):
     DAHDI_PATH = '/dev/dahdi'
 
     def test_asterisk_owns_dahdi_files(self):
-        self.assertTrue(os.path.isdir(self.DAHDI_PATH))
+        self.assertTrue(path.isdir(self.DAHDI_PATH))
         for file in os.listdir(self.DAHDI_PATH):
-            self.assertTrue(self._owned_by_asterisk(os.path.join(self.DAHDI_PATH, file)))
+            self.assertTrue(self._owned_by_asterisk(path.join(self.DAHDI_PATH, file)))
 
     def _owned_by_asterisk(self, file):
         asterisk_ids = getpwnam('asterisk')[2:4]
@@ -58,12 +60,11 @@ class TestMohFilesPermission(unittest.TestCase):
         files = os.listdir(self.MOH_PATH)
 
         for file in files:
-            file_path = os.path.join(self.MOH_PATH, file)
+            file_path = path.join(self.MOH_PATH, file)
             uid = self._find_uid(file_path)
             gid = self._find_gid(file_path)
             self.assertEqual(self.FILE_UID, uid, 'File %s : UID %s not owned by %s ' % (file, uid, self.FILE_UID))
             self.assertEqual(self.FILE_GID, gid, 'File %s : GID %s not owned by %s ' % (file, gid, self.FILE_GID))
-
 
     def _find_uid(self, file):
         return pwd.getpwuid(os.stat(file).st_uid).pw_name
@@ -74,15 +75,15 @@ class TestMohFilesPermission(unittest.TestCase):
 
 class TestBackupLogRotate(unittest.TestCase):
 
-    BACKUP_DIR = '/var/backups/pf-xivo/'
+    BACKUP_DIR = '/var/backups/xivo/'
 
     def setUp(self):
         files = os.listdir(self.BACKUP_DIR)
         for file in files:
-            file_path = os.path.join(self.BACKUP_DIR, file)
+            file_path = path.join(self.BACKUP_DIR, file)
             os.remove(file_path)
-        data_file = os.path.join(self.BACKUP_DIR, 'data.tgz')
-        db_file = os.path.join(self.BACKUP_DIR, 'db.tgz')
+        data_file = path.join(self.BACKUP_DIR, 'data.tgz')
+        db_file = path.join(self.BACKUP_DIR, 'db.tgz')
         open(data_file, 'w+')
         open(db_file, 'w+')
         del sys.path
@@ -92,27 +93,19 @@ class TestBackupLogRotate(unittest.TestCase):
         expected_files = ['data.tgz', 'data.tgz.1', 'db.tgz', 'db.tgz.1']
 
         for expected_file in expected_files:
-            file_path = os.path.join(self.BACKUP_DIR, expected_file)
-            self.assertTrue(self._is_file_exist(file_path))
+            file_path = path.join(self.BACKUP_DIR, expected_file)
+            self.assertTrue(path.exists(file_path))
 
         self._exec_logrotate_backup()
         expected_files.extend(['data.tgz.2', 'db.tgz.2'])
 
         for expected_file in expected_files:
-            file_path = os.path.join(self.BACKUP_DIR, expected_file)
-            self.assertTrue(self._is_file_exist(file_path))
+            file_path = path.join(self.BACKUP_DIR, expected_file)
+            self.assertTrue(path.exists(file_path))
 
     def _exec_logrotate_backup(self):
         command = ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup']
         _exec_local_cmd(command)
-
-    def _is_file_exist(self, path):
-        print path
-        try:
-           with open(path) as f:
-               return True
-        except IOError as e:
-           return False
 
 
 def _exec_local_cmd(cmd):
