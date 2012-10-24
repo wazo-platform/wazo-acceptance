@@ -228,3 +228,25 @@ Feature: WEBI Agent Stats
           | 10h-11h | 01:00:00 |
           | 11h-12h | 01:00:00 |
           | Total   | 02:27:28 |
+
+
+    Scenario: Generate stats for total wrapup time
+        Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
+        Given there is a queue "q11" with extension "5011@statscenter"
+        Given there is a agent "Agent" "11" with extension "11@statscenter"
+        Given there is a statistic configuration "test_wrapup_time" from "8:00" to "12:00" with queue "q11" and agent "11"
+        Given I have the following queue_log entries:
+          | time                       | callid        | queuename | agent    | event         | data1 | data2         | data3 | data4 | data5 |
+          | 2012-01-01 09:43:07.216260 | NONE          | NONE      | Agent/11 | WRAPUPSTART   | 15    |               |       |       |       |
+          | 2012-01-01 09:43:07.213910 | wrapup_time_1 | q11       | Agent/11 | COMPLETEAGENT | 18    | 2             | 1     |       |       |
+          | 2012-01-01 09:43:05.121034 | wrapup_time_1 | q11       | Agent/11 | CONNECT       | 18    | 1351078982.15 | 2     |       |       |
+          | 2012-01-01 09:42:47.009661 | wrapup_time_1 | q11       | NONE     | ENTERQUEUE    |       | 1003          | 1     |       |       |
+        Given I clear and generate the statistics cache
+        Then I should have the following statististics on agent "11" on "2012-01-01" on configuration "test_wrapup_time":
+          |         | Answered | Wrapup   |
+          | 8h-9h   |        0 | 00:00:00 |
+          | 9h-10h  |        1 | 00:00:15 |
+          | 10h-11h |        0 | 00:00:00 |
+          | 11h-12h |        0 | 00:00:00 |
+          | Total   |        1 | 00:00:15 |
+          

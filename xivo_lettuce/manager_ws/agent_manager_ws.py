@@ -39,6 +39,8 @@ def add_agent(data_dict):
         agent.lastname = data_dict['lastname']
     if 'passwd' in data_dict:
         agent.passwd = data_dict['passwd']
+    if 'wrapuptime' in data_dict:
+        agent.wrapuptime = data_dict['wrapuptime']
     if 'users' in data_dict:
         agent.users = data_dict['users']
 

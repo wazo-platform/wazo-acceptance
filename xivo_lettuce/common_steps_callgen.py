@@ -2,7 +2,7 @@
 
 import time
 from datetime import datetime
-from lettuce import step, world
+from lettuce import step
 from xivo_lettuce.manager import queuelog_manager
 from xivo_lettuce.manager import call_manager, agent_status_manager
 from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension

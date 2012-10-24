@@ -11,7 +11,6 @@ from xivo_lettuce.manager.agent_manager import is_agent_in_agent_group, \
     select_agent_group_list
 from lettuce.registry import world
 from selenium.webdriver.common.action_chains import ActionChains
-import time
 
 
 @step(u'Given an agent "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)" in group default')
@@ -40,13 +39,27 @@ def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, ext
     agent_manager_ws.add_agent(agent_data)
 
 
-@step(u'Given there is a logged agent "([^"]*)" "([^"]*)" with number "([^"]*)" in "([^"]*)"')
+@step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)" with wrapup time "([^"]+)"$')
+def given_there_is_a_agent_in_context_with_number_with_wrapup_time(step, firstname, lastname, extension, wrapuptime):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    agent_manager_ws.delete_agent_with_number(number)
+    agent_data = {
+        'firstname': firstname,
+        'lastname': lastname,
+        'number': number,
+        'context': context,
+        'wrapuptime': int(wrapuptime) * 1000
+    }
+    agent_manager_ws.add_agent(agent_data)
+
+
+@step(u'Given there is a logged agent "([^"]*)" "([^"]*)" with number "([^"]*)" in "([^"]*)"$')
 def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastname, number, context):
     user_data = {
         'firstname': firstname,
         'lastname': lastname,
         'line_number': number,
-        'line_context': context,
+        'line_context': context
     }
     user_id = user_manager_ws.add_or_replace_user(user_data)
     agent_data = {
@@ -54,7 +67,7 @@ def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastna
         'lastname': lastname,
         'number': number,
         'context': context,
-        'users': [user_id],
+        'users': [user_id]
     }
     agent_manager_ws.add_or_replace_agent(agent_data)
     agent_status_manager.log_agent_on_user(number)
