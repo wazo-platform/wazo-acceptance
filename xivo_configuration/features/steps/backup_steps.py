@@ -8,7 +8,7 @@ from xivo_lettuce.common import open_url, find_line
 
 @step(u'Given there is a backup file "([^"]*)"')
 def given_there_is_a_backup_file(step, filename):
-    command = 'dd if=/dev/zero of=/var/backups/pf-xivo/%s bs=1024 count=200240' % filename
+    command = 'dd if=/dev/zero of=/var/backups/xivo/%s bs=1024 count=200240' % filename
     world.ssh_client_xivo.out_call([command])
 
 
