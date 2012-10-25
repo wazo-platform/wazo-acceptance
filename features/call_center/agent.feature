@@ -1,14 +1,13 @@
 Feature: Agent
 
     Scenario: Add an agent with first name and last name and remove it
-        Given there is no agent with number "23000"
         When I create an agent "Aaliyah" "Stuart" "23000"
         Then agent "Aaliyah Stuart" is displayed in the list of "default" agent group
         When I remove agent "Aaliyah" "Stuart"
         Then agent "Aaliyah Stuart" is not displayed in the list of "default" agent group
 
     Scenario: Agent modification
-        Given an agent "John" "Wayne" "24000" "" in group default
+        Given there is a agent "John" "Wayne" with extension "24000@default"
         Then the agent "24000" password is ""
         When I change the agent "24000" password to "8888"
         Then the agent "24000" password is "8888"
@@ -17,7 +16,6 @@ Feature: Agent
         Given there are no calls running
         Given there is no "AGENTCALLBACKLOGIN" entry for agent "666"
         Given there is a user "User" "666" with extension "1666@default"
-        Given there is no agent with number "666"
         When I create an agent "Super" "Agent" "666"
         Then agent "Super Agent" is displayed in the list of "default" agent group
         Given I log agent "666" on extension "1666@default"
@@ -25,11 +23,11 @@ Feature: Agent
         Then I should see 1 "AGENTCALLBACKLOGIN" event for agent "666" in the queue log
 
     Scenario: Agent search
-        Given an agent "Il" "buono" "24000" "" in group default
-        Given an agent "Il" "brutto" "25000" "" in group default
-        Given an agent "Il" "cattivo" "26000" "" in group default
-        When I search an agent "25000"
-        Then agent "25000" is displayed in the list of "default" agent group
+        Given there is a agent "Il" "buono" with extension "24001@default"
+        Given there is a agent "Il" "brutto" with extension "24002@default"
+        Given there is a agent "Il" "cattivo" with extension "24003@default"
+        When I search an agent "24002"
+        Then agent "24002" is displayed in the list of "default" agent group
         When I search an agent "cattivo"
         Then agent "cattivo" is displayed in the list of "default" agent group
 
