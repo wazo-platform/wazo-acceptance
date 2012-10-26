@@ -15,6 +15,12 @@ def set_text_field(field_label, value):
     text_input.send_keys(value)
 
 
+def set_text_field_by_id(field_id, value):
+    text_input = world.browser.find_element_by_id(field_id)
+    text_input.clear()
+    text_input.send_keys(value)
+
+
 def set_select_field(field_label, value):
     select_input = world.browser.find_element_by_label(field_label)
     Select(select_input).select_by_visible_text(value)
@@ -23,6 +29,11 @@ def set_select_field(field_label, value):
 def set_select_field_by_id(field_id, value):
     select_input = world.browser.find_element_by_id(field_id)
     Select(select_input).select_by_visible_text(value)
+
+
+def get_value(field_label):
+    element = world.browser.find_element_by_label(field_label)
+    return element.get_attribute('value')
 
 
 def submit_form_with_errors():
