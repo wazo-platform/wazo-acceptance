@@ -17,9 +17,13 @@ def create_or_replace_certificate(info):
     input_name = world.browser.find_element_by_id('it-name')
     input_name.send_keys(info['name'])
 
-    input_email = world.browser.find_element_by_id('it-subject-emailAddress')
-    input_email.clear()
-    input_email.send_keys(info['email'])
+    if 'autosigned' in info:
+        checked = info['autosigned'] == "yes"
+        Checkbox.from_id('it-autosigned').set_checked(checked)
+
+    if 'certificate authority' in info:
+        checked = info['certificate authority'] == "yes"
+        Checkbox.from_id('it-is_ca').set_checked(checked)
 
     input_date = world.browser.find_element_by_id('it-validity-end')
     input_date.clear()
@@ -32,13 +36,9 @@ def create_or_replace_certificate(info):
 
     input_date.send_keys(date.strftime("%m/%d/%Y"))
 
-    if 'autosigned' in info:
-        checked = info['autosigned'] == "yes"
-        Checkbox.from_id('it-autosigned').set_checked(checked)
-
-    if 'certificate authority' in info:
-        checked = info['certificate authority'] == "yes"
-        Checkbox.from_id('it-is_ca').set_checked(checked)
+    input_email = world.browser.find_element_by_id('it-subject-emailAddress')
+    input_email.clear()
+    input_email.send_keys(info['email'])
 
 
 def insert_hostname_into_form():
