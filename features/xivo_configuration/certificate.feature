@@ -15,11 +15,9 @@ Feature: Certificates
           | name      | email           | valid date in the future | certificate authority | autosigned |
           | phones    | foo@example.org | yes                      | no                    | yes        |
           | phones-ca | foo@example.org | yes                      | yes                   | yes        |
-
         When I enable the following options for the SIP Protocol:
           | allow tls connections | listening address | server certificate | ca certificate |
           | yes                   | 0.0.0.0           | phones             | phones-ca      |
-
         Then SIP tls connections use the "phones" certificate for encryption
         Then there are no warnings when reloading sip configuration
 
@@ -28,4 +26,3 @@ Feature: Certificates
            | name      | email           | valid date in the future | certificate authority | autosigned |
            | xivo-ctid | foo@example.com | yes                      | no                    | yes        |
         Then I see no errors
-

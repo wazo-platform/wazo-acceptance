@@ -33,14 +33,12 @@ def create_or_replace_certificate(info):
     input_date.send_keys(date.strftime("%m/%d/%Y"))
 
     if 'autosigned' in info:
-        autosign_check = world.browser.find_element_by_id('it-autosigned')
         checked = info['autosigned'] == "yes"
-        Checkbox(autosign_check).set_checked(checked)
+        Checkbox.from_id('it-autosigned').set_checked(checked)
 
     if 'certificate authority' in info:
-        authority_check = world.browser.find_element_by_id('it-is_ca')
         checked = info['certificate authority'] == "yes"
-        Checkbox(authority_check).set_checked(checked)
+        Checkbox.from_id('it-is_ca').set_checked(checked)
 
 
 def insert_hostname_into_form():
@@ -59,7 +57,6 @@ def update_sip_configuration(info):
     Checkbox.from_label("Allow TLS connections").set_checked(checked)
 
     form.set_text_field("Listening address", info['listening address'])
-
     form.set_select_field("Server certificate", info['server certificate'])
     form.set_select_field("CA certificate", info['ca certificate'])
     form.submit_form()
