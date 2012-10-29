@@ -7,7 +7,7 @@ from utils.func import extract_number_and_context_from_extension
 from xivo_lettuce.common import open_url, element_is_in_list
 from xivo_lettuce import form
 from xivo_lettuce.checkbox import Checkbox
-from xivo_lettuce.manager.sys_manager import search_str_in_asterisk_log
+from xivo_lettuce.logs import search_str_in_asterisk_log
 from xivo_lettuce.table import extract_webi_talbe_to_dict
 
 

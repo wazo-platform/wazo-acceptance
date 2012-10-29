@@ -4,7 +4,7 @@ from lettuce import step
 from xivo_lettuce import form
 from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import general_settings_xivo_manager
-from xivo_lettuce.manager.sys_manager import search_str_in_daemon_log
+from xivo_lettuce.logs import search_str_in_daemon_log
 
 
 @step(u'Given a live reload configuration is enable')

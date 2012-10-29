@@ -4,7 +4,7 @@ import socket
 
 from subprocess import Popen, PIPE
 from lettuce.registry import world
-from utils.func import extract_number_and_context_from_extension
+from utils import func
 
 
 def killall_process_sipp():
@@ -13,7 +13,7 @@ def killall_process_sipp():
 
 
 def execute_n_calls_then_hangup(count, extension, duration=3000, username='', password=''):
-    number, context = extract_number_and_context_from_extension(extension)
+    number, context = func.extract_number_and_context_from_extension(extension)
     if not username or not password:
         callto_user = 'to_%s' % context
         callto_pass = 'to_%s' % context
@@ -35,7 +35,7 @@ def execute_n_calls_then_hangup(count, extension, duration=3000, username='', pa
 
 
 def execute_n_calls_then_wait(count, extension, username='', password=''):
-    number, context = extract_number_and_context_from_extension(extension)
+    number, context = func.extract_number_and_context_from_extension(extension)
     if not username or not password:
         callto_user = 'to_%s' % context
         callto_pass = 'to_%s' % context

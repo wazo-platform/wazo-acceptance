@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import datetime
 
 from lettuce import step, world
@@ -6,7 +7,6 @@ from xivo_lettuce import form, logs
 from xivo_lettuce.common import open_url, remove_all_elements, go_to_tab
 from xivo_lettuce.manager import asterisk_manager
 from xivo_lettuce.checkbox import Checkbox
-from selenium.webdriver.support.select import Select
 
 
 def create_or_replace_certificate(info):
@@ -43,13 +43,13 @@ def create_or_replace_certificate(info):
         Checkbox(authority_check).set_checked(checked)
 
 
-
 def insert_hostname_into_form():
     command = ['hostname', '-f']
     hostname = world.ssh_client_xivo.out_call(command).strip()
 
     input_cn = world.browser.find_element_by_id("it-subject-CN")
     input_cn.send_keys(hostname)
+
 
 def update_sip_configuration(info):
     open_url('general_sip')
@@ -71,6 +71,7 @@ def when_i_create_a_certificate_with_the_following_invalid_info(step):
         create_or_replace_certificate(info)
         form.submit_form_with_errors()
 
+
 @step(u'When I create a certificate with following valid info:')
 def when_i_create_a_certificate_with_following_valid_info(step):
     for info in step.hashes:
@@ -84,6 +85,7 @@ def i_create_a_certificate_with_following_valid_info_and_the_server_s_hostname_a
         create_or_replace_certificate(info)
         insert_hostname_into_form()
         form.submit_form()
+
 
 @step(u'When I enable the following options for the SIP Protocol:')
 def when_i_enable_the_following_options_for_the_sip_protocol(step):
@@ -102,14 +104,5 @@ def then_sip_tls_connections_use_the_group1_certificate_for_encryption(step, cer
 
 @step(u'Then there are no warnings when reloading sip configuration')
 def then_there_are_no_warnings_when_reloading_sip_configuration(step):
-
-    now = datetime.datetime.now()
-
     asterisk_manager.send_to_asterisk_cli("sip reload")
-    command = ['tac', '/var/log/asterisk/messages', '|', 'grep', 'WARNING', '--max-count', '5']
-    output = world.ssh_client_xivo.out_call(command).strip()
-
-    lines = logs.read_last_log_lines(output, now)
-    assert len(lines) > 1
-
-
+    assert not logs.search_str_in_asterisk_log('WARNING')
