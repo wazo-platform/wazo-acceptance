@@ -4,11 +4,16 @@ import os
 from lettuce.registry import world
 
 SOUND_REC_PATH = '/usr/share/asterisk/sounds/recordings'
+SOUND_REC_MEETME_PATH = '/var/lib/asterisk/sounds/meetme'
 MOH_PATH = '/usr/share/asterisk/moh/default'
 
 
 def create_recordings_file(filename):
     _touch_remote_file(os.path.join(SOUND_REC_PATH, filename))
+
+
+def create_recordings_meetme_file(filename):
+    _touch_remote_file(os.path.join(SOUND_REC_MEETME_PATH, filename))
 
 
 def _touch_remote_file(abs_filename):

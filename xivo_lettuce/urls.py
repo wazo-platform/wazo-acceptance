@@ -5,6 +5,10 @@ ALIAS = {
         'module': 'sounds',
         'qry': {'dir': 'recordings'}
     },
+    'recording meetme file': {
+        'module': 'sounds',
+        'qry': {'dir': 'recordings-meetme'}
+    },
     'musiconhold file': {
         'module': 'musiconhold',
         'qry': {'act': 'listfile',

@@ -11,3 +11,7 @@ Feature: Files
     Scenario: List g722 asterisk moh sound
         Given a musiconhold file with name "macroform-cold_day.g722"
         Then musiconhold file "macroform-cold_day.g722" is displayed in the list
+
+    Scenario: Recording meetme
+        Given a recording meetme file with name "meetme-4000-1351609395.wav"
+        Then recording meetme file "meetme-4000-1351609395.wav" is displayed in the list
