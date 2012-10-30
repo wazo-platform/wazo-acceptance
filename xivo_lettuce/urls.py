@@ -37,6 +37,10 @@ URLS = {
         'web': '/service/ipbx/index.php/pbx_settings/lines',
         'ws': 'ipbx/pbx_settings/lines'
     },
+    'device': {
+        'web': '/service/ipbx/index.php/pbx_settings/devices',
+        'ws': 'ipbx/pbx_settings/devices'
+    },
     'voicemail': {
         'web': '/service/ipbx/index.php/pbx_settings/voicemail',
         'ws': 'ipbx/pbx_settings/voicemail'
