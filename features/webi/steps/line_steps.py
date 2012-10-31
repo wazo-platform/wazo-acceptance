@@ -37,7 +37,9 @@ def when_i_set_the_interface(step, interface):
 
 @step(u'When I remove this line')
 def when_i_remove_this_line(step):
+    open_url('line', 'search', {'search': world.id})
     remove_line(world.id)
+    open_url('line', 'search', {'search': ''})
 
 
 @step(u'When I search for this line')
