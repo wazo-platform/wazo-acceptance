@@ -47,7 +47,7 @@ def when_i_check_this_option(step, checkstate):
     Checkbox(option).set_checked(goal_checked)
 
 
-@step(u'Given there is no (?!queue)([a-z ]*) "([^"]*)"$')
+@step(u'Given there is no ([a-z ]*) "([^"]*)"$')
 def given_there_is_no_element(step, module, search):
     remove_element_if_exist(module, search)
 
