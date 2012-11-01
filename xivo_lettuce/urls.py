@@ -25,7 +25,10 @@ ALIAS = {
     },
     'LDAP filter': {
         'module': 'ldapfilter'
-    }
+    },
+    'CTI profile': {
+        'module': 'profile'
+    },
 }
 
 URLS = {

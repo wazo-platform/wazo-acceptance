@@ -1,14 +1,11 @@
 Feature: Profile
 
     Scenario: Add a CTI profile
-        Given there is no profile "test"
-        Given there is no profile "TEST"
-        When I add a CTI profile
-        When I set the profile name to "TEST"
-        When I submit with errors
+        Given there is no CTI profile "test"
+        Given there is no CTI profile "TEST"
+        When I add the CTI profile "TEST" with errors
         Then I see errors
-        When I set the profile name to "test"
-        When I submit
+        When I add the CTI profile "test"
         Then I see no errors
 
     Scenario: Remove a CTI profile that is associated with a user
