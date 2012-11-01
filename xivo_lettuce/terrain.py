@@ -45,7 +45,7 @@ def initialize():
 
 def read_config():
     config = ConfigParser.RawConfigParser()
-    config_environ = os.environ['LETTUCE_CONFIG']
+    config_environ = os.getenv('LETTUCE_CONFIG')
     if config_environ and os.path.exists(config_environ):
         config_file = config_environ
     else:
