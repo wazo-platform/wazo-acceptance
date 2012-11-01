@@ -141,16 +141,6 @@ def when_i_create_a_user(step, firstname, lastname):
     form.submit_form()
 
 
-@step(u'When I add user "([^"]*)" "([^"]*)" in group "([^"]*)"$')
-def when_i_create_a_user_in_group(step, firstname, lastname, group):
-    import group_steps as grp
-    grp.when_i_create_group(step, group)
-    open_url('user', 'add')
-    user_manager.type_user_names(firstname, lastname)
-    user_manager.type_user_in_group(group)
-    form.submit_form()
-
-
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
     user_id = user_manager_ws.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
@@ -191,19 +181,6 @@ def i_enable_the_xivo_client_as_1_pass_2_profile_3(step, login, password, profil
     step.given('I set the text field "Login" to "%s"' % login)
     step.given('I set the text field "Password" to "%s"' % password)
     step.given('I set the select field "Profile" to "%s"' % profile)
-
-
-@step(u'I add a SIP line "([^"]*)" to the user')
-def given_i_add_a_sip_line_1(step, linenumber):
-    user_manager.user_form_add_line(linenumber)
-
-
-@step(u'I add a voicemail "([^"]*)"')
-def i_add_a_voicemail_1_on_2(step, vm_num):
-    go_to_tab('Voicemail')
-    step.given('I set the select field "Voice Mail" to "Asterisk"')
-    step.given('Given the option "Enable voicemail" is checked')
-    step.given('I set the text field "Voicemail" to "%s"' % vm_num)
 
 
 @step(u'When I delete agent number "([^"]*)"')

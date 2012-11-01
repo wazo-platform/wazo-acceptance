@@ -35,15 +35,3 @@ def then_i_see_rejected_call_in_asterisk_log(step, extension):
     number, context = extract_number_and_context_from_extension(extension)
     expression = "to extension '%s' rejected because extension not found in context '%s'" % (number, context)
     assert search_str_in_asterisk_log(expression)
-
-
-@step(u'Then i see the called extension "([^"]*)" by "([^"]*)" in call logs page')
-def then_i_see_the_called_extension_in_call_logs_page(step, called, caller):
-    open_url('cel')
-    form.submit_form()
-
-    table = world.browser.find_element_by_xpath("//div[@id='sb-part-result']/div/table")
-    lines = extract_webi_talbe_to_dict(table)
-
-    last_call = lines.pop()
-    assert last_call['Called'] == called

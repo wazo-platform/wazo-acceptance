@@ -18,11 +18,6 @@ def given_there_is_no_entry_in_queue_queue(step, event, queue_name):
     queuelog_manager.delete_event_by_queue(event, queue_name)
 
 
-@step(u'^Given there is no "([A-Z_]+)" entry in queue "(\S+)" between "(.+)" and "(.+)"$')
-def given_there_is_no_event_entry_in_queue_log_table_in_queue_between(step, event, queue_name, start, end):
-    queuelog_manager.delete_event_by_queue_between(event, queue_name, start, end)
-
-
 @step(u'^Given there is no entries in queue_log between "(.+)" and "(.+)"$')
 def given_there_is_no_entries_in_queue_log_table_between(step, start, end):
     queuelog_manager.delete_event_between(start, end)
@@ -98,19 +93,6 @@ def given_i_wait_call_then_i_answer_then_i_answer_and_wait(step):
 def given_i_wait_call_then_i_answer_then_hangup_after_n_seconds(step, call_duration):
     call_duration_ms = int(call_duration) * 1000
     call_manager.execute_answer_then_hangup(call_duration_ms)
-
-
-@step(u'Given I wait call then I answer after "([0-9]+)s" then I hang up after "([0-9]+)s"')
-def given_i_wait_call_then_answer_after_x_seconds_then_i_hangup_after_n_second(step, ring_time, call_duration):
-    ring_time_ms = int(ring_time) * 1000
-    call_duration_ms = int(call_duration) * 1000
-    call_manager.execute_answer_then_hangup(call_duration_ms, ring_time_ms)
-
-
-@step(u'Given I wait call then I answer after "([0-9]+)s" then I wait')
-def given_i_wait_then_i_answer_after_n_second_then_i_wait(step, ring_time):
-    ring_time_ms = int(ring_time) * 1000
-    call_manager.execute_answer_then_wait(ring_time_ms)
 
 
 @step(u'I wait (\d+) seconds')

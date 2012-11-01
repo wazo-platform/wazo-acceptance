@@ -27,18 +27,6 @@ def when_i_disable_the_sip_encryption_option(step, label):
     form.submit_form()
 
 
-@step(u'Then the "([^"]*)" option is enabled')
-def then_the_sip_encryption_option_is_enabled(step, label):
-    option = _get_sip_option_from_label(label)
-    assert option.is_checked()
-
-
-@step(u'Then the "([^"]*)" option is disabled')
-def then_the_sip_encryption_option_is_disabled(step, label):
-    option = _get_sip_option_from_label(label)
-    assert not option.is_checked()
-
-
 @step(u'^Then I should see "([^"]*)" to "([^"]*)" in "([^"]*)"$')
 def then_i_see_sip_encryption_in_file(step, var_name, expected_var_val, file):
     var_val = asterisk_manager.get_asterisk_conf(file, var_name)

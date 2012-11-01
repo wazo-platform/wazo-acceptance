@@ -21,18 +21,6 @@ def i_start_the_xivo_client(step):
         raise
 
 
-@step(u'I go to the XiVO Client configuration')
-@xivoclient_step
-def i_go_to_the_xivo_client_configuration(step):
-    pass
-
-
-@step(u'I close the XiVO Client configuration')
-@xivoclient_step
-def i_close_the_xivo_client_configuration(step):
-    pass
-
-
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"$')
 def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
     xivo_address = common.get_host_address()
@@ -74,8 +62,3 @@ def i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(host, login, p
 @xivoclient_step
 def i_log_out_of_the_xivo_client(step):
     assert world.xc_response == 'OK'
-
-
-@step(u'I stop the XiVO Client$')
-def when_i_stop_the_xivo_client(step):
-    i_stop_the_xivo_client()

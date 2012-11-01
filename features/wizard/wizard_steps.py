@@ -10,11 +10,6 @@ def given_there_is_xivo_not_configured(step):
     world.ssh_client_xivo.check_call(cmd)
 
 
-@step(u'When I open the url')
-def when_i_open_the_url(step):
-    world.browser.get(world.host)
-
-
 @step(u'When I start the wizard')
 def when_i_start_the_wizard(step):
     world.browser.get(world.host)

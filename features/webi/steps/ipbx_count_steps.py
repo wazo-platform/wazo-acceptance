@@ -68,18 +68,3 @@ def then_i_should_have_n_more_then_remembered_calue(step, count, name_var):
     except Exception:
         assert(False)
     assert((int(nb_exist_trunk) + int(count)) == _get_total_sip_trunk_count())
-
-
-@step(u'Then I should have (\d+) ([a-z]+) sip trunk')
-def then_i_should_have_enable_sip_trunk(step, count, status):
-    if status == 'enabled':
-        assert (int(count) == _get_enabled_sip_trunk_count())
-    elif status == 'disabled':
-        assert (int(count) == _get_disabled_sip_trunk_count())
-    else:
-        assert(False)
-
-
-@step(u'Then I should have (\d+) sip trunk')
-def then_i_should_have_x_sip_trunk(step, count):
-    assert(int(count) == _get_total_sip_trunk_count())

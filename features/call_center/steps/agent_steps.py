@@ -13,19 +13,6 @@ from lettuce.registry import world
 from selenium.webdriver.common.action_chains import ActionChains
 
 
-@step(u'Given an agent "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)" in group default')
-def given_an_agent_in_group_default(step, firstname, lastname, number, password):
-    agent_manager_ws.delete_agent_with_number(number)
-    agent_data = {
-        'firstname': firstname,
-        'lastname': lastname,
-        'number': number,
-        'context': 'default',
-        'password': password
-    }
-    agent_manager_ws.add_agent(agent_data)
-
-
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
 def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, extension):
     number, context = func.extract_number_and_context_from_extension(extension)

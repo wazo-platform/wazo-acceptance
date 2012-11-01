@@ -12,16 +12,6 @@ from xivo_lettuce.manager.queue_manager import type_queue_name_display_name_numb
 from xivo_lettuce.manager_ws.queue_manager_ws import get_queue_id_with_queue_name
 
 
-@step(u'Given there is no queue "([^"]*)"')
-def given_there_is_no_queue_1(step, queue_name):
-    queue_manager_ws.delete_queue_with_name_if_exists(queue_name)
-
-
-@step(u'Given there is no queue with number "([^"]*)"')
-def given_there_is_no_queue_with_number_1(step, queue_number):
-    queue_manager_ws.delete_queue_with_number_if_exists(queue_number)
-
-
 @step(u'Given there is a queue "([^"]+)" with extension "([^"]+)"$')
 def given_there_is_a_queue_in_context_with_number(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
@@ -40,20 +30,6 @@ def given_there_is_a_queue_joinempty_with_extension(step, name, extension):
             'number': number,
             'context': context,
             'joinempty': 'unavailable'}
-    queue_manager_ws.add_queue(data)
-
-
-@step(u'Given there is a queue "([^"]+)" diverted with extension "([^"]+)" with agent "([^"]+)"$')
-def given_there_is_a_queue_diverted_with_extension_with_agent(step, name, extension, agent_number):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    remove_queues_with_name_or_number_if_exist(name, number)
-    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
-    data = {'name': name,
-            'number': number,
-            'context': context,
-            'agents': [agent_id],
-            'waittime': 5,
-            'waitratio': 100}
     queue_manager_ws.add_queue(data)
 
 

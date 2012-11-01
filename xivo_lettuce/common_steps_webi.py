@@ -28,11 +28,6 @@ def given_the_option_is_checked(step, option_name, checkstate):
     the_option_is_checked(option_name, checkstate, given=True)
 
 
-@step(u'Then the option "([^"]*)" is (not )?checked')
-def then_the_option_is_checked(step, option_name, checkstate):
-    the_option_is_checked(option_name, checkstate)
-
-
 @step(u'When I (un)?check the option "([^"]*)"')
 def when_i_check_the_option_1(step, checkstate, option_label):
     option = world.browser.find_element_by_label(option_label)

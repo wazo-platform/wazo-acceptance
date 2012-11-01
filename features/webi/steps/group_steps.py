@@ -24,11 +24,6 @@ def given_there_is_a_group_with_extension_and_users(step, name, extension):
     group_manager_ws.add_group(name, number, context, user_ids)
 
 
-@step(u'Given there is no group with number "([^"]*)"')
-def given_there_is_no_group_with_number(step, number):
-    group_manager_ws.delete_group_with_number(number)
-
-
 @step(u'Given there is no group with name "([^"]*)"')
 def given_there_is_no_group_with_name(step, name):
     group_manager_ws.delete_group_with_name(name)
@@ -49,13 +44,6 @@ def when_i_set_a_group_with_number_(step, group_name, group_number):
     type_group_name(group_name)
     type_group_number(group_number)
     type_context('default')
-
-
-@step(u'When I create a group "([^"]*)"$')
-def when_i_create_group(step, group_name):
-    open_url('group', 'add')
-    type_group_name(group_name)
-    form.submit_form()
 
 
 @step(u'When group "([^"]*)" is removed')
