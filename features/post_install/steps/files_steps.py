@@ -13,12 +13,12 @@ ASTERISK_SOUND_PATH = '/usr/share/asterisk/sounds/en'
 
 @step(u'Then directory of the Asterisk voicemail is empty')
 def then_directory_of_the_asterisk_voicemail_is_empty(step):
-    assert not sysutils.dir_not_empty(ASTERISK_VM_PATH)
+    assert sysutils.dir_is_empty(ASTERISK_VM_PATH)
 
 
 @step(u'Then Asterisk sound files correctly installed')
 def then_asterisk_sound_files_correctly_installed(step):
-    assert sysutils.dir_not_empty(ASTERISK_SOUND_PATH)
+    assert not sysutils.dir_is_empty(ASTERISK_SOUND_PATH)
 
 
 @step(u'Then Asterisk owns /dev/dadhi')

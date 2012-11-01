@@ -12,12 +12,9 @@ def path_exists(path):
         return False
 
 
-def dir_not_empty(path):
-    command = ['ls', path, '|', 'wc', '-l']
-    try:
-        return world.ssh_client_xivo.check_call(command) == 0
-    except Exception:
-        return False
+def dir_is_empty(path):
+    command = ['ls', '-1A', path, '|', 'wc', '-l']
+    return world.ssh_client_xivo.out_call(command).strip() == '0'
 
 
 def get_list_file(path):

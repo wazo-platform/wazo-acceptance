@@ -43,4 +43,4 @@ def then_i_not_see_process_monitored_by_monit(step, process_name):
 @step(u'Then directory of the dhcpd update not empty')
 def then_directory_at_the_dhcpd_update_not_empty(step):
     DHCPD_UPDATE_DIR = '/etc/dhcp/dhcpd_update'
-    assert sysutils.dir_not_empty(DHCPD_UPDATE_DIR)
+    assert not sysutils.dir_is_empty(DHCPD_UPDATE_DIR)
