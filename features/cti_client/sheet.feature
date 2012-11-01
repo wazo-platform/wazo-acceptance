@@ -8,8 +8,6 @@ Feature: Sheet
 
         Given I assign the sheet "testsheet" to the "Agent linked" event
 
-        Given there is no user "Cedric" "Abunar"
-        Given there is no agent with number "1153"
         Given there is a user "Cedric" "Abunar" with an agent "1153@default" and CTI profile "Client"
 
         Given there is a queue "frere" with extension "3009@default" with agent "1153"
