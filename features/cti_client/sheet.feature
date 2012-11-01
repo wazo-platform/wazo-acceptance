@@ -33,7 +33,7 @@ Feature: Sheet
         | xivo-calleridnum  | 1234            |
         | xivo-calleridname | Laurent Demange |
 
-    Scenario: Variables on link event
+    Scenario: Variables on link event User
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
         | xivo-calledidname |
