@@ -8,7 +8,7 @@ from xivo_lettuce.common import open_url
 
 @step(u'Given I remove skill rule "([^"]*)"')
 def given_i_remove_skill_rule(step, skill_rule_name):
-    skill_rule_manager_ws.delete_skill_rule_with_name(skill_rule_name)
+    skill_rule_manager_ws.delete_skill_rules_with_name(skill_rule_name)
 
 
 @step(u'When I create a skill rule "([^"]*)"')
