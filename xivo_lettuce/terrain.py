@@ -45,11 +45,15 @@ def initialize():
 
 def read_config():
     config = ConfigParser.RawConfigParser()
-    local_config = '%s.local' % _CONFIG_FILE
-    if os.path.exists(local_config):
-        config_file = local_config
+    config_environ = os.environ['LETTUCE_CONFIG']
+    if config_environ and os.path.exists(config_environ):
+        config_file = config_environ
     else:
-        config_file = _CONFIG_FILE
+        local_config = '%s.local' % _CONFIG_FILE
+        if os.path.exists(local_config):
+            config_file = local_config
+        else:
+            config_file = _CONFIG_FILE
     with open(config_file) as fobj:
         config.readfp(fobj)
     return config
