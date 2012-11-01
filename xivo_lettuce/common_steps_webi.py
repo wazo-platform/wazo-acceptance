@@ -10,17 +10,11 @@ from xivo_lettuce import form
 from lettuce.registry import world
 from xivo_lettuce.checkbox import Checkbox
 from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce.manager_ws.context_manager_ws import add_context
 
 
 @step(u'When I login as (.*) with password (.*) in (.*)')
 def when_i_login_the_webi(step, login, password, language):
     webi_login(login, password, language)
-
-
-@step(u'Given there is a outcall context "([^"]*)"')
-def given_there_is_a_ouctall_context(step, context_name):
-    add_context(context_name, context_name, 'outcall')
 
 
 @step(u'Given the option "([^"]*)" is (not )?checked')

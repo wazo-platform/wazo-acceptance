@@ -11,6 +11,7 @@ from xivo_lettuce.manager.outcall_manager import exten_line
 from xivo_lettuce.manager_ws import trunksip_manager_ws, outcall_manager_ws
 from xivo_lettuce import form
 from selenium.webdriver.support.select import Select
+from xivo_lettuce.manager_ws import context_manager_ws
 
 
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
@@ -21,6 +22,11 @@ def given_there_is_an_outcall_with_trunk(step, outcall_name, trunk_name):
             'context': 'to-extern',
             'trunks': [trunk_id]}
     outcall_manager_ws.add_outcall(data)
+
+
+@step(u'Given there is a outcall context "([^"]*)"')
+def given_there_is_a_ouctall_context(step, context_name):
+    context_manager_ws.add_context(context_name, context_name, 'outcall')
 
 
 @step(u'Given there is an outcall "([^"]*)" in context "([^"]*)" with trunk "([^"]*)"')
