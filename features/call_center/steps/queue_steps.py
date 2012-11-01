@@ -41,9 +41,9 @@ def given_there_is_a_queue_closed_with_extension_with_agent(step, name, extensio
               'weekdays': '1-1',
               'monthdays': '1-1',
               'months': '1-1'}
-    schedule_manager_ws.delete_schedule_with_name('always_closed')
+    schedule_manager_ws.delete_schedules_with_name('always_closed')
     schedule_manager_ws.add_schedule('always_closed', opened)
-    schedule_id = schedule_manager_ws.get_schedule_id_with_name('always_closed')
+    schedule_id = schedule_manager_ws.find_schedule_id_with_name('always_closed')
 
     data = {'name': name,
             'number': number,
