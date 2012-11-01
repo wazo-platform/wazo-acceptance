@@ -8,20 +8,12 @@ from xivo_lettuce.common import webi_login, remove_element_if_exist, \
     element_is_in_list, element_is_not_in_list, go_to_tab
 from xivo_lettuce import form
 from lettuce.registry import world
-from xivo_lettuce.checkbox import Checkbox
 from selenium.common.exceptions import NoSuchElementException
 
 
 @step(u'When I login as (.*) with password (.*) in (.*)')
 def when_i_login_the_webi(step, login, password, language):
     webi_login(login, password, language)
-
-
-@step(u'When I (un)?check the option "([^"]*)"')
-def when_i_check_the_option_1(step, checkstate, option_label):
-    option = world.browser.find_element_by_label(option_label)
-    goal_checked = (checkstate is None)
-    Checkbox(option).set_checked(goal_checked)
 
 
 @step(u'Given there is no ([a-z ]*) "([^"]*)"$')
