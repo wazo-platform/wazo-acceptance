@@ -11,9 +11,6 @@ from xivo_lettuce import common
 def i_start_the_xivo_client(step):
     run_xivoclient()
 
-    # Waiting for the listening socket to open
-    time.sleep(1)
-
     try:
         world.xc_socket.connect('/tmp/xivoclient')
     except:

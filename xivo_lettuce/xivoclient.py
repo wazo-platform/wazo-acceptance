@@ -4,6 +4,7 @@ import os
 import subprocess
 import socket
 import json
+import time
 from lettuce import before, after, world
 
 
@@ -14,6 +15,9 @@ def run_xivoclient():
     world.xc_process = subprocess.Popen('./xivoclient',
                                         cwd=xc_path,
                                         env=environment_variables)
+
+    # Waiting for the listening socket to open
+    time.sleep(1)
 
 
 def xivoclient_step(f):
