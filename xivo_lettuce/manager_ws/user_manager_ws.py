@@ -126,3 +126,17 @@ def user_id_is_in_group_name(group_name, user_id):
         if id == user_id:
             return True
     return False
+
+
+def disable_cti_client(firstname, lastname):
+    user = find_user_with_firstname_lastname(firstname, lastname)
+    user.enable_client = False
+    world.ws.users.edit(user)
+
+
+def enable_cti_client(firstname, lastname):
+    user = find_user_with_firstname_lastname(firstname, lastname)
+    user.client_username = firstname.lower()
+    user.client_password = lastname.lower()
+    user.enable_client = True
+    world.ws.users.edit(user)
