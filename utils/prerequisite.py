@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 
+import os
 import socket
 
 from lettuce import world
@@ -7,11 +8,17 @@ from xivo_lettuce.manager_ws import context_manager_ws, trunksip_manager_ws
 from xivo_lettuce.terrain import initialize, deinitialize
 
 
+_WEBSERVICES_SQL_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'webservices.sql'))
+
+
 def main():
     print 'Initializing ...'
     initialize()
     try:
         callgen_ip = socket.gethostbyname(world.callgen_host)
+
+        print 'Adding WebService Access'
+        _create_webservices_access()
 
         print 'Adding context'
         context_manager_ws.update_contextnumbers_queue('statscenter', 5000, 5100)
@@ -37,6 +44,12 @@ def main():
 
     finally:
         deinitialize()
+
+
+def _create_webservices_access():
+    world.ssh_client_xivo.send_files(_WEBSERVICES_SQL_FILE, '/tmp')
+    cmd = ['sudo', '-u', 'postgres', 'psql', '-f', '/tmp/webservices.sql']
+    world.ssh_client_xivo.check_call(cmd)
 
 
 def _create_pgpass_on_remote_host():

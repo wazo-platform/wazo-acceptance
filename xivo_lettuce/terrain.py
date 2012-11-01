@@ -98,6 +98,7 @@ def _setup_ssh_client_xivo(config):
     hostname = config.get('xivo', 'hostname')
     login = config.get('ssh_infos', 'login')
     world.xivo_host = hostname
+    world.xivo_login = login
     world.ssh_client_xivo = SSHClient(hostname, login)
     return world.ssh_client_xivo
 

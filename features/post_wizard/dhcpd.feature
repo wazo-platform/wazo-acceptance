@@ -1,14 +1,15 @@
 Feature: DHCPD
 
+    Scenario: update files are present
+        Then directory at the dhcpd update not empty
+
     Scenario: DHCP not monitored after wizard executed
         When I wizard correctly executed
         Then I not see "isc-dhcp-server" monitored by monit
 
-
     Scenario: DHCP monitored after enable it
         When I activate dhcpd server
         Then I see "isc-dhcp-server" monitored by monit
-
 
     Scenario: DHCP not monitored after disable it
         When I desactivate dhcpd server

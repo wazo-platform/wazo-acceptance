@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from lettuce import step
-from xivo_lettuce import form
+from xivo_lettuce import form, sysutils
 from xivo_lettuce.terrain import _webi_configured
 from xivo_lettuce.manager import dhcpd_manager, commonconf_manager
 from xivo_lettuce.common import open_url
@@ -38,3 +38,9 @@ def then_i_see_process_monitored_by_monit(step, process_name):
 @step(u'Then I not see "([^"]*)" monitored by monit')
 def then_i_not_see_process_monitored_by_monit(step, process_name):
     assert not dhcpd_manager.process_monitored(process_name)
+
+
+@step(u'Then directory at the dhcpd update not empty')
+def then_directory_at_the_dhcpd_update_not_empty(step):
+    DHCPD_UPDATE_DIR = '/etc/dhcp/dhcpd_update'
+    assert sysutils.dir_not_empty(DHCPD_UPDATE_DIR)

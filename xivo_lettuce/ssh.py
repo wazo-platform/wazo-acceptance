@@ -9,18 +9,35 @@ class SSHClient(object):
         self._hostname = hostname
         self._login = login
 
+    def send_files(self, path_from, path_to):
+        xivo_ssh = '%s@%s' % (self._login, self._hostname)
+        cmd = ['"%s"' % path_from, '"%s:%s"' % (xivo_ssh, path_to)]
+        scp_command = ['scp',
+                       '-o', 'PreferredAuthentications=publickey',
+                       '-o', 'StrictHostKeyChecking=no',
+                       '-o', 'UserKnownHostsFile=/dev/null']
+        scp_command.extend(cmd)
+
+        return subprocess.call(scp_command,
+                               stdout=PIPE,
+                               stderr=STDOUT,
+                               close_fds=True)
+
     def call(self, remote_command):
         return self._exec_ssh_command(remote_command)
 
-    def _format_ssh_command(self, remote_command):
-        ssh_command = ['ssh',
-                       '-o', 'PreferredAuthentications=publickey',
-                       '-o', 'StrictHostKeyChecking=no',
-                       '-o', 'UserKnownHostsFile=/dev/null',
-                       '-l', self._login,
-                       self._hostname]
-        ssh_command.extend(remote_command)
-        return ssh_command
+    def check_call(self, remote_command):
+        retcode = self._exec_ssh_command(remote_command)
+        if retcode != 0:
+            raise Exception('Remote command %r returned non-zero exit status %r' %
+                            (remote_command, retcode))
+        return retcode
+
+    def out_call(self, remote_command):
+        return self._exec_ssh_command_with_return_stdout(remote_command)
+
+    def out_err_call(self, remote_command):
+        return self._exec_ssh_command_with_return_stdout_stderr(remote_command)
 
     def _exec_ssh_command(self, remote_command):
         command = self._format_ssh_command(remote_command)
@@ -59,15 +76,12 @@ class SSHClient(object):
 
         return stdoutdata
 
-    def check_call(self, remote_command):
-        retcode = self._exec_ssh_command(remote_command)
-        if retcode != 0:
-            raise Exception('Remote command %r returned non-zero exit status %r' %
-                            (remote_command, retcode))
-        return retcode
-
-    def out_call(self, remote_command):
-        return self._exec_ssh_command_with_return_stdout(remote_command)
-
-    def out_err_call(self, remote_command):
-        return self._exec_ssh_command_with_return_stdout_stderr(remote_command)
+    def _format_ssh_command(self, remote_command):
+        ssh_command = ['ssh',
+                       '-o', 'PreferredAuthentications=publickey',
+                       '-o', 'StrictHostKeyChecking=no',
+                       '-o', 'UserKnownHostsFile=/dev/null',
+                       '-l', self._login,
+                       self._hostname]
+        ssh_command.extend(remote_command)
+        return ssh_command
