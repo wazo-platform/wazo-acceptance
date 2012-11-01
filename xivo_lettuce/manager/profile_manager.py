@@ -14,6 +14,13 @@ def delete_profile(profile_label):
     remove_line(profile_label)
 
 
+def delete_profile_if_exists(profile_label):
+    try:
+        delete_profile(profile_label)
+    except NoSuchElementException:
+        pass
+
+
 def type_profile_names(id, display_name):
     input_id = world.browser.find_element_by_id('it-profiles-name')
     input_id.clear()
