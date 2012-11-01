@@ -3,23 +3,23 @@
 from lettuce.decorators import step
 from xivo_lettuce.manager import skill_rule_manager
 from xivo_lettuce.manager_ws import skill_rule_manager_ws
-from xivo_lettuce.common import open_url
+from xivo_lettuce import common, form
 
 
-@step(u'Given I remove skill rule "([^"]*)"')
-def given_i_remove_skill_rule(step, skill_rule_name):
+@step(u'Given the skill rule "([^"]*)" does not exist')
+def given_the_skill_rule_does_not_exist(step, skill_rule_name):
     skill_rule_manager_ws.delete_skill_rules_with_name(skill_rule_name)
 
 
 @step(u'When I create a skill rule "([^"]*)"')
 def when_i_create_a_skill_rule(step, skill_rule_name):
-    open_url('skill_rule', 'add')
+    common.open_url('skill_rule', 'add')
     skill_rule_manager.type_skill_rule_name(skill_rule_name)
-
-
-@step(u'When I add a rule "([^"]*)"')
-def when_i_add_a_rule(step, rule):
-    skill_rule_manager.add_rule(rule)
+    skill_rule_config = step.hashes
+    for skill_rule_element in skill_rule_config:
+        rule = skill_rule_element['rule']
+        skill_rule_manager.add_rule(rule)
+    form.submit_form()
 
 
 @step(u'Then "([^"]*)" is displayed in the list')
