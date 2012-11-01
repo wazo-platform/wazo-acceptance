@@ -30,4 +30,3 @@ def check_output_asterisk_cli(asterisk_command):
     shell_command = ['asterisk', '-rx', '"%s"' % asterisk_command]
     output = world.ssh_client_xivo.out_call(shell_command)
     return output
-

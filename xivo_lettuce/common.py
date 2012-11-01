@@ -109,7 +109,9 @@ def open_url(module, act=None, qry={}):
         raise Exception("Unknown module : %s" % module)
 
     qry_encode = urllib.urlencode(qry)
-    url = '%s%s?%s' % (world.host, uri, qry_encode)
+    url = '%s%s' % (world.host, uri)
+    if qry_encode:
+        url = '%s?%s' % (url, qry_encode)
     world.browser.get(url)
 
 

@@ -168,5 +168,9 @@ URLS = {
     'phonebook': {
         'web': '/service/ipbx/index.php/pbx_services/phonebook',
         'ws': None
-    }
+    },
+    'parking': {
+        'web': '/service/ipbx/index.php/pbx_services/extenfeatures/#parking',
+        'ws': None,
+    },
 }
