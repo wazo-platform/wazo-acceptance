@@ -32,18 +32,6 @@ def given_i_see_a_call_limit_to_netmask_of_calls(step, destination, netmask, lim
         form.submit_form()
 
 
-@step(u'Given the SRV lookup option is disabled')
-def given_the_srv_lookup_option_is_disabled(step):
-    option = _get_srv_lookup_option()
-
-    if option.is_checked():
-        option.uncheck()
-        form.submit_form()
-
-        option = _get_srv_lookup_option()
-        assert not option.is_checked()
-
-
 @step(u'I go on the General Settings > IAX Protocol page, tab "([^"]*)"')
 def i_go_on_the_general_settings_iax_protocol_page_tab(step, tab):
     open_url('general_iax')
@@ -96,6 +84,18 @@ def then_i_don_t_see_a_call_limit_to_group1_netmask_group2(step, destination, ne
         assert False, 'the call limit has not been removed'
     except NoSuchElementException:
         pass
+
+
+@step(u'Given the SRV lookup option is disabled')
+def given_the_srv_lookup_option_is_disabled(step):
+    option = _get_srv_lookup_option()
+
+    if option.is_checked():
+        option.uncheck()
+        form.submit_form()
+
+        option = _get_srv_lookup_option()
+        assert not option.is_checked()
 
 
 @step(u'When I enable the SRV lookup option')
