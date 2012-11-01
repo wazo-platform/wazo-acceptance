@@ -24,7 +24,7 @@ def when_i_download_backup_file(step, filename):
 def then_a_non_empty_file_is_present_on_disk(step, filename):
     path = os.path.join('/', 'tmp', filename)
     filesize = 0
-    for x in range(30):
+    for _ in range(30):
         time.sleep(1)
         is_file = os.path.isfile(path)
         if is_file:
@@ -36,3 +36,4 @@ def then_a_non_empty_file_is_present_on_disk(step, filename):
                 raise Exception("Unknown file : %s" % path)
 
     assert filesize > 0, 'filesize : %s' % filesize
+    os.remove(path)
