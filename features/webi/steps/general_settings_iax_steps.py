@@ -130,3 +130,49 @@ def _get_srv_lookup_option():
     option = Checkbox.from_label('SRV lookup')
 
     return option
+
+
+@step(u'Given the Shrink caller ID option is disabled')
+def given_the_shrink_caller_id_option_is_disabled(step):
+    option = _get_shrink_caller_id_option()
+
+    if option.is_checked():
+        option.uncheck()
+        form.submit_form()
+
+        option = _get_shrink_caller_id_option()
+        assert not option.is_checked()
+
+
+@step(u'When I enable the Shrink caller ID option')
+def when_i_enable_the_shrink_caller_id_option(step):
+    option = _get_shrink_caller_id_option()
+    option.check()
+    form.submit_form()
+
+
+@step(u'Then the Shrink caller ID option is enabled')
+def then_the_shrink_caller_id_option_is_enabled(step):
+    option = _get_shrink_caller_id_option()
+    assert option.is_checked()
+
+
+@step(u'When I disable the Shrink caller ID option')
+def when_i_disable_the_shrink_caller_id_option(step):
+    option = _get_shrink_caller_id_option()
+    option.uncheck()
+    form.submit_form()
+
+
+@step(u'Then the Shrink caller ID option is disabled')
+def then_the_shrink_caller_id_option_is_disabled(step):
+    option = _get_shrink_caller_id_option()
+    assert not option.is_checked()
+
+
+def _get_shrink_caller_id_option():
+    open_url('general_iax')
+    go_to_tab('Advanced')
+    option = Checkbox.from_label('Shrink CallerID')
+
+    return option

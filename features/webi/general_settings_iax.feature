@@ -1,24 +1,11 @@
 Feature: IAX general parameters
 
-    Scenario: Enable shrink Caller ID
-        Given I go on the General Settings > IAX Protocol page, tab "Advanced"
-        Given the option "Shrink CallerID" is not checked
-        Given I submit
-        When I go on the General Settings > IAX Protocol page, tab "Advanced"
-        When I check this option
-        When I submit
-        When I go on the General Settings > IAX Protocol page, tab "Advanced"
-        Then this option is checked
-
-    Scenario: Disable shrink Caller ID
-        Given I go on the General Settings > IAX Protocol page, tab "Advanced"
-        Given the option "Shrink CallerID" is checked
-        Given I submit
-        When I go on the General Settings > IAX Protocol page, tab "Advanced"
-        When I uncheck this option
-        When I submit
-        When I go on the General Settings > IAX Protocol page, tab "Advanced"
-        Then this option is not checked
+    Scenario: Toggle Shrink caller ID
+        Given the Shrink caller ID option is disabled
+        When I enable the Shrink caller ID option
+        Then the Shrink caller ID option is enabled
+        When I disable the Shrink caller ID option
+        Then the Shrink caller ID option is disabled
 
     Scenario: Toggle SRV lookup
         Given the SRV lookup option is disabled

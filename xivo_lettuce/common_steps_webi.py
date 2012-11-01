@@ -17,21 +17,9 @@ def when_i_login_the_webi(step, login, password, language):
     webi_login(login, password, language)
 
 
-@step(u'Given the option "([^"]*)" is (not )?checked')
-def given_the_option_is_checked(step, option_name, checkstate):
-    the_option_is_checked(option_name, checkstate, given=True)
-
-
 @step(u'When I (un)?check the option "([^"]*)"')
 def when_i_check_the_option_1(step, checkstate, option_label):
     option = world.browser.find_element_by_label(option_label)
-    goal_checked = (checkstate is None)
-    Checkbox(option).set_checked(goal_checked)
-
-
-@step(u'When I (un)?check this option')
-def when_i_check_this_option(step, checkstate):
-    option = world.browser.find_element_by_label(world.last_option_label)
     goal_checked = (checkstate is None)
     Checkbox(option).set_checked(goal_checked)
 
@@ -72,11 +60,6 @@ def then_i_see_no_errors(step):
         pass
     else:
         raise form.FormErrorException(error_element.text)
-
-
-@step(u'Then this option is (not )?checked')
-def then_this_option_is_checked(step, checkstate):
-    the_option_is_checked(world.last_option_label, checkstate)
 
 
 @step(u'Then I see errors')
