@@ -17,3 +17,9 @@ def then_i_see_a_sheet_with_the_following_values(step):
         pass
     then_i_see_a_sheet_with_variables_and_values(step.hashes)
     assert world.xc_response == 'OK'
+
+
+@step(u'Then I should not see any sheet')
+@xivoclient_step
+def then_i_should_not_see_any_sheet(step):
+    assert world.xc_response == 'OK'
