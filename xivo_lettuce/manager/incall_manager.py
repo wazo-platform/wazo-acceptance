@@ -7,6 +7,7 @@ from xivo_lettuce import common
 DESTINATION_ELEMENT_MAP = {
     'Queue': 'it-dialaction-answer-queue-actionarg1',
     'User': 'it-dialaction-answer-user-actionarg1',
+    'Group': 'it-dialaction-answer-group-actionarg1',
 }
 
 
