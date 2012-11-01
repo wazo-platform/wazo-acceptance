@@ -49,7 +49,6 @@ function remove_used_step_definitions {
         step_pattern=$(extract_step_pattern "$step_definition")
         find_step_usage "$step_pattern"
         if [ "$?" -eq "$STEP_NOT_FOUND" ] ; then
-            echo "$step_pattern" | sed 's/"/\\"/g'
             echo "$step_definition"
         fi
     done
