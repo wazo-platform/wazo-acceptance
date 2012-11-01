@@ -11,7 +11,7 @@ class SSHClient(object):
 
     def send_files(self, path_from, path_to):
         xivo_ssh = '%s@%s' % (self._login, self._hostname)
-        cmd = ['"%s"' % path_from, '"%s:%s"' % (xivo_ssh, path_to)]
+        cmd = ['%s' % path_from, '%s:%s' % (xivo_ssh, path_to)]
         scp_command = ['scp',
                        '-o', 'PreferredAuthentications=publickey',
                        '-o', 'StrictHostKeyChecking=no',
