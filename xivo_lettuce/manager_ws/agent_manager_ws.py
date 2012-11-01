@@ -20,7 +20,7 @@ def add_agent(data_dict):
         agent.users = data_dict['users']
 
     world.ws.agents.add(agent)
-    agent = world.ws.agents.find_one_by_number(data_dict['number'])
+    agent = _find_agent_with_number(data_dict['number'])
     return int(agent.id)
 
 
