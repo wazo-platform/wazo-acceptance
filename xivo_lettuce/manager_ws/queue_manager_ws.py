@@ -68,6 +68,8 @@ def add_queue(data):
         queue.maxlen = data['maxlen']
     if 'agents' in data:
         queue.agents = data['agents']
+    if 'users' in data:
+        queue.users = data['users']
     if 'joinempty' in data:
         queue.joinempty = data['joinempty']
     if 'leavewhenempty' in data:

@@ -56,7 +56,7 @@ def add_or_replace_user(data_dict):
 
 
 def delete_user_with_number(number, context):
-    user_ids = _search_user_ids_with_number(number, context)
+    user_ids = search_user_ids_with_number(number, context)
     for user_id in user_ids:
         _delete_user_with_id(user_id)
 
@@ -115,7 +115,7 @@ def _search_users_with_firstname_lastname(firstname, lastname):
             user.lastname == lastname]
 
 
-def _search_user_ids_with_number(number, context):
+def search_user_ids_with_number(number, context):
     lines = world.ws.lines.search_by_number(number)
     return [line.user_id for line in lines if line.context == context]
 

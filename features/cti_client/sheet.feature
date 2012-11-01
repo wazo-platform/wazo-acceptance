@@ -33,7 +33,7 @@ Feature: Sheet
         | xivo-calleridnum  | 1234            |
         | xivo-calleridname | Laurent Demange |
 
-    Scenario: Variables on link event User
+    Scenario: Variables on link event to a User
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
         | xivo-calledidname |
@@ -59,3 +59,31 @@ Feature: Sheet
         | Variable          | Value        |
         | xivo-calledidname | Alice Gopher |
         | xivo-calledidnum  | 1007         |
+
+    Scenario: Variables on link event to a Queue
+        Given I have a sheet model named "testsheet" with the variables:
+        | variable          |
+        | xivo-calledidname |
+        | xivo-calledidnum  |
+        Given I assign the sheet "testsheet" to the "Link" event
+
+        Given there is a user "Alice" "Gopher" with extension "1007@default" and CTI profile "Client"
+        Given there is a queue "frere" with extension "3001@default" with user "1007"
+        Given there is an incall "3001" in context "Incalls (from-extern)" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
+
+        When I start the XiVO Client
+        When I enable screen pop-up
+        When I log in the XiVO client as "alice", pass "gopher"
+
+        Given there are no calls running
+        Given I wait 5 seconds for the dialplan to be reloaded
+        Given I register extension "1007"
+        Given I wait call then I answer then I hang up after "3s"
+        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
+
+        Given I wait 10 seconds for the call processing
+
+        Then I see a sheet with the following values:
+        | Variable          | Value |
+        | xivo-calledidname | frere |
+        | xivo-calledidnum  | 3001  |

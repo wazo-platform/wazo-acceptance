@@ -65,6 +65,20 @@ def given_there_is_a_queue_leaveempty_with_extension_with_agent(step, name, exte
     queue_manager_ws.add_queue(data)
 
 
+@step(u'^Given there is a queue "([^"]*)" with extension "([^"]*)" with user "([^"]*)"')
+def given_there_is_a_queue_group1_with_extension_group2_with_user_group3(step, name, extension, user_number):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    remove_queues_with_name_or_number_if_exist(name, number)
+    user_ids = user_manager_ws.search_user_ids_with_number(user_number, context)
+    data = {
+        'name': name,
+        'number': number,
+        'context': context,
+        'users': user_ids,
+    }
+    queue_manager_ws.add_queue(data)
+
+
 @step(u'Given there is a queue "([^"]+)" with ringing time of "([0-9]+)s" with extension "([^"]+)" with agent "([^"]+)"')
 def given_there_is_a_queue_with_ringing_time_with_extension_with_agent(step, name, ringing_time, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)
