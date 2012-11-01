@@ -56,7 +56,7 @@ def given_there_is_a_queue_closed_with_extension_with_agent(step, name, extensio
 def given_there_is_a_queue_leaveempty_with_extension_with_agent(step, name, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)
     remove_queues_with_name_or_number_if_exist(name, number)
-    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
     data = {'name': name,
             'number': number,
             'context': context,
@@ -83,7 +83,7 @@ def given_there_is_a_queue_group1_with_extension_group2_with_user_group3(step, n
 def given_there_is_a_queue_with_ringing_time_with_extension_with_agent(step, name, ringing_time, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)
     remove_queues_with_name_or_number_if_exist(name, number)
-    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
     data = {'name': name,
             'number': number,
             'context': context,
@@ -96,7 +96,7 @@ def given_there_is_a_queue_with_ringing_time_with_extension_with_agent(step, nam
 def given_there_is_a_queue_in_context_with_extension_with_agent(step, name, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)
     remove_queues_with_name_or_number_if_exist(name, number)
-    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
     data = {'name': name,
             'number': number,
             'context': context,
@@ -108,7 +108,7 @@ def given_there_is_a_queue_in_context_with_extension_with_agent(step, name, exte
 def given_there_is_a_queue_saturated_in_context_with_extension_with_agent(step, name, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)
     remove_queues_with_name_or_number_if_exist(name, number)
-    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
     data = {'name': name,
             'number': number,
             'context': context,
@@ -186,7 +186,7 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_nam
 @step(u'When I add agent "([^"]*)" to "([^"]*)"')
 def when_i_add_agent_1_to_2(step, agent_number, queue_name):
     queue = queue_manager_ws.get_queue_with_name(queue_name)
-    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
     queue.agents.append(agent_id)
     world.ws.queues.edit(queue)
     time.sleep(5)
@@ -195,7 +195,7 @@ def when_i_add_agent_1_to_2(step, agent_number, queue_name):
 @step(u'When I remove agent "([^"]*)" from "([^"]*)"')
 def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
     queue = queue_manager_ws.get_queue_with_name(queue_name)
-    agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
+    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
     queue.agents.remove(agent_id)
     world.ws.queues.edit(queue)
     time.sleep(10)

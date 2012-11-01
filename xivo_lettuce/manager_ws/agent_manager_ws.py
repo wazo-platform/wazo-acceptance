@@ -4,31 +4,6 @@ from lettuce import world
 from xivo_ws import Agent
 
 
-def get_agent_password_with_number(number):
-    agent = world.ws.agents.find_one_by_number(number)
-    return agent.password
-
-
-def get_agent_id_with_number(number):
-    agents = world.ws.agents.search_by_number(number)
-    for agent in agents:
-        if agent.number == str(number):
-            return agent.id
-    raise Exception('no agent with number %s' % number)
-
-
-def get_agent_with_number(number):
-    agent_id = get_agent_id_with_number(number)
-    agent = world.ws.agents.view(agent_id)
-    return agent
-
-
-def delete_agent_with_number(number):
-    agents = world.ws.agents.search_by_number(number)
-    for agent in agents:
-        world.ws.agents.delete(agent.id)
-
-
 def add_agent(data_dict):
     agent = Agent()
     agent.firstname = data_dict['firstname']
@@ -51,6 +26,34 @@ def add_agent(data_dict):
 
 def add_or_replace_agent(data_dict):
     agent_number = data_dict['number']
-    delete_agent_with_number(agent_number)
+    delete_agents_with_number(agent_number)
 
     return add_agent(data_dict)
+
+
+def delete_agents_with_number(number):
+    for agent in _search_agents_with_number(number):
+        world.ws.agents.delete(agent.id)
+
+
+def find_agent_id_with_number(number):
+    agent = _find_agent_with_number(number)
+    return agent.id
+
+
+def find_agent_password_with_number(number):
+    agent = _find_agent_with_number(number)
+    return agent.password
+
+
+def get_agent_with_number(number):
+    agent = _find_agent_with_number(number)
+    return world.ws.agents.view(agent.id)
+
+
+def _find_agent_with_number(number):
+    return world.ws.agents.find_one_by_number(number)
+
+
+def _search_agents_with_number(number):
+    return world.ws.agents.search_by_number(number)

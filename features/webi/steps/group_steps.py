@@ -14,7 +14,7 @@ from utils.func import extract_number_and_context_from_extension
 @step(u'Given there is a group "([^"]*)" with extension "([^"]*)" and users:')
 def given_there_is_a_group_with_extension_and_users(step, name, extension):
     number, context = extract_number_and_context_from_extension(extension)
-    group_manager_ws.delete_group_with_number(number)
+    group_manager_ws.delete_groups_with_number(number)
 
     user_ids = []
     for info in step.hashes:
@@ -26,7 +26,7 @@ def given_there_is_a_group_with_extension_and_users(step, name, extension):
 
 @step(u'Given there is no group with name "([^"]*)"')
 def given_there_is_no_group_with_name(step, name):
-    group_manager_ws.delete_group_with_name(name)
+    group_manager_ws.delete_groups_with_name(name)
 
 
 @step(u'When I create a group "([^"]*)" with number "([^"]*)"')

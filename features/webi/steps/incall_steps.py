@@ -18,7 +18,7 @@ def when_i_create_incall_with_did(step, incall_did, context):
 
 @step(u'Given there is an incall "([^"]*)" in context "([^"]*)" to the "(.+)" "([^"]*)" with caller id name "([^"]*)" number "([^"]*)"')
 def given_there_is_an_incall_group1_in_context_group2_to_the_queue_group3(step, did, context, destination_type, destination_name, caller_id_name, caller_id_number):
-    incall_manager_ws.delete_incall_with_did(did)
+    incall_manager_ws.delete_incalls_with_did(did)
     open_url('incall', 'add')
     incall_man.type_incall_did(did)
     incall_man.type_incall_context(context)

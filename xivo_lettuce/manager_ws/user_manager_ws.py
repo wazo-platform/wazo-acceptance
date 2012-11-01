@@ -121,7 +121,7 @@ def search_user_ids_with_number(number, context):
 
 
 def user_id_is_in_group_name(group_name, user_id):
-    group = group_manager_ws.view_group_with_name(group_name)
+    group = group_manager_ws.get_group_with_name(group_name)
     for id in group.user_ids:
         if id == user_id:
             return True

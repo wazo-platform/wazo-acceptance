@@ -56,17 +56,6 @@ def update_contextnumbers_incall(name, numberbeg, numberend, didlength):
         world.ws.contexts.edit(context)
 
 
-def delete_context_with_name(name):
-    world.ws.contexts.delete(name)
-
-
-def get_context_with_name(name):
-    try:
-        return world.ws.contexts.view(name)
-    except WebServiceRequestError:
-        return False
-
-
 def add_context(name, display_name, context_type,
                  context_include=[],
                  contextnumbers_user='',
@@ -95,3 +84,10 @@ def add_context(name, display_name, context_type,
         context.incalls = [contextnumbers_incall]
 
     world.ws.contexts.add(context)
+
+
+def get_context_with_name(name):
+    try:
+        return world.ws.contexts.view(name)
+    except WebServiceRequestError:
+        return False

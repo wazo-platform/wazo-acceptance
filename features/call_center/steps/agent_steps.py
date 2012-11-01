@@ -16,7 +16,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
 def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    agent_manager_ws.delete_agent_with_number(number)
+    agent_manager_ws.delete_agents_with_number(number)
     agent_data = {
         'firstname': firstname,
         'lastname': lastname,
@@ -29,7 +29,7 @@ def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, ext
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)" with wrapup time "([^"]+)"$')
 def given_there_is_a_agent_in_context_with_number_with_wrapup_time(step, firstname, lastname, extension, wrapuptime):
     number, context = func.extract_number_and_context_from_extension(extension)
-    agent_manager_ws.delete_agent_with_number(number)
+    agent_manager_ws.delete_agents_with_number(number)
     agent_data = {
         'firstname': firstname,
         'lastname': lastname,
@@ -62,7 +62,7 @@ def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastna
 
 @step(u'Given there is no agent with number "([^"]*)"$')
 def given_no_agent_number_1(step, number):
-    agent_manager_ws.delete_agent_with_number(number)
+    agent_manager_ws.delete_agents_with_number(number)
 
 
 @step(u'When I log agent "([^"]*)"')
@@ -77,7 +77,7 @@ def when_i_unlog_agent_group1(step, agent_number):
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)"$')
 def when_i_create_an_agent(step, firstname, lastname, number):
-    agent_manager_ws.delete_agent_with_number(number)
+    agent_manager_ws.delete_agents_with_number(number)
     open_url('agent', 'addagent', {'group': '1'})
     agent_manager.type_agent_info(firstname, lastname, number)
     form.submit_form()
@@ -85,7 +85,7 @@ def when_i_create_an_agent(step, firstname, lastname, number):
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)" in group "([^"]*)"$')
 def when_i_create_an_agent_in_group(step, firstname, lastname, number, agent_group):
-    agent_manager_ws.delete_agent_with_number(number)
+    agent_manager_ws.delete_agents_with_number(number)
     group_id = get_agent_group_id(agent_group)
     open_url('agent', 'addagent', {'group': group_id})
     agent_manager.type_agent_info(firstname, lastname, number)
@@ -123,7 +123,7 @@ def when_i_remove_selected_agent_group(step):
 
 @step(u'When I change the agent "([^"]*)" password to "([^"]*)"')
 def when_i_change_the_agent_password_to_group1(step, number, password):
-    agent_id = agent_manager_ws.get_agent_id_with_number(number)
+    agent_id = agent_manager_ws.find_agent_id_with_number(number)
     open_url('agent', 'editagent', {'group': '1', 'id': agent_id})
     agent_manager.change_password(password)
     form.submit_form()
@@ -161,5 +161,5 @@ def then_agent_group_has_x_agents(step, agent_group, nb_agents):
 
 @step(u'Then the agent "([^"]*)" password is "([^"]*)"')
 def then_the_agent_password_is(step, number, password):
-    current_password = agent_manager_ws.get_agent_password_with_number(number)
+    current_password = agent_manager_ws.find_agent_password_with_number(number)
     assert current_password == password, 'passord was not changed : expected : %s current %s' % (password, current_password)

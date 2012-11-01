@@ -19,17 +19,17 @@ def add_group(group_name, number='', context='default', user_ids=None):
 def add_or_replace_group(group_name, number='', context='default', user_ids=None):
     if not user_ids:
         user_ids = []
-    delete_group_with_name(group_name)
+    delete_groups_with_name(group_name)
     add_group(group_name, number, context, user_ids)
 
 
-def delete_group_with_number(group_number):
+def delete_groups_with_number(group_number):
     groups = world.ws.groups.search_by_number(group_number)
     for group in groups:
         world.ws.groups.delete(group.id)
 
 
-def delete_group_with_name(group_name):
+def delete_groups_with_name(group_name):
     groups = world.ws.groups.search_by_name(group_name)
     for group in groups:
         world.ws.groups.delete(group.id)
@@ -43,8 +43,9 @@ def find_group_with_name(name):
     return groups[0]
 
 
-def view_group_with_name(name):
-    return world.ws.groups.view(find_group_with_name(name).id)
+def get_group_with_name(name):
+    group = find_group_with_name(name)
+    return world.ws.groups.view(group.id)
 
 
 def _search_groups_with_name(name):

@@ -35,5 +35,5 @@ def _get_line_from_agent(agent_number):
     if not agent.users:
         raise Exception('agent %s has no users' % agent_number)
     user_id = agent.users[0]
-    line = line_manager_ws.find_line_with_user(user_id)
+    line = line_manager_ws.find_line_with_user_id(user_id)
     return line
