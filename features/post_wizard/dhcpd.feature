@@ -1,7 +1,7 @@
 Feature: DHCPD
 
     Scenario: update files are present
-        Then directory at the dhcpd update not empty
+        Then directory of the dhcpd update not empty
 
     Scenario: DHCP not monitored after wizard executed
         When I wizard correctly executed

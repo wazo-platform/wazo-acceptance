@@ -20,6 +20,21 @@ def dir_not_empty(path):
         return False
 
 
+def get_list_file(path):
+    command = ['ls', path]
+    return world.ssh_client_xivo.out_call(command)
+
+
+def file_owned_by_user(path, owner):
+    command = ['stat', '-c', '%U', path]
+    return world.ssh_client_xivo.out_call(command).strip() == owner
+
+
+def file_owned_by_group(path, owner):
+    command = ['stat', '-c', '%G', path]
+    return world.ssh_client_xivo.out_call(command).strip() == owner
+
+
 def get_content_file(path):
     command = ['cat', path]
     return world.ssh_client_xivo.out_call(command)
