@@ -4,7 +4,7 @@ import time
 
 from lettuce import step
 from selenium.webdriver.support.select import Select
-from xivo_lettuce.common import webi_login, the_option_is_checked, remove_element_if_exist, \
+from xivo_lettuce.common import webi_login, remove_element_if_exist, \
     element_is_in_list, element_is_not_in_list, go_to_tab
 from xivo_lettuce import form
 from lettuce.registry import world
