@@ -60,7 +60,7 @@ def given_i_see_an_exten(step, exten):
 
 @step(u'Given there is no outcall "([^"]*)"')
 def given_there_is_no_outcall(step, name):
-    outcall_manager_ws.delete_outcall_with_name_if_exists(name)
+    outcall_manager_ws.delete_outcalls_with_name(name)
 
 
 @step(u'When I create an outcall with name "([^"]*)" and trunk "([^"]*)"')

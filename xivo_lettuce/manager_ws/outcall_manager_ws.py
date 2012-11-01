@@ -4,23 +4,6 @@ from lettuce import world
 from xivo_ws import Outcall, OutcallExten
 
 
-def get_outcall_id_with_outcall_name(name):
-    outcalls = world.ws.outcalls.list()
-    for outcall in outcalls:
-        if outcall.name == str(name):
-            return outcall.id
-    raise Exception('no outcall with outcall name %s' % name)
-
-
-def delete_outcall_with_name_if_exists(name):
-    try:
-        outcall_id = get_outcall_id_with_outcall_name(name)
-    except Exception:
-        pass
-    else:
-        world.ws.outcalls.delete(outcall_id)
-
-
 def add_outcall(data):
     outcall = Outcall()
     outcall.name = data['name']
@@ -35,3 +18,14 @@ def add_outcall(data):
             extens.append(OutcallExten(exten=extension, stripnum=stripnum, caller_id=caller_id))
         outcall.extens = extens
     world.ws.outcalls.add(outcall)
+
+
+def delete_outcalls_with_name(name):
+    for outcall in _search_outcalls_with_name(name):
+        world.ws.outcalls.delete(outcall.id)
+
+
+def _search_outcalls_with_name(name):
+    name = unicode(name)
+    outcalls = world.ws.outcalls.search(name)
+    return [outcall for outcall in outcalls if outcall.name == name]
