@@ -26,7 +26,7 @@ def given_there_is_a_user(step, firstname, lastname):
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)"$')
 def given_there_is_a_user_with_extension(step, firstname, lastname, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_all_voicemails_with_number(number)
+    voicemail_manager_ws.delete_voicemails_with_number(number)
     user_data = {
         'firstname': firstname,
         'lastname': lastname,
@@ -39,7 +39,7 @@ def given_there_is_a_user_with_extension(step, firstname, lastname, extension):
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" in group "([^"]*)"$')
 def given_there_is_a_user_with_a_sip_line_in_group(step, firstname, lastname, extension, group_name):
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_all_voicemails_with_number(number)
+    voicemail_manager_ws.delete_voicemails_with_number(number)
     user_data = {
         'firstname': firstname,
         'lastname': lastname,
@@ -66,7 +66,7 @@ def given_there_is_a_user_with_cti_profile(step, firstname, lastname, cti_profil
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" and CTI profile "([^"]*)"$')
 def given_there_is_a_user_with_extension_and_cti_profile(step, firstname, lastname, extension, cti_profile):
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_all_voicemails_with_number(number)
+    voicemail_manager_ws.delete_voicemails_with_number(number)
     user_data = {'firstname': firstname,
                  'lastname': lastname,
                  'language': 'en_US',
@@ -83,7 +83,7 @@ def given_there_is_a_user_with_extension_and_cti_profile(step, firstname, lastna
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)", voicemail and CTI profile "([^"]*)"$')
 def given_i_there_is_a_user_with_extension_with_voicemail_and_cti_profile(step, firstname, lastname, extension, cti_profile):
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_all_voicemails_with_number(number)
+    voicemail_manager_ws.delete_voicemails_with_number(number)
     user_data = {'firstname': firstname,
                  'lastname': lastname,
                  'language': 'en_US',
@@ -101,7 +101,7 @@ def given_i_there_is_a_user_with_extension_with_voicemail_and_cti_profile(step, 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with an agent "([^"]*)" and CTI profile "([^"]*)"$')
 def given_there_is_a_user_with_an_agent_and_cti_profile(step, firstname, lastname, number_at_context, cti_profile):
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
+    user_manager_ws.delete_users_with_firstname_lastname(firstname, lastname)
     number, context = number_at_context.split('@', 1)[:]
     line_manager_ws.delete_line_with_number(number, context)
     agent_manager_ws.delete_agent_with_number(number)
@@ -126,7 +126,7 @@ def given_there_is_a_user_with_an_agent_and_cti_profile(step, firstname, lastnam
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
 def given_there_is_a_no_user_1_2(step, firstname, lastname):
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
+    user_manager_ws.delete_users_with_firstname_lastname(firstname, lastname)
 
 
 @step(u'I add a user$')
@@ -144,7 +144,7 @@ def when_i_create_a_user(step, firstname, lastname):
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
     user_id = user_manager_ws.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
-    user_manager_ws.delete_user_with_firstname_lastname(dest_firstname, dest_lastname)
+    user_manager_ws.delete_users_with_firstname_lastname(dest_firstname, dest_lastname)
     open_url('user', 'edit', {'id': user_id})
     user_manager.type_user_names(dest_firstname, dest_lastname)
     form.submit_form()
@@ -193,7 +193,7 @@ def when_i_delete_agent_number_1(step, agent_number):
 
 @step(u'When I add a user "([^"]*)" "([^"]*)" with a function key with type Customized and extension "([^"]*)"')
 def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastname, extension):
-    user_manager_ws.delete_user_with_firstname_lastname(firstname, lastname)
+    user_manager_ws.delete_users_with_firstname_lastname(firstname, lastname)
     open_url('user', 'add')
 
     user_manager.type_user_names(firstname, lastname)

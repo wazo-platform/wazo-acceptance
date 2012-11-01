@@ -16,7 +16,7 @@ def given_there_is_a_trunkcustom(step, name):
 
 @step(u'Given there is no trunkcustom "([^"]*)"')
 def given_there_is_no_trunkcustom(step, name):
-    trunkcustom_manager_ws.delete_trunkcustom_with_name(name)
+    trunkcustom_manager_ws.delete_trunkcustoms_with_name(name)
 
 
 @step(u'When I create a trunkcustom with name "([^"]*)"')

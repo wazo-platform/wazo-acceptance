@@ -12,11 +12,11 @@ def add_trunkcustom(data):
 
 
 def add_or_replace_trunkcustom(data):
-    delete_trunkcustom_with_name(data['name'])
+    delete_trunkcustoms_with_name(data['name'])
     add_trunkcustom(data)
 
 
-def delete_trunkcustom_with_name(name):
+def delete_trunkcustoms_with_name(name):
     custom_trunks = _search_trunkcustom_with_name(name)
     for custom_trunk in custom_trunks:
         world.ws.custom_trunks.delete(custom_trunk.id)

@@ -16,7 +16,7 @@ def given_there_is_a_trunkiax(step, name):
 
 @step(u'Given there is no trunkiax "([^"]*)"')
 def given_there_is_no_trunkiax(step, name):
-    trunkiax_manager_ws.delete_trunkiax_with_name(name)
+    trunkiax_manager_ws.delete_trunkiaxs_with_name(name)
 
 
 @step(u'When I create a trunkiax with name "([^"]*)"')

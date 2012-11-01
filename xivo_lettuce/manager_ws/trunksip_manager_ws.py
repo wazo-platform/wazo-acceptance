@@ -16,11 +16,11 @@ def add_trunksip(host, name, context='default'):
 
 
 def add_or_replace_trunksip(host, name, context='default'):
-    delete_trunksip_with_name(name)
+    delete_trunksips_with_name(name)
     add_trunksip(host, name, context)
 
 
-def delete_trunksip_with_name(name):
+def delete_trunksips_with_name(name):
     sip_trunks = _search_trunksip_with_name(name)
     for sip_trunk in sip_trunks:
         world.ws.sip_trunks.delete(sip_trunk.id)

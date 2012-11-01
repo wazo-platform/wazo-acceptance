@@ -17,7 +17,7 @@ def generate_cache():
 
 
 def open_queue_stat_page_on_day(queue_name, day, config_name):
-    conf_id = statconfs_manager_ws.get_conf_id_with_name(config_name)
+    conf_id = statconfs_manager_ws.find_conf_id_with_name(config_name)
     queue_id = queue_manager_ws.get_queue_id_with_queue_name(queue_name)
     host = world.xivo_host
 
@@ -30,7 +30,7 @@ def open_queue_stat_page_on_day(queue_name, day, config_name):
 
 
 def open_agent_stat_page_on_day(agent_number, day, config_name):
-    conf_id = statconfs_manager_ws.get_conf_id_with_name(config_name)
+    conf_id = statconfs_manager_ws.find_conf_id_with_name(config_name)
     agent_id = agent_manager_ws.get_agent_id_with_number(agent_number)
     host = world.xivo_host
 

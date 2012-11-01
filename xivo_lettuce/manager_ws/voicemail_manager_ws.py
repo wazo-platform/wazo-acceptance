@@ -7,8 +7,8 @@ def delete_voicemail_with_id(voicemail_id):
     world.ws.voicemails.delete(voicemail_id)
 
 
-def delete_all_voicemails_with_number(voicemail_number):
-    for voicemail in _search_voicemails_with_number(voicemail_number):
+def delete_voicemails_with_number(number):
+    for voicemail in _search_voicemails_with_number(number):
         delete_voicemail_with_id(voicemail.id)
 
 

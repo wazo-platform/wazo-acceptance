@@ -12,11 +12,11 @@ def add_trunkiax(data):
 
 
 def add_or_replace_trunkiax(data):
-    delete_trunkiax_with_name(data['name'])
+    delete_trunkiaxs_with_name(data['name'])
     add_trunkiax(data)
 
 
-def delete_trunkiax_with_name(name):
+def delete_trunkiaxs_with_name(name):
     iax_trunks = _search_trunkiax_with_name(name)
     for iax_trunk in iax_trunks:
         world.ws.iax_trunks.delete(iax_trunk.id)
