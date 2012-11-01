@@ -22,8 +22,8 @@ def then_i_see_errors(step, profile_label):
     open_url('profile', 'list')
     table_line = find_line(profile_label)
     try:
-        delete_button = table_line.find_element_by_xpath(".//a[@title='Delete']")
+        table_line.find_element_by_xpath(".//a[@title='Delete']")
     except NoSuchElementException:
-        assert True
+        pass
     else:
-        assert False
+        raise Exception('CTI profile %s should not be removable' % profile_label)
