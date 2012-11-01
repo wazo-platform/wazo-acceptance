@@ -123,7 +123,7 @@ def _exec_cmd(command, extra_ssh_args=None):
               close_fds=True)
     output = p.communicate()[0]
 
-    if p.returncode != 0:
+    if p.returncode != 0 and p.returncode != 99:
         print output
 
     return p.returncode
