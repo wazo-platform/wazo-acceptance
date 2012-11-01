@@ -10,6 +10,7 @@ from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
     line_manager_ws, agent_manager_ws, voicemail_manager_ws
 from xivo_lettuce.common import open_url, remove_line, \
     edit_line, go_to_tab, find_line
+from xivo_lettuce import common
 from xivo_lettuce import form
 from utils import func
 
@@ -235,3 +236,22 @@ def when_i_remove_line_from_lines(step, line_number):
     remove_line(line_number)
     form.assert_form_errors()
     line_manager.unsearch_line()
+
+
+@step(u'When I add a voicemail "([^"]*)" to the user "([^"]*)" "([^"]*)" with errors')
+def when_i_add_a_voicemail_1_to_the_user_2_3_with_errors(step, voicemail_number, firstname, lastname):
+    _edit_user(firstname, lastname)
+    user_manager.type_voicemail(voicemail_number)
+    form.submit_form_with_errors()
+
+
+@step(u'When I add a voicemail "([^"]*)" to the user "([^"]*)" "([^"]*)"')
+def when_i_add_a_voicemail_1_to_the_user_2_3(step, voicemail_number, firstname, lastname):
+    _edit_user(firstname, lastname)
+    user_manager.type_voicemail(voicemail_number)
+    form.submit_form()
+
+
+def _edit_user(firstname, lastname):
+    user_id = user_manager_ws.find_user_id_with_firstname_lastname(firstname, lastname)
+    common.open_url('user', 'edit', qry={'id': user_id})

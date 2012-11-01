@@ -45,19 +45,10 @@ Feature: User
     Scenario: Save user and voicemail forms
         Given there is a user "Tom" "Sawyer" with extension "1405@default"
         Given there is no voicemail "1405"
-        When I edit the user "Tom" "Sawyer"
-        When I set the select field "Language" to "en_US"
-        When I go to the "Voicemail" tab
-        When I set the select field "Voice Mail" to "Asterisk"
-        When I check the option "Enable voicemail"
-        When I set the text field "Voicemail" to ""
-        When I submit with errors
-        When I go to the "Voicemail" tab
-        When I set the text field "Voicemail" to "1405"
-        When I submit
-        Then user "Tom Sawyer" is displayed in the list
-        # Last step needed to avoid eventual problems from bug #3396.
-        Given there is no voicemail "1405"
+        When I add a voicemail "" to the user "Tom" "Sawyer" with errors
+        Then I see errors
+        When I add a voicemail "1405" to the user "Tom" "Sawyer"
+        Then voicemail "1405" is displayed in the list
 
     Scenario: Delete user in group
         Given there is a user "Tom" "Sawyer" with extension "1405@default" in group "american_dream"

@@ -3,6 +3,7 @@
 from xivo_lettuce.common import go_to_tab
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
+from xivo_lettuce import common, form
 
 
 def type_user_names(firstName, lastName):
@@ -44,3 +45,11 @@ def user_form_add_line(linenumber, context='default'):
     input_linenumber = world.browser.find_elements_by_id('linefeatures-number')[-2]
     input_linenumber.send_keys(linenumber)
     go_to_tab('General')
+
+
+def type_voicemail(voicemail_number):
+    common.go_to_tab('General')
+    form.set_select_field('Language', 'en_US')
+    common.go_to_tab('Voicemail')
+    form.set_select_field('Voice Mail', 'Asterisk')
+    form.set_text_field('Voicemail', voicemail_number)
