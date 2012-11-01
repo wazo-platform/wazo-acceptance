@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import time
 from xivo_lettuce.common import go_to_tab
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
@@ -53,3 +54,11 @@ def type_voicemail(voicemail_number):
     common.go_to_tab('Voicemail')
     form.set_select_field('Voice Mail', 'Asterisk')
     form.set_text_field('Voicemail', voicemail_number)
+
+
+def remove_line():
+    common.go_to_tab('Lines')
+    select_line = world.browser.find_element_by_xpath("//table[@id='list_linefeatures']/tbody/tr//input[@id='linefeatures-number']")
+    delete_button = select_line.find_element_by_xpath("//a[@title='Delete this line']")
+    delete_button.click()
+    time.sleep(world.timeout)

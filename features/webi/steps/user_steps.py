@@ -35,6 +35,21 @@ def given_there_is_a_user_with_extension(step, firstname, lastname, extension):
     user_manager_ws.add_or_replace_user(user_data)
 
 
+@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]+)@([^"]+)" and voicemail$')
+def given_there_is_a_user_1_2_with_extension_3_4_and_voicemail(step, firstname, lastname, extension, context):
+    voicemail_manager_ws.delete_voicemails_with_number(extension)
+    user_data = {
+        'firstname': firstname,
+        'lastname': lastname,
+        'line_context': context,
+        'line_number': extension,
+        'language': 'en_US',
+        'voicemail_name': extension,
+        'voicemail_number': extension,
+    }
+    user_manager_ws.add_or_replace_user(user_data)
+
+
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" in group "([^"]*)"$')
 def given_there_is_a_user_with_a_sip_line_in_group(step, firstname, lastname, extension, group_name):
     number, context = func.extract_number_and_context_from_extension(extension)
@@ -218,17 +233,15 @@ def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstna
     assert type_field.first_selected_option.text == "Customized"
 
 
-@step(u'When I remove line "([^"]*)" from user')
-def when_i_remove_line_from_user(step, lineNumber):
-    common.go_to_tab('Lines')
-    select_line = world.browser.find_element_by_xpath("//table[@id='list_linefeatures']/tbody/tr//input[@id='linefeatures-number' and @value='%s']" % lineNumber)
-    delete_button = select_line.find_element_by_xpath("//a[@title='Delete this line']")
-    delete_button.click()
-    time.sleep(world.timeout)
+@step(u'When I remove line from user "([^"]*)" "([^"]*)" with errors')
+def when_i_remove_line_from_user_1_2_with_errors(step, firstname, lastname):
+    _edit_user(firstname, lastname)
+    user_manager.remove_line()
+    form.submit_form_with_errors()
 
 
-@step(u'When I remove line "([^"]*)" from lines with errors')
-def when_i_remove_line_from_lines(step, line_number):
+@step(u'When I remove line "([^"]*)" from lines then I see errors')
+def when_i_remove_line_from_lines_then_i_see_errors(step, line_number):
     common.open_url('line')
     line_manager.search_line_number(line_number)
     common.remove_line(line_number)

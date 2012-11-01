@@ -60,16 +60,8 @@ Feature: User
        Then I see the user "Tom" "Sawyer" exists
        Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"
 
-    Scenario: Delete line from user with voicemail (X-398)
-        Given there is a user "Abraham" "Maharba" with extension "1456@default"
-        When I edit the user "Abraham" "Maharba"
-        When I set the select field "Language" to "en_US"
-        When I go to the "Voicemail" tab
-        When I set the select field "Voice Mail" to "Asterisk"
-        When I check the option "Enable voicemail"
-        When I set the text field "Voicemail" to "1456"
-        When I submit
-        When I edit the user "Abraham" "Maharba"
-        When I remove line "1456" from user
-        When I submit with errors
-        When I remove line "1456" from lines with errors
+    Scenario: Delete line from user with voicemail
+        Given there is a user "Abraham" "Maharba" with extension "1456@default" and voicemail
+        When I remove line from user "Abraham" "Maharba" with errors
+        Then I see errors
+        When I remove line "1456" from lines then I see errors
