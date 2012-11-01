@@ -18,7 +18,7 @@ def generate_cache():
 
 def open_queue_stat_page_on_day(queue_name, day, config_name):
     conf_id = statconfs_manager_ws.find_conf_id_with_name(config_name)
-    queue_id = queue_manager_ws.get_queue_id_with_queue_name(queue_name)
+    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
     host = world.xivo_host
 
     uri = '''https://%s/statistics/call_center/index.php/data/stats1''' % host

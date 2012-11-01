@@ -4,60 +4,6 @@ from lettuce import world
 from xivo_ws import Queue
 
 
-def get_queue_id_with_queue_name(queue_name):
-    queues = world.ws.queues.list()
-    for queue in queues:
-        if queue.name == str(queue_name):
-            return queue.id
-    raise Exception('no queue with queue name %s' % queue_name)
-
-
-def get_queue_id_with_number(queue_number):
-    queues = world.ws.queues.search(queue_number)
-    for queue in queues:
-        if queue.number == str(queue_number):
-            return queue.id
-    raise Exception('no queue with queue number %s' % queue_number)
-
-
-def get_queue_with_name(queue_name):
-    queue_id = get_queue_id_with_queue_name(queue_name)
-    queue = world.ws.queues.view(queue_id)
-    return queue
-
-
-def delete_queue_with_name_if_exists(queue_displayname):
-    try:
-        queue_id = get_queue_id_with_queue_name(queue_displayname)
-    except Exception:
-        pass
-    else:
-        world.ws.queues.delete(queue_id)
-
-
-def delete_queue_with_number_if_exists(queue_number):
-    try:
-        queue_id = get_queue_id_with_number(queue_number)
-    except Exception:
-        pass
-    else:
-        world.ws.queues.delete(queue_id)
-
-
-def find_queue_id_with_displayname(queue_displayname):
-    queues = world.ws.queues.search(queue_displayname)
-    if queues:
-        return [queue.id for queue in queues]
-    return []
-
-
-def find_queue_id_with_number(queue_number):
-    queues = world.ws.queues.search(queue_number)
-    if queues:
-        return [queue.id for queue in queues]
-    return []
-
-
 def add_queue(data):
     queue = Queue()
     queue.name = data['name'].lower()
@@ -87,6 +33,55 @@ def add_queue(data):
 
 def add_or_replace_queue(queue_data):
     queue_number = queue_data['number']
-    delete_queue_with_number_if_exists(queue_number)
+    delete_queues_with_number(queue_number)
 
     add_queue(queue_data)
+
+
+def delete_queues_with_name(name):
+    for queue in _search_queues_with_name(name):
+        world.ws.queues.delete(queue.id)
+
+
+def delete_queues_with_number(number):
+    for queue in _search_queues_with_number(number):
+        world.ws.queues.delete(queue.id)
+
+
+def get_queue_with_name(name):
+    queue = _find_queue_with_name(name)
+    return world.ws.queues.view(queue.id)
+
+
+def find_queue_id_with_name(name):
+    queue = _find_queue_with_name(name)
+    return queue.id
+
+
+def _find_queue_with_name(name):
+    queues = _search_queues_with_name(name)
+    if len(queues) != 1:
+        raise Exception('expecting 1 queue with name %r: found %s' %
+                        (name, len(queues)))
+    return queues[0]
+
+
+def _find_queue_with_number(number):
+    queues = _search_queues_with_number(number)
+    if len(queues) != 1:
+        raise Exception('expecting 1 queue with number %r: found %s' %
+                        (number, len(queues)))
+    return queues[0]
+
+
+def _search_queues_with_name(name):
+    # name is not the same as display name
+    name = unicode(name)
+    queues = world.ws.queues.list()
+    return [queue for queue in queues if queue.name == name]
+
+
+def _search_queues_with_number(number):
+    number = unicode(number)
+    queues = world.ws.queues.search(number)
+    return [queue for queue in queues if queue.number == number]

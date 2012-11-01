@@ -5,8 +5,8 @@ from xivo_lettuce import form
 
 
 def remove_queues_with_name_or_number_if_exist(queue_name, queue_number):
-    queue_manager_ws.delete_queue_with_name_if_exists(queue_name)
-    queue_manager_ws.delete_queue_with_number_if_exists(queue_number)
+    queue_manager_ws.delete_queues_with_name(queue_name)
+    queue_manager_ws.delete_queues_with_number(queue_number)
 
 
 def type_queue_name_display_name_number_context(name, display_name, extension, context):

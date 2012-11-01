@@ -13,7 +13,7 @@ def then_the_queue_members_xlet_is_empty(step):
 
 @step(u'Then the Queue members xlet for queue "([^"]*)" is empty')
 def then_the_queue_members_xlet_for_queue_1_is_empty(step, queue_name):
-    queue_id = queue_manager_ws.get_queue_id_with_queue_name(queue_name)
+    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
 
     @xivoclient
     def then_the_queue_members_xlet_for_queue_1_is_empty_(queue_id):
@@ -37,7 +37,7 @@ def when_i_disable_the_hide_unlogged_agents_option(step):
 
 @step(u'Then the Queue members xlet for queue "([^"]*)" should display agents:')
 def then_the_queue_members_xlet_for_queue_1_should_display_agents(step, queue_name):
-    queue_id = queue_manager_ws.get_queue_id_with_queue_name(queue_name)
+    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
 
     @xivoclient
     def then_the_queue_members_xlet_for_queue_1_displays_agents(queue_id, variable_map):

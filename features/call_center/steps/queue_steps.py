@@ -9,7 +9,7 @@ from xivo_lettuce import common
 from xivo_lettuce import form
 from xivo_lettuce.manager.queue_manager import type_queue_name_display_name_number_context, \
     remove_queues_with_name_or_number_if_exist, type_queue_ring_strategy
-from xivo_lettuce.manager_ws.queue_manager_ws import get_queue_id_with_queue_name
+from xivo_lettuce.manager_ws.queue_manager_ws import find_queue_id_with_name
 
 
 @step(u'Given there is a queue "([^"]+)" with extension "([^"]+)"$')
@@ -170,14 +170,14 @@ def when_i_add_the_queue_group1_with_extension_group2_with_ring_strategy_at_grou
 
 @step(u'When I edit the queue "([^"]*)"$')
 def when_i_edit_the_queue_group1(step, queue_name):
-    queue_id = get_queue_id_with_queue_name(queue_name)
+    queue_id = find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     form.submit_form()
 
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)"$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_name, ring_strategy):
-    queue_id = get_queue_id_with_queue_name(queue_name)
+    queue_id = find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     type_queue_ring_strategy(ring_strategy)
     form.submit_form()
@@ -203,12 +203,7 @@ def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)" with errors$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(step, queue_name, ring_strategy):
-    queue_id = get_queue_id_with_queue_name(queue_name)
+    queue_id = find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     type_queue_ring_strategy(ring_strategy)
     form.submit_form_with_errors()
-
-
-def _remove_queues_with_name_or_number_if_exist(queue_name, queue_number):
-    queue_manager_ws.delete_queue_with_name_if_exists(queue_name)
-    queue_manager_ws.delete_queue_with_number_if_exists(queue_number)
