@@ -2,7 +2,7 @@ Feature: Outcall
 
     Scenario: Add an outcall
         Given there is no outcall "outdoor"
-        Given there is a trunksip  "door"
+        Given there is a trunksip "door"
         When I create an outcall with name "outdoor" and trunk "door"
         Then outcall "outdoor" is displayed in the list
 
@@ -37,7 +37,7 @@ Feature: Outcall
 
     Scenario: Edit an outcall and change the context
         Given there is no outcall "linguini"
-        Given there is a trunksip  "pasta"
+        Given there is a trunksip "pasta"
         Given there is no context "interco"
         Given there is a outcall context "interco"
         Given there is an outcall "linguini" in context "interco" with trunk "pasta"
