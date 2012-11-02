@@ -1,4 +1,3 @@
 # -*- coding: utf-8 -*-
 
-class FormErrorException(Exception):
-    pass
+from input import *

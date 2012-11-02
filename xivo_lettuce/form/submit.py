@@ -2,7 +2,10 @@
 
 from selenium.common.exceptions import NoSuchElementException
 from lettuce import world
-from xivo_lettuce.form import FormErrorException
+
+
+class FormErrorException(Exception):
+    pass
 
 
 def submit_form_with_errors():
