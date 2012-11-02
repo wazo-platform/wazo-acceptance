@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import step, world
-
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import form
 from xivo_lettuce.common import find_line, open_url, remove_line
@@ -16,7 +15,7 @@ def given_there_is_a_sip_trunk(step, name):
         open_url('trunksip', 'add')
         input_name = world.browser.find_element_by_id('it-protocol-name', 'SIP trunk form not loaded')
         input_name.send_keys(name)
-        form.submit_form()
+        form.submit.submit_form()
 
 
 @step(u'Given there is no trunksip "([^"]*)"')
@@ -33,7 +32,7 @@ def when_i_create_a_trunksip_with_name_and_trunk(step, name):
     open_url('trunksip', 'add')
     input_name = world.browser.find_element_by_id('it-protocol-name', 'trunksip form not loaded')
     input_name.send_keys(name)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'Given there is a trunksip "([^"]*)"')

@@ -152,7 +152,7 @@ def i_add_a_user(step):
 def when_i_create_a_user(step, firstname, lastname):
     common.open_url('user', 'add')
     user_manager.type_user_names(firstname, lastname)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"')
@@ -161,7 +161,7 @@ def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest
     user_manager_ws.delete_users_with_firstname_lastname(dest_firstname, dest_lastname)
     common.open_url('user', 'edit', {'id': user_id})
     user_manager.type_user_names(dest_firstname, dest_lastname)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I remove user "([^"]*)" "([^"]*)"')
@@ -201,7 +201,6 @@ def i_enable_the_xivo_client_as_1_pass_2_profile_3(step, login, password, profil
 def when_i_delete_agent_number_1(step, agent_number):
     agent = world.ws.agents.search(agent_number)[0]
     world.ws.agents.delete(agent.id)
-
     time.sleep(world.timeout)
 
 
@@ -209,11 +208,9 @@ def when_i_delete_agent_number_1(step, agent_number):
 def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastname, extension):
     user_manager_ws.delete_users_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'add')
-
     user_manager.type_user_names(firstname, lastname)
     user_manager.type_func_key('Customized', extension)
-
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'Then I see the user "([^"]*)" "([^"]*)" exists')
@@ -237,7 +234,7 @@ def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstna
 def when_i_remove_line_from_user_1_2_with_errors(step, firstname, lastname):
     _edit_user(firstname, lastname)
     user_manager.remove_line()
-    form.submit_form_with_errors()
+    form.submit.submit_form_with_errors()
 
 
 @step(u'When I remove line "([^"]*)" from lines then I see errors')
@@ -245,7 +242,7 @@ def when_i_remove_line_from_lines_then_i_see_errors(step, line_number):
     common.open_url('line')
     line_manager.search_line_number(line_number)
     common.remove_line(line_number)
-    form.assert_form_errors()
+    form.submit.assert_form_errors()
     line_manager.unsearch_line()
 
 
@@ -253,14 +250,14 @@ def when_i_remove_line_from_lines_then_i_see_errors(step, line_number):
 def when_i_add_a_voicemail_1_to_the_user_2_3_with_errors(step, voicemail_number, firstname, lastname):
     _edit_user(firstname, lastname)
     user_manager.type_voicemail(voicemail_number)
-    form.submit_form_with_errors()
+    form.submit.submit_form_with_errors()
 
 
 @step(u'When I add a voicemail "([^"]*)" to the user "([^"]*)" "([^"]*)"')
 def when_i_add_a_voicemail_1_to_the_user_2_3(step, voicemail_number, firstname, lastname):
     _edit_user(firstname, lastname)
     user_manager.type_voicemail(voicemail_number)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 def _edit_user(firstname, lastname):

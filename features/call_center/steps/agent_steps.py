@@ -4,7 +4,7 @@ from lettuce import step
 from xivo_lettuce import form
 from xivo_lettuce.manager import agent_manager, agent_status_manager
 from xivo_lettuce.manager_ws import agent_manager_ws, user_manager_ws
-from xivo_lettuce.common import open_url, remove_line, edit_text_field
+from xivo_lettuce.common import open_url, remove_line
 from utils import func
 from xivo_lettuce.manager.agent_manager import is_agent_in_agent_group, \
     remove_agent_group_if_exist, get_agent_group_id, get_nb_agents_in_group, \
@@ -80,7 +80,7 @@ def when_i_create_an_agent(step, firstname, lastname, number):
     agent_manager_ws.delete_agents_with_number(number)
     open_url('agent', 'addagent', {'group': '1'})
     agent_manager.type_agent_info(firstname, lastname, number)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)" in group "([^"]*)"$')
@@ -89,14 +89,14 @@ def when_i_create_an_agent_in_group(step, firstname, lastname, number, agent_gro
     group_id = get_agent_group_id(agent_group)
     open_url('agent', 'addagent', {'group': group_id})
     agent_manager.type_agent_info(firstname, lastname, number)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I search an agent "([^"]*)"')
 def when_i_search_an_agent_group1(step, search):
     open_url('agent', 'listagent', {'group': '1'})
-    edit_text_field('it-toolbar-search', search)
-    form.submit_form('it-toolbar-subsearch')
+    form.input.edit_text_field_with_id('it-toolbar-search', search)
+    form.submit.submit_form('it-toolbar-subsearch')
 
 
 @step(u'When I remove agent "([^"]*)" "([^"]*)"')
@@ -126,15 +126,15 @@ def when_i_change_the_agent_password_to_group1(step, number, password):
     agent_id = agent_manager_ws.find_agent_id_with_number(number)
     open_url('agent', 'editagent', {'group': '1', 'id': agent_id})
     agent_manager.change_password(password)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I create an agent group "([^"]*)"')
 def when_i_create_an_agent_group(step, agent_group_name):
     remove_agent_group_if_exist(agent_group_name)
     open_url('agent', 'add')
-    edit_text_field('it-agentgroup-name', agent_group_name)
-    form.submit_form()
+    form.input.edit_text_field_with_id('it-agentgroup-name', agent_group_name)
+    form.submit.submit_form()
 
 
 @step(u'When I select a list of agent group "([^"]*)"')

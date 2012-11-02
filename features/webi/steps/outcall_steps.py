@@ -45,7 +45,7 @@ def given_i_dont_see_any_exten(step, exten):
         then_i_dont_see_any_exten(step, exten)
     except AssertionError:
         when_i_remove_the_exten(step, exten)
-        form.submit_form()
+        form.submit.submit_form()
 
 
 @step(u'Given I see an exten "([^"]*)"')
@@ -55,7 +55,7 @@ def given_i_see_an_exten(step, exten):
     except NoSuchElementException:
         when_i_add_an_exten(step)
         when_i_set_the_exten_to(step, exten)
-        form.submit_form()
+        form.submit.submit_form()
 
 
 @step(u'Given there is no outcall "([^"]*)"')
@@ -75,11 +75,9 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     input_trunk = world.browser.find_element_by_xpath(
         "//div[@id='outcalltrunklist']//div[@class='available']//li[contains(@title, %s)]//a" % trunk)
     input_trunk.click()
-
     # Wait for the Javascript to move the trunk
     time.sleep(1)
-
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When i edit the outcall "([^"]*)" and set context to "([^"]*)"')
@@ -88,7 +86,7 @@ def when_i_edit_the_outcall_and_set_context(step, name, context):
     edit_line(name)
     type_field = Select(world.browser.find_element_by_id('it-outcall-context', 'Outcall form not loaded'))
     type_field.select_by_value(context)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I remove the outcall "([^"]*)"')

@@ -26,7 +26,7 @@ def when_i_create_a_trunkcustom_with_name_and_trunk(step, name):
     input_name.send_keys(name)
     input_interface = world.browser.find_element_by_id('it-protocol-interface', 'trunkcustom form not loaded')
     input_interface.send_keys('misdn//xivo')
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I remove the trunkcustom "([^"]*)"')

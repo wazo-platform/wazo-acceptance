@@ -19,7 +19,7 @@ def when_i_create_a_skill_rule(step, skill_rule_name):
     for skill_rule_element in skill_rule_config:
         rule = skill_rule_element['rule']
         skill_rule_manager.add_rule(rule)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'Then "([^"]*)" is displayed in the list')

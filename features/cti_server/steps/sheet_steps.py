@@ -21,11 +21,11 @@ EVENT_ELEMENT_MAP = {
 def given_i_have_a_sheet_model_named_group1_with_the_variables(step, sheet_name):
     common.remove_element_if_exist('sheet', sheet_name)
     common.open_url('sheet', 'add')
-    form.set_text_field('Name :', sheet_name)
+    form.input.set_text_field_with_label('Name :', sheet_name)
     common.go_to_tab('Sheet')
     for line in step.hashes:
         _add_sheet_variable(line['variable'])
-    form.submit_form()
+    form.submit.submit_form()
 
 
 def _add_sheet_variable(variable_name):
@@ -56,4 +56,4 @@ def given_i_assign_the_sheet_group1_to_the_agent_linked_event(step, sheet_name, 
         else:
             Select(select_box).select_by_index(0)
 
-    form.submit_form()
+    form.submit.submit_form()

@@ -10,7 +10,7 @@ from xivo_lettuce.manager import ldap_manager as ldap_man
 def i_create_an_ldap_server_with_name_1_and_host_2(step, name, host):
     open_url('ldapserver', 'add')
     ldap_man.type_ldap_name_and_host(name, host)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'Given there is a LDAP server with name "([^"]*)" and with host "([^"]*)"')

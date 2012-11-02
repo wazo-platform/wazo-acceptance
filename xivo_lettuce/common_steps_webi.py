@@ -34,12 +34,12 @@ def then_value_is_not_displayed_in_the_list(step, type, search):
 @step(u'I submit$')
 def i_submit(step):
     time.sleep(1)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I submit with errors')
 def when_i_submit_with_errors(step):
-    form.submit_form_with_errors()
+    form.submit.submit_form_with_errors()
 
 
 @step(u'Then I see no errors')
@@ -47,7 +47,7 @@ def then_i_see_no_errors(step):
     # this step is there mostly for test readability; it's a no-op in most cases
     # since it's already checked when a form is submitted
     try:
-        error_element = form.find_form_errors()
+        error_element = form.submit.find_form_errors()
     except NoSuchElementException:
         pass
     else:
@@ -56,7 +56,7 @@ def then_i_see_no_errors(step):
 
 @step(u'Then I see errors')
 def then_i_see_errors(step):
-    form.assert_form_errors()
+    form.submit.assert_form_errors()
 
 
 @step(u'I set the select field "([^"]*)" to "([^"]*)"')

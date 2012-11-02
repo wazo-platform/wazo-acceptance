@@ -15,7 +15,7 @@ def given_a_live_reload_configuration_is_enable(step):
 @step(u'When i edit extenfeatures page')
 def when_i_edit_extenfeatures_page(step):
     open_url('extenfeatures')
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When i disable live reload configuration')

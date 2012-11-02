@@ -6,7 +6,7 @@ from lettuce import step, world
 from xivo_lettuce import form, logs
 from xivo_lettuce.common import open_url, remove_all_elements, go_to_tab
 from xivo_lettuce.manager import asterisk_manager
-from xivo_lettuce.checkbox import Checkbox
+from xivo_lettuce.form.checkbox import Checkbox
 
 
 def create_or_replace_certificate(info):
@@ -56,24 +56,24 @@ def update_sip_configuration(info):
     checked = info['allow tls connections'] == "yes"
     Checkbox.from_label("Allow TLS connections").set_checked(checked)
 
-    form.set_text_field("Listening address", info['listening address'])
-    form.set_select_field("Server certificate", info['server certificate'])
-    form.set_select_field("CA certificate", info['ca certificate'])
-    form.submit_form()
+    form.input.set_text_field_with_label("Listening address", info['listening address'])
+    form.select.set_select_field_with_label("Server certificate", info['server certificate'])
+    form.select.set_select_field_with_label("CA certificate", info['ca certificate'])
+    form.submit.submit_form()
 
 
 @step(u'When I create a certificate with the following invalid info:')
 def when_i_create_a_certificate_with_the_following_invalid_info(step):
     for info in step.hashes:
         create_or_replace_certificate(info)
-        form.submit_form_with_errors()
+        form.submit.submit_form_with_errors()
 
 
 @step(u'When I create a certificate with following valid info:')
 def when_i_create_a_certificate_with_following_valid_info(step):
     for info in step.hashes:
         create_or_replace_certificate(info)
-        form.submit_form()
+        form.submit.submit_form()
 
 
 @step(u'I create a certificate with following valid info and the server\'s hostname as common name:$')
@@ -81,7 +81,7 @@ def i_create_a_certificate_with_following_valid_info_and_the_server_s_hostname_a
     for info in step.hashes:
         create_or_replace_certificate(info)
         insert_hostname_into_form()
-        form.submit_form()
+        form.submit.submit_form()
 
 
 @step(u'When I enable the following options for the SIP Protocol:')

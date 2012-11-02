@@ -35,7 +35,7 @@ def when_i_create_group_with_number(step, group_name, group_number):
     type_group_name(group_name)
     type_group_number(group_number)
     type_context('default')
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I set a group "([^"]*)" with number "([^"]*)"')

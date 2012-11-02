@@ -14,7 +14,7 @@ def when_i_create_a_conference_room_with_name_number(step, name, confno):
     meetme_manager.type_name(name)
     meetme_manager.type_context('default')
     meetme_manager.type_confno(confno)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I create a conference room with name "([^"]*)" with number "([^"]*)" with max participants "([^"]*)"')
@@ -25,4 +25,4 @@ def when_i_create_a_conference_room_with_name_number_max_participants(step, name
     meetme_manager.type_context('default')
     meetme_manager.type_confno(confno)
     meetme_manager.type_maxusers(maxusers)
-    form.submit_form()
+    form.submit.submit_form()

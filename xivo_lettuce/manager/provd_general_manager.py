@@ -3,12 +3,12 @@
 import json
 import time
 from lettuce.registry import world
-from xivo_lettuce.common import open_url, form
+from xivo_lettuce.common import open_url, get_value_with_label
 
 def rest_api_configuration():
     open_url('provd_general')
-    host = form.get_value("API REST IP")
-    port = form.get_value("API REST port")
+    host = get_value_with_label("API REST IP")
+    port = get_value_with_label("API REST port")
     return host, int(port)
 
 

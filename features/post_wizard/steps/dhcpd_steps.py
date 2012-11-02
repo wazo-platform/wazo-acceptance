@@ -5,7 +5,7 @@ from xivo_lettuce import form, sysutils
 from xivo_lettuce.terrain import _webi_configured
 from xivo_lettuce.manager import dhcpd_manager, commonconf_manager
 from xivo_lettuce.common import open_url
-from xivo_lettuce.checkbox import Checkbox
+from xivo_lettuce.form.checkbox import Checkbox
 
 
 @step(u'When I wizard correctly executed')
@@ -18,7 +18,7 @@ def when_i_activate_dhcpd_server(step):
     open_url('dhcp')
     Checkbox.from_id('it-active').check()
     dhcpd_manager.type_pool_start_end('192.168.0.15', '192.168.0.20')
-    form.submit_form()
+    form.submit.submit_form()
     commonconf_manager.webi_exec_commonconf()
 
 
@@ -26,7 +26,7 @@ def when_i_activate_dhcpd_server(step):
 def when_i_desactivate_dhcpd_server(step):
     open_url('dhcp')
     Checkbox.from_id('it-active').uncheck()
-    form.submit_form()
+    form.submit.submit_form()
     commonconf_manager.webi_exec_commonconf()
 
 

@@ -6,10 +6,10 @@ import time
 
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
-from checkbox import Checkbox
+from form.checkbox import Checkbox
 from xivo_lettuce import urls
-from xivo_lettuce import form
 from webservices.webservices import WebServicesFactory
+from xivo_lettuce.form import submit
 
 UTILS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils'))
 
@@ -21,6 +21,11 @@ def get_utils_file_content(filename):
     return filecontent
 
 
+def get_value_with_label(field_label):
+    element = world.browser.find_element_by_label(field_label)
+    return element.get_attribute('value')
+
+
 def webi_login(user, password, language):
     input_login = world.browser.find_element_by_id('it-login')
     input_password = world.browser.find_element_by_id('it-password')
@@ -28,7 +33,7 @@ def webi_login(user, password, language):
     input_password.send_keys(password)
     language_option = world.browser.find_element_by_xpath('//option[@value="%s"]' % language)
     language_option.click()
-    form.submit_form()
+    submit.submit_form()
     world.browser.find_element_by_id('loginbox', 'Cannot login as ' + user)
     world.logged = True
 
@@ -180,12 +185,6 @@ def get_host_address():
     host = host.rstrip('/')
     host = host.partition('//')[2]
     return host
-
-
-def edit_text_field(field_id, new_value):
-    input_field = world.browser.find_element_by_id(field_id)
-    input_field.clear()
-    input_field.send_keys(new_value)
 
 
 def go_to_home_page():

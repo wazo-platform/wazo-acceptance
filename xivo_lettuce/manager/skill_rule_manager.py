@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from xivo_lettuce.common import edit_text_field
 from lettuce.registry import world
+from xivo_lettuce import form
 
 
 def type_skill_rule_name(skill_rule_name):
-    edit_text_field('it-queueskillrule-name', skill_rule_name)
+    form.input.edit_text_field_with_id('it-queueskillrule-name', skill_rule_name)
 
 
 def add_rule(rule):

@@ -41,7 +41,7 @@ def when_i_click_the_directmedia_checkbox(step):
 
 @step('When I submit the form')
 def when_i_submit_the_form(step):
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step('When I change the dial timeout to "([^"]*)"')

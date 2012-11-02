@@ -20,14 +20,14 @@ def create_entry(entry):
     display_name = "%(first name)s %(last name)s" % entry
     entry.setdefault('display name', display_name)
 
-    form.set_text_field("First Name", entry['first name'])
-    form.set_text_field("Last Name", entry['last name'])
-    form.set_text_field("Display name", entry['display name'])
+    form.input.set_text_field_with_label("First Name", entry['first name'])
+    form.input.set_text_field_with_label("Last Name", entry['last name'])
+    form.input.set_text_field_with_label("Display name", entry['display name'])
 
     go_to_tab("Office")
-    form.set_text_field('Phone', entry.get('phone', ''))
+    form.input.set_text_field_with_label('Phone', entry.get('phone', ''))
 
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'Given "([^"]*)" is not in the phonebook')

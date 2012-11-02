@@ -147,7 +147,7 @@ def when_i_add_the_queue_1_with_display_name_2_with_extension_3_in_4(step, name,
     remove_queues_with_name_or_number_if_exist(name, extension)
     common.open_url('queue', 'add')
     type_queue_name_display_name_number_context(name, display_name, extension, context)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I add the queue "([^"]*)" with display name "([^"]*)" with extension "([^"]*)" in "([^"]*)" with errors$')
@@ -155,7 +155,7 @@ def when_i_add_the_queue_1_with_display_name_2_with_extension_3_in_4_with_errors
     remove_queues_with_name_or_number_if_exist(name, extension)
     common.open_url('queue', 'add')
     type_queue_name_display_name_number_context(name, display_name, extension, context)
-    form.submit_form_with_errors()
+    form.submit.submit_form_with_errors()
 
 
 @step(u'When I add the queue "([^"]*)" with extension "([^"]*)" with ring strategy at "([^"]*)"$')
@@ -165,14 +165,14 @@ def when_i_add_the_queue_group1_with_extension_group2_with_ring_strategy_at_grou
     common.open_url('queue', 'add')
     type_queue_name_display_name_number_context(queue_name, queue_name, number, context)
     type_queue_ring_strategy(ring_strategy)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I edit the queue "([^"]*)"$')
 def when_i_edit_the_queue_group1(step, queue_name):
     queue_id = find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)"$')
@@ -180,7 +180,7 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_nam
     queue_id = find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     type_queue_ring_strategy(ring_strategy)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I add agent "([^"]*)" to "([^"]*)"')
@@ -206,4 +206,4 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(ste
     queue_id = find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     type_queue_ring_strategy(ring_strategy)
-    form.submit_form_with_errors()
+    form.submit.submit_form_with_errors()

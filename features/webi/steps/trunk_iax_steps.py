@@ -24,7 +24,7 @@ def when_i_create_a_trunkiax_with_name_and_trunk(step, name):
     open_url('trunkiax', 'add')
     input_name = world.browser.find_element_by_id('it-protocol-name', 'trunkiax form not loaded')
     input_name.send_keys(name)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When I remove the trunkiax "([^"]*)"')

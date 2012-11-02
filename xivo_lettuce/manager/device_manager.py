@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from xivo_lettuce.common import edit_text_field, open_url, remove_line
+from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce import form
 from selenium.common.exceptions import NoSuchElementException
 
@@ -12,9 +12,9 @@ def add_or_replace_device(info):
 
 def add_device(info):
     open_url('device', 'add')
-    edit_text_field('it-devicefeatures-ip', info['ip'])
-    edit_text_field('it-devicefeatures-mac', info['mac'])
-    form.submit_form()
+    form.input.edit_text_field_with_id('it-devicefeatures-ip', info['ip'])
+    form.input.edit_text_field_with_id('it-devicefeatures-mac', info['mac'])
+    form.submit.submit_form()
 
 
 def delete_device(info):
@@ -27,5 +27,5 @@ def delete_device(info):
 
 def search_device(search):
     open_url('device')
-    edit_text_field('it-toolbar-search', search)
-    form.submit_form('it-toolbar-subsearch')
+    form.input.edit_text_field_with_id('it-toolbar-search', search)
+    form.submit.submit_form('it-toolbar-subsearch')

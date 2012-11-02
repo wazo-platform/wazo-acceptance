@@ -6,8 +6,8 @@ from xivo_lettuce.common import find_line, open_url, remove_all_elements, \
     remove_line, edit_line
 from xivo_lettuce.manager_ws import line_manager_ws
 from xivo_lettuce.manager import line_manager
-from xivo_lettuce.checkbox import Checkbox
-from xivo_lettuce.list_pane import ListPane
+from xivo_lettuce.form.checkbox import Checkbox
+from xivo_lettuce.form.list_pane import ListPane
 
 
 @step(u'Given there is no custom lines')

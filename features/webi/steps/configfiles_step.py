@@ -19,4 +19,4 @@ def when_i_create_configfiles_with_content(step, filename, content):
     input_description = world.browser.find_element_by_id('it-configfile-description')
     input_description.clear()
     input_description.send_keys(content)
-    form.submit_form()
+    form.submit.submit_form()

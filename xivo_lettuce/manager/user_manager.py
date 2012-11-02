@@ -50,10 +50,10 @@ def user_form_add_line(linenumber, context='default'):
 
 def type_voicemail(voicemail_number):
     common.go_to_tab('General')
-    form.set_select_field('Language', 'en_US')
+    form.select.set_select_field_with_label('Language', 'en_US')
     common.go_to_tab('Voicemail')
-    form.set_select_field('Voice Mail', 'Asterisk')
-    form.set_text_field('Voicemail', voicemail_number)
+    form.select.set_select_field_with_label('Voice Mail', 'Asterisk')
+    form.input.set_text_field_with_label('Voicemail', voicemail_number)
 
 
 def remove_line():

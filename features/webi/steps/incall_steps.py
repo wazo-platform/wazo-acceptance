@@ -26,7 +26,7 @@ def when_i_create_incall_with_did(step, incall_did, context):
     open_url('incall', 'add')
     incall_man.type_incall_did(incall_did)
     incall_man.type_incall_context(context)
-    form.submit_form()
+    form.submit.submit_form()
 
 
 @step(u'When incall "([^"]*)" is removed')

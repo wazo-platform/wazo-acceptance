@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from xivo_lettuce.common import open_url
-from xivo_lettuce.checkbox import Checkbox
+from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce import form
 
 
@@ -20,4 +20,4 @@ def _toggle_live_reload(state):
         option.check()
     else:
         option.uncheck()
-    form.submit_form()
+    form.submit.submit_form()
