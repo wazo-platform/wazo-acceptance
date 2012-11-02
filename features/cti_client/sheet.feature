@@ -97,7 +97,7 @@ Feature: Sheet
         Given there is a group "main" with extension "2006@default" and users:
           | firstname | lastname |
           | Alice     | Gopher   |
-        Given there is an incall "2006" in context "Incalls (from-extern)" to the "Group" "main" with caller id name "Tux" number "5555555555"
+        Given there is an incall "2006" in context "from-extern" to the "Group" "main" with caller id name "Tux" number "5555555555"
 
         When I start the XiVO Client
         When I enable screen pop-up
