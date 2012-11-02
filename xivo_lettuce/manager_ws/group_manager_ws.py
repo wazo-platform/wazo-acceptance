@@ -43,6 +43,10 @@ def find_group_with_name(name):
     return groups[0]
 
 
+def find_group_id_with_name(name):
+    return find_group_with_name(name).id
+
+
 def get_group_with_name(name):
     group = find_group_with_name(name)
     return world.ws.groups.view(group.id)
