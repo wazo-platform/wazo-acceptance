@@ -11,7 +11,7 @@ Feature: Sheet
         Given there is a user "Cedric" "Abunar" with an agent "1153@default" and CTI profile "Client"
 
         Given there is a queue "frere" with extension "3009@default" with agent "1153"
-        Given there is an incall "3001" in context "Incalls (from-extern)" to the "Queue" "frere" with caller id name "Laurent Demange" number "1234"
+        Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Laurent Demange" number "1234"
 
         When I start the XiVO Client
         When I enable screen pop-up
@@ -39,7 +39,7 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Link" event
 
         Given there is a user "Alice" "Gopher" with extension "1007@default" and CTI profile "Client"
-        Given there is an incall "1007" in context "Incalls (from-extern)" to the "User" "Alice Gopher" with caller id name "Tux" number "5555555555"
+        Given there is an incall "1007" in context "from-extern" to the "User" "Alice Gopher" with caller id name "Tux" number "5555555555"
 
         When I start the XiVO Client
         When I enable screen pop-up
@@ -67,7 +67,7 @@ Feature: Sheet
 
         Given there is a user "Alice" "Gopher" with extension "1007@default" and CTI profile "Client"
         Given there is a queue "frere" with extension "3001@default" with user "1007"
-        Given there is an incall "3001" in context "Incalls (from-extern)" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
+        Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
 
         When I start the XiVO Client
         When I enable screen pop-up
@@ -128,7 +128,7 @@ Feature: Sheet
         Given there is a group "main" with extension "2006@default" and users:
           | firstname | lastname |
           | Alice     | Gopher   |
-        Given there is an incall "2006" in context "Incalls (from-extern)" to the "Group" "main" with caller id name "Tux" number "5555555555"
+        Given there is an incall "2006" in context "from-extern" to the "Group" "main" with caller id name "Tux" number "5555555555"
 
         When I start the XiVO Client
         When I enable screen pop-up
