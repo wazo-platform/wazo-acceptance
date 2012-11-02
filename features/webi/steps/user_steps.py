@@ -8,9 +8,7 @@ from selenium.webdriver.support.select import Select
 from xivo_lettuce.manager import user_manager, line_manager
 from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
     line_manager_ws, agent_manager_ws, voicemail_manager_ws
-from xivo_lettuce import common
-from xivo_lettuce import form
-from utils import func
+from xivo_lettuce import common, func, form
 
 
 @step(u'Given there is a user "([^"]*)" "([^"]*)"$')

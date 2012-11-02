@@ -3,9 +3,8 @@
 import time
 
 from lettuce import step, world
-from utils.func import extract_number_and_context_from_extension
 from xivo_lettuce.common import open_url, element_is_in_list
-from xivo_lettuce import form
+from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.logs import search_str_in_asterisk_log
 from xivo_lettuce.table import extract_webi_talbe_to_dict
@@ -32,7 +31,7 @@ def then_i_not_see_recording_file_of_this_call_in_monitoring_audio_files_page(st
 
 @step(u'Then I see rejected call to extension "([^"]+)" in asterisk log')
 def then_i_see_rejected_call_in_asterisk_log(step, extension):
-    number, context = extract_number_and_context_from_extension(extension)
+    number, context = func.extract_number_and_context_from_extension(extension)
     expression = "to extension '%s' rejected because extension not found in context '%s'" % (number, context)
     assert search_str_in_asterisk_log(expression)
 

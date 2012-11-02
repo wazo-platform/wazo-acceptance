@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import step
-from xivo_lettuce import form
+from xivo_lettuce import form, func
 from xivo_lettuce.common import open_url, element_in_list_matches_field
 from xivo_lettuce.manager.group_manager import remove_group_with_name, \
     type_group_name, type_group_number, type_context
 from xivo_lettuce.manager_ws import group_manager_ws
 from xivo_lettuce.manager_ws.user_manager_ws import find_user_id_with_firstname_lastname
 from xivo_lettuce.manager_ws import user_manager_ws
-from utils.func import extract_number_and_context_from_extension
 
 
 @step(u'Given there is a group "([^"]*)" with extension "([^"]*)" and users:')
 def given_there_is_a_group_with_extension_and_users(step, name, extension):
-    number, context = extract_number_and_context_from_extension(extension)
+    number, context = func.extract_number_and_context_from_extension(extension)
     group_manager_ws.delete_groups_with_number(number)
 
     user_ids = []

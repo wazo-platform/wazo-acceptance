@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import urllib
-import os
 import time
 
 from lettuce.registry import world
@@ -10,15 +9,6 @@ from form.checkbox import Checkbox
 from xivo_lettuce import urls
 from webservices.webservices import WebServicesFactory
 from xivo_lettuce.form import submit
-
-UTILS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils'))
-
-
-def get_utils_file_content(filename):
-    abs_file_path = os.path.join(UTILS_DIR, filename)
-    with open(abs_file_path) as fobj:
-        filecontent = fobj.read()
-    return filecontent
 
 
 def get_value_with_label(field_label):

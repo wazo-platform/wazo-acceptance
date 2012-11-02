@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import world
-from utils.func import extract_number_and_context_from_extension
+from xivo_lettuce import func
 
 
 def delete_lines_with_number(number, context):
@@ -23,7 +23,7 @@ def find_line_id_with_number(number, context):
 
 
 def find_line_with_extension(extension):
-    number, context = extract_number_and_context_from_extension(extension)
+    number, context = func.extract_number_and_context_from_extension(extension)
     return find_line_with_number(number, context)
 
 

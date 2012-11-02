@@ -1,11 +1,10 @@
 # -*- coding: UTF-8 -*-
 
 from lettuce import step
-from xivo_lettuce import form
+from xivo_lettuce import form, func
 from xivo_lettuce.manager import agent_manager, agent_status_manager
 from xivo_lettuce.manager_ws import agent_manager_ws, user_manager_ws
 from xivo_lettuce.common import open_url, remove_line
-from utils import func
 from xivo_lettuce.manager.agent_manager import is_agent_in_agent_group, \
     remove_agent_group_if_exist, get_agent_group_id, get_nb_agents_in_group, \
     select_agent_group_list

@@ -4,7 +4,7 @@ import socket
 
 from subprocess import Popen, PIPE
 from lettuce.registry import world
-from utils import func
+from xivo_lettuce import func
 
 
 def killall_process_sipp():

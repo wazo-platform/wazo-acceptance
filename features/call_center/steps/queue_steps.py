@@ -4,8 +4,7 @@ import time
 from lettuce import step, world
 from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
     schedule_manager_ws, user_manager_ws
-from utils import func
-from xivo_lettuce import common
+from xivo_lettuce import common, func
 from xivo_lettuce import form
 from xivo_lettuce.manager.queue_manager import type_queue_name_display_name_number_context, \
     remove_queues_with_name_or_number_if_exist, type_queue_ring_strategy
