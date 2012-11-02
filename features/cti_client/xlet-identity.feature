@@ -1,8 +1,6 @@
 Feature: Xlet identity
 
     Scenario: Display identity infos
-        Given there is no user "Yoda" "Kenobi"
-        Given there is no SIP line "1151"
         Given there is a user "Yoda" "Kenobi" with extension "1151@default" and CTI profile "Client"
 
         Given I go to the "Resolver" configuration page
@@ -16,8 +14,6 @@ Feature: Xlet identity
         Then the Xlet identity shows phone number as "1151"
 
     Scenario: Display voicemail icon and number
-        Given there is no user "Bail" "Tarkin"
-        Given there is no SIP line "1152"
         Given there is a user "Bail" "Tarkin" with extension "1152@default", voicemail and CTI profile "Client"
 
         When I start the XiVO Client
@@ -25,8 +21,6 @@ Feature: Xlet identity
         Then the Xlet identity shows a voicemail "1152"
 
     Scenario: Display agent icon and number
-        Given there is no user "Darth" "Chewbacca"
-        Given there is no agent with number "1153"
         Given there is a user "Darth" "Chewbacca" with an agent "1153@default" and CTI profile "Client"
 
         When I start the XiVO Client

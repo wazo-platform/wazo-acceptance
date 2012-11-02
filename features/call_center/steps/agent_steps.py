@@ -59,11 +59,6 @@ def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastna
     agent_status_manager.log_agent_on_user(number)
 
 
-@step(u'Given there is no agent with number "([^"]*)"$')
-def given_no_agent_number_1(step, number):
-    agent_manager_ws.delete_agents_with_number(number)
-
-
 @step(u'When I log agent "([^"]*)"')
 def when_i_log_agent_1(step, agent_number):
     agent_status_manager.log_agent_on_user(agent_number)
