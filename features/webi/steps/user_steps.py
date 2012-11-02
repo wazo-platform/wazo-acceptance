@@ -141,11 +141,6 @@ def given_there_is_a_no_user_1_2(step, firstname, lastname):
     user_manager_ws.delete_users_with_firstname_lastname(firstname, lastname)
 
 
-@step(u'I add a user$')
-def i_add_a_user(step):
-    common.open_url('user', 'add')
-
-
 @step(u'When I create a user "([^"]*)" "([^"]*)"$')
 def when_i_create_a_user(step, firstname, lastname):
     common.open_url('user', 'add')
@@ -185,14 +180,6 @@ def then_i_should_be_at_the_user_list_page(step):
 def when_i_edit_the_user_1_2(step, firstname, lastname):
     common.open_url('user', 'list')
     common.edit_line('%s %s' % (firstname, lastname))
-
-
-@step(u'I enable the XiVO Client as "([^"]*)" pass "([^"]*)" profile "([^"]*)"')
-def i_enable_the_xivo_client_as_1_pass_2_profile_3(step, login, password, profile):
-    step.given('Given the option "Enable XiVO Client" is checked')
-    step.given('I set the text field "Login" to "%s"' % login)
-    step.given('I set the text field "Password" to "%s"' % password)
-    step.given('I set the select field "Profile" to "%s"' % profile)
 
 
 @step(u'When I delete agent number "([^"]*)"')

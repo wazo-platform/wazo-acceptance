@@ -1,30 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from lettuce import step
-from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import profile_manager
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import common, form
-
-
-@step(u'Given there is no profile "([^"]*)"')
-def given_there_is_no_profile_1(step, profile_name):
-    profile_manager.delete_profile_if_exists(profile_name)
-
-
-@step(u'Given I add a profile')
-def given_i_add_a_profile(step):
-    open_url('profile', 'add')
-
-
-@step(u'Given I remove all services')
-def given_i_remove_all_services(step):
-    profile_manager.remove_all_services()
-
-
-@step(u'Given I add a XLet "([^"]*)"')
-def given_i_add_a_xlet_1(step, xlet_label):
-    profile_manager.add_xlet(xlet_label)
 
 
 @step(u'Given there is a profile "([^"]*)" with no services and xlets:')
