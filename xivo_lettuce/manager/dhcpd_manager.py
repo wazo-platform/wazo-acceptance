@@ -26,14 +26,12 @@ def process_monitored(process_name):
 
 
 def _wait_monit_restart(maxtries):
-    nbtries = 0
-    _ready = is_monit_started()
-    while nbtries < maxtries and not _ready:
+    for _ in xrange(maxtries):
+        ready = is_monit_started()
+        if ready:
+            break
         time.sleep(SECONDS_BETWEEN_RETRIES_TO_CONTACT_MONIT)
-        _ready = True if is_monit_started() else False
-        nbtries += 1
-
-    return _ready
+    return ready
 
 
 def is_monit_started():

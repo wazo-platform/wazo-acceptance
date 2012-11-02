@@ -17,7 +17,7 @@ def when_i_wizard_correctly_executed(step):
 def when_i_activate_dhcpd_server(step):
     open_url('dhcp')
     Checkbox.from_id('it-active').check()
-    dhcpd_manager.type_pool_start_end('192.168.0.15', '192.168.0.20')
+    dhcpd_manager.type_pool_start_end('192.168.32.20', '192.168.32.21')
     form.submit.submit_form()
     commonconf_manager.webi_exec_commonconf()
 
