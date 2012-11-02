@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 
+import time
 from lettuce.decorators import step
 from xivo_lettuce import common
 from lettuce.registry import world
@@ -10,6 +11,7 @@ from selenium.webdriver.common.by import By
 def when_i_edit_cti_profile_group1(step, profile_name):
     common.open_url('profile', 'list')
     common.edit_line(profile_name)
+    time.sleep(world.timeout)
 
 
 @step(u'Then i see default services activated')
