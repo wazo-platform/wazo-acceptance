@@ -95,6 +95,12 @@ def given_i_wait_call_then_i_answer_then_hangup_after_n_seconds(step, call_durat
     call_manager.execute_answer_then_hangup(call_duration_ms)
 
 
+@step(u'Given I wait call then I answer after "([0-9]+)s" then I wait')
+def given_i_wait_then_i_answer_after_n_second_then_i_wait(step, ring_time):
+    ring_time_ms = int(ring_time) * 1000
+    call_manager.execute_answer_then_wait(ring_time_ms)
+
+
 @step(u'I wait (\d+) seconds')
 def given_i_wait_n_seconds(step, count):
     time.sleep(int(count))

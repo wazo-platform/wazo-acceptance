@@ -9,7 +9,7 @@ Feature: Stat
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "008" on extension "1008@statscenter"
         Given I wait 5 seconds for the calls processing
-        Given I wait call then i answer after "2s" then i wait
+        Given I wait call then I answer after "2s" then i wait
         Given I wait 2 seconds for the calls processing
         Given there is 1 calls to extension "5008@statscenter" then i hang up after "5s"
         Given I wait 10 seconds for the calls processing
