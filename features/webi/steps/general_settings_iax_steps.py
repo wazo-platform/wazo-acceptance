@@ -1,89 +1,60 @@
 # -*- coding: utf-8 -*-
 
-from lettuce import step, world
-
+from lettuce import step
 from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce import form
+from xivo_lettuce.manager import general_settings_iax_manager
+from xivo_lettuce import form, common
 from xivo_lettuce.form.checkbox import Checkbox
-from xivo_lettuce.common import go_to_tab, open_url
-from xivo_lettuce.manager.general_settings_iax_manager import find_call_limit_line, \
-    find_call_limit_lines
 
 
-@step(u'Given I don\'t see any call limit to "([^"]*)" netmask "([^"]*)"')
-def given_i_don_t_see_any_call_limit_to_netmask_(step, destination, netmask):
-    try:
-        find_call_limit_lines(destination, netmask)
-    except NoSuchElementException:
-        return
-    when_i_remove_the_call_limits_to_netmask(step, destination, netmask)
+@step(u'Given the IAX call limit to "([^"]*)" netmask "([^"]*)" does not exist')
+def given_the_iax_call_limit_to_1_netmask_2_does_not_exist(step, destination, netmask):
+    general_settings_iax_manager.remove_call_limit_if_exists(destination, netmask)
+
+
+@step(u'When I add IAX call limits with errors:')
+def when_i_add_iax_call_limit_with_errors(step):
+    _go_to_call_limits_form()
+    _type_call_limits(step.hashes)
+    form.submit.submit_form_with_errors()
+
+
+@step(u'When I remove IAX call limits:')
+def when_i_remove_iax_call_limits(step):
+    call_limits_to_remove = step.hashes
+    general_settings_iax_manager.remove_call_limits(call_limits_to_remove)
+
+
+@step(u'When I add IAX call limits:')
+def when_i_add_iax_call_limit(step):
+    _go_to_call_limits_form()
+    _type_call_limits(step.hashes)
     form.submit.submit_form()
 
 
-@step(u'Given I see a call limit to "([^"]*)" netmask "([^"]*)" of "([^"]*)" calls')
-def given_i_see_a_call_limit_to_netmask_of_calls(step, destination, netmask, limit):
-    try:
-        find_call_limit_line(destination, netmask, limit)
-    except NoSuchElementException:
-        when_i_add_a_call_limit(step)
-        when_i_set_the_destination_to(step, destination)
-        when_i_set_the_netmask_to(step, netmask)
-        when_i_set_the_call_limit_to(step, limit)
-        form.submit.submit_form()
+@step(u'Then I see IAX call limits:')
+def then_i_see_iax_call_limits(step):
+    expected_call_limits = step.hashes
+    for expected_call_limit in expected_call_limits:
+        address = expected_call_limit['address']
+        netmask = expected_call_limit['netmask']
+        call_count = expected_call_limit['call_count']
+        general_settings_iax_manager.find_call_limit_line(address, netmask, call_count)
 
 
-@step(u'I go on the General Settings > IAX Protocol page, tab "([^"]*)"')
-def i_go_on_the_general_settings_iax_protocol_page_tab(step, tab):
-    open_url('general_iax')
-    go_to_tab(tab)
-
-
-@step(u'When I add a call limit')
-def when_i_add_a_call_limit(step):
-    add_button = world.browser.find_element_by_xpath("//a[@title='Add a call limit']")
-    add_button.click()
-    world.new_line = world.browser.find_elements_by_xpath("//tbody[@id='disp']//tr")[-1]
-
-
-@step(u'When I set the destination to "([^"]*)"')
-def when_i_set_the_destination_to(step, destination):
-    input_destination = world.new_line.find_element_by_name('calllimits[destination][]')
-    input_destination.send_keys(destination)
-
-
-@step(u'When I set the netmask to "([^"]*)"')
-def when_i_set_the_netmask_to(step, netmask):
-    input_netmask = world.new_line.find_element_by_name('calllimits[netmask][]')
-    input_netmask.send_keys(netmask)
-
-
-@step(u'When I set the call limit to "([^"]*)"')
-def when_i_set_the_call_limit_to(step, limit):
-    input_limit = world.new_line.find_element_by_name('calllimits[calllimits][]')
-    input_limit.send_keys(limit)
-
-
-@step(u'Then I see a call limit to "([^"]*)" netmask "([^"]*)" of "([^"]*)" calls')
-def then_i_see_a_call_limit_to_netmask_of_calls(step, destination, netmask, limit):
-    find_call_limit_line(destination, netmask, limit)
-
-
-@step(u'When I remove the call limits to "([^"]*)" netmask "([^"]*)"')
-def when_i_remove_the_call_limits_to_netmask(step, destination, netmask):
-    lines = find_call_limit_lines(destination, netmask)
-    for line in lines:
-        delete_button = line.find_element_by_xpath(".//a[@title='Delete this limit']")
-        delete_button.click()
-    form.submit.submit_form()
-
-
-@step(u'Then I don\'t see a call limit to "([^"]*)" netmask "([^"]*)"')
-def then_i_don_t_see_a_call_limit_to_group1_netmask_group2(step, destination, netmask):
-    try:
-        find_call_limit_line(destination, netmask)
-        assert False, 'the call limit has not been removed'
-    except NoSuchElementException:
-        pass
+@step(u'Then I don\'t see IAX call limits:')
+def then_i_don_t_see_iax_call_limits(step):
+    unexpected_call_limits = step.hashes
+    for unexpected_call_limit in unexpected_call_limits:
+        address = unexpected_call_limit['address']
+        netmask = unexpected_call_limit['netmask']
+        call_count = unexpected_call_limit['call_count']
+        try:
+            general_settings_iax_manager.find_call_limit_line(address, netmask, call_count)
+        except NoSuchElementException:
+            pass
+        else:
+            raise Exception('Call limit %s should not be visible' % unexpected_call_limit)
 
 
 @step(u'Given the SRV lookup option is disabled')
@@ -124,14 +95,6 @@ def then_the_srv_lookup_option_is_disabled(step):
     assert not option.is_checked()
 
 
-def _get_srv_lookup_option():
-    open_url('general_iax')
-    go_to_tab('Default')
-    option = Checkbox.from_label('SRV lookup')
-
-    return option
-
-
 @step(u'Given the Shrink caller ID option is disabled')
 def given_the_shrink_caller_id_option_is_disabled(step):
     option = _get_shrink_caller_id_option()
@@ -170,9 +133,27 @@ def then_the_shrink_caller_id_option_is_disabled(step):
     assert not option.is_checked()
 
 
+def _get_srv_lookup_option():
+    common.open_url('general_iax')
+    common.go_to_tab('Default')
+    option = Checkbox.from_label('SRV lookup')
+
+    return option
+
+
 def _get_shrink_caller_id_option():
-    open_url('general_iax')
-    go_to_tab('Advanced')
+    common.open_url('general_iax')
+    common.go_to_tab('Advanced')
     option = Checkbox.from_label('Shrink CallerID')
 
     return option
+
+
+def _go_to_call_limits_form():
+    common.open_url('general_iax')
+    common.go_to_tab('Call limits')
+
+
+def _type_call_limits(call_limits_config):
+    for call_limit in call_limits_config:
+        general_settings_iax_manager.type_iax_call_limit(call_limit)
