@@ -51,7 +51,7 @@ def then_i_see_no_errors(step):
     except NoSuchElementException:
         pass
     else:
-        raise form.FormErrorException(error_element.text)
+        raise form.submit.FormErrorException(error_element.text)
 
 
 @step(u'Then I see errors')
