@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from lettuce.registry import world
+
 
 def delete_skill_rules_with_name(name):
-    for id in _search_skill_rules_with_name(name):
-        WSA.delete(id)
+    for skill_rule in _search_skill_rules_with_name(name):
+        world.ws.queueskillrules.delete(skill_rule.id)
 
 
 def _search_skill_rules_with_name(name):
-    skill_rule_list = WSA.search(name)
-    if skill_rule_list:
-        return [skill_rule['id'] for skill_rule in skill_rule_list if
-                skill_rule['name'] == name]
-    return []
+    return world.ws.queueskillrules.search_by_name(name)
