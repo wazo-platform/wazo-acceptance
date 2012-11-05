@@ -89,12 +89,12 @@ def open_url(module, act=None, qry={}):
     if act:
         qry.update({'act': act})
     if module in list_url:
-        uri = list_url[module]['web']
+        uri = list_url[module]
     elif module in urls.ALIAS:
         module_alias = urls.ALIAS[module]['module']
         if 'qry' in urls.ALIAS[module]:
             qry.update(urls.ALIAS[module]['qry'])
-        uri = list_url[module_alias]['web']
+        uri = list_url[module_alias]
     else:
         raise Exception("Unknown module : %s" % module)
 
