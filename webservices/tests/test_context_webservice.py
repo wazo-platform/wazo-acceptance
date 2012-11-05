@@ -1,68 +1,51 @@
 # -*- coding: utf-8 -*-
 
-__license__ = """
-    Copyright (C) 2011  Avencall
+# Copyright (C) 2012  Avencall
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
-"""
-
-import unittest, json
-from webservices.webservices import WebServices
+import xivo_ws
+import unittest
+import common
 
 
-class TestContext(unittest.TestCase):
+class TestContextWebServices(unittest.TestCase):
+
     def setUp(self):
-        self._aws = WebServices('ipbx/system_management/context')
-        response = self._aws.view('toto')
-        if response:
-            self._aws.delete('toto')
+        self._xivo_ws = common.xivo_server_ws
 
-    def tearDown(self):
-        pass
+    def test_01_add_context(self):
+        context = xivo_ws.Context()
+        context.entity = 1
+        context.name = u'name_test_ws_add_context'
+        context.display_name = u'name_test_ws_add_context'
+        common.delete_with_name('contexts', context.name)
+        self._xivo_ws.contexts.add(context)
 
-    def test_add(self):
-        var_replace = {
-                      "name": 'toto',
-                      "displayname" : 'Toto Corp.',
-                      "entity" : 'avencall',
-                      "contexttype": 'internal',
-                      "contextinclude": '[]',
-                      "contextnumbers_user": '"user": [{"numberbeg": "600", "numberend": "699"}]',
-                      "contextnumbers_group": '',
-                      "contextnumbers_meetme": '',
-                      "contextnumbers_queue": '',
-                      "contextnumbers_incall": ''
-                      }
-        jsonfilecontent = self._aws.get_json_file_content('context');
-        jsonstr = jsonfilecontent % (var_replace)
-        content = json.loads(jsonstr)
+        self.assertEqual(common.nb_with_name('contexts', context.name), 1)
 
-        response = self._aws.add(content)
-        self.assertEqual(response.code, 200)
+    def test_02_edit_context(self):
+        context = common.find_with_name('contexts', u'name_test_ws_add_context')[0]
+        context.name = u'name_test_ws_edit_context'
+        context.display_name = u'name_test_ws_edit_context'
+        self._xivo_ws.contexts.edit(context)
+        context = common.find_with_name('contexts', u'name_test_ws_edit_context')[0]
 
-        response = self._aws.view(var_replace['name'])
-        self.assertEqual(response.code, 200)
-        return var_replace['name']
+        self.assertEqual(context.name, u'name_test_ws_edit_context')
 
-    def test_delete(self):
-        id = self.test_add()
-        response = self._aws.delete(id)
-        self.assertEqual(response.code, 200)
-        response = self._aws.search('toto')
-        self.assertEqual(response.code, 204)
+    def test_03_delete_context(self):
+        common.delete_with_name('contexts', u'name_test_ws_edit_context')
 
-
-if __name__ == '__main__':
-    unittest.main()
+        self.assertEqual(common.nb_with_name('contexts', u'name_test_ws_add_context'), 0)
+        self.assertEqual(common.nb_with_name('contexts', u'name_test_ws_edit_context'), 0)

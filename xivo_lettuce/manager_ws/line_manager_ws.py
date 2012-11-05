@@ -17,6 +17,14 @@ def find_line_with_number(number, context):
     return lines[0]
 
 
+def find_line_with_name(name):
+    lines = _search_lines_with_name(name)
+    if len(lines) != 1:
+        raise Exception('expecting 1 line with name %r; found %s' %
+                        (name, len(lines)))
+    return lines[0]
+
+
 def find_line_id_with_number(number, context):
     line = find_line_with_number(number, context)
     return line.id
@@ -50,3 +58,7 @@ def _search_lines_with_number(number, context):
     context = str(context)
     lines = world.ws.lines.search_by_number(number)
     return [line for line in lines if line.context == context]
+
+
+def _search_lines_with_name(name):
+    return world.ws.lines.search_by_name(name)

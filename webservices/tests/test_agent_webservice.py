@@ -1,35 +1,54 @@
 # -*- coding: utf-8 -*-
 
-__license__ = """
-    Copyright (C) 2011  Avencall
+# Copyright (C) 2012  Avencall
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
-"""
-
+import xivo_ws
 import unittest
-from webservices.common import WSCommon
+import common
 
 
-class TestAgentWebService(unittest.TestCase):
+class TestAgentWebServices(unittest.TestCase):
+
     def setUp(self):
-        self._aws_agent = WSCommon('callcenter/settings/agents')
-        self._aws_skills = WSCommon('callcenter/settings/skills')
+        self._xivo_ws = common.xivo_server_ws
 
-    def tearDown(self):
-        pass
+    def test_01_add_agent(self):
+        agent = xivo_ws.Agent()
+        agent.firstname = u'name_test_ws_add_agent'
+        agent.number = u'5000'
+        agent.context = u'default'
+        common.delete_with_number('agents', agent.number)
+        self._xivo_ws.agents.add(agent)
 
+        self.assertEqual(common.nb_with_number('agents', agent.number), 1)
+
+    def test_02_edit_agent(self):
+        agent = common.find_with_number('agents', u'5000')[0]
+        agent.firstname = u'name_test_ws_edit_agent'
+        self._xivo_ws.agents.edit(agent)
+        agent = common.find_with_number('agents', u'5000')[0]
+
+        self.assertEqual(agent.firstname, u'name_test_ws_edit_agent')
+
+    def test_03_delete_agent(self):
+        common.delete_with_number('agents', u'5000')
+
+        self.assertEqual(common.nb_with_number('agents', u'5000'), 0)
+
+"""
     def new_agent(self, firstname, lastname, number):
         return {
                 "agentfeatures": {
@@ -148,7 +167,4 @@ class TestAgentWebService(unittest.TestCase):
             return 0
         else:
             return len(agent_list)
-
-
-if __name__ == '__main__':
-    unittest.main()
+"""

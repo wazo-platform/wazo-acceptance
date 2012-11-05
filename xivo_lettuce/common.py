@@ -7,7 +7,6 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from form.checkbox import Checkbox
 from xivo_lettuce import urls
-from webservices.webservices import WebServicesFactory
 from xivo_lettuce.form import submit
 
 
@@ -56,10 +55,6 @@ def the_option_is_checked(option_label, checkstate, **kwargs):
         assert Checkbox(option).is_checked() == goal_checked
     else:
         Checkbox(option).set_checked(goal_checked)
-
-
-def get_webservices(module):
-    return WebServicesFactory(urls.URLS[module]['ws'])
 
 
 def element_is_in_list(module, search, qry={}, action='list'):

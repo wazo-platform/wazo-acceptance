@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from xivo_lettuce.common import get_webservices
-
-WSA = get_webservices('skill_rule')
-
 
 def delete_skill_rules_with_name(name):
     for id in _search_skill_rules_with_name(name):
