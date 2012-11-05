@@ -237,12 +237,14 @@ def then_i_see_the_user_group1_group2_exists(step, firstname, lastname):
 
 @step(u'Then i see user with username "([^"]*)" "([^"]*)" has a function key with type Customized and extension "([^"]*)"$')
 def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstname, lastname, extension):
+    common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     common.edit_line("%s %s" % (firstname, lastname))
     common.go_to_tab('Func Keys')
     destination_field = world.browser.find_element_by_id('it-phonefunckey-custom-typeval-0')
     assert destination_field.get_attribute('value') == extension
     type_field = Select(world.browser.find_element_by_id('it-phonefunckey-type-0'))
     assert type_field.first_selected_option.text == "Customized"
+    common.open_url('user', 'search', {'search': ''})
 
 
 def _edit_user(firstname, lastname):
