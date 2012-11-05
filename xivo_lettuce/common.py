@@ -8,6 +8,7 @@ from selenium.common.exceptions import NoSuchElementException, ElementNotVisible
 from form.checkbox import Checkbox
 from xivo_lettuce import urls
 from xivo_lettuce.form import submit
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 def get_value_with_label(field_label):
@@ -150,19 +151,18 @@ def edit_line(line_substring):
     edit_button.click()
 
 
-def go_to_tab(tab_label):
+def go_to_tab(tab_label, ss_tab_label=None):
     """Click a tab button."""
-    tab_button = world.browser.find_element_by_xpath(
-        "//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
-    tab_button.click()
+    tab_button = world.browser.find_element_by_xpath("//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
+    if ss_tab_label:
+        hover = ActionChains(world.browser).move_to_element(tab_button)
+        ss_tab_label = tab_button.find_element_by_xpath("//div[@class='stab']//a[contains(.,'%s')]" % ss_tab_label)
+        hover.move_to_element(ss_tab_label)
+        hover.click()
+        hover.perform()
+    else:
+        tab_button.click()
     time.sleep(1)
-
-
-def go_to_tab_href(tab_href):
-    sb_menu = world.browser.find_element_by_class_name('sb-smenu')
-    sb_part = sb_menu.find_element_by_xpath(".//li[contains(@onclick,'sb-part-%s')]" % (tab_href))
-    href = sb_part.find_element_by_xpath(".//a[@href='#%s']" % (tab_href))
-    href.click()
 
 
 def get_host_address():

@@ -6,7 +6,8 @@ from xivo_lettuce.manager import asterisk_manager
 
 
 def set_parking_config(config_map):
-    common.open_url('parking')
+    common.open_url('extenfeatures')
+    common.go_to_tab('Advanced', 'Parking')
 
     form.input.set_text_field_with_label('Extension', config_map['Extension'])
 
