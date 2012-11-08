@@ -65,3 +65,7 @@ def then_backup_files_succeffuly_rotated(step):
     expected_files.extend(['data.tgz.2', 'db.tgz.2'])
     for expected_file in expected_files:
         assert sysutils.path_exists('%s/%s' % (BACKUP_DIR, expected_file))
+
+@step(u'Then max open file descriptors are equals to 8192')
+def then_max_open_file_descriptors_are_equals_to_8192(step):
+        assert False, 'This step must be implemented'
