@@ -28,6 +28,8 @@ def add_queue(data):
         queue.schedule_id = data['schedule_id']
     if 'ringing_time' in data:
         queue.ringing_time = int(data['ringing_time'])
+    if 'wrapuptime' in data:
+        queue.wrapuptime = data['wrapuptime']
     world.ws.queues.add(queue)
 
 

@@ -103,6 +103,19 @@ def given_there_is_a_queue_in_context_with_extension_with_agent(step, name, exte
     queue_manager_ws.add_queue(data)
 
 
+@step(u'Given there is a queue "([^"]+)" with extension "([^"]+)" with agent "([^"]*)" with wrapup time "(\d+)"$')
+def given_there_is_a_queue_in_context_with_extension_with_agent_and_wrapup(step, name, extension, agent_number, wrapup_time):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    remove_queues_with_name_or_number_if_exist(name, number)
+    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
+    data = {'name': name,
+            'number': number,
+            'context': context,
+            'agents': [agent_id],
+            'wrapuptime': wrapup_time}
+    queue_manager_ws.add_queue(data)
+
+
 @step(u'Given there is a queue "([^"]+)" saturated with extension "([^"]+)" with agent "([^"]+)"$')
 def given_there_is_a_queue_saturated_in_context_with_extension_with_agent(step, name, extension, agent_number):
     number, context = func.extract_number_and_context_from_extension(extension)

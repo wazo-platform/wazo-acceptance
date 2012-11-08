@@ -25,20 +25,6 @@ def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, ext
     agent_manager_ws.add_agent(agent_data)
 
 
-@step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)" with wrapup time "([^"]+)"$')
-def given_there_is_a_agent_in_context_with_number_with_wrapup_time(step, firstname, lastname, extension, wrapuptime):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    agent_manager_ws.delete_agents_with_number(number)
-    agent_data = {
-        'firstname': firstname,
-        'lastname': lastname,
-        'number': number,
-        'context': context,
-        'wrapuptime': int(wrapuptime) * 1000
-    }
-    agent_manager_ws.add_agent(agent_data)
-
-
 @step(u'Given there is a logged agent "([^"]*)" "([^"]*)" with number "([^"]*)" in "([^"]*)"$')
 def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastname, number, context):
     user_data = {

@@ -60,7 +60,6 @@ class TestAgentWebServices(unittest.TestCase):
                     "numgroup": "1",
                     "autologoff": "0",
                     "ackcall": "no",
-                    "wrapuptime": "0",
                     "enddtmf": "*",
                     "acceptdtmf": "#",
                  },

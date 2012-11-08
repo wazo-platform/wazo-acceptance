@@ -249,4 +249,3 @@ Feature: WEBI Agent Stats
           | 10h-11h |        0 | 00:00:00 |
           | 11h-12h |        0 | 00:00:00 |
           | Total   |        1 | 00:00:15 |
-          
