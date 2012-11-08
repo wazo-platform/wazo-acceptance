@@ -42,6 +42,11 @@ def send_command(command):
     time.sleep(1)
     return res
 
+def output_command(command):
+    res = world.ssh_client_xivo.out_call(command)
+    time.sleep(1)
+    return res
+
 
 def is_process_running(pidfile):
     if not path_exists(pidfile):
