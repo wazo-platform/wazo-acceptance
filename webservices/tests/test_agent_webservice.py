@@ -25,9 +25,9 @@ class TestAgentWebServices(unittest.TestCase):
     def setUp(self):
         self._xivo_ws = common.xivo_server_ws
 
-    def test_01_add_agent(self):
+    def test_add_agent(self):
         agent = xivo_ws.Agent()
-        agent.firstname = u'name_test_ws_add_agent'
+        agent.firstname = u'test_ws_add_agent'
         agent.number = u'5000'
         agent.context = u'default'
         common.delete_with_number('agents', agent.number)
@@ -35,40 +35,31 @@ class TestAgentWebServices(unittest.TestCase):
 
         self.assertEqual(common.nb_with_number('agents', agent.number), 1)
 
-    def test_02_edit_agent(self):
+    def test_edit_agent(self):
+        self._add_agent(u'test_ws_add_agent', '', u'5000')
         agent = common.find_with_number('agents', u'5000')[0]
-        agent.firstname = u'name_test_ws_edit_agent'
+        agent.firstname = u'test_ws_edit_agent'
         self._xivo_ws.agents.edit(agent)
         agent = common.find_with_number('agents', u'5000')[0]
 
-        self.assertEqual(agent.firstname, u'name_test_ws_edit_agent')
+        self.assertEqual(agent.firstname, u'test_ws_edit_agent')
 
-    def test_03_delete_agent(self):
+    def test_delete_agent(self):
+        self._add_agent(u'test_ws_delete_agent', '', u'5000')
         common.delete_with_number('agents', u'5000')
 
         self.assertEqual(common.nb_with_number('agents', u'5000'), 0)
 
-"""
-    def new_agent(self, firstname, lastname, number):
-        return {
-                "agentfeatures": {
-                    "firstname": unicode(firstname),
-                    "lastname": unicode(lastname),
-                    "number": unicode(number),
-                    "passwd": "7789",
-                    "context": "default",
-                    "numgroup": "1",
-                    "autologoff": "0",
-                    "ackcall": "no",
-                    "enddtmf": "*",
-                    "acceptdtmf": "#",
-                 },
-                "agentoptions": {
-                    "musiconhold": "default",
-                    "maxlogintries": "3",
-                }
-        }
+    def _add_agent(self, firstname, lastname, number):
+        common.delete_with_number('agents', number)
+        agent = xivo_ws.Agent()
+        agent.firstname = firstname
+        agent.lastname = lastname
+        agent.number = number
+        agent.context = u'default'
+        self._xivo_ws.agents.add(agent)
 
+"""
     def new_skilled_agent(self, firstname, lastname, number, skill_id, weight):
         agent = self.new_agent(firstname, lastname, number)
         agent.update({"queueskills":
@@ -77,28 +68,6 @@ class TestAgentWebServices(unittest.TestCase):
                               "id": unicode(skill_id)}
                              ]})
         return agent
-
-    def remove_agent(self, agent_number):
-        agents = self._aws_agent.list()
-        if agents is not None:
-            agents_to_remove = [agent for agent in agents if agent['number'] == agent_number]
-            for agent in agents_to_remove:
-                self._aws_agent.delete(agent['id'])
-
-    def agent_exists(self, agent_number):
-        agents = self._aws_agent.list()
-        if agents is not None:
-            matching_agents = [agent for agent in agents if agent['number'] == agent_number]
-            return (len(matching_agents) == 1)
-
-    def get_agent(self, agent_number):
-        agents = self._aws_agent.list()
-        if agents is not None:
-            matching_agents = [agent for agent in agents if agent['number'] == agent_number]
-        if len(matching_agents) == 1:
-            return self._aws_agent.view(matching_agents[0]['id'])
-        else:
-            return None
 
     def assertAgentHasSkill(self, agent, skill_name):
         agent_skills = agent['queueskills']
@@ -126,15 +95,6 @@ class TestAgentWebServices(unittest.TestCase):
         matching_skills = [skill for skill in skills if skill['name'] == skill_name]
         return matching_skills[0]['id']
 
-    def test_add(self):
-        agent_number = "5678"
-        self.remove_agent(agent_number)
-
-        agent = self.new_agent("John test", "AddWs", agent_number)
-
-        self.assertTrue(self._aws_agent.simple_add(agent))
-        self.assertTrue(self.agent_exists(agent_number), "agent %s is not created " % agent_number)
-
     def test_add_with_skills(self):
         skill_name = 'test_agt_webservices'
         agent_number = "99543"
@@ -149,21 +109,4 @@ class TestAgentWebServices(unittest.TestCase):
         agent_created = self.get_agent(agent_number)
         self.assertNotEqual(agent_created, None, 'agent was not properly created')
         self.assertAgentHasSkill(agent_created, skill_name)
-
-    def test_delete_all(self):
-        agent = self.new_agent('John', 'Doe', '4277')
-        self._aws_agent.simple_add(agent)
-
-        self.assertTrue(self._get_nb_of_agents() > 0)
-
-        self._aws_agent.custom({'act': 'deleteall'})
-
-        self.assertEqual(0, self._get_nb_of_agents())
-
-    def _get_nb_of_agents(self):
-        agent_list = self._aws_agent.list()
-        if agent_list is None:
-            return 0
-        else:
-            return len(agent_list)
 """

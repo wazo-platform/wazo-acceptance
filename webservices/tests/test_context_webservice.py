@@ -25,27 +25,40 @@ class TestContextWebServices(unittest.TestCase):
     def setUp(self):
         self._xivo_ws = common.xivo_server_ws
 
-    def test_01_add_context(self):
+    def test_add_context(self):
         context = xivo_ws.Context()
         context.entity = 1
-        context.name = u'name_test_ws_add_context'
-        context.display_name = u'name_test_ws_add_context'
-        common.delete_with_name('contexts', context.name)
+        context.name = u'test_ws_add_context'
+        context.display_name = u'test_ws_add_context'
+        self._delete_context(context.name)
         self._xivo_ws.contexts.add(context)
 
         self.assertEqual(common.nb_with_name('contexts', context.name), 1)
 
-    def test_02_edit_context(self):
-        context = common.find_with_name('contexts', u'name_test_ws_add_context')[0]
-        context.name = u'name_test_ws_edit_context'
-        context.display_name = u'name_test_ws_edit_context'
+    def test_edit_context(self):
+        common.delete_with_name('contexts', u'test_ws_edit_context')
+        self._add_context(u'test_ws_add_context')
+        context = common.find_with_name('contexts', u'test_ws_add_context')[0]
+        context.name = u'test_ws_edit_context'
+        context.display_name = u'test_ws_edit_context'
         self._xivo_ws.contexts.edit(context)
-        context = common.find_with_name('contexts', u'name_test_ws_edit_context')[0]
+        context = common.find_with_name('contexts', u'test_ws_edit_context')[0]
 
-        self.assertEqual(context.name, u'name_test_ws_edit_context')
+        self.assertEqual(context.name, u'test_ws_edit_context')
 
-    def test_03_delete_context(self):
-        common.delete_with_name('contexts', u'name_test_ws_edit_context')
+    def test_delete_context(self):
+        self._add_context(u'test_ws_delete_context')
+        common.delete_with_name('contexts', u'test_ws_delete_context')
 
-        self.assertEqual(common.nb_with_name('contexts', u'name_test_ws_add_context'), 0)
-        self.assertEqual(common.nb_with_name('contexts', u'name_test_ws_edit_context'), 0)
+        self.assertEqual(common.nb_with_name('contexts', u'test_ws_delete_context'), 0)
+
+    def _add_context(self, name):
+        common.delete_with_name('contexts', name)
+        context = xivo_ws.Context()
+        context.entity = 1
+        context.name = name
+        context.display_name = name
+        self._xivo_ws.contexts.add(context)
+
+    def _delete_context(self, name):
+        common.delete_with_name('contexts', name)

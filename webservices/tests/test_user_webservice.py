@@ -25,39 +25,62 @@ class TestUserWebServices(unittest.TestCase):
     def setUp(self):
         self._xivo_ws = common.xivo_server_ws
 
-    def test_01_add_user(self):
+    def test_add_user(self):
         user = xivo_ws.User()
-        user.firstname = u'name_test_ws_add_user'
+        user.firstname = u'test_ws_add_user'
         common.delete_with_firstname_lastname('users', user.firstname, '')
         self._xivo_ws.users.add(user)
 
         self.assertEqual(common.nb_with_firstname_lastname('users', user.firstname, ''), 1)
 
-    def test_02_edit_user(self):
-        user = common.find_with_firstname_lastname('users', u'name_test_ws_add_user', '')[0]
-        user.firstname = u'name_test_ws_edit_user'
+    def test_edit_user(self):
+        common.delete_with_firstname_lastname('users', u'test_ws_edit_user', '')
+        self._add_user(u'test_ws_add_user', '')
+        user = common.find_with_firstname_lastname('users', u'test_ws_add_user', '')[0]
+        user.firstname = u'test_ws_edit_user'
         self._xivo_ws.users.edit(user)
-        user = common.find_with_firstname_lastname('users', u'name_test_ws_edit_user', '')[0]
+        user = common.find_with_firstname_lastname('users', u'test_ws_edit_user', '')[0]
 
-        self.assertEqual(user.firstname, u'name_test_ws_edit_user')
+        self.assertEqual(user.firstname, u'test_ws_edit_user')
 
-    def test_03_delete_user(self):
-        common.delete_with_firstname_lastname('users', u'name_test_ws_edit_user', '')
+    def test_delete_user(self):
+        self._add_user(u'test_ws_delete_user', '')
+        common.delete_with_firstname_lastname('users', u'test_ws_delete_user', '')
 
-        self.assertEqual(common.nb_with_firstname_lastname('users', u'name_test_ws_add_user', ''), 0)
-        self.assertEqual(common.nb_with_firstname_lastname('users', u'name_test_ws_edit_user', ''), 0)
+        self.assertEqual(common.nb_with_firstname_lastname('users', u'test_ws_delete_user', ''), 0)
 
-"""
     def test_associate_existant_user_with_line(self):
-        user_names = ('Paul', 'Castagnette')
-        self._remove_users(*user_names)
-        user = self._add_user(*user_names)
-        line = self._add_line('test_associate', 'secret')
+        user_id = self._add_user(u'test_ws_associate_user', 'with_line')
+        line_id = self._add_sip_line('test_associate', 'secret')
 
-        user_json = self._new_user(*user_names)
-        user_json["linefeatures"] = {"id": [line['id']]}
-        self.assertTrue(self._aws_user.edit(user['userfeatures']['id'], user_json))
+        user = common.find_with_firstname_lastname('users', u'test_ws_associate_user', u'with_line')[0]
+        user.line = xivo_ws.UserLine(id=line_id)
+        self._xivo_ws.users.edit(user)
 
-        associated_user = self._get_user(*user_names)
-        self.assertEqual(associated_user['linefeatures'][0]['id'], line['id'])
-"""
+        line = self._xivo_ws.lines.search_by_name(u'test_associate')[0]
+
+        self.assertEqual(user_id, line.user_id)
+
+        common.delete_with_firstname_lastname('users', u'test_ws_associate_user', u'with_line')
+        common.delete_with_name('lines', u'test_associate')
+
+    def _add_user(self, firstname, lastname):
+        common.delete_with_firstname_lastname('users', firstname, lastname)
+        user = xivo_ws.User()
+        user.firstname = firstname
+        user.lastname = lastname
+        self._xivo_ws.users.add(user)
+        user = common.find_with_firstname_lastname('users', firstname, lastname)[0]
+        return user.id
+
+    def _add_sip_line(self, name, secret, context='default'):
+        common.delete_with_name('lines', name)
+        line = xivo_ws.Line()
+        line.protocol = line.PROTOCOL_SIP
+        line.name = name
+        line.secret = secret
+        line.context = context
+        common.delete_with_name('lines', name)
+        self._xivo_ws.lines.add(line)
+        line = common.find_with_name('lines', name)[0]
+        return line.id
