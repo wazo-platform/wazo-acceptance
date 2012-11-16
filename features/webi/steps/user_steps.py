@@ -136,6 +136,45 @@ def given_there_is_a_user_with_an_agent_and_cti_profile(step, firstname, lastnam
     agent_manager_ws.add_agent(agent_data)
 
 
+@step(u'^Given there are users with infos:$')
+def given_there_are_users_with_infos(step):
+    for user_data in step.hashes:
+        user_ws_data = {}
+
+        user_manager_ws.delete_users_with_firstname_lastname(user_data['firstname'], user_data['lastname'])
+        user_ws_data['firstname'] = user_data['firstname']
+        user_ws_data['lastname'] = user_data['lastname']
+
+        if user_data.get('number') and user_data.get('context'):
+            line_manager_ws.delete_lines_with_number(user_data['number'], user_data['context'])
+            user_ws_data['line_number'] = user_data['number']
+            user_ws_data['line_context'] = user_data['context']
+
+            if user_data.get('voicemail_name') and user_data.get('voicemail_number'):
+                user_ws_data['voicemail_name'] = user_data['voicemail_name']
+                user_ws_data['voicemail_number'] = user_data['voicemail_number']
+
+        if user_data.get('language'):
+            user_ws_data['language'] = user_data['language']
+
+        if user_data.get('cti_profile'):
+            user_ws_data['enable_client'] = True
+            user_ws_data['client_profile'] = user_data['cti_profile']
+            user_ws_data['client_username'] = user_data['cti_login']
+            user_ws_data['client_password'] = user_data['cti_passwd']
+
+        user_id = user_manager_ws.add_user(user_ws_data)
+
+        if user_data.get('agent_number'):
+            agent_manager_ws.delete_agents_with_number(user_data['agent_number'])
+            agent_data = {'firstname': user_data['firstname'],
+                          'lastname': user_data['lastname'],
+                          'number': user_data['agent_number'],
+                          'context': user_data['context'],
+                          'users': [int(user_id)]}
+            agent_manager_ws.add_agent(agent_data)
+
+
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
 def given_there_is_a_no_user_1_2(step, firstname, lastname):
     user_manager_ws.delete_users_with_firstname_lastname(firstname, lastname)

@@ -39,6 +39,29 @@ def add_configuration_with_queue_and_agent(config_name, work_start, work_end, qu
     world.ws.statconfs.add(conf)
 
 
+def add_configuration_with_infos(config_name, work_start, work_end, data):
+    delete_confs_with_name(config_name)
+
+    list_queue_id = []
+    dict_queue_id_qos = {}
+    for q in data['queues']:
+        queue_id = queue_manager_ws.find_queue_id_with_name(q['name'])
+        list_queue_id.append(queue_id)
+        dict_queue_id_qos[queue_id] = q['qos']
+
+    list_agent_id = []
+    for agent_number in data['agents']:
+        agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
+        list_agent_id.append(agent_id)
+
+    conf = _build_base_configuration(config_name, work_start, work_end)
+    conf.queue = list_queue_id
+    conf.queue_qos = dict_queue_id_qos
+    conf.agent = list_agent_id
+
+    world.ws.statconfs.add(conf)
+
+
 def _build_base_configuration(config_name, work_start, work_end):
     conf = Statconf(
         name=config_name,
