@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import time
-
 from lettuce import step
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
