@@ -26,3 +26,9 @@ def when_i_search_for_term(step, term):
 def then_entry_appears_in_the_list(step, entry):
     element = find_line(entry)
     assert element is not None
+
+
+@step(u'When I import the CSV file "([^"]*)" into the phonebook')
+def when_i_import_the_csv_file_into_the_phonebook(step, csvfile):
+    path = assets.full_path(csvfile)
+    phonebook_manager.import_csv_file(path)

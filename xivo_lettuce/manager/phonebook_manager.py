@@ -31,3 +31,10 @@ def remove_entry_if_exists(search):
     phonebook_search(search)
     remove_element_if_exist("phonebook", search)
     phonebook_search('')
+
+
+def import_csv_file(path):
+    open_url('phonebook', 'import')
+    element = world.browser.find_element_by_id("it-import")
+    element.send_keys(path)
+    form.submit.submit_form()
