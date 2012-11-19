@@ -32,3 +32,16 @@ Feature: Directory
         When I log in the Xivo Client as "greatlord", pass "macdonnell"
         Then nothing shows up in the directory xlet after searching for ""
 
+    Scenario: Search for a contact with special characters in his name
+        Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
+        Given there are users with infos:
+          | firstname | lastname    |
+          | Lôrdé     | Sànndéêrsòn |
+          | Làârd     | Témèlêtë    |
+          | Lûùrd     | Tûrècôt     |
+        When I start the XiVO Client
+        When I log in the Xivo Client as "lord", pass "sanderson"
+        Then "Lord Sanderson" shows up in the directory xlet after searching for "lord"
+        Then "Lôrdé Sànndéêrsòn" shows up in the directory xlet after searching for "ôrdé"
+        Then nothing shows up in the directory xlet after searching for "asdfasdfasdfasdf"
+
