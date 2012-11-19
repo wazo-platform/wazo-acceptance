@@ -16,3 +16,10 @@ Feature: Phonebook
         When I log in the XiVO Client as "lord", pass "sanderson"
         Then "Marty McFly" shows up in the directory xlet after searching for "marty"
 
+    Scenario: Case insensitive search for a contact
+        Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
+        When I start the XiVO Client
+        When I log in the XiVO Client as "lord", pass "sanderson"
+        Then "Lord Sanderson" shows up in the directory xlet after searching for "LORD"
+        Then "Lord Sanderson" shows up in the directory xlet after searching for "lord"
+
