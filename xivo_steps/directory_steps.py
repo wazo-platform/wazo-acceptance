@@ -83,3 +83,8 @@ def when_i_restart_the_cti_server(step):
 def then_user_shows_up_in_the_directory_xlet_after_searching(step, user, search):
     assert world.xc_response == 'OK'
 
+
+@step(u'Then nothing shows up in the directory xlet after searching for "([^"]*)"')
+@xivoclient_step
+def then_nothing_shows_up_in_the_directory_xlet_after_searching(step, search):
+    assert world.xc_response == "OK"

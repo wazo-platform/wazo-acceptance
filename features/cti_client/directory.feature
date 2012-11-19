@@ -26,3 +26,9 @@ Feature: Directory
         Then "Emmett Brown" shows up in the directory xlet after searching for "emmet"
         Then "Emmett Brown" shows up in the directory xlet after searching for "0601"
 
+    Scenario: Search for a contact without a line
+        Given there is a user "GreatLord" "MacDonnell" with CTI profile "Client"
+        When I start the XiVO Client
+        When I log in the Xivo Client as "greatlord", pass "macdonnell"
+        Then nothing shows up in the directory xlet after searching for ""
+
