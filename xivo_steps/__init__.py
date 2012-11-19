@@ -16,6 +16,7 @@ from cti_server_steps import *
 from device_steps import *
 from dhcpd_steps import *
 from directed_pickup_steps import *
+from directory_steps import *
 from file_steps import *
 from files_steps import *
 from general_settings_iax_steps import *
