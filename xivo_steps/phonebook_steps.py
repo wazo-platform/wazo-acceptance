@@ -1,52 +1,25 @@
 # -*- coding: utf-8 -*-
 from lettuce import step, world
-from xivo_lettuce.common import remove_element_if_exist, open_url, \
-    go_to_tab, find_line
-from xivo_lettuce import form
 
-
-def phonebook_search(term):
-    search = world.browser.find_element_by_id("it-toolbar-search")
-    search.clear()
-    search.send_keys(term)
-
-    submit_button = world.browser.find_element_by_id("it-subsearch")
-    submit_button.click()
-
-
-def create_entry(entry):
-    open_url('phonebook', 'add')
-
-    display_name = "%(first name)s %(last name)s" % entry
-    entry.setdefault('display name', display_name)
-
-    form.input.set_text_field_with_label("First Name", entry['first name'])
-    form.input.set_text_field_with_label("Last Name", entry['last name'])
-    form.input.set_text_field_with_label("Display name", entry['display name'])
-
-    go_to_tab("Office")
-    form.input.set_text_field_with_label('Phone', entry.get('phone', ''))
-
-    form.submit.submit_form()
+from xivo_lettuce import assets
+from xivo_lettuce.common import find_line
+from xivo_lettuce.manager import phonebook_manager
 
 
 @step(u'Given "([^"]*)" is not in the phonebook')
 def given_entry_is_not_in_the_phonebook(step, entry):
-    open_url('phonebook')
-    phonebook_search(entry)
-    remove_element_if_exist("phonebook", entry)
-    phonebook_search('')
+    phonebook_manager.remove_entry_if_exists(entry)
 
 
 @step(u'When I add the following entries to the phonebook:')
 def when_i_add_the_following_entries_to_the_phonebook(step):
     for entry in step.hashes:
-        create_entry(entry)
+        phonebook_manager.create_entry(entry)
 
 
 @step(u'When I search for "([^"]*)"')
 def when_i_search_for_term(step, term):
-    phonebook_search(term)
+    phonebook_manager.phonebook_search(term)
 
 
 @step(u'Then "([^"]*)" appears in the list')
