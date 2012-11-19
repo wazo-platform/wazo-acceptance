@@ -67,5 +67,8 @@ URLS = {
     'sccpgeneralsettings': '/service/ipbx/index.php/general_settings/sccp',
     'general_settings': '/xivo/configuration/index.php/manage/general',
     'phonebook': '/service/ipbx/index.php/pbx_services/phonebook',
-    'parking': '/service/ipbx/index.php/pbx_services/extenfeatures/#parking'
+    'parking': '/service/ipbx/index.php/pbx_services/extenfeatures/#parking',
+    'directory_config': '/xivo/configuration/index.php/manage/directories',
+    'cti_directory': '/cti/index.php/directories',
+    'cti_direct_directory': '/cti/index.php/contexts',
 }
