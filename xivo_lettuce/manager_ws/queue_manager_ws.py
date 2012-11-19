@@ -6,7 +6,7 @@ from xivo_ws import Queue
 
 def add_queue(data):
     queue = Queue()
-    queue.name = data['name'].lower()
+    queue.name = data['name'].lower().strip()
     queue.display_name = data['name']
     queue.number = data['number']
     queue.context = data['context']
@@ -27,7 +27,7 @@ def add_queue(data):
     if 'schedule_id' in data:
         queue.schedule_id = data['schedule_id']
     if 'ringing_time' in data:
-        queue.ringing_time = int(data['ringing_time'])
+        queue.ringing_time = data['ringing_time']
     if 'wrapuptime' in data:
         queue.wrapuptime = data['wrapuptime']
     world.ws.queues.add(queue)

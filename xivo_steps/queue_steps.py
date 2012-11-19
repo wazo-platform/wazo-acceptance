@@ -129,6 +129,37 @@ def given_there_is_a_queue_saturated_in_context_with_extension_with_agent(step, 
     queue_manager_ws.add_queue(data)
 
 
+@step(u'^Given there are queues with infos:$')
+def given_there_are_queues_with_infos(step):
+    for queue_data in step.hashes:
+        queue_ws_data = {}
+        queue_ws_data['name'] = queue_data['name']
+        queue_ws_data['number'] = queue_data['number']
+        queue_ws_data['context'] = queue_data['context']
+
+        if queue_data.get('maxlen'):
+            queue_ws_data['maxlen'] = queue_data['maxlen']
+        if queue_data.get('wrapuptime'):
+            queue_ws_data['wrapuptime'] = queue_data['wrapuptime']
+        if queue_data.get('ringing_time'):
+            queue_ws_data['ringing_time'] = queue_data['ringing_time']
+        if queue_data.get('joinempty'):
+            queue_ws_data['joinempty'] = queue_data['joinempty']
+        if queue_data.get('leavewhenempty'):
+            queue_ws_data['leavewhenempty'] = queue_data['leavewhenempty']
+
+        if queue_data.get('agents_number'):
+            agent_ids = []
+            agent_number_list = queue_data['agents_number'].split(',')
+            for agent_number in agent_number_list:
+                agent_id = agent_manager_ws.find_agent_id_with_number(agent_number.strip())
+                agent_ids.append(agent_id)
+            queue_ws_data['agents'] = agent_ids
+
+        remove_queues_with_name_or_number_if_exist(queue_data['name'], queue_data['number'])
+        queue_manager_ws.add_queue(queue_ws_data)
+
+
 @step(u'^Given there is a queue "([^"]*)" with extension "([^"]+)" and unlogged members:$')
 def given_there_is_a_queue_with_extension_and_unlogged_members(step, queue_name, extension):
     queue_number, queue_context = func.extract_number_and_context_from_extension(extension)
