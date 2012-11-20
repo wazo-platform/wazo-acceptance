@@ -1,0 +1,20 @@
+XiVO Steps's documentation
+========================
+
+Prerequisites
+-------------
+
+sudo pip install -U sphinx
+
+
+Build
+-----
+
+cd xivo-acceptance/doc
+PYTHONPATH=.. make html
+
+
+Show result
+-----------
+
+open index.html with your browser

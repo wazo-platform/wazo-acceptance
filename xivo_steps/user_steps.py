@@ -136,6 +136,20 @@ def given_there_is_a_user_with_an_agent_and_cti_profile(step, firstname, lastnam
 
 @step(u'^Given there are users with infos:$')
 def given_there_are_users_with_infos(step):
+    """step: Given there are users with infos:
+
+    :param step: hashes
+    :type step: list
+
+    .. note::
+        note
+
+    :Example:
+
+    Scenario: Create Users
+        Given there are users with infos:
+        | firstname | lastname | number | context | cti_profile | cti_login | cti_passwd | agent_number | language | voicemail_name | voicemail_number |
+    """
     for user_data in step.hashes:
         user_ws_data = {}
 
