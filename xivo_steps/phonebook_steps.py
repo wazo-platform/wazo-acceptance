@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from lettuce import step, world
+from lettuce import step
 
 from xivo_lettuce import assets
 from xivo_lettuce.common import find_line
@@ -17,7 +17,7 @@ def when_i_add_the_following_entries_to_the_phonebook(step):
         phonebook_manager.create_entry(entry)
 
 
-@step(u'When I search for "([^"]*)"')
+@step(u'When I search for "([^"]*)"$')
 def when_i_search_for_term(step, term):
     phonebook_manager.phonebook_search(term)
 

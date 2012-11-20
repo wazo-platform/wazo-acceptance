@@ -2,23 +2,29 @@
 import time
 
 from lettuce import step, world
-from selenium.webdriver.support.select import Select
 from xivo_lettuce import assets
 from xivo_lettuce.common import open_url, remove_element_if_exist, find_line, edit_line
 from xivo_lettuce.form import submit
 from xivo_lettuce.manager import directory_manager
 from xivo_lettuce.xivoclient import xivoclient_step
 
+
 @step(u'Given the directory "([^"]*)" does not exist')
 def given_the_directory_does_not_exist(step, directory):
     remove_element_if_exist('directory_config', directory)
 
 
+@step(u'Given the following directories exist:')
+def given_the_following_directories_exist(step):
+    for directory in step.hashes:
+        remove_element_if_exist('directory_config', directory['name'])
+        directory_manager.create_directory(directory)
+
+
 @step(u'Given the directory definition "([^"]*)" does not exist')
 def given_the_directory_definition_does_not_exist(step, definition):
     remove_element_if_exist('cti_directory', 'phonebookcsv')
-    #Work around for directory assocations that
-    #aren't deleted 
+    #Work around for directory associations that aren't deleted
     open_url('cti_direct_directory', 'list')
     edit_line('default')
     submit.submit_form()
@@ -78,13 +84,19 @@ def when_i_restart_the_cti_server(step):
     time.sleep(10)
 
 
-@step(u'Then "([^"]*)" shows up in the directory xlet after searching for "([^"]*)"')
+@step(u'When I search for "([^"]*)" in the directory xlet')
 @xivoclient_step
-def then_user_shows_up_in_the_directory_xlet_after_searching(step, user, search):
+def when_i_search_for_1_in_the_directory_xlet(step, search):
     assert world.xc_response == 'OK'
 
 
-@step(u'Then nothing shows up in the directory xlet after searching for "([^"]*)"')
+@step(u'Then nothing shows up in the directory xlet')
 @xivoclient_step
-def then_nothing_shows_up_in_the_directory_xlet_after_searching(step, search):
-    assert world.xc_response == "OK"
+def then_nothing_shows_up_in_the_directory_xlet(step):
+    assert world.xc_response == 'OK'
+
+
+@step(u'Then "([^"]*)" shows up in the directory xlet')
+@xivoclient_step
+def then_1_shows_up_in_the_directory_xlet(step, entry):
+    assert world.xc_response == 'OK'

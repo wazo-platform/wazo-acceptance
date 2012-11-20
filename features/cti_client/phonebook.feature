@@ -14,12 +14,14 @@ Feature: Phonebook
         When I import the CSV file "phonebook-x268.csv" into the phonebook
         When I start the XiVO Client
         When I log in the XiVO Client as "lord", pass "sanderson"
-        Then "Marty McFly" shows up in the directory xlet after searching for "marty"
+        When I search for "marty" in the directory xlet
+        Then "Marty McFly" shows up in the directory xlet
 
     Scenario: Case insensitive search for a contact
         Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
         When I start the XiVO Client
         When I log in the XiVO Client as "lord", pass "sanderson"
-        Then "Lord Sanderson" shows up in the directory xlet after searching for "LORD"
-        Then "Lord Sanderson" shows up in the directory xlet after searching for "lord"
-
+        When I search for "LORD" in the directory xlet
+        Then "Lord Sanderson" shows up in the directory xlet
+        When I search for "lord" in the directory xlet
+        Then "Lord Sanderson" shows up in the directory xlet
