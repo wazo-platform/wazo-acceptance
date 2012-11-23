@@ -73,7 +73,7 @@ class Prerequisite(object):
                          'client_profile': 'client'
                      }
         nb_user = 10
-        user_increment = range(1, nb_user)
+        user_increment = range(0, nb_user)
         for i in user_increment:
             user_data = {'lastname': '%i' % (i),
                         'line_number': '10%i' % (i),
@@ -94,7 +94,7 @@ class Prerequisite(object):
     def _prepare_incall(self):
         print 'Configuring Incall..'
         nb_incall = 1
-        incall_increment = range(1, nb_incall)
+        incall_increment = range(0, nb_incall)
         for i in incall_increment:
             incall_exist = world.ws.incalls.search('100%s') % (i)
             if not incall_exist:
