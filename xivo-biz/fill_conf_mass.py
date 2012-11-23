@@ -96,7 +96,7 @@ class Prerequisite(object):
         nb_incall = 1
         incall_increment = range(0, nb_incall)
         for i in incall_increment:
-            incall_exist = world.ws.incalls.search('100%s') % (i)
+            incall_exist = world.ws.incalls.search('100%s' % (i))
             if not incall_exist:
                 incall = Incall()
                 incall.number = '100%s' % (i)
