@@ -2,4 +2,4 @@
 
 export PYTHONPATH="../:$PYTHONPATH"
 
-python -m fill_conf "$@"
+python -m fill_conf_mass "$@"
