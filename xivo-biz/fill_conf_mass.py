@@ -72,49 +72,37 @@ class Prerequisite(object):
                          'client_password': '12345',
                          'client_profile': 'client'
                      }
-        user_data = {'lastname': '1',
-                    'line_number': '101',
-                    'client_username': 'user1'}
-        user_data.update(user_data_tpl)
-        user_exist = user_manager_ws.is_user_with_name_exists('user', '1')
-        if not user_exist:
-            user_manager_ws.add_user(user_data)
-        user_data = {'lastname': '2',
-                    'line_number': '102',
-                    'client_username': 'user2'}
-        user_data.update(user_data_tpl)
-        user_exist = user_manager_ws.is_user_with_name_exists('user', '2')
-        if not user_exist:
-            user_manager_ws.add_user(user_data)
+        nb_user = 10
+        user_increment = range(1, nb_user)
+        for i in user_increment:
+            user_data = {'lastname': '%i' % (i),
+                        'line_number': '10%i' % (i),
+                        'client_username': 'user%i' % (i)}
+            user_data.update(user_data_tpl)
+            user_exist = user_manager_ws.is_user_with_name_exists('user', '%i' % (i))
+            if not user_exist:
+                user_manager_ws.add_user(user_data)
 
-        line1 = world.ws.lines.search('101')
-        line2 = world.ws.lines.search('102')
+            line = world.ws.lines.search('10%s' % (i))
 
-        print
-        print 'User1 line infos:'
-        print 'Name: %s' % line1[0].name
-        print 'Secret: %s' % line1[0].secret
-        print 'User2 line infos:'
-        print 'Name: %s' % line2[0].name
-        print 'Secret: %s' % line2[0].secret
-        print
+            print
+            print 'User%s line infos:' % (i)
+            print 'Name: %s' % line[0].name
+            print 'Secret: %s' % line[0].secret
+            print
 
     def _prepare_incall(self):
         print 'Configuring Incall..'
-        incall_exist = world.ws.incalls.search('1001')
-        if not incall_exist:
-            incall = Incall()
-            incall.number = '1001'
-            incall.context = 'from-extern'
-            incall.destination = UserDestination(line_manager_ws.find_line_id_with_number('101', 'default'))
-            world.ws.incalls.add(incall)
-        incall_exist = world.ws.incalls.search('1002')
-        if not incall_exist:
-            incall = Incall()
-            incall.number = '1002'
-            incall.context = 'from-extern'
-            incall.destination = UserDestination(line_manager_ws.find_line_id_with_number('102', 'default'))
-            world.ws.incalls.add(incall)
+        nb_incall = 1
+        incall_increment = range(1, nb_incall)
+        for i in incall_increment:
+            incall_exist = world.ws.incalls.search('100%s') % (i)
+            if not incall_exist:
+                incall = Incall()
+                incall.number = '100%s' % (i)
+                incall.context = 'from-extern'
+                incall.destination = UserDestination(line_manager_ws.find_line_id_with_number('10%s' % (i), 'default'))
+                world.ws.incalls.add(incall)
 
     def _prepare_outcall(self):
         print 'Configuring Outcall..'
