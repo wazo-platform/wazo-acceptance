@@ -2,6 +2,7 @@ Feature: Stat
 
     Scenario: Generation of event RINGNOANSWER
         Given there are no calls running
+        Given there is no agents logged
         Given there is no "RINGNOANSWER" entry in queue "q04"
         Given there is a user "User" "004" with extension "1004@statscenter"
         Given there is a agent "Agent" "004" with extension "004@statscenter"

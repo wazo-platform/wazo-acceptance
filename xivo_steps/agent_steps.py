@@ -45,6 +45,11 @@ def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastna
     agent_status_manager.log_agent_on_user(number)
 
 
+@step(u'Given there is no agents logged')
+def given_there_is_no_agents_logged(step):
+    agent_status_manager.unlog_all_agents()
+
+
 @step(u'When I log agent "([^"]*)"')
 def when_i_log_agent_1(step, agent_number):
     agent_status_manager.log_agent_on_user(agent_number)

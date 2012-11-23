@@ -1,8 +1,8 @@
 Feature: Stat
 
-
     Scenario: Generation of event LEAVEEMPTY
         Given there are no calls running
+        Given there is no agents logged
         Given there is no "LEAVEEMPTY" entry in queue "q10"
         Given there is a user "User" "010" with extension "1010@statscenter"
         Given there is a agent "Agent" "010" with extension "010@statscenter"

@@ -2,6 +2,7 @@ Feature: Stat
 
     Scenario: Generation of event CONNECT
         Given there are no calls running
+        Given there is no agents logged
         Given there is no "CONNECT" entry in queue "q03"
         Given there is a user "User" "003" with extension "1003@statscenter"
         Given there is a agent "Agent" "003" with extension "003@statscenter"

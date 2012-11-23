@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from lettuce.registry import world
+from lettuce import world
+from xivo_lettuce import postgres
 from xivo_dao import queue_log_dao
 from xivo_dao.alchemy import dbconnection
 
@@ -27,13 +28,13 @@ class asterisk_connection(object):
 
 def delete_event_by_queue(event, queuename):
     pg_command = '"DELETE FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'"' % (queuename, event)
-    _exec_pgsql_request(pg_command)
+    postgres.exec_sql_request(pg_command)
 
 
 def delete_event_by_agent_number(event, agent_number):
     agent_number = _build_agent_db_tag_from_number(agent_number)
     pg_command = '"DELETE FROM queue_log WHERE agent = \'%s\' and event = \'%s\'"' % (agent_number, event)
-    _exec_pgsql_request(pg_command)
+    postgres.exec_sql_request(pg_command)
 
 
 def delete_event_by_queue_between(event, queuename, start, end):
@@ -48,19 +49,19 @@ def delete_event_between(start, end):
 
 def insert_corrupt_data():
     pg_command = '"INSERT INTO queue_log(time, callid, queuename, agent, event, data1) VALUES (cast (localtimestamp - interval \'1 hour\' as text), \'test_exitwithtimeout\', \'q1\', \'NONE\', \'EXITWITHTIMEOUT\', \'1\')"'
-    _exec_pgsql_request(pg_command)
+    postgres.exec_sql_request(pg_command)
 
 
 def get_event_count_queue(event, queuename):
     pg_command = '"SELECT COUNT(*) FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'"' % (queuename, event)
-    res = _exec_pgsql_request_with_return(pg_command)
+    res = postgres.exec_sql_request_with_return(pg_command)
     return int(res.split('\n')[-4].strip())
 
 
 def get_event_count_agent(event, agent_number):
     agent_number = _build_agent_db_tag_from_number(agent_number)
     pg_command = '"SELECT COUNT(*) FROM queue_log WHERE agent = \'%s\' and event = \'%s\'"' % (agent_number, event)
-    res = _exec_pgsql_request_with_return(pg_command)
+    res = postgres.exec_sql_request_with_return(pg_command)
     return int(res.split('\n')[-4].strip())
 
 
@@ -75,16 +76,6 @@ def get_last_callid(event, agent_number):
 
 def _build_agent_db_tag_from_number(agent_number):
     return 'Agent/%s' % agent_number
-
-
-def _exec_pgsql_request(pg_command):
-    command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
-    world.ssh_client_xivo.check_call(command)
-
-
-def _exec_pgsql_request_with_return(pg_command):
-    command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
-    return world.ssh_client_xivo.out_call(command)
 
 
 def insert_entries(entries):

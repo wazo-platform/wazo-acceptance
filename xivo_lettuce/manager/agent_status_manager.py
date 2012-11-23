@@ -2,6 +2,7 @@
 
 import time
 from lettuce.registry import world
+from xivo_lettuce import postgres
 from xivo_lettuce.manager import call_manager
 from xivo_lettuce.manager_ws import line_manager_ws, agent_manager_ws
 
@@ -28,6 +29,11 @@ def unlog_agent(agent_number, extension):
     line = line_manager_ws.find_line_with_extension(extension)
     call_manager.execute_n_calls_then_wait(1, '*32%s' % agent_number, username=line.name, password=line.secret)
     time.sleep(5)
+
+
+def unlog_all_agents():
+    pg_command = '"delete from agent_login_status"'
+    postgres.exec_sql_request(pg_command)
 
 
 def _get_line_from_agent(agent_number):

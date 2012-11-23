@@ -2,6 +2,7 @@ Feature: Stat
 
     Scenario: Generation of event EXITEMPTY
         Given there are no calls running
+        Given there is no agents logged
         Given there is no "EXITEMPTY" entry in queue "q13"
         Given there is a user "User" "013" with extension "1013@statscenter"
         Given there is a agent "Agent" "013" with extension "013@statscenter"

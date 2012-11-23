@@ -2,6 +2,7 @@ Feature: Stat
 
     Scenario: Generation of event AGENTCALLBACKLOGIN
         Given there are no calls running
+        Given there is no agents logged
         Given there is no "AGENTCALLBACKLOGIN" entry for agent "007"
         Given there is a user "User" "007" with extension "1007@statscenter"
         Given there is a agent "Agent" "007" with extension "007@statscenter"
@@ -11,6 +12,7 @@ Feature: Stat
 
     Scenario: Login twice using AGENTCALLBACKLOGIN
         Given there are no calls running
+        Given there is no agents logged
         Given there is no "AGENTCALLBACKLOGIN" entry for agent "007"
         Given there is a user "User" "007" with extension "1007@statscenter"
         Given there is a agent "Agent" "007" with extension "007@statscenter"
@@ -22,6 +24,7 @@ Feature: Stat
 
     Scenario: Callid on AGENTCALLBACKLOGIN
         Given there are no calls running
+        Given there is no agents logged
         Given there is no "AGENTCALLBACKLOGIN" entry for agent "007"
         Given there is a user "User" "007" with extension "1007@statscenter"
         Given there is a agent "Agent" "007" with extension "007@statscenter"
@@ -31,6 +34,7 @@ Feature: Stat
 
     Scenario: Logoff when not logged in
         Given there are no calls running
+        Given there is no agents logged
         Given there is no "AGENTCALLBACKLOGOFF" entry for agent "007"
         Given there is a user "User" "007" with extension "1007@statscenter"
         Given there is a agent "Agent" "007" with extension "007@statscenter"
