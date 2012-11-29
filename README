@@ -1,10 +1,11 @@
 You may use a config.ini.local to test on your local vm
 Use ip adresses and not names in config.ini.*
 
-sudo easy_install lettuce
-sudo easy_install selenium
-sudo easy_install pyvirtualdisplay
-sudo apt-get install xvfb
+pip install lettuce
+pip install selenium
+pip install pyvirtualdisplay
+pip install pyhamcrest
+apt-get install xvfb
 
 Example:
 
