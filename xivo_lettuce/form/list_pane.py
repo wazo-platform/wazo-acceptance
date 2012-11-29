@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from lettuce import world
+
+
 class ListPane(object):
     '''Wraps a jQuery Multiselect to make it easier to manipulate through Selenium'''
 
@@ -28,3 +31,19 @@ class ListPane(object):
         selector = 'div.selected a.remove-all'
         self.find_and_click(selector)
 
+    def available_labels(self):
+        selector = 'div.available .ui-element'
+        return self._labels_by_selector(selector)
+
+    def selected_labels(self):
+        selector = 'div.selected .ui-element'
+        return self._labels_by_selector(selector)
+
+    def _labels_by_selector(self, css_selector):
+        elements = self.pane.find_elements_by_css_selector(css_selector)
+        return [element.get_attribute('title') for element in elements]
+
+    @classmethod
+    def from_id(cls, webelement_id):
+        webelement = world.browser.find_element_by_id(webelement_id)
+        return cls(webelement)

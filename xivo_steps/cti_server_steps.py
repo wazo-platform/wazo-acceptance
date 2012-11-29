@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
 
 import time
-from lettuce.decorators import step
+from lettuce import step, world
+from hamcrest import assert_that, equal_to
 from xivo_lettuce import common
-from lettuce.registry import world
-from selenium.webdriver.common.by import By
+from xivo_lettuce.form.list_pane import ListPane
 
 
 @step(u'When i edit CTI Profile "([^"]*)"')
@@ -14,13 +14,14 @@ def when_i_edit_cti_profile_group1(step, profile_name):
     time.sleep(world.timeout)
 
 
-@step(u'Then i see default services activated')
+@step(u'Then I see default services activated')
 def then_i_see_default_services_activated(step):
-    services = world.browser.find_element_by_id('it-services').find_elements(By.TAG_NAME, 'option')
-    expected_elements = ['enablednd', 'fwdunc', 'fwdbusy', 'fwdrna']
-    elements = []
-    for service in services:
-        value = service.get_attribute("value")
-        elements.append(value)
+    expected_labels = [
+        'Enable DND',
+        'Unconditional transfer to a number',
+        'Transfer on busy',
+        'Transfer on no-answer',
+    ]
+    list_pane = ListPane.from_id('queuelist')
 
-    assert elements == expected_elements, 'missing service in profile client'
+    assert_that(list_pane.selected_labels(), equal_to(expected_labels))
