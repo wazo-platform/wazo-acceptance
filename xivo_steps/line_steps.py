@@ -109,12 +109,12 @@ def check_codec_for_sip_line(peer, codec):
 
 @step(u'Then the codec "([^"]*)" appears after typing \'sip show peer\' in asterisk')
 def then_the_codec_appears_after_typing_sip_show_peer_in_asterisk(step, codec):
-    assert check_codec_for_sip_line(world.id, codec) == True
+    assert check_codec_for_sip_line(world.id, codec) is True
 
 
 @step(u'Then the codec "([^"]*)" does not appear after typing \'sip show peer\' in asterisk')
 def then_the_codec_does_not_appear_after_typing_sip_show_peer_in_asterisk(step, codec):
-    assert check_codec_for_sip_line(world.id, codec) == False
+    assert check_codec_for_sip_line(world.id, codec) is False
 
 
 @step(u'Then this line is displayed in the list')
