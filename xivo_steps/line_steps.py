@@ -70,8 +70,7 @@ def when_i_deactivate_custom_codecs(step):
 
 @step(u'When I add the codec "([^"]*)"')
 def when_i_add_the_codec(step, codec):
-    webelement = world.browser.find_element_by_id("codeclist")
-    list_pane = ListPane(webelement)
+    list_pane = ListPane.from_id('codeclist')
     list_pane.add(codec)
 
 
