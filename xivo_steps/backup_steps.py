@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import time
 import os
+import time
 from lettuce import step, world
+from hamcrest import assert_that, greater_than
 from xivo_lettuce.common import open_url, find_line
 
 
@@ -30,10 +31,10 @@ def then_a_non_empty_file_is_present_on_disk(step, filename):
         if is_file:
             try:
                 filesize = os.path.getsize(path)
-                if(filesize > 0):
+                if filesize > 0:
                     break
             except OSError:
                 raise Exception("Unknown file : %s" % path)
 
-    assert filesize > 0, 'filesize : %s' % filesize
+    assert_that(filesize, greater_than(0))
     os.remove(path)

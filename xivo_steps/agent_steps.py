@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from lettuce import step
+from hamcrest import assert_that, equal_to
 from xivo_lettuce import form, func
 from xivo_lettuce.manager import agent_manager, agent_status_manager
 from xivo_lettuce.manager_ws import agent_manager_ws, user_manager_ws
@@ -141,10 +142,13 @@ def then_agent_is_not_displayed_in_the_list_of_default_agent_group(step, agent_n
 
 @step(u'Then agent group "([^"]*)" has "([^"]*)" agents')
 def then_agent_group_has_x_agents(step, agent_group, nb_agents):
-    assert int(nb_agents) == get_nb_agents_in_group(agent_group)
+    nb_agents = int(nb_agents)
+
+    assert_that(get_nb_agents_in_group(agent_group), equal_to(nb_agents))
 
 
 @step(u'Then the agent "([^"]*)" password is "([^"]*)"')
 def then_the_agent_password_is(step, number, password):
     current_password = agent_manager_ws.find_agent_password_with_number(number)
-    assert current_password == password, 'passord was not changed : expected : %s current %s' % (password, current_password)
+
+    assert_that(current_password, equal_to(password))
