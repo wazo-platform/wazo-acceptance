@@ -28,25 +28,22 @@ def given_there_is_no_group_with_name(step, name):
     group_manager_ws.delete_groups_with_name(name)
 
 
-@step(u'When I create a group "([^"]*)" with number "([^"]*)"')
+@step(u'When I create a group "([^"]*)" with number "([^"]*)"$')
 def when_i_create_group_with_number(step, group_name, group_number):
     open_url('group', 'add')
-    type_group_name(group_name)
-    type_group_number(group_number)
-    type_context('default')
+    _type_group_name_number_context(group_name, group_number)
     form.submit.submit_form()
 
 
-@step(u'When I set a group "([^"]*)" with number "([^"]*)"')
-def when_i_set_a_group_with_number_(step, group_name, group_number):
+@step(u'When I create a group "([^"]*)" with number "([^"]*)" with errors')
+def when_i_create_group_with_number_with_errors(step, group_name, group_number):
     open_url('group', 'add')
-    type_group_name(group_name)
-    type_group_number(group_number)
-    type_context('default')
+    _type_group_name_number_context(group_name, group_number)
+    form.submit.submit_form_with_errors()
 
 
-@step(u'When group "([^"]*)" is removed')
-def when_group_is_removed(step, group_name):
+@step(u'When I remove the group "([^"]*)"')
+def when_i_remove_the_group_1(step, group_name):
     remove_group_with_name(group_name)
 
 
@@ -68,3 +65,9 @@ def given_there_is_a_group_with_n_users(step, group_size):
         group_members.append(user_id)
 
     group_manager_ws.add_or_replace_group(group_name, user_ids=group_members)
+
+
+def _type_group_name_number_context(name, number, context='default'):
+    type_group_name(name)
+    type_group_number(number)
+    type_context(context)
