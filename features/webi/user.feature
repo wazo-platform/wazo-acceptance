@@ -23,24 +23,19 @@ Feature: User
     Scenario: Save user and line forms
     # The problem is that saving the user form may erase values previously
     # set in the line form (bug #2918)
-        Given there is a user "Tom" "Sawyer" with extension "1405@default"
-        When I edit the line "1405"
-        When I set the select field "NAT" to "No"
-        When I go to the "Advanced" tab
-        When I set the select field "IP Addressing type" to "Static"
-        When I set the text field "IP address" to "10.0.0.1"
-        When I submit
-
-        Then I see the line "1405" has its call limit to "10"
-
-        When I edit the user "Tom" "Sawyer"
-        When I submit
-
-        When I edit the line "1405"
-        Then the select field "NAT" is set to "No"
-        When I go to the "Advanced" tab
-        Then the select field "IP Addressing type" is set to "Static"
-        Then the text field "IP address" is set to "10.0.0.1"
+        Given there are users with infos:
+        | firstname | lastname | number | context |
+        | Tom       | Sawyer   |   1405 | default |
+        Given I set the following options in line "1405":
+        | NAT | IP addressing type | IP address |
+        | No  | Static             | 10.0.0.1   |
+        Then the line "1405" has the following line options:
+        | Call limit |
+        |         10 |
+        When I edit the user "Tom" "Sawyer" without changing anything
+        Then the line "1405" has the following line options:
+        | NAT | IP addressing type | IP address |
+        | No  | Static             |   10.0.0.1 |
 
     Scenario: Save user and voicemail forms
         Given there is a user "Tom" "Sawyer" with extension "1405@default"

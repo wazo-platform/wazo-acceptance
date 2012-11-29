@@ -215,12 +215,6 @@ def remove_user(step, firstname, lastname):
     common.open_url('user', 'search', {'search': ''})
 
 
-@step(u'When I edit the user "([^"]*)" "([^"]*)"$')
-def when_i_edit_the_user_1_2(step, firstname, lastname):
-    common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
-    common.edit_line('%s %s' % (firstname, lastname))
-
-
 @step(u'When I delete agent number "([^"]*)"$')
 def when_i_delete_agent_number_1(step, agent_number):
     agent = world.ws.agents.search(agent_number)[0]
@@ -276,6 +270,12 @@ def then_user_is_in_group(step, firstname, lastname, group_name):
 def then_i_should_be_at_the_user_list_page(step):
     world.browser.find_element_by_id('bc-main', 'User list page not loaded')
     world.browser.find_element_by_name('fm-users-list')
+
+
+@step(u'When I edit the user "([^"]*)" "([^"]*)" without changing anything')
+def when_i_edit_the_user_1_2_without_changing_anything(step, firstname, lastname):
+    _edit_user(firstname, lastname)
+    form.submit.submit_form()
 
 
 @step(u'Then I see the user "([^"]*)" "([^"]*)" exists$')
