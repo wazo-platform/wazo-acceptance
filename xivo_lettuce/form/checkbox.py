@@ -36,3 +36,12 @@ class Checkbox(object):
     def from_value(cls, id):
         option_element = world.browser.find_element_by_id(id)
         return cls(option_element)
+
+
+def check_checkbox_with_id(element_id):
+    Checkbox.from_id(element_id).check()
+    element = world.browser.find_element_by_id(element_id)
+    Checkbox(element).check()
+
+def uncheck_checkbox_with_id(element_id):
+    Checkbox.from_id(element_id).uncheck()

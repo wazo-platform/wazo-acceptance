@@ -7,7 +7,7 @@ from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 from xivo_lettuce.ssh import SSHClient
 from selenium.webdriver import FirefoxProfile
-from xivo_lettuce.common import webi_login_as_default, go_to_home_page
+from xivo_lettuce.common import webi_login_as_default, go_to_home_page, webi_logout
 from xivo_lettuce.manager import asterisk_manager
 
 
@@ -18,6 +18,11 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 @before.all
 def xivo_lettuce_before_all():
     initialize()
+
+
+@before.each_scenario
+def xivo_lettuce_before_each(scenario):
+    _check_webi_login_root()
 
 
 @after.each_scenario
@@ -137,6 +142,14 @@ def _log_on_webi():
 def _logout_agents():
     asterisk_manager.logoff_agents(world.logged_agents)
     world.logged_agents = []
+
+
+def _check_webi_login_root():
+    element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
+    username = element.text
+    if username != "root":
+        webi_logout()
+        webi_login_as_default()
 
 
 def deinitialize():

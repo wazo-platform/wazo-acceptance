@@ -36,6 +36,12 @@ def waitForLoginPage():
     world.browser.find_element_by_id('it-login', 'login page not loaded', 30)
 
 
+def webi_logout():
+    logout = '/xivo/logoff.php'
+    url = '%s%s' % (world.host, logout)
+    world.browser.get(url)
+
+
 def the_option_is_checked(option_label, checkstate, **kwargs):
     """Reads or write the value of a checkbox, selected by its label text.
        Use given = True if you want to set the checkbox"""
