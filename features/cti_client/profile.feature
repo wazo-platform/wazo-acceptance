@@ -5,7 +5,9 @@ Feature: CTI Profile
         | xlet     |
         | Features |
 
-        Given there is a user "Abraham" "Washington" with CTI profile "noservices"
+        Given there are users with infos:
+        | firstname | lastname   | cti_profile | cti_login | cti_passwd |
+        | Abraham   | Washington | noservices  | abraham   | washington |
 
         When I start the XiVO Client
         Then I can connect the CTI Client of "Abraham" "Washington"

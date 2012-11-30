@@ -4,24 +4,21 @@ import time
 from lettuce import step, world
 from hamcrest import assert_that, equal_to
 from xivo_lettuce import common
-from xivo_lettuce.form.list_pane import ListPane
+from xivo_lettuce.manager import profile_manager
 
 
-@step(u'When i edit CTI Profile "([^"]*)"')
-def when_i_edit_cti_profile_group1(step, profile_name):
+@step(u'Then the profile "([^"]*)" has default services activated')
+def then_the_profile_1_has_default_services_activated(step, profile_name):
     common.open_url('profile', 'list')
     common.edit_line(profile_name)
-    time.sleep(world.timeout)
+    time.sleep(world.timeout)  # wait for the javascript to load
 
-
-@step(u'Then I see default services activated')
-def then_i_see_default_services_activated(step):
-    expected_labels = [
+    expected_services = [
         'Enable DND',
         'Unconditional transfer to a number',
         'Transfer on busy',
         'Transfer on no-answer',
     ]
-    list_pane = ListPane.from_id('queuelist')
+    selected_services = profile_manager.selected_services()
 
-    assert_that(list_pane.selected_labels(), equal_to(expected_labels))
+    assert_that(selected_services, equal_to(expected_services))

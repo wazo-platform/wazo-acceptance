@@ -5,6 +5,7 @@ from lettuce import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 from xivo_lettuce.common import open_url, remove_line
+from xivo_lettuce.form.list_pane import ListPane
 from xivo_lettuce.manager_ws.user_manager_ws import delete_users_with_profile
 
 
@@ -21,62 +22,20 @@ def delete_profile_if_exists(profile_label):
         pass
 
 
-def type_profile_names(id, display_name):
+def type_profile_names(profile_name):
     input_id = world.browser.find_element_by_id('it-profiles-name')
     input_id.clear()
-    input_id.send_keys(id)
-
-    input_display_name = world.browser.find_element_by_id('it-profiles-appliname')
-    input_display_name.clear()
-    input_display_name.send_keys(display_name)
+    input_id.send_keys(profile_name)
 
 
-def add_service(service_label):
-    """Add a service. If the service is already added, does nothing."""
-    input_services_disabled = Select(world.browser.find_element_by_xpath(
-        "//select[@id = 'it-serviceslist']"))
-    try:
-        input_services_disabled.select_by_visible_text(service_label)
-    except NoSuchElementException:
-        return
-    input_add_button = world.browser.find_element_by_id('bt-inaccess_profiles')
-    input_add_button.click()
-
-    # Wait for the Javascript to add the service
-    time.sleep(1)
-
-
-def remove_service(service_label):
-    """Remove a service. If the service is already removed, does nothing."""
-    input_services_enabled = Select(world.browser.find_element_by_xpath(
-        "//select[@id = 'it-services']"))
-    try:
-        input_services_enabled.select_by_visible_text(service_label)
-    except NoSuchElementException:
-        return
-    input_remove_button = world.browser.find_element_by_id('bt-outaccess_profiles')
-    input_remove_button.click()
-
-    # Wait for the Javascript to add the service
-    time.sleep(1)
+def selected_services():
+    services_pane = _get_services_list()
+    return services_pane.selected_labels()
 
 
 def remove_all_services():
-    """Removes all services."""
-    try:
-        options = world.browser.find_elements_by_xpath(
-            "//select[@id = 'it-services']/option")
-    except NoSuchElementException:
-        return
-
-    for option in options:
-        option.click()
-
-    input_remove_button = world.browser.find_element_by_id('bt-outaccess_profiles')
-    input_remove_button.click()
-
-    # Wait for the Javascript to add the service
-    time.sleep(1)
+    services_pane = _get_services_list()
+    services_pane.remove_all()
 
 
 def add_xlet(xlet_label):
@@ -88,5 +47,9 @@ def add_xlet(xlet_label):
     input_line = world.browser.find_elements_by_xpath(
         "//tbody[@id='xlets']//tr")[-1]
     input_xlet_name = Select(input_line.find_element_by_xpath(
-        ".//select[@name = 'xletslist[]']"))
+        ".//select[@name = 'xlet[id][]']"))
     input_xlet_name.select_by_visible_text(xlet_label)
+
+
+def _get_services_list():
+    return ListPane.from_id('servicelist')
