@@ -14,7 +14,7 @@ def when_i_login_the_webi(step, login, password, language):
     webi_login(login, password, language)
 
 
-@step(u'Given there is no ([a-z ]*) "([^"]*)"$')
+@step(u'Given there is no ([a-z _]*) "([^"]*)"$')
 def given_there_is_no_element(step, module, search):
     remove_element_if_exist(module, search)
 
