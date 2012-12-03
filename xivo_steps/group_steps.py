@@ -23,8 +23,8 @@ def given_there_is_a_group_with_extension_and_users(step, name, extension):
     group_manager_ws.add_group(name, number, context, user_ids)
 
 
-@step(u'Given there is no group with name "([^"]*)"')
-def given_there_is_no_group_with_name(step, name):
+@step(u'Given the group named "([^"]*)" does not exist')
+def given_the_group_named_1_does_not_exist(step, name):
     group_manager_ws.delete_groups_with_name(name)
 
 
