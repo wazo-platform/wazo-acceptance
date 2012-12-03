@@ -22,7 +22,8 @@ def xivo_lettuce_before_all():
 
 @before.each_scenario
 def xivo_lettuce_before_each(scenario):
-    _check_webi_login_root()
+    if _webi_configured():
+        _check_webi_login_root()
 
 
 @after.each_scenario
