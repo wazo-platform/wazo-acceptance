@@ -16,20 +16,20 @@ def when_i_stop_asterisk(step):
     assert sysutils.send_command(command)
 
 
-@step(u'When service "([^"]*)" run')
-def then_service_group1_run(step, service):
+@step(u'Then the service "([^"]*)" is running')
+def then_the_service_group1_is_running(step, service):
     pidfile = sysutils.get_pidfile_for_service_name(service)
     assert sysutils.is_process_running(pidfile)
 
 
-@step(u'I expected that the service "([^"]*)" restart')
-def when_i_wait_service_service_group1_restart(step, service):
+@step(u'When I wait for the service "([^"]*)" to restart')
+def when_i_wait_for_the_service_group1_to_restart(step, service):
     pidfile = sysutils.get_pidfile_for_service_name(service)
     assert sysutils.wait_service_restart(pidfile)
 
 
-@step(u'Then service "([^"]*)" not run')
-def then_service_group1_not_run(step, service):
+@step(u'Then the service "([^"]*)" is no longer running')
+def then_the_service_group1_is_no_longer_running(step, service):
     pidfile = sysutils.get_pidfile_for_service_name(service)
     assert not sysutils.is_process_running(pidfile)
 
