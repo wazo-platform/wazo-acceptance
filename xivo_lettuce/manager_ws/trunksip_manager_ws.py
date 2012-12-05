@@ -4,14 +4,14 @@ from lettuce import world
 from xivo_ws import SIPTrunk
 
 
-def add_trunksip(host, name, context='default'):
+def add_trunksip(host, name, context='default', type='friend'):
     sip_trunk = SIPTrunk()
     sip_trunk.name = name
     sip_trunk.username = sip_trunk.name
     sip_trunk.secret = sip_trunk.name
     sip_trunk.context = context
     sip_trunk.host = host
-    sip_trunk.type = 'friend'
+    sip_trunk.type = type
     world.ws.sip_trunks.add(sip_trunk)
 
 
