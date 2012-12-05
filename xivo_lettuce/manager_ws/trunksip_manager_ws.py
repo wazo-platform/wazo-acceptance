@@ -15,9 +15,9 @@ def add_trunksip(host, name, context='default', type='friend'):
     world.ws.sip_trunks.add(sip_trunk)
 
 
-def add_or_replace_trunksip(host, name, context='default'):
+def add_or_replace_trunksip(host, name, context='default', type='friend'):
     delete_trunksips_with_name(name)
-    add_trunksip(host, name, context)
+    add_trunksip(host, name, context, type)
 
 
 def delete_trunksips_with_name(name):
