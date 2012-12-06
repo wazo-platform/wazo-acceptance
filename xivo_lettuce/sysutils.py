@@ -37,8 +37,11 @@ def get_content_file(path):
     return world.ssh_client_xivo.out_call(command)
 
 
-def send_command(command):
-    res = world.ssh_client_xivo.check_call(command) == 0
+def send_command(command, check=True):
+    if check:
+        res = world.ssh_client_xivo.check_call(command) == 0
+    else:
+        res = world.ssh_client_xivo.call(command) == 0
     time.sleep(1)
     return res
 
