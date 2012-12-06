@@ -64,7 +64,9 @@ def the_option_is_checked(option_label, checkstate, **kwargs):
         Checkbox(option).set_checked(goal_checked)
 
 
-def element_is_in_list(module, search, qry={}, action='list'):
+def element_is_in_list(module, search, qry=None, action='list'):
+    if qry is None:
+        qry = {}
     open_url(module, action, qry)
     try:
         find_line(search)
@@ -73,7 +75,9 @@ def element_is_in_list(module, search, qry={}, action='list'):
     return True
 
 
-def element_is_not_in_list(module, search, qry={}, action='list'):
+def element_is_not_in_list(module, search, qry=None, action='list'):
+    if qry is None:
+        qry = {}
     open_url(module, action, qry)
     try:
         find_line(search)
@@ -82,7 +86,9 @@ def element_is_not_in_list(module, search, qry={}, action='list'):
     return False
 
 
-def element_in_list_matches_field(module, search, class_name, value, qry={}, action='list'):
+def element_in_list_matches_field(module, search, class_name, value, qry=None, action='list'):
+    if qry is None:
+        qry = {}
     open_url(module, action, qry)
     try:
         line = find_line_and_fetch_col(search, class_name)
@@ -91,7 +97,9 @@ def element_in_list_matches_field(module, search, class_name, value, qry={}, act
         return None
 
 
-def open_url(module, act=None, qry={}):
+def open_url(module, act=None, qry=None):
+    if qry is None:
+        qry = {}
     list_url = urls.URLS
     if act:
         qry.update({'act': act})
