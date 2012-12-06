@@ -50,3 +50,4 @@ from voicemail_steps import *
 from wizard_steps import *
 from xlet_identity_steps import *
 from xlet_queue_member_steps import *
+from xivo_agent_steps import *
