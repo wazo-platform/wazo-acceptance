@@ -1,4 +1,4 @@
 Feature: CTI Server
 
     Scenario: Default Services Activated
-        Then the profile "client" has default services activated
+        Then the profile "Client" has default services activated
