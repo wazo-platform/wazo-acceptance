@@ -12,6 +12,7 @@ Feature: Directory
 
     Scenario: Create a CTI directory definition
         Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
+        Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
         Given the following directories exist:
           | name           | type | URI                     |
           | phonebook-x254 | File | /tmp/phonebook-x254.csv |
@@ -35,6 +36,7 @@ Feature: Directory
 
     Scenario: Search for a contact without a line
         Given there is a user "GreatLord" "MacDonnell" with CTI profile "Client"
+        Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
         When I start the XiVO Client
         When I log in the Xivo Client as "greatlord", pass "macdonnell"
         When I search for "emmet" in the directory xlet

@@ -73,10 +73,16 @@ def delete_users_with_firstname(firstname):
         _delete_user(user)
 
 
-def delete_users_with_profile(profile):
+def delete_users_with_profile(profile_name):
     users = world.ws.users.list()
+    profiles = [profile for profile in world.ws.cti_profiles.list() if profile.name == profile_name]
+
+    if not profiles:
+        raise Exception('The CTI profile %s does not exist.' % profile_name)
+
+    profile_id = profiles[0].id
     for user in users:
-        if user.client_profile == profile:
+        if user.client_profile_id == profile_id:
             _delete_user(user)
 
 
