@@ -42,6 +42,8 @@ def then_i_see_the_called_extension_in_call_logs_page(step, called, caller):
     common.open_url('cel')
     form.submit.submit_form()
 
+    common.go_to_last_page()
+
     table = world.browser.find_element_by_xpath("//div[@id='sb-part-result']/div/table")
     lines = extract_webi_table_to_dict(table)
 

@@ -179,6 +179,13 @@ def go_to_tab(tab_label, ss_tab_label=None):
     time.sleep(1)
 
 
+def go_to_last_page():
+    page_links = world.browser.find_elements_by_xpath("//div[@class='b-page']/a[starts-with(@title, 'Page ')]")
+    if page_links:
+        last_page_link = page_links[-1]
+        last_page_link.click()
+
+
 def get_host_address():
     host = world.host
     host = host.rstrip('/')
