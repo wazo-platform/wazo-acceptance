@@ -7,7 +7,7 @@ from xivo_lettuce.common import open_url, element_is_in_list
 from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.logs import search_str_in_asterisk_log
-from xivo_lettuce.table import extract_webi_talbe_to_dict
+from xivo_lettuce.table import extract_webi_table_to_dict
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
@@ -42,7 +42,7 @@ def then_i_see_the_called_extension_in_call_logs_page(step, called, caller):
     form.submit.submit_form()
 
     table = world.browser.find_element_by_xpath("//div[@id='sb-part-result']/div/table")
-    lines = extract_webi_talbe_to_dict(table)
+    lines = extract_webi_table_to_dict(table)
 
     last_call = lines.pop()
     assert last_call['Called'] == called

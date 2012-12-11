@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 
-def extract_webi_talbe_to_dict(table):
+def extract_webi_table_to_dict(table):
     list_tr = table.find_elements_by_tag_name('tr')
 
     headers_line = list_tr.pop(0)
