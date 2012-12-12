@@ -5,6 +5,7 @@ from lettuce import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 from xivo_lettuce.common import open_url, remove_line
+from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.form.list_pane import ListPane
 from xivo_lettuce.manager_ws.user_manager_ws import delete_users_with_profile
 
@@ -18,7 +19,7 @@ def delete_profile(profile_label):
 def delete_profile_if_exists(profile_label):
     try:
         delete_profile(profile_label)
-    except NoSuchElementException:
+    except (NoSuchProfileException, NoSuchElementException):
         pass
 
 

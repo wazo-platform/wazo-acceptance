@@ -3,6 +3,7 @@
 import voicemail_manager_ws
 from lettuce import world
 from xivo_ws import User, UserLine, UserVoicemail
+from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.manager_ws import group_manager_ws
 
 
@@ -78,7 +79,7 @@ def delete_users_with_profile(profile_name):
     profiles = [profile for profile in world.ws.cti_profiles.list() if profile.name == profile_name]
 
     if not profiles:
-        raise Exception('The CTI profile %s does not exist.' % profile_name)
+        raise NoSuchProfileException('The CTI profile %s does not exist.' % profile_name)
 
     profile_id = profiles[0].id
     for user in users:
