@@ -180,8 +180,11 @@ def go_to_tab(tab_label, ss_tab_label=None):
 
 
 def go_to_last_page():
-    page_links = world.browser.find_elements_by_xpath("//div[@class='b-page']/a[starts-with(@title, 'Page ')]")
-    if page_links:
+    try:
+        page_links = world.browser.find_elements_by_xpath("//div[@class='b-page']/a[starts-with(@title, 'Page ')]")
+    except NoSuchElementException:
+        pass
+    else:
         last_page_link = page_links[-1]
         last_page_link.click()
 
