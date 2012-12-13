@@ -9,7 +9,7 @@ def given_there_is_a_call_center_supervisor_firstname_lastname(step, firstname, 
     user_data = {
         'firstname': firstname,
         'lastname': lastname,
-        'client_profile': 'agentsup',
+        'client_profile': 'Supervisor',
         'client_username': firstname.lower(),
         'client_password': lastname.lower(),
         'enable_client': True,
