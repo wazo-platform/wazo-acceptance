@@ -6,7 +6,7 @@ Feature: Sheet
         | xivo-calleridnum  |
         | xivo-calleridname |
 
-        Given I assign the sheet "testsheet" to the "Agent linked" event
+        Given I assign the sheet "testsheet" to the "Link" event
 
         Given there is a user "Cedric" "Abunar" with an agent "1153@default" and CTI profile "Client"
 

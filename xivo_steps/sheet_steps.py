@@ -11,8 +11,6 @@ EVENT_ELEMENT_MAP = {
     'Dial': 'it-dial',
     'Link': 'it-link',
     'Unlink': 'it-unlink',
-    'Agent linked': 'it-agentlinked',
-    'Agent unlinked': 'it-agentunlinked',
     'Incoming DID': 'it-incomingdid',
     'Hangup': 'it-hangup',
 }
