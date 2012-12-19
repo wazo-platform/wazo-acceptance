@@ -4,13 +4,6 @@ import time
 from lettuce.registry import world
 
 
-SERVICE_PIDFILES = {
-    'asterisk': '/var/run/asterisk/asterisk.pid',
-    'xivo-ctid': '/var/run/xivo-ctid.pid',
-    'xivo-agent': '/var/run/xivo-agentd.pid',
-}
-
-
 def path_exists(path):
     command = ['ls', path]
     try:
@@ -77,7 +70,9 @@ def wait_service_restart(pidfile, maxtries=15, wait_secs=10):
 
 
 def get_pidfile_for_service_name(service):
-    pidfile = SERVICE_PIDFILES.get(service, None)
-    if not pidfile:
+    if service == 'asterisk':
+        return '/var/run/asterisk/asterisk.pid'
+    elif service == 'xivo-ctid':
+        return '/var/run/xivo-ctid.pid'
+    else:
         assert False, 'Service %s must be implemented' % service
-    return pidfile
