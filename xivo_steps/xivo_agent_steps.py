@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-from lettuce.decorators import step
+from lettuce import step
 from xivo_lettuce import sysutils, logs
 
 

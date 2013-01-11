@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import time
-from lettuce.registry import world
+from lettuce import world
 from xivo_lettuce import postgres
+from xivo_lettuce import sysutils
 from xivo_lettuce.manager import call_manager
 from xivo_lettuce.manager_ws import line_manager_ws, agent_manager_ws
 
@@ -32,8 +33,7 @@ def unlog_agent(agent_number, extension):
 
 
 def unlog_all_agents():
-    pg_command = '"delete from agent_login_status"'
-    postgres.exec_sql_request(pg_command)
+    sysutils.send_command(['xivo-agentctl', '-c', 'logoff_all'])
 
 
 def _get_line_from_agent(agent_number):

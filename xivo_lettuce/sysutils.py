@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import time
-from lettuce.registry import world
+from lettuce import world
 
 
 SERVICE_PIDFILES = {
@@ -51,6 +51,7 @@ def send_command(command, check=True):
         res = world.ssh_client_xivo.call(command) == 0
     time.sleep(1)
     return res
+
 
 def output_command(command):
     res = world.ssh_client_xivo.out_call(command)
