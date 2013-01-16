@@ -70,7 +70,7 @@ class Prerequisite(object):
                          'line_context': 'default',
                          'enable_client': True,
                          'client_password': '12345',
-                         'client_profile': 'client'
+                         'client_profile': 'Client'
                      }
         user_data = {'lastname': '1',
                     'line_number': '101',
