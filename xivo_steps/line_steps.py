@@ -4,8 +4,7 @@ from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 from xivo_lettuce import common
-from xivo_lettuce.common import find_line, open_url, remove_all_elements, \
-    remove_line, edit_line
+from xivo_lettuce.common import find_line, open_url, remove_line, edit_line
 from xivo_lettuce.manager_ws import line_manager_ws
 from xivo_lettuce.manager import line_manager
 from xivo_lettuce import form
@@ -13,9 +12,9 @@ from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.form.list_pane import ListPane
 
 
-@step(u'Given there is no custom lines')
-def given_there_is_no_custom_lines(step):
-    remove_all_elements('line', 'Customized')
+@step(u'Given there are no custom lines with interface beginning with "([^"]*)"')
+def given_there_are_no_custom_lines_with_interface_beginning_with_1(step, interface_start):
+    common.remove_element_if_exist('line', interface_start)
 
 
 @step(u'Given I set the following options in line "([^"]*)":')
@@ -41,11 +40,20 @@ def given_i_set_the_following_options_in_line_1(step, line_number):
     form.submit.submit_form()
 
 
-@step(u'When I add a "([^"]*)" line')
-def when_i_add_a_line(step, protocol):
-    open_url('line', 'add', {'proto': protocol.lower()})
-    if protocol.lower() == 'sip':
-        world.id = world.browser.find_element_by_id('it-protocol-name').get_attribute('value')
+# @step(u'When I add a "([^"]*)" line')
+# def when_i_add_a_line(step, protocol):
+#     open_url('line', 'add', {'proto': protocol.lower()})
+#     if protocol.lower() == 'sip':
+#         world.id = world.browser.find_element_by_id('it-protocol-name').get_attribute('value')
+
+
+@step(u'When I add a custom line with infos:')
+def when_i_add_a_custom_line(step):
+    for line in step.hashes:
+        open_url('line', 'add', {'proto': 'custom'})
+        if 'interface' in line:
+            form.input.set_text_field_with_id('it-protocol-interface', line['interface'])
+            form.submit.submit_form()
 
 
 @step(u'When I set the context to "([^"]*)"')
@@ -53,12 +61,6 @@ def when_i_set_the_context(step, context):
     select_context = world.browser.find_element_by_xpath(
         '//select[@id="it-protocol-context"]//option[@value="%s"]' % context)
     select_context.click()
-
-
-@step(u'When I set the interface to "([^"]*)"')
-def when_i_set_the_interface(step, interface):
-    input_interface = world.browser.find_element_by_id('it-protocol-interface')
-    input_interface.send_keys(interface)
 
 
 @step(u'When I remove this line')

@@ -1,18 +1,16 @@
 Feature: Line
 
     Scenario: Add a SIP line and remove it
-        When I add a "sip" line
-        When I set the context to "default"
-        When I submit
+        When I add a SIP line
         Then this line is displayed in the list
         When I remove this line
         Then this line is not displayed in the list
 
     Scenario: Add a custom line with 127 characters
-        Given there is no custom lines
-        When I add a "custom" line
-        When I set the interface to "1234567000000000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111111111"
-        When I submit
+        Given there are no custom lines with interface beginning with "12345670000000000111111111122"
+        When I add a custom line with infos:
+        |                                                                                                                       interface |
+        | 1234567000000000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111111111 |
         Then I see no errors
 
     # BUG #3642
@@ -37,4 +35,3 @@ Feature: Line
         When I deactivate custom codecs
         When I submit
         Then the codec "siren14" does not appear after typing 'sip show peer' in asterisk
-
