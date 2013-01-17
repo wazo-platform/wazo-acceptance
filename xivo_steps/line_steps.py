@@ -40,11 +40,15 @@ def given_i_set_the_following_options_in_line_1(step, line_number):
     form.submit.submit_form()
 
 
-# @step(u'When I add a "([^"]*)" line')
-# def when_i_add_a_line(step, protocol):
-#     open_url('line', 'add', {'proto': protocol.lower()})
-#     if protocol.lower() == 'sip':
-#         world.id = world.browser.find_element_by_id('it-protocol-name').get_attribute('value')
+@step(u'When I add a SIP line')
+def when_i_add_a_sip_line(step):
+    open_url('line', 'add', {'proto': 'sip'})
+    world.id = _get_line_name()
+    form.submit.submit_form()
+
+
+def _get_line_name():
+    return world.browser.find_element_by_id('it-protocol-name').get_attribute('value')
 
 
 @step(u'When I add a custom line with infos:')
