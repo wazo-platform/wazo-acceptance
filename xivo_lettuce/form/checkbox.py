@@ -41,5 +41,6 @@ class Checkbox(object):
 def check_checkbox_with_id(element_id):
     Checkbox.from_id(element_id).check()
 
+
 def uncheck_checkbox_with_id(element_id):
     Checkbox.from_id(element_id).uncheck()
