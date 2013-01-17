@@ -16,9 +16,6 @@ Feature: SCCP General
         Then the option "dialtimeout" is at "6" in sccp.conf
 
     Scenario: Change language
-        Given the language option is at "en_US"
-        Given I am on the SCCP General Settings page
-        When I select the language "fr_FR"
-        When I submit the form
+        Given the SCCP language is "en_US"
+        When I select the SCCP language "fr_FR"
         Then the option "language" is at "fr_FR" in sccp.conf
-_
