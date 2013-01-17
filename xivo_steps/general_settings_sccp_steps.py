@@ -2,14 +2,16 @@
 
 from lettuce import step, world
 from xivo_lettuce import form
+from xivo_lettuce.form import submit
+from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import asterisk_manager
 from xivo_lettuce.manager_ws import general_settings_sccp_manager_ws as sccp_manager_ws
 from selenium.webdriver.support.select import Select
 
 
-@step('Given the directmedia option is disabled')
-def given_the_directmedia_option_is_disabled(step):
+@step(u'Given the SCCP directmedia is disabled')
+def given_the_sccp_directmedia_is_disabled(step):
     sccp_manager_ws.disable_directmedia()
 
 
@@ -31,6 +33,14 @@ def given_the_language_option_is_at(step, language):
 @step('Given I am on the SCCP General Settings page')
 def given_i_am_on_the_sccp_general_settings_page(step):
     open_url('sccpgeneralsettings')
+
+
+@step(u'When I enable the SCCP directmedia')
+def when_i_enable_the_sccp_directmedia(step):
+    open_url('sccpgeneralsettings')
+    directmedia_checkbox = Checkbox.from_id("it-sccpgeneralsettings-directmedia")
+    directmedia_checkbox.check()
+    submit.submit_form()
 
 
 @step('When I click the directmedia checkbox')
@@ -61,4 +71,3 @@ def when_i_select_the_language(step, language):
 def then_the_option_is_at_x_in_sccp_conf(step, option, expected_value):
     value = asterisk_manager.get_asterisk_conf("sccp.conf", option)
     assert(value == expected_value)
-
