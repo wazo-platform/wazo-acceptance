@@ -20,13 +20,6 @@ def given_there_is_a_profile_1_with_no_services_and_xlets(step, profile_name):
     form.submit.submit_form()
 
 
-@step(u'When I add the CTI profile "([^"]*)" with errors')
-def when_i_add_the_cti_profile_1_with_errors(step, profile_name):
-    common.open_url('profile', 'add')
-    profile_manager.type_profile_names(profile_name)
-    form.submit.submit_form_with_errors()
-
-
 @step(u'When I add the CTI profile "([^"]*)"')
 def when_i_add_the_cti_profile_1(step, profile_name):
     common.open_url('profile', 'add')
