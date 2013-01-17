@@ -11,10 +11,8 @@ Feature: SCCP General
         Then the option "directmedia" is at "0" in sccp.conf
 
     Scenario: Change dial timeout
-        Given the dial timeout is at 1 seconds
-        Given I am on the SCCP General Settings page
-        When I change the dial timeout to "6"
-        When I submit the form
+        Given the SCCP dial timeout is at "1" seconds
+        When I change the SCCP dial timeout to "6" seconds
         Then the option "dialtimeout" is at "6" in sccp.conf
 
     Scenario: Change language

@@ -20,8 +20,8 @@ def given_the_sccp_directmedia_is_enabled(step):
     sccp_manager_ws.enable_directmedia()
 
 
-@step('Given the dial timeout is at (\d+) seconds')
-def given_the_dial_timeout_is_at_x_seconds(step, timeout):
+@step(u'Given the SCCP dial timeout is at "(\d+)" seconds')
+def given_the_sccp_dial_timeout_is_at_1_seconds(step, timeout):
     sccp_manager_ws.set_dialtimeout(timeout)
 
 
@@ -51,16 +51,16 @@ def when_i_disable_the_sccp_directmedia(step):
     submit.submit_form()
 
 
+@step(u'When I change the SCCP dial timeout to "([^"]*)" seconds')
+def when_i_change_the_sccp_dial_timeout_to_1_seconds(step, timeout):
+    open_url('sccpgeneralsettings')
+    form.set_text_field_with_id('it-sccpgeneralsettings-dialtimeout', timeout)
+    submit.submit_form()
+
+
 @step('When I submit the form')
 def when_i_submit_the_form(step):
     form.submit.submit_form()
-
-
-@step('When I change the dial timeout to "([^"]*)"')
-def when_i_change_the_dial_timeout(step, timeout):
-    dialtimeout_input = world.browser.find_element_by_id('it-sccpgeneralsettings-dialtimeout')
-    dialtimeout_input.clear()
-    dialtimeout_input.send_keys(timeout)
 
 
 @step('When I select the language "([^"]*)"')
