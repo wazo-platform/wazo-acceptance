@@ -15,8 +15,8 @@ def given_the_sccp_directmedia_is_disabled(step):
     sccp_manager_ws.disable_directmedia()
 
 
-@step('Given the directmedia option is enabled')
-def given_the_directmedia_option_is_enabled(step):
+@step(u'Given the SCCP directmedia is enabled')
+def given_the_sccp_directmedia_is_enabled(step):
     sccp_manager_ws.enable_directmedia()
 
 
@@ -43,10 +43,12 @@ def when_i_enable_the_sccp_directmedia(step):
     submit.submit_form()
 
 
-@step('When I click the directmedia checkbox')
-def when_i_click_the_directmedia_checkbox(step):
-    directmedia_checkbox = world.browser.find_element_by_id("it-sccpgeneralsettings-directmedia")
-    directmedia_checkbox.click()
+@step(u'When I disable the SCCP directmedia')
+def when_i_disable_the_sccp_directmedia(step):
+    open_url('sccpgeneralsettings')
+    directmedia_checkbox = Checkbox.from_id("it-sccpgeneralsettings-directmedia")
+    directmedia_checkbox.uncheck()
+    submit.submit_form()
 
 
 @step('When I submit the form')
