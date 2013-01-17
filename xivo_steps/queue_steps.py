@@ -160,25 +160,6 @@ def given_there_are_queues_with_infos(step):
         queue_manager_ws.add_queue(queue_ws_data)
 
 
-@step(u'^Given there is a queue "([^"]*)" with extension "([^"]+)" and unlogged members:$')
-def given_there_is_a_queue_with_extension_and_unlogged_members(step, queue_name, extension):
-    queue_number, queue_context = func.extract_number_and_context_from_extension(extension)
-    agent_ids = []
-    for agent_data in step.hashes:
-        agent_number = agent_data['number']
-        agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
-        agent_ids.append(agent_id)
-
-    queue_data = {
-        'name': queue_name,
-        'number': queue_number,
-        'context': queue_context,
-        'agents': agent_ids,
-    }
-
-    queue_manager_ws.add_or_replace_queue(queue_data)
-
-
 @step(u'Given there is a queue "([^"]*)" with number "([^"]*)" in "([^"]*)" and unlogged members:')
 def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(step, queue_name, queue_number, queue_context):
     agent_ids = []
