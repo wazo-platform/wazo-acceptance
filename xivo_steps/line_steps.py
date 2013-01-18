@@ -40,11 +40,20 @@ def given_i_set_the_following_options_in_line_1(step, line_number):
     form.submit.submit_form()
 
 
-@step(u'When I add a SIP line')
-def when_i_add_a_sip_line(step):
-    open_url('line', 'add', {'proto': 'sip'})
-    world.id = _get_line_name()
-    form.submit.submit_form()
+@step(u'When I add a SIP line with infos:')
+def when_i_add_a_sip_line_with_infos(step):
+    for line_infos in step.hashes:
+        open_url('line', 'add', {'proto': 'sip'})
+        world.id = _get_line_name()
+        if 'context' in line_infos:
+            context = line_infos['context']
+            form.select.set_select_field_with_id_containing('it-protocol-context', context)
+        if 'custom_codecs' in line_infos:
+            common.go_to_tab('Signalling')
+            Checkbox.from_label("Customize codecs:").check()
+            codec = line_infos['custom_codecs']
+            ListPane.from_id('codeclist').add(codec)
+        form.submit.submit_form()
 
 
 def _get_line_name():
@@ -60,11 +69,13 @@ def when_i_add_a_custom_line(step):
             form.submit.submit_form()
 
 
-@step(u'When I set the context to "([^"]*)"')
-def when_i_set_the_context(step, context):
-    select_context = world.browser.find_element_by_xpath(
-        '//select[@id="it-protocol-context"]//option[@value="%s"]' % context)
-    select_context.click()
+@step(u'When I disable custom codecs for this line')
+def when_i_disable_custom_codecs_for_this_line(step):
+    line_manager.search_line_number(world.id)
+    edit_line(world.id)
+    common.go_to_tab('Signalling')
+    Checkbox.from_label("Customize codecs:").uncheck()
+    form.submit.submit_form()
 
 
 @step(u'When I remove this line')
@@ -74,36 +85,10 @@ def when_i_remove_this_line(step):
     open_url('line', 'search', {'search': ''})
 
 
-@step(u'When I search for this line')
-def when_i_search_for_this_line(step):
-    line_manager.search_line_number(world.id)
-
-
-@step(u'When I edit this line')
-def when_i_edit_this_line(step):
-    edit_line(world.id)
-
-
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
     line_id = line_manager_ws.find_line_id_with_number(linenumber, 'default')
     open_url('line', 'edit', {'id': line_id})
-
-
-@step(u'When I activate custom codecs')
-def when_i_activate_custom_codecs(step):
-    Checkbox.from_label("Customize codecs:").check()
-
-
-@step(u'When I deactivate custom codecs')
-def when_i_deactivate_custom_codecs(step):
-    Checkbox.from_label("Customize codecs:").uncheck()
-
-
-@step(u'When I add the codec "([^"]*)"')
-def when_i_add_the_codec(step, codec):
-    list_pane = ListPane.from_id('codeclist')
-    list_pane.add(codec)
 
 
 def check_codec_for_sip_line(peer, codec):

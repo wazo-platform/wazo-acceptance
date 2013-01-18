@@ -1,7 +1,9 @@
 Feature: Line
 
     Scenario: Add a SIP line and remove it
-        When I add a SIP line
+        When I add a SIP line with infos:
+        | context |
+        | default |
         Then this line is displayed in the list
         When I remove this line
         Then this line is not displayed in the list
@@ -22,16 +24,9 @@ Feature: Line
 
     #Test X-325
     Scenario: Choose custom SIP codec
-        When I add a "sip" line
-        When I set the context to "default"
-        When I go to the "Signalling" tab
-        When I activate custom codecs
-        When I add the codec "Siren14 (G.722.1C) (Audio)"
-        When I submit
+        When I add a SIP line with infos:
+        | context | custom_codecs              |
+        | default | Siren14 (G.722.1C) (Audio) |
         Then the codec "siren14" appears after typing 'sip show peer' in asterisk
-        When I search for this line
-        When I edit this line
-        When I go to the "Signalling" tab
-        When I deactivate custom codecs
-        When I submit
+        When I disable custom codecs for this line
         Then the codec "siren14" does not appear after typing 'sip show peer' in asterisk
