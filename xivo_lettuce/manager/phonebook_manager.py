@@ -1,9 +1,11 @@
+# -*- coding: UTF-8 -*-
 
-from lettuce import step, world
+from lettuce import world
 
-from xivo_lettuce.common import remove_element_if_exist, open_url, \
-    go_to_tab, find_line
 from xivo_lettuce import form
+from xivo_lettuce.common import remove_element_if_exist, open_url, \
+    go_to_tab
+
 
 def phonebook_search(term):
     open_url('phonebook')
@@ -37,4 +39,14 @@ def import_csv_file(path):
     open_url('phonebook', 'import')
     element = world.browser.find_element_by_id("it-import")
     element.send_keys(path)
+    form.submit.submit_form()
+
+
+# phonebook settings
+def set_accessibility_to_any_host():
+    open_url('phonebook_settings')
+    multilist = form.PhonebookSettingsMultilist.from_id('accesslist')
+    multilist.remove_all()
+    multilist.add('0.0.0.0/1')
+    multilist.add('128.0.0.0/1')
     form.submit.submit_form()
