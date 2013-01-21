@@ -33,7 +33,7 @@ def unlog_agent(agent_number, extension):
 
 
 def unlog_all_agents():
-    sysutils.send_command(['xivo-agentctl', '-c', 'logoff_all'])
+    sysutils.send_command(['xivo-agentctl', '-c', 'logoff all'])
 
 
 def _get_line_from_agent(agent_number):
