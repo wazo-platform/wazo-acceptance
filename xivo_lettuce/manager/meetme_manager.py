@@ -1,30 +1,22 @@
 # -*- coding: utf-8 -*-
 
 from lettuce.registry import world
+from xivo_lettuce import form
+from xivo_lettuce.common import open_url
+from xivo_lettuce.manager_ws import meetme_manager_ws
 
+def create_meetme(meetme):
+    meetme_manager_ws.delete_meetme_with_confno(meetme['number'])
+    open_url('meetme', 'add')
 
-def type_name(name):
-    world.browser.find_element_by_id('it-meetmefeatures-name', 'Meetme form not loaded')
-    input_name = world.browser.find_element_by_id('it-meetmefeatures-name')
-    input_name.clear()
-    input_name.send_keys(name)
+    form.input.set_text_field_with_id('it-meetmefeatures-name', meetme['name'])
+    form.input.set_text_field_with_id('it-meetmefeatures-confno', meetme['number'])
 
+    if 'context' in meetme:
+        form.select.set_select_field_with_id('it-meetmefeatures-maxusers', meetme['context'])
 
-def type_confno(confno):
-    world.browser.find_element_by_id('it-meetmefeatures-confno', 'Meetme form not loaded')
-    input_confno = world.browser.find_element_by_id('it-meetmefeatures-confno')
-    input_confno.clear()
-    input_confno.send_keys(confno)
+    if 'max users' in meetme:
+        form.input.set_text_field_with_id('it-meetmefeatures-maxusers', meetme['max users'])
 
+    form.submit.submit_form()
 
-def type_context(context):
-    world.browser.find_element_by_id('it-meetmefeatures-context', 'Meetme form not loaded')
-    language_option = world.browser.find_element_by_xpath('//select[@id="it-meetmefeatures-context"]//option[@value="%s"]' % context)
-    language_option.click()
-
-
-def type_maxusers(maxusers):
-    world.browser.find_element_by_id('it-meetmefeatures-maxusers', 'Meetme form not loaded')
-    input_maxusers = world.browser.find_element_by_id('it-meetmefeatures-maxusers')
-    input_maxusers.clear()
-    input_maxusers.send_keys(maxusers)
