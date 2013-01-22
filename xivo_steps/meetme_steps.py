@@ -18,12 +18,22 @@ def when_i_add_the_following_conference_rooms(step):
         meetme_manager.create_meetme(meetme)
 
 
-@step(u'Then the following conference rooms appear in the conferemce room xlet:')
+@step(u'Then the following conference rooms appear in the conference room xlet:')
 def then_the_following_conference_rooms_appear_in_the_list(step):
     for meetme in step.hashes:
-        assert_conference_room_appears_in_xlet(meetme['number'])
-
+        assert_conference_room_1_has_number_2_in_xlet(meetme['name'], meetme['number'])
+        if 'pin code' in meetme:
+            assert_conference_room_1_has_pin_code_2_in_xlet(meetme['name'], meetme['pin code'])
 
 @xivoclient
-def assert_conference_room_appears_in_xlet(confnumber):
-    assert world.xc_response == 'OK'
+def assert_conference_room_1_has_number_2_in_xlet(confname, confnumber):
+    assert world.xc_response == "OK"
+
+@xivoclient
+def assert_conference_room_1_has_pin_code_2_in_xlet(confname, pincode):
+    assert world.xc_response == "OK"
+
+@step(u'When I update the following conference rooms:')
+def when_i_update_the_following_conference_rooms(step):
+    for meetme in step.hashes:
+        meetme_manager.update_meetme(meetme)
