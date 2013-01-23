@@ -34,6 +34,13 @@ def given_phone_is_accessible_by_any_hosts(step):
     phonebook_manager.set_accessibility_to_any_host()
 
 
+@step(u'Given there are entries in the phonebook:')
+def given_there_are_entries_in_the_phonebook(step):
+    for entry in step.hashes:
+        phonebook_manager.remove_entry_if_exists(entry)
+        phonebook_manager.create_entry(entry)
+
+
 @step(u'When I add the following entries to the phonebook:')
 def when_i_add_the_following_entries_to_the_phonebook(step):
     for entry in step.hashes:
