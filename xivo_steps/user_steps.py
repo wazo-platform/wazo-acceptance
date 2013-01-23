@@ -163,7 +163,21 @@ def given_there_are_users_with_infos(step):
 
     Scenario: Create Users
         Given there are users with infos:
-        | firstname | lastname | number | context | cti_profile | cti_login | cti_passwd | agent_number | language | voicemail_name | voicemail_number |
+        | firstname | lastname | number | context | ... |
+
+    Columns are:
+        firstname
+        lastname
+        number
+        context
+        cti_profile
+        cti_login
+        cti_passwd
+        agent_number
+        language
+        voicemail_name
+        voicemail_number
+        mobile_number
     """
     for user_data in step.hashes:
         user_ws_data = {}
@@ -189,6 +203,9 @@ def given_there_are_users_with_infos(step):
             user_ws_data['client_profile'] = user_data['cti_profile']
             user_ws_data['client_username'] = user_data['cti_login']
             user_ws_data['client_password'] = user_data['cti_passwd']
+
+        if user_data.get('mobile_number'):
+            user_ws_data['mobile_number'] = user_data['mobile_number']
 
         user_id = user_manager_ws.add_user(user_ws_data)
 

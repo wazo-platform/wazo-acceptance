@@ -51,6 +51,9 @@ def add_user(data_dict):
         user.voicemail.name = data_dict['voicemail_name']
         user.voicemail.number = data_dict['voicemail_number']
 
+    if 'mobile_number' in data_dict:
+        user.mobile_number = data_dict['mobile_number']
+
     ret = world.ws.users.add(user)
     if not ret:
         return False
