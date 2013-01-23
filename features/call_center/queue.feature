@@ -27,3 +27,14 @@ Feature: Queues
             | queue1 | Queue 1      | 3101   | default | 24100@default |
         Then the agent "24100" is not logged in
         Then the agent "24100" is not a member of the queue "queue1" in asterisk
+
+    Scenario: Add a logged agent to a queue
+        Given I have the following agents with a user:
+            | firstname | lastname | number | context |
+            | John      | Doe      | 24101  | default |
+        When I log agent "24101"
+        Then the agent "24101" is logged in
+        When I create the following queues:
+            | name   | display name | number | context | agents        |
+            | queue2 | Queue 2      | 3102   | default | 24101@default |
+        Then the agent "24101" is a member of the queue "queue2" in asterisk

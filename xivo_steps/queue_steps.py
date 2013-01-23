@@ -274,6 +274,12 @@ def when_i_create_the_following_queues(step):
         queue_manager.add_or_replace_queue(queue)
 
 
+@step(u'Then the agent "([^"]*)" is a member of the queue "([^"]*)" in asterisk')
+def then_the_agent_group1_is_a_member_of_the_queue_group2_in_asterisk(step, agent_number, queue_name):
+    agent_numbers = queue_manager.agent_numbers_from_asterisk(queue_name)
+    assert int(agent_number) in agent_numbers
+
+
 @step(u'Then the agent "([^"]*)" is not a member of the queue "([^"]*)" in asterisk')
 def then_the_agent_group1_is_a_member_of_the_queue_group2_in_asterisk(step, agent_number, queue_name):
     agent_numbers = queue_manager.agent_numbers_from_asterisk(queue_name)
