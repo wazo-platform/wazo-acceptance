@@ -56,6 +56,7 @@ from sheet_steps import *
 from skillrules_steps import *
 from statcenter_steps import *
 from supervisor_steps import *
+from switchboard_steps import *
 from trunk_custom_steps import *
 from trunk_iax_steps import *
 from trunk_sip_steps import *
