@@ -6,7 +6,9 @@ Feature: Stat
         Given there is no "LEAVEEMPTY" entry in queue "q10"
         Given there is a user "User" "010" with extension "1010@statscenter"
         Given there is a agent "Agent" "010" with extension "010@statscenter"
-        Given there is a queue "q10" leaveempty with extension "5010@statscenter" with agent "010"
+        Given there are queues wth infos:
+            | name | number | context     | leavewhenempty     | agents_number |
+            | q10  | 5010   | statscenter | unavailable,paused | 010           |
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "010" on extension "1010@statscenter"
         Given I wait 5 seconds for the calls processing

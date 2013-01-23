@@ -2,7 +2,9 @@ Feature: WEBI Agent Stats
 
     Scenario: Generate stats for answered calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
-        Given there is a queue "q01" with extension "5001@statscenter"
+        Given there are queues with infos:
+           | name | number | context     |
+           | q01  | 5001   | statscenter |
         Given there is a agent "Agent" "1" with extension "1@statscenter"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01" and agent "1"
         Given I have the following queue_log entries:
@@ -29,7 +31,9 @@ Feature: WEBI Agent Stats
 
     Scenario: Generate stats for total conversation time
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is a queue "q02" with extension "5002@statscenter"
+        Given there are queues with infos:
+           | name | number | context     |
+           | q02  | 5002   | statscenter |
         Given there is a agent "Agent" "2" with extension "2@statscenter"
         Given there is a statistic configuration "test_talktime" from "8:00" to "12:00" with queue "q02" and agent "2"
         Given I have the following queue_log entries:
@@ -232,7 +236,9 @@ Feature: WEBI Agent Stats
 
     Scenario: Generate stats for total wrapup time
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is a queue "q11" with extension "5011@statscenter"
+        Given there are queues with infos:
+           | name | number | context     |
+           | q11  | 5011   | statscenter |
         Given there is a agent "Agent" "11" with extension "11@statscenter"
         Given there is a statistic configuration "test_wrapup_time" from "8:00" to "12:00" with queue "q11" and agent "11"
         Given I have the following queue_log entries:

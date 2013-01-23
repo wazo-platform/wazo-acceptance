@@ -49,6 +49,13 @@ def given_there_is_a_queue_joinempty_with_extension(step, name, extension):
     queue_manager_ws.add_queue(data)
 
 
+@step(u'Given there is a schedule named "([^"]+)" with the following timetable:$')
+def given_there_is_a_schedule_named_1_with_the_following_info(step):
+    for schedule in step.hashes:
+        name = schedule['name']
+        schedule_manager_ws.delete_schedules_with_name(name)
+        schedule_manager_ws.add_schedule(name, schedule)
+
 @step(u'Given there is a queue "([^"]+)" closed with extension "([^"]+)"$')
 def given_there_is_a_queue_closed_with_extension_with_agent(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
@@ -172,6 +179,10 @@ def given_there_are_queues_with_infos(step):
                 agent_id = agent_manager_ws.find_agent_id_with_number(agent_number.strip())
                 agent_ids.append(agent_id)
             queue_ws_data['agents'] = agent_ids
+
+        if queue_data.get('schedule_name'):
+            schedule_id = schedule_manager_ws.find_schedule_id_with_name(queue_data['schedule_name'])
+            queue_wd_data['schedule_id'] = schedule_id
 
         remove_queues_with_name_or_number_if_exist(queue_data['name'], queue_data['number'])
         queue_manager_ws.add_queue(queue_ws_data)

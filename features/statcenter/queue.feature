@@ -3,7 +3,9 @@ Feature: WEBI Queue Stats
 
     Scenario: Generate stats for received/abandoned calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
-        Given there is a queue "q01" with extension "5001@statscenter"
+        Given there are queues with infos:
+            | name | number | context     |
+            | q01  | 5001   | statscenter |
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
         Given I have the following queue_log entries:
           | time                       | callid     | queuename | agent | event      | data1 | data2 | data3 | data4 | data5 |
@@ -31,7 +33,9 @@ Feature: WEBI Queue Stats
 
     Scenario: Generate stats for received/answered calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
-        Given there is a queue "q01" with extension "5001@statscenter"
+        Given there are queues with infos:
+            | name | number | context     |
+            | q01  | 5001   | statscenter |
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
         Given I have the following queue_log entries:
           | time                       | callid     | queuename | agent     | event          | data1 | data2 | data3 | data4 | data5 |
@@ -65,7 +69,9 @@ Feature: WEBI Queue Stats
 
     Scenario: Generate stats for received/blocking calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
-        Given there is a queue "q01" with extension "5001@statscenter"
+        Given there are queues with infos:
+            | name | number | context     |
+            | q01  | 5001   | statscenter |
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
         Given I have the following queue_log entries:
           | time                       | callid     | queuename | agent | event      | data1 | data2 | data3 | data4 | data5 |
@@ -87,7 +93,9 @@ Feature: WEBI Queue Stats
 
     Scenario: Generate stats for closed queue
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
-        Given there is a queue "q01" with extension "5001@statscenter"
+        Given there are queues with infos:
+            | name | number | context     |
+            | q01  | 5001   | statscenter |
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
         Given I have the following queue_log entries:
           | time                       | callid     | queuename | agent | event   | data1 | data2 | data3 | data4 | data5 |
@@ -109,7 +117,9 @@ Feature: WEBI Queue Stats
 
     Scenario: Generate stats for saturated calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
-        Given there is a queue "q01" with extension "5001@statscenter"
+        Given there are queues with infos:
+            | name | number | context     |
+            | q01  | 5001   | statscenter |
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
         Given I have the following queue_log entries:
           | time                       | callid      | queuename | agent | event           | data1 | data2 | data3 | data4 | data5 |

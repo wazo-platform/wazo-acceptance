@@ -6,7 +6,9 @@ Feature: Stat
         Given there is no "EXITWITHTIMEOUT" entry in queue "q12"
         Given there is a user "User" "012" with extension "1012@statscenter"
         Given there is a agent "Agent" "012" with extension "012@statscenter"
-        Given there is a queue "q12" with ringing time of "30s" with extension "5012@statscenter" with agent "012"
+        Given there are queues with infos:
+            | name | number | context     | ringing_time | agents_number |
+            | q12  | 5012   | statscenter | 30s          | 012           |
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "012" on extension "1012@statscenter"
         Given I wait 5 seconds for the calls processing
