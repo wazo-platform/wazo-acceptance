@@ -31,12 +31,11 @@ def phonebook_search(term):
 def create_entry(entry):
     open_url('phonebook', 'add')
 
-    display_name = "%(first name)s %(last name)s" % entry
-    entry.setdefault('display name', display_name)
+    display_name = _get_display_name_from_entry(entry)
 
     form.input.set_text_field_with_label("First Name", entry['first name'])
     form.input.set_text_field_with_label("Last Name", entry['last name'])
-    form.input.set_text_field_with_label("Display name", entry['display name'])
+    form.input.set_text_field_with_label("Display name", display_name)
 
     go_to_tab("Office")
     form.input.set_text_field_with_label('Phone', entry.get('phone', ''))
@@ -44,7 +43,20 @@ def create_entry(entry):
     form.submit.submit_form()
 
 
-def remove_entry_if_exists(search):
+def remove_entry_if_exists(entry):
+    display_name = _get_display_name_from_entry(entry)
+    remove_entry_matching(display_name)
+
+
+def _get_display_name_from_entry(entry):
+    if 'display name' in entry:
+        display_name = entry['display name']
+    else:
+        display_name = "%(first name)s %(last name)s" % entry
+    return display_name
+
+
+def remove_entry_matching(search):
     phonebook_search(search)
     remove_element_if_exist("phonebook", search)
     phonebook_search('')

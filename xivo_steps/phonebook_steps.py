@@ -25,8 +25,8 @@ from xivo_lettuce.manager import phonebook_manager
 
 
 @step(u'Given "([^"]*)" is not in the phonebook')
-def given_entry_is_not_in_the_phonebook(step, entry):
-    phonebook_manager.remove_entry_if_exists(entry)
+def given_entry_is_not_in_the_phonebook(step, search):
+    phonebook_manager.remove_entry_matching(search)
 
 
 @step(u'Given the phonebook is accessible by any hosts')
