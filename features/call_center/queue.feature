@@ -18,35 +18,34 @@ Feature: Queues
         When I edit the queue "green" and set ring strategy at "Linear" with errors
         Then I see errors
 
-    Scenario: Add an unlogged agent to a queue
+    Scenario: Add an unlogged agent to a new queue
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | Bob       | Smith    | 24100  | default |
+            | Bob       | Smith    | 24101  | default |
         When I create the following queues:
             | name   | display name | number | context | agents        |
-            | queue1 | Queue 1      | 3101   | default | 24100@default |
-        Then the agent "24100" is not logged in
-        Then the agent "24100" is not a member of the queue "queue1" in asterisk
+            | queue1 | Queue 1      | 3101   | default | 24101@default |
+        Then the agent "24101" is not a member of the queue "queue1" in asterisk
 
-    Scenario: Add a logged agent to a queue
+    Scenario: Add a logged agent to a new queue
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | John      | Doe      | 24101  | default |
-        When I log agent "24101"
-        Then the agent "24101" is logged in
+            | John      | Doe      | 24102  | default |
+        When I log agent "24102"
+        Then the agent "24102" is not a member of the queue "queue2" in asterisk
         When I create the following queues:
             | name   | display name | number | context | agents        |
-            | queue2 | Queue 2      | 3102   | default | 24101@default |
-        Then the agent "24101" is a member of the queue "queue2" in asterisk
+            | queue2 | Queue 2      | 3102   | default | 24102@default |
+        Then the agent "24102" is a member of the queue "queue2" in asterisk
 
-    Scenario: Delete a queue with unlogged agents
+    Scenario: Delete a queue with logged agents
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | Wayne     | Brady    | 24102  | default |
+            | Wayne     | Brady    | 24103  | default |
         Given there are queues with infos:
             | name   | display name | number | context | agents_number |
-            | queue3 | Queue 3      | 3103   | default | 24102         |
-        When I log agent "24102"
+            | queue3 | Queue 3      | 3103   | default | 24103         |
+        When I log agent "24103"
+        Then the agent "24103" is a member of the queue "queue3" in asterisk
         When I delete the queue with number "3103"
-        Then the agent "24102" is logged in
         Then the queue "queue3" does not exist in asterisk

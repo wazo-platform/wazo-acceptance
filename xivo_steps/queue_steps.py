@@ -279,6 +279,7 @@ def when_i_create_the_following_queues(step):
 def when_i_delete_the_queue_with_number_group1(step, queue_number):
     common.open_url('queue', 'list')
     common.remove_line(queue_number)
+    time.sleep(3)
 
 
 @step(u'Then the agent "([^"]*)" is a member of the queue "([^"]*)" in asterisk')
