@@ -43,6 +43,11 @@ class ListPane(object):
         selector = 'ul.selected li[title="%s"] a' % label
         self.find_and_click(selector)
 
+    def remove_contains(self, label):
+        label = label.replace('"', '\"')
+        selector = 'ul.selected li[title*="%s"] a' % label
+        self.find_and_click(selector)
+
     def add_all(self):
         selector = 'div.available a.add-all'
         self.find_and_click(selector)

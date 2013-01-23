@@ -268,6 +268,14 @@ def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
     time.sleep(10)
 
 
+@step(u'When I remove the agent with extension "([^"]*)" from the queue "([^"]*)"')
+def when_i_remove_the_agent_with_extension_group1_from_the_queue_group2(step, extension, queue_name):
+    queue_id = find_queue_id_with_name(queue_name)
+    common.open_url('queue', 'edit', {'id': queue_id})
+    queue_manager.remove_agents_from_queue([extension])
+    form.submit.submit_form()
+
+
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)" with errors$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(step, queue_name, ring_strategy):
     queue_id = find_queue_id_with_name(queue_name)

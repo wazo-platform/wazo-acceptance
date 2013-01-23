@@ -57,6 +57,12 @@ def add_agents_to_queue(agents):
         pane.add_contains(agent)
 
 
+def remove_agents_from_queue(agents):
+    go_to_tab('Members')
+    pane = form.list_pane.ListPane.from_id('agentlist')
+    for agent in agents:
+        pane.remove_contains(agent)
+
 def agent_numbers_from_asterisk(queue_name):
     output = _asterisk_queue_show(queue_name)
     agent_numbers = _parse_members(output)
