@@ -69,3 +69,15 @@ Feature: Queues
             | queue5 | Queue 5      | 3105   | default | 24105         |
         When I remove the agent with extension "24105@default" from the queue "queue5"
         Then the agent "24105" is not a member of the queue "queue5" in asterisk
+
+    Scenario: Add a logged agent to an existing queue
+        Given I have the following agents with a user:
+            | firstname | lastname | number | context |
+            | Cookie    | Monster  | 24107  | default |
+        Given there are queues with infos:
+            | name   | display name | number | context |
+            | queue7 | Queue 7      | 3107   | default |
+        When I log agent "24107"
+        Then the agent "24107" is not a member of the queue "queue7" in asterisk
+        When I add the agent with extension "24107@default" to the queue "queue7"
+        Then the agent "24107" is a member of the queue "queue7" in asterisk
