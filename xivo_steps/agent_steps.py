@@ -28,6 +28,30 @@ from lettuce.registry import world
 from selenium.webdriver.common.action_chains import ActionChains
 
 
+@step(u'Given I have the following agents with a user:')
+def given_i_have_the_following_agents_with_a_user(step):
+    for agent in step.hashes:
+        create_agent_with_user(agent)
+
+def create_agent_with_user(agent):
+        user_data = {
+            'firstname': agent['firstname'],
+            'lastname': agent['lastname'],
+            'line_number': agent['number'],
+            'line_context': agent['context'],
+        }
+        user_id = user_manager_ws.add_or_replace_user(user_data)
+
+        agent_data = {
+            'firstname': agent['firstname'],
+            'lastname': agent['lastname'],
+            'number': agent['number'],
+            'context': agent['context'],
+            'users': [user_id]
+        }
+        agent_id = agent_manager_ws.add_or_replace_agent(agent_data)
+
+
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
 def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
@@ -167,3 +191,15 @@ def then_the_agent_password_is(step, number, password):
     current_password = agent_manager_ws.find_agent_password_with_number(number)
 
     assert_that(current_password, equal_to(password))
+
+
+@step(u'Then the agent "([^"]*)" is not logged in')
+def then_the_agent_group1_is_not_logged_in(step, agent_number):
+    logged_in = agent_status_manager.is_agent_logged_in(agent_number)
+    assert not logged_in
+
+
+@step(u'Then the agent "([^"]*)" is logged in')
+def then_the_agent_group1_is_logged_in(step, agent_number):
+    logged_in = agent_status_manager.is_agent_logged_in(agent_number)
+    assert logged_in

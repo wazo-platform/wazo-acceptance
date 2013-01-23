@@ -47,6 +47,15 @@ def unlog_agent(agent_number, extension):
     time.sleep(5)
 
 
+def is_agent_logged_in(agent_number):
+    command = ['xivo-agentctl', '-c', '"status %s"' % agent_number]
+    output = sysutils.output_command(command)
+
+    log_line = output.split("\n")[1]
+    log_status = log_line.split(": ")[1].strip()
+
+    return log_status == "True"
+
 def unlog_all_agents():
     sysutils.send_command(['xivo-agentctl', '-c', '"logoff all"'])
 
