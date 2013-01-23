@@ -49,3 +49,13 @@ Feature: Queues
         Then the agent "24103" is a member of the queue "queue3" in asterisk
         When I delete the queue with number "3103"
         Then the queue "queue3" does not exist in asterisk
+
+    Scenario: Add an unlogged agent to an existing queue
+        Given I have the following agents with a user:
+            | firstname | lastname | number | context |
+            | Brad      | Pitt     | 24104  | default |
+        Given there are queues with infos:
+            | name   | display name | number | context |
+            | queue4 | Queue 4      | 3104   | default |
+        When I add the agent with extension "24104@default" to the queue "queue4"
+        Then the agent "24104" is not a member of the queue "queue4" in asterisk

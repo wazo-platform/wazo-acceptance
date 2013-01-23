@@ -44,15 +44,16 @@ def add_or_replace_queue(queue):
     type_queue_name_display_name_number_context(queue['name'], queue['display name'],
                                                 queue['number'], queue['context'])
     if 'agents' in queue:
-        _add_agents_to_queue(queue['agents'])
+        agentlist = queue['agents'].split(",")
+        add_agents_to_queue(agentlist)
 
     form.submit.submit_form()
 
 
-def _add_agents_to_queue(agents):
+def add_agents_to_queue(agents):
     go_to_tab('Members')
     pane = form.list_pane.ListPane.from_id('agentlist')
-    for agent in agents.split(","):
+    for agent in agents:
         pane.add_contains(agent)
 
 

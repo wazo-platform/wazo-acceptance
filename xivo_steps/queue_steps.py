@@ -251,6 +251,13 @@ def when_i_add_agent_1_to_2(step, agent_number, queue_name):
     world.ws.queues.edit(queue)
     time.sleep(5)
 
+@step(u'When I add the agent with extension "([^"]*)" to the queue "([^"]*)"')
+def when_i_add_the_agent_with_extension_group1_to_the_queue_group2(step, extension, queue_name):
+    queue_id = find_queue_id_with_name(queue_name)
+    common.open_url('queue', 'edit', {'id': queue_id})
+    queue_manager.add_agents_to_queue([extension])
+    form.submit.submit_form()
+
 
 @step(u'When I remove agent "([^"]*)" from "([^"]*)"')
 def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
