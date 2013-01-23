@@ -39,16 +39,19 @@ def type_queue_ring_strategy(ring_strategy):
 
 
 def add_or_replace_queue(queue):
-    open_url('queue', 'add')
     remove_queues_with_name_or_number_if_exist(queue['name'], queue['number'])
+    open_url('queue', 'add')
+    fill_form(queue)
+
+
+def fill_form(queue):
     type_queue_name_display_name_number_context(queue['name'], queue['display name'],
                                                 queue['number'], queue['context'])
+    if 'ring strategy' in queue:
+        type_queue_ring_strategy(queue['ring strategy'])
     if 'agents' in queue:
         agentlist = queue['agents'].split(",")
         add_agents_to_queue(agentlist)
-
-    form.submit.submit_form()
-
 
 def add_agents_to_queue(agents):
     go_to_tab('Members')

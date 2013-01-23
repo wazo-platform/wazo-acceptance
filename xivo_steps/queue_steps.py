@@ -202,30 +202,18 @@ def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(st
     queue_manager_ws.add_or_replace_queue(queue_data)
 
 
-@step(u'When I add the queue "([^"]*)" with display name "([^"]*)" with extension "([^"]*)" in "([^"]*)"$')
-def when_i_add_the_queue_1_with_display_name_2_with_extension_3_in_4(step, name, display_name, extension, context):
-    remove_queues_with_name_or_number_if_exist(name, extension)
-    common.open_url('queue', 'add')
-    type_queue_name_display_name_number_context(name, display_name, extension, context)
-    form.submit.submit_form()
+@step(u'When I create the following queues:')
+def when_i_create_the_following_queues(step):
+    for queue in step.hashes:
+        queue_manager.add_or_replace_queue(queue)
+        form.submit.submit_form()
 
 
-@step(u'When I add the queue "([^"]*)" with display name "([^"]*)" with extension "([^"]*)" in "([^"]*)" with errors$')
-def when_i_add_the_queue_1_with_display_name_2_with_extension_3_in_4_with_errors(step, name, display_name, extension, context):
-    remove_queues_with_name_or_number_if_exist(name, extension)
-    common.open_url('queue', 'add')
-    type_queue_name_display_name_number_context(name, display_name, extension, context)
-    form.submit.submit_form_with_errors()
-
-
-@step(u'When I add the queue "([^"]*)" with extension "([^"]*)" with ring strategy at "([^"]*)"$')
-def when_i_add_the_queue_group1_with_extension_group2_with_ring_strategy_at_group3(step, queue_name, extension, ring_strategy):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    remove_queues_with_name_or_number_if_exist(queue_name, number)
-    common.open_url('queue', 'add')
-    type_queue_name_display_name_number_context(queue_name, queue_name, number, context)
-    type_queue_ring_strategy(ring_strategy)
-    form.submit.submit_form()
+@step(u'When I create the following invalid queues:')
+def when_i_create_the_following_invalid_queues(step):
+    for queue in step.hashes:
+        queue_manager.add_or_replace_queue(queue)
+        form.submit.submit_form_with_errors()
 
 
 @step(u'When I edit the queue "([^"]*)"$')
@@ -243,6 +231,14 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_nam
     form.submit.submit_form()
 
 
+@step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)" with errors$')
+def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(step, queue_name, ring_strategy):
+    queue_id = find_queue_id_with_name(queue_name)
+    common.open_url('queue', 'edit', {'id': queue_id})
+    type_queue_ring_strategy(ring_strategy)
+    form.submit.submit_form_with_errors()
+
+
 @step(u'When I add agent "([^"]*)" to "([^"]*)"')
 def when_i_add_agent_1_to_2(step, agent_number, queue_name):
     queue = queue_manager_ws.get_queue_with_name(queue_name)
@@ -250,6 +246,7 @@ def when_i_add_agent_1_to_2(step, agent_number, queue_name):
     queue.agents.append(agent_id)
     world.ws.queues.edit(queue)
     time.sleep(5)
+
 
 @step(u'When I add the agent with extension "([^"]*)" to the queue "([^"]*)"')
 def when_i_add_the_agent_with_extension_group1_to_the_queue_group2(step, extension, queue_name):
@@ -274,20 +271,6 @@ def when_i_remove_the_agent_with_extension_group1_from_the_queue_group2(step, ex
     common.open_url('queue', 'edit', {'id': queue_id})
     queue_manager.remove_agents_from_queue([extension])
     form.submit.submit_form()
-
-
-@step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)" with errors$')
-def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(step, queue_name, ring_strategy):
-    queue_id = find_queue_id_with_name(queue_name)
-    common.open_url('queue', 'edit', {'id': queue_id})
-    type_queue_ring_strategy(ring_strategy)
-    form.submit.submit_form_with_errors()
-
-
-@step(u'When I create the following queues:')
-def when_i_create_the_following_queues(step):
-    for queue in step.hashes:
-        queue_manager.add_or_replace_queue(queue)
 
 
 @step(u'When I delete the queue with number "([^"]*)"')
