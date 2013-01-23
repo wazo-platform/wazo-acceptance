@@ -172,6 +172,15 @@ def given_there_are_queues_with_infos(step):
         if queue_data.get('leavewhenempty'):
             queue_ws_data['leavewhenempty'] = queue_data['leavewhenempty']
 
+        if queue_data.get('users_number'):
+            users = []
+            context = queue_data['context']
+            user_number_list = queue_data['users_number'].split(',')
+            for user_number in user_number_list:
+                user_ids = user_manager_ws.search_user_ids_with_number(user_number, context)
+                users.extend(user_ids)
+            queue_ws_data['users'] = users
+
         if queue_data.get('agents_number'):
             agent_ids = []
             agent_number_list = queue_data['agents_number'].split(',')

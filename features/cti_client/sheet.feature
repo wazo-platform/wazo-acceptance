@@ -10,7 +10,9 @@ Feature: Sheet
 
         Given there is a user "Cedric" "Abunar" with an agent "1153@default" and CTI profile "Client"
 
-        Given there is a queue "frere" with extension "3009@default" with agent "1153"
+        Given there are queues with infos:
+            | name  | number | context | agents_number |
+            | frere | 3009   | default | 1153          |
         Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Laurent Demange" number "1234"
 
         When I start the XiVO Client
@@ -66,7 +68,9 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Link" event
 
         Given there is a user "Alice" "Gopher" with extension "1007@default" and CTI profile "Client"
-        Given there is a queue "frere" with extension "3001@default" with user "1007"
+        Given there are queues with infos:
+            | name  | number | context | users_number |
+            | frere | 3001   | default | 1007         |
         Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
 
         When I start the XiVO Client
