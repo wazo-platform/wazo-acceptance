@@ -53,6 +53,7 @@ from provd_plugins_steps import *
 from provd_proxy_steps import *
 from queue_steps import *
 from sheet_steps import *
+from schedule_steps import *
 from skillrules_steps import *
 from statcenter_steps import *
 from supervisor_steps import *
