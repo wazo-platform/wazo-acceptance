@@ -38,3 +38,15 @@ Feature: Queues
             | name   | display name | number | context | agents        |
             | queue2 | Queue 2      | 3102   | default | 24101@default |
         Then the agent "24101" is a member of the queue "queue2" in asterisk
+
+    Scenario: Delete a queue with unlogged agents
+        Given I have the following agents with a user:
+            | firstname | lastname | number | context |
+            | Wayne     | Brady    | 24102  | default |
+        Given there are queues with infos:
+            | name   | display name | number | context | agents_number |
+            | queue3 | Queue 3      | 3103   | default | 24102         |
+        When I log agent "24102"
+        When I delete the queue with number "3103"
+        Then the agent "24102" is logged in
+        Then the queue "queue3" does not exist in asterisk

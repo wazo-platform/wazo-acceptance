@@ -92,3 +92,8 @@ def _parse_member_line(member_line):
     if membertype != "Agent":
         raise Exception("membertype %s different from Agent" % membertype)
     return int(number)
+
+
+def does_queue_exist_in_asterisk(queue_name):
+    output = _asterisk_queue_show(queue_name)
+    return not output.startswith("No such queue")

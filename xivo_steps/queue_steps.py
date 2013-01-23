@@ -20,6 +20,7 @@ import time
 from lettuce import step, world
 from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
     schedule_manager_ws, user_manager_ws
+from xivo_lettuce.manager import queue_manager
 from xivo_lettuce import common, func
 from xivo_lettuce import form
 from xivo_lettuce.manager.queue_manager import type_queue_name_display_name_number_context, \
@@ -274,6 +275,12 @@ def when_i_create_the_following_queues(step):
         queue_manager.add_or_replace_queue(queue)
 
 
+@step(u'When I delete the queue with number "([^"]*)"')
+def when_i_delete_the_queue_with_number_group1(step, queue_number):
+    common.open_url('queue', 'list')
+    common.remove_line(queue_number)
+
+
 @step(u'Then the agent "([^"]*)" is a member of the queue "([^"]*)" in asterisk')
 def then_the_agent_group1_is_a_member_of_the_queue_group2_in_asterisk(step, agent_number, queue_name):
     agent_numbers = queue_manager.agent_numbers_from_asterisk(queue_name)
@@ -286,3 +293,6 @@ def then_the_agent_group1_is_a_member_of_the_queue_group2_in_asterisk(step, agen
     assert int(agent_number) not in agent_numbers
 
 
+@step(u'Then the queue "([^"]*)" does not exist in asterisk')
+def then_the_queue_group1_does_not_exist_in_asterisk(step, queue_name):
+    assert not queue_manager.does_queue_exist_in_asterisk(queue_name)
