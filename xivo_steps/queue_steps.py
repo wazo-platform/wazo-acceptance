@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
+
 from lettuce import step, world
 from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
     schedule_manager_ws, user_manager_ws
@@ -265,3 +266,17 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(ste
     common.open_url('queue', 'edit', {'id': queue_id})
     type_queue_ring_strategy(ring_strategy)
     form.submit.submit_form_with_errors()
+
+
+@step(u'When I create the following queues:')
+def when_i_create_the_following_queues(step):
+    for queue in step.hashes:
+        queue_manager.add_or_replace_queue(queue)
+
+
+@step(u'Then the agent "([^"]*)" is not a member of the queue "([^"]*)" in asterisk')
+def then_the_agent_group1_is_a_member_of_the_queue_group2_in_asterisk(step, agent_number, queue_name):
+    agent_numbers = queue_manager.agent_numbers_from_asterisk(queue_name)
+    assert int(agent_number) not in agent_numbers
+
+

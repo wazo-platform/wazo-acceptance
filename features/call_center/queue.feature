@@ -17,3 +17,13 @@ Feature: Queues
         Then I see no errors
         When I edit the queue "green" and set ring strategy at "Linear" with errors
         Then I see errors
+
+    Scenario: Add an unlogged agent to a queue
+        Given I have the following agents with a user:
+            | firstname | lastname | number | context |
+            | Bob       | Smith    | 24100  | default |
+        When I create the following queues:
+            | name   | display name | number | context | agents        |
+            | queue1 | Queue 1      | 3101   | default | 24100@default |
+        Then the agent "24100" is not logged in
+        Then the agent "24100" is not a member of the queue "queue1" in asterisk
