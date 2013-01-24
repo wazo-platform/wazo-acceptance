@@ -44,6 +44,29 @@ Feature: Queues
             | queue2 | Queue 2      | 3102   | default | 24102@default |
         Then the agent "24102" is a member of the queue "queue2" in asterisk
 
+    Scenario: Add a logged agent to a new queue and answer a call
+        Given I have the following agents with a user:
+            | firstname | lastname | number | context |
+            | John      | Doe      | 24102  | default |
+        When I log agent "24102"
+        When I create the following queues:
+            | name   | display name | number | context | agents        |
+            | queue2 | Queue 2      | 3102   | default | 24102@default |
+
+        Given there is an incall "3102" in context "from-extern" to the "Queue" "queue2" with caller id name "Lord Greg" number "1234"
+        Given there are no calls running
+        Given there is no "CONNECT" entry in queue "queue2"
+        Given there is no "COMPLETEAGENT" entry in queue "queue2"
+        Given there is no "ENTERQUEUE" entry in queue "queue2"
+
+        Given I wait call then I answer then I hang up after "3s"
+        When there is 1 calls to extension "3102@from-extern" on trunk "to_incall" and wait
+        When I wait 10 seconds for the calls processing
+
+        Then I should see 1 "ENTERQUEUE" event in queue "queue2" in the queue log
+        Then I should see 1 "CONNECT" event in queue "queue2" in the queue log
+        Then I should see 1 "COMPLETEAGENT" event in queue "queue2" in the queue log
+
     Scenario: Delete a queue with logged agents
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
@@ -87,6 +110,30 @@ Feature: Queues
         Then the agent "24107" is not a member of the queue "queue7" in asterisk
         When I add the agent with extension "24107@default" to the queue "queue7"
         Then the agent "24107" is a member of the queue "queue7" in asterisk
+
+    Scenario: Add a logged agent to an existing queue and answer a call
+        Given I have the following agents with a user:
+            | firstname | lastname | number | context |
+            | Cookie    | Monster  | 24107  | default |
+        Given there are queues with infos:
+            | name   | display name | number | context |
+            | queue7 | Queue 7      | 3107   | default |
+        When I log agent "24107"
+        When I add the agent with extension "24107@default" to the queue "queue7"
+
+        Given there is an incall "3107" in context "from-extern" to the "Queue" "queue7" with caller id name "Lord Greg" number "1234"
+        Given there are no calls running
+        Given there is no "CONNECT" entry in queue "queue7"
+        Given there is no "COMPLETEAGENT" entry in queue "queue7"
+        Given there is no "ENTERQUEUE" entry in queue "queue7"
+
+        Given I wait call then I answer then I hang up after "3s"
+        When there is 1 calls to extension "3107@from-extern" on trunk "to_incall" and wait
+        When I wait 10 seconds for the calls processing
+
+        Then I should see 1 "ENTERQUEUE" event in queue "queue7" in the queue log
+        Then I should see 1 "CONNECT" event in queue "queue7" in the queue log
+        Then I should see 1 "COMPLETEAGENT" event in queue "queue7" in the queue log
 
     Scenario: Remove a logged agent from an existing queue
         Given I have the following agents with a user:
