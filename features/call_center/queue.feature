@@ -96,6 +96,6 @@ Feature: Queues
             | name   | display name | number | context | agents_number |
             | queue8 | Queue 8      | 3108   | default | 24108         |
         When I log agent "24108"
-        Then the agent "24108" is a member of the queue "queue7" in asterisk
+        Then the agent "24108" is a member of the queue "queue8" in asterisk
         When I remove the agent with extension "24108@default" from the queue "queue8"
         Then the agent "24108" is not a member of the queue "queue8" in asterisk
