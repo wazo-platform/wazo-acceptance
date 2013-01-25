@@ -28,3 +28,5 @@ Feature: Switchboard
         Then I see transfer destinations:
         | display_name     | phone |
         | Felix Shrödinger |   666 |
+        When I remove the mobile number of user "Felix" "Shrödinger"
+        Then I see no transfer destinations

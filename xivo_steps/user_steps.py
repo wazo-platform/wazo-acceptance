@@ -299,6 +299,13 @@ def when_i_modify_the_mobile_number_of_user_1_2_to_3(step, firstname, lastname, 
     form.submit.submit_form()
 
 
+@step(u'When I remove the mobile number of user "([^"]*)" "([^"]*)"')
+def when_i_remove_the_mobile_number_of_user_group1_group2(step, firstname, lastname):
+    _edit_user(firstname, lastname)
+    user_manager.type_mobile_number('')
+    form.submit.submit_form()
+
+
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"$')
 def then_user_is_in_group(step, firstname, lastname, group_name):
     user_id = user_manager_ws.find_user_id_with_firstname_lastname(firstname, lastname)

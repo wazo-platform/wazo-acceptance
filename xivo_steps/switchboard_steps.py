@@ -32,6 +32,12 @@ def then_i_see_transfer_destinations(step):
         assert_directory_has_entry(entry['display_name'], entry['phone'])
 
 
+@step(u'Then I see no transfer destinations')
+@xivoclient_step
+def then_i_see_no_transfer_destinations(step):
+    assert_that(world.xc_response, equal_to('OK'))
+
+
 @xivoclient
 def assert_directory_has_entry(name, phone_number):
     assert_that(world.xc_response, equal_to('OK'))
