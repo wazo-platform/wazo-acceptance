@@ -24,3 +24,7 @@ Feature: Switchboard
         Then I see transfer destinations:
         | display_name     |      phone |
         | Felix Shrödinger | 5555555555 |
+        When I modify the mobile number of user "Felix" "Shrödinger" to "666"
+        Then I see transfer destinations:
+        | display_name     | phone |
+        | Felix Shrödinger |   666 |

@@ -292,6 +292,13 @@ def when_i_add_a_voicemail_1_to_the_user_2_3(step, voicemail_number, firstname, 
     form.submit.submit_form()
 
 
+@step(u'When I modify the mobile number of user "([^"]*)" "([^"]*)" to "([^"]*)"')
+def when_i_modify_the_mobile_number_of_user_1_2_to_3(step, firstname, lastname, mobile_number):
+    _edit_user(firstname, lastname)
+    user_manager.type_mobile_number(mobile_number)
+    form.submit.submit_form()
+
+
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"$')
 def then_user_is_in_group(step, firstname, lastname, group_name):
     user_id = user_manager_ws.find_user_id_with_firstname_lastname(firstname, lastname)
