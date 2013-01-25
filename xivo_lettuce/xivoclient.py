@@ -20,6 +20,7 @@ import subprocess
 import socket
 import json
 import time
+import errno
 from lettuce import before, after, world
 
 
@@ -27,9 +28,15 @@ def run_xivoclient():
     xc_path = os.environ['XC_PATH'] + '/'
     environment_variables = os.environ
     environment_variables['LD_LIBRARY_PATH'] = '.'
-    world.xc_process = subprocess.Popen('./xivoclient',
-                                        cwd=xc_path,
-                                        env=environment_variables)
+    try:
+        world.xc_process = subprocess.Popen('./xivoclient',
+                                            cwd=xc_path,
+                                            env=environment_variables)
+    except OSError as e:
+        if e.errno == errno.ENOENT:
+            raise Exception('XiVO Client executable not found')
+        else:
+            raise
 
     # Waiting for the listening socket to open
     time.sleep(1)

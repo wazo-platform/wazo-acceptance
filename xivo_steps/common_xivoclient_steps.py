@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
+import socket
+import errno
 from lettuce import step, world
 from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
 from xivo_lettuce.xivoclient import run_xivoclient
@@ -29,9 +31,12 @@ def i_start_the_xivo_client(step):
 
     try:
         world.xc_socket.connect('/tmp/xivoclient')
-    except:
+    except socket.error as (error_number, message):
         world.xc_process.terminate()
-        raise
+        if error_number == errno.ENOENT:
+            raise Exception('XiVO Client must be built for functional testing')
+        else:
+            raise
 
 
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"$')

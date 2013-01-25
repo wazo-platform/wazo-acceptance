@@ -71,6 +71,11 @@ def type_voicemail(voicemail_number):
     form.input.set_text_field_with_label('Voicemail', voicemail_number)
 
 
+def type_mobile_number(mobile_number):
+    common.go_to_tab('General')
+    form.input.set_text_field_with_label('Mobile phone number', mobile_number)
+
+
 def remove_line():
     common.go_to_tab('Lines')
     select_line = world.browser.find_element_by_xpath("//table[@id='list_linefeatures']/tbody/tr//input[@id='linefeatures-number']")

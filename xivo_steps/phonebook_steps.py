@@ -25,13 +25,20 @@ from xivo_lettuce.manager import phonebook_manager
 
 
 @step(u'Given "([^"]*)" is not in the phonebook')
-def given_entry_is_not_in_the_phonebook(step, entry):
-    phonebook_manager.remove_entry_if_exists(entry)
+def given_entry_is_not_in_the_phonebook(step, search):
+    phonebook_manager.remove_entry_matching(search)
 
 
 @step(u'Given the phonebook is accessible by any hosts')
 def given_phone_is_accessible_by_any_hosts(step):
     phonebook_manager.set_accessibility_to_any_host()
+
+
+@step(u'Given there are entries in the phonebook:')
+def given_there_are_entries_in_the_phonebook(step):
+    for entry in step.hashes:
+        phonebook_manager.remove_entry_if_exists(entry)
+        phonebook_manager.create_entry(entry)
 
 
 @step(u'When I add the following entries to the phonebook:')
