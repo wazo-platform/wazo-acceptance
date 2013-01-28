@@ -36,6 +36,8 @@ def create_entry(entry):
     form.input.set_text_field_with_label("First Name", entry['first name'])
     form.input.set_text_field_with_label("Last Name", entry['last name'])
     form.input.set_text_field_with_label("Display name", display_name)
+    if 'mobile' in entry:
+        form.input.set_text_field_with_label("Mobile phone", entry['mobile'])
 
     go_to_tab("Office")
     form.input.set_text_field_with_label('Phone', entry.get('phone', ''))
