@@ -21,7 +21,6 @@ from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
 from xivo_lettuce.manager_ws import context_manager_ws
 from xivo_lettuce.manager import ldap_manager
 from xivo_lettuce.manager import directory_manager
-from xivo_lettuce import form
 
 
 @step(u'When I search a transfer destination "([^"]*)"')
@@ -74,4 +73,4 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
 @step(u'Given there are entries in the ldap server:')
 def given_there_are_entries_in_the_ldap_server(step):
     for directory_entry in step.hashes:
-        ldap_manager.add_entry(directory_entry)
+        ldap_manager.add_or_replace_entry(directory_entry)

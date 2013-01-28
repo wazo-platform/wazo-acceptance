@@ -18,6 +18,14 @@
 from lettuce.registry import world
 from xivo_lettuce import common
 from xivo_lettuce import form
+import ldap
+import ldap.modlist
+
+
+LDAP_URI = 'ldap://openldap-dev.lan-quebec.avencall.com:389/'
+LDAP_LOGIN = 'cn=admin,dc=lan-quebec,dc=avencall,dc=com'
+LDAP_PASSWORD = 'superpass'
+LDAP_USER_GROUP = 'ou=people,dc=lan-quebec,dc=avencall,dc=com'
 
 
 def type_ldap_name_and_host(name, host):
@@ -46,8 +54,36 @@ def add_or_replace_ldap_filter(name, server, base_dn, username=None, password=No
     _add_ldap_filter(server, name, base_dn, username, password)
 
 
-def add_entry(directory_entry):
-    pass
+def add_or_replace_entry(directory_entry):
+    ldap_server = ldap.initialize(LDAP_URI)
+    ldap_server.simple_bind(LDAP_LOGIN, LDAP_PASSWORD)
+
+    entry_common_name = _get_entry_common_name(directory_entry)
+    if _ldap_has_entry_bound(ldap_server, entry_common_name):
+        entry_id = _get_entry_id(directory_entry)
+        delete_entry_bound(ldap_server, entry_id)
+    add_entry_bound(ldap_server, directory_entry)
+
+    ldap_server.unbind_s()
+
+
+def delete_entry_bound(ldap_server, directory_entry_id):
+    directory_entry_id_encoded = directory_entry_id.encode('utf-8')
+    ldap_server.delete_s(directory_entry_id_encoded)
+
+
+def add_entry_bound(ldap_server, directory_entry):
+    directory_entry_encoded = _encode_directory_entry(directory_entry)
+    new_entry_common_name_encoded = _get_entry_common_name(directory_entry).encode('utf-8')
+    new_entry_id_encoded = _get_entry_id(directory_entry).encode('utf-8')
+    new_entry_attributes_encoded = {
+        'objectClass': ['top', 'inetOrgPerson'],
+        'cn': new_entry_common_name_encoded,
+        'sn': directory_entry_encoded['last name'],
+        'telephoneNumber': directory_entry_encoded['phone'],
+    }
+    new_entry_content_encoded = ldap.modlist.addModlist(new_entry_attributes_encoded)
+    ldap_server.add_s(new_entry_id_encoded, new_entry_content_encoded)
 
 
 def _add_ldap_filter(server, name, base_dn, username=None, password=None):
@@ -109,3 +145,28 @@ def _type_username_and_password(username, password):
     text_input = world.browser.find_element_by_label("Password")
     text_input.clear()
     text_input.send_keys(password)
+
+
+def _get_entry_id(directory_entry):
+    entry_common_name = _get_entry_common_name(directory_entry)
+    return "cn=%s,ou=people,dc=lan-quebec,dc=avencall,dc=com" % entry_common_name
+
+
+def _get_entry_common_name(directory_entry):
+    return "%s %s" % (directory_entry['first name'], directory_entry['last name'])
+
+
+def _encode_directory_entry(directory_entry):
+    directory_entry_encoded = {}
+    for key in directory_entry:
+        directory_entry_encoded[key] = directory_entry[key].encode('utf-8')
+    return directory_entry_encoded
+
+
+def _ldap_has_entry_bound(ldap_server, entry_common_name):
+    entry_common_name_encoded = entry_common_name.encode('utf-8')
+    ldap_results = ldap_server.search_s(LDAP_USER_GROUP, ldap.SCOPE_SUBTREE, '(cn=%s)' % entry_common_name_encoded)
+    if ldap_results:
+        return True
+    else:
+        return False
