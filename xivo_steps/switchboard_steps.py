@@ -69,3 +69,9 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
         'switchboard',
         ['openldap']
     )
+
+
+@step(u'Given there are entries in the ldap server:')
+def given_there_are_entries_in_the_ldap_server(step):
+    for directory_entry in step.hashes:
+        ldap_manager.add_entry(directory_entry)

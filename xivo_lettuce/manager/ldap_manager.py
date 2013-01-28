@@ -46,6 +46,10 @@ def add_or_replace_ldap_filter(name, server, base_dn, username=None, password=No
     _add_ldap_filter(server, name, base_dn, username, password)
 
 
+def add_entry(directory_entry):
+    pass
+
+
 def _add_ldap_filter(server, name, base_dn, username=None, password=None):
     common.open_url('ldapfilter', 'add')
 
