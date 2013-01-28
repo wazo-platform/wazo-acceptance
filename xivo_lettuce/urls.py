@@ -87,5 +87,6 @@ URLS = {
     'directory_config': '/xivo/configuration/index.php/manage/directories',
     'cti_directory': '/cti/index.php/directories',
     'cti_direct_directory': '/cti/index.php/contexts',
+    'cti_display_filter': '/cti/index.php/displays',
     'admin_user': '/xivo/configuration/index.php/manage/user',
 }

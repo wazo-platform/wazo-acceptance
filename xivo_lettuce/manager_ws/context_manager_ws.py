@@ -101,6 +101,13 @@ def add_context(name, display_name, context_type,
     world.ws.contexts.add(context)
 
 
+def add_or_replace_context(name, display_name, context_type):
+    context = get_context_with_name(name)
+    if context:
+        world.ws.contexts.delete(context.id)
+    add_context(name, display_name, context_type)
+
+
 def get_context_with_name(name):
     try:
         return world.ws.contexts.view(name)

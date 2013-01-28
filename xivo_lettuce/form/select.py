@@ -31,6 +31,15 @@ def set_select_field_with_id(field_id, value):
 
 def set_select_field_with_id_containing(field_id, filter_string):
     select_input = Select(world.browser.find_element_by_id(field_id))
+    _select_option_containing(filter_string, select_input)
+
+
+def set_select_field_with_label_containing(label, filter_string):
+    select_input = Select(world.browser.find_element_by_label(label))
+    _select_option_containing(filter_string, select_input)
+
+
+def _select_option_containing(filter_string, select_input):
     options = select_input.options
     for option in options:
         if filter_string in option.text:

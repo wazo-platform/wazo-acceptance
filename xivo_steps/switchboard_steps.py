@@ -18,6 +18,10 @@
 from lettuce import world, step
 from hamcrest import assert_that, equal_to
 from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
+from xivo_lettuce.manager_ws import context_manager_ws
+from xivo_lettuce.manager import ldap_manager
+from xivo_lettuce.manager import directory_manager
+from xivo_lettuce import form
 
 
 @step(u'When I search a transfer destination "([^"]*)"')
@@ -41,3 +45,27 @@ def then_i_see_no_transfer_destinations(step):
 @xivoclient
 def assert_directory_has_entry(name, phone_number):
     assert_that(world.xc_response, equal_to('OK'))
+
+
+@step(u'Given the switchboard is configured for ldap lookup')
+def given_the_switchboard_is_configured_for_ldap_lookup(step):
+    context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
+    ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
+    ldap_manager.add_or_replace_ldap_filter('openldap-dev', 'openldap-dev', 'cn=admin,dc=lan-quebec,dc=avencall,dc=com', 'superpass', 'dc=lan-quebec,dc=avencall,dc=com')
+    directory_manager.add_or_replace_directory(
+        'openldap',
+        'ldapfilter://openldap-dev',
+        'name,number',
+        {'name': 'cn',
+         'number': 'telephoneNumber'}
+    )
+    directory_manager.add_or_replace_display(
+        'switchboard',
+        {'name': '{db-name}',
+         'number': '{db-number}'}
+    )
+    directory_manager.assign_filter_and_directories_to_context(
+        '__switchboard_directory',
+        'switchboard',
+        ['openldap']
+    )
