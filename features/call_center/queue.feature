@@ -27,30 +27,30 @@ Feature: Queues
     Scenario: Add an unlogged agent to a new queue
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | Bob       | Smith    | 1101  | default |
+            | Bob       | Smith    | 1101   | default |
         When I create the following queues:
-            | name   | display name | number | context | agents        |
+            | name   | display name | number | context | agents       |
             | queue1 | Queue 1      | 3101   | default | 1101@default |
         Then the agent "1101" is not a member of the queue "queue1" in asterisk
 
     Scenario: Add a logged agent to a new queue
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | John      | Doe      | 1102  | default |
+            | John      | Doe      | 1102   | default |
         When I log agent "1102"
         Then the agent "1102" is not a member of the queue "queue2" in asterisk
         When I create the following queues:
-            | name   | display name | number | context | agents        |
+            | name   | display name | number | context | agents       |
             | queue2 | Queue 2      | 3102   | default | 1102@default |
         Then the agent "1102" is a member of the queue "queue2" in asterisk
 
     Scenario: Add a logged agent to a new queue and answer a call
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | John      | Doe      | 1102  | default |
+            | John      | Doe      | 1102   | default |
         When I log agent "1102"
         When I create the following queues:
-            | name   | display name | number | context | agents        |
+            | name   | display name | number | context | agents       |
             | queue2 | Queue 2      | 3102   | default | 1102@default |
 
         Given there is an incall "3102" in context "from-extern" to the "Queue" "queue2" with caller id name "Lord Greg" number "1234"
@@ -70,10 +70,10 @@ Feature: Queues
     Scenario: Delete a queue with logged agents
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | Wayne     | Brady    | 1103  | default |
+            | Wayne     | Brady    | 1103   | default |
         Given there are queues with infos:
             | name   | display name | number | context | agents_number |
-            | queue3 | Queue 3      | 3103   | default | 1103         |
+            | queue3 | Queue 3      | 3103   | default | 1103          |
         When I log agent "1103"
         Then the agent "1103" is a member of the queue "queue3" in asterisk
         When I delete the queue with number "3103"
@@ -82,7 +82,7 @@ Feature: Queues
     Scenario: Add an unlogged agent to an existing queue
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | Brad      | Pitt     | 1104  | default |
+            | Brad      | Pitt     | 1104   | default |
         Given there are queues with infos:
             | name   | display name | number | context |
             | queue4 | Queue 4      | 3104   | default |
@@ -92,17 +92,17 @@ Feature: Queues
     Scenario: Remove an unlogged agent from an existing queue
         Given I have the following agents with a user:
             | firstname | lastname   | number | context |
-            | Alice     | Wonderland | 1105  | default |
+            | Alice     | Wonderland | 1105   | default |
         Given there are queues with infos:
             | name   | display name | number | context | agents_number |
-            | queue5 | Queue 5      | 3105   | default | 1105         |
+            | queue5 | Queue 5      | 3105   | default | 1105          |
         When I remove the agent with extension "1105@default" from the queue "queue5"
         Then the agent "1105" is not a member of the queue "queue5" in asterisk
 
     Scenario: Add a logged agent to an existing queue
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | Cookie    | Monster  | 1107  | default |
+            | Cookie    | Monster  | 1107   | default |
         Given there are queues with infos:
             | name   | display name | number | context |
             | queue7 | Queue 7      | 3107   | default |
@@ -114,7 +114,7 @@ Feature: Queues
     Scenario: Add a logged agent to an existing queue and answer a call
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | Cookie    | Monster  | 1107  | default |
+            | Cookie    | Monster  | 1107   | default |
         Given there are queues with infos:
             | name   | display name | number | context |
             | queue7 | Queue 7      | 3107   | default |
@@ -138,10 +138,10 @@ Feature: Queues
     Scenario: Remove a logged agent from an existing queue
         Given I have the following agents with a user:
             | firstname | lastname | number | context |
-            | Bugs      | Bunny    | 1108  | default |
+            | Bugs      | Bunny    | 1108   | default |
         Given there are queues with infos:
             | name   | display name | number | context | agents_number |
-            | queue8 | Queue 8      | 3108   | default | 1108         |
+            | queue8 | Queue 8      | 3108   | default | 1108          |
         When I log agent "1108"
         Then the agent "1108" is a member of the queue "queue8" in asterisk
         When I remove the agent with extension "1108@default" from the queue "queue8"
