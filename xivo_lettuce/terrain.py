@@ -20,11 +20,11 @@ import os
 import xivo_ws
 from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
-from xivo_lettuce.ssh import SSHClient
 from selenium.webdriver import FirefoxProfile
+from xivo_dao.helpers import config as dao_config
 from xivo_lettuce.common import webi_login_as_default, go_to_home_page, webi_logout
 from xivo_lettuce.manager import asterisk_manager
-
+from xivo_lettuce.ssh import SSHClient
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             '../config/config.ini'))
@@ -54,6 +54,7 @@ def xivo_lettuce_after_all(total):
 def initialize():
     config = read_config()
     _setup_browser(config)
+    _setup_dao(config)
     _setup_xivo_client(config)
     _setup_login_infos(config)
     _setup_ssh_client_xivo(config)
@@ -91,6 +92,11 @@ def _setup_browser(config):
     world.browser = XiVOBrowser(firefox_profile=profile)
     world.timeout = timeout
     world.stocked_infos = {}
+
+
+def _setup_dao(config):
+    hostname = config.get('xivo', 'hostname')
+    dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % hostname
 
 
 def _setup_browser_profile():

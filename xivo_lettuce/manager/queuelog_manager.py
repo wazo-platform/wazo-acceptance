@@ -15,30 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import world
 from xivo_lettuce import postgres
 from xivo_dao import queue_log_dao
-from xivo_dao.alchemy import dbconnection
-
-
-class asterisk_connection(object):
-    '''
-    Context manager to be able to use xivo-dao
-
-    Usage:
-        with asterisk_connection():
-            dao.function(...)
-    '''
-
-    def __enter__(self):
-        db_connection_pool = dbconnection.DBConnectionPool(dbconnection.DBConnection)
-        dbconnection.register_db_connection_pool(db_connection_pool)
-
-        uri = 'postgresql://asterisk:proformatique@%s/asterisk' % world.xivo_host
-        dbconnection.add_connection_as(uri, 'asterisk')
-
-    def __exit__(self, t, v, tr):
-        dbconnection.unregister_db_connection_pool()
 
 
 def delete_event_by_queue(event, queuename):
@@ -53,13 +31,11 @@ def delete_event_by_agent_number(event, agent_number):
 
 
 def delete_event_by_queue_between(event, queuename, start, end):
-    with asterisk_connection():
-        queue_log_dao.delete_event_by_queue_between(event, queuename, start, end)
+    queue_log_dao.delete_event_by_queue_between(event, queuename, start, end)
 
 
 def delete_event_between(start, end):
-    with asterisk_connection():
-        queue_log_dao.delete_event_between(start, end)
+    queue_log_dao.delete_event_between(start, end)
 
 
 def insert_corrupt_data():
@@ -81,12 +57,11 @@ def get_event_count_agent(event, agent_number):
 
 
 def get_last_callid(event, agent_number):
-    with asterisk_connection():
-        callid = queue_log_dao.get_last_callid_with_event_for_agent(
-            event,
-            _build_agent_db_tag_from_number(agent_number)
-            )
-        return callid
+    callid = queue_log_dao.get_last_callid_with_event_for_agent(
+        event,
+        _build_agent_db_tag_from_number(agent_number)
+        )
+    return callid
 
 
 def _build_agent_db_tag_from_number(agent_number):
@@ -94,17 +69,16 @@ def _build_agent_db_tag_from_number(agent_number):
 
 
 def insert_entries(entries):
-    with asterisk_connection():
-        for entry in entries:
-            queue_log_dao.insert_entry(
-                entry['time'],
-                entry['callid'],
-                entry['queuename'],
-                entry['agent'],
-                entry['event'],
-                entry['data1'],
-                entry['data2'],
-                entry['data3'],
-                entry['data4'],
-                entry['data5']
-                )
+    for entry in entries:
+        queue_log_dao.insert_entry(
+            entry['time'],
+            entry['callid'],
+            entry['queuename'],
+            entry['agent'],
+            entry['event'],
+            entry['data1'],
+            entry['data2'],
+            entry['data3'],
+            entry['data4'],
+            entry['data5']
+            )
