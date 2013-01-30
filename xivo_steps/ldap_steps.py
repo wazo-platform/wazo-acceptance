@@ -33,8 +33,8 @@ def given_there_is_a_ldap_server_with_name_1_and_with_host_2(step, name, host):
 @step(u'I create an LDAP filter with name "([^"]*)" and server "([^"]*)"')
 def i_create_an_ldap_filter_with_name_and_server(step, name, server):
     ldap_manager.add_or_replace_ldap_filter(
-        'openldap-dev',
-        'openldap-dev',
+        name,
+        server,
         'dc=lan-quebec,dc=avencall,dc=com'
     )
 
