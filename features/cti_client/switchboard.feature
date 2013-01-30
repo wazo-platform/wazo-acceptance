@@ -45,17 +45,17 @@ Feature: Switchboard
         When I remove user "Germaine" "Tremblay"
         Then I see no transfer destinations
 
-    # Scenario: Search transfer destination in ldap server
-    #     Given there are users with infos:
-    #     | firstname | lastname | cti_profile | cti_login | cti_passwd |
-    #     | Switch    | Board    | Switchboard | switch    | board      |
-    #     Given the switchboard is configured for ldap lookup
-    #     Given there are entries in the ldap server:
-    #     | first name | last name |      phone |
-    #     | Robert     | Lébleux   | 0133123456 |
-    #     When I start the XiVO Client
-    #     When I log in the XiVO Client as "switch", pass "board"
-    #     When I search a transfer destination "léb"
-    #     Then I see transfer destinations:
-    #     | display_name   |      phone |
-    #     | Robert Lébleux | 0133123456 |
+    Scenario: Search transfer destination in ldap server
+        Given there are users with infos:
+        | firstname | lastname | cti_profile | cti_login | cti_passwd |
+        | Switch    | Board    | Switchboard | switch    | board      |
+        Given the switchboard is configured for ldap lookup
+        Given there are entries in the ldap server:
+        | first name | last name |      phone |
+        | Robert     | Lébleux   | 0133123456 |
+        When I start the XiVO Client
+        When I log in the XiVO Client as "switch", pass "board"
+        When I search a transfer destination "léb"
+        Then I see transfer destinations:
+        | display_name   |      phone |
+        | Robert Lébleux | 0133123456 |

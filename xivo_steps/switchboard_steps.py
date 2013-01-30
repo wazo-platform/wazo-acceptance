@@ -50,7 +50,7 @@ def assert_directory_has_entry(name, phone_number):
 def given_the_switchboard_is_configured_for_ldap_lookup(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
     ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
-    ldap_manager.add_or_replace_ldap_filter('openldap-dev', 'openldap-dev', 'cn=admin,dc=lan-quebec,dc=avencall,dc=com', 'superpass', 'dc=lan-quebec,dc=avencall,dc=com')
+    ldap_manager.add_or_replace_ldap_filter('openldap-dev', 'openldap-dev', 'dc=lan-quebec,dc=avencall,dc=com', 'cn=admin,dc=lan-quebec,dc=avencall,dc=com', 'superpass')
     directory_manager.add_or_replace_directory(
         'openldap',
         'ldapfilter://openldap-dev',
@@ -61,7 +61,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
     directory_manager.add_or_replace_display(
         'switchboard',
         {'name': '{db-name}',
-         'number': '{db-number}'}
+         'number_office': '{db-number}'}
     )
     directory_manager.assign_filter_and_directories_to_context(
         '__switchboard_directory',

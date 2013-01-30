@@ -117,7 +117,7 @@ def _select_filter_display_name_field():
     add_button = world.browser.find_element_by_id('bt-ldapfilter-attrdisplayname-add')
     add_button.click()
     alert = world.browser.switch_to_alert()
-    alert.send_keys("sn")
+    alert.send_keys("cn")
     alert.accept()
 
 
