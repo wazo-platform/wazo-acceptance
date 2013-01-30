@@ -6,7 +6,7 @@ Feature: Stat
         Given there is a schedule named "always_closed" with the following timetable:
             | hours       | weekdays | monthdays | months |
             | 00:00-00:01 | 1-1      | 1-1       | 1-1    |
-        Given there are queues wth infos:
+        Given there are queues with infos:
             | name | number | context     | schedule_name |
             | q11  | 5011   | statscenter | always_closed |
         Given I wait 5 seconds for the dialplan to be reloaded
