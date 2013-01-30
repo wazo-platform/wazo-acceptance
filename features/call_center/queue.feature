@@ -38,7 +38,6 @@ Feature: Queues
             | firstname | lastname | number | context |
             | John      | Doe      | 1102   | default |
         When I log agent "1102"
-        Then the agent "1102" is not a member of the queue "queue2" in asterisk
         When I create the following queues:
             | name   | display name | number | context | agents       |
             | queue2 | Queue 2      | 3102   | default | 1102@default |
