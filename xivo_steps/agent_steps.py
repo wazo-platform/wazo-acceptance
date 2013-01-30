@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step
+from lettuce import step, world
 from hamcrest import assert_that, equal_to
 from xivo_lettuce import form, func
 from xivo_lettuce.manager import agent_manager, agent_status_manager
@@ -24,7 +24,6 @@ from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce.manager.agent_manager import is_agent_in_agent_group, \
     remove_agent_group_if_exist, get_agent_group_id, get_nb_agents_in_group, \
     select_agent_group_list
-from lettuce.registry import world
 from selenium.webdriver.common.action_chains import ActionChains
 
 
@@ -32,6 +31,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 def given_i_have_the_following_agents_with_a_user(step):
     for agent in step.hashes:
         create_agent_with_user(agent)
+
 
 def create_agent_with_user(agent):
         user_data = {
@@ -49,7 +49,7 @@ def create_agent_with_user(agent):
             'context': agent['context'],
             'users': [user_id]
         }
-        agent_id = agent_manager_ws.add_or_replace_agent(agent_data)
+        agent_manager_ws.add_or_replace_agent(agent_data)
 
 
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
