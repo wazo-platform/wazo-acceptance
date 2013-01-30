@@ -6,7 +6,7 @@ Feature: Stat
         Given there is no "COMPLETEAGENT" entry in queue "q09"
         Given there is a user "User" "009" with extension "1009@statscenter"
         Given there is a agent "Agent" "009" with extension "009@statscenter"
-        Given there are queues wth infos:
+        Given there are queues with infos:
             | name | number | context     | agents_number |
             | q09  | 5009   | statscenter | 009           |
         Given I wait 5 seconds for the dialplan to be reloaded
