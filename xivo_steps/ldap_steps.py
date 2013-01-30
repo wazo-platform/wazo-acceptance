@@ -46,16 +46,6 @@ def given_there_exist_an_ldap_entry_on_ldap_server(step, dn, server):
     assert False, ret
 
 
-@step(u'When I search "([^"]*)" on an aastra phone')
-def when_i_search_group1_on_an_aastra_phone(step, group1):
-    assert False, 'This step must be implemented'
-
-
-@step(u'Then result "([^"]*)" is present')
-def then_result_group1_is_present(step, group1):
-    assert False, 'This step must be implemented'
-
-
 @step(u'Given there is an LDAP filter with name "([^"]*)" and with server "([^"]*)"')
 def given_there_is_an_ldap_filter_with_name_and_with_server(step, name, server):
     if common.element_is_not_in_list('ldapfilter', name):
