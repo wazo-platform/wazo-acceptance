@@ -13,4 +13,3 @@ Feature: Stat
         Given there is 2 calls to extension "5011@statscenter" and wait
         Given I wait 5 seconds for the calls processing
         Then i should see 2 "CLOSED" event in queue "q11" in the queue log
-

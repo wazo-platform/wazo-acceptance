@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step, world
+from lettuce import step
 from xivo_lettuce.manager_ws import schedule_manager_ws
 
+
 @step(u'Given there is a schedule named "([^"]+)" with the following timetable:$')
-def given_there_is_a_schedule_named_1_with_the_following_info(step):
+def given_there_is_a_schedule_named_1_with_the_following_info(step, name):
     for schedule in step.hashes:
-        name = schedule['name']
         schedule_manager_ws.delete_schedules_with_name(name)
         schedule_manager_ws.add_schedule(name, schedule)
