@@ -31,8 +31,8 @@ def create_directory(directory):
 def add_directory_definition(directory):
     _add_directory(
         directory['name'],
-        directory['direct match'],
         directory['URI'],
+        directory['direct match'],
         directory.get('delimiter')
     )
 
