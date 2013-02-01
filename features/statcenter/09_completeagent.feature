@@ -17,3 +17,19 @@ Feature: Stat
         Given there is 1 calls to extension "5009@statscenter" and wait
         Given I wait 9 seconds for the calls processing
         Then i should see 1 "COMPLETEAGENT" event in queue "q09" in the queue log
+
+#    Scenario: Generation of event COMPLETEAGENT
+#        Given there is no events for queue "q09" in the queue log
+#        Given there is a agent with number "009" in context "statscenter"
+#        Given there are queues with infos:
+#            | name | number | context     | agents_number |
+#            | q09  | 5009   | statscenter | 009           |
+#        When agent "009" executes the following actions:
+#            | action        | number | time      |
+#            | logon         |    009 |           |
+#            | wait for call |        |           |
+#        When there is an incoming call:
+#            | action | number           | time       |
+#            | call   | 5009@statscenter | 10 seconds |
+#            | hangup |                  |            |
+#        Then I should see 1 "COMPLETEAGENT" event on queue "q09" in the queue log
