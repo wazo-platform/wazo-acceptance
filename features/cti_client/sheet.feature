@@ -5,6 +5,8 @@ Feature: Sheet
         | variable          |
         | xivo-calleridnum  |
         | xivo-calleridname |
+        | xivo-queuename|
+        | xivo-agentnumber|
 
         Given I assign the sheet "testsheet" to the "Link" event
 
@@ -13,6 +15,7 @@ Feature: Sheet
         Given there are queues with infos:
             | name  | number | context | agents_number |
             | frere | 3009   | default | 1153          |
+
         Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Laurent Demange" number "1234"
 
         When I start the XiVO Client
@@ -32,6 +35,8 @@ Feature: Sheet
         | Variable          | Value           |
         | xivo-calleridnum  | 1234            |
         | xivo-calleridname | Laurent Demange |
+        | xivo-queuename| frere |
+        | xivo-agentnumber| 1153 |
 
     Scenario: Variables on link event to a User
         Given I have a sheet model named "testsheet" with the variables:
