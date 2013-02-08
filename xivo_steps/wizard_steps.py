@@ -21,7 +21,7 @@ from xivo_lettuce.common import waitForLoginPage
 
 @step(u'Given there is XiVO not configured')
 def given_there_is_xivo_not_configured(step):
-    cmd = ['rm', '-f', '/etc/pf-xivo/web-interface/xivo.ini']
+    cmd = ['rm', '-f', '/var/lib/pf-xivo/configured']
     world.ssh_client_xivo.check_call(cmd)
 
 

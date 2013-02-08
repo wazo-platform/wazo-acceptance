@@ -148,7 +148,7 @@ def _setup_ws(config):
 
 def _webi_configured():
     try:
-        command = ['test', '-e', '/etc/pf-xivo/web-interface/xivo.ini']
+        command = ['test', '-e', '/var/lib/pf-xivo/configured']
         world.ssh_client_xivo.check_call(command)
     except Exception:
         return False
