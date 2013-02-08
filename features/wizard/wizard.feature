@@ -13,8 +13,6 @@ Feature: Wizard
         Then I see the license
         When I accept the terms of the licence
         When I click next
-        Then I should be on the checkcomponents page
-        When I click next
         Then I should be on the mainconfig page
         When I fill hostname skaro-daily, domain lan-quebec.avencall.com, password superpass in the configuration page
         When I click next
