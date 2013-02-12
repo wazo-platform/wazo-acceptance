@@ -59,3 +59,14 @@ Feature: Switchboard
         Then I see transfer destinations:
         | display_name   |      phone |
         | Robert Lébleux | 0133123456 |
+
+    Scenario: Search transfer destination with an arbitrary number
+        Given there are users with infos:
+        | firstname | lastname | cti_profile | cti_login | cti_passwd |
+        | Switch    | Board    | Switchboard | switch    | board      |
+        When I start the XiVO Client
+        When I log in the XiVO Client as "switch", pass "board"
+        When I search a transfer destination "6543"
+        Then I see transfer destinations:
+        | display_name | phone |
+        |              |  6543 |
