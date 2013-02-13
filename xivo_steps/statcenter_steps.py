@@ -15,11 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce.decorators import step
-from xivo_lettuce.manager import stat_manager, queuelog_manager
-from xivo_lettuce.manager_ws import statconfs_manager_ws
 from datetime import datetime
 from datetime import timedelta
+from lettuce import step
+from hamcrest import assert_that, equal_to
+from xivo_lettuce.manager import stat_manager, queuelog_manager
+from xivo_lettuce.manager_ws import statconfs_manager_ws
 
 
 @step(u'^Given there are a corrupt entry in queue_log$')
@@ -84,14 +85,14 @@ def then_i_dont_should_not_have_error(step):
 def then_i_should_see_nb_n_event_in_queue_in_the_queue_log(step, expected_count, event, queue_name):
     count = queuelog_manager.get_event_count_queue(event, queue_name)
 
-    assert(count == int(expected_count))
+    assert_that(count, equal_to(int(expected_count)))
 
 
 @step(u'Then i should see ([0-9]+) "([^"]*)" event for agent "([^"]*)" in the queue log')
 def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, event, agent_number):
     count = queuelog_manager.get_event_count_agent(event, agent_number)
 
-    assert(count == int(expected_count))
+    assert_that(count, equal_to(int(expected_count)))
 
 
 @step(u'^Then I should have the following statististics on "(.+)" on "(.+)" on configuration "(\S+)":$')
