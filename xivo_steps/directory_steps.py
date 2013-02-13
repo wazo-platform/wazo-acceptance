@@ -42,8 +42,12 @@ def given_the_directory_definition_does_not_exist(step, definition):
     remove_element_if_exist('cti_directory', 'phonebookcsv')
     #Work around for directory associations that aren't deleted
     open_url('cti_direct_directory', 'list')
-    edit_line('default')
-    submit.submit_form()
+    try:
+        edit_line('default')
+    except Exception:
+        pass  # No default context configured
+    else:
+        submit.submit_form()
 
 
 @step(u'Given the CSV file "([^"]*)" is copied on the server into "([^"]*)"')
@@ -87,10 +91,11 @@ def when_i_map_the_following_fields_and_save_the_directory_definition(step):
 
 @step(u'When I include "([^"]*)" in the default directory')
 def when_i_include_phonebook_in_the_default_directory(step, phonebook):
-    open_url('cti_direct_directory', 'list')
-    edit_line('default')
-    directory_manager.add_directory_to_context(phonebook)
-    submit.submit_form()
+    directory_manager.assign_filter_and_directories_to_context(
+        'default',
+        'Display',
+        [phonebook]
+    )
 
 
 @step(u'When I restart the CTI server')
