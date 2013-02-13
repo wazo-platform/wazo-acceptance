@@ -121,3 +121,26 @@ def then_nothing_shows_up_in_the_directory_xlet(step):
 @xivoclient_step
 def then_1_shows_up_in_the_directory_xlet(step, entry):
     assert world.xc_response == 'OK'
+
+
+@step(u'Given the internal phonebook is configured')
+def given_the_internal_phonebook_is_configured(step):
+    directory_manager.add_or_replace_directory(
+        'internal',
+        'internal',
+        'userfeatures.firstname,userfeatures.lastname',
+        {'firstname': 'userfeatures.firstname',
+         'lastname': 'userfeatures.lastname',
+         'phone': 'linefeatures.number'}
+    )
+    directory_manager.add_or_replace_display(
+        'Display',
+        [('Nom', 'name', '{db-firstname} {db-lastname}'),
+         (u'Numéro', 'number_office', '{db-phone}'),
+        ]
+    )
+    directory_manager.assign_filter_and_directories_to_context(
+        'default',
+        'Display',
+        ['internal']
+    )

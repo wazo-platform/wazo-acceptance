@@ -74,7 +74,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
 def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
     directory_manager.add_or_replace_directory(
-        'internal',
+        'xivodir',
         'phonebook',
         'phonebook.firstname,phonebook.lastname,phonebook.displayname,phonebook.society,phonebooknumber.office.number',
         {'name': 'phonebook.displayname',
@@ -91,7 +91,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
     directory_manager.assign_filter_and_directories_to_context(
         '__switchboard_directory',
         'switchboard',
-        ['internal']
+        ['xivodir']
     )
 
 
