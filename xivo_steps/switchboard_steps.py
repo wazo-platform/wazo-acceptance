@@ -70,6 +70,31 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
     )
 
 
+@step(u'Given the switchboard is configured for internal directory lookup')
+def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
+    context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
+    directory_manager.add_or_replace_directory(
+        'internal',
+        'phonebook',
+        'phonebook.firstname,phonebook.lastname,phonebook.displayname,phonebook.society,phonebooknumber.office.number',
+        {'name': 'phonebook.displayname',
+         'number': 'phonebooknumber.office.number',
+         'mobile': 'phonebooknumber.mobile.number'}
+    )
+    directory_manager.add_or_replace_display(
+        'switchboard',
+        [('Name', 'name', '{db-name}'),
+         ('Number', 'number_office', '{db-number}'),
+         ('Number', 'number_mobile', '{db-mobile}'),
+        ]
+    )
+    directory_manager.assign_filter_and_directories_to_context(
+        '__switchboard_directory',
+        'switchboard',
+        ['internal']
+    )
+
+
 @step(u'Given there are entries in the ldap server:')
 def given_there_are_entries_in_the_ldap_server(step):
     for directory_entry in step.hashes:

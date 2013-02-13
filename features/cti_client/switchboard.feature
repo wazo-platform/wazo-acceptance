@@ -4,6 +4,7 @@ Feature: Switchboard
         Given there are users with infos:
         | firstname | lastname | cti_profile | cti_login | cti_passwd |
         | Switch    | Board    | Switchboard | switch    | board      |
+        Given the switchboard is configured for internal directory lookup
         Given there are entries in the phonebook:
         | first name | last name | phone |     mobile |
         | Uncle      | Bob       |  1234 | 5555555555 |
