@@ -54,14 +54,14 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
     directory_manager.add_or_replace_directory(
         'openldap',
         'ldapfilter://openldap-dev',
-        'name,number',
+        'cn,telephoneNumber',
         {'name': 'cn',
          'number': 'telephoneNumber'}
     )
     directory_manager.add_or_replace_display(
         'switchboard',
-        {'name': '{db-name}',
-         'number_office': '{db-number}'}
+        [('Name', 'name', '{db-name}'),
+         ('Number', 'number_office', '{db-number}')]
     )
     directory_manager.assign_filter_and_directories_to_context(
         '__switchboard_directory',

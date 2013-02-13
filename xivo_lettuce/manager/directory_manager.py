@@ -52,8 +52,8 @@ def add_or_replace_display(name, fields):
 
     common.open_url('cti_display_filter', 'add')
     _type_display_name(name)
-    for field_title, display in fields.iteritems():
-        _add_display_field(field_title, display)
+    for title, field_type, display in fields:
+        _add_display_field(title, field_type, display)
     submit.submit_form()
 
 
@@ -88,14 +88,17 @@ def add_field(fieldname, value):
     value_input.send_keys(value)
 
 
-def _add_display_field(fieldname, value):
+def _add_display_field(title, f_type, value):
     b = world.browser
     add_btn = b.find_element_by_css_selector(".sb-list table .sb-top .th-right a")
     add_btn.click()
 
     xpath = "//div[@class='sb-list']/table[position()=1]/tbody/tr[last()]/td[position()=%s]/input"
     field_title = b.find_element_by_xpath(xpath % 1)
-    field_title.send_keys(fieldname)
+    field_title.send_keys(title)
+
+    field_type = b.find_element_by_xpath(xpath % 2)
+    field_type.send_keys(f_type)
 
     display_format = b.find_element_by_xpath(xpath % 4)
     display_format.send_keys(value)
