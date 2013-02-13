@@ -100,6 +100,16 @@ def when_i_unlog_agent_group1(step, agent_number):
     agent_status_manager.unlog_agent_from_user(agent_number)
 
 
+@step(u'When I pause agent "([^"]*)"')
+def when_i_pause_agent_1(step, agent_number):
+    agent_status_manager.pause_agent(agent_number)
+
+
+@step(u'When I unpause agent "([^"]*)"')
+def when_i_unpause_agent_1(step, agent_number):
+    agent_status_manager.unpause_agent(agent_number)
+
+
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)"$')
 def when_i_create_an_agent(step, firstname, lastname, number):
     agent_manager_ws.delete_agents_with_number(number)

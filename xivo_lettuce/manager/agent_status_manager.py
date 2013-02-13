@@ -17,7 +17,6 @@
 
 import time
 from lettuce import world
-from xivo_lettuce import postgres
 from xivo_lettuce import sysutils
 from xivo_lettuce.manager import call_manager
 from xivo_lettuce.manager_ws import line_manager_ws, agent_manager_ws
@@ -56,8 +55,19 @@ def is_agent_logged_in(agent_number):
 
     return log_status == "True"
 
+
 def unlog_all_agents():
     sysutils.send_command(['xivo-agentctl', '-c', '"logoff all"'])
+
+
+def pause_agent(agent_number):
+    command = ['xivo-agentctl', '-c', '"pause %s"' % agent_number]
+    sysutils.send_command(command)
+
+
+def unpause_agent(agent_number):
+    command = ['xivo-agentctl', '-c', '"unpause %s"' % agent_number]
+    sysutils.send_command(command)
 
 
 def _get_line_from_agent(agent_number):
