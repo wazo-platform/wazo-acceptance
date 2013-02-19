@@ -47,11 +47,13 @@ def add_or_replace_ldap_server(name, host):
     add_ldap_server(name, host)
 
 
-def add_or_replace_ldap_filter(name, server, base_dn, username=None, password=None):
+def add_or_replace_ldap_filter(name, server, base_dn, username=None, password=None,
+        display_fields=['cn'], number_fields=['telephoneNumber']):
     if common.element_is_in_list('ldapfilter', name):
         common.remove_line(name)
 
-    _add_ldap_filter(server, name, base_dn, username, password)
+    _add_ldap_filter(server, name, base_dn, username, password, display_fields,
+            number_fields)
 
 
 def add_or_replace_entry(directory_entry):
@@ -82,11 +84,19 @@ def add_entry_bound(ldap_server, directory_entry):
         'sn': directory_entry_encoded['last name'],
         'telephoneNumber': directory_entry_encoded['phone'],
     }
+
+    if 'location' in directory_entry_encoded:
+        new_entry_attributes_encoded['st'] = directory_entry_encoded['location']
+
+    if 'department' in directory_entry_encoded:
+        new_entry_attributes_encoded['o'] = directory_entry_encoded['department']
+
     new_entry_content_encoded = ldap.modlist.addModlist(new_entry_attributes_encoded)
     ldap_server.add_s(new_entry_id_encoded, new_entry_content_encoded)
 
 
-def _add_ldap_filter(server, name, base_dn, username=None, password=None):
+def _add_ldap_filter(server, name, base_dn, username=None, password=None,
+        display_fields=['cn'], phone_fields=['telephoneNumber']):
     common.open_url('ldapfilter', 'add')
 
     _type_ldap_filter_name(name)
@@ -99,25 +109,28 @@ def _add_ldap_filter(server, name, base_dn, username=None, password=None):
 
     common.go_to_tab("Attributes")
 
-    _select_filter_display_name_field()
-    _select_filter_phone_number_field()
+    for field in display_fields:
+        _add_filter_display_name_field(field)
+
+    for field in phone_fields:
+        _add_filter_phone_number_field(field)
 
     form.submit.submit_form()
 
 
-def _select_filter_phone_number_field():
+def _add_filter_phone_number_field(field):
     add_button = world.browser.find_element_by_id('bt-ldapfilter-attrphonenumber-add')
     add_button.click()
     alert = world.browser.switch_to_alert()
-    alert.send_keys("telephoneNumber")
+    alert.send_keys(field)
     alert.accept()
 
 
-def _select_filter_display_name_field():
+def _add_filter_display_name_field(field):
     add_button = world.browser.find_element_by_id('bt-ldapfilter-attrdisplayname-add')
     add_button.click()
     alert = world.browser.switch_to_alert()
-    alert.send_keys("cn")
+    alert.send_keys(field)
     alert.accept()
 
 

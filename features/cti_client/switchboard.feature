@@ -61,6 +61,78 @@ Feature: Switchboard
         | Name           | Number     |
         | Robert Lébleux | 0133123456 |
 
+    Scenario: Search transfer location in ldap server
+        Given there are users with infos:
+        | firstname | lastname | cti_profile | cti_login | cti_passwd | mobile_number |
+        | Switch    | Board    | Switchboard | switch    | board      |               |
+        | Germaine  | Tremblay | Client      | germaine  | tremblay   | 1234          |
+        Given the switchboard is configured for ldap lookup with location
+        Given there are entries in the ldap server:
+        | first name | last name |      phone | location |
+        | Robert     | Lébleux   | 0133123456 | USA      |
+        When I start the XiVO Client
+        When I log in the XiVO Client as "switch", pass "board"
+        When I search a transfer destination "us"
+        Then I see transfer destinations:
+        | Name           | Number     | Location |
+        | Robert Lébleux | 0133123456 | USA      |
+        When I search a transfer destination "ger"
+        Then I see transfer destinations:
+        | Name              | Number | Location |
+        | Germaine Tremblay | 1234   |          |
+
+    Scenario: Search transfer destination with 2 columns from ldap
+        Given there are users with infos:
+        | firstname | lastname | cti_profile | cti_login | cti_passwd | mobile_number |
+        | Switch    | Board    | Switchboard | switch    | board      |               |
+        Given the switchboard is configured for ldap lookup with location and department
+        Given there are entries in the ldap server:
+        | first name | last name |      phone | location | department |
+        | Robert     | Lébleux   | 0133123456 | USA      | Sales      |
+        When I start the XiVO Client
+        When I log in the XiVO Client as "switch", pass "board"
+        When I search a transfer destination "sale"
+        Then I see transfer destinations:
+        | Name           | Number     | Location | Department |
+        | Robert Lébleux | 0133123456 | USA      | Sales      |
+        When I search a transfer destination "us"
+        Then I see transfer destinations:
+        | Name           | Number     | Location | Department |
+        | Robert Lébleux | 0133123456 | USA      | Sales      |
+
+    Scenario: Search transfer destination both in internal directory and ldap
+        Given there are users with infos:
+        | firstname | lastname | cti_profile | cti_login | cti_passwd | number | context |
+        | Switch    | Board    | Switchboard | switch    | board      |        |         |
+        | Robert    | Lébleux  | Client      | robert    | lebleux    | 1423   | default |
+        Given the switchboard is configured for ldap lookup with location
+        Given there are entries in the ldap server:
+        | first name | last name | phone | location |
+        | Robert     | Lébleux   | 1423  | USA      |
+        When I start the XiVO Client
+        When I log in the XiVO Client as "switch", pass "board"
+        When I search a transfer destination "robe"
+        Then I see transfer destinations:
+        | Name           | Number | Location |
+        | Robert Lébleux | 1423   | USA      |
+
+    Scenario: Search transfer destination in ldap with 2 numbers
+        Given there are users with infos:
+        | firstname | lastname | cti_profile | cti_login | cti_passwd | number | context | mobile_number |
+        | Switch    | Board    | Switchboard | switch    | board      |        |         |               |
+        | Robert    | Lébleux  | Client      | robert    | lebleux    | 1423   | default | 5551234567    |
+        Given the switchboard is configured for ldap lookup with location
+        Given there are entries in the ldap server:
+        | first name | last name | phone | location |
+        | Robert     | Lébleux   | 1423  | USA      |
+        When I start the XiVO Client
+        When I log in the XiVO Client as "switch", pass "board"
+        When I search a transfer destination "robe"
+        Then I see transfer destinations:
+        | Name           | Number     | Location |
+        | Robert Lébleux | 1423       | USA      |
+        | Robert Lébleux | 5551234567 |          |
+
     Scenario: Search transfer destination with an arbitrary number
         Given there are users with infos:
         | firstname | lastname | cti_profile | cti_login | cti_passwd |
