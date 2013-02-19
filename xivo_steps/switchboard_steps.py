@@ -32,7 +32,7 @@ def when_i_search_a_transfer_destination_1(step, group1):
 @step(u'Then I see transfer destinations:')
 def then_i_see_transfer_destinations(step):
     for entry in step.hashes:
-        assert_directory_has_entry(entry['display_name'], entry['phone'])
+        assert_directory_has_entry(dict(entry))
 
 
 @step(u'Then I see no transfer destinations')

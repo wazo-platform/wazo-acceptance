@@ -12,9 +12,9 @@ Feature: Switchboard
         When I log in the XiVO Client as "switch", pass "board"
         When I search a transfer destination "uncle bob"
         Then I see transfer destinations:
-        | display_name |      phone |
-        | Uncle Bob    |       1234 |
-        | Uncle Bob    | 5555555555 |
+        | Name      | Number     |
+        | Uncle Bob | 1234       |
+        | Uncle Bob | 5555555555 |
 
     Scenario: Search mobile number of transfer destination
         Given there are users with infos:
@@ -24,12 +24,12 @@ Feature: Switchboard
         When I log in the XiVO Client as "felix", pass "shrodinger"
         When I search a transfer destination "felix"
         Then I see transfer destinations:
-        | display_name     |      phone |
+        | Name             | Number     |
         | Felix Shrödinger | 5555555555 |
         When I modify the mobile number of user "Felix" "Shrödinger" to "666"
         Then I see transfer destinations:
-        | display_name     | phone |
-        | Felix Shrödinger |   666 |
+        | Name             | Number |
+        | Felix Shrödinger | 666    |
         When I remove the mobile number of user "Felix" "Shrödinger"
         Then I see no transfer destinations
 
@@ -41,8 +41,8 @@ Feature: Switchboard
         When I log in the XiVO Client as "germaine", pass "tremblay"
         When I search a transfer destination "germaine tremblay"
         Then I see transfer destinations:
-        | display_name      | phone |
-        | Germaine Tremblay |  1234 |
+        | Name              | Number |
+        | Germaine Tremblay | 1234   |
         When I remove user "Germaine" "Tremblay"
         Then I see no transfer destinations
 
@@ -58,7 +58,7 @@ Feature: Switchboard
         When I log in the XiVO Client as "switch", pass "board"
         When I search a transfer destination "léb"
         Then I see transfer destinations:
-        | display_name   |      phone |
+        | Name           | Number     |
         | Robert Lébleux | 0133123456 |
 
     Scenario: Search transfer destination with an arbitrary number
@@ -69,5 +69,5 @@ Feature: Switchboard
         When I log in the XiVO Client as "switch", pass "board"
         When I search a transfer destination "6543"
         Then I see transfer destinations:
-        | display_name | phone |
-        |              |  6543 |
+        | Name | Number |
+        |      | 6543   |
