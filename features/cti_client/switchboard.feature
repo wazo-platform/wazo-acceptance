@@ -72,7 +72,7 @@ Feature: Switchboard
         | Robert     | Lébleux   | 0133123456 | USA      |
         When I start the XiVO Client
         When I log in the XiVO Client as "switch", pass "board"
-        When I search a transfer destination "us"
+        When I search a transfer destination "usa"
         Then I see transfer destinations:
         | Name           | Number     | Location |
         | Robert Lébleux | 0133123456 | USA      |
@@ -95,7 +95,7 @@ Feature: Switchboard
         Then I see transfer destinations:
         | Name           | Number     | Location | Department |
         | Robert Lébleux | 0133123456 | USA      | Sales      |
-        When I search a transfer destination "us"
+        When I search a transfer destination "usa"
         Then I see transfer destinations:
         | Name           | Number     | Location | Department |
         | Robert Lébleux | 0133123456 | USA      | Sales      |

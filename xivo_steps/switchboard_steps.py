@@ -47,14 +47,14 @@ def assert_directory_has_entry(entry):
 
 
 @step(u'Given the switchboard is configured for ldap lookup with location and department$')
-def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
+def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_department(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
     ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
     ldap_manager.add_or_replace_ldap_filter('openldap-dev', 'openldap-dev',
-        'dc=lan-quebec,dc=avencall,dc=com',
-        'cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-        'superpass',
-        ['cn', 'st', 'o'])
+                                            'dc=lan-quebec,dc=avencall,dc=com',
+                                            'cn=admin,dc=lan-quebec,dc=avencall,dc=com',
+                                            'superpass',
+                                            ['cn', 'st', 'o'])
 
     directory_manager.add_or_replace_directory(
         'openldap',
@@ -67,7 +67,8 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
     )
     directory_manager.add_or_replace_display(
         'switchboard',
-        [('Name', 'name', '{db-name}'),
+        [('', 'status', ''),
+         ('Name', 'name', '{db-name}'),
          ('Number', 'number_office', '{db-number}'),
          ('Location', '', '{db-location}'),
          ('Department', '', '{db-department}')]
@@ -78,15 +79,16 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
         ['openldap']
     )
 
+
 @step(u'Given the switchboard is configured for ldap lookup with location$')
 def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
     ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
     ldap_manager.add_or_replace_ldap_filter('openldap-dev', 'openldap-dev',
-        'dc=lan-quebec,dc=avencall,dc=com',
-        'cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-        'superpass',
-        ['cn', 'st'])
+                                            'dc=lan-quebec,dc=avencall,dc=com',
+                                            'cn=admin,dc=lan-quebec,dc=avencall,dc=com',
+                                            'superpass',
+                                            ['cn', 'st'])
 
     directory_manager.add_or_replace_directory(
         'openldap',
@@ -98,7 +100,8 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
     )
     directory_manager.add_or_replace_display(
         'switchboard',
-        [('Name', 'name', '{db-name}'),
+        [('', 'status', ''),
+         ('Name', 'name', '{db-name}'),
          ('Number', 'number_office', '{db-number}'),
          ('Location', '', '{db-location}')]
     )
@@ -123,7 +126,8 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
     )
     directory_manager.add_or_replace_display(
         'switchboard',
-        [('Name', 'name', '{db-name}'),
+        [('', 'status', ''),
+         ('Name', 'name', '{db-name}'),
          ('Number', 'number_office', '{db-number}')]
     )
     directory_manager.assign_filter_and_directories_to_context(
@@ -146,7 +150,8 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
     )
     directory_manager.add_or_replace_display(
         'switchboard',
-        [('Name', 'name', '{db-name}'),
+        [('', 'status', ''),
+         ('Name', 'name', '{db-name}'),
          ('Number', 'number_office', '{db-number}'),
          ('Number', 'number_mobile', '{db-mobile}'),
         ]
