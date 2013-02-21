@@ -65,7 +65,7 @@ Feature: Switchboard
         Given there are users with infos:
         | firstname | lastname | cti_profile | cti_login | cti_passwd | mobile_number |
         | Switch    | Board    | Switchboard | switch    | board      |               |
-        | Germaine  | Tremblay | Client      | germaine  | tremblay   | 1234          |
+        | Germaine  | Tremblay | Client      | germaine  | tremblay   |    4186566666 |
         Given the switchboard is configured for ldap lookup with location
         Given there are entries in the ldap server:
         | first name | last name |      phone | location |
@@ -78,8 +78,8 @@ Feature: Switchboard
         | Robert Lébleux | 0133123456 | USA      |
         When I search a transfer destination "ger"
         Then I see transfer destinations:
-        | Name              | Number | Location |
-        | Germaine Tremblay | 1234   |          |
+        | Name              |     Number | Location |
+        | Germaine Tremblay | 4186566666 |          |
 
     Scenario: Search transfer destination with 2 columns from ldap
         Given there are users with infos:
