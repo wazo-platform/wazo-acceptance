@@ -17,6 +17,17 @@ Feature: Directory
           | name           | type | URI                     |
           | phonebook-x254 | File | /tmp/phonebook-x254.csv |
         Given the directory definition "phonebookcsv" does not exist
+        Given the display filter "Display" exists with the following fields:
+          | Field title | Field type | Default value | Display format               |
+          | Nom         |            |               | {db-firstname} {db-lastname} |
+          | Numéro      | phone      |               | {db-phone}                   |
+          | Entreprise  |            | Inconnue      | {db-company}                 |
+          | E-mail      |            |               | {db-mail}                    |
+          | Mobile      | phone      |               | {db-mobile}                  |
+          | Source      |            |               | {db-directory}               | 
+	Given the context "default" uses display "Display" with the following directories:
+          | Directories |
+          | xivodir     |
         When I add the following CTI directory definition:
           | name         | URI                            | delimiter | direct match                    |
           | phonebookcsv | file:///tmp/phonebook-x254.csv | \|        | firstname,lastname,mobilenumber |

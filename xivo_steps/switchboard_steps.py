@@ -80,6 +80,22 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
     )
 
 
+@step(u'Given the display filter "([^"]*)" exists with the following fields:')
+def given_the_display_filter_group1_exists_with_the_following_fields(step, filter_name):
+    field_list = []
+    for line in step.hashes:
+        field_list.append((line['Field title'], line['Field type'], line['Display format']))
+    directory_manager.add_or_replace_display(filter_name, field_list)
+
+
+@step(u'Given the context "([^"]*)" uses display "([^"]*)" with the following directories:')
+def given_the_context_group1_uses_display_group2_with_the_following_directories(step, context, filter_name):
+    directories = [line['Directories'] for line in step.hashes]
+    directory_manager.assign_filter_and_directories_to_context(
+        context, filter_name, directories
+    )
+
+
 @step(u'Given the switchboard is configured for ldap lookup with location$')
 def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
