@@ -20,6 +20,8 @@ from xivo_lettuce.manager_ws import agent_manager_ws, queue_manager_ws, \
     statconfs_manager_ws
 import copy
 
+from hamcrest import *
+
 
 def regenerate_cache():
     world.ssh_client_xivo.check_call(['xivo-stat', 'clean_db'])
@@ -28,7 +30,7 @@ def regenerate_cache():
 
 def generate_cache():
     ret = world.ssh_client_xivo.check_call(['xivo-stat', 'fill_db'])
-    assert(ret == 0)
+    assert_that(ret, equal_to(0), 'xivo-stall fill_db return value')
 
 
 def open_queue_stat_page_on_day(queue_name, day, config_name):
@@ -75,14 +77,13 @@ def check_partial_agent_statistic(stats):
 def _check_table_statistic(table, stats):
     values = _get_statistics(table, stats)
 
-    assert(stats == values)
+    assert_that(values, equal_to(stats), '%s statistics' % table)
 
 
 def _check_partial_table_statistic(table, stats):
     values = _get_statistics(table, stats)
 
-    for stat_line in stats:
-        assert stat_line in values
+    assert_that(values, has_items(stats), 'Statistics contains atleast these items')
 
 
 def _get_statistics(table, stats):
@@ -123,6 +124,6 @@ def check_agent_login_time(login_time, period_start):
     expected_stats = [
         {'': '%sh-%sh' % (period_start.hour, period_start.hour + 1),
          'Login': login_time}
-        ]
+    ]
 
     check_partial_agent_statistic(expected_stats)
