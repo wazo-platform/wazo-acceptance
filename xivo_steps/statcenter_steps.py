@@ -85,14 +85,14 @@ def then_i_dont_should_not_have_error(step):
 def then_i_should_see_nb_n_event_in_queue_in_the_queue_log(step, expected_count, event, queue_name):
     count = queuelog_manager.get_event_count_queue(event, queue_name)
 
-    assert_that(count, equal_to(int(expected_count)))
+    assert_that(count, equal_to(int(expected_count)), 'Number of %s in %s' % (event, queue_name))
 
 
 @step(u'Then i should see ([0-9]+) "([^"]*)" event for agent "([^"]*)" in the queue log')
 def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, event, agent_number):
     count = queuelog_manager.get_event_count_agent(event, agent_number)
 
-    assert_that(count, equal_to(int(expected_count)))
+    assert_that(count, equal_to(int(expected_count)), 'Number of %s for agent %s' % (event, agent_number))
 
 
 @step(u'^Then I should have the following statististics on "(.+)" on "(.+)" on configuration "(\S+)":$')
