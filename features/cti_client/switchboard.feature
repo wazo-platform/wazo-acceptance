@@ -6,15 +6,15 @@ Feature: Switchboard
         | Switch    | Board    | Switchboard | switch    | board      |
         Given the switchboard is configured for internal directory lookup
         Given there are entries in the phonebook:
-        | first name | last name | phone |     mobile |
-        | Uncle      | Bob       |  1234 | 5555555555 |
+        | first name | last name |      phone |     mobile |
+        | Uncle      | Bob       | 8197644444 | 8197621114 |
         When I start the XiVO Client
         When I log in the XiVO Client as "switch", pass "board"
         When I search a transfer destination "uncle bob"
         Then I see transfer destinations:
         | Name      | Number     |
-        | Uncle Bob | 1234       |
-        | Uncle Bob | 5555555555 |
+        | Uncle Bob | 8197644444 |
+        | Uncle Bob | 8197621114 |
 
     Scenario: Search mobile number of transfer destination
         Given there are users with infos:
