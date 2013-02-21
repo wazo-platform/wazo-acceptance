@@ -83,7 +83,7 @@ def _check_table_statistic(table, stats):
 def _check_partial_table_statistic(table, stats):
     values = _get_statistics(table, stats)
 
-    assert_that(values, has_items(stats), 'Statistics contains atleast these items')
+    assert_that(values, has_items(*stats), 'Statistics contains atleast these items')
 
 
 def _get_statistics(table, stats):
