@@ -32,12 +32,14 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 
 @before.all
 def xivo_lettuce_before_all():
+    world.config = read_config()
+    world.browser_enable = world.config.getboolean('browser', 'enable')
     initialize()
 
 
 @before.each_scenario
 def xivo_lettuce_before_each(scenario):
-    if _webi_configured():
+    if world.browser_enable and _webi_configured():
         _check_webi_login_root()
 
 
@@ -49,20 +51,6 @@ def xivo_lettuce_after_each(scenario):
 @after.all
 def xivo_lettuce_after_all(total):
     deinitialize()
-
-
-def initialize():
-    config = read_config()
-    _setup_browser(config)
-    _setup_dao(config)
-    _setup_xivo_client(config)
-    _setup_login_infos(config)
-    _setup_ssh_client_xivo(config)
-    _setup_ssh_client_callgen(config)
-    _setup_ws(config)
-    if _webi_configured():
-        _log_on_webi()
-    world.logged_agents = []
 
 
 def read_config():
@@ -81,9 +69,23 @@ def read_config():
     return config
 
 
-def _setup_browser(config):
-    visible = config.getboolean('browser', 'visible')
-    timeout = config.getint('browser', 'timeout')
+def initialize():
+    _setup_dao()
+    _setup_xivo_client()
+    _setup_login_infos()
+    _setup_ssh_client_xivo()
+    _setup_ssh_client_callgen()
+    _setup_ws()
+    if world.browser_enable:
+        _setup_browser()
+        if _webi_configured():
+            _log_on_webi()
+    world.logged_agents = []
+
+
+def _setup_browser():
+    visible = world.config.getboolean('browser', 'visible')
+    timeout = world.config.getint('browser', 'timeout')
 
     from pyvirtualdisplay import Display
     profile = _setup_browser_profile()
@@ -92,11 +94,6 @@ def _setup_browser(config):
     world.browser = XiVOBrowser(firefox_profile=profile)
     world.timeout = timeout
     world.stocked_infos = {}
-
-
-def _setup_dao(config):
-    hostname = config.get('xivo', 'hostname')
-    dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % hostname
 
 
 def _setup_browser_profile():
@@ -110,38 +107,43 @@ def _setup_browser_profile():
     return fp
 
 
-def _setup_xivo_client(config):
-    world.xc_login_timeout = config.getint('xivo_client', 'login_timeout')
+def _setup_dao():
+    hostname = world.config.get('xivo', 'hostname')
+    dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % hostname
 
 
-def _setup_login_infos(config):
-    world.host = 'http://%s/' % config.get('xivo', 'hostname')
-    world.login = config.get('login_infos', 'login')
-    world.password = config.get('login_infos', 'password')
+def _setup_xivo_client():
+    world.xc_login_timeout = world.config.getint('xivo_client', 'login_timeout')
+
+
+def _setup_login_infos():
+    world.host = 'http://%s/' % world.config.get('xivo', 'hostname')
+    world.login = world.config.get('login_infos', 'login')
+    world.password = world.config.get('login_infos', 'password')
     world.logged = False
 
 
-def _setup_ssh_client_xivo(config):
-    hostname = config.get('xivo', 'hostname')
-    login = config.get('ssh_infos', 'login')
+def _setup_ssh_client_xivo():
+    hostname = world.config.get('xivo', 'hostname')
+    login = world.config.get('ssh_infos', 'login')
     world.xivo_host = hostname
     world.xivo_login = login
     world.ssh_client_xivo = SSHClient(hostname, login)
     return world.ssh_client_xivo
 
 
-def _setup_ssh_client_callgen(config):
-    hostname = config.get('callgen', 'hostname')
-    login = config.get('callgen', 'login')
+def _setup_ssh_client_callgen():
+    hostname = world.config.get('callgen', 'hostname')
+    login = world.config.get('callgen', 'login')
     world.callgen_host = hostname
     world.callgen_login = login
     world.ssh_client_callgen = SSHClient(hostname, login)
 
 
-def _setup_ws(config):
-    hostname = config.get('xivo', 'hostname')
-    login = config.get('webservices_infos', 'login')
-    password = config.get('webservices_infos', 'password')
+def _setup_ws():
+    hostname = world.config.get('xivo', 'hostname')
+    login = world.config.get('webservices_infos', 'login')
+    password = world.config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)
     return world.ws
 
@@ -175,7 +177,8 @@ def _check_webi_login_root():
 
 
 def deinitialize():
-    _teardown_browser()
+    if world.browser_enable:
+        _teardown_browser()
 
 
 def _teardown_browser():
