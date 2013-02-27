@@ -32,8 +32,6 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 
 @before.all
 def xivo_lettuce_before_all():
-    world.config = read_config()
-    world.browser_enable = world.config.getboolean('browser', 'enable')
     initialize()
 
 
@@ -70,6 +68,8 @@ def read_config():
 
 
 def initialize():
+    world.config = read_config()
+    world.browser_enable = world.config.getboolean('browser', 'enable')
     _setup_dao()
     _setup_xivo_client()
     _setup_login_infos()
