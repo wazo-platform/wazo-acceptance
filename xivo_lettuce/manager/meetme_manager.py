@@ -27,13 +27,11 @@ def create_meetme(meetme):
     fill_form(meetme)
     form.submit.submit_form()
 
-
 def update_meetme(meetme):
     open_url('meetme', 'list')
     edit_line(meetme['name'])
     fill_form(meetme)
     form.submit.submit_form()
-
 
 def fill_form(meetme):
     form.input.set_text_field_with_id('it-meetmefeatures-name', meetme['name'])
@@ -47,3 +45,5 @@ def fill_form(meetme):
 
     if 'pin code' in meetme:
         form.input.set_text_field_with_id('it-meetmeroom-pin', meetme['pin code'])
+
+

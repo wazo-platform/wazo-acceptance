@@ -11,9 +11,3 @@ Feature: Meetme
             | name | number | max users |
             | blue | 4000   | 0         |
         Then meetme "blue" is displayed in the list
-
-    Scenario: Add a conference room with max participants left empty
-        When I add the following conference rooms:
-            | name  | number | max users |
-            | green |   4000 |           |
-        Then meetme "green" is displayed in the list
