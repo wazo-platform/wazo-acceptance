@@ -1,16 +1,44 @@
-You may use a config.ini.local to test on your local vm
-Use ip adresses and not names in config.ini.*
+Requirements:
+-------------
 
 pip install lettuce
 pip install selenium
 pip install pyvirtualdisplay
 pip install pyhamcrest
+pip install python-ldap
 apt-get install xvfb
 
-Example:
+/!\ Important:
+--------------
 
-/!\ Important
 You must execute "utils/prerequisite.py" before testing !
+
+
+If you need to display the browser update config.ini
+[browser]
+visible = 1
+
+and install xserver-xephyr
+sudo apt-get install xserver-xephyr
+
+
+Execution on your local machine:
+--------------------------------
+You may use a config.ini.local to test on your local vm
+Use ip adresses and not names in config.ini.*
+
+
+export XC_PATH - directory of XiVo client binary built with following options:
+qmake
+make FUNCTESTS=yes -s
+export XC_PATH=...
+
+Access using ssh to machines in listed in config.ini without password.
+ 
+
+
+Example:
+--------
 
 Start a test using :
 
@@ -22,10 +50,3 @@ Lettuce tests are in features/*.feature
 Actions for each step are in features/step_definitions/*_steps.py
 Common actions are in xivo_lettuce/common_steps_webi.py
 
-
-If you need to display the browser update config.ini
-[browser]
-visible = 1
-
-and install xserver-xephyr
-sudo apt-get install xserver-xephyr
