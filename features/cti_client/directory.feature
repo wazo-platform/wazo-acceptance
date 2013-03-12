@@ -24,7 +24,7 @@ Feature: Directory
           | Entreprise  |            | Inconnue      | {db-company}                 |
           | E-mail      |            |               | {db-mail}                    |
           | Mobile      | phone      |               | {db-mobile}                  |
-          | Source      |            |               | {db-directory}               | 
+          | Source      |            |               | {db-directory}               |
 	Given the context "default" uses display "Display" with the following directories:
           | Directories |
           | xivodir     |
