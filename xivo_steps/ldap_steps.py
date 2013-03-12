@@ -17,7 +17,7 @@
 
 from lettuce import step, world
 from xivo_lettuce.manager import ldap_manager
-from xivo_lettuce import common
+from xivo_lettuce import common, assets, sysutils
 
 
 @step(u'I create an LDAP server with name "([^"]*)" and host "([^"]*)"')
@@ -50,3 +50,28 @@ def given_there_exist_an_ldap_entry_on_ldap_server(step, dn, server):
 def given_there_is_an_ldap_filter_with_name_and_with_server(step, name, server):
     if common.element_is_not_in_list('ldapfilter', name):
         step.given('I create an LDAP filter with name "%s" and server "%s"' % (name, server))
+
+
+@step(u'Given the LDAP server is configured for SSL connections')
+def given_the_ldap_server_is_configured_for_ssl_connections(step):
+    copy_ca_certificate()
+    configure_ca_certificate()
+    ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com', True)
+    ldap_manager.add_or_replace_ldap_filter('openldap-dev', 'openldap-dev',
+                                            'dc=lan-quebec,dc=avencall,dc=com',
+                                            'cn=admin,dc=lan-quebec,dc=avencall,dc=com',
+                                            'superpass',
+                                            ['cn', 'st', 'givenName'],
+                                            ['telephoneNumber'])
+
+
+def copy_ca_certificate():
+    assets.copy_asset_to_server("ca-certificates.crt", "/etc/ssl/certs/ca-certificates.crt")
+
+
+def configure_ca_certificate():
+    command = ['grep', 'TLS_CACERT', '/etc/ldap/ldap.conf']
+    output = sysutils.output_command(command)
+    if not output.strip():
+        command = ["echo 'TLS_CACERT /etc/ssl/certs/ca-certificates.crt' >> /etc/ldap/ldap.conf"]
+        sysutils.send_command(command)

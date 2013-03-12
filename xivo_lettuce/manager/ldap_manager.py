@@ -21,7 +21,6 @@ from xivo_lettuce import form
 import ldap
 import ldap.modlist
 
-
 LDAP_URI = 'ldap://openldap-dev.lan-quebec.avencall.com:389/'
 LDAP_LOGIN = 'cn=admin,dc=lan-quebec,dc=avencall,dc=com'
 LDAP_PASSWORD = 'superpass'
@@ -35,16 +34,23 @@ def type_ldap_name_and_host(name, host):
     input_host.send_keys(host)
 
 
-def add_ldap_server(name, host):
+def change_to_ssl():
+    form.input.set_text_field_with_id("it-port", "636")
+    form.select.set_select_field_with_id("it-securitylayer", "SSL")
+
+
+def add_ldap_server(name, host, ssl=False):
     common.open_url('ldapserver', 'add')
     type_ldap_name_and_host(name, host)
+    if ssl:
+        change_to_ssl()
     form.submit.submit_form()
 
 
-def add_or_replace_ldap_server(name, host):
+def add_or_replace_ldap_server(name, host, ssl=False):
     if common.element_is_in_list('ldapserver', name):
         common.remove_line(name)
-    add_ldap_server(name, host)
+    add_ldap_server(name, host, ssl)
 
 
 def add_or_replace_ldap_filter(name, server, base_dn, username=None, password=None,
@@ -80,6 +86,7 @@ def add_entry_bound(ldap_server, directory_entry):
     new_entry_id_encoded = _get_entry_id(directory_entry).encode('utf-8')
     new_entry_attributes_encoded = {
         'objectClass': ['top', 'inetOrgPerson'],
+        'givenName': directory_entry_encoded['first name'],
         'cn': new_entry_common_name_encoded,
         'sn': directory_entry_encoded['last name'],
         'telephoneNumber': directory_entry_encoded['phone'],
