@@ -63,6 +63,7 @@ def given_the_ldap_server_is_configured_for_ssl_connections(step):
                                             'superpass',
                                             ['cn', 'st', 'givenName'],
                                             ['telephoneNumber'])
+    ldap_manager.add_ldap_filter_to_phonebook('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
 
 
 def copy_ca_certificate():

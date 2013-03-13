@@ -13,3 +13,14 @@ Feature: Phonebook
           | value            |
           | Abc Aaa (Office) |
           | Abc Def (Office) |
+
+    Scenario: Phonebook searches using SSL LDAP connection
+        Given the phonebook is accessible by any hosts
+        Given the LDAP server is configured for SSL connections
+        Given there are entries in the ldap server:
+          | first name  | last name   | phone      |
+          | SupremeLord | Sanderson   | 4185551234 |
+      When I search the phonebook for "sup" on my Aastra
+      Then I see the following results on the phone:
+          | value                          |
+          | SupremeLord Sanderson (Office) |

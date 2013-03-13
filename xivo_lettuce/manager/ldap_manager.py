@@ -190,3 +190,17 @@ def _ldap_has_entry_bound(ldap_server, entry_common_name):
         return True
     else:
         return False
+
+
+def add_ldap_filter_to_phonebook(name, host):
+    common.open_url('phonebook_settings')
+    common.go_to_tab('LDAP filters')
+    _move_filter_to_right_pane(name, host)
+    form.submit.submit_form()
+
+def _move_filter_to_right_pane(name, host):
+    filter_name = "%s (%s)" % (name, host)
+    form.select.set_select_field_with_id("it-ldapfilterlist", filter_name)
+
+    button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[1]")
+    button.click()
