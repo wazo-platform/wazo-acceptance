@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce.decorators import step
+import time
+from lettuce import world, step
 from xivo_lettuce import sysutils, logs
 
 
@@ -29,6 +30,7 @@ def then_asterisk_command_group1_return_no_error(step, ast_cmd):
 def when_i_stop_asterisk(step):
     command = ['service', 'asterisk', 'stop']
     assert sysutils.send_command(command)
+    time.sleep(world.timeout)
 
 
 @step(u'Then the service "([^"]*)" is running')
