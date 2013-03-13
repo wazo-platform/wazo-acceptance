@@ -82,3 +82,20 @@ def remove_line():
     delete_button = select_line.find_element_by_xpath("//a[@title='Delete this line']")
     delete_button.click()
     time.sleep(world.timeout)
+
+
+def switchboard_config_for_user(user):
+    common.open_url('user')
+    common.edit_line(user)
+    select_simultaneous_calls(1)
+    enable_call_transfer()
+    form.submit.submit_form()
+
+
+def select_simultaneous_calls(nb_calls):
+    form.select.set_select_field_with_id("it-userfeatures-simultcalls", str(nb_calls))
+
+
+def enable_call_transfer():
+    go_to_tab("Services")
+    form.checkbox.check_checkbox_with_id("it-userfeatures-enablehint")

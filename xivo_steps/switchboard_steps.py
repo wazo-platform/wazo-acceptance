@@ -21,6 +21,8 @@ from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
 from xivo_lettuce.manager_ws import context_manager_ws
 from xivo_lettuce.manager import ldap_manager
 from xivo_lettuce.manager import directory_manager
+from xivo_lettuce.manager import user_manager
+from xivo_lettuce.manager import queue_manager
 
 
 @step(u'When I search a transfer destination "([^"]*)"')
@@ -183,3 +185,23 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
 def given_there_are_entries_in_the_ldap_server(step):
     for directory_entry in step.hashes:
         ldap_manager.add_or_replace_entry(directory_entry)
+
+
+@step(u'Given the user "([^"]*)" is configured for switchboard use')
+def given_the_user_group1_is_configured_for_switchboard_use(step, user):
+    user_manager.switchboard_config_for_user(user)
+
+
+@step(u'Given there is a switchboard configured as:')
+def given_there_is_a_switchboard_configured_as(step):
+    for config in step.hashes:
+        queue_manager.add_or_replace_switchboard_queue(
+            config['incalls queue name'],
+            config['incalls queue number'],
+            config['incalls queue context'],
+            config['agents'])
+
+        queue_manager.add_or_replace_switchboard_hold_queue(
+            config['hold calls queue name'],
+            config['hold calls queue number'],
+            config['hold calls queue context'])

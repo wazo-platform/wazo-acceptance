@@ -18,9 +18,20 @@
 from xivo_lettuce import sysutils
 from xivo_lettuce.common import open_url, go_to_tab
 from xivo_lettuce.form.input import set_text_field_with_label
-from xivo_lettuce.form.select import set_select_field_with_label
+from xivo_lettuce.form.select import set_select_field_with_label, \
+    set_select_field_with_id
+from xivo_lettuce.form.checkbox import set_checkbox_with_id
 from xivo_lettuce.form.list_pane import ListPane
+from xivo_lettuce.form.submit import submit_form
 from xivo_lettuce.manager_ws import queue_manager_ws, context_manager_ws
+
+
+CALLEE_TRANSFER = 'allow allee transfer'
+CALLER_HANGUP = 'allow caller hangup'
+REACH_TIMEOUT = 'member reachability timeout'
+CALL_RETRY = 'call retry time'
+REASSIGN_DELAY = 'reassign delay'
+AUTOPAUSE_AGENTS = 'autopause agents'
 
 
 def remove_queues_with_name_or_number(queue_name, queue_number):
@@ -38,7 +49,50 @@ def add_or_replace_queue(queue):
     fill_form(queue)
 
 
+def add_or_replace_switchboard_queue(name, number, context, agents):
+    config = {
+        'name': name,
+        'display name': name,
+        'number': number,
+        'context': context,
+        'agents': agents,
+        CALLEE_TRANSFER: 'true',
+        CALLER_HANGUP: 'true',
+        REACH_TIMEOUT: 'Disabled',
+        CALL_RETRY: '1 second',
+        REASSIGN_DELAY: 'Disabled',
+        AUTOPAUSE_AGENTS: 'false',
+    }
+
+    add_or_replace_queue(config)
+    submit_form()
+
+
+def add_or_replace_switchboard_hold_queue(name, number, context):
+    config = {
+        'name': name,
+        'display name': name,
+        'number': number,
+        'context': context,
+    }
+
+    add_or_replace_queue(config)
+    submit_form()
+
+
 def fill_form(queue):
+    fill_general_tab(queue)
+    fill_application_tab(queue)
+    fill_advanced_tab(queue)
+
+    if 'agents' in queue:
+        agentlist = queue['agents'].split(",")
+        add_agents_to_queue(agentlist)
+
+
+def fill_general_tab(queue):
+    go_to_tab('General')
+
     set_text_field_with_label('Name', queue['name'])
     set_text_field_with_label('Display name', queue['display name'])
     set_text_field_with_label('Number', queue['number'])
@@ -50,9 +104,35 @@ def fill_form(queue):
     if 'ring strategy' in queue:
         type_queue_ring_strategy(queue['ring strategy'])
 
-    if 'agents' in queue:
-        agentlist = queue['agents'].split(",")
-        add_agents_to_queue(agentlist)
+
+def fill_application_tab(queue):
+    go_to_tab('Application')
+
+    if CALLEE_TRANSFER in queue:
+        callee_transfer = (queue[CALLEE_TRANSFER] == 'true')
+        set_checkbox_with_id('it-queuefeatures-hitting-callee', callee_transfer)
+
+    if CALLER_HANGUP in queue:
+        caller_hangup = (queue[CALLER_HANGUP]  == 'true')
+        set_checkbox_with_id('it-queuefeatures-hitting-caller', caller_hangup)
+
+
+def fill_advanced_tab(queue):
+    go_to_tab('Advanced')
+
+    if REACH_TIMEOUT in queue:
+        set_select_field_with_id('it-queue-timeout',
+            queue[REACH_TIMEOUT])
+
+    if CALL_RETRY in queue:
+        set_select_field_with_id('it-queue-retry', queue[CALL_RETRY])
+
+    if REASSIGN_DELAY in queue:
+        set_select_field_with_id('it-queue-wrapuptime', queue[REASSIGN_DELAY])
+
+    if AUTOPAUSE_AGENTS in queue:
+        autopause_agents = (queue[AUTOPAUSE_AGENTS] == 'true')
+        set_checkbox_with_id('it-queue-autopause', autopause_agents)
 
 
 def add_agents_to_queue(agents):
@@ -84,7 +164,7 @@ def _asterisk_queue_show(queue_name):
 def _parse_members(output):
     lines = output.split("\n")
 
-    queue_details = lines.pop(0).strip()
+    lines.pop(0).strip()
     member_header = lines.pop(0).strip()
 
     if member_header == "No Members":
