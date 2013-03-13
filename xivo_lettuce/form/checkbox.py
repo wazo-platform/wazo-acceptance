@@ -59,3 +59,7 @@ def check_checkbox_with_id(element_id):
 
 def uncheck_checkbox_with_id(element_id):
     Checkbox.from_id(element_id).uncheck()
+
+
+def set_checkbox_with_id(element_id, checked):
+    Checkbox.from_id(element_id).set_checked(checked)
