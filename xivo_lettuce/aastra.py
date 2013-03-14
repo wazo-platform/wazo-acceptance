@@ -43,5 +43,6 @@ class AastraPhonebookBrowser(object):
         for line in fobj:
             m = self._REGEX.match(line)
             if m:
-                results.append(m.group(1))
+                result = m.group(1).decode('utf8')
+                results.append(result)
         return results
