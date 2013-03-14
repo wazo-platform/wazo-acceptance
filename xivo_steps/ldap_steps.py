@@ -33,9 +33,9 @@ def given_there_is_a_ldap_server_with_name_1_and_with_host_2(step, name, host):
 @step(u'I create an LDAP filter with name "([^"]*)" and server "([^"]*)"')
 def i_create_an_ldap_filter_with_name_and_server(step, name, server):
     ldap_manager.add_or_replace_ldap_filter(
-        name,
-        server,
-        'dc=lan-quebec,dc=avencall,dc=com'
+        name=name,
+        server=server,
+        base_dn='dc=lan-quebec,dc=avencall,dc=com'
     )
 
 
@@ -54,23 +54,25 @@ def given_there_is_an_ldap_filter_with_name_and_with_server(step, name, server):
 
 @step(u'Given the LDAP server is configured for SSL connections')
 def given_the_ldap_server_is_configured_for_ssl_connections(step):
-    copy_ca_certificate()
-    configure_ca_certificate()
+    _copy_ca_certificate()
+    _configure_ca_certificate()
     ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com', True)
-    ldap_manager.add_or_replace_ldap_filter('openldap-dev', 'openldap-dev',
-                                            'dc=lan-quebec,dc=avencall,dc=com',
-                                            'cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-                                            'superpass',
-                                            ['cn', 'st', 'givenName'],
-                                            ['telephoneNumber'])
+    ldap_manager.add_or_replace_ldap_filter(
+        name='openldap-dev',
+        server='openldap-dev',
+        base_dn='dc=lan-quebec,dc=avencall,dc=com',
+        username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
+        password='superpass',
+        display_name=['cn', 'st', 'givenName'],
+        phone_number=['telephoneNumber'])
     ldap_manager.add_ldap_filter_to_phonebook('openldap-dev')
 
 
-def copy_ca_certificate():
+def _copy_ca_certificate():
     assets.copy_asset_to_server("ca-certificates.crt", "/etc/ssl/certs/ca-certificates.crt")
 
 
-def configure_ca_certificate():
+def _configure_ca_certificate():
     command = ['grep', 'TLS_CACERT', '/etc/ldap/ldap.conf']
     output = sysutils.output_command(command)
     if not output.strip():
@@ -87,15 +89,15 @@ def given_the_ldap_server_is_configured(step):
 def given_there_are_the_following_ldap_filters(step):
     for ldap_filter in step.hashes:
         ldap_manager.add_or_replace_ldap_filter(
-            ldap_filter['name'],
-            ldap_filter['server'],
-            ldap_filter['base dn'],
-            ldap_filter['username'],
-            ldap_filter['password'],
-            ldap_filter['display name'].split(','),
-            ldap_filter['phone number'].split(','),
-            ldap_filter['filter'],
-            ldap_filter['phone number type'])
+            name=ldap_filter['name'],
+            server=ldap_filter['server'],
+            base_dn=ldap_filter['base dn'],
+            username=ldap_filter['username'],
+            password=ldap_filter['password'],
+            display_name=ldap_filter['display name'].split(','),
+            phone_number=ldap_filter['phone number'].split(','),
+            custom_filter=ldap_filter['filter'],
+            number_type=ldap_filter['phone number type'])
 
 @step(u'Given the ldap filter "([^"]*)" has been added to the phonebook')
 def given_the_ldap_filter_group1_has_been_added_to_the_phonebook(step, ldap_filter):

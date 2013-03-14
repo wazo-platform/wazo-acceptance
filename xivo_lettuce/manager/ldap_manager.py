@@ -28,8 +28,8 @@ LDAP_USER_GROUP = 'ou=people,dc=lan-quebec,dc=avencall,dc=com'
 
 
 def type_ldap_name_and_host(name, host):
-    input_name = world.browser.find_element_by_id('it-name', 'LDAP form  not loaded')
-    input_host = world.browser.find_element_by_id('it-host', 'LDAP form  not loaded')
+    input_name = world.browser.find_element_by_id('it-name', 'LDAP form not loaded')
+    input_host = world.browser.find_element_by_id('it-host', 'LDAP form not loaded')
     input_name.send_keys(name)
     input_host.send_keys(host)
 
@@ -53,15 +53,17 @@ def add_or_replace_ldap_server(name, host, ssl=False):
     add_ldap_server(name, host, ssl)
 
 
-def add_or_replace_ldap_filter(name, server, base_dn, username=None, password=None,
-        display_fields=['cn'], number_fields=['telephoneNumber'], custom_filter=None,
-        number_type=None):
+def add_or_replace_ldap_filter(**args):
+    opts = {
+        'display_name': ['cn'],
+        'phone_number': ['telephoneNumber'],
+    }
+    opts.update(args)
 
-    if common.element_is_in_list('ldapfilter', name):
-        common.remove_line(name)
+    if common.element_is_in_list('ldapfilter', opts['name']):
+        common.remove_line(opts['name'])
 
-    _add_ldap_filter(server, name, base_dn, username, password, display_fields,
-            number_fields, custom_filter, number_type)
+    _add_ldap_filter(**opts)
 
 
 def add_or_replace_entry(directory_entry):
@@ -110,32 +112,30 @@ def add_entry_bound(ldap_server, directory_entry):
     ldap_server.add_s(new_entry_id_encoded, new_entry_content_encoded)
 
 
-def _add_ldap_filter(server, name, base_dn, username=None, password=None,
-        display_fields=['cn'], phone_fields=['telephoneNumber'], custom_filter=None,
-        number_type=None):
+def _add_ldap_filter(**args):
 
     common.open_url('ldapfilter', 'add')
 
-    _type_ldap_filter_name(name)
-    _choose_ldap_server(server)
+    _type_ldap_filter_name(args['name'])
+    _choose_ldap_server(args['server'])
 
-    if username and password:
-        _type_username_and_password(username, password)
+    if 'username' in args and 'password' in args:
+        _type_username_and_password(args['username'], args['password'])
 
-    _type_ldap_filter_base_dn(base_dn)
+    _type_ldap_filter_base_dn(args['base_dn'])
 
-    if custom_filter:
-        _type_ldap_custom_filter(custom_filter)
+    if 'custom_filter' in args:
+        _type_ldap_custom_filter(args['custom_filter'])
 
-    if number_type:
-        _select_phone_number_type(number_type)
+    if 'number_type' in args:
+        _select_phone_number_type(args['number_type'])
 
     common.go_to_tab("Attributes")
 
-    for field in display_fields:
+    for field in args.get('display_name', []):
         _add_filter_display_name_field(field)
 
-    for field in phone_fields:
+    for field in args.get('phone_number', []):
         _add_filter_phone_number_field(field)
 
     form.submit.submit_form()
