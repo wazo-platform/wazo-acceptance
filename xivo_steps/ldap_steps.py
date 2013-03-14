@@ -63,7 +63,7 @@ def given_the_ldap_server_is_configured_for_ssl_connections(step):
                                             'superpass',
                                             ['cn', 'st', 'givenName'],
                                             ['telephoneNumber'])
-    ldap_manager.add_ldap_filter_to_phonebook('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
+    ldap_manager.add_ldap_filter_to_phonebook('openldap-dev')
 
 
 def copy_ca_certificate():
@@ -76,3 +76,27 @@ def configure_ca_certificate():
     if not output.strip():
         command = ["echo 'TLS_CACERT /etc/ssl/certs/ca-certificates.crt' >> /etc/ldap/ldap.conf"]
         sysutils.send_command(command)
+
+
+@step(u'^Given the LDAP server is configured$')
+def given_the_ldap_server_is_configured(step):
+    ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
+
+
+@step(u'Given there are the following ldap filters:')
+def given_there_are_the_following_ldap_filters(step):
+    for ldap_filter in step.hashes:
+        ldap_manager.add_or_replace_ldap_filter(
+            ldap_filter['name'],
+            ldap_filter['server'],
+            ldap_filter['base dn'],
+            ldap_filter['username'],
+            ldap_filter['password'],
+            ldap_filter['display name'].split(','),
+            ldap_filter['phone number'].split(','),
+            ldap_filter['filter'],
+            ldap_filter['phone number type'])
+
+@step(u'Given the ldap filter "([^"]*)" has been added to the phonebook')
+def given_the_ldap_filter_group1_has_been_added_to_the_phonebook(step, ldap_filter):
+    ldap_manager.add_ldap_filter_to_phonebook(ldap_filter)

@@ -54,12 +54,14 @@ def add_or_replace_ldap_server(name, host, ssl=False):
 
 
 def add_or_replace_ldap_filter(name, server, base_dn, username=None, password=None,
-        display_fields=['cn'], number_fields=['telephoneNumber']):
+        display_fields=['cn'], number_fields=['telephoneNumber'], custom_filter=None,
+        number_type=None):
+
     if common.element_is_in_list('ldapfilter', name):
         common.remove_line(name)
 
     _add_ldap_filter(server, name, base_dn, username, password, display_fields,
-            number_fields)
+            number_fields, custom_filter, number_type)
 
 
 def add_or_replace_entry(directory_entry):
@@ -98,12 +100,20 @@ def add_entry_bound(ldap_server, directory_entry):
     if 'department' in directory_entry_encoded:
         new_entry_attributes_encoded['o'] = directory_entry_encoded['department']
 
+    if 'city' in directory_entry_encoded:
+        new_entry_attributes_encoded['l'] = directory_entry_encoded['city']
+
+    if 'state' in directory_entry_encoded:
+        new_entry_attributes_encoded['st'] = directory_entry_encoded['state']
+
     new_entry_content_encoded = ldap.modlist.addModlist(new_entry_attributes_encoded)
     ldap_server.add_s(new_entry_id_encoded, new_entry_content_encoded)
 
 
 def _add_ldap_filter(server, name, base_dn, username=None, password=None,
-        display_fields=['cn'], phone_fields=['telephoneNumber']):
+        display_fields=['cn'], phone_fields=['telephoneNumber'], custom_filter=None,
+        number_type=None):
+
     common.open_url('ldapfilter', 'add')
 
     _type_ldap_filter_name(name)
@@ -113,6 +123,12 @@ def _add_ldap_filter(server, name, base_dn, username=None, password=None,
         _type_username_and_password(username, password)
 
     _type_ldap_filter_base_dn(base_dn)
+
+    if custom_filter:
+        _type_ldap_custom_filter(custom_filter)
+
+    if number_type:
+        _select_phone_number_type(number_type)
 
     common.go_to_tab("Attributes")
 
@@ -151,6 +167,10 @@ def _type_ldap_filter_base_dn(base_dn):
     text_input.send_keys(base_dn)
 
 
+def _type_ldap_custom_filter(custom_filter):
+    form.input.set_text_field_with_id("it-ldapfilter-filter", custom_filter)
+
+
 def _type_ldap_filter_name(name):
     text_input = world.browser.find_element_by_label("Name")
     text_input.clear()
@@ -165,6 +185,14 @@ def _type_username_and_password(username, password):
     text_input = world.browser.find_element_by_label("Password")
     text_input.clear()
     text_input.send_keys(password)
+
+
+def _select_phone_number_type(number_type):
+    if number_type in ['Office', 'Home', 'Mobile', 'Fax', 'Other']:
+        form.select.set_select_field_with_id("it-ldapfilter-additionaltype", number_type)
+    else:
+        form.select.set_select_field_with_id("it-ldapfilter-additionaltype", "Customized")
+        form.input.set_text_field_with_id("it-ldapfilter-additionaltext", number_type)
 
 
 def _get_entry_id(directory_entry):
@@ -192,15 +220,15 @@ def _ldap_has_entry_bound(ldap_server, entry_common_name):
         return False
 
 
-def add_ldap_filter_to_phonebook(name, host):
+def add_ldap_filter_to_phonebook(ldap_filter):
     common.open_url('phonebook_settings')
     common.go_to_tab('LDAP filters')
-    _move_filter_to_right_pane(name, host)
+    _move_filter_to_right_pane(ldap_filter)
     form.submit.submit_form()
 
-def _move_filter_to_right_pane(name, host):
-    filter_name = "%s (%s)" % (name, host)
-    form.select.set_select_field_with_id("it-ldapfilterlist", filter_name)
+
+def _move_filter_to_right_pane(ldap_filter):
+    form.select.set_select_field_with_id_containing("it-ldapfilterlist", ldap_filter)
 
     button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[1]")
     button.click()
