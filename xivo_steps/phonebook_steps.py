@@ -17,7 +17,7 @@
 
 from lettuce import step, world
 
-from hamcrest import assert_that, equal_to
+from hamcrest import assert_that, has_items
 from xivo_lettuce import assets
 from xivo_lettuce.aastra import AastraPhonebookBrowser
 from xivo_lettuce.common import find_line
@@ -62,7 +62,7 @@ def when_i_search_the_phonebook_on_my_aastra(step, term):
 def then_i_see_the_following_results_on_the_phone(step):
     results = world.phone_results
     expected_results = [info['value'] for info in step.hashes]
-    assert_that(results, equal_to(expected_results))
+    assert_that(results, has_items(*expected_results))
 
 
 @step(u'Then "([^"]*)" appears in the list')
