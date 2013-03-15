@@ -88,16 +88,23 @@ def given_the_ldap_server_is_configured(step):
 @step(u'Given there are the following ldap filters:')
 def given_there_are_the_following_ldap_filters(step):
     for ldap_filter in step.hashes:
-        ldap_manager.add_or_replace_ldap_filter(
+        options = dict(
             name=ldap_filter['name'],
             server=ldap_filter['server'],
             base_dn=ldap_filter['base dn'],
             username=ldap_filter['username'],
-            password=ldap_filter['password'],
-            display_name=ldap_filter['display name'].split(','),
-            phone_number=ldap_filter['phone number'].split(','),
-            custom_filter=ldap_filter['filter'],
-            number_type=ldap_filter['phone number type'])
+            password=ldap_filter['password'])
+
+        if 'display name' in ldap_filter:
+            options['display_name'] = ldap_filter['display name'].split(',')
+
+        if 'phone number' in ldap_filter:
+            options['phone_number'] = ldap_filter['phone number'].split(',')
+
+        if 'filter' in ldap_filter:
+            options['custom_filter'] = ldap_filter['filter']
+
+        ldap_manager.add_or_replace_ldap_filter(**options)
 
 @step(u'Given the ldap filter "([^"]*)" has been added to the phonebook')
 def given_the_ldap_filter_group1_has_been_added_to_the_phonebook(step, ldap_filter):
