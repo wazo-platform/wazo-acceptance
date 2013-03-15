@@ -109,3 +109,7 @@ def given_there_are_the_following_ldap_filters(step):
 @step(u'Given the ldap filter "([^"]*)" has been added to the phonebook')
 def given_the_ldap_filter_group1_has_been_added_to_the_phonebook(step, ldap_filter):
     ldap_manager.add_ldap_filter_to_phonebook(ldap_filter)
+
+@step(u'Given there are no LDAP filters configured in the phonebook')
+def given_there_are_no_ldap_filters_configured_in_the_phonebook(step):
+    ldap_manager.remove_all_filters_from_phonebook()

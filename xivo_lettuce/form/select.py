@@ -44,3 +44,9 @@ def _select_option_containing(filter_string, select_input):
     for option in options:
         if filter_string in option.text:
             select_input.select_by_value(option.get_attribute('value'))
+
+def select_all_with_id(field_id):
+    element = world.browser.find_element_by_id(field_id)
+    select_input = Select(element)
+    for option in select_input.options:
+        select_input.select_by_value(option.get_attribute('value'))

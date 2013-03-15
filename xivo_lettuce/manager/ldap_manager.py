@@ -229,6 +229,16 @@ def add_ldap_filter_to_phonebook(ldap_filter):
 
 def _move_filter_to_right_pane(ldap_filter):
     form.select.set_select_field_with_id_containing("it-ldapfilterlist", ldap_filter)
-
     button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[1]")
+    button.click()
+
+def remove_all_filters_from_phonebook():
+    common.open_url('phonebook_settings')
+    common.go_to_tab('LDAP filters')
+    _move_all_filters_to_left_pane()
+    form.submit.submit_form()
+
+def _move_all_filters_to_left_pane():
+    form.select.select_all_with_id("it-ldapfilter")
+    button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[2]")
     button.click()

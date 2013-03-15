@@ -2,6 +2,7 @@ Feature: Phonebook
 
     Scenario: Phonebook is sorted by display name
         Given the phonebook is accessible by any hosts
+        Given there are no LDAP filters configured in the phonebook
         Given "Abc Def" is not in the phonebook
         Given "Abc Aaa" is not in the phonebook
         When I add the following entries to the phonebook:
@@ -16,6 +17,7 @@ Feature: Phonebook
 
     Scenario: Phonebook searches using SSL LDAP connection
         Given the phonebook is accessible by any hosts
+        Given there are no LDAP filters configured in the phonebook
         Given the LDAP server is configured for SSL connections
         Given there are entries in the ldap server:
           | first name  | last name   | phone      |
@@ -27,6 +29,7 @@ Feature: Phonebook
 
     Scenario: Phonebook searches using multiple filters
         Given the phonebook is accessible by any hosts
+        Given there are no LDAP filters configured in the phonebook
         Given the LDAP server is configured
         Given there are entries in the ldap server:
           | first name | last name | city   | state  | phone      |
@@ -47,3 +50,21 @@ Feature: Phonebook
           | Cédric SimCity (City)  |
           | Linus Torvalds (State) |
           | Pape Francois (State)  |
+
+    Scenario: Phonebook searches LDAP using multiple attributes
+        Given the phonebook is accessible by any hosts
+        Given there are no LDAP filters configured in the phonebook
+        Given the LDAP server is configured
+        Given there are entries in the ldap server:
+          | first name | last name | city        | state        | phone  |
+          | foobar     | city      | foobar city |              | 123789 |
+          | foobar     | state     |             | foobar state | 123456 |
+        Given there are the following ldap filters:
+          | name                | server       | username                                  | password  | base dn                          | display name | phone number    |
+          | openldap-attributes | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | l,st         | telephoneNumber |
+        Given the ldap filter "openldap-attributes" has been added to the phonebook
+        When I search the phonebook for "foobar" on my Aastra
+        Then I see the following results on the phone:
+          | value                 |
+          | foobar city (Office)  |
+          | foobar state (Office) |
