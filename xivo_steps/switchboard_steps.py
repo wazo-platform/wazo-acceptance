@@ -52,11 +52,13 @@ def assert_directory_has_entry(entry):
 def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_department(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
     ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
-    ldap_manager.add_or_replace_ldap_filter('openldap-dev', 'openldap-dev',
-                                            'dc=lan-quebec,dc=avencall,dc=com',
-                                            'cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-                                            'superpass',
-                                            ['cn', 'st', 'o'])
+    ldap_manager.add_or_replace_ldap_filter(
+        name='openldap-dev',
+        server='openldap-dev',
+        base_dn='dc=lan-quebec,dc=avencall,dc=com',
+        username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
+        password='superpass',
+        display_name=['cn', 'st', 'o'])
 
     directory_manager.add_or_replace_directory(
         'openldap',
@@ -102,11 +104,13 @@ def given_the_context_group1_uses_display_group2_with_the_following_directories(
 def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
     ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
-    ldap_manager.add_or_replace_ldap_filter('openldap-dev', 'openldap-dev',
-                                            'dc=lan-quebec,dc=avencall,dc=com',
-                                            'cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-                                            'superpass',
-                                            ['cn', 'st'])
+    ldap_manager.add_or_replace_ldap_filter(
+        name='openldap-dev',
+        server='openldap-dev',
+        base_dn='dc=lan-quebec,dc=avencall,dc=com',
+        username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
+        password='superpass',
+        display_name=['cn', 'st'])
 
     directory_manager.add_or_replace_directory(
         'openldap',
@@ -134,7 +138,13 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
 def given_the_switchboard_is_configured_for_ldap_lookup(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
     ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
-    ldap_manager.add_or_replace_ldap_filter('openldap-dev', 'openldap-dev', 'dc=lan-quebec,dc=avencall,dc=com', 'cn=admin,dc=lan-quebec,dc=avencall,dc=com', 'superpass')
+    ldap_manager.add_or_replace_ldap_filter(
+        name='openldap-dev',
+        server='openldap-dev',
+        base_dn='dc=lan-quebec,dc=avencall,dc=com',
+        username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
+        password='superpass')
+
     directory_manager.add_or_replace_directory(
         'openldap',
         'ldapfilter://openldap-dev',

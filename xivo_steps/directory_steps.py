@@ -39,7 +39,7 @@ def given_the_following_directories_exist(step):
 
 @step(u'Given the directory definition "([^"]*)" does not exist')
 def given_the_directory_definition_does_not_exist(step, definition):
-    remove_element_if_exist('cti_directory', 'phonebookcsv')
+    remove_element_if_exist('cti_directory', definition)
     #Work around for directory associations that aren't deleted
     open_url('cti_direct_directory', 'list')
     try:
@@ -120,6 +120,12 @@ def then_nothing_shows_up_in_the_directory_xlet(step):
 @step(u'Then "([^"]*)" shows up in the directory xlet')
 @xivoclient_step
 def then_1_shows_up_in_the_directory_xlet(step, entry):
+    assert world.xc_response == 'OK'
+
+
+@step(u'Then "([^"]*)" does not show up in the directory xlet')
+@xivoclient_step
+def then_1_does_not_show_up_in_the_directory_xlet(step, entry):
     assert world.xc_response == 'OK'
 
 

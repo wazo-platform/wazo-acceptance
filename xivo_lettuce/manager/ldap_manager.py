@@ -21,7 +21,6 @@ from xivo_lettuce import form
 import ldap
 import ldap.modlist
 
-
 LDAP_URI = 'ldap://openldap-dev.lan-quebec.avencall.com:389/'
 LDAP_LOGIN = 'cn=admin,dc=lan-quebec,dc=avencall,dc=com'
 LDAP_PASSWORD = 'superpass'
@@ -29,31 +28,42 @@ LDAP_USER_GROUP = 'ou=people,dc=lan-quebec,dc=avencall,dc=com'
 
 
 def type_ldap_name_and_host(name, host):
-    input_name = world.browser.find_element_by_id('it-name', 'LDAP form  not loaded')
-    input_host = world.browser.find_element_by_id('it-host', 'LDAP form  not loaded')
+    input_name = world.browser.find_element_by_id('it-name', 'LDAP form not loaded')
+    input_host = world.browser.find_element_by_id('it-host', 'LDAP form not loaded')
     input_name.send_keys(name)
     input_host.send_keys(host)
 
 
-def add_ldap_server(name, host):
+def change_to_ssl():
+    form.input.set_text_field_with_id("it-port", "636")
+    form.select.set_select_field_with_id("it-securitylayer", "SSL")
+
+
+def add_ldap_server(name, host, ssl=False):
     common.open_url('ldapserver', 'add')
     type_ldap_name_and_host(name, host)
+    if ssl:
+        change_to_ssl()
     form.submit.submit_form()
 
 
-def add_or_replace_ldap_server(name, host):
+def add_or_replace_ldap_server(name, host, ssl=False):
     if common.element_is_in_list('ldapserver', name):
         common.remove_line(name)
-    add_ldap_server(name, host)
+    add_ldap_server(name, host, ssl)
 
 
-def add_or_replace_ldap_filter(name, server, base_dn, username=None, password=None,
-        display_fields=['cn'], number_fields=['telephoneNumber']):
-    if common.element_is_in_list('ldapfilter', name):
-        common.remove_line(name)
+def add_or_replace_ldap_filter(**args):
+    opts = {
+        'display_name': ['cn'],
+        'phone_number': ['telephoneNumber'],
+    }
+    opts.update(args)
 
-    _add_ldap_filter(server, name, base_dn, username, password, display_fields,
-            number_fields)
+    if common.element_is_in_list('ldapfilter', opts['name']):
+        common.remove_line(opts['name'])
+
+    _add_ldap_filter(**opts)
 
 
 def add_or_replace_entry(directory_entry):
@@ -80,6 +90,7 @@ def add_entry_bound(ldap_server, directory_entry):
     new_entry_id_encoded = _get_entry_id(directory_entry).encode('utf-8')
     new_entry_attributes_encoded = {
         'objectClass': ['top', 'inetOrgPerson'],
+        'givenName': directory_entry_encoded['first name'],
         'cn': new_entry_common_name_encoded,
         'sn': directory_entry_encoded['last name'],
         'telephoneNumber': directory_entry_encoded['phone'],
@@ -91,28 +102,46 @@ def add_entry_bound(ldap_server, directory_entry):
     if 'department' in directory_entry_encoded:
         new_entry_attributes_encoded['o'] = directory_entry_encoded['department']
 
+    if 'city' in directory_entry_encoded:
+        new_entry_attributes_encoded['l'] = directory_entry_encoded['city']
+
+    if 'state' in directory_entry_encoded:
+        new_entry_attributes_encoded['st'] = directory_entry_encoded['state']
+
+    if 'mobile' in directory_entry_encoded:
+        new_entry_attributes_encoded['mobile'] = directory_entry_encoded['mobile']
+
+    if 'email' in directory_entry_encoded:
+        new_entry_attributes_encoded['mail'] = directory_entry_encoded['email']
+
     new_entry_content_encoded = ldap.modlist.addModlist(new_entry_attributes_encoded)
     ldap_server.add_s(new_entry_id_encoded, new_entry_content_encoded)
 
 
-def _add_ldap_filter(server, name, base_dn, username=None, password=None,
-        display_fields=['cn'], phone_fields=['telephoneNumber']):
+def _add_ldap_filter(**args):
+
     common.open_url('ldapfilter', 'add')
 
-    _type_ldap_filter_name(name)
-    _choose_ldap_server(server)
+    _type_ldap_filter_name(args['name'])
+    _choose_ldap_server(args['server'])
 
-    if username and password:
-        _type_username_and_password(username, password)
+    if 'username' in args and 'password' in args:
+        _type_username_and_password(args['username'], args['password'])
 
-    _type_ldap_filter_base_dn(base_dn)
+    _type_ldap_filter_base_dn(args['base_dn'])
+
+    if 'custom_filter' in args:
+        _type_ldap_custom_filter(args['custom_filter'])
+
+    if 'number_type' in args:
+        _select_phone_number_type(args['number_type'])
 
     common.go_to_tab("Attributes")
 
-    for field in display_fields:
+    for field in args.get('display_name', []):
         _add_filter_display_name_field(field)
 
-    for field in phone_fields:
+    for field in args.get('phone_number', []):
         _add_filter_phone_number_field(field)
 
     form.submit.submit_form()
@@ -144,6 +173,10 @@ def _type_ldap_filter_base_dn(base_dn):
     text_input.send_keys(base_dn)
 
 
+def _type_ldap_custom_filter(custom_filter):
+    form.input.set_text_field_with_id("it-ldapfilter-filter", custom_filter)
+
+
 def _type_ldap_filter_name(name):
     text_input = world.browser.find_element_by_label("Name")
     text_input.clear()
@@ -158,6 +191,14 @@ def _type_username_and_password(username, password):
     text_input = world.browser.find_element_by_label("Password")
     text_input.clear()
     text_input.send_keys(password)
+
+
+def _select_phone_number_type(number_type):
+    if number_type in ['Office', 'Home', 'Mobile', 'Fax', 'Other']:
+        form.select.set_select_field_with_id("it-ldapfilter-additionaltype", number_type)
+    else:
+        form.select.set_select_field_with_id("it-ldapfilter-additionaltype", "Customized")
+        form.input.set_text_field_with_id("it-ldapfilter-additionaltext", number_type)
 
 
 def _get_entry_id(directory_entry):
@@ -183,3 +224,27 @@ def _ldap_has_entry_bound(ldap_server, entry_common_name):
         return True
     else:
         return False
+
+
+def add_ldap_filter_to_phonebook(ldap_filter):
+    common.open_url('phonebook_settings')
+    common.go_to_tab('LDAP filters')
+    _move_filter_to_right_pane(ldap_filter)
+    form.submit.submit_form()
+
+
+def _move_filter_to_right_pane(ldap_filter):
+    form.select.set_select_field_with_id_containing("it-ldapfilterlist", ldap_filter)
+    button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[1]")
+    button.click()
+
+def remove_all_filters_from_phonebook():
+    common.open_url('phonebook_settings')
+    common.go_to_tab('LDAP filters')
+    _move_all_filters_to_left_pane()
+    form.submit.submit_form()
+
+def _move_all_filters_to_left_pane():
+    form.select.select_all_with_id("it-ldapfilter")
+    button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[2]")
+    button.click()
