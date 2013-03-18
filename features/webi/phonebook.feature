@@ -68,3 +68,21 @@ Feature: Phonebook
           | name                  |
           | foobar city (Office)  |
           | foobar state (Office) |
+
+    Scenario: Phonebook searches LDAP using multiple attriburtes in phone number
+        Given the phonebook is accessible by any hosts
+        Given there are no LDAP filters configured in the phonebook
+        Given the LDAP server is configured
+        Given there are entries in the ldap server:
+          | first name  | last name   | mobile       | phone        |
+          | utilisateur | mobile      | 654 456 9871 |              |
+          | utilisateur | phoneNumber |              | 496 548 6512 |
+        Given there are the following ldap filters:
+          | name                 | server       | username                                  | password  | base dn                          | display name | phone number           |
+          | openldap-phonenumber | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber,mobile |
+        Given the ldap filter "openldap-phonenumber" has been added to the phonebook
+        When I search the phonebook for "utilisateur" on my Aastra
+        Then I see the following results on the phone:
+          | name                             | number     |
+          | utilisateur mobile (Office)      | 6544569871 |
+          | utilisateur phoneNumber (Office) | 4965486512 |
