@@ -51,7 +51,7 @@ Feature: Phonebook
           | Linus Torvalds (State) |
           | Pape Francois (State)  |
 
-    Scenario: Phonebook searches LDAP using multiple attributes
+    Scenario: Phonebook searches LDAP using multiple attributes in display name
         Given the phonebook is accessible by any hosts
         Given there are no LDAP filters configured in the phonebook
         Given the LDAP server is configured
@@ -60,9 +60,9 @@ Feature: Phonebook
           | foobar     | city      | foobar city |              | 123789 |
           | foobar     | state     |             | foobar state | 123456 |
         Given there are the following ldap filters:
-          | name                | server       | username                                  | password  | base dn                          | display name | phone number    |
-          | openldap-attributes | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | l,st         | telephoneNumber |
-        Given the ldap filter "openldap-attributes" has been added to the phonebook
+          | name                 | server       | username                                  | password  | base dn                          | display name | phone number    |
+          | openldap-displayname | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | l,st         | telephoneNumber |
+        Given the ldap filter "openldap-displayname" has been added to the phonebook
         When I search the phonebook for "foobar" on my Aastra
         Then I see the following results on the phone:
           | value                 |
