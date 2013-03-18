@@ -108,6 +108,9 @@ def add_entry_bound(ldap_server, directory_entry):
     if 'state' in directory_entry_encoded:
         new_entry_attributes_encoded['st'] = directory_entry_encoded['state']
 
+    if 'mobile' in directory_entry_encoded:
+        new_entry_attributes_encoded['mobile'] = directory_entry_encoded['mobile']
+
     new_entry_content_encoded = ldap.modlist.addModlist(new_entry_attributes_encoded)
     ldap_server.add_s(new_entry_id_encoded, new_entry_content_encoded)
 

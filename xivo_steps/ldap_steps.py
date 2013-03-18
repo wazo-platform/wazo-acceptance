@@ -104,6 +104,9 @@ def given_there_are_the_following_ldap_filters(step):
         if 'filter' in ldap_filter:
             options['custom_filter'] = ldap_filter['filter']
 
+        if 'phone number type' in ldap_filter:
+            options['number_type'] = ldap_filter['phone number type']
+
         ldap_manager.add_or_replace_ldap_filter(**options)
 
 @step(u'Given the ldap filter "([^"]*)" has been added to the phonebook')
