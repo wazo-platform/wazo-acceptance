@@ -17,7 +17,7 @@
 
 from lettuce import step, world
 
-from hamcrest import assert_that, has_items
+from hamcrest import assert_that, has_items, is_not
 from xivo_lettuce import assets
 from xivo_lettuce.aastra import AastraPhonebookBrowser
 from xivo_lettuce.common import find_line
@@ -64,6 +64,14 @@ def then_i_see_the_following_results_on_the_phone(step):
     results = _extract_results(step.keys, world.phone_results)
 
     assert_that(results, has_items(*expected_results))
+
+
+@step(u'Then I do not see the following results on the phone')
+def then_i_do_not_see_the_following_results_on_the_phone(step):
+    expected_results = step.hashes
+    results = _extract_results(step.keys, world.phone_results)
+
+    assert_that(results, is_not(has_items(*expected_results)))
 
 
 @step(u'Then "([^"]*)" appears in the list')

@@ -123,6 +123,12 @@ def then_1_shows_up_in_the_directory_xlet(step, entry):
     assert world.xc_response == 'OK'
 
 
+@step(u'Then "([^"]*)" does not show up in the directory xlet')
+@xivoclient_step
+def then_1_does_not_show_up_in_the_directory_xlet(step, entry):
+    assert world.xc_response == 'OK'
+
+
 @step(u'Given the internal phonebook is configured')
 def given_the_internal_phonebook_is_configured(step):
     directory_manager.add_or_replace_directory(

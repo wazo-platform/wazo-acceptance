@@ -86,3 +86,25 @@ Feature: Phonebook
           | name                             | number     |
           | utilisateur mobile (Office)      | 6544569871 |
           | utilisateur phoneNumber (Office) | 4965486512 |
+
+    Scenario: Phonebook searches LDAP using a custom filter
+        Given the phonebook is accessible by any hosts
+        Given there are no LDAP filters configured in the phonebook
+        Given the LDAP server is configured
+        Given there are entries in the ldap server:
+          | first name | last name              | email             | city   | state  | phone      |
+          | explicite  | mail avencall no state | user@avencall.com | Québec |        | 3698521478 |
+          | explicite  | no mail state quebec   |                   |        | Québec | 123123123  |
+          | explicite  | mail example no state  | qqch@example.com  |        |        | 4445556666 |
+        Given there are the following ldap filters:
+          | name              | server       | username                                  | password  | base dn                          | filter                                         | display name | phone number    |
+          | openldap-explicit | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | &(cn=*%Q*)(\|(mail=*@avencall.com)(st=Québec)) | cn           | telephoneNumber |
+        Given the ldap filter "openldap-explicit" has been added to the phonebook
+        When I search the phonebook for "explicite" on my Aastra
+        Then I see the following results on the phone:
+          | name                                      | number     |
+          | explicite mail avencall no state (Office) | 3698521478 |
+          | explicite no mail state quebec (Office)   | 123123123  |
+        Then I do not see the following results on the phone:
+          | name                            | number     |
+          | explicite mail example no state | 4445556666 |
