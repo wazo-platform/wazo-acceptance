@@ -11,7 +11,7 @@ Feature: Phonebook
           | Abc        | Aaa       | 6789  |
         When I search the phonebook for "Abc" on my Aastra
         Then I see the following results on the phone:
-          | value            |
+          | name             |
           | Abc Aaa (Office) |
           | Abc Def (Office) |
 
@@ -24,7 +24,7 @@ Feature: Phonebook
           | SupremeLord | Sanderson   | 4185551234 |
       When I search the phonebook for "sup" on my Aastra
       Then I see the following results on the phone:
-          | value                          |
+          | name                           |
           | SupremeLord Sanderson (Office) |
 
     Scenario: Phonebook searches using multiple filters
@@ -45,7 +45,7 @@ Feature: Phonebook
         Given the ldap filter "openldap-state" has been added to the phonebook
         When I search the phonebook for "QU" on my Aastra
         Then I see the following results on the phone:
-          | value                  |
+          | name                   |
           | Marie IPad (City)      |
           | Cédric SimCity (City)  |
           | Linus Torvalds (State) |
@@ -65,6 +65,6 @@ Feature: Phonebook
         Given the ldap filter "openldap-displayname" has been added to the phonebook
         When I search the phonebook for "foobar" on my Aastra
         Then I see the following results on the phone:
-          | value                 |
+          | name                  |
           | foobar city (Office)  |
           | foobar state (Office) |

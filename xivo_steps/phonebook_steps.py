@@ -60,8 +60,9 @@ def when_i_search_the_phonebook_on_my_aastra(step, term):
 
 @step(u'Then I see the following results on the phone')
 def then_i_see_the_following_results_on_the_phone(step):
-    results = world.phone_results
-    expected_results = [info['value'] for info in step.hashes]
+    expected_results = step.hashes
+    results = _extract_results(step.keys, world.phone_results)
+
     assert_that(results, has_items(*expected_results))
 
 
@@ -75,3 +76,8 @@ def then_entry_appears_in_the_list(step, entry):
 def when_i_import_the_csv_file_into_the_phonebook(step, csvfile):
     path = assets.full_path(csvfile)
     phonebook_manager.import_csv_file(path)
+
+
+def _extract_results(keys, phone_results):
+    results = [dict((key, phone_result[key]) for key in keys) for phone_result in phone_results]
+    return results

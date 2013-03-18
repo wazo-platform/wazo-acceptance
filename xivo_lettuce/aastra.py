@@ -24,7 +24,9 @@ class AastraPhonebookBrowser(object):
 
     _PATH = 'service/ipbx/web_services.php/phonebook/search/'
     _HEADERS = {'User-Agent': 'Aastra6731i MAC:00-08-5D-31-EF-D2 V:3.2.2.1136-SIP'}
-    _REGEX = re.compile(r'<Prompt><!\[CDATA\[(.+?)\]\]></Prompt>')
+    _REGEX_DISPLAY = re.compile(r'<Prompt><!\[CDATA\[(.+?)\]\]></Prompt>')
+    _REGEX_NUMBER = re.compile(r'<URI>Dial:<!\[CDATA\[(.+?)\]\]></URI>')
+
 
     def search(self, name):
         request = self._new_request(name)
@@ -34,14 +36,26 @@ class AastraPhonebookBrowser(object):
         finally:
             fobj.close()
 
+    def _parse_response(self, fobj):
+        lines = fobj.readlines()
+        names = self._accumulate_display(lines)
+        numbers = self._accumulate_number(lines)
+        return [{'name': name, 'number': number} for name, number in zip(names, numbers)]
+
     def _new_request(self, name):
         url = '%s%s?name=%s' % (world.host, self._PATH, name)
         return urllib2.Request(url, headers=self._HEADERS)
 
-    def _parse_response(self, fobj):
+    def _accumulate_display(self, lines):
+        return self._accumulate_result(lines, self._REGEX_DISPLAY)
+
+    def _accumulate_number(self, lines):
+        return self._accumulate_result(lines, self._REGEX_NUMBER)
+
+    def _accumulate_result(self, lines, regex):
         results = []
-        for line in fobj:
-            m = self._REGEX.match(line)
+        for line in lines:
+            m = regex.match(line)
             if m:
                 result = m.group(1).decode('utf8')
                 results.append(result)
