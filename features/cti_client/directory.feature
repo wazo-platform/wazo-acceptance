@@ -100,7 +100,7 @@ Feature: Directory
 
     Scenario: Search for a contact in a LDAP server with a custom filter
         Given there is a user "GreatLord" "MacDonnell" with extension "1043@default" and CTI profile "Client"
-        Given the directory definition "openldap-explicit" does not exist
+        Given the directory definition "openldapexplicit" does not exist
         Given the LDAP server is configured
         Given there are entries in the ldap server:
           | first name | last name              | email             | city   | state  | phone      |
