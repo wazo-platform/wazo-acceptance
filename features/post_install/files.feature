@@ -13,7 +13,7 @@ Feature: PostInstall Files
         Then MOH files owned by asterisk:www-data
 
     Scenario: Log Rotate Backup Files
-        Then backup files succeffuly rotated
+        Then backup files successfully rotated
 
     Scenario: Asterisk Max File Descriptors
         Then max open file descriptors are equals to 8192

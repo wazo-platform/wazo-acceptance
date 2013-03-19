@@ -60,8 +60,8 @@ def then_moh_files_owned_by_asterisk_www_data(step):
             assert sysutils.file_owned_by_group(file, 'www-data')
 
 
-@step(u'Then backup files succeffuly rotated')
-def then_backup_files_succeffuly_rotated(step):
+@step(u'Then backup files successfully rotated')
+def then_backup_files_successfully_rotated(step):
     command = ['rm', '-f', '%s/*' % BACKUP_DIR]
     sysutils.send_command(command)
     command = ['touch', '%s/data.tgz' % BACKUP_DIR]
