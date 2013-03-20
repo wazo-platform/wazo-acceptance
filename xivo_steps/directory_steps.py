@@ -150,3 +150,12 @@ def given_the_internal_phonebook_is_configured(step):
         'Display',
         ['internal']
     )
+
+
+@step(u'Given the directory definition "([^"]*)" is included in the default directory')
+def given_the_directory_definition_group1_is_included_in_the_default_directory(step, definition):
+    directory_manager.assign_filter_and_directories_to_context(
+        'default',
+        'Display',
+        [definition]
+    )

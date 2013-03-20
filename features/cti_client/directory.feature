@@ -25,7 +25,7 @@ Feature: Directory
           | E-mail      |            |               | {db-mail}                    |
           | Mobile      | phone      |               | {db-mobile}                  |
           | Source      |            |               | {db-directory}               |
-	Given the context "default" uses display "Display" with the following directories:
+        Given the context "default" uses display "Display" with the following directories:
           | Directories |
           | xivodir     |
         When I add the following CTI directory definition:
@@ -48,6 +48,7 @@ Feature: Directory
     Scenario: Search for a contact without a line
         Given there is a user "GreatLord" "MacDonnell" with CTI profile "Client"
         Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
+        Given the directory definition "internal" is included in the default directory
         When I start the XiVO Client
         When I log in the Xivo Client as "greatlord", pass "macdonnell"
         When I search for "emmet" in the directory xlet
