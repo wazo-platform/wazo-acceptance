@@ -20,6 +20,7 @@ from xivo_lettuce import common
 from xivo_lettuce import form
 import ldap
 import ldap.modlist
+import time
 
 LDAP_URI = 'ldap://openldap-dev.lan-quebec.avencall.com:389/'
 LDAP_LOGIN = 'cn=admin,dc=lan-quebec,dc=avencall,dc=com'
@@ -50,6 +51,7 @@ def add_ldap_server(name, host, ssl=False):
 def add_or_replace_ldap_server(name, host, ssl=False):
     if common.element_is_in_list('ldapserver', name):
         common.remove_line(name)
+    time.sleep(1)
     add_ldap_server(name, host, ssl)
 
 
