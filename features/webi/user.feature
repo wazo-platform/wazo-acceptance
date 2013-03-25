@@ -1,5 +1,5 @@
 Feature: User
-
+        
     Scenario: Add a user with first name and last name and remove it
         Given there is no user "John" "Willis"
         When I create a user "John" "Willis"
@@ -49,8 +49,16 @@ Feature: User
         Given there is a user "Tom" "Sawyer" with extension "1405@default" in group "american_dream"
         When I remove user "Tom" "Sawyer"
         Then I see a group "american_dream" with no users
+        
+    Scenario: Delete user in queue
+   		Given there is a user "Tom" "Sawyer" with extension "1405@default"
+		Given there are queues with infos:
+            |      name      |  display name  | number | context | users_number |
+            | americandream  | American Dream |  3203  | default |    1405      |
+   		When I remove user "Tom" "Sawyer"
+        Then there is no data about this user remaining in the database.
 
-   Scenario: Add user with function keys
+	Scenario: Add user with function keys
        When I add a user "Tom" "Sawyer" with a function key with type Customized and extension "1234"
        Then I see the user "Tom" "Sawyer" exists
        Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"
