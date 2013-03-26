@@ -248,6 +248,11 @@ def remove_user(step, firstname, lastname):
     common.open_url('user', 'search', {'search': ''})
 
 
+@step(u'When I search for user "([^"]*)" "([^"]*)"')
+def when_i_search_for_user_firstname_lastname(step, firstname, lastname):
+    common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
+
+
 @step(u'When I delete agent number "([^"]*)"$')
 def when_i_delete_agent_number_1(step, agent_number):
     agent = world.ws.agents.search(agent_number)[0]

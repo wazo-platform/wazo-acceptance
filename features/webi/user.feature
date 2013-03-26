@@ -18,6 +18,7 @@ Feature: User
         When I create a user "Bill" "Bush"
         Then user "Bill Bush" is displayed in the list
         When I rename "Bill" "Bush" to "George" "Orwell"
+        When I search for user "George" "Orwell"
         Then user "George Orwell" is displayed in the list
 
     Scenario: Save user and line forms
