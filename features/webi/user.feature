@@ -1,11 +1,11 @@
 Feature: User
 
     Scenario: Add a user with first name and last name and remove it
-        Given there is no user "John" "Willis"
-        When I create a user "John" "Willis"
-        Then user "John Willis" is displayed in the list
-        When I remove user "John" "Willis"
-        Then user "John Willis" is not displayed in the list
+        Given there is no user "Bill" "Bush"
+        When I create a user "Bill" "Bush"
+        Then user "Bill Bush" is displayed in the list
+        When I remove user "Bill" "Bush"
+        Then user "Bill Bush" is not displayed in the list
 
     Scenario: Add a user in a group
         Given there is a user "Bob" "Marley" with extension "1101@default" in group "rastafarien"
