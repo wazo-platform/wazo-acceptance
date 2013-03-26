@@ -18,6 +18,7 @@
 from xivo_lettuce import terrain
 
 from agent_steps import *
+from agent_list_steps import *
 from admin_user_steps import *
 from asterisk_steps import *
 from backup_steps import *
