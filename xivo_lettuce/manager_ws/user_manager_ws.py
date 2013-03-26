@@ -20,7 +20,6 @@ from lettuce import world
 from xivo_ws import User, UserLine, UserVoicemail
 from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.manager_ws import group_manager_ws
-from xivo_lettuce.manager_ws import line_manager_ws
 
 
 def add_user(data_dict):
@@ -71,7 +70,6 @@ def add_or_replace_user(data_dict):
         number = data_dict['line_number']
         context = data_dict.get('line_context', 'default')
         delete_users_with_number(number, context)
-        line_manager_ws.delete_lines_with_number(number, context)
 
     return add_user(data_dict)
 
