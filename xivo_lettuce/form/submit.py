@@ -40,6 +40,7 @@ def submit_form(input_id='it-submit'):
     except NoSuchElementException:
         pass
     else:
+        world.dump_current_page()
         raise FormErrorException(error_element.text)
 
 

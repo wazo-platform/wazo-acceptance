@@ -17,6 +17,7 @@
 
 import ConfigParser
 import os
+import tempfile
 import xivo_ws
 from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
@@ -187,9 +188,15 @@ def _teardown_browser():
 
 
 @world.absorb
-def dump_current_page(filename='/tmp/lettuce.html'):
+def dump_current_page(filename='lettuce.html'):
     """Use this if you want to debug your test
        Call it with world.dump_current_page()"""
-    with open(filename, 'w') as fobj:
+    dump_dir = tempfile.mkdtemp(prefix='lettuce-')
+    source_file_name = '%s/lettuce-dump.html' % dump_dir
+    with open(source_file_name, 'w') as fobj:
         fobj.write(world.browser.page_source.encode('utf-8'))
-    world.browser.save_screenshot(filename + '.png')
+    image_file_name = '%s/lettuce-dump.png' % dump_dir
+    world.browser.save_screenshot(image_file_name)
+    print
+    print 'Screenshot dumped in %s' % dump_dir
+    print
