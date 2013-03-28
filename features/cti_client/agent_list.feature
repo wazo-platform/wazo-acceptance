@@ -9,6 +9,7 @@ Feature: Agent list xlet
          | enterprise | Enterprise   | 3110   | default | 1110          |
         When I start the XiVO Client
         When I log in the XiVO Client as "jim", pass "kirk"
+        Then the agent list xlet shows agent "1110" as unlogged
         When I log agent "1110"
         Then the agent list xlet shows agent "1110" as not in use
         When I unlog agent "1110"
