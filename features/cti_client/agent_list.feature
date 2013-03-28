@@ -15,7 +15,7 @@ Feature: Agent list xlet
         When I unlog agent "1110"
         Then the agent list xlet shows agent "1110" as unlogged
 
-    Scenario: Status since indicator changes when an agent receives a call
+    Scenario: Status since indicator changes when an agent receives a call from a queue
         Given there are users with infos:
          | firstname | lastname | number | agent_number | context | cti_profile | cti_login | cti_passwd |
          | Jim       | Kirk     | 1110   | 1110         | default | Supervisor  | jim       | kirk       |
