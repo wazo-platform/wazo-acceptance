@@ -10,7 +10,7 @@ Feature: Directory
         When I edit and save the directory "phonebook-x254"
         Then the directory "phonebook-x254" has the URI "file:///tmp/phonebook-x254.csv"
 
-    Scenario: Create a CTI directory definition from CSV file
+    Scenario: Create a CTI directory definition
         Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
         Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
         Given the following directories exist:
