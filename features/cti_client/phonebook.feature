@@ -11,6 +11,7 @@ Feature: Phonebook
 
     Scenario: Import phonebook entries from a CSV file
         Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
+        Given the directory definition "xivodir" is included in the default directory
         Given "Marty McFly" is not in the phonebook
         When I import the CSV file "phonebook-x268.csv" into the phonebook
         When I start the XiVO Client
