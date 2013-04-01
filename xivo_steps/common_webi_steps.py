@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import time
-
 from lettuce import step
 from xivo_lettuce.common import webi_login, remove_element_if_exist, \
     element_is_in_list, element_is_not_in_list, go_to_tab
@@ -42,12 +40,6 @@ def then_value_is_displayed_in_the_list(step, type, search):
 @step(u'Then ([a-z ]*) "([^"]*)" is not displayed in the list$')
 def then_value_is_not_displayed_in_the_list(step, type, search):
     assert element_is_not_in_list(type, search)
-
-
-@step(u'I submit$')
-def i_submit(step):
-    time.sleep(1)
-    form.submit.submit_form()
 
 
 @step(u'Then I see no errors')
