@@ -31,12 +31,12 @@ def i_start_the_xivo_client(step):
 
     try:
         world.xc_socket.connect('/tmp/xivoclient')
-    except socket.error as (error_number, message):
+    except socket.error as(error_number, message):
         world.xc_process.terminate()
         if error_number == errno.ENOENT:
             raise Exception('XiVO Client must be built for functional testing')
         else:
-            raise
+            raise message
 
 
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"$')
