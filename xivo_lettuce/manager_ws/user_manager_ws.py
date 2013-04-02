@@ -161,7 +161,5 @@ def disable_cti_client(firstname, lastname):
 
 def enable_cti_client(firstname, lastname):
     user = find_user_with_firstname_lastname(firstname, lastname)
-    user.client_username = firstname.lower()
-    user.client_password = lastname.lower()
     user.enable_client = True
     world.ws.users.edit(user)
