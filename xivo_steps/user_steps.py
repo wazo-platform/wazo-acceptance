@@ -357,7 +357,6 @@ def then_there_is_no_data_about_this_user_remaining_in_the_database(step):
     assert count_dialaction(world.user_id) == 0, "Data is remaining in dialaction after user deletion."
     assert count_phonefunckey(world.user_id) == 0, "Data is remaining in phonefunckey after user deletion."
     assert count_callfiltermember(world.user_id) == 0, "Data is remaining in callfiltermember after user deletion."
-    assert count_userqueueskill(world.user_id) == 0, "Data is remaining in userqueueskill after user deletion."
     assert count_queuemember(world.user_id) == 0, "Data is remaining in queuemember after user deletion."
     assert count_schedulepath(world.user_id) == 0, "Data is remaining in schedulepath after user deletion."
 
@@ -386,10 +385,6 @@ def count_phonefunckey(user_id):
 
 def count_callfiltermember(user_id):
     return _count_table_with_criteria("callfiltermember", {"type": "'user'", "typeval": "'%s'" % user_id})
-
-
-def count_userqueueskill(user_id):
-    return _count_table_with_criteria("userqueueskill", {"userid": user_id})
 
 
 def count_queuemember(user_id):
