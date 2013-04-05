@@ -18,24 +18,10 @@
 from lettuce import step
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
-from xivo_lettuce import common, func, form
+from xivo_lettuce import common, form
 from xivo_lettuce.manager import user_manager, line_manager
 from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
-    line_manager_ws, agent_manager_ws, voicemail_manager_ws
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" in group "([^"]*)"$')
-def given_there_is_a_user_with_a_sip_line_in_group(step, firstname, lastname, extension, group_name):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_voicemails_with_number(number)
-    user_data = {
-        'firstname': firstname,
-        'lastname': lastname,
-        'line_context': context,
-        'line_number': number
-    }
-    user_id = user_manager_ws.add_or_replace_user(user_data)
-    group_manager_ws.add_or_replace_group(group_name, user_ids=[user_id])
+    line_manager_ws, agent_manager_ws
 
 
 @step(u'^Given there are users with infos:$')
@@ -67,6 +53,7 @@ def given_there_are_users_with_infos(step):
         voicemail_name
         voicemail_number
         mobile_number
+        group_name
     """
     for user_data in step.hashes:
         user_ws_data = {}
@@ -115,6 +102,9 @@ def given_there_are_users_with_infos(step):
                           'context': user_data['context'],
                           'users': [int(user_id)]}
             agent_manager_ws.add_agent(agent_data)
+
+        if user_data.get('group_name'):
+            group_manager_ws.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
 
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')

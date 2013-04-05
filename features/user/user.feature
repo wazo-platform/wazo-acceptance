@@ -8,7 +8,9 @@ Feature: User
         Then user "Bill Bush" is not displayed in the list
 
     Scenario: Add a user in a group
-        Given there is a user "Bob" "Marley" with extension "1101@default" in group "rastafarien"
+        Given there are users with infos:
+        | firstname | lastname | number | context | group_name  |
+        | Bob       | Marley   |   1101 | default | rastafarien |
         When I rename "Bob" "Marley" to "Bob" "Dylan"
         Then I should be at the user list page
         Then "Bob" "Dylan" is in group "rastafarien"
@@ -49,7 +51,9 @@ Feature: User
         Then voicemail "1405" is displayed in the list
 
     Scenario: Delete user in group
-        Given there is a user "Tom" "Sawyer" with extension "1405@default" in group "american_dream"
+        Given there are users with infos:
+        | firstname | lastname | number | context | group_name     |
+        | Tom       | Sawyer   |   1405 | default | american_dream |
         When I remove user "Tom" "Sawyer"
         Then I see a group "american_dream" with no users
 

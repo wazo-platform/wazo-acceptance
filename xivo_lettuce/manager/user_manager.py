@@ -20,7 +20,6 @@ from xivo_lettuce.common import go_to_tab
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
 from xivo_lettuce import common, form, postgres
-from xivo_lettuce.manager_ws import user_manager_ws
 
 
 def type_user_names(firstName, lastName):
