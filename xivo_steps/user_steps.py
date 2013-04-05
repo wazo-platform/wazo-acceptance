@@ -77,6 +77,9 @@ def given_there_are_users_with_infos(step):
         if user_data.get('language'):
             user_ws_data['language'] = user_data['language']
 
+        if user_data.get('voicemail_name') and not user_data.get('language'):
+            user_ws_data['language'] = 'en_US'
+
         if user_data.get('cti_profile'):
             user_ws_data['enable_client'] = True
             user_ws_data['client_profile'] = user_data['cti_profile']
