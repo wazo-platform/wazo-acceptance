@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+
 def _rec_update_dict(base_dict, overlay_dict):
     for k, v in overlay_dict.iteritems():
         if isinstance(v, dict):

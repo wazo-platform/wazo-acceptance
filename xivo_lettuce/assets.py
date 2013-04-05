@@ -15,21 +15,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+
 import os
-import sys
 from lettuce import world
 
 ASSET_PATH = os.path.abspath(
     os.path.join(
-        os.path.dirname(__file__), 
+        os.path.dirname(__file__),
         "..", "assets"
     )
 )
+
 
 def copy_asset_to_server(asset, serverpath):
     assetpath = os.path.join(ASSET_PATH, asset)
     world.ssh_client_xivo.send_files(assetpath, serverpath)
 
+
 def full_path(asset):
     return os.path.join(ASSET_PATH, asset)
-
