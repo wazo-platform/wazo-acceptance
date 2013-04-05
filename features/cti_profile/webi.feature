@@ -9,5 +9,7 @@ Feature: Profile
         Then I see no errors
 
     Scenario: Remove a CTI profile that is associated with a user
-        Given there is a user "Alfredo" "Buenanote" with extension "1482@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname  | number | context | cti_profile |
+         | Alfredo   | Buenanote | 1482   | default | Client      |
         Then I can't remove profile "Client"

@@ -39,7 +39,9 @@ Feature: User
         | No  | Static             |   10.0.0.1 |
 
     Scenario: Save user and voicemail forms
-        Given there is a user "Tom" "Sawyer" with extension "1405@default"
+        Given there are users with infos:
+         | firstname | lastname | number | context |
+         | Tom       | Sawyer   |   1405 | default |
         Given there is no voicemail "1405"
         When I add a voicemail "" to the user "Tom" "Sawyer" with errors
         Then I see errors
@@ -52,7 +54,9 @@ Feature: User
         Then I see a group "american_dream" with no users
 
     Scenario: Delete user in queue
-        Given there is a user "Tom" "Sawyer" with extension "1405@default"
+        Given there are users with infos:
+         | firstname | lastname | number | context |
+         | Tom       | Sawyer   |   1405 | default |
         Given there are queues with infos:
             |      name      |  display name  | number | context | users_number |
             | americandream  | American Dream |  3203  | default |    1405      |
@@ -65,7 +69,9 @@ Feature: User
         Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"
 
     Scenario: Delete line from user with voicemail
-        Given there is a user "Abraham" "Maharba" with extension "1456@default" and voicemail
+        Given there are users with infos:
+         | firstname | lastname | number | context | language | voicemail_name | voicemail_number |
+         | Abraham   | Maharba  |   1456 | default | en_US    | 1456           | 1456             |
         When I remove line from user "Abraham" "Maharba" with errors
         Then I see errors
         When I remove line "1456" from lines then I see errors

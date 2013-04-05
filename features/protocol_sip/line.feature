@@ -10,7 +10,9 @@ Feature: Line
 
     # BUG #3642
     Scenario: See IPBX infos in line page with accent in callerid
-        Given there is a user "André" "óíúéåäë" with extension "1801@default"
+        Given there are users with infos:
+         | firstname | lastname | number | context |
+         | André     | óíúéåäë  |   1801 | default |
         When I edit the line "1801"
         When I go to the "IPBX Infos" tab
         Then I see in IPBX Infos tab value "callerid" has set to "André óíúéåäë" <1801>

@@ -4,8 +4,9 @@ Feature: Stat
         Given there are no calls running
         Given there is no agents logged
         Given there is no "WRAPUPSTART" entry for agent "014"
-        Given there is a user "User" "014" with extension "1014@statscenter"
-        Given there is a agent "Agent" "014" with extension "014@statscenter"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number |
+         | User      | 014      |   1014 | statscenter | 014          |
         Given there are queues with infos:
             | name | number | context     | agents_number | wrapuptime |
             | q14  | 5014   | statscenter | 014           | 15         |

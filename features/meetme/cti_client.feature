@@ -1,7 +1,9 @@
 Feature: Meetme
 
     Scenario: All conference rooms show up in CTI client
-        Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname  | number | context | cti_profile |
+         | Lord      | Sanderson | 1042   | default | Client      |
         Given there are no conference rooms
         When I add the following conference rooms:
             | name  | number |
@@ -17,7 +19,9 @@ Feature: Meetme
             | room3 | 4003   |
 
     Scenario: PIN Code for a conference room shows up in the CTI client
-        Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname  | number | context | cti_profile |
+         | Lord      | Sanderson | 1042   | default | Client      |
         Given there are no conference rooms
         When I add the following conference rooms:
             | name  | number |

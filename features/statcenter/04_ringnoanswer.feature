@@ -4,8 +4,9 @@ Feature: Stat
         Given there are no calls running
         Given there is no agents logged
         Given there is no "RINGNOANSWER" entry in queue "q04"
-        Given there is a user "User" "004" with extension "1004@statscenter"
-        Given there is a agent "Agent" "004" with extension "004@statscenter"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number |
+         | User      | 004      |   1004 | statscenter | 004          |
         Given there are queues with infos:
             | name | number | context     | agents_number |
             | q04  | 5004   | statscenter | 004           |

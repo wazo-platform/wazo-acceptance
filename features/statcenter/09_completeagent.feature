@@ -4,8 +4,9 @@ Feature: Stat
         Given there are no calls running
         Given there is no agents logged
         Given there is no "COMPLETEAGENT" entry in queue "q09"
-        Given there is a user "User" "009" with extension "1009@statscenter"
-        Given there is a agent "Agent" "009" with extension "009@statscenter"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number |
+         | User      | 009      |   1009 | statscenter | 009          |
         Given there are queues with infos:
             | name | number | context     | agents_number |
             | q09  | 5009   | statscenter | 009           |

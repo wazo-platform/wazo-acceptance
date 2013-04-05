@@ -10,7 +10,9 @@ Feature: Phonebook
         Then "John Doe" appears in the list
 
     Scenario: Import phonebook entries from a CSV file
-        Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname  | number | context | cti_profile |
+         | Lord      | Sanderson | 1042   | default | Client      |
         Given the directory definition "xivodir" is included in the default directory
         Given "Marty McFly" is not in the phonebook
         When I import the CSV file "phonebook-x268.csv" into the phonebook
@@ -20,7 +22,9 @@ Feature: Phonebook
         Then "Marty McFly" shows up in the directory xlet
 
     Scenario: Case insensitive search for a contact
-        Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname  | number | context | cti_profile |
+         | Lord      | Sanderson | 1042   | default | Client      |
         Given the directory definition "internal" is included in the default directory
         When I start the XiVO Client
         When I log in the XiVO Client as "lord", pass "sanderson"

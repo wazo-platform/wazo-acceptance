@@ -4,8 +4,9 @@ Feature: Stat
         Given there are no calls running
         Given there is no agents logged
         Given there is no "AGENTCALLBACKLOGIN" entry for agent "007"
-        Given there is a user "User" "007" with extension "1007@statscenter"
-        Given there is a agent "Agent" "007" with extension "007@statscenter"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number |
+         | User      | 007      |   1007 | statscenter | 007          |
         Given I log agent "007" on extension "1007@statscenter"
         Given I wait 5 seconds for the calls processing
         Then I should see 1 "AGENTCALLBACKLOGIN" event for agent "007" in the queue log
@@ -14,8 +15,9 @@ Feature: Stat
         Given there are no calls running
         Given there is no agents logged
         Given there is no "AGENTCALLBACKLOGIN" entry for agent "007"
-        Given there is a user "User" "007" with extension "1007@statscenter"
-        Given there is a agent "Agent" "007" with extension "007@statscenter"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number |
+         | User      | 007      |   1007 | statscenter | 007          |
         Given I log agent "007" on extension "1007@statscenter"
         Given I wait 5 seconds for the calls processing
         Given I log agent "007" on extension "1007@statscenter"
@@ -26,8 +28,9 @@ Feature: Stat
         Given there are no calls running
         Given there is no agents logged
         Given there is no "AGENTCALLBACKLOGOFF" entry for agent "007"
-        Given there is a user "User" "007" with extension "1007@statscenter"
-        Given there is a agent "Agent" "007" with extension "007@statscenter"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number |
+         | User      | 007      |   1007 | statscenter | 007          |
         Given I log agent "007" on extension "1007@statscenter"
         Given I wait 5 seconds for the calls processing
         Given I logout agent "007" on extension "1007@statscenter"

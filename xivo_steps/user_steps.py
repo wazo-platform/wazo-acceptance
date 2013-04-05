@@ -24,43 +24,6 @@ from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
     line_manager_ws, agent_manager_ws, voicemail_manager_ws
 
 
-@step(u'Given there is a user "([^"]*)" "([^"]*)"$')
-def given_there_is_a_user(step, firstname, lastname):
-    user_data = {
-        'firstname': firstname,
-        'lastname': lastname
-    }
-    user_manager_ws.add_or_replace_user(user_data)
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)"$')
-def given_there_is_a_user_with_extension(step, firstname, lastname, extension):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_voicemails_with_number(number)
-    user_data = {
-        'firstname': firstname,
-        'lastname': lastname,
-        'line_context': context,
-        'line_number': number
-    }
-    user_manager_ws.add_or_replace_user(user_data)
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]+)@([^"]+)" and voicemail$')
-def given_there_is_a_user_1_2_with_extension_3_4_and_voicemail(step, firstname, lastname, extension, context):
-    voicemail_manager_ws.delete_voicemails_with_number(extension)
-    user_data = {
-        'firstname': firstname,
-        'lastname': lastname,
-        'line_context': context,
-        'line_number': extension,
-        'language': 'en_US',
-        'voicemail_name': extension,
-        'voicemail_number': extension,
-    }
-    user_manager_ws.add_or_replace_user(user_data)
-
-
 @step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" in group "([^"]*)"$')
 def given_there_is_a_user_with_a_sip_line_in_group(step, firstname, lastname, extension, group_name):
     number, context = func.extract_number_and_context_from_extension(extension)
@@ -73,80 +36,6 @@ def given_there_is_a_user_with_a_sip_line_in_group(step, firstname, lastname, ex
     }
     user_id = user_manager_ws.add_or_replace_user(user_data)
     group_manager_ws.add_or_replace_group(group_name, user_ids=[user_id])
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with CTI profile "([^"]*)"$')
-def given_there_is_a_user_with_cti_profile(step, firstname, lastname, cti_profile):
-    user_data = {
-        'firstname': firstname,
-        'lastname': lastname,
-        'enable_client': True,
-        'client_username': firstname.lower(),
-        'client_password': lastname.lower(),
-        'client_profile': cti_profile
-    }
-    user_manager_ws.add_or_replace_user(user_data)
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)" and CTI profile "([^"]*)"$')
-def given_there_is_a_user_with_extension_and_cti_profile(step, firstname, lastname, extension, cti_profile):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_voicemails_with_number(number)
-    user_data = {'firstname': firstname,
-                 'lastname': lastname,
-                 'language': 'en_US',
-                 'line_number': number,
-                 'line_context': context,
-                 'enable_client': True,
-                 'client_username': firstname.lower(),
-                 'client_password': lastname.lower(),
-                 'client_profile': cti_profile
-                 }
-    user_manager_ws.add_or_replace_user(user_data)
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with extension "([^"]*)", voicemail and CTI profile "([^"]*)"$')
-def given_i_there_is_a_user_with_extension_with_voicemail_and_cti_profile(step, firstname, lastname, extension, cti_profile):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_manager_ws.delete_voicemails_with_number(number)
-    user_data = {'firstname': firstname,
-                 'lastname': lastname,
-                 'language': 'en_US',
-                 'line_number': number,
-                 'line_context': context,
-                 'voicemail_name': number,
-                 'voicemail_number': number,
-                 'enable_client': True,
-                 'client_username': firstname.lower(),
-                 'client_password': lastname.lower(),
-                 'client_profile': cti_profile
-                 }
-    user_manager_ws.add_or_replace_user(user_data)
-
-
-@step(u'Given there is a user "([^"]*)" "([^"]*)" with an agent "([^"]*)" and CTI profile "([^"]*)"$')
-def given_there_is_a_user_with_an_agent_and_cti_profile(step, firstname, lastname, number_at_context, cti_profile):
-    user_manager_ws.delete_users_with_firstname_lastname(firstname, lastname)
-    number, context = number_at_context.split('@', 1)[:]
-    line_manager_ws.delete_lines_with_number(number, context)
-    agent_manager_ws.delete_agents_with_number(number)
-    user_data = {'firstname': firstname,
-                 'lastname': lastname,
-                 'enable_client': True,
-                 'client_username': firstname.lower(),
-                 'client_password': lastname.lower(),
-                 'client_profile': cti_profile,
-                 'line_context': context,
-                 'line_number': number,
-                 }
-    user_id = user_manager_ws.add_user(user_data)
-
-    agent_data = {'firstname': firstname,
-                  'lastname': lastname,
-                  'number': number,
-                  'context': context,
-                  'users': [int(user_id)]}
-    agent_manager_ws.add_agent(agent_data)
 
 
 @step(u'^Given there are users with infos:$')
@@ -204,8 +93,14 @@ def given_there_are_users_with_infos(step):
         if user_data.get('cti_profile'):
             user_ws_data['enable_client'] = True
             user_ws_data['client_profile'] = user_data['cti_profile']
-            user_ws_data['client_username'] = user_data['cti_login']
-            user_ws_data['client_password'] = user_data['cti_passwd']
+            if user_data.get('cti_login'):
+                user_ws_data['client_username'] = user_data['cti_login']
+            else:
+                user_ws_data['client_username'] = user_ws_data['firstname'].lower()
+            if user_data.get('cti_passwd'):
+                user_ws_data['client_password'] = user_data['cti_passwd']
+            else:
+                user_ws_data['client_password'] = user_ws_data['lastname'].lower()
 
         if user_data.get('mobile_number'):
             user_ws_data['mobile_number'] = user_data['mobile_number']

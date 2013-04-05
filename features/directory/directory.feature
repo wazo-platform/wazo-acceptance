@@ -11,7 +11,9 @@ Feature: Directory
         Then the directory "phonebook-x254" has the URI "file:///tmp/phonebook-x254.csv"
 
     Scenario: Create a CTI directory definition from CSV file
-        Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname  | number | context | cti_profile |
+         | Lord      | Sanderson | 1042   | default | Client      |
         Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
         Given the following directories exist:
           | name           | type | URI                     |
@@ -46,7 +48,9 @@ Feature: Directory
         Then "Emmett Brown" shows up in the directory xlet
 
     Scenario: Search for a contact without a line
-        Given there is a user "GreatLord" "MacDonnell" with CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname   | cti_profile |
+         | GreatLord | MacDonnell | Client      |
         Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
         Given the directory definition "internal" is included in the default directory
         When I start the XiVO Client
@@ -55,7 +59,9 @@ Feature: Directory
         Then nothing shows up in the directory xlet
 
     Scenario: Search for a contact in a SSL LDAP directory
-        Given there is a user "GreatLord" "MacDonnell" with extension "1043@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
         Given the directory definition "openldap" does not exist
         Given the LDAP server is configured for SSL connections
         Given there are entries in the ldap server:
@@ -81,7 +87,9 @@ Feature: Directory
         Then "Milan Gélinas" shows up in the directory xlet
 
     Scenario: Search for a contact with special characters in his name
-        Given there is a user "Lord" "Sanderson" with extension "1042@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname  | number | context | cti_profile |
+         | Lord      | Sanderson | 1042   | default | Client      |
         Given the internal phonebook is configured
         Given there are users with infos:
           | firstname | lastname    |
@@ -100,7 +108,9 @@ Feature: Directory
         Then nothing shows up in the directory xlet
 
     Scenario: Search for a contact in a LDAP server with a custom filter
-        Given there is a user "GreatLord" "MacDonnell" with extension "1043@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
         Given the directory definition "openldapexplicit" does not exist
         Given the LDAP server is configured
         Given there are entries in the ldap server:

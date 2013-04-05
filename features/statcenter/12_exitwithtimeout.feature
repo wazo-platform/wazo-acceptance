@@ -4,8 +4,9 @@ Feature: Stat
         Given there are no calls running
         Given there is no agents logged
         Given there is no "EXITWITHTIMEOUT" entry in queue "q12"
-        Given there is a user "User" "012" with extension "1012@statscenter"
-        Given there is a agent "Agent" "012" with extension "012@statscenter"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number |
+         | User      | 012      |   1012 | statscenter | 012          |
         Given there are queues with infos:
             | name | number | context     | ringing_time | agents_number |
             | q12  | 5012   | statscenter | 30           | 012           |

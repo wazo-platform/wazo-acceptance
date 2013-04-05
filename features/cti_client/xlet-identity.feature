@@ -1,7 +1,9 @@
 Feature: Xlet identity
 
     Scenario: Display identity infos
-        Given there is a user "Yoda" "Kenobi" with extension "1151@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile |
+         | Yoda      | Kenobi   | 1151   | default | Client      |
 
         Given I go to the "Resolver" configuration page
         Given I read the field "Hostname"
@@ -14,14 +16,18 @@ Feature: Xlet identity
         Then the Xlet identity shows phone number as "1151"
 
     Scenario: Display voicemail icon and number
-        Given there is a user "Bail" "Tarkin" with extension "1152@default", voicemail and CTI profile "Client"
-
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile | voicemail_name | voicemail_number |
+         | Bail      | Tarkin   | 1152   | default | Client      | 1152           | 1152             |
+         
         When I start the XiVO Client
         When I log in the XiVO Client as "bail", pass "tarkin"
         Then the Xlet identity shows a voicemail "1152"
 
     Scenario: Display agent icon and number
-        Given there is a user "Darth" "Chewbacca" with an agent "1153@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname  | agent_number | cti_profile |
+         | Darth     | Chewbacca | 1153         | Client      |
 
         When I start the XiVO Client
         When I log in the XiVO Client as "darth", pass "chewbacca", unlogged agent

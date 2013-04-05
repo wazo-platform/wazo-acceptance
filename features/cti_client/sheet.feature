@@ -9,8 +9,10 @@ Feature: Sheet
         | xivo-agentnumber|
 
         Given I assign the sheet "testsheet" to the "Link" event
-
-        Given there is a user "Cedric" "Abunar" with an agent "1153@default" and CTI profile "Client"
+        
+        Given there are users with infos:
+         | firstname | lastname | agent_number | cti_profile |
+         | Cedric    | Abunar   | 1153         | Client      |
 
         Given there are queues with infos:
             | name  | number | context | agents_number |
@@ -45,7 +47,10 @@ Feature: Sheet
         | xivo-calledidnum  |
         Given I assign the sheet "testsheet" to the "Link" event
 
-        Given there is a user "Alice" "Gopher" with extension "1007@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile |
+         | Alice     | Gopher   | 1007   | default | Client      |
+         
         Given there is an incall "1007" in context "from-extern" to the "User" "Alice Gopher" with caller id name "Tux" number "5555555555"
 
         When I start the XiVO Client
@@ -72,7 +77,9 @@ Feature: Sheet
         | xivo-calledidnum  |
         Given I assign the sheet "testsheet" to the "Link" event
 
-        Given there is a user "Alice" "Gopher" with extension "1007@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile |
+         | Alice     | Gopher   | 1007   | default | Client      |
         Given there are queues with infos:
             | name  | number | context | users_number |
             | frere | 3001   | default | 1007         |
@@ -102,7 +109,9 @@ Feature: Sheet
         | xivo-calledidnum  |
         Given I assign the sheet "testsheet" to the "Link" event
 
-        Given there is a user "Alice" "Gopher" with extension "1007@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile |
+         | Alice     | Gopher   | 1007   | default | Client      |
         Given there is a group "main" with extension "2006@default" and users:
           | firstname | lastname |
           | Alice     | Gopher   |
@@ -132,8 +141,10 @@ Feature: Sheet
         | xivo-calledidnum  |
         Given I assign the sheet "testsheet" to the "Dial" event
 
-        Given there is a user "Alice" "Gopher" with extension "1007@default" and CTI profile "Client"
-        Given there is a user "Gnu" "Linux" with extension "1006@default" and CTI profile "Client"
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile |
+         | Alice     | Gopher   | 1007   | default | Client      |
+         | Gnu       | Linux    | 1006   | default | Client      |
         Given there is a group "main" with extension "2006@default" and users:
           | firstname | lastname |
           | Alice     | Gopher   |
