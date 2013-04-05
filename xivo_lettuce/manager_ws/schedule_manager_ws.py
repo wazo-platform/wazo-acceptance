@@ -18,23 +18,45 @@
 from lettuce import world
 from xivo_ws import Schedule
 
+from hamcrest import *
 
-def add_schedule(name, opened=None):
-    '''
-    opened1 = {'hours': '00:00-00:01',
-               'weekdays': '1-1',
-               'monthdays': '1-1',
-               'months': '1-1'
-               },
-               {...}
-       }
-   '''
-    schedule = Schedule()
-    schedule.name = name
-    schedule.timezone = 'America/Montreal'
-    if opened:
-        schedule.opened = [opened]
+
+def add_schedule(name, timezone, times):
+    delete_schedules_with_name(name)
+    schedule = _create_schedule(name, timezone, times)
     world.ws.schedules.add(schedule)
+
+
+def assert_schedule_exists(name, timezone, times):
+    expected_schedule = _create_schedule(name, timezone, times)
+    result_schedule = view_schedule(find_schedule_id_with_name(name))
+
+    assert_that(result_schedule, equal_to(expected_schedule))
+
+
+def _create_schedule(name, timezone, times):
+    schedule = Schedule(
+        name=name,
+        timezone=timezone,
+    )
+    opened, closed = [], []
+    for time in times:
+        formatted_time = {
+            'hours': '%s-%s' % (time['Start hour'], time['End hour']),
+            'weekdays': time['Days of week'],
+            'monthdays': time['Days of month'],
+            'months': time['Months'],
+        }
+        if time['Status'] == 'Opened':
+            opened.append(formatted_time)
+        elif time['Status'] == 'Closed':
+            closed.append(formatted_time)
+    if opened:
+        schedule.opened = opened
+    if closed:
+        schedule.closed = closed
+
+    return schedule
 
 
 def delete_schedules_with_name(name):
@@ -45,6 +67,10 @@ def delete_schedules_with_name(name):
 def find_schedule_id_with_name(name):
     schedule = _find_schedule_with_name(name)
     return schedule.id
+
+
+def view_schedule(schedule_id):
+    return world.ws.schedules.view(schedule_id)
 
 
 def _find_schedule_with_name(name):

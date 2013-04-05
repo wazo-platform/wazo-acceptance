@@ -17,10 +17,21 @@
 
 from lettuce import step
 from xivo_lettuce.manager_ws import schedule_manager_ws
+from xivo_lettuce.manager import schedule_manager
 
 
-@step(u'Given there is a schedule named "([^"]+)" with the following timetable:$')
-def given_there_is_a_schedule_named_1_with_the_following_info(step, name):
-    for schedule in step.hashes:
-        schedule_manager_ws.delete_schedules_with_name(name)
-        schedule_manager_ws.add_schedule(name, schedule)
+@step(u'Given I have a schedule "([^"]*)" in "([^"]*)" with the following schedules:')
+def given_i_have_a_schedule_group1_in_group2_with_the_following_schedules(step, name, timezone):
+    schedule_manager_ws.add_schedule(name, timezone, step.hashes)
+
+
+@step(u'When I delete the "([^"]*)" "([^"]*)" schedule from "([^"]*)"')
+def when_i_delete_the_group1_group2_schedule(step, order, status, name):
+    if status != 'Closed' and order != 'Second':
+        assert False, 'This step not completely implemented'
+    schedule_manager.remove_closed_schedule(name, 2)
+
+
+@step(u'Then I should have a schdule "([^"]*)" in "([^"]*)" with the following schedules:')
+def then_i_should_have_a_schdule_group1_in_group2_with_the_following_schedules(step, name, timezone):
+    schedule_manager_ws.assert_schedule_exists(name, timezone, step.hashes)

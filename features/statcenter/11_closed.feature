@@ -3,9 +3,9 @@ Feature: Stat
     Scenario: Generation of event CLOSED
         Given there are no calls running
         Given there is no "CLOSED" entry in queue "q11"
-        Given there is a schedule named "always_closed" with the following timetable:
-            | hours       | weekdays | monthdays | months |
-            | 00:00-00:01 | 1-1      | 1-1       | 1-1    |
+        Given I have a schedule "always_closed" in "America/Montreal" with the following schedules:
+            | Status | Months | Days of month | Days of week | Start hour | End hour |
+            | Opened |    1-1 |           1-1 |          1-1 |      00:00 |    00:01 |
         Given there are queues with infos:
             | name | number | context     | schedule_name |
             | q11  | 5011   | statscenter | always_closed |
