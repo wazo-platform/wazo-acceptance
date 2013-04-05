@@ -195,6 +195,9 @@ def given_there_are_users_with_infos(step):
                 user_ws_data['voicemail_name'] = user_data['voicemail_name']
                 user_ws_data['voicemail_number'] = user_data['voicemail_number']
 
+        if user_data.get('bsfilter'):
+            user_ws_data['bsfilter'] = user_data['bsfilter']
+
         if user_data.get('language'):
             user_ws_data['language'] = user_data['language']
 

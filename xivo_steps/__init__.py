@@ -22,6 +22,7 @@ from admin_user_steps import *
 from asterisk_steps import *
 from backup_steps import *
 from call_steps import *
+from callfilter_steps import *
 from certificate_steps import *
 from common_callgen_steps import *
 from common_webi_steps import *

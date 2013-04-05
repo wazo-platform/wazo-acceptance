@@ -60,6 +60,7 @@ URLS = {
     'incall': '/service/ipbx/index.php/call_management/incall',
     'outcall': '/service/ipbx/index.php/call_management/outcall',
     'cel': '/service/ipbx/index.php/call_management/cel',
+    'callfilter': '/service/ipbx/index.php/call_management/callfilter',
     'trunkcustom': '/service/ipbx/index.php/trunk_management/custom',
     'trunksip': '/service/ipbx/index.php/trunk_management/sip',
     'trunkiax': '/service/ipbx/index.php/trunk_management/iax',

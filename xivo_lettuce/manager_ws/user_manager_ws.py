@@ -40,6 +40,8 @@ def add_user(data_dict):
         user.client_password = data_dict['client_password']
     if 'client_profile' in data_dict:
         user.client_profile = data_dict['client_profile']
+    if 'bsfilter' in data_dict:
+        user.bsfilter = data_dict['bsfilter']
 
     if 'line_number' in data_dict and 'line_context' in data_dict:
         user.line = UserLine()
