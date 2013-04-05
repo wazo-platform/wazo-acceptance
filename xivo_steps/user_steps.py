@@ -98,11 +98,12 @@ def given_there_are_users_with_infos(step):
         user_id = user_manager_ws.add_user(user_ws_data)
 
         if user_data.get('agent_number'):
+            context = user_data['context'] if user_data.get('context') else 'default'
             agent_manager_ws.delete_agents_with_number(user_data['agent_number'])
             agent_data = {'firstname': user_data['firstname'],
                           'lastname': user_data['lastname'],
                           'number': user_data['agent_number'],
-                          'context': user_data['context'],
+                          'context': context,
                           'users': [int(user_id)]}
             agent_manager_ws.add_agent(agent_data)
 
