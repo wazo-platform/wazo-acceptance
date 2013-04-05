@@ -19,7 +19,8 @@ import time
 from xivo_lettuce.common import go_to_tab
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
-from xivo_lettuce import common, form
+from xivo_lettuce import common, form, postgres
+from xivo_lettuce.manager_ws import user_manager_ws
 
 
 def type_user_names(firstName, lastName):
@@ -99,3 +100,43 @@ def select_simultaneous_calls(nb_calls):
 def enable_call_transfer():
     go_to_tab("Services")
     form.checkbox.check_checkbox_with_id("it-userfeatures-enablehint")
+
+
+def count_linefeatures(user_id):
+    return _count_table_with_criteria("linefeatures", {"iduserfeatures": user_id})
+
+
+def count_rightcallmember(user_id):
+    return _count_table_with_criteria("rightcallmember", {"type": "'user'", "typeval": "'%s'" % user_id})
+
+
+def count_dialaction(user_id):
+    return _count_table_with_criteria("dialaction", {"category": "'user'", "categoryval": "'%s'" % user_id})
+
+
+def count_phonefunckey(user_id):
+    return _count_table_with_criteria("phonefunckey", {"iduserfeatures": user_id})
+
+
+def count_callfiltermember(user_id):
+    return _count_table_with_criteria("callfiltermember", {"type": "'user'", "typeval": "'%s'" % user_id})
+
+
+def count_queuemember(user_id):
+    return _count_table_with_criteria("queuemember", {"usertype": "'user'", "userid": user_id})
+
+
+def count_schedulepath(user_id):
+    return _count_table_with_criteria("schedule_path", {"path": "'user'", "pathid": user_id})
+
+
+def _count_table_with_criteria(table, criteria):
+    pgcommand = "\"SELECT COUNT(*) FROM %s" % table
+    if(criteria is not None and criteria != {}):
+        pgcommand += " WHERE "
+        for key, value in criteria.iteritems():
+            pgcommand += "%s = %s AND " % (key, value)
+        pgcommand = pgcommand[:-5]
+        pgcommand += "\""
+    result = postgres.exec_sql_request_with_return(pgcommand)
+    return int(result.split('\n')[-4].strip())

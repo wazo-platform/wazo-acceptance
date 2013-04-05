@@ -18,7 +18,7 @@
 from lettuce import step
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
-from xivo_lettuce import common, func, form, postgres
+from xivo_lettuce import common, func, form
 from xivo_lettuce.manager import user_manager, line_manager
 from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
     line_manager_ws, agent_manager_ws, voicemail_manager_ws
@@ -250,56 +250,15 @@ def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstna
 
 @step(u'Then there is no data about this user remaining in the database.$')
 def then_there_is_no_data_about_this_user_remaining_in_the_database(step):
-    assert count_linefeatures(world.user_id) == 0, "Data is remaining in linefeatures after user deletion."
-    assert count_rightcallmember(world.user_id) == 0, "Data is remaining in rightcallmember after user deletion."
-    assert count_dialaction(world.user_id) == 0, "Data is remaining in dialaction after user deletion."
-    assert count_phonefunckey(world.user_id) == 0, "Data is remaining in phonefunckey after user deletion."
-    assert count_callfiltermember(world.user_id) == 0, "Data is remaining in callfiltermember after user deletion."
-    assert count_queuemember(world.user_id) == 0, "Data is remaining in queuemember after user deletion."
-    assert count_schedulepath(world.user_id) == 0, "Data is remaining in schedulepath after user deletion."
-
+    assert user_manager.count_linefeatures(world.user_id) == 0, "Data is remaining in linefeatures after user deletion."
+    assert user_manager.count_rightcallmember(world.user_id) == 0, "Data is remaining in rightcallmember after user deletion."
+    assert user_manager.count_dialaction(world.user_id) == 0, "Data is remaining in dialaction after user deletion."
+    assert user_manager.count_phonefunckey(world.user_id) == 0, "Data is remaining in phonefunckey after user deletion."
+    assert user_manager.count_callfiltermember(world.user_id) == 0, "Data is remaining in callfiltermember after user deletion."
+    assert user_manager.count_queuemember(world.user_id) == 0, "Data is remaining in queuemember after user deletion."
+    assert user_manager.count_schedulepath(world.user_id) == 0, "Data is remaining in schedulepath after user deletion."
 
 
 def _edit_user(firstname, lastname):
     user_id = user_manager_ws.find_user_id_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'edit', qry={'id': user_id})
-
-
-def count_linefeatures(user_id):
-    return _count_table_with_criteria("linefeatures", {"iduserfeatures": user_id})
-
-
-def count_rightcallmember(user_id):
-    return _count_table_with_criteria("rightcallmember", {"type": "'user'", "typeval": "'%s'" % user_id})
-
-
-def count_dialaction(user_id):
-    return _count_table_with_criteria("dialaction", {"category": "'user'", "categoryval": "'%s'" % user_id})
-
-
-def count_phonefunckey(user_id):
-    return _count_table_with_criteria("phonefunckey", {"iduserfeatures": user_id})
-
-
-def count_callfiltermember(user_id):
-    return _count_table_with_criteria("callfiltermember", {"type": "'user'", "typeval": "'%s'" % user_id})
-
-
-def count_queuemember(user_id):
-    return _count_table_with_criteria("queuemember", {"usertype": "'user'", "userid": user_id})
-
-
-def count_schedulepath(user_id):
-    return _count_table_with_criteria("schedule_path", {"path": "'user'", "pathid": user_id})
-
-
-def _count_table_with_criteria(table, criteria):
-    pgcommand = "\"SELECT COUNT(*) FROM %s" % table
-    if(criteria is not None and criteria != {}):
-        pgcommand += " WHERE "
-        for key, value in criteria.iteritems():
-            pgcommand += "%s = %s AND " % (key, value)
-        pgcommand = pgcommand[:-5]
-        pgcommand += "\""
-    result = postgres.exec_sql_request_with_return(pgcommand)
-    return int(result.split('\n')[-4].strip())
