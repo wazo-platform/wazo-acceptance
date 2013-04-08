@@ -25,18 +25,18 @@ Feature: Queues
         Then I see errors
 
     Scenario: Add an unlogged agent to a new queue
-        Given I have the following agents with a user:
-            | firstname | lastname | number | context |
-            | Bob       | Smith    | 1101   | default |
+        Given there are users with infos:
+         | firstname | lastname | number | context | agent_number |
+         | Bob       | Smith    |   1101 | default | 1101         |
         When I create the following queues:
             | name   | display name | number | context | agents       |
             | queue1 | Queue 1      | 3101   | default | 1101@default |
         Then the agent "1101" is not a member of the queue "queue1" in asterisk
 
     Scenario: Add a logged agent to a new queue
-        Given I have the following agents with a user:
-            | firstname | lastname | number | context |
-            | John      | Doe      | 1102   | default |
+        Given there are users with infos:
+         | firstname | lastname | number | context | agent_number |
+         | John      | Doe      |   1102 | default | 1102         |
         When I log agent "1102"
         When I create the following queues:
             | name   | display name | number | context | agents       |
@@ -44,9 +44,9 @@ Feature: Queues
         Then the agent "1102" is a member of the queue "queue2" in asterisk
 
     Scenario: Add a logged agent to a new queue and answer a call
-        Given I have the following agents with a user:
-            | firstname | lastname | number | context |
-            | John      | Doe      | 1102   | default |
+        Given there are users with infos:
+         | firstname | lastname | number | context | agent_number |
+         | John      | Doe      |   1102 | default | 1102         |
         When I log agent "1102"
         When I create the following queues:
             | name   | display name | number | context | agents       |
@@ -67,9 +67,9 @@ Feature: Queues
         Then I should see 1 "COMPLETEAGENT" event in queue "queue2" in the queue log
 
     Scenario: Delete a queue with logged agents
-        Given I have the following agents with a user:
-            | firstname | lastname | number | context |
-            | Wayne     | Brady    | 1103   | default |
+        Given there are users with infos:
+         | firstname | lastname | number | context | agent_number |
+         | Wayne     | Brady    |   1103 | default | 1103         |
         Given there are queues with infos:
             | name   | display name | number | context | agents_number |
             | queue3 | Queue 3      | 3103   | default | 1103          |
@@ -79,9 +79,9 @@ Feature: Queues
         Then the queue "queue3" does not exist in asterisk
 
     Scenario: Add an unlogged agent to an existing queue
-        Given I have the following agents with a user:
-            | firstname | lastname | number | context |
-            | Brad      | Pitt     | 1104   | default |
+        Given there are users with infos:
+         | firstname | lastname | number | context | agent_number |
+         | Brad      | Pitt     |   1104 | default | 1104         |
         Given there are queues with infos:
             | name   | display name | number | context |
             | queue4 | Queue 4      | 3104   | default |
@@ -89,9 +89,9 @@ Feature: Queues
         Then the agent "1104" is not a member of the queue "queue4" in asterisk
 
     Scenario: Remove an unlogged agent from an existing queue
-        Given I have the following agents with a user:
-            | firstname | lastname   | number | context |
-            | Alice     | Wonderland | 1105   | default |
+        Given there are users with infos:
+         | firstname | lastname   | number | context | agent_number |
+         | Alice     | Wonderland |   1105 | default | 1105         |
         Given there are queues with infos:
             | name   | display name | number | context | agents_number |
             | queue5 | Queue 5      | 3105   | default | 1105          |
@@ -99,9 +99,9 @@ Feature: Queues
         Then the agent "1105" is not a member of the queue "queue5" in asterisk
 
     Scenario: Add a logged agent to an existing queue
-        Given I have the following agents with a user:
-            | firstname | lastname | number | context |
-            | Cookie    | Monster  | 1107   | default |
+        Given there are users with infos:
+         | firstname | lastname   | number | context | agent_number |
+         | Cookie    | Monster    |   1107 | default | 1107         |
         Given there are queues with infos:
             | name   | display name | number | context |
             | queue7 | Queue 7      | 3107   | default |
@@ -111,9 +111,9 @@ Feature: Queues
         Then the agent "1107" is a member of the queue "queue7" in asterisk
 
     Scenario: Add a logged agent to an existing queue and answer a call
-        Given I have the following agents with a user:
-            | firstname | lastname | number | context |
-            | Cookie    | Monster  | 1107   | default |
+        Given there are users with infos:
+         | firstname | lastname   | number | context | agent_number |
+         | Cookie    | Monster    |   1107 | default | 1107         |
         Given there are queues with infos:
             | name   | display name | number | context |
             | queue7 | Queue 7      | 3107   | default |
@@ -135,9 +135,9 @@ Feature: Queues
         Then I should see 1 "COMPLETEAGENT" event in queue "queue7" in the queue log
 
     Scenario: Remove a logged agent from an existing queue
-        Given I have the following agents with a user:
-            | firstname | lastname | number | context |
-            | Bugs      | Bunny    | 1108   | default |
+        Given there are users with infos:
+         | firstname | lastname   | number | context | agent_number |
+         | Bugs      | Bunny      |   1108 | default | 1108         |
         Given there are queues with infos:
             | name   | display name | number | context | agents_number |
             | queue8 | Queue 8      | 3108   | default | 1108          |

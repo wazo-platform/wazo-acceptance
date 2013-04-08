@@ -27,31 +27,6 @@ from xivo_lettuce.manager.agent_manager import is_agent_in_agent_group, \
 from selenium.webdriver.common.action_chains import ActionChains
 
 
-@step(u'Given I have the following agents with a user:')
-def given_i_have_the_following_agents_with_a_user(step):
-    for agent in step.hashes:
-        create_agent_with_user(agent)
-
-
-def create_agent_with_user(agent):
-        user_data = {
-            'firstname': agent['firstname'],
-            'lastname': agent['lastname'],
-            'line_number': agent['number'],
-            'line_context': agent['context'],
-        }
-        user_id = user_manager_ws.add_or_replace_user(user_data)
-
-        agent_data = {
-            'firstname': agent['firstname'],
-            'lastname': agent['lastname'],
-            'number': agent['number'],
-            'context': agent['context'],
-            'users': [user_id]
-        }
-        agent_manager_ws.add_or_replace_agent(agent_data)
-
-
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
 def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
