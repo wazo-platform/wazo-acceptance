@@ -77,7 +77,7 @@ def given_there_are_users_with_infos(step):
         if user_data.get('language'):
             user_ws_data['language'] = user_data['language']
 
-        if user_data.get('voicemail_name') and not user_data.get('language'):
+        if 'voicemail_name' in user_data and 'language' not in user_data:
             user_ws_data['language'] = 'en_US'
 
         if user_data.get('cti_profile'):
@@ -98,12 +98,11 @@ def given_there_are_users_with_infos(step):
         user_id = user_manager_ws.add_user(user_ws_data)
 
         if user_data.get('agent_number'):
-            context = user_data['context'] if user_data.get('context') else 'default'
             agent_manager_ws.delete_agents_with_number(user_data['agent_number'])
             agent_data = {'firstname': user_data['firstname'],
                           'lastname': user_data['lastname'],
                           'number': user_data['agent_number'],
-                          'context': context,
+                          'context': user_data.get('context', 'default'),
                           'users': [int(user_id)]}
             agent_manager_ws.add_agent(agent_data)
 
