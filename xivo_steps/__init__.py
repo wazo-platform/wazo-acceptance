@@ -29,6 +29,7 @@ from common_webi_steps import *
 from common_xivoclient_steps import *
 from conf_file_steps import *
 from configfiles_steps import *
+from cti_client_configuration_steps import *
 from cti_server_steps import *
 from device_steps import *
 from dhcpd_steps import *
