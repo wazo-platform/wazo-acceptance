@@ -108,3 +108,23 @@ Feature: Phonebook
         Then I do not see the following results on the phone:
           | name                            | number     |
           | explicite mail example no state | 4445556666 |
+
+    Scenario: Phonebook searches LDAP using special characters
+        Given the phonebook is accessible by any hosts
+        Given there are no LDAP filters configured in the phonebook
+        Given the LDAP server is configured
+        Given there are entries in the ldap server:
+          | first name | last name | email               | phone |
+          | Vwé        | Xyzà      | vwexyza@example.org | 987   |
+        Given there are the following ldap filters:
+          | name              | server       | username                                  | password  | base dn                          | display name | phone number    |
+          | openldap-chars    | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
+        Given the ldap filter "openldap-chars" has been added to the phonebook
+        When I search the phonebook for "Vw" on my Aastra
+        Then I see the following results on the phone:
+          | name              | number |
+          | Vwé Xyzà (Office) | 987    |
+        When I search the phonebook for "é" on my Aastra
+        Then I see the following results on the phone:
+          | name              | number |
+          | Vwé Xyzà (Office) | 987    |
