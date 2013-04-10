@@ -141,3 +141,40 @@ Feature: Directory
         Then "explicite mail avencall no state" shows up in the directory xlet
         Then "explicite no mail state quebec" shows up in the directory xlet
         Then "explicite mail example no state" does not show up in the directory xlet
+
+    Scenario: Search for a contact in a LDAP server with special characters
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
+        Given the directory definition "openldapchars" does not exist
+        Given the LDAP server is configured
+        Given there are entries in the ldap server:
+          | first name | last name | email               | city  | state | phone | mobile |
+          | Vwé        | Xyzà      | vwexyza@example.org | phone | 987   | 987   | 987    |
+        Given there are the following ldap filters:
+          | name              | server       | username                                  | password  | base dn                          | display name | phone number    |
+          | openldap-chars    | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
+        Given the display filter "Display" exists with the following fields:
+          | Field title | Field type | Display format               |
+          | Nom         |            | {db-firstname} {db-lastname} |
+          | Numéro      |            | {db-phone}                   |
+        When I add the following CTI directory definition:
+          | name          | URI                            | direct match                 |
+          | openldapchars | ldapfilter://openldap-chars    | sn,givenName,telephoneNumber |
+        When I map the following fields and save the directory definition:
+          | field name | value           |
+          | firstname  | givenName       |
+          | lastname   | sn              |
+          | phone      | telephoneNumber |
+        When I include "openldapchars" in the default directory
+        When I restart the CTI server
+        When I start the XiVO Client
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
+        When I search for "Vw" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom      | Numéro |
+          | Vwé Xyzà | 987    |
+        When I search for "é" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom      | Numéro |
+          | Vwé Xyzà | 987    |

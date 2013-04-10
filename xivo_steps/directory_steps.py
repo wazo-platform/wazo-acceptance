@@ -17,12 +17,13 @@
 
 import time
 
+from hamcrest import assert_that, equal_to
 from lettuce import step, world
 from xivo_lettuce import assets
 from xivo_lettuce.common import open_url, remove_element_if_exist, find_line, edit_line
 from xivo_lettuce.form import submit
 from xivo_lettuce.manager import directory_manager
-from xivo_lettuce.xivoclient import xivoclient_step
+from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
 
 
 @step(u'Given the directory "([^"]*)" does not exist')
@@ -161,5 +162,12 @@ def then_1_does_not_show_up_in_the_directory_xlet(step, entry):
     assert world.xc_response == 'OK'
 
 
+@step(u'Then the following results show up in the directory xlet:')
+def then_the_following_results_show_up_in_the_directory_xlet(step):
+    for row in step.hashes:
+        assert_row_shows_up_in_the_directory_xlet(row)
 
 
+@xivoclient
+def assert_row_shows_up_in_the_directory_xlet(row):
+    assert_that(world.xc_response, equal_to('OK'))
