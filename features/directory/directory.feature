@@ -157,8 +157,8 @@ Feature: Directory
         Given the directory definition "openldapchars" does not exist
         Given the LDAP server is configured
         Given there are entries in the ldap server:
-          | first name | last name | email               | city  | state | phone | mobile |
-          | Vwé        | Xyzà      | vwexyza@example.org | phone | 987   | 987   | 987    |
+          | first name | last name | email               | phone |
+          | Vwé        | Xyzà      | vwexyza@example.org | 987   |
         Given there are the following ldap filters:
           | name              | server       | username                                  | password  | base dn                          | display name | phone number    |
           | openldap-chars    | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
