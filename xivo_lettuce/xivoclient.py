@@ -47,7 +47,6 @@ def xivoclient_step(f):
     def xivoclient_decorator(step, *kargs):
         formatted_command = _format_command(f.__name__, kargs)
         _send_and_receive_command(formatted_command)
-        print 'XC response: %s %r' % (f.__name__, world.xc_response)
         f(step, *kargs)
     return xivoclient_decorator
 
@@ -57,7 +56,6 @@ def xivoclient(f):
     def xivoclient_decorator(*kargs):
         formatted_command = _format_command(f.__name__, kargs)
         _send_and_receive_command(formatted_command)
-        print 'XC response: %s %r' % (f.__name__, world.xc_response)
         f(*kargs)
     return xivoclient_decorator
 
@@ -76,6 +74,8 @@ def _send_and_receive_command(formatted_command):
     from pprint import pprint
     pprint(response_dict)
     world.xc_response = response_dict['test_result']
+    world.xc_return_value = response_dict['return_value']
+    world.xc_message = response_dict['message']
 
 
 @before.each_scenario
@@ -94,4 +94,4 @@ def clean_xivoclient_rc(scenario):
 
 @xivoclient
 def i_stop_the_xivo_client():
-    assert world.xc_response == "OK"
+    assert world.xc_response == "passed"

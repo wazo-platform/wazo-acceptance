@@ -28,7 +28,7 @@ from xivo_lettuce.manager import queue_manager
 @step(u'When I search a transfer destination "([^"]*)"')
 @xivoclient_step
 def when_i_search_a_transfer_destination_1(step, group1):
-    assert_that(world.xc_response, equal_to('OK'))
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @step(u'Then I see transfer destinations:')
@@ -40,12 +40,12 @@ def then_i_see_transfer_destinations(step):
 @step(u'Then I see no transfer destinations')
 @xivoclient_step
 def then_i_see_no_transfer_destinations(step):
-    assert_that(world.xc_response, equal_to('OK'))
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @xivoclient
 def assert_directory_has_entry(entry):
-    assert_that(world.xc_response, equal_to('OK'))
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @step(u'Given the switchboard is configured for ldap lookup with location and department$')

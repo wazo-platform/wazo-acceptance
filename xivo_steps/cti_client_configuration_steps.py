@@ -37,4 +37,4 @@ def i_log_in_the_xivo_client_to_host_1_as_2_pass_3(host, login, password):
 
 @step(u'Then I see a error message on CtiClient')
 def then_i_see_a_error_message_on_cticlient(step):
-    assert world.xc_response.startswith('KO')
+    assert world.xc_response == 'failed'
