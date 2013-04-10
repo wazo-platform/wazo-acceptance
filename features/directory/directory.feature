@@ -12,8 +12,8 @@ Feature: Directory
 
     Scenario: Create a CTI directory definition from CSV file
         Given there are users with infos:
-         | firstname | lastname  | number | context | cti_profile |
-         | Lord      | Sanderson | 1042   | default | Client      |
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
         Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
         Given the following directories exist:
           | name           | type | URI                     |
@@ -41,11 +41,15 @@ Feature: Directory
         When I include "phonebookcsv" in the default directory
         When I restart the CTI server
         When I start the XiVO Client
-        When I log in the XiVO Client as "lord", pass "sanderson"
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
         When I search for "emmet" in the directory xlet
-        Then "Emmett Brown" shows up in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom          | Numéro     | Entreprise | E-mail | Mobile     | Source |
+          | Emmett Brown | 0601020304 |            |        |            |        |
         When I search for "0601" in the directory xlet
-        Then "Emmett Brown" shows up in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom          | Numéro     | Entreprise | E-mail | Mobile     | Source |
+          | Emmett Brown | 0601020304 |            |        |            |        |
 
     Scenario: Search for a contact without a line
         Given there are users with infos:
