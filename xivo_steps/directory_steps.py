@@ -22,8 +22,10 @@ from lettuce import step, world
 from xivo_lettuce import assets
 from xivo_lettuce.common import open_url, remove_element_if_exist, find_line, edit_line
 from xivo_lettuce.form import submit
-from xivo_lettuce.manager import directory_manager
+from xivo_lettuce.manager import directory_manager, call_manager
+from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
 from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
+
 
 
 @step(u'Given the directory "([^"]*)" does not exist')
@@ -171,3 +173,28 @@ def then_the_following_results_show_up_in_the_directory_xlet(step):
 @xivoclient
 def assert_row_shows_up_in_the_directory_xlet(row):
     assert_that(world.xc_response, equal_to('OK'))
+
+
+@step(u'Given extension (\d+) will answer a call and wait')
+def given_extension_will_answer_a_call_and_wait(step, extension):
+    line = find_line_with_extension(extension)
+    call_manager.execute_sip_register(line.name, line.secret)
+    time.sleep(1)
+    call_manager.execute_answer_then_wait()
+    time.sleep(1)
+
+
+@step(u'Given extension (\d+) will answer a call, wait (\d+) seconds and hangup')
+def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, seconds):
+    line = find_line_with_extension(extension)
+    call_manager.execute_sip_register(line.name, line.secret)
+    time.sleep(1)
+    call_manager.execute_answer_then_hangup()
+    time.sleep(1)
+
+
+@step(u'When I double-click on the phone number for "([^"]*)"')
+@xivoclient_step
+def when_i_double_click_on_the_phone_number_for_name(step, name):
+    assert world.xc_response == 'OK'
+
