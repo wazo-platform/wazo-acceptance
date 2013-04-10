@@ -71,7 +71,11 @@ def _format_command(function_name, arguments):
 
 def _send_and_receive_command(formatted_command):
     world.xc_socket.send('%s\n' % formatted_command)
-    world.xc_response = str(world.xc_socket.recv(1024))
+    response_json = str(world.xc_socket.recv(1024))
+    response_dict = json.loads(response_json)
+    from pprint import pprint
+    pprint(response_dict)
+    world.xc_response = response_dict['test_result']
 
 
 @before.each_scenario
