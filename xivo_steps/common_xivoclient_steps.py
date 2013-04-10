@@ -46,6 +46,7 @@ def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
                                                    login,
                                                    password)
     assert world.xc_response == 'passed'
+    get_identity_infos()
 
 
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", unlogged agent$')
@@ -54,6 +55,12 @@ def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
     i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(xivo_address,
                                                                   login,
                                                                   password)
+    assert world.xc_response == 'passed'
+    get_identity_infos()
+
+
+@xivoclient
+def get_identity_infos():
     assert world.xc_response == 'passed'
 
 

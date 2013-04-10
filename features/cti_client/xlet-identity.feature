@@ -5,14 +5,10 @@ Feature: Xlet identity
          | firstname | lastname | number | context | cti_profile |
          | Yoda      | Kenobi   | 1151   | default | Client      |
 
-        Given I go to the "Resolver" configuration page
-        Given I read the field "Hostname"
-
         When I start the XiVO Client
         When I log in the XiVO Client as "yoda", pass "kenobi"
 
         Then the Xlet identity shows name as "Yoda" "Kenobi"
-        Then the Xlet identity shows server name as field "Hostname"
         Then the Xlet identity shows phone number as "1151"
 
     Scenario: Display voicemail icon and number
@@ -31,7 +27,7 @@ Feature: Xlet identity
 
         When I start the XiVO Client
         When I log in the XiVO Client as "darth", pass "chewbacca", unlogged agent
-        Then the Xlet identity shows an agent "1153"
+        Then the Xlet identity shows an agent "Agent 1153"
 
         When I log out of the XiVO Client
         When I delete agent number "1153"
