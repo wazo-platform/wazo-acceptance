@@ -88,7 +88,9 @@ Feature: Directory
         When I start the XiVO Client
         When I log in the XiVO Client as "greatlord", pass "macdonnell"
         When I search for "gélinas" in the directory xlet
-        Then "Milan Gélinas" shows up in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom           | Numéro      |
+          | Milan Gélinas | 0133123456  |
 
     Scenario: Search for a contact with special characters in his name
         Given there are users with infos:
