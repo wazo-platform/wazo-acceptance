@@ -43,7 +43,8 @@ class AastraPhonebookBrowser(object):
         return [{'name': name, 'number': number} for name, number in zip(names, numbers)]
 
     def _new_request(self, name):
-        url = '%s%s?name=%s' % (world.host, self._PATH, name)
+        encoded_name = name.encode('utf8')
+        url = '%s%s?name=%s' % (world.host, self._PATH, encoded_name)
         return urllib2.Request(url, headers=self._HEADERS)
 
     def _accumulate_display(self, lines):
