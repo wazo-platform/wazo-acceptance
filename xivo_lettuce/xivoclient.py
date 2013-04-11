@@ -23,6 +23,8 @@ import time
 import errno
 from lettuce import before, after, world
 
+DEBUG = False
+
 
 def run_xivoclient():
     xc_path = os.environ['XC_PATH'] + '/'
@@ -68,11 +70,21 @@ def _format_command(function_name, arguments):
 
 
 def _send_and_receive_command(formatted_command):
+    if DEBUG:
+        from pprint import pprint
+        print '-------------------- MSG SEND ---------------------'
+        pprint(formatted_command)
     world.xc_socket.send('%s\n' % formatted_command)
-    response_json = str(world.xc_socket.recv(1024))
-    response_dict = json.loads(response_json)
-    from pprint import pprint
-    pprint(response_dict)
+    response_raw = str(world.xc_socket.recv(1024))
+    if DEBUG:
+        print '------------------ RAW RESPONSE -------------------'
+        pprint(response_raw)
+    response_dict = json.loads(response_raw)
+    if DEBUG:
+        print '---------------- DECODED RESPONSE -----------------'
+        pprint(response_dict)
+        print '------------------ END RESPONSE -------------------'
+        print
     world.xc_response = response_dict['test_result']
     world.xc_return_value = response_dict['return_value']
     world.xc_message = response_dict['message']
