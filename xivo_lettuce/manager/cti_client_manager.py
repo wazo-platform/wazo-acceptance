@@ -55,7 +55,8 @@ def get_identity_infos():
 def log_out_of_the_xivo_client():
     @xivoclient
     def i_log_out_of_the_xivo_client():
-        assert world.xc_response == 'passed'
+        pass
+    i_log_out_of_the_xivo_client()
 
 
 def log_in_the_xivo_client():
