@@ -15,14 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import time
 import socket
 import errno
 from lettuce import step, world
-from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
+from xivo_lettuce.xivoclient import xivoclient_step
 from xivo_lettuce.xivoclient import run_xivoclient
 from xivo_lettuce import common
 from xivo_lettuce.manager_ws import user_manager_ws
+from xivo_lettuce.manager import cti_client_manager
 
 
 @step(u'When I start the XiVO Client')
@@ -41,37 +41,29 @@ def i_start_the_xivo_client(step):
 
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"$')
 def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
-    xivo_address = common.get_host_address()
-    i_log_in_the_xivo_client_to_host_1_as_2_pass_3(xivo_address,
-                                                   login,
-                                                   password)
+    conf_dict = {
+        'main_server_address': common.get_host_address(),
+        'login': login,
+        'password': password
+    }
+    cti_client_manager.configure_client(conf_dict)
+    cti_client_manager.log_in_the_xivo_client()
+
     assert world.xc_response == 'passed'
-    get_identity_infos()
 
 
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", unlogged agent$')
 def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
-    xivo_address = common.get_host_address()
-    i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(xivo_address,
-                                                                  login,
-                                                                  password)
+    conf_dict = {
+        'main_server_address': common.get_host_address(),
+        'login': login,
+        'password': password,
+        'agent_option': 'unlogged'
+    }
+    cti_client_manager.configure_client(conf_dict)
+    cti_client_manager.log_in_the_xivo_client()
+
     assert world.xc_response == 'passed'
-    get_identity_infos()
-
-
-@xivoclient
-def get_identity_infos():
-    assert world.xc_response == 'passed'
-
-
-@xivoclient
-def i_log_in_the_xivo_client_to_host_1_as_2_pass_3(host, login, password):
-    time.sleep(world.xc_login_timeout)
-
-
-@xivoclient
-def i_log_in_the_xivo_client_to_host_1_as_2_pass_3_unlogged_agent(host, login, password):
-    time.sleep(world.xc_login_timeout)
 
 
 @step(u'I log out of the XiVO Client$')
@@ -92,21 +84,11 @@ def when_i_enable_access_to_xivo_client_to_user_group1_group2(step, firstname, l
 
 @step(u'Then I can\'t connect the CTI client of "([^"]*)" "([^"]*)"')
 def then_i_can_t_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
-    _log_user_in_client(firstname, lastname)
+    cti_client_manager.log_user_in_client(firstname, lastname)
     assert world.xc_response != 'passed'
 
 
 @step(u'Then I can connect the CTI client of "([^"]*)" "([^"]*)"')
 def then_i_can_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
-    _log_user_in_client(firstname, lastname)
+    cti_client_manager.log_user_in_client(firstname, lastname)
     assert world.xc_response == 'passed'
-
-
-def _log_user_in_client(firstname, lastname):
-    xivo_address = common.get_host_address()
-    user = user_manager_ws.find_user_with_firstname_lastname(firstname, lastname)
-    login = user.client_username
-    password = user.client_password
-    i_log_in_the_xivo_client_to_host_1_as_2_pass_3(xivo_address,
-                                                   login,
-                                                   password)

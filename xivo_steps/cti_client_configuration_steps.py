@@ -16,23 +16,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-import time
 from lettuce.decorators import step
-from xivo_steps.common_xivoclient_steps import i_log_in_the_xivo_client_to_host_1_as_2_pass_3
 from lettuce.registry import world
-from xivo_lettuce.xivoclient import xivoclient
+from xivo_lettuce.manager import cti_client_manager
 
 
 @step(u'I log in the XiVO Client with bad server address$')
-def i_log_in_the_xivo_client_with_server_address_as_1_pass_2(step):
-    i_log_in_the_xivo_client_to_host_1_as_2_pass_3('avencall.com',
-                                                   'toto',
-                                                   'titi')
+def i_log_in_the_xivo_client_with_bad_server_address(step):
+    conf_dict = {
+        'main_server_address': 'avencall.com',
+        'login': 'toto',
+        'password': 'titi'
+    }
+    cti_client_manager.configure_client(conf_dict)
+    cti_client_manager.log_in_the_xivo_client()
 
 
-@xivoclient
-def i_log_in_the_xivo_client_to_host_1_as_2_pass_3(host, login, password):
-    time.sleep(world.xc_login_timeout)
+@step(u'When I enable screen pop-up')
+def when_i_enable_screen_pop_up(step):
+    conf_dict = {'customerinfo': True}
+    cti_client_manager.configure_client(conf_dict)
 
 
 @step(u'Then I see a error message on CtiClient')
