@@ -79,3 +79,11 @@ Feature: User
         When I remove line from user "Abraham" "Maharba" with errors
         Then I see errors
         When I remove line "1456" from lines then I see errors
+
+    Scenario: Find a user by line number
+        Given there are users with infos:
+        | firstname | lastname | number | context |
+        | Bob       | Marley   |   1101 | default |
+        | Abraham   | Maharba  |   1456 | default |
+        When I search for user with number "1456"
+        Then user "Abraham Maharba" is displayed in the list
