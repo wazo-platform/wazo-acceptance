@@ -45,6 +45,7 @@ def configure_client(conf_dict):
     def configure(conf_dict):
         time.sleep(world.xc_login_timeout)
     configure(conf_dict)
+    assert world.xc_response == 'passed'
 
 
 @xivoclient
