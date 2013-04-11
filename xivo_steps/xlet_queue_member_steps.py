@@ -39,18 +39,6 @@ def then_the_queue_members_xlet_for_queue_1_is_empty(step, queue_name):
     assert_that(world.xc_response, equal_to('passed'))
 
 
-@step(u'When I enable the hide unlogged agents option')
-@xivoclient_step
-def when_i_enable_the_hide_unlogged_agents_option(step):
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@step(u'When I disable the hide unlogged agents option')
-@xivoclient_step
-def when_i_disable_the_hide_unlogged_agents_option(step):
-    assert_that(world.xc_response, equal_to('passed'))
-
-
 @step(u'Then the Queue members xlet for queue "([^"]*)" should display agents:')
 def then_the_queue_members_xlet_for_queue_1_should_display_agents(step, queue_name):
     queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
