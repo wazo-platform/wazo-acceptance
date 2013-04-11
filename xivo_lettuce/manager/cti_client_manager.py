@@ -18,7 +18,9 @@
 
 import time
 from lettuce import world
-from xivo_lettuce import common, xivoclient
+from xivo_lettuce import common
+from xivo_lettuce.manager_ws import user_manager_ws
+from xivo_lettuce.xivoclient import xivoclient
 
 
 def configure_client(conf_dict):
@@ -39,10 +41,38 @@ def configure_client(conf_dict):
     if 'show_agent_option' not in conf_dict:
         conf_dict['show_agent_option'] = False
 
-    from pprint import pprint
-    pprint(conf_dict)
-
     @xivoclient
     def configure(conf_dict):
         time.sleep(world.xc_login_timeout)
     configure(conf_dict)
+
+
+@xivoclient
+def get_identity_infos():
+    assert world.xc_response == 'passed'
+
+
+def log_out_of_the_xivo_client():
+    @xivoclient
+    def i_log_out_of_the_xivo_client():
+        assert world.xc_response == 'passed'
+
+
+def log_in_the_xivo_client():
+    @xivoclient
+    def i_log_in_the_xivo_client():
+        time.sleep(world.xc_login_timeout)
+    i_log_in_the_xivo_client()
+    get_identity_infos()
+
+
+def log_user_in_client(firstname, lastname):
+    user = user_manager_ws.find_user_with_firstname_lastname(firstname, lastname)
+    conf_dict = {
+        'main_server_address': common.get_host_address(),
+        'main_server_port': 5003,
+        'login': user.client_username,
+        'password': user.client_password
+    }
+    configure_client(conf_dict)
+    log_in_the_xivo_client()
