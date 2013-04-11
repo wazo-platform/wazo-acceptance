@@ -67,8 +67,9 @@ def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
 
 
 @step(u'I log out of the XiVO Client$')
-@xivoclient_step
-def i_log_out_of_the_xivo_client(step):
+def log_out_of_the_xivo_client(step):
+    cti_client_manager.log_out_of_the_xivo_client()
+
     assert world.xc_response == 'passed'
 
 
