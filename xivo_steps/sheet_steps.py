@@ -73,16 +73,22 @@ def given_i_assign_the_sheet_group1_to_the_agent_linked_event(step, sheet_name, 
     form.submit.submit_form()
 
 
+@step(u'When I enable screen pop-up')
+@xivoclient_step
+def when_i_enable_screen_pop_up(step):
+    assert world.xc_response == 'OK'
+
+
 @step(u'Then I see a sheet with the following values:')
 def then_i_see_a_sheet_with_the_following_values(step):
     @xivoclient
     def then_i_see_a_sheet_with_variables_and_values(variable_map):
         pass
     then_i_see_a_sheet_with_variables_and_values(step.hashes)
-    assert world.xc_response == 'passed'
+    assert world.xc_response == 'OK'
 
 
 @step(u'Then I should not see any sheet')
 @xivoclient_step
 def then_i_should_not_see_any_sheet(step):
-    assert world.xc_response == 'passed'
+    assert world.xc_response == 'OK'

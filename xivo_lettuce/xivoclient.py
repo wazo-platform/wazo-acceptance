@@ -23,8 +23,6 @@ import time
 import errno
 from lettuce import before, after, world
 
-DEBUG = False
-
 
 def run_xivoclient():
     xc_path = os.environ['XC_PATH'] + '/'
@@ -49,6 +47,7 @@ def xivoclient_step(f):
     def xivoclient_decorator(step, *kargs):
         formatted_command = _format_command(f.__name__, kargs)
         _send_and_receive_command(formatted_command)
+        print 'XC response: %s %r' % (f.__name__, world.xc_response)
         f(step, *kargs)
     return xivoclient_decorator
 
@@ -58,6 +57,7 @@ def xivoclient(f):
     def xivoclient_decorator(*kargs):
         formatted_command = _format_command(f.__name__, kargs)
         _send_and_receive_command(formatted_command)
+        print 'XC response: %s %r' % (f.__name__, world.xc_response)
         f(*kargs)
     return xivoclient_decorator
 
@@ -70,24 +70,8 @@ def _format_command(function_name, arguments):
 
 
 def _send_and_receive_command(formatted_command):
-    if DEBUG:
-        from pprint import pprint
-        print '-------------------- MSG SEND ---------------------'
-        pprint(formatted_command)
     world.xc_socket.send('%s\n' % formatted_command)
-    response_raw = str(world.xc_socket.recv(1024))
-    if DEBUG:
-        print '------------------ RAW RESPONSE -------------------'
-        pprint(response_raw)
-    response_dict = json.loads(response_raw)
-    if DEBUG:
-        print '---------------- DECODED RESPONSE -----------------'
-        pprint(response_dict)
-        print '------------------ END RESPONSE -------------------'
-        print
-    world.xc_response = response_dict['test_result']
-    world.xc_return_value = response_dict['return_value']
-    world.xc_message = response_dict['message']
+    world.xc_response = str(world.xc_socket.recv(1024))
 
 
 @before.each_scenario
@@ -106,4 +90,4 @@ def clean_xivoclient_rc(scenario):
 
 @xivoclient
 def i_stop_the_xivo_client():
-    assert world.xc_response == "passed"
+    assert world.xc_response == "OK"

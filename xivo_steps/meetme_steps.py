@@ -42,12 +42,12 @@ def then_the_following_conference_rooms_appear_in_the_list(step):
 
 @xivoclient
 def assert_conference_room_1_has_number_2_in_xlet(confname, confnumber):
-    assert world.xc_response == "passed"
+    assert world.xc_response == "OK"
 
 
 @xivoclient
 def assert_conference_room_1_has_pin_code_2_in_xlet(confname, pincode):
-    assert world.xc_response == "passed"
+    assert world.xc_response == "OK"
 
 
 @step(u'When I update the following conference rooms:')

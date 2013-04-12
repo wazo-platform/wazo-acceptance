@@ -27,6 +27,7 @@ from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
 from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
 
 
+
 @step(u'Given the directory "([^"]*)" does not exist')
 def given_the_directory_does_not_exist(step, directory):
     remove_element_if_exist('directory_config', directory)
@@ -42,7 +43,7 @@ def given_the_following_directories_exist(step):
 @step(u'Given the directory definition "([^"]*)" does not exist')
 def given_the_directory_definition_does_not_exist(step, definition):
     remove_element_if_exist('cti_directory', definition)
-    # Work around for directory associations that aren't deleted
+    #Work around for directory associations that aren't deleted
     open_url('cti_direct_directory', 'list')
     try:
         edit_line('default')
@@ -142,25 +143,25 @@ def when_i_restart_the_cti_server(step):
 @step(u'When I search for "([^"]*)" in the directory xlet')
 @xivoclient_step
 def when_i_search_for_1_in_the_directory_xlet(step, search):
-    assert world.xc_response == 'passed'
+    assert world.xc_response == 'OK'
 
 
 @step(u'Then nothing shows up in the directory xlet')
 @xivoclient_step
 def then_nothing_shows_up_in_the_directory_xlet(step):
-    assert world.xc_response == 'passed'
+    assert world.xc_response == 'OK'
 
 
 @step(u'Then "([^"]*)" shows up in the directory xlet')
 @xivoclient_step
 def then_1_shows_up_in_the_directory_xlet(step, entry):
-    assert world.xc_response == 'passed'
+    assert world.xc_response == 'OK'
 
 
 @step(u'Then "([^"]*)" does not show up in the directory xlet')
 @xivoclient_step
 def then_1_does_not_show_up_in_the_directory_xlet(step, entry):
-    assert world.xc_response == 'passed'
+    assert world.xc_response == 'OK'
 
 
 @step(u'Then the following results show up in the directory xlet:')
@@ -171,7 +172,7 @@ def then_the_following_results_show_up_in_the_directory_xlet(step):
 
 @xivoclient
 def assert_row_shows_up_in_the_directory_xlet(row):
-    assert_that(world.xc_response, equal_to('passed'))
+    assert_that(world.xc_response, equal_to('OK'))
 
 
 @step(u'Given extension (\d+) will answer a call and wait')
@@ -196,3 +197,4 @@ def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, 
 @xivoclient_step
 def when_i_double_click_on_the_phone_number_for_name(step, name):
     assert world.xc_response == 'OK'
+
