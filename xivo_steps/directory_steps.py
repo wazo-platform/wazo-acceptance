@@ -27,7 +27,6 @@ from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
 from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
 
 
-
 @step(u'Given the directory "([^"]*)" does not exist')
 def given_the_directory_does_not_exist(step, directory):
     remove_element_if_exist('directory_config', directory)
@@ -172,7 +171,7 @@ def then_the_following_results_show_up_in_the_directory_xlet(step):
 
 @xivoclient
 def assert_row_shows_up_in_the_directory_xlet(row):
-    assert_that(world.xc_response, equal_to('OK'))
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @step(u'Given extension (\d+) will answer a call and wait')
@@ -197,4 +196,3 @@ def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, 
 @xivoclient_step
 def when_i_double_click_on_the_phone_number_for_name(step, name):
     assert world.xc_response == 'OK'
-
