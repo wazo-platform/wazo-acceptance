@@ -51,6 +51,16 @@ def get_identity_infos():
     assert world.xc_response == 'passed'
 
 
+@xivoclient
+def set_queue_for_queue_members(queue_id):
+    assert world.xc_response == 'passed'
+
+
+@xivoclient
+def get_queue_members_infos():
+    assert world.xc_response == 'passed'
+
+
 def log_out_of_the_xivo_client():
     @xivoclient
     def i_log_out_of_the_xivo_client():

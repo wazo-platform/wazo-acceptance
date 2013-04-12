@@ -18,7 +18,6 @@
 import socket
 import errno
 from lettuce import step, world
-from xivo_lettuce.xivoclient import xivoclient_step
 from xivo_lettuce.xivoclient import run_xivoclient
 from xivo_lettuce import common
 from xivo_lettuce.manager_ws import user_manager_ws

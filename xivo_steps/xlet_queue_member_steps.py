@@ -17,35 +17,31 @@
 
 from lettuce import step, world
 from hamcrest import assert_that, equal_to
-from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
+from hamcrest.library.number.ordering_comparison import greater_than
 from xivo_lettuce.manager_ws import queue_manager_ws
+from xivo_lettuce.manager import cti_client_manager
 
 
 @step(u'Then the Queue members xlet is empty')
-@xivoclient_step
 def then_the_queue_members_xlet_is_empty(step):
+    cti_client_manager.get_queue_members_infos()
     assert_that(world.xc_response, equal_to('passed'))
+    assert_that(world.xc_return_value['row_count'], equal_to(0))
 
 
 @step(u'Then the Queue members xlet for queue "([^"]*)" is empty')
 def then_the_queue_members_xlet_for_queue_1_is_empty(step, queue_name):
     queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
-
-    @xivoclient
-    def then_the_queue_members_xlet_for_queue_1_is_empty_(queue_id):
-        pass
-
-    then_the_queue_members_xlet_for_queue_1_is_empty_(queue_id)
+    cti_client_manager.set_queue_for_queue_members(queue_id)
+    cti_client_manager.get_queue_members_infos()
     assert_that(world.xc_response, equal_to('passed'))
+    assert_that(world.xc_return_value['row_count'], equal_to(0))
 
 
 @step(u'Then the Queue members xlet for queue "([^"]*)" should display agents:')
 def then_the_queue_members_xlet_for_queue_1_should_display_agents(step, queue_name):
     queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
-
-    @xivoclient
-    def then_the_queue_members_xlet_for_queue_1_displays_agents(queue_id, variable_map):
-        pass
-
-    then_the_queue_members_xlet_for_queue_1_displays_agents(queue_id, step.hashes)
+    cti_client_manager.set_queue_for_queue_members(queue_id)
+    cti_client_manager.get_queue_members_infos()
     assert_that(world.xc_response, equal_to('passed'))
+    assert_that(world.xc_return_value['row_count'], greater_than(0))
