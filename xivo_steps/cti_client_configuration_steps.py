@@ -41,14 +41,14 @@ def when_i_enable_screen_pop_up(step):
 
 @step(u'When I enable the hide unlogged agents option')
 def when_i_enable_the_hide_unlogged_agents_option(step):
-    conf_dict = {'show_agent_option': False}
+    conf_dict = {'hide_unlogged_agents_for_xlet_queue_members': True}
     cti_client_manager.configure_client(conf_dict)
     assert world.xc_response == 'passed'
 
 
 @step(u'When I disable the hide unlogged agents option')
 def when_i_disable_the_hide_unlogged_agents_option(step):
-    conf_dict = {'show_agent_option': True}
+    conf_dict = {'hide_unlogged_agents_for_xlet_queue_members': False}
     cti_client_manager.configure_client(conf_dict)
     assert world.xc_response == 'passed'
 

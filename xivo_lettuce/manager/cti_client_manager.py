@@ -31,15 +31,13 @@ def configure_client(conf_dict):
         'login': 'string',
         'password': 'string',
         'agent_option': enum [no, unlogged, logged]
-        'show_agent_option': bool
+        'hide_unlogged_agents_for_xlet_queue_members': bool
     }
     """
     if 'main_server_address' not in conf_dict:
         conf_dict['main_server_address'] = common.get_host_address()
     if 'main_server_port' not in conf_dict:
         conf_dict['main_server_port'] = 5003
-    if 'show_agent_option' not in conf_dict:
-        conf_dict['show_agent_option'] = False
 
     @xivoclient
     def configure(conf_dict):
