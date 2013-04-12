@@ -73,7 +73,8 @@ def log_in_the_xivo_client():
     def i_log_in_the_xivo_client():
         time.sleep(world.xc_login_timeout)
     i_log_in_the_xivo_client()
-    get_identity_infos()
+    if world.xc_response == 'passed':
+        get_identity_infos()
 
 
 def log_user_in_client(firstname, lastname):
