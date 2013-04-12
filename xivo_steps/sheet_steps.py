@@ -20,6 +20,8 @@ from xivo_lettuce import common
 from xivo_lettuce import form
 from selenium.webdriver.support.select import Select
 from xivo_lettuce.xivoclient import xivoclient_step, xivoclient
+from hamcrest.core import assert_that
+from hamcrest.core.core.isequal import equal_to
 
 
 EVENT_ELEMENT_MAP = {
@@ -79,10 +81,10 @@ def then_i_see_a_sheet_with_the_following_values(step):
     def then_i_see_a_sheet_with_variables_and_values(variable_map):
         pass
     then_i_see_a_sheet_with_variables_and_values(step.hashes)
-    assert world.xc_response == 'passed'
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @step(u'Then I should not see any sheet')
 @xivoclient_step
 def then_i_should_not_see_any_sheet(step):
-    assert world.xc_response == 'passed'
+    assert_that(world.xc_response, equal_to('passed'))

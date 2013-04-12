@@ -142,25 +142,25 @@ def when_i_restart_the_cti_server(step):
 @step(u'When I search for "([^"]*)" in the directory xlet')
 @xivoclient_step
 def when_i_search_for_1_in_the_directory_xlet(step, search):
-    assert world.xc_response == 'passed'
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @step(u'Then nothing shows up in the directory xlet')
 @xivoclient_step
 def then_nothing_shows_up_in_the_directory_xlet(step):
-    assert world.xc_response == 'passed'
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @step(u'Then "([^"]*)" shows up in the directory xlet')
 @xivoclient_step
 def then_1_shows_up_in_the_directory_xlet(step, entry):
-    assert world.xc_response == 'passed'
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @step(u'Then "([^"]*)" does not show up in the directory xlet')
 @xivoclient_step
 def then_1_does_not_show_up_in_the_directory_xlet(step, entry):
-    assert world.xc_response == 'passed'
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @step(u'Then the following results show up in the directory xlet:')
@@ -195,4 +195,4 @@ def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, 
 @step(u'When I double-click on the phone number for "([^"]*)"')
 @xivoclient_step
 def when_i_double_click_on_the_phone_number_for_name(step, name):
-    assert world.xc_response == 'OK'
+    assert_that(world.xc_response, equal_to('passed'))

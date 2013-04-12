@@ -19,6 +19,8 @@
 from lettuce.decorators import step
 from lettuce.registry import world
 from xivo_lettuce.manager import cti_client_manager
+from hamcrest.core import assert_that
+from hamcrest.core.core.isequal import equal_to
 
 
 @step(u'I log in the XiVO Client with bad server address$')
@@ -52,4 +54,4 @@ def when_i_disable_the_hide_unlogged_agents_option(step):
 
 @step(u'Then I see a error message on CtiClient')
 def then_i_see_a_error_message_on_cticlient(step):
-    assert world.xc_response == 'failed'
+    assert_that(world.xc_response, equal_to('failed'))

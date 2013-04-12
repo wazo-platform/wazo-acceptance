@@ -21,6 +21,8 @@ from lettuce import world
 from xivo_lettuce import common
 from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.xivoclient import xivoclient
+from hamcrest.core import assert_that
+from hamcrest.core.core.isequal import equal_to
 
 
 def configure_client(conf_dict):
@@ -43,7 +45,7 @@ def configure_client(conf_dict):
     def configure(conf_dict):
         time.sleep(world.xc_login_timeout)
     configure(conf_dict)
-    assert world.xc_response == 'passed'
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @xivoclient
@@ -53,12 +55,12 @@ def get_identity_infos():
 
 @xivoclient
 def set_queue_for_queue_members(queue_id):
-    assert world.xc_response == 'passed'
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 @xivoclient
 def get_queue_members_infos():
-    assert world.xc_response == 'passed'
+    assert_that(world.xc_response, equal_to('passed'))
 
 
 def log_out_of_the_xivo_client():
