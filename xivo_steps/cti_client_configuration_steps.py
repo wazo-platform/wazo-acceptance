@@ -36,21 +36,18 @@ def i_log_in_the_xivo_client_with_bad_server_address(step):
 def when_i_enable_screen_pop_up(step):
     conf_dict = {'customerinfo': True}
     cti_client_manager.configure_client(conf_dict)
-    assert world.xc_response == 'passed'
 
 
 @step(u'When I enable the hide unlogged agents option')
 def when_i_enable_the_hide_unlogged_agents_option(step):
     conf_dict = {'hide_unlogged_agents_for_xlet_queue_members': True}
     cti_client_manager.configure_client(conf_dict)
-    assert world.xc_response == 'passed'
 
 
 @step(u'When I disable the hide unlogged agents option')
 def when_i_disable_the_hide_unlogged_agents_option(step):
     conf_dict = {'hide_unlogged_agents_for_xlet_queue_members': False}
     cti_client_manager.configure_client(conf_dict)
-    assert world.xc_response == 'passed'
 
 
 @step(u'Then I see a error message on CtiClient')
