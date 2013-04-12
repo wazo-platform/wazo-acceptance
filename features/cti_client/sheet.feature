@@ -11,8 +11,8 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Link" event
         
         Given there are users with infos:
-         | firstname | lastname | agent_number | cti_profile |
-         | Cedric    | Abunar   | 1153         | Client      |
+         | firstname | lastname | number | context | agent_number | cti_profile |
+         | Cedric    | Abunar   | 1153   | default | 1153         | Client      |
 
         Given there are queues with infos:
             | name  | number | context | agents_number |
