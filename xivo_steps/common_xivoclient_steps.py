@@ -92,7 +92,7 @@ def when_i_enable_access_to_xivo_client_to_user_group1_group2(step, firstname, l
 @step(u'Then I can\'t connect the CTI client of "([^"]*)" "([^"]*)"')
 def then_i_can_t_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
     cti_client_manager.log_user_in_client(firstname, lastname)
-    assert_that(world.xc_response, equal_to('passed'))
+    assert_that(world.xc_response, equal_to('failed'))
 
 
 @step(u'Then I can connect the CTI client of "([^"]*)" "([^"]*)"')
