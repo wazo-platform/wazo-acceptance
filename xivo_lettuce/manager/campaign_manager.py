@@ -18,14 +18,17 @@
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import form
 from xivo_lettuce.common import open_url, find_line, edit_line, remove_line
+from xivo_lettuce.form.submit import submit_form_with_errors
 
 def create_campaign(info):
     open_url('campaign', 'add')
     fill_form(info)
+    form.submit.submit_form()
 
 def edit_campaign(name, info):
     edit_line(name)
     fill_form(info)
+    form.submit.submit_form()
 
 def add_or_replace(name):
     try:
@@ -42,7 +45,6 @@ def fill_form(info):
         form.input.edit_text_field_with_id('it-end_date', info['end_date'])
     if 'queue' in info:
         form.select.set_select_field_with_id_containing("recordingcampaign_queueid", info['queue'])
-    form.submit.submit_form()
 
 def remove_recordings(campaign_name):
     open_url('campaign', 'list')
@@ -59,3 +61,8 @@ def remove_recordings(campaign_name):
 def remove_campaign(name):
     open_url('campaign', 'list')
     remove_line(name)
+
+def create_campaign_with_errors(infos):
+    open_url('campaign', 'add')
+    fill_form(infos)
+    submit_form_with_errors()

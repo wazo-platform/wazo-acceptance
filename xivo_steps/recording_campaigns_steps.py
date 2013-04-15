@@ -54,3 +54,8 @@ def given_there_is_a_campaign_with_no_recording(step, name):
 @step(u'When I delete the campaign "([^"]*)"')
 def when_i_delete_the_campaign(step, name):
     campaign_manager.remove_campaign(name)
+
+@step(u'When I try to create a campaign with the following parameters:')
+def when_i_try_to_create_a_campaign_with_the_following_parameters(step):
+    params = step.hashes[0]
+    campaign_manager.create_campaign_with_errors(params)
