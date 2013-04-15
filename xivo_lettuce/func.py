@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
+
 
 def _rec_update_dict(base_dict, overlay_dict):
     for k, v in overlay_dict.iteritems():
@@ -41,3 +43,18 @@ def extract_number_and_context_from_extension(extension, default_context='defaul
         number = extension
         context = default_context
     return number, context
+
+
+def st_time(func):
+    """
+        st decorator to calculate the total time of a func
+    """
+
+    def st_func(*args, **keyArgs):
+        t1 = time.time()
+        r = func(*args, **keyArgs)
+        t2 = time.time()
+        print "Function=%s, Time=%s" % (func.__name__, t2 - t1)
+        return r
+
+    return st_func
