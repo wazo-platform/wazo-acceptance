@@ -26,6 +26,7 @@ from xivo_dao.helpers import config as dao_config
 from xivo_lettuce.common import webi_login_as_default, go_to_home_page, webi_logout
 from xivo_lettuce.manager import asterisk_manager
 from xivo_lettuce.ssh import SSHClient
+from xivo_lettuce.func import st_time
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             '../config/config.ini'))
@@ -84,6 +85,7 @@ def initialize():
     world.logged_agents = []
 
 
+@st_time
 def _setup_browser():
     visible = world.config.getboolean('browser', 'visible')
     timeout = world.config.getint('browser', 'timeout')
@@ -159,6 +161,7 @@ def _webi_configured():
         return True
 
 
+@st_time
 def _log_on_webi():
     go_to_home_page()
     webi_login_as_default()
