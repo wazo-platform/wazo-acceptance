@@ -16,8 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce.common import open_url, find_line, remove_line
 from xivo_lettuce.manager import campaign_manager
 
 @step(u'When I create a campaign with the following parameters:')
@@ -27,16 +25,8 @@ def when_i_create_a_campaign_with_the_following_parameters(step):
 
 @step(u'Then there is a campaign in the list with the following values:')
 def then_there_is_a_campaign_in_the_list_with_the_following_values(step):
-    params = step.hashes[0]
-    open_url('campaign', 'list', None)
-    name = params['name']
-    line = find_line(name)
-    for value in params.values():
-        try:
-            line.find_element_by_xpath(".//td[contains(.,'%s')]" % value)
-            assert True
-        except NoSuchElementException:
-            assert False
+    for info in step.hashes:
+        campaign_manager.campaign_exists(info)
 
 @step(u'Given there is a campaign "([^"]*)"$')
 def given_there_is_a_campaign(step, name):
@@ -57,5 +47,5 @@ def when_i_delete_the_campaign(step, name):
 
 @step(u'When I try to create a campaign with the following parameters:')
 def when_i_try_to_create_a_campaign_with_the_following_parameters(step):
-    params = step.hashes[0]
-    campaign_manager.create_campaign_with_errors(params)
+    for info in step.hashes:
+        campaign_manager.create_campaign_with_errors(info)

@@ -17,8 +17,10 @@
 
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import form
-from xivo_lettuce.common import open_url, find_line, edit_line, remove_line
+from xivo_lettuce.common import open_url, find_line, edit_line, remove_line, \
+    remove_element_if_exist
 from xivo_lettuce.form.submit import submit_form_with_errors
+import hamcrest
 
 def create_campaign(info):
     open_url('campaign', 'add')
@@ -31,10 +33,8 @@ def edit_campaign(name, info):
     form.submit.submit_form()
 
 def add_or_replace(name):
-    try:
-        find_line(name)
-    except NoSuchElementException:
-        create_campaign({'name': name})
+    remove_element_if_exist('campaign', name)
+    create_campaign({'name': name})
 
 def fill_form(info):
     if 'name' in info:
@@ -51,6 +51,8 @@ def remove_recordings(campaign_name):
     line = find_line(campaign_name)
     link = line.find_element_by_xpath(".//a[@title='%s']" % campaign_name)
     link.click()
+    #Ne serait-ce pas mieux d'utiliser xivo_lettuce.common.remove_all_elements ?
+    #on ne peut pas: remove_all_elements appelle l'action 'list', ici on appelle l'action 'listrecordings' avec un paramètre
     got_exception = False
     while not got_exception:
         try:
@@ -66,3 +68,17 @@ def create_campaign_with_errors(infos):
     open_url('campaign', 'add')
     fill_form(infos)
     submit_form_with_errors()
+
+def campaign_exists(info):
+    open_url('campaign', 'list', None)
+    line = find_line(info['name'])
+    for value in info.values():
+        #Ne serait-ce pas mieux d'utiliser xivo_lettuce.common.element_is_in_list ?
+        #je ne pense pas: element_is_in_list vérifie qu'un tableau contient une valeur donnée
+        #ici on veut vérifier qu'une ligne particulière du tableau contient un ensemble de valeurs
+        try:
+            line.find_element_by_xpath(".//td[contains(.,'%s')]" % value)
+            hamcrest.assert_that(True)
+            assert True
+        except NoSuchElementException:
+            hamcrest.assert_that(False, "The campaign was not found in the list.")
