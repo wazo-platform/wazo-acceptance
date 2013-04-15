@@ -18,14 +18,8 @@
 from lettuce.registry import world
 from xivo_lettuce import common
 from xivo_lettuce import form
-import ldap
-import ldap.modlist
+from xivo_lettuce import ldap_utils
 import time
-
-LDAP_URI = 'ldap://openldap-dev.lan-quebec.avencall.com:389/'
-LDAP_LOGIN = 'cn=admin,dc=lan-quebec,dc=avencall,dc=com'
-LDAP_PASSWORD = 'superpass'
-LDAP_USER_GROUP = 'ou=people,dc=lan-quebec,dc=avencall,dc=com'
 
 
 def type_ldap_name_and_host(name, host):
@@ -69,55 +63,44 @@ def add_or_replace_ldap_filter(**args):
 
 
 def add_or_replace_entry(directory_entry):
-    ldap_server = ldap.initialize(LDAP_URI)
-    ldap_server.simple_bind(LDAP_LOGIN, LDAP_PASSWORD)
-
-    entry_common_name = _get_entry_common_name(directory_entry)
-    if _ldap_has_entry_bound(ldap_server, entry_common_name):
-        entry_id = _get_entry_id(directory_entry)
-        delete_entry_bound(ldap_server, entry_id)
-    add_entry_bound(ldap_server, directory_entry)
-
-    ldap_server.unbind_s()
+    entry = _convert_directory_entry(directory_entry)
+    ldap_utils.add_or_replace_entry(entry)
 
 
-def delete_entry_bound(ldap_server, directory_entry_id):
-    directory_entry_id_encoded = directory_entry_id.encode('utf-8')
-    ldap_server.delete_s(directory_entry_id_encoded)
+def _convert_directory_entry(directory_entry):
+    new_entry_common_name = _get_entry_common_name(directory_entry)
 
-
-def add_entry_bound(ldap_server, directory_entry):
-    directory_entry_encoded = _encode_directory_entry(directory_entry)
-    new_entry_common_name_encoded = _get_entry_common_name(directory_entry).encode('utf-8')
-    new_entry_id_encoded = _get_entry_id(directory_entry).encode('utf-8')
-    new_entry_attributes_encoded = {
+    new_entry_attributes = {
         'objectClass': ['top', 'inetOrgPerson'],
-        'givenName': directory_entry_encoded['first name'],
-        'cn': new_entry_common_name_encoded,
-        'sn': directory_entry_encoded['last name'],
-        'telephoneNumber': directory_entry_encoded['phone'],
+        'givenName': directory_entry['first name'],
+        'cn': new_entry_common_name,
+        'sn': directory_entry['last name'],
+        'telephoneNumber': directory_entry['phone'],
     }
 
-    if 'location' in directory_entry_encoded:
-        new_entry_attributes_encoded['st'] = directory_entry_encoded['location']
+    if 'location' in directory_entry:
+        new_entry_attributes['st'] = directory_entry['location']
 
-    if 'department' in directory_entry_encoded:
-        new_entry_attributes_encoded['o'] = directory_entry_encoded['department']
+    if 'department' in directory_entry:
+        new_entry_attributes['o'] = directory_entry['department']
 
-    if 'city' in directory_entry_encoded:
-        new_entry_attributes_encoded['l'] = directory_entry_encoded['city']
+    if 'city' in directory_entry:
+        new_entry_attributes['l'] = directory_entry['city']
 
-    if 'state' in directory_entry_encoded:
-        new_entry_attributes_encoded['st'] = directory_entry_encoded['state']
+    if 'state' in directory_entry:
+        new_entry_attributes['st'] = directory_entry['state']
 
-    if 'mobile' in directory_entry_encoded:
-        new_entry_attributes_encoded['mobile'] = directory_entry_encoded['mobile']
+    if 'mobile' in directory_entry:
+        new_entry_attributes['mobile'] = directory_entry['mobile']
 
-    if 'email' in directory_entry_encoded:
-        new_entry_attributes_encoded['mail'] = directory_entry_encoded['email']
+    if 'email' in directory_entry:
+        new_entry_attributes['mail'] = directory_entry['email']
 
-    new_entry_content_encoded = ldap.modlist.addModlist(new_entry_attributes_encoded)
-    ldap_server.add_s(new_entry_id_encoded, new_entry_content_encoded)
+    return new_entry_attributes
+
+
+def _get_entry_common_name(directory_entry):
+    return "%s %s" % (directory_entry['first name'], directory_entry['last name'])
 
 
 def _add_ldap_filter(**args):
@@ -201,31 +184,6 @@ def _select_phone_number_type(number_type):
     else:
         form.select.set_select_field_with_id("it-ldapfilter-additionaltype", "Customized")
         form.input.set_text_field_with_id("it-ldapfilter-additionaltext", number_type)
-
-
-def _get_entry_id(directory_entry):
-    entry_common_name = _get_entry_common_name(directory_entry)
-    return "cn=%s,ou=people,dc=lan-quebec,dc=avencall,dc=com" % entry_common_name
-
-
-def _get_entry_common_name(directory_entry):
-    return "%s %s" % (directory_entry['first name'], directory_entry['last name'])
-
-
-def _encode_directory_entry(directory_entry):
-    directory_entry_encoded = {}
-    for key in directory_entry:
-        directory_entry_encoded[key] = directory_entry[key].encode('utf-8')
-    return directory_entry_encoded
-
-
-def _ldap_has_entry_bound(ldap_server, entry_common_name):
-    entry_common_name_encoded = entry_common_name.encode('utf-8')
-    ldap_results = ldap_server.search_s(LDAP_USER_GROUP, ldap.SCOPE_SUBTREE, '(cn=%s)' % entry_common_name_encoded)
-    if ldap_results:
-        return True
-    else:
-        return False
 
 
 def add_ldap_filter_to_phonebook(ldap_filter):
