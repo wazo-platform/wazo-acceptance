@@ -187,6 +187,37 @@ Feature: Directory
           | Nom      | Numéro |
           | Vwé Xyzà | 987    |
 
+    Scenario: Search for a contact in a LDAP server with an active directory username
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
+        Given the directory definition "openldapaduser" does not exist
+        Given the LDAP server is configured
+        Given there is a user with common name "ACTIVE\Directory" on the ldap server
+        Given there are the following ldap filters:
+          | name            | server       | username                                             | password  | base dn                          | display name | phone number    |
+          | openldap-aduser | openldap-dev | cn=ACTIVE\Directory,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
+        Given the display filter "Display" exists with the following fields:
+          | Field title | Field type | Display format |
+          | Nom         |            | {db-fullname}  |
+          | Numéro      |            | {db-phone}     |
+        When I add the following CTI directory definition:
+          | name           | URI                          | direct match                 |
+          | openldapaduser | ldapfilter://openldap-aduser | sn,givenName,telephoneNumber |
+        When I map the following fields and save the directory definition:
+          | field name | value           |
+          | fullname   | cn              |
+          | phone      | telephoneNumber |
+        When I include "openldapaduser" in the default directory
+        When I restart the CTI server
+        When I start the XiVO Client
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
+        When I search for "active" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom              | Numéro |
+          | ACTIVE\Directory |        |
+        Then there are no errors in the CTI logs
+
     Scenario: Call a contact in the directory
         Given there are no calls running
         Given there are users with infos:

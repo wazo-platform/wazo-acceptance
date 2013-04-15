@@ -19,7 +19,7 @@ import time
 
 from hamcrest import assert_that, equal_to
 from lettuce import step, world
-from xivo_lettuce import assets
+from xivo_lettuce import assets, logs
 from xivo_lettuce.common import open_url, remove_element_if_exist, find_line, edit_line
 from xivo_lettuce.form import submit
 from xivo_lettuce.manager import directory_manager, call_manager
@@ -167,6 +167,12 @@ def then_1_does_not_show_up_in_the_directory_xlet(step, entry):
 def then_the_following_results_show_up_in_the_directory_xlet(step):
     for row in step.hashes:
         assert_row_shows_up_in_the_directory_xlet(row)
+
+
+@step(u'Then there are no errors in the CTI logs')
+def then_there_are_no_errors_in_the_cti_logs(step):
+    errors_found = logs.search_str_in_xivo_cti_log("ERROR")
+    assert_that(errors_found, equal_to(False), 'errors were found in CTI logs when searching in the directory')
 
 
 @xivoclient

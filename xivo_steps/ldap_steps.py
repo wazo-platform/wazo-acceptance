@@ -17,7 +17,7 @@
 
 from lettuce import step, world
 from xivo_lettuce.manager import ldap_manager
-from xivo_lettuce import common, assets, sysutils
+from xivo_lettuce import common, assets, sysutils, ldap_utils
 
 
 @step(u'I create an LDAP server with name "([^"]*)" and host "([^"]*)"')
@@ -118,3 +118,14 @@ def given_the_ldap_filter_group1_has_been_added_to_the_phonebook(step, ldap_filt
 @step(u'Given there are no LDAP filters configured in the phonebook')
 def given_there_are_no_ldap_filters_configured_in_the_phonebook(step):
     ldap_manager.remove_all_filters_from_phonebook()
+
+
+@step(u'Given there is a user with common name "([^"]*)" on the ldap server')
+def given_there_is_a_user_with_common_name_group1_on_the_ldap_server(step, common_name):
+    entry = {
+        'objectClass': ['top', 'inetOrgPerson'],
+        'cn': common_name,
+        'sn': common_name,
+    }
+
+    ldap_utils.add_or_replace_entry(entry)
