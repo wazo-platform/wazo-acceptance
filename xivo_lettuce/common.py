@@ -212,7 +212,8 @@ def get_host_address():
 
 
 def go_to_home_page():
-    world.browser.get(world.host)
+    home_page = '%s%s' % (world.host, '?go=%252Fservice%252Fipbx%252Findex.php')
+    world.browser.get(home_page)
 
 
 def logged():
