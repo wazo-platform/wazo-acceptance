@@ -5,8 +5,8 @@ Feature: Sheet
         | variable          |
         | xivo-calleridnum  |
         | xivo-calleridname |
-        | xivo-queuename|
-        | xivo-agentnumber|
+        | xivo-queuename    |
+        | xivo-agentnumber  |
 
         Given I assign the sheet "testsheet" to the "Link" event
         
@@ -32,13 +32,12 @@ Feature: Sheet
         When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
 
         Given I wait 10 seconds for the calls processing
-
         Then I see a sheet with the following values:
         | Variable          | Value           |
         | xivo-calleridnum  | 1234            |
         | xivo-calleridname | Laurent Demange |
-        | xivo-queuename| frere |
-        | xivo-agentnumber| 1153 |
+        | xivo-queuename    | frere           |
+        | xivo-agentnumber  | 1153            |
 
     Scenario: Variables on link event to a User
         Given I have a sheet model named "testsheet" with the variables:

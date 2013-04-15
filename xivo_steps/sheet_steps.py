@@ -19,8 +19,8 @@ from lettuce import step, world
 from xivo_lettuce import common
 from xivo_lettuce import form
 from selenium.webdriver.support.select import Select
-from xivo_lettuce.xivoclient import xivoclient_step, xivoclient
 from hamcrest.core import assert_that
+from xivo_lettuce.manager import cti_client_manager
 from hamcrest.core.core.isequal import equal_to
 
 
@@ -77,14 +77,14 @@ def given_i_assign_the_sheet_group1_to_the_agent_linked_event(step, sheet_name, 
 
 @step(u'Then I see a sheet with the following values:')
 def then_i_see_a_sheet_with_the_following_values(step):
-    @xivoclient
-    def then_i_see_a_sheet_with_variables_and_values(variable_map):
-        pass
-    then_i_see_a_sheet_with_variables_and_values(step.hashes)
-    assert_that(world.xc_response, equal_to('passed'))
+    cti_client_manager.get_sheet_infos()
+    data_sheet = world.xc_return_value['content']
+    expected_data_sheet = dict(step.hashes)
+    expected_value = dict(zip(expected_data_sheet.values(), expected_data_sheet.keys()))
+    assert_that(expected_value, data_sheet)
 
 
 @step(u'Then I should not see any sheet')
-@xivoclient_step
 def then_i_should_not_see_any_sheet(step):
-    assert_that(world.xc_response, equal_to('passed'))
+    cti_client_manager.get_sheet_infos()
+    assert_that(world.xc_return_value['content'], equal_to({}))

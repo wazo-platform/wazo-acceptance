@@ -40,6 +40,11 @@ def i_start_the_xivo_client(step):
             raise message
 
 
+@step(u'Then I get sheet infos')
+def get_sheet_infos(step):
+    cti_client_manager.get_sheet_infos()
+
+
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"$')
 def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
     conf_dict = {
