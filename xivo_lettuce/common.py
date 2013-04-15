@@ -157,6 +157,9 @@ def remove_element_if_exist(module, search):
 
 def remove_all_elements(module, search):
     open_url(module, 'list')
+    remove_all_elements_from_current_page(search)
+
+def remove_all_elements_from_current_page(search):
     try:
         while True:
             remove_line(search)

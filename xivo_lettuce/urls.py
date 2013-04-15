@@ -91,4 +91,5 @@ URLS = {
     'cti_display_filter': '/cti/index.php/displays',
     'admin_user': '/xivo/configuration/index.php/manage/user',
     'schedule': '/service/ipbx/index.php/call_management/schedule',
+    'campaign': '/service/ipbx/index.php/call_management/recording',
 }
