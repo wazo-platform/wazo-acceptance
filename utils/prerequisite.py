@@ -97,12 +97,14 @@ def _xivo_service_restart():
     command = ['xivo-service', 'restart', 'all']
     world.ssh_client_xivo.check_call(command)
 
+
 def _activate_recording_campaigns():
     command = ['sed',
                '-ri',
                '"s/\\#(.*recording)/\\1/g"',
                '/usr/share/xivo-web-interface/object/objectconf/acl/user.inc']
     world.ssh_client_xivo.check_call(command)
+
 
 if __name__ == '__main__':
     main()
