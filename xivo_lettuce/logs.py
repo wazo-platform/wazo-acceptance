@@ -24,12 +24,14 @@ from lettuce.registry import world
 DAEMON_LOGFILE = '/var/log/daemon.log'
 ASTERISK_LOGFILE = '/var/log/asterisk/messages'
 XIVO_AGENT_LOGFILE = '/var/log/xivo-agentd.log'
+XIVO_CTI_LOGFILE = '/var/log/xivo-ctid.log'
 
 DAEMON_DATE_FORMAT = "%b %d %H:%M:%S"
 DAEMON_DATE_PATTERN = "([\w]{3} [\d ]{2} [\d]{2}:[\d]{2}:[\d]{2})"
 
-XIVO_AGENT_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
-XIVO_AGENT_DATE_PATTERN = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"
+PYTHON_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+PYTHON_DATE_PATTERN = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"
+
 
 LogfileInfo = namedtuple('LogfileInfo', ['logfile', 'date_format', 'date_pattern'])
 
@@ -42,8 +44,12 @@ ASTERISK_LOG_INFO = LogfileInfo(logfile=ASTERISK_LOGFILE,
                                 date_pattern=DAEMON_DATE_PATTERN)
 
 XIVO_AGENT_LOG_INFO = LogfileInfo(logfile=XIVO_AGENT_LOGFILE,
-                                  date_format=XIVO_AGENT_DATE_FORMAT,
-                                  date_pattern=XIVO_AGENT_DATE_PATTERN)
+                                  date_format=PYTHON_DATE_FORMAT,
+                                  date_pattern=PYTHON_DATE_PATTERN)
+
+XIVO_CTI_LOG_INFO = LogfileInfo(logfile=XIVO_CTI_LOGFILE,
+                                date_format=PYTHON_DATE_FORMAT,
+                                date_pattern=PYTHON_DATE_PATTERN)
 
 
 def search_str_in_daemon_log(expression, delta=10):
@@ -58,8 +64,12 @@ def search_str_in_xivo_agent_log(expression, delta=10):
     return _search_str_in_log_file(expression, XIVO_AGENT_LOG_INFO, delta)
 
 
+def search_str_in_xivo_cti_log(expression, delta=10):
+    return _search_str_in_log_file(expression, XIVO_CTI_LOG_INFO, delta)
+
+
 def _search_str_in_log_file(expression, loginfo, delta=10):
-    command = ['tail', '-n', '15', loginfo.logfile]
+    command = ['tail', '-n', '30', loginfo.logfile]
     result = world.ssh_client_xivo.out_call(command)
 
     min_timestamp = datetime.now() - timedelta(seconds=delta)
