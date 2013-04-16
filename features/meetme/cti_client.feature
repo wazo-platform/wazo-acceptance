@@ -33,7 +33,7 @@ Feature: Meetme
         When I start the XiVO Client
         When I log in the XiVO Client as "lord", pass "sanderson"
         Then the following conference rooms appear in the conference room xlet:
-            | name  | number | pin code |
-            | room1 | 4001   | Yes      |
-            | room2 | 4002   | No       |
+            | name  | number | pin_required |
+            | room1 | 4001   | Yes          |
+            | room2 | 4002   | No           |
 

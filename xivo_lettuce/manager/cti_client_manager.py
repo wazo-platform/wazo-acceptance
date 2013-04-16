@@ -49,6 +49,11 @@ def configure_client(conf_dict):
 
 
 @xivoclient
+def get_conference_room_infos():
+    assert_that(world.xc_response, equal_to('passed'))
+
+
+@xivoclient
 def get_identity_infos():
     assert_that(world.xc_response, equal_to('passed'))
 

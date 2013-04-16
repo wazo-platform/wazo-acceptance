@@ -16,9 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step, world
-from xivo_lettuce.manager import meetme_manager
+from xivo_lettuce.manager import meetme_manager, cti_client_manager
 from xivo_lettuce.manager_ws import meetme_manager_ws
-from xivo_lettuce.xivoclient import xivoclient
+from hamcrest.core import assert_that
+from hamcrest.library.collection.isdict_containingentries import has_entries
 
 
 @step(u'Given there are no conference rooms')
@@ -32,25 +33,14 @@ def when_i_add_the_following_conference_rooms(step):
         meetme_manager.create_meetme(meetme)
 
 
-@step(u'Then the following conference rooms appear in the conference room xlet:')
-def then_the_following_conference_rooms_appear_in_the_list(step):
-    for meetme in step.hashes:
-        assert_conference_room_1_has_number_2_in_xlet(meetme['name'], meetme['number'])
-        if 'pin code' in meetme:
-            assert_conference_room_1_has_pin_code_2_in_xlet(meetme['name'], meetme['pin code'])
-
-
-@xivoclient
-def assert_conference_room_1_has_number_2_in_xlet(confname, confnumber):
-    assert world.xc_response == "passed"
-
-
-@xivoclient
-def assert_conference_room_1_has_pin_code_2_in_xlet(confname, pincode):
-    assert world.xc_response == "passed"
-
-
 @step(u'When I update the following conference rooms:')
 def when_i_update_the_following_conference_rooms(step):
     for meetme in step.hashes:
         meetme_manager.update_meetme(meetme)
+
+
+@step(u'Then the following conference rooms appear in the conference room xlet:')
+def then_the_following_conference_rooms_appear_in_the_list(step):
+    cti_client_manager.get_conference_room_infos()
+    for src_dict, expected_dict in zip(world.xc_return_value['content'], step.hashes):
+        assert_that(src_dict, has_entries(expected_dict))
