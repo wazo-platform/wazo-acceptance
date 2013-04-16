@@ -18,7 +18,7 @@ def escape_ldap_string(text):
 
 
 def encode_entry(entry):
-    return {key: sanitize_string(value) for key, value in entry.iteritems()}
+    return dict((key, sanitize_string(value)) for key, value in entry.iteritems())
 
 
 def add_or_replace_entry(entry):
