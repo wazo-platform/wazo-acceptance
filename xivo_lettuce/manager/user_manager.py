@@ -72,6 +72,14 @@ def type_func_key(key_type, destination, key_number=None, label=None, supervised
         supervision_field.select_by_visible_text('Enabled')
 
 
+def change_key_order(pairs):
+    go_to_tab('Func Keys')
+    for old, new in pairs:
+        current_line = world.browser.find_element_by_xpath('''//tbody[@id='phonefunckey']/tr[%s]''' % old)
+        number_field = Select(current_line.find_element_by_name('phonefunckey[fknum][]'))
+        number_field.select_by_visible_text(new)
+
+
 def user_form_add_line(linenumber, context='default'):
     go_to_tab('Lines')
     add_button = world.browser.find_element_by_id('lnk-add-row')
