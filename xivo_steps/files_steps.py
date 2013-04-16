@@ -82,14 +82,15 @@ def then_backup_files_successfully_rotated(step):
     for expected_file in expected_files:
         assert sysutils.path_exists('%s/%s' % (BACKUP_DIR, expected_file))
 
+
 def _get_asterisk_pid():
     return sysutils.get_content_file('/var/run/asterisk/asterisk.pid')
+
 
 @step(u'Then max open file descriptors are equals to 8192')
 def then_max_open_file_descriptors_are_equals_to_8192(step):
         pid = _get_asterisk_pid().strip()
-        cmd =  ['/bin/grep', '"Max open files"','/proc/%s/limits' % pid ]
+        cmd = ['/bin/grep', '"Max open files"', '/proc/%s/limits' % pid]
         string_limit = sysutils.output_command(cmd)
         limit = re.sub('\s+', ' ', string_limit).split()[3]
         assert int(limit) == 8192
-
