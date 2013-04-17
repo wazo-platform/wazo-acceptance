@@ -89,18 +89,28 @@ def given_the_directory_definition_group1_is_included_in_the_default_directory(s
     )
 
 
+@step(u'Given extension (\d+) will answer a call and wait')
+def given_extension_will_answer_a_call_and_wait(step, extension):
+    line = find_line_with_extension(extension)
+    call_manager.execute_sip_register(line.name, line.secret)
+    time.sleep(1)
+    call_manager.execute_answer_then_wait()
+    time.sleep(1)
+
+
+@step(u'Given extension (\d+) will answer a call, wait (\d+) seconds and hangup')
+def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, seconds):
+    line = find_line_with_extension(extension)
+    call_manager.execute_sip_register(line.name, line.secret)
+    time.sleep(1)
+    call_manager.execute_answer_then_hangup()
+    time.sleep(1)
+
+
 @step(u'When I configure the following directories:')
 def when_i_configure_the_following_directories(step):
     for directory in step.hashes:
         directory_manager.create_directory(directory)
-
-
-@step(u'Then the directory "([^"]*)" has the URI "([^"]*)"')
-def then_the_directory_has_the_uri(step, directory, uri):
-    line = find_line(directory)
-    cells = line.find_elements_by_tag_name("td")
-    uri_cell = cells[2]
-    assert uri_cell.text == uri
 
 
 @step(u'When I edit and save the directory "([^"]*)"')
@@ -145,6 +155,20 @@ def when_i_search_for_1_in_the_directory_xlet(step, search):
     assert_that(world.xc_response, equal_to('passed'))
 
 
+@step(u'When I double-click on the phone number for "([^"]*)"')
+@xivoclient_step
+def when_i_double_click_on_the_phone_number_for_name(step, name):
+    assert_that(world.xc_response, equal_to('passed'))
+
+
+@step(u'Then the directory "([^"]*)" has the URI "([^"]*)"')
+def then_the_directory_has_the_uri(step, directory, uri):
+    line = find_line(directory)
+    cells = line.find_elements_by_tag_name("td")
+    uri_cell = cells[2]
+    assert uri_cell.text == uri
+
+
 @step(u'Then nothing shows up in the directory xlet')
 @xivoclient_step
 def then_nothing_shows_up_in_the_directory_xlet(step):
@@ -177,28 +201,4 @@ def then_there_are_no_errors_in_the_cti_logs(step):
 
 @xivoclient
 def assert_row_shows_up_in_the_directory_xlet(row):
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@step(u'Given extension (\d+) will answer a call and wait')
-def given_extension_will_answer_a_call_and_wait(step, extension):
-    line = find_line_with_extension(extension)
-    call_manager.execute_sip_register(line.name, line.secret)
-    time.sleep(1)
-    call_manager.execute_answer_then_wait()
-    time.sleep(1)
-
-
-@step(u'Given extension (\d+) will answer a call, wait (\d+) seconds and hangup')
-def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, seconds):
-    line = find_line_with_extension(extension)
-    call_manager.execute_sip_register(line.name, line.secret)
-    time.sleep(1)
-    call_manager.execute_answer_then_hangup()
-    time.sleep(1)
-
-
-@step(u'When I double-click on the phone number for "([^"]*)"')
-@xivoclient_step
-def when_i_double_click_on_the_phone_number_for_name(step, name):
     assert_that(world.xc_response, equal_to('passed'))
