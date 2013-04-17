@@ -15,15 +15,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import socket
-import errno
+import time
 from lettuce import step, world
 from xivo_lettuce.xivoclient import start_xivoclient, stop_xivoclient
-from xivo_lettuce import common
+from xivo_lettuce import common, logs
 from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.manager import cti_client_manager
 from hamcrest.core import assert_that
 from hamcrest.core.core.isequal import equal_to
+
+
+@step(u'When I restart the CTI server')
+def when_i_restart_the_cti_server(step):
+    command = ["/etc/init.d/xivo-ctid", "restart"]
+    world.ssh_client_xivo.check_call(command)
+    time.sleep(10)
 
 
 @step(u'When I start the XiVO Client')
@@ -95,3 +101,9 @@ def then_i_can_t_connect_the_cti_client_of_group1_group2(step, firstname, lastna
 def then_i_can_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
     cti_client_manager.log_user_in_client(firstname, lastname)
     assert_that(world.xc_response, equal_to('passed'))
+
+
+@step(u'Then there are no errors in the CTI logs')
+def then_there_are_no_errors_in_the_cti_logs(step):
+    errors_found = logs.search_str_in_xivo_cti_log("ERROR")
+    assert_that(errors_found, equal_to(False), 'errors were found in CTI logs when searching in the directory')
