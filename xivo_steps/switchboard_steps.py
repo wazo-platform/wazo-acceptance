@@ -17,35 +17,11 @@
 
 from lettuce import world, step
 from hamcrest import assert_that, equal_to
-from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
 from xivo_lettuce.manager_ws import context_manager_ws
-from xivo_lettuce.manager import ldap_manager
+from xivo_lettuce.manager import ldap_manager, cti_client_manager
 from xivo_lettuce.manager import directory_manager
 from xivo_lettuce.manager import user_manager
 from xivo_lettuce.manager import queue_manager
-
-
-@step(u'When I search a transfer destination "([^"]*)"')
-@xivoclient_step
-def when_i_search_a_transfer_destination_1(step, group1):
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@step(u'Then I see transfer destinations:')
-def then_i_see_transfer_destinations(step):
-    for entry in step.hashes:
-        assert_directory_has_entry(dict(entry))
-
-
-@step(u'Then I see no transfer destinations')
-@xivoclient_step
-def then_i_see_no_transfer_destinations(step):
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@xivoclient
-def assert_directory_has_entry(entry):
-    assert_that(world.xc_response, equal_to('passed'))
 
 
 @step(u'Given the switchboard is configured for ldap lookup with location and department$')
@@ -71,7 +47,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
     )
     directory_manager.add_or_replace_display(
         'switchboard',
-        [('', 'status', ''),
+        [('Icon', 'status', ''),
          ('Name', 'name', '{db-name}'),
          ('Number', 'number_office', '{db-number}'),
          ('Location', '', '{db-location}'),
@@ -81,22 +57,6 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
         '__switchboard_directory',
         'switchboard',
         ['openldap']
-    )
-
-
-@step(u'Given the display filter "([^"]*)" exists with the following fields:')
-def given_the_display_filter_group1_exists_with_the_following_fields(step, filter_name):
-    field_list = []
-    for line in step.hashes:
-        field_list.append((line['Field title'], line['Field type'], line['Display format']))
-    directory_manager.add_or_replace_display(filter_name, field_list)
-
-
-@step(u'Given the context "([^"]*)" uses display "([^"]*)" with the following directories:')
-def given_the_context_group1_uses_display_group2_with_the_following_directories(step, context, filter_name):
-    directories = [line['Directories'] for line in step.hashes]
-    directory_manager.assign_filter_and_directories_to_context(
-        context, filter_name, directories
     )
 
 
@@ -122,7 +82,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
     )
     directory_manager.add_or_replace_display(
         'switchboard',
-        [('', 'status', ''),
+        [('Icon', 'status', ''),
          ('Name', 'name', '{db-name}'),
          ('Number', 'number_office', '{db-number}'),
          ('Location', '', '{db-location}')]
@@ -154,7 +114,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
     )
     directory_manager.add_or_replace_display(
         'switchboard',
-        [('', 'status', ''),
+        [('Icon', 'status', ''),
          ('Name', 'name', '{db-name}'),
          ('Number', 'number_office', '{db-number}')]
     )
@@ -178,7 +138,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
     )
     directory_manager.add_or_replace_display(
         'switchboard',
-        [('', 'status', ''),
+        [('Icon', 'status', ''),
          ('Name', 'name', '{db-name}'),
          ('Number', 'number_office', '{db-number}'),
          ('Number', 'number_mobile', '{db-mobile}'),
@@ -188,6 +148,22 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
         '__switchboard_directory',
         'switchboard',
         ['xivodirswitchboard']
+    )
+
+
+@step(u'Given the display filter "([^"]*)" exists with the following fields:')
+def given_the_display_filter_group1_exists_with_the_following_fields(step, filter_name):
+    field_list = []
+    for line in step.hashes:
+        field_list.append((line['Field title'], line['Field type'], line['Display format']))
+    directory_manager.add_or_replace_display(filter_name, field_list)
+
+
+@step(u'Given the context "([^"]*)" uses display "([^"]*)" with the following directories:')
+def given_the_context_group1_uses_display_group2_with_the_following_directories(step, context, filter_name):
+    directories = [line['Directories'] for line in step.hashes]
+    directory_manager.assign_filter_and_directories_to_context(
+        context, filter_name, directories
     )
 
 
@@ -215,3 +191,35 @@ def given_there_is_a_switchboard_configured_as(step):
             config['hold calls queue name'],
             config['hold calls queue number'],
             config['hold calls queue context'])
+
+
+@step(u'When I search a transfer destination "([^"]*)"')
+def when_i_search_a_transfer_destination_1(step, search):
+    cti_client_manager.set_search_for_directory(search)
+
+
+@step(u'Then I see transfer destinations:')
+def then_i_see_transfer_destinations(step):
+    cti_client_manager.get_switchboard_infos()
+
+    for src_expected in step.hashes:
+        result = {}
+        iterator = 0
+        for content in world.xc_return_value['content']:
+            result[iterator] = 1
+            for key_expected, value in src_expected.iteritems():
+                if key_expected in content and value == content[key_expected]:
+                    result[iterator] = result[iterator] + 1
+            iterator = iterator + 1
+        assert_res = False
+        for iter_value_result in result.itervalues():
+            if iter_value_result >= len(src_expected):
+                assert_res = True
+
+        assert_that(assert_res, equal_to(True))
+
+
+@step(u'Then I see no transfer destinations')
+def then_i_see_no_transfer_destinations(step):
+    cti_client_manager.get_switchboard_infos()
+    assert_that(world.xc_return_value['content'], equal_to([]))
