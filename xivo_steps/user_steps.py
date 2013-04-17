@@ -54,6 +54,8 @@ def given_there_are_users_with_infos(step):
         voicemail_number
         mobile_number
         group_name
+        protocol
+        device
     """
     for user_data in step.hashes:
         user_ws_data = {}
@@ -66,6 +68,9 @@ def given_there_are_users_with_infos(step):
             line_manager_ws.delete_lines_with_number(user_data['number'], user_data['context'])
             user_ws_data['line_number'] = user_data['number']
             user_ws_data['line_context'] = user_data['context']
+            user_ws_data['protocol'] = user_data['protocol']
+            if 'device' in user_data:
+                user_ws_data['device'] = user_data['device']
 
             if user_data.get('voicemail_name') and user_data.get('voicemail_number'):
                 user_ws_data['voicemail_name'] = user_data['voicemail_name']
