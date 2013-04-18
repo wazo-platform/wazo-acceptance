@@ -42,7 +42,7 @@ def type_user_in_group(groupName):
     add_button.click()
 
 
-def type_func_key(key_type, destination, key_number=None, label=None, supervised=False):
+def type_func_key(key_type, destination, key_number=None, label=None, supervised=None):
     go_to_tab('Func Keys')
 
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-funckeys']//a[@id='add_funckey_button']")
@@ -69,7 +69,7 @@ def type_func_key(key_type, destination, key_number=None, label=None, supervised
 
     if supervised:
         supervision_field = Select(current_line.find_element_by_name('phonefunckey[supervision][]'))
-        supervision_field.select_by_visible_text('Enabled')
+        supervision_field.select_by_visible_text(supervised)
 
 
 def change_key_order(pairs):
