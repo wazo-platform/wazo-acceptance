@@ -18,7 +18,7 @@
 import socket
 import errno
 from lettuce import step, world
-from xivo_lettuce.xivoclient import run_xivoclient
+from xivo_lettuce.xivoclient import start_xivoclient, stop_xivoclient
 from xivo_lettuce import common
 from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.manager import cti_client_manager
@@ -28,16 +28,12 @@ from hamcrest.core.core.isequal import equal_to
 
 @step(u'When I start the XiVO Client')
 def i_start_the_xivo_client(step):
-    run_xivoclient()
+    start_xivoclient()
 
-    try:
-        world.xc_socket.connect('/tmp/xivoclient')
-    except socket.error as(error_number, message):
-        world.xc_process.terminate()
-        if error_number == errno.ENOENT:
-            raise Exception('XiVO Client must be built for functional testing')
-        else:
-            raise message
+
+@step(u'When I stop the XiVO client')
+def when_i_stop_the_xivo_client(step):
+    stop_xivoclient()
 
 
 @step(u'Then I get sheet infos')

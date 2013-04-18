@@ -26,7 +26,7 @@ from lettuce import before, after, world
 DEBUG = False
 
 
-def run_xivoclient():
+def start_xivoclient():
     xc_path = os.environ['XC_PATH'] + '/'
     environment_variables = os.environ
     environment_variables['LD_LIBRARY_PATH'] = '.'
@@ -42,6 +42,23 @@ def run_xivoclient():
 
     # Waiting for the listening socket to open
     time.sleep(1)
+
+    world.xc_socket = socket.socket(socket.AF_UNIX)
+    try:
+        world.xc_socket.connect('/tmp/xivoclient')
+    except socket.error as(error_number, message):
+        if error_number == errno.ENOENT:
+            raise Exception('XiVO Client must be built for functional testing')
+        else:
+            raise Exception(message)
+
+
+def stop_xivoclient():
+    if world.xc_process:
+        world.xc_process.terminate()
+        world.xc_socket.close()
+        world.xc_process = None
+        world.xc_socket = None
 
 
 def xivoclient_step(f):
@@ -90,18 +107,13 @@ def _send_and_receive_command(formatted_command):
     world.xc_message = response_dict['message']
 
 
-@before.each_scenario
-def setup_xivoclient_rc(scenario):
-    world.xc_process = None
-    world.xc_socket = socket.socket(socket.AF_UNIX)
-
-
 @after.each_scenario
 def clean_xivoclient_rc(scenario):
     if world.xc_process:
         world.xc_process.poll()
         if world.xc_process.returncode is None:
             i_stop_the_xivo_client()
+        stop_xivoclient()
 
 
 @xivoclient
