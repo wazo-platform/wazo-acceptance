@@ -42,14 +42,42 @@ def type_user_in_group(groupName):
     add_button.click()
 
 
-def type_func_key(func_key_kind, destination):
+def type_func_key(key_type, destination, key_number=None, label=None, supervised=False):
     go_to_tab('Func Keys')
+
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-funckeys']//a[@id='add_funckey_button']")
     add_button.click()
-    type_field = Select(world.browser.find_element_by_id('it-phonefunckey-type-1'))
-    type_field.select_by_visible_text(func_key_kind)
-    destination_field = world.browser.find_element_by_id('it-phonefunckey-custom-typeval-1')
+
+    current_line = world.browser.find_element_by_xpath('''//tbody[@id='phonefunckey']/tr[last()]''')
+
+    if key_number:
+        key_number_field = Select(current_line.find_element_by_name('phonefunckey[fknum][]'))
+        key_number_field.select_by_visible_text(key_number)
+
+    select_field_element = current_line.find_element_by_name('phonefunckey[type][]')
+    line_number = int(select_field_element.get_attribute('id')[-1:])
+    type_field = Select(select_field_element)
+    type_field.select_by_visible_text(key_type)
+
+    field_name = 'it-phonefunckey-custom-typeval-%s' % line_number
+    destination_field = current_line.find_element_by_id(field_name)
     destination_field.send_keys(destination)
+
+    if label:
+        label_field = current_line.find_element_by_name('phonefunckey[label][]')
+        label_field.send_keys(label)
+
+    if supervised:
+        supervision_field = Select(current_line.find_element_by_name('phonefunckey[supervision][]'))
+        supervision_field.select_by_visible_text('Enabled')
+
+
+def change_key_order(pairs):
+    go_to_tab('Func Keys')
+    for old, new in pairs:
+        current_line = world.browser.find_element_by_xpath('''//tbody[@id='phonefunckey']/tr[%s]''' % old)
+        number_field = Select(current_line.find_element_by_name('phonefunckey[fknum][]'))
+        number_field.select_by_visible_text(new)
 
 
 def user_form_add_line(linenumber, context='default'):

@@ -54,6 +54,8 @@ def given_there_are_users_with_infos(step):
         voicemail_number
         mobile_number
         group_name
+        protocol
+        device
     """
     for user_data in step.hashes:
         user_ws_data = {}
@@ -66,6 +68,9 @@ def given_there_are_users_with_infos(step):
             line_manager_ws.delete_lines_with_number(user_data['number'], user_data['context'])
             user_ws_data['line_number'] = user_data['number']
             user_ws_data['line_context'] = user_data['context']
+            user_ws_data['protocol'] = user_data['protocol']
+            if 'device' in user_data:
+                user_ws_data['device'] = user_data['device']
 
             if user_data.get('voicemail_name') and user_data.get('voicemail_number'):
                 user_ws_data['voicemail_name'] = user_data['voicemail_name']
@@ -113,6 +118,32 @@ def given_there_are_users_with_infos(step):
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
 def given_there_is_a_no_user_1_2(step, firstname, lastname):
     user_manager_ws.delete_users_with_firstname_lastname(firstname, lastname)
+
+
+@step(u'Given user "([^"]*)" "([^"]*)" has the following function keys:')
+def given_user_has_the_following_function_keys(step, firstname, lastname):
+    common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
+    common.edit_line("%s %s" % (firstname, lastname))
+    name_map = {
+        'Key': 'key_number',
+        'Type': 'key_type',
+        'Destination': 'destination',
+        'Label': 'label',
+        'Supervision': 'supervised',
+    }
+    for key_definition in step.hashes:
+        key = dict((name_map[k], v) for k, v in key_definition.iteritems())
+        user_manager.type_func_key(**key)
+    form.submit.submit_form()
+
+
+@step(u'When I reorder "([^"]*)" "([^"]*)"s function keys such that:')
+def when_i_reorder_group1_group2_s_function_keys_such_that(step, firstname, lastname):
+    common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
+    common.edit_line("%s %s" % (firstname, lastname))
+    pairs = [(k['Old'], k['New']) for k in step.hashes]
+    user_manager.change_key_order(pairs)
+    form.submit.submit_form()
 
 
 @step(u'When I create a user "([^"]*)" "([^"]*)"$')

@@ -27,6 +27,11 @@ def get_asterisk_conf(file_name, var_name):
     assert(False)
 
 
+def get_confgen_file(file_name):
+    command = ['xivo-confgen', 'asterisk/%s' % file_name]
+    return world.ssh_client_xivo.out_call(command)
+
+
 def logoff_agents(agent_numbers):
     for agent_number in agent_numbers:
         logoff_agent(agent_number)
