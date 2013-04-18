@@ -209,11 +209,58 @@ Feature: Sheet
         | xivo-calledidname | frere |
         | xivo-calledidnum  | 3001  |
 
+        When I stop the XiVO client
+
+        When I start the XiVO Client
         When I log in the XiVO client as "peter", pass "jenkins"
         Given there are no calls running
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I register extension "1117"
         Given I wait call then I answer then I hang up after "5s"
         When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
+        Given I wait 10 seconds for the call processing
+        Then I should not see any sheet
+
+    Scenario: Sheet distribution of link event to a Group
+        Given I have a sheet model named "testsheet" with the variables:
+        | variable          |
+        | xivo-calledidname |
+        | xivo-calledidnum  |
+        Given I assign the sheet "testsheet" to the "Link" event
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile |
+         | Alice     | Gopher   |   1117 | default | Client      |
+         | Peter     | Jenkins  |   1118 | default | Client      |
+        Given there is a group "groupie" with extension "2001@default" and users:
+          | firstname | lastname |
+          | Alice     | Gopher   |
+          | Peter     | Jenkins  |
+        Given there is an incall "2001" in context "from-extern" to the "Group" "groupie" with caller id name "Tux" number "5555555555"
+
+        When I restart the CTI server
+
+        When I start the XiVO Client
+        When I enable screen pop-up
+        When I log in the XiVO client as "alice", pass "gopher"
+        Given there are no calls running
+        Given I wait 5 seconds for the dialplan to be reloaded
+        Given I register extension "1117"
+        Given I wait call then I answer then I hang up after "5s"
+        When there is 1 calls to extension "2001@from-extern" on trunk "to_incall" and wait
+        Given I wait 10 seconds for the call processing
+        Then I see a sheet with the following values:
+        | Variable          | Value   |
+        | xivo-calledidname | groupie |
+        | xivo-calledidnum  | 2001    |
+
+        When I stop the XiVO client
+
+        When I start the XiVO Client
+        When I log in the XiVO client as "peter", pass "jenkins"
+        Given there are no calls running
+        Given I wait 5 seconds for the dialplan to be reloaded
+        Given I register extension "1117"
+        Given I wait call then I answer then I hang up after "5s"
+        When there is 1 calls to extension "2001@from-extern" on trunk "to_incall" and wait
         Given I wait 10 seconds for the call processing
         Then I should not see any sheet
