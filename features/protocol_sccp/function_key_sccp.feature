@@ -2,7 +2,7 @@ Feature: SCCP function keys
 
   Scenario: Reorder SCCP function keys
       Given there is a device with infos:
-      |             ip | mac               | protocol |
+      | ip             | mac               | protocol |
       | 192.168.32.197 | 00:00:00:00:aa:01 | SCCP     |
       Given there are users with infos:
       | firstname | lastname | number | context | protocol | device            |
