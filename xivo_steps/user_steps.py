@@ -68,7 +68,8 @@ def given_there_are_users_with_infos(step):
             line_manager_ws.delete_lines_with_number(user_data['number'], user_data['context'])
             user_ws_data['line_number'] = user_data['number']
             user_ws_data['line_context'] = user_data['context']
-            user_ws_data['protocol'] = user_data['protocol']
+            if 'protocol' in user_data:
+                user_ws_data['protocol'] = user_data['protocol']
             if 'device' in user_data:
                 user_ws_data['device'] = user_data['device']
 
