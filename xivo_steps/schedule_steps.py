@@ -27,9 +27,14 @@ def given_i_have_a_schedule_group1_in_group2_with_the_following_schedules(step, 
 
 @step(u'When I delete the "([^"]*)" "([^"]*)" schedule from "([^"]*)"')
 def when_i_delete_the_group1_group2_schedule(step, order, status, name):
-    if status != 'Closed' and order != 'Second':
+    if order != 'Second':
         assert False, 'This step not completely implemented'
-    schedule_manager.remove_closed_schedule(name, 2)
+    if status == 'Closed':
+        schedule_manager.remove_closed_schedule(name, 2)
+    elif status == 'Opened':
+        schedule_manager.remove_opened_schedule(name, 2)
+    else:
+        assert False, 'Unknown schedule status %s' % status
 
 
 @step(u'Then I should have a schdule "([^"]*)" in "([^"]*)" with the following schedules:')
