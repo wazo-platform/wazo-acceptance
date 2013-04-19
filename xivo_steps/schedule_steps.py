@@ -37,6 +37,6 @@ def when_i_delete_the_group1_group2_schedule(step, order, status, name):
         assert False, 'Unknown schedule status %s' % status
 
 
-@step(u'Then I should have a schdule "([^"]*)" in "([^"]*)" with the following schedules:')
-def then_i_should_have_a_schdule_group1_in_group2_with_the_following_schedules(step, name, timezone):
+@step(u'Then I should have a schedule "([^"]*)" in "([^"]*)" with the following schedules:')
+def then_i_should_have_a_schedule_group1_in_group2_with_the_following_schedules(step, name, timezone):
     schedule_manager_ws.assert_schedule_exists(name, timezone, step.hashes)
