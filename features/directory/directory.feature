@@ -51,6 +51,43 @@ Feature: Directory
           | Nom          | Numéro     | Entreprise | E-mail | Mobile     | Source |
           | Emmett Brown | 0601020304 |            |        |            |        |
 
+    Scenario: Create a CTI directory definition from UTF-8 CSV file
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
+        Given the CSV file "phonebook-unicode.csv" is copied on the server into "/tmp"
+        Given the following directories exist:
+          | name              | type | URI                        |
+          | phonebook-unicode | File | /tmp/phonebook-unicode.csv |
+        Given the directory definition "phonebookunicode" does not exist
+        Given the display filter "Display" exists with the following fields:
+          | Field title | Field type | Default value | Display format               |
+          | Nom         |            |               | {db-firstname} {db-lastname} |
+          | Numéro      | phone      |               | {db-phone}                   |
+        Given the context "default" uses display "Display" with the following directories:
+          | Directories |
+          | xivodir     |
+        When I add the following CTI directory definition:
+          | name             | URI                               | delimiter | direct match   |
+          | phonebookunicode | file:///tmp/phonebook-unicode.csv | ;         | nom,prenom,tel |
+        When I map the following fields and save the directory definition:
+          | field name | value  |
+          | firstname  | prenom |
+          | lastname   | nom    |
+          | phone      | tel    |
+        When I include "phonebookunicode" in the default directory
+        When I restart the CTI server
+        When I start the XiVO Client
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
+        When I search for "pier" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom              | Numéro |
+          | Pierre DÉSPROGES | 12345  |
+        When I search for "dés" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom              | Numéro |
+          | Pierre DÉSPROGES | 12345  |
+
     Scenario: Search for a contact without a line
         Given there are users with infos:
          | firstname | lastname   | cti_profile |
