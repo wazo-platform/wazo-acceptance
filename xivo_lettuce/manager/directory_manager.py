@@ -38,7 +38,7 @@ def add_directory_definition(directory):
 
 
 def add_or_replace_directory(name, uri, direct_match, fields):
-    if common.element_is_in_list('cti_directory', name):
+    while common.element_is_in_list('cti_directory', name):
         common.remove_line(name)
 
     _add_directory(name, uri, direct_match)
