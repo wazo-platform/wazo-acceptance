@@ -107,6 +107,11 @@ def _send_and_receive_command(formatted_command):
     world.xc_message = response_dict['message']
 
 
+@before.each_scenario
+def setup_xivoclient_rc(scenario):
+    world.xc_process = None
+
+
 @after.each_scenario
 def clean_xivoclient_rc(scenario):
     if world.xc_process:
