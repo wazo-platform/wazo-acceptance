@@ -19,7 +19,9 @@ Feature: Phonebook
         When I start the XiVO Client
         When I log in the XiVO Client as "lord", pass "sanderson"
         When I search for "marty" in the directory xlet
-        Then "Marty McFly" shows up in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom         | Numéro |
+          | Marty McFly | 1981   |
 
     Scenario: Case insensitive search for a contact
         Given there are users with infos:
@@ -29,6 +31,10 @@ Feature: Phonebook
         When I start the XiVO Client
         When I log in the XiVO Client as "lord", pass "sanderson"
         When I search for "LORD" in the directory xlet
-        Then "Lord Sanderson" shows up in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom            | Numéro |
+          | Lord Sanderson | 1042   |
         When I search for "lord" in the directory xlet
-        Then "Lord Sanderson" shows up in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom            | Numéro |
+          | Lord Sanderson | 1042   |

@@ -19,12 +19,12 @@ import time
 
 from hamcrest import assert_that, equal_to
 from lettuce import step, world
-from xivo_lettuce import assets
+from xivo_lettuce import assets, func
 from xivo_lettuce.common import open_url, remove_element_if_exist, find_line, edit_line
 from xivo_lettuce.form import submit
-from xivo_lettuce.manager import directory_manager, call_manager
+from xivo_lettuce.manager import directory_manager, call_manager, \
+    cti_client_manager
 from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
-from xivo_lettuce.xivoclient import xivoclient, xivoclient_step
 
 
 @step(u'Given the directory "([^"]*)" does not exist')
@@ -143,15 +143,13 @@ def when_i_include_phonebook_in_the_default_directory(step, phonebook):
 
 
 @step(u'When I search for "([^"]*)" in the directory xlet')
-@xivoclient_step
 def when_i_search_for_1_in_the_directory_xlet(step, search):
-    assert_that(world.xc_response, equal_to('passed'))
+    cti_client_manager.set_search_for_remote_directory(search)
 
 
 @step(u'When I double-click on the phone number for "([^"]*)"')
-@xivoclient_step
 def when_i_double_click_on_the_phone_number_for_name(step, name):
-    assert_that(world.xc_response, equal_to('passed'))
+    cti_client_manager.exec_double_click_on_number_for_name(name)
 
 
 @step(u'Then the directory "([^"]*)" has the URI "([^"]*)"')
@@ -163,29 +161,20 @@ def then_the_directory_has_the_uri(step, directory, uri):
 
 
 @step(u'Then nothing shows up in the directory xlet')
-@xivoclient_step
 def then_nothing_shows_up_in_the_directory_xlet(step):
-    assert_that(world.xc_response, equal_to('passed'))
+    cti_client_manager.get_remote_directory_infos()
+    assert_that(world.xc_return_value['content'], equal_to([]))
 
 
-@step(u'Then "([^"]*)" shows up in the directory xlet')
-@xivoclient_step
-def then_1_shows_up_in_the_directory_xlet(step, entry):
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@step(u'Then "([^"]*)" does not show up in the directory xlet')
-@xivoclient_step
-def then_1_does_not_show_up_in_the_directory_xlet(step, entry):
-    assert_that(world.xc_response, equal_to('passed'))
+@step(u'Then the following results does not show up in the directory xlet:')
+def then_the_following_results_does_not_show_up_in_the_directory_xlet(step):
+    cti_client_manager.get_remote_directory_infos()
+    assert_res = func.compare_list_of_dict_recursive_expected_key_value(step.hashes, world.xc_return_value['content'])
+    assert_that(assert_res, equal_to(False))
 
 
 @step(u'Then the following results show up in the directory xlet:')
 def then_the_following_results_show_up_in_the_directory_xlet(step):
-    for row in step.hashes:
-        assert_row_shows_up_in_the_directory_xlet(row)
-
-
-@xivoclient
-def assert_row_shows_up_in_the_directory_xlet(row):
-    assert_that(world.xc_response, equal_to('passed'))
+    cti_client_manager.get_remote_directory_infos()
+    assert_res = func.compare_list_of_dict_recursive_expected_key_value(step.hashes, world.xc_return_value['content'])
+    assert_that(assert_res, equal_to(True))

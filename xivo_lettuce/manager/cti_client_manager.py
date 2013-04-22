@@ -55,6 +55,22 @@ def set_search_for_directory(search):
 
 
 @xivoclient
+def set_search_for_remote_directory(search):
+    time.sleep(2)
+    assert_that(world.xc_response, equal_to('passed'))
+
+
+@xivoclient
+def exec_double_click_on_number_for_name(name):
+    assert_that(world.xc_response, equal_to('passed'))
+
+
+@xivoclient
+def get_remote_directory_infos():
+    assert_that(world.xc_response, equal_to('passed'))
+
+
+@xivoclient
 def get_switchboard_infos():
     assert_that(world.xc_response, equal_to('passed'))
 

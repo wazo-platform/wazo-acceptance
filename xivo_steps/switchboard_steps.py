@@ -22,6 +22,7 @@ from xivo_lettuce.manager import ldap_manager, cti_client_manager
 from xivo_lettuce.manager import directory_manager
 from xivo_lettuce.manager import user_manager
 from xivo_lettuce.manager import queue_manager
+from xivo_lettuce import func
 
 
 @step(u'Given the switchboard is configured for ldap lookup with location and department$')
@@ -201,22 +202,8 @@ def when_i_search_a_transfer_destination_1(step, search):
 @step(u'Then I see transfer destinations:')
 def then_i_see_transfer_destinations(step):
     cti_client_manager.get_switchboard_infos()
-
-    for src_expected in step.hashes:
-        result = {}
-        iterator = 0
-        for content in world.xc_return_value['content']:
-            result[iterator] = 1
-            for key_expected, value in src_expected.iteritems():
-                if key_expected in content and value == content[key_expected]:
-                    result[iterator] = result[iterator] + 1
-            iterator = iterator + 1
-        assert_res = False
-        for iter_value_result in result.itervalues():
-            if iter_value_result >= len(src_expected):
-                assert_res = True
-
-        assert_that(assert_res, equal_to(True))
+    assert_res = func.compare_list_of_dict_recursive_expected_key_value(step.hashes, world.xc_return_value['content'])
+    assert_that(assert_res, equal_to(True))
 
 
 @step(u'Then I see no transfer destinations')

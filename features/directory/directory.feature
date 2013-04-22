@@ -144,9 +144,13 @@ Feature: Directory
         When I start the XiVO Client
         When I log in the Xivo Client as "lord", pass "sanderson"
         When I search for "lord" in the directory xlet
-        Then "Lord Sanderson" shows up in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom            |
+          | Lord Sanderson |
         When I search for "ôrdé" in the directory xlet
-        Then "Lôrdé Sànndéêrsòn" shows up in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom               |
+          | Lôrdé Sànndéêrsòn |
         When I search for "asdfasdfasdfasdf" in the directory xlet
         Then nothing shows up in the directory xlet
 
@@ -185,7 +189,9 @@ Feature: Directory
           | Nom                              | Numéro     |
           | explicite mail avencall no state | 3698521478 |
           | explicite no mail state quebec   | 123123123  |
-        Then "explicite mail example no state" does not show up in the directory xlet
+        Then the following results does not show up in the directory xlet:
+          | Nom                             | Numéro     |
+          | explicite mail example no state | 4445556666 |
 
     Scenario: Search for a contact in a LDAP server with special characters
         Given there are users with infos:
