@@ -45,7 +45,7 @@ function extract_classnames {
         awk \
 '
 BEGIN {FS = ": "}
-/Feature/ {feature = $2}
+/^Feature/ {feature = $2}
 /Scenario/ {print feature " : " $2 }
 ' \
         $filename
