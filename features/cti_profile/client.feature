@@ -12,8 +12,7 @@ Feature: CTI Profile
         When I start the XiVO Client
         Then I can connect the CTI Client of "Abraham" "Washington"
 
-
-    Scenario: Edit Xlet list
+    Scenario: Edit Xlet list without restart cti server
         Given there is a profile "toto" with no services and xlets:
         | xlet     |
         | Identity |
