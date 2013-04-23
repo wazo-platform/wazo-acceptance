@@ -68,6 +68,11 @@ def exec_double_click_on_number_for_name(name):
 
 
 @xivoclient
+def get_xlets():
+    assert_that(world.xc_response, equal_to('passed'))
+
+
+@xivoclient
 def get_login_screen_infos():
     assert_that(world.xc_response, equal_to('passed'))
 

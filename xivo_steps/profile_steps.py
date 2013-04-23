@@ -16,9 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from xivo_lettuce.manager import profile_manager
+from xivo_lettuce.manager import profile_manager, cti_client_manager
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import common, form
+from hamcrest.core import assert_that
+from lettuce.registry import world
+from hamcrest.library.collection.issequence_containing import has_item
 
 
 @step(u'Given there is a profile "([^"]*)" with no services and xlets:')
@@ -32,6 +35,15 @@ def given_there_is_a_profile_1_with_no_services_and_xlets(step, profile_name):
     for cti_profile_element in cti_profile_config:
         xlet_name = cti_profile_element['xlet']
         profile_manager.add_xlet(xlet_name)
+    form.submit.submit_form()
+
+
+@step(u'When I add Xlet "([^"]*)" to profile "([^"]*)"')
+def when_i_add_xlet_to_profile(step, xlet_name, profile_name):
+    common.open_url('profile', 'list')
+    common.edit_line(profile_name)
+    common.go_to_tab('Xlets')
+    profile_manager.add_xlet(xlet_name)
     form.submit.submit_form()
 
 
@@ -52,3 +64,15 @@ def then_i_see_errors(step, profile_label):
         pass
     else:
         raise Exception('CTI profile %s should not be removable' % profile_label)
+
+
+@step(u'Then I don\'t see xlet "([^"]*)"')
+def then_i_don_t_see_xlet_group1(step, xlet):
+    cti_client_manager.get_xlets()
+    assert_that(world.xc_return_value['xlets'], not has_item(xlet))
+
+
+@step(u'Then I see xlet "([^"]*)"')
+def then_i_see_xlet_group1(step, xlet):
+    cti_client_manager.get_xlets()
+    assert_that(world.xc_return_value['xlets'], has_item(xlet))
