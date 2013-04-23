@@ -19,7 +19,7 @@ Feature: CTI Profile
 
         Given there are users with infos:
         | firstname | lastname | cti_profile |
-        | Al        | Pacino   | toto        | abraham   | washington |
+        | Al        | Pacino   | toto        |
 
         When I start the XiVO Client
         When I log in the XiVO Client as "al", pass "pacino"
