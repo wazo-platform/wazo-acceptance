@@ -34,6 +34,17 @@ def i_log_in_the_xivo_client_with_bad_server_address(step):
     cti_client_manager.log_in_the_xivo_client()
 
 
+@step(u'I log in the XiVO Client with bad server port$')
+def i_log_in_the_xivo_client_with_bad_server_port(step):
+    conf_dict = {
+        'main_server_port': 123,
+        'login': 'toto',
+        'password': 'titi'
+    }
+    cti_client_manager.configure_client(conf_dict)
+    cti_client_manager.log_in_the_xivo_client()
+
+
 @step(u'When I enable screen pop-up')
 def when_i_enable_screen_pop_up(step):
     conf_dict = {'customerinfo': True}
@@ -50,6 +61,34 @@ def when_i_enable_the_hide_unlogged_agents_option(step):
 def when_i_disable_the_hide_unlogged_agents_option(step):
     conf_dict = {'hide_unlogged_agents_for_xlet_queue_members': False}
     cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'When I hide agent option on login screen')
+def when_i_hide_agent_option_on_login_screen(step):
+    conf_dict = {
+        'show_agent_option': 0,
+    }
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'When I show agent option on login screen')
+def when_i_show_agent_option_on_login_screen(step):
+    conf_dict = {
+        'show_agent_option': 1,
+    }
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'Then I not see agent option on login screen')
+def then_i_not_see_agent_option_on_login_screen(step):
+    cti_client_manager.get_login_screen_infos()
+    assert_that(world.xc_return_value['show_agent_option'], equal_to(False))
+
+
+@step(u'Then I see agent option on login screen')
+def then_i_see_agent_option_on_login_screen(step):
+    cti_client_manager.get_login_screen_infos()
+    assert_that(world.xc_return_value['show_agent_option'], equal_to(True))
 
 
 @step(u'Then I see a error message on CtiClient')

@@ -32,6 +32,8 @@ def configure_client(conf_dict):
         'main_server_port': int,
         'login': 'string',
         'password': 'string',
+        'autoconnect': bool,
+        'show_agent_option': bool
         'agent_option': enum [no, unlogged, logged]
         'hide_unlogged_agents_for_xlet_queue_members': bool
     }
@@ -62,6 +64,11 @@ def set_search_for_remote_directory(search):
 
 @xivoclient
 def exec_double_click_on_number_for_name(name):
+    assert_that(world.xc_response, equal_to('passed'))
+
+
+@xivoclient
+def get_login_screen_infos():
     assert_that(world.xc_response, equal_to('passed'))
 
 
