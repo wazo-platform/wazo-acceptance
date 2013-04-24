@@ -60,19 +60,28 @@ def st_time(func):
     return st_func
 
 
-def compare_list_of_dict_recursive_expected_key_value(expecteds, results):
-    for dict_expected in expecteds:
-        assert_dict = {}
-        iterator = 0
-        for dict_result in results:
-            assert_dict[iterator] = 1
-            for key_expected, value in dict_expected.iteritems():
-                if key_expected in dict_result and value == dict_result[key_expected]:
-                    assert_dict[iterator] = assert_dict[iterator] + 1
-            iterator = iterator + 1
-        assert_res = False
-        for iter_value_result in assert_dict.itervalues():
-            if iter_value_result >= len(dict_expected):
-                assert_res = True
+def _is_subset(subset, superset):
+    return subset <= superset
 
-    return assert_res
+
+def _has_superset_item(subset, supersets):
+    for superset in supersets:
+        if _is_subset(subset, superset):
+            return True
+    return False
+
+
+def _all_superset_item(subsets, supersets):
+    for subset in subsets:
+        if not _has_superset_item(subset, supersets):
+            return False
+    return True
+
+
+def _list_of_dict_to_list_of_set(dicts):
+    return map(lambda d: set(d.iteritems()), dicts)
+
+
+def compare_list_of_dict_recursive_expected_key_value(expecteds, results):
+    return _all_superset_item(_list_of_dict_to_list_of_set(expecteds),
+                              _list_of_dict_to_list_of_set(results))
