@@ -68,10 +68,10 @@ def then_i_see_errors(step, profile_label):
 @step(u'Then I don\'t see xlet "([^"]*)"')
 def then_i_don_t_see_xlet_group1(step, xlet):
     res = cti_client_manager.get_xlets()
-    assert_that(res['return_value']['xlets'], not has_item(xlet))
+    assert_that(res['xlets'], not has_item(xlet))
 
 
 @step(u'Then I see xlet "([^"]*)"')
 def then_i_see_xlet_group1(step, xlet):
     res = cti_client_manager.get_xlets()
-    assert_that(res['return_value']['xlets'], has_item(xlet))
+    assert_that(res['xlets'], has_item(xlet))

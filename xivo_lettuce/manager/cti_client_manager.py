@@ -77,7 +77,8 @@ def set_queue_for_queue_members(queue_id):
 
 
 def get_xlets():
-    return xivoclient.exec_command('get_xlets')
+    res = xivoclient.exec_command('get_xlets')
+    return res['return_value']
 
 
 def get_login_screen_infos():
