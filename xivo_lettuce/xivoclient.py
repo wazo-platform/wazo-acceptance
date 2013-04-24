@@ -21,6 +21,7 @@ import socket
 import json
 import time
 import errno
+from pprint import pprint
 from lettuce import before, after, world
 
 DEBUG = False
@@ -88,15 +89,30 @@ def _format_command(function_name, arguments):
 
 
 def _send_and_receive_command(formatted_command):
+    _send_command(formatted_command)
+    response_raw = _receive_command()
+    response_decoded = _decode_response(response_raw)
+    return response_decoded
+
+
+def _send_command(formatted_command):
     if DEBUG:
-        from pprint import pprint
-        print '-------------------- MSG SEND ---------------------'
+        print '-------------------- MSG SENT ---------------------'
         pprint(formatted_command)
     world.xc_socket.send('%s\n' % formatted_command)
-    response_raw = str(world.xc_socket.recv(1024))
+
+
+def _receive_command():
+    socket_buffer = world.xc_socket.makefile()
+    response_raw = str(socket_buffer.readline())
+    socket_buffer.close()
     if DEBUG:
         print '------------------ RAW RESPONSE -------------------'
         pprint(response_raw)
+    return response_raw
+
+
+def _decode_response(response_raw):
     response_dict = json.loads(response_raw)
     if DEBUG:
         print '---------------- DECODED RESPONSE -----------------'
