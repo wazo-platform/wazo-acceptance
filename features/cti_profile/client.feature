@@ -28,3 +28,15 @@ Feature: CTI Profile
         When I add Xlet "Datetime" to profile "toto"
         When I log in the XiVO Client as "al", pass "pacino"
         Then I see xlet "datetime"
+
+    Scenario: Show/Hide profile of configuration
+        Given there are users with infos:
+        | firstname | lastname | cti_profile |
+        | Al        | Pacino   | Client      |
+
+        When I start the XiVO Client
+        When I log in the XiVO Client as "al", pass "pacino"
+        When I show profile on status bar
+        Then I see profile on status bar
+        When I hide profile on status bar
+        Then I not see profile on status bar

@@ -32,6 +32,7 @@ def configure_client(conf_dict):
         'main_server_port': int,
         'login': 'string',
         'password': 'string',
+        'display_profile': bool,
         'autoconnect': bool,
         'show_agent_option': bool
         'agent_option': enum [no, unlogged, logged]
@@ -74,6 +75,11 @@ def get_xlets():
 
 @xivoclient
 def get_login_screen_infos():
+    assert_that(world.xc_response, equal_to('passed'))
+
+
+@xivoclient
+def get_status_bar_infos():
     assert_that(world.xc_response, equal_to('passed'))
 
 

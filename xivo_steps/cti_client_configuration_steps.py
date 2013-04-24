@@ -79,6 +79,30 @@ def when_i_show_agent_option_on_login_screen(step):
     cti_client_manager.configure_client(conf_dict)
 
 
+@step(u'When I hide profile on status bar')
+def when_i_hide_profile_on_status_bar(step):
+    conf_dict = {'display_profile': 0}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'When I show profile on status bar')
+def when_i_show_profile_on_status_bar(step):
+    conf_dict = {'display_profile': 1}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'Then I not see profile on status bar')
+def then_i_not_see_profile_on_status_bar(step):
+    cti_client_manager.get_status_bar_infos()
+    assert_that(world.xc_return_value['profilename_is_hidden'], equal_to(True))
+
+
+@step(u'Then I see profile on status bar')
+def then_i_see_profile_on_status_bar(step):
+    cti_client_manager.get_status_bar_infos()
+    assert_that(world.xc_return_value['profilename_is_hidden'], equal_to(False))
+
+
 @step(u'Then I not see agent option on login screen')
 def then_i_not_see_agent_option_on_login_screen(step):
     cti_client_manager.get_login_screen_infos()
