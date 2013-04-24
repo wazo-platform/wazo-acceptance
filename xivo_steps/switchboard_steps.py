@@ -208,4 +208,5 @@ def then_i_see_transfer_destinations(step):
 
 @step(u'Then I see no transfer destinations')
 def then_i_see_no_transfer_destinations(step):
-    res = assert_that(res['return_value']['content'], equal_to([]))
+    res = cti_client_manager.get_switchboard_infos()
+    assert_that(res['return_value']['content'], equal_to([]))
