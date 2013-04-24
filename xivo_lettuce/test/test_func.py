@@ -37,7 +37,7 @@ class TestFunc(unittest.TestCase):
                    u'Num\xe9ro': u'0601020304',
                    u'Source': u''}]
 
-        self.assertTrue(func.compare_list_of_dict_recursive_expected_key_value(expected, result))
+        self.assertTrue(func.has_subsets_of_dicts(expected, result))
 
     def test_compare_list_of_dict_more_than_expected(self):
         expected = [{u'E-mail': u'',
@@ -61,7 +61,7 @@ class TestFunc(unittest.TestCase):
              u'Source': u''},
         ]
 
-        self.assertTrue(func.compare_list_of_dict_recursive_expected_key_value(expected, result))
+        self.assertTrue(func.has_subsets_of_dicts(expected, result))
 
     def test_compare_list_of_dict_partial_match(self):
         result = [{u'E-mail': u'',
@@ -85,10 +85,10 @@ class TestFunc(unittest.TestCase):
              u'Source': u''},
         ]
 
-        self.assertFalse(func.compare_list_of_dict_recursive_expected_key_value(expected, result))
+        self.assertFalse(func.has_subsets_of_dicts(expected, result))
 
     def test_compare_list_of_dict_empty(self):
-        self.assertTrue(func.compare_list_of_dict_recursive_expected_key_value([], []))
+        self.assertTrue(func.has_subsets_of_dicts([], []))
 
     def test_compare_list_of_dict_many_different_order(self):
         expected = [
@@ -108,4 +108,4 @@ class TestFunc(unittest.TestCase):
         result = copy(expected)
         result.reverse()
 
-        self.assertTrue(func.compare_list_of_dict_recursive_expected_key_value(expected, result))
+        self.assertTrue(func.has_subsets_of_dicts(expected, result))

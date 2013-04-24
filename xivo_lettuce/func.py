@@ -82,6 +82,6 @@ def _list_of_dict_to_list_of_set(dicts):
     return map(lambda d: set(d.iteritems()), dicts)
 
 
-def compare_list_of_dict_recursive_expected_key_value(expecteds, results):
+def has_subsets_of_dicts(expecteds, results):
     return _all_superset_item(_list_of_dict_to_list_of_set(expecteds),
                               _list_of_dict_to_list_of_set(results))

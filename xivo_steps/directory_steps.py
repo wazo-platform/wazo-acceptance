@@ -169,12 +169,12 @@ def then_nothing_shows_up_in_the_directory_xlet(step):
 @step(u'Then the following results does not show up in the directory xlet:')
 def then_the_following_results_does_not_show_up_in_the_directory_xlet(step):
     res = cti_client_manager.get_remote_directory_infos()
-    assert_res = func.compare_list_of_dict_recursive_expected_key_value(step.hashes, res['return_value']['content'])
+    assert_res = func.has_subsets_of_dicts(step.hashes, res['return_value']['content'])
     assert_that(assert_res, equal_to(False))
 
 
 @step(u'Then the following results show up in the directory xlet:')
 def then_the_following_results_show_up_in_the_directory_xlet(step):
     res = cti_client_manager.get_remote_directory_infos()
-    assert_res = func.compare_list_of_dict_recursive_expected_key_value(step.hashes, res['return_value']['content'])
+    assert_res = func.has_subsets_of_dicts(step.hashes, res['return_value']['content'])
     assert_that(assert_res, equal_to(True))
