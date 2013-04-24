@@ -15,10 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step, world
-from hamcrest import assert_that, equal_to
-from xivo_lettuce.xivoclient import xivoclient_step
-from xivo_lettuce.manager import call_manager
+from lettuce import step
+from hamcrest import *
+from xivo_lettuce.manager import call_manager, cti_client_manager
 
 
 @step(u'Given the agent "([^"]*)" will answer a call and hangup after (\d+) seconds')
@@ -36,18 +35,39 @@ def when_i_call_extension_from_trunk(step, extension, trunk_name):
 
 
 @step(u'Then the agent list xlet shows agent "([^"]*)" as in use')
-@xivoclient_step
 def then_the_agent_list_xlet_shows_agent_as_in_use(step, agent_number):
-    assert_that(world.xc_response, equal_to('OK'))
+    agent = _get_agent_infos(agent_number)
+
+    assert_that(agent['availability'], starts_with('In use'), 'agent %s not "In use"' % agent_number)
+
+
+@step(u'Then the agent list xlet shows agent "([^"]*)" as on non-ACD call')
+def then_the_agent_list_xlet_shows_agent_as_on_non_acd_call(step, agent_number):
+    agent = _get_agent_infos(agent_number)
+
+    assert_that(agent['availability'], starts_with('Out of queue'), 'agent %s not "Out of queue"' % agent_number)
 
 
 @step(u'Then the agent list xlet shows agent "([^"]*)" as not in use')
-@xivoclient_step
 def then_the_agent_list_xlet_shows_agent_as_not_in_use(step, agent_number):
-    assert_that(world.xc_response, equal_to('OK'))
+    agent = _get_agent_infos(agent_number)
+
+    assert_that(agent['availability'], starts_with('Not in use'), 'agent %s not "Not in use"' % agent_number)
 
 
 @step(u'Then the agent list xlet shows agent "([^"]*)" as unlogged')
-@xivoclient_step
 def then_the_agent_list_xlet_shows_agent_as_unlogged(step, agent_number):
-    assert_that(world.xc_response, equal_to('OK'))
+    agent = _get_agent_infos(agent_number)
+
+    assert_that(agent['availability'], starts_with('-'), 'agent %s not "Unlogged"' % agent_number)
+
+
+def _get_agent_infos(agent_number):
+    agent_list_infos = cti_client_manager.get_agent_list_infos()
+    agent_list = agent_list_infos['content']
+    agent_list = [agent for agent in agent_list if agent['number'] == agent_number]
+
+    assert_that(len(agent_list), greater_than(0), 'agent %s not found in xlet agent list' % agent_number)
+    assert_that(len(agent_list), less_than(2), 'more than one agent %s found in xlet agent list' % agent_number)
+
+    return agent_list[0]

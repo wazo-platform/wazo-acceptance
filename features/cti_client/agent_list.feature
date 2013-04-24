@@ -47,9 +47,8 @@ Feature: Agent list xlet
         When I log in the XiVO Client as "jim", pass "kirk"
         When I log agent "1110"
         Given the agent "1110" will answer a call and hangup after 10 seconds
-        When I register extension "1111"
         When I call extension "1110@default"
         When I wait 5 seconds
-        Then the agent list xlet shows agent "1110" as in use
+        Then the agent list xlet shows agent "1110" as on non-ACD call
         When I wait 10 seconds
         Then the agent list xlet shows agent "1110" as not in use

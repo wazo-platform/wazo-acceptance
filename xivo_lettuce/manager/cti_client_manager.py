@@ -118,6 +118,10 @@ def get_queue_members_infos():
     return xivoclient.exec_command('get_queue_members_infos')
 
 
+def get_agent_list_infos():
+    return xivoclient.exec_command('get_agent_list_infos')['return_value']
+
+
 def log_out_of_the_xivo_client():
     return xivoclient.exec_command('i_log_out_of_the_xivo_client')
 
