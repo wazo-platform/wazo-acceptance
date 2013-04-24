@@ -1,5 +1,5 @@
-Welcome to XiVO Steps's documentation!
-======================================
+Welcome to XiVO Acceptance's documentation!
+===========================================
 
 Contents:
 

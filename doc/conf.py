@@ -18,6 +18,7 @@
 import sys
 
 sys.path.append('../xivo_steps')
+sys.path.append('../xivo_lettuce')
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -46,8 +47,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'XiVO Steps'
-copyright = u'2012, Avencall'
+project = u'XiVO Acceptance'
+copyright = u'2013, Avencall'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -76,11 +77,11 @@ exclude_patterns = ['_build']
 # default_role = None
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
-# add_function_parentheses = True
+add_function_parentheses = True
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-# add_module_names = True
+add_module_names = True
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
@@ -170,4 +171,4 @@ html_theme = 'default'
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'XiVOStepsdoc'
+htmlhelp_basename = 'XiVOAcceptance'
