@@ -26,6 +26,20 @@ from lettuce import before, after, world
 DEBUG = False
 
 
+@before.each_scenario
+def setup_xivoclient_rc(scenario):
+    world.xc_process = None
+
+
+@after.each_scenario
+def clean_xivoclient_rc(scenario):
+    if world.xc_process:
+        world.xc_process.poll()
+        if world.xc_process.returncode is None:
+            exec_command('i_stop_the_xivo_client')
+        stop_xivoclient()
+
+
 def start_xivoclient(argument=''):
     xc_path = os.environ['XC_PATH'] + '/'
     environment_variables = os.environ
@@ -61,22 +75,9 @@ def stop_xivoclient():
         world.xc_socket = None
 
 
-def xivoclient_step(f):
-    """Decorator that sends the function name to the XiVO Client."""
-    def xivoclient_decorator(step, *kargs):
-        formatted_command = _format_command(f.__name__, kargs)
-        _send_and_receive_command(formatted_command)
-        f(step, *kargs)
-    return xivoclient_decorator
-
-
-def xivoclient(f):
-    """Decorator that sends the function name to the XiVO Client."""
-    def xivoclient_decorator(*kargs):
-        formatted_command = _format_command(f.__name__, kargs)
-        _send_and_receive_command(formatted_command)
-        f(*kargs)
-    return xivoclient_decorator
+def exec_command(cmd, *kargs):
+    formatted_command = _format_command(cmd, kargs)
+    return _send_and_receive_command(formatted_command)
 
 
 def _format_command(function_name, arguments):
@@ -102,25 +103,4 @@ def _send_and_receive_command(formatted_command):
         pprint(response_dict)
         print '------------------ END RESPONSE -------------------'
         print
-    world.xc_response = response_dict['test_result']
-    world.xc_return_value = response_dict['return_value']
-    world.xc_message = response_dict['message']
-
-
-@before.each_scenario
-def setup_xivoclient_rc(scenario):
-    world.xc_process = None
-
-
-@after.each_scenario
-def clean_xivoclient_rc(scenario):
-    if world.xc_process:
-        world.xc_process.poll()
-        if world.xc_process.returncode is None:
-            i_stop_the_xivo_client()
-        stop_xivoclient()
-
-
-@xivoclient
-def i_stop_the_xivo_client():
-    assert world.xc_response == "passed"
+    return response_dict

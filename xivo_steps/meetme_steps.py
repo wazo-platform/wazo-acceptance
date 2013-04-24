@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step, world
+from lettuce import step
 from xivo_lettuce.manager import meetme_manager, cti_client_manager
 from xivo_lettuce.manager_ws import meetme_manager_ws
 from hamcrest.core import assert_that
@@ -41,6 +41,6 @@ def when_i_update_the_following_conference_rooms(step):
 
 @step(u'Then the following conference rooms appear in the conference room xlet:')
 def then_the_following_conference_rooms_appear_in_the_list(step):
-    cti_client_manager.get_conference_room_infos()
-    for src_dict, expected_dict in zip(world.xc_return_value['content'], step.hashes):
+    res = cti_client_manager.get_conference_room_infos()
+    for src_dict, expected_dict in zip(res['return_value']['content'], step.hashes):
         assert_that(src_dict, has_entries(expected_dict))

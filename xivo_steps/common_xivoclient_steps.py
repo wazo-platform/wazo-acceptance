@@ -62,8 +62,6 @@ def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
     cti_client_manager.configure_client(conf_dict)
     cti_client_manager.log_in_the_xivo_client()
 
-    assert_that(world.xc_response, equal_to('passed'))
-
 
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", unlogged agent$')
 def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
@@ -76,14 +74,10 @@ def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
     cti_client_manager.configure_client(conf_dict)
     cti_client_manager.log_in_the_xivo_client()
 
-    assert_that(world.xc_response, equal_to('passed'))
-
 
 @step(u'I log out of the XiVO Client$')
 def log_out_of_the_xivo_client(step):
     cti_client_manager.log_out_of_the_xivo_client()
-
-    assert_that(world.xc_response, equal_to('passed'))
 
 
 @step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')
@@ -98,14 +92,14 @@ def when_i_enable_access_to_xivo_client_to_user_group1_group2(step, firstname, l
 
 @step(u'Then I can\'t connect the CTI client of "([^"]*)" "([^"]*)"')
 def then_i_can_t_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
-    cti_client_manager.log_user_in_client(firstname, lastname)
-    assert_that(world.xc_response, equal_to('failed'))
+    res = cti_client_manager.log_user_in_client(firstname, lastname)
+    assert_that(res['test_result'], equal_to('failed'))
 
 
 @step(u'Then I can connect the CTI client of "([^"]*)" "([^"]*)"')
 def then_i_can_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
-    cti_client_manager.log_user_in_client(firstname, lastname)
-    assert_that(world.xc_response, equal_to('passed'))
+    res = cti_client_manager.log_user_in_client(firstname, lastname)
+    assert_that(res['test_result'], equal_to('passed'))
 
 
 @step(u'Then there are no errors in the CTI logs')

@@ -20,7 +20,6 @@ from xivo_lettuce.manager import profile_manager, cti_client_manager
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import common, form
 from hamcrest.core import assert_that
-from lettuce.registry import world
 from hamcrest.library.collection.issequence_containing import has_item
 
 
@@ -68,11 +67,11 @@ def then_i_see_errors(step, profile_label):
 
 @step(u'Then I don\'t see xlet "([^"]*)"')
 def then_i_don_t_see_xlet_group1(step, xlet):
-    cti_client_manager.get_xlets()
-    assert_that(world.xc_return_value['xlets'], not has_item(xlet))
+    res = cti_client_manager.get_xlets()
+    assert_that(res['return_value']['xlets'], not has_item(xlet))
 
 
 @step(u'Then I see xlet "([^"]*)"')
 def then_i_see_xlet_group1(step, xlet):
-    cti_client_manager.get_xlets()
-    assert_that(world.xc_return_value['xlets'], has_item(xlet))
+    res = cti_client_manager.get_xlets()
+    assert_that(res['return_value']['xlets'], has_item(xlet))

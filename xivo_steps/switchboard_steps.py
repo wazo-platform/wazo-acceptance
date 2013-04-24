@@ -201,12 +201,11 @@ def when_i_search_a_transfer_destination_1(step, search):
 
 @step(u'Then I see transfer destinations:')
 def then_i_see_transfer_destinations(step):
-    cti_client_manager.get_switchboard_infos()
-    assert_res = func.compare_list_of_dict_recursive_expected_key_value(step.hashes, world.xc_return_value['content'])
+    res = cti_client_manager.get_switchboard_infos()
+    assert_res = func.compare_list_of_dict_recursive_expected_key_value(step.hashes, res['return_value']['content'])
     assert_that(assert_res, equal_to(True))
 
 
 @step(u'Then I see no transfer destinations')
 def then_i_see_no_transfer_destinations(step):
-    cti_client_manager.get_switchboard_infos()
-    assert_that(world.xc_return_value['content'], equal_to([]))
+    res = assert_that(res['return_value']['content'], equal_to([]))

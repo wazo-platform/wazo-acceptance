@@ -20,25 +20,25 @@ from lettuce import step, world
 
 @step(u'Then the Xlet identity shows name as "([^"]*)" "([^"]*)"')
 def then_the_xlet_identity_shows_name_as_1_2(step, firstname, lastname):
-    assert world.xc_return_value['fullname'] == '%s %s' % (firstname, lastname)
+    assert world.xc_identity_infos['fullname'] == '%s %s' % (firstname, lastname)
 
 
 @step(u'Then the Xlet identity shows phone number as "([^"]*)"')
 def then_the_xlet_identity_shows_phone_number_as_1(step, linenumber):
-    assert world.xc_return_value['phonenum'] == linenumber
+    assert world.xc_identity_infos['phonenum'] == linenumber
 
 
 @step(u'Then the Xlet identity shows a voicemail "([^"]*)"')
 def then_the_xlet_identity_shows_a_voicemail_1(step, vm_number):
-    assert world.xc_return_value['voicemail_num'] != ''
-    assert world.xc_return_value['voicemail_button'] == True
+    assert world.xc_identity_infos['voicemail_num'] != ''
+    assert world.xc_identity_infos['voicemail_button'] == True
 
 
 @step(u'Then the Xlet identity shows an agent "([^"]*)"')
 def then_the_xlet_identity_shows_an_agent_1(step, agent_number):
-    assert world.xc_return_value['agent_number'] == agent_number
+    assert world.xc_identity_infos['agent_number'] == agent_number
 
 
 @step(u'Then the Xlet identity does not show any agent')
 def then_the_xlet_identity_does_not_show_any_agent(step):
-    assert world.xc_return_value['agent_number'] == ''
+    assert world.xc_identity_infos['agent_number'] == ''

@@ -77,8 +77,8 @@ def given_i_assign_the_sheet_group1_to_the_agent_linked_event(step, sheet_name, 
 
 @step(u'Then I see a sheet with the following values:')
 def then_i_see_a_sheet_with_the_following_values(step):
-    cti_client_manager.get_sheet_infos()
-    data_sheet = world.xc_return_value['content']
+    res = cti_client_manager.get_sheet_infos()
+    data_sheet = res['return_value']['content']
     expected_data_sheet = dict(step.hashes)
     expected_value = dict(zip(expected_data_sheet.values(), expected_data_sheet.keys()))
     assert_that(expected_value, data_sheet)
@@ -86,5 +86,5 @@ def then_i_see_a_sheet_with_the_following_values(step):
 
 @step(u'Then I should not see any sheet')
 def then_i_should_not_see_any_sheet(step):
-    cti_client_manager.get_sheet_infos()
-    assert_that(world.xc_return_value['content'], equal_to({}))
+    res = cti_client_manager.get_sheet_infos()
+    assert_that(res['return_value']['content'], equal_to({}))

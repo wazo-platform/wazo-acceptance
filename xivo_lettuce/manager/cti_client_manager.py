@@ -16,17 +16,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-import time
-from lettuce import world
-from xivo_lettuce import common
+from xivo_lettuce import common, xivoclient
 from xivo_lettuce.manager_ws import user_manager_ws
-from xivo_lettuce.xivoclient import xivoclient
-from hamcrest.core import assert_that
-from hamcrest.core.core.isequal import equal_to
+import time
+from lettuce.registry import world
 
 
 def configure_client(conf_dict):
-    """
+    """func: configure_client
+
+    :param conf_dict: dict
+
+    .. note::
+        note
+
+    :Example:
+
     conf_dict = {
         'main_server_address': 'string',
         'main_server_port': int,
@@ -44,94 +49,79 @@ def configure_client(conf_dict):
     if 'main_server_port' not in conf_dict:
         conf_dict['main_server_port'] = 5003
 
-    @xivoclient
-    def configure(conf_dict):
-        time.sleep(world.xc_login_timeout)
-    configure(conf_dict)
-    assert_that(world.xc_response, equal_to('passed'))
+    return xivoclient.exec_command('configure', conf_dict)
 
 
-@xivoclient
 def set_search_for_directory(search):
-    time.sleep(1)
-    assert_that(world.xc_response, equal_to('passed'))
+    res = xivoclient.exec_command('set_search_for_directory', search)
+    time.sleep(world.xc_login_timeout)
+    return res
 
 
-@xivoclient
 def set_search_for_remote_directory(search):
-    time.sleep(2)
-    assert_that(world.xc_response, equal_to('passed'))
+    res = xivoclient.exec_command('set_search_for_remote_directory', search)
+    time.sleep(world.xc_login_timeout)
+    return res
 
 
-@xivoclient
 def exec_double_click_on_number_for_name(name):
-    assert_that(world.xc_response, equal_to('passed'))
+    res = xivoclient.exec_command('exec_double_click_on_number_for_name', name)
+    time.sleep(world.xc_login_timeout)
+    return res
 
 
-@xivoclient
-def get_xlets():
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@xivoclient
-def get_login_screen_infos():
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@xivoclient
-def get_status_bar_infos():
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@xivoclient
-def get_remote_directory_infos():
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@xivoclient
-def get_switchboard_infos():
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@xivoclient
-def get_conference_room_infos():
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@xivoclient
-def get_identity_infos():
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@xivoclient
-def get_sheet_infos():
-    assert_that(world.xc_response, equal_to('passed'))
-
-
-@xivoclient
 def set_queue_for_queue_members(queue_id):
-    assert_that(world.xc_response, equal_to('passed'))
+    res = xivoclient.exec_command('set_queue_for_queue_members', queue_id)
+    time.sleep(world.xc_login_timeout)
+    return res
 
 
-@xivoclient
+def get_xlets():
+    return xivoclient.exec_command('get_xlets')
+
+
+def get_login_screen_infos():
+    return xivoclient.exec_command('get_login_screen_infos')
+
+
+def get_status_bar_infos():
+    return xivoclient.exec_command('get_status_bar_infos')
+
+
+def get_remote_directory_infos():
+    return xivoclient.exec_command('get_remote_directory_infos')
+
+
+def get_switchboard_infos():
+    return xivoclient.exec_command('get_switchboard_infos')
+
+
+def get_conference_room_infos():
+    return xivoclient.exec_command('get_conference_room_infos')
+
+
+def get_identity_infos():
+    return xivoclient.exec_command('get_identity_infos')
+
+
+def get_sheet_infos():
+    return xivoclient.exec_command('get_sheet_infos')
+
+
 def get_queue_members_infos():
-    assert_that(world.xc_response, equal_to('passed'))
+    return xivoclient.exec_command('get_queue_members_infos')
 
 
 def log_out_of_the_xivo_client():
-    @xivoclient
-    def i_log_out_of_the_xivo_client():
-        pass
-    i_log_out_of_the_xivo_client()
+    return xivoclient.exec_command('i_log_out_of_the_xivo_client')
 
 
 def log_in_the_xivo_client():
-    @xivoclient
-    def i_log_in_the_xivo_client():
-        time.sleep(world.xc_login_timeout)
-    i_log_in_the_xivo_client()
-    if world.xc_response == 'passed':
-        get_identity_infos()
+    res = xivoclient.exec_command('i_log_in_the_xivo_client')
+    time.sleep(world.xc_login_timeout)
+    identity_infos = get_identity_infos()
+    world.xc_identity_infos = identity_infos['return_value']
+    return res
 
 
 def log_user_in_client(firstname, lastname):
@@ -143,4 +133,4 @@ def log_user_in_client(firstname, lastname):
         'password': user.client_password
     }
     configure_client(conf_dict)
-    log_in_the_xivo_client()
+    return log_in_the_xivo_client()

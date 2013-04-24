@@ -31,7 +31,8 @@ def i_log_in_the_xivo_client_with_bad_server_address(step):
         'password': 'titi'
     }
     cti_client_manager.configure_client(conf_dict)
-    cti_client_manager.log_in_the_xivo_client()
+    res = cti_client_manager.log_in_the_xivo_client()
+    world.xc_result = res['test_result']
 
 
 @step(u'I log in the XiVO Client with bad server port$')
@@ -42,7 +43,8 @@ def i_log_in_the_xivo_client_with_bad_server_port(step):
         'password': 'titi'
     }
     cti_client_manager.configure_client(conf_dict)
-    cti_client_manager.log_in_the_xivo_client()
+    res = cti_client_manager.log_in_the_xivo_client()
+    world.xc_result = res['test_result']
 
 
 @step(u'When I enable screen pop-up')
@@ -65,17 +67,13 @@ def when_i_disable_the_hide_unlogged_agents_option(step):
 
 @step(u'When I hide agent option on login screen')
 def when_i_hide_agent_option_on_login_screen(step):
-    conf_dict = {
-        'show_agent_option': 0,
-    }
+    conf_dict = {'show_agent_option': 0}
     cti_client_manager.configure_client(conf_dict)
 
 
 @step(u'When I show agent option on login screen')
 def when_i_show_agent_option_on_login_screen(step):
-    conf_dict = {
-        'show_agent_option': 1,
-    }
+    conf_dict = {'show_agent_option': 1}
     cti_client_manager.configure_client(conf_dict)
 
 
@@ -93,28 +91,28 @@ def when_i_show_profile_on_status_bar(step):
 
 @step(u'Then I not see profile on status bar')
 def then_i_not_see_profile_on_status_bar(step):
-    cti_client_manager.get_status_bar_infos()
-    assert_that(world.xc_return_value['profilename_is_hidden'], equal_to(True))
+    res = cti_client_manager.get_status_bar_infos()
+    assert_that(res['return_value']['profilename_is_hidden'], equal_to(True))
 
 
 @step(u'Then I see profile on status bar')
 def then_i_see_profile_on_status_bar(step):
-    cti_client_manager.get_status_bar_infos()
-    assert_that(world.xc_return_value['profilename_is_hidden'], equal_to(False))
+    res = cti_client_manager.get_status_bar_infos()
+    assert_that(res['return_value']['profilename_is_hidden'], equal_to(False))
 
 
 @step(u'Then I not see agent option on login screen')
 def then_i_not_see_agent_option_on_login_screen(step):
-    cti_client_manager.get_login_screen_infos()
-    assert_that(world.xc_return_value['show_agent_option'], equal_to(False))
+    res = cti_client_manager.get_login_screen_infos()
+    assert_that(res['return_value']['show_agent_option'], equal_to(False))
 
 
 @step(u'Then I see agent option on login screen')
 def then_i_see_agent_option_on_login_screen(step):
-    cti_client_manager.get_login_screen_infos()
-    assert_that(world.xc_return_value['show_agent_option'], equal_to(True))
+    res = cti_client_manager.get_login_screen_infos()
+    assert_that(res['return_value']['show_agent_option'], equal_to(True))
 
 
 @step(u'Then I see a error message on CtiClient')
 def then_i_see_a_error_message_on_cticlient(step):
-    assert_that(world.xc_response, equal_to('failed'))
+    assert_that(world.xc_result, equal_to('failed'))
