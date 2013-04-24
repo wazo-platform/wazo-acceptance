@@ -40,3 +40,18 @@ Feature: CTI Profile
         Then I see profile on status bar
         When I hide profile on status bar
         Then I not see profile on status bar
+
+    Scenario: Launch CtiClient with a profile
+        Given there are users with infos:
+        | firstname | lastname | cti_profile |
+        | Al        | Pacino   | Client      |
+
+        When I start the XiVO Client with an argument "apacino"
+        When I update configuration as "display_profile" to "False"
+        Then the configuration "displayprofile" is equal to "False"
+        When I stop the XiVO client
+        When I start the XiVO Client with an argument "tortelini"
+        When I update configuration as "display_profile" to "True"
+        When I stop the XiVO client
+        When I start the XiVO Client with an argument "apacino"
+        Then the configuration "displayprofile" is equal to "False"

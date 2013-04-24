@@ -76,6 +76,11 @@ def set_queue_for_queue_members(queue_id):
     return res
 
 
+def get_configuration():
+    res = xivoclient.exec_command('get_configuration')
+    return res['return_value']
+
+
 def get_xlets():
     res = xivoclient.exec_command('get_xlets')
     return res['return_value']

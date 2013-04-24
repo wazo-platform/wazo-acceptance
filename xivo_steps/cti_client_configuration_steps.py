@@ -89,6 +89,18 @@ def when_i_show_profile_on_status_bar(step):
     cti_client_manager.configure_client(conf_dict)
 
 
+@step(u'When I update configuration as "([^"]*)" to "([^"]*)"')
+def when_i_update_configuration_as_group1_to_group2(step, conf_key, conf_value):
+    conf_dict = {conf_key: conf_value}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'Then the configuration "([^"]*)" is equal to "([^"]*)"')
+def then_the_configuration_group1_is_equal_to_group2(step, conf_key, conf_value):
+    res = cti_client_manager.get_configuration()
+    assert_that(str(res[conf_key]), equal_to(conf_value))
+
+
 @step(u'Then I not see profile on status bar')
 def then_i_not_see_profile_on_status_bar(step):
     res = cti_client_manager.get_status_bar_infos()
