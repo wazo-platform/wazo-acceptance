@@ -26,12 +26,12 @@ from lettuce import before, after, world
 DEBUG = False
 
 
-def start_xivoclient():
+def start_xivoclient(argument=''):
     xc_path = os.environ['XC_PATH'] + '/'
     environment_variables = os.environ
     environment_variables['LD_LIBRARY_PATH'] = '.'
     try:
-        world.xc_process = subprocess.Popen('./xivoclient',
+        world.xc_process = subprocess.Popen(['./xivoclient', argument],
                                             cwd=xc_path,
                                             env=environment_variables)
     except OSError as e:

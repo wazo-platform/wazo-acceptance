@@ -37,6 +37,11 @@ def i_start_the_xivo_client(step):
     start_xivoclient()
 
 
+@step(u'When I start the XiVO Client with an argument "([^"]*)"$')
+def i_start_the_xivo_client_with_an_argument(step, argument):
+    start_xivoclient(argument)
+
+
 @step(u'When I stop the XiVO client')
 def when_i_stop_the_xivo_client(step):
     stop_xivoclient()
