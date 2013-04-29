@@ -8,7 +8,7 @@ Welcome to XiVO Acceptance's documentation!
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    xivo_steps/xivo_steps
 
