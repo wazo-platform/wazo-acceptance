@@ -26,9 +26,6 @@ Feature: Directory
           | E-mail      |            |               | {db-mail}                    |
           | Mobile      | phone      |               | {db-mobile}                  |
           | Source      |            |               | {db-directory}               |
-        Given the context "default" uses display "Display" with the following directories:
-          | Directories |
-          | xivodir     |
         When I add the following CTI directory definition:
           | name         | URI                            | delimiter | direct match                    |
           | phonebookcsv | file:///tmp/phonebook-x254.csv | \|        | firstname,lastname,mobilenumber |
@@ -63,9 +60,6 @@ Feature: Directory
           | Field title | Field type | Default value | Display format               |
           | Nom         |            |               | {db-firstname} {db-lastname} |
           | Numéro      | phone      |               | {db-phone}                   |
-        Given the context "default" uses display "Display" with the following directories:
-          | Directories |
-          | xivodir     |
         When I add the following CTI directory definition:
           | name             | URI                               | delimiter | direct match   |
           | phonebookunicode | file:///tmp/phonebook-unicode.csv | ;         | nom,prenom,tel |
@@ -100,15 +94,12 @@ Feature: Directory
 
     Scenario: Search for a contact with special characters in his name
         Given there are users with infos:
-         | firstname | lastname  | number | context | cti_profile |
-         | Lord      | Sanderson | 1042   | default | Client      |
+         | firstname | lastname    | number | context | cti_profile |
+         | Lord      | Sanderson   | 1042   | default | Client      |
+         | Lôrdé     | Sànndéêrsòn |        |         |             |
+         | Làârd     | Témèlêtë    |        |         |             |
+         | Lûùrd     | Tûrècôt     |        |         |             |
         Given the internal phonebook is configured
-        Given there are users with infos:
-          | firstname | lastname    |
-          | Lôrdé     | Sànndéêrsòn |
-          | Làârd     | Témèlêtë    |
-          | Lûùrd     | Tûrècôt     |
-        When I include "internal" in the default directory
         When I restart the CTI server
         When I start the XiVO Client
         When I log in the Xivo Client as "lord", pass "sanderson"
