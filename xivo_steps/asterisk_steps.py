@@ -33,6 +33,12 @@ def when_i_stop_asterisk(step):
     time.sleep(world.timeout)
 
 
+@step(u'When I restart Asterisk')
+def when_i_restart_asterisk(step):
+    command = ['service', 'asterisk', 'restart']
+    sysutils.send_command(command)
+
+
 @step(u'Then the service "([^"]*)" is running')
 def then_the_service_group1_is_running(step, service):
     pidfile = sysutils.get_pidfile_for_service_name(service)

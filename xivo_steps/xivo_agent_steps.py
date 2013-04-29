@@ -19,12 +19,6 @@ from lettuce import step
 from xivo_lettuce import sysutils, logs
 
 
-@step(u'When I restart Asterisk')
-def when_i_restart_asterisk(step):
-    command = ['service', 'asterisk', 'restart']
-    sysutils.send_command(command)
-
-
 @step(u'When I try to log in agent "([^"]*)" with extension "([^"]*)" through xivo-agentctl')
 def when_i_try_to_log_in_agent_through_xivoagentctl(step, agent, extension):
     number, context = extension.split('@')
