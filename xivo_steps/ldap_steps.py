@@ -125,7 +125,8 @@ def given_there_is_a_user_with_common_name_group1_on_the_ldap_server(step, commo
     entry = {
         'objectClass': ['top', 'inetOrgPerson'],
         'cn': common_name,
-        'sn': common_name,
+        'givenName': 'active\\',
+        'sn': 'directory',
     }
 
     ldap_utils.add_or_replace_entry(entry)
