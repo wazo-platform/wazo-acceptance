@@ -129,8 +129,9 @@ def log_out_of_the_xivo_client():
 def log_in_the_xivo_client():
     res = xivoclient.exec_command('i_log_in_the_xivo_client')
     time.sleep(world.xc_login_timeout)
-    identity_infos = get_identity_infos()
-    world.xc_identity_infos = identity_infos['return_value']
+    if res['test_result'] == 'passed':
+        identity_infos = get_identity_infos()
+        world.xc_identity_infos = identity_infos['return_value']
     return res
 
 
