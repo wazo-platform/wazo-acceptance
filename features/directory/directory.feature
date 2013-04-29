@@ -14,7 +14,7 @@ Feature: Directory
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
         Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
-        Given the following directories exist:
+        Given the following directory configurations exist:
           | name           | type | URI                     |
           | phonebook-x254 | File | /tmp/phonebook-x254.csv |
         Given the directory definition "phonebookcsv" does not exist
@@ -55,7 +55,7 @@ Feature: Directory
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
         Given the CSV file "phonebook-unicode.csv" is copied on the server into "/tmp"
-        Given the following directories exist:
+        Given the following directory configurations exist:
           | name              | type | URI                        |
           | phonebook-unicode | File | /tmp/phonebook-unicode.csv |
         Given the directory definition "phonebookunicode" does not exist

@@ -20,18 +20,17 @@ import time
 from hamcrest import assert_that, equal_to
 from lettuce import step
 from xivo_lettuce import assets, func
-from xivo_lettuce.common import open_url, remove_element_if_exist, find_line, edit_line
+from xivo_lettuce.common import open_url, find_line, edit_line
 from xivo_lettuce.form import submit
 from xivo_lettuce.manager import directory_manager, call_manager, \
     cti_client_manager
 from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
 
 
-@step(u'Given the following directories exist:')
+@step(u'Given the following directory configurations exist:')
 def given_the_following_directories_exist(step):
     for directory in step.hashes:
-        remove_element_if_exist('directory_config', directory['name'])
-        directory_manager.create_directory(directory)
+        directory_manager.add_or_replace_directory_config(directory)
 
 
 @step(u'Given the directory definition "([^"]*)" does not exist')
