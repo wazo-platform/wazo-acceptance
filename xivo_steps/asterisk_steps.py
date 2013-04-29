@@ -15,8 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import time
-from lettuce import world, step
+from lettuce import step
 from xivo_lettuce import sysutils, logs
 
 
@@ -30,7 +29,6 @@ def then_asterisk_command_group1_return_no_error(step, ast_cmd):
 def when_i_stop_asterisk(step):
     command = ['service', 'asterisk', 'stop']
     assert sysutils.send_command(command)
-    time.sleep(world.timeout)
 
 
 @step(u'When I restart Asterisk')
@@ -39,16 +37,22 @@ def when_i_restart_asterisk(step):
     sysutils.send_command(command)
 
 
-@step(u'Then the service "([^"]*)" is running')
-def then_the_service_group1_is_running(step, service):
+@step(u'When I wait for the service "([^"]*)" to stop')
+def when_i_wait_for_the_service_group1_to_stop(step, service):
     pidfile = sysutils.get_pidfile_for_service_name(service)
-    assert sysutils.is_process_running(pidfile)
+    sysutils.wait_service_successfully_stopped(pidfile)
 
 
 @step(u'When I wait for the service "([^"]*)" to restart')
 def when_i_wait_for_the_service_group1_to_restart(step, service):
     pidfile = sysutils.get_pidfile_for_service_name(service)
-    assert sysutils.wait_service_restart(pidfile)
+    assert sysutils.wait_service_successfully_started(pidfile)
+
+
+@step(u'Then the service "([^"]*)" is running')
+def then_the_service_group1_is_running(step, service):
+    pidfile = sysutils.get_pidfile_for_service_name(service)
+    assert sysutils.is_process_running(pidfile)
 
 
 @step(u'Then the service "([^"]*)" is no longer running')

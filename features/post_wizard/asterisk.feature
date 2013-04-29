@@ -5,6 +5,7 @@ Feature: Asterisk
 
     Scenario: Restart
         When I stop Asterisk
+        When I wait for the service "asterisk" to stop
         Then the service "asterisk" is no longer running
         Then the service "xivo-ctid" is no longer running
         When I wait for the service "asterisk" to restart

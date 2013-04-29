@@ -81,15 +81,23 @@ def is_process_running(pidfile):
     return path_exists("/proc/%s" % pid)
 
 
-def wait_service_restart(pidfile, maxtries=15, wait_secs=10):
+def wait_service_successfully_stopped(pidfile, maxtries=15, wait_secs=10):
+    return _wait_for_the_service_state(pidfile, False, maxtries, wait_secs)
+
+
+def wait_service_successfully_started(pidfile, maxtries=15, wait_secs=10):
+    return _wait_for_the_service_state(pidfile, True, maxtries, wait_secs)
+
+
+def _wait_for_the_service_state(pidfile, status, maxtries, wait_secs):
     nbtries = 0
-    restarted = is_process_running(pidfile)
-    while nbtries < maxtries and not restarted:
+    process_status = is_process_running(pidfile)
+    while nbtries < maxtries and process_status != status:
         time.sleep(wait_secs)
-        restarted = is_process_running(pidfile)
+        process_status = is_process_running(pidfile)
         nbtries += 1
 
-    return restarted
+    return process_status
 
 
 def get_pidfile_for_service_name(service):
