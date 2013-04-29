@@ -99,36 +99,6 @@ Feature: Directory
         When I search for "emmet" in the directory xlet
         Then nothing shows up in the directory xlet
 
-    Scenario: Search for a contact in a SSL LDAP directory
-        Given there are users with infos:
-         | firstname | lastname   | number | context | cti_profile |
-         | GreatLord | MacDonnell | 1043   | default | Client      |
-        Given the directory definition "openldap" does not exist
-        Given the LDAP server is configured for SSL connections
-        Given there are entries in the ldap server:
-          | first name | last name | phone      |
-          | Milan      | Gélinas   | 0133123456 |
-        Given the display filter "Display" exists with the following fields:
-          | Field title | Field type | Display format               |
-          | Nom         |            | {db-firstname} {db-lastname} |
-          | Numéro      |            | {db-phone}                   |
-        When I add the following CTI directory definition:
-          | name     | URI                       | direct match                 |
-          | openldap | ldapfilter://openldap-dev | sn,givenName,telephoneNumber |
-        When I map the following fields and save the directory definition:
-          | field name | value           |
-          | firstname  | givenName       |
-          | lastname   | sn              |
-          | phone      | telephoneNumber |
-        When I include "openldap" in the default directory
-        When I restart the CTI server
-        When I start the XiVO Client
-        When I log in the XiVO Client as "greatlord", pass "macdonnell"
-        When I search for "gélinas" in the directory xlet
-        Then the following results show up in the directory xlet:
-          | Nom           | Numéro      |
-          | Milan Gélinas | 0133123456  |
-
     Scenario: Search for a contact with special characters in his name
         Given there are users with infos:
          | firstname | lastname  | number | context | cti_profile |
@@ -153,6 +123,22 @@ Feature: Directory
           | Lôrdé Sànndéêrsòn |
         When I search for "asdfasdfasdfasdf" in the directory xlet
         Then nothing shows up in the directory xlet
+
+    Scenario: Search for a contact in a SSL LDAP directory
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
+        Given the LDAP server is configured for SSL connections
+        Given there are entries in the ldap server:
+          | first name | last name | phone      |
+          | Milan      | Gélinas   | 0133123456 |
+        Given the CTI directory definition is configured for LDAP searches using the ldap filter "openldap-dev"
+        When I start the XiVO Client
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
+        When I search for "gélinas" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom           | Numéro      |
+          | Milan Gélinas | 0133123456  |
 
     Scenario: Search for a contact in a LDAP server with a custom filter
         Given there are users with infos:
