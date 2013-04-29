@@ -27,11 +27,6 @@ from xivo_lettuce.manager import directory_manager, call_manager, \
 from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
 
 
-@step(u'Given the directory "([^"]*)" does not exist')
-def given_the_directory_does_not_exist(step, directory):
-    remove_element_if_exist('directory_config', directory)
-
-
 @step(u'Given the following directories exist:')
 def given_the_following_directories_exist(step):
     for directory in step.hashes:
@@ -143,13 +138,13 @@ def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, 
     time.sleep(1)
 
 
-@step(u'When I configure the following directories:')
+@step(u'When I create the following directory configurations:')
 def when_i_configure_the_following_directories(step):
     for directory in step.hashes:
-        directory_manager.create_directory(directory)
+        directory_manager.add_or_replace_directory_config(directory)
 
 
-@step(u'When I edit and save the directory "([^"]*)"')
+@step(u'When I edit and save the directory configuration "([^"]*)"')
 def when_i_edit_and_save_the_directory(step, directory):
     open_url('directory_config', 'list')
     edit_line(directory)
@@ -188,7 +183,7 @@ def when_i_double_click_on_the_phone_number_for_name(step, name):
     cti_client_manager.exec_double_click_on_number_for_name(name)
 
 
-@step(u'Then the directory "([^"]*)" has the URI "([^"]*)"')
+@step(u'Then the directory configuration "([^"]*)" has the URI "([^"]*)"')
 def then_the_directory_has_the_uri(step, directory, uri):
     line = find_line(directory)
     cells = line.find_elements_by_tag_name("td")

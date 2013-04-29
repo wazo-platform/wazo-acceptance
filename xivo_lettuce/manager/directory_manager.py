@@ -20,7 +20,16 @@ from xivo_lettuce.form import submit, input, select
 from xivo_lettuce import common
 
 
-def create_directory(directory):
+def add_or_replace_directory_config(directory):
+    _remove_directory_config(directory)
+    _create_directory_config(directory)
+
+
+def _remove_directory_config(directory):
+    common.remove_element_if_exist('directory_config', directory['name'])
+
+
+def _create_directory_config(directory):
     common.open_url('directory_config', 'add')
     input.set_text_field_with_label("Directory name", directory['name'])
     input.set_text_field_with_label("URI", directory['URI'])

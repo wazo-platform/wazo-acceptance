@@ -1,14 +1,13 @@
 Feature: Directory
 
     Scenario: Create a directory from CSV file
-        Given the directory "phonebook-x254" does not exist
         Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
-        When I configure the following directories:
+        When I create the following directory configurations:
           | name           | type | URI                     |
           | phonebook-x254 | File | /tmp/phonebook-x254.csv |
-        Then the directory "phonebook-x254" has the URI "file:///tmp/phonebook-x254.csv"
-        When I edit and save the directory "phonebook-x254"
-        Then the directory "phonebook-x254" has the URI "file:///tmp/phonebook-x254.csv"
+        Then the directory configuration "phonebook-x254" has the URI "file:///tmp/phonebook-x254.csv"
+        When I edit and save the directory configuration "phonebook-x254"
+        Then the directory configuration "phonebook-x254" has the URI "file:///tmp/phonebook-x254.csv"
 
     Scenario: Create a CTI directory definition from CSV file
         Given there are users with infos:
