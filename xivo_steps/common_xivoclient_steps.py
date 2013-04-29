@@ -83,11 +83,13 @@ def log_out_of_the_xivo_client(step):
 @step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')
 def when_i_disable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
     user_manager_ws.disable_cti_client(firstname, lastname)
+    time.sleep(1)
 
 
 @step(u'When I enable access to XiVO Client to user "([^"]*)" "([^"]*)"')
 def when_i_enable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
     user_manager_ws.enable_cti_client(firstname, lastname)
+    time.sleep(1)
 
 
 @step(u'Then I can\'t connect the CTI client of "([^"]*)" "([^"]*)"')
