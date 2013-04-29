@@ -38,6 +38,11 @@ def given_the_directory_definition_does_not_exist(step, definition):
     directory_manager.remove_directory(definition)
 
 
+@step(u'Given the CSV file "([^"]*)" is copied on the server into "([^"]*)"')
+def given_the_csv_file_is_copied_on_the_server_into_group2(step, csvfile, serverpath):
+    assets.copy_asset_to_server(csvfile, serverpath)
+
+
 @step(u'Given the CTI directory definition is configured for LDAP searches using the ldap filter "([^"]*)"')
 def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the_ldap_filter(step, ldap_filter):
     _configure_display_filter()
@@ -76,10 +81,6 @@ def _add_ldap_directory_to_direct_directories():
 def _restart_cti_server(step):
     step.when('When I restart the CTI server')
 
-
-@step(u'Given the CSV file "([^"]*)" is copied on the server into "([^"]*)"')
-def given_the_csv_file_is_copied_on_the_server_into_group2(step, csvfile, serverpath):
-    assets.copy_asset_to_server(csvfile, serverpath)
 
 @step(u'Given the internal directory exists')
 def given_the_internal_directory_exists(step):
