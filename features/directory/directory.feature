@@ -206,6 +206,35 @@ Feature: Directory
           | active\ directory |        |
         Then there are no errors in the CTI logs
 
+    Scenario: Search for a contact in a LDAP server with invalid credentials
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
+        Given the LDAP server is configured
+        Given there are the following ldap filters:
+          | name             | server       | username                                  | password        | base dn                          | display name | phone number    |
+          | openldap-invalid | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | invalidpassword | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
+        Given the internal directory exists
+        Given the CTI directory definition is configured for LDAP searches using the ldap filter "openldap-invalid"
+        Given the context "default" uses display "Display" with the following directories:
+          | Directories   |
+          | internal      |
+          | ldapdirectory |
+        When I start the XiVO Client
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
+        When I search for "greatlord" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom                  | Numéro |
+          | GreatLord MacDonnell | 1043   |
+        Then there are no errors in the CTI logs
+        When I log out of the XiVO Client
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
+        When I search for "greatlord" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom                  | Numéro |
+          | GreatLord MacDonnell | 1043   |
+        Then there are no errors in the CTI logs
+
     Scenario: Call a contact in the directory
         Given there are no calls running
         Given there are users with infos:

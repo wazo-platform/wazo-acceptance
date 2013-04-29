@@ -87,9 +87,8 @@ def _restart_cti_server(step):
 def given_the_csv_file_is_copied_on_the_server_into_group2(step, csvfile, serverpath):
     assets.copy_asset_to_server(csvfile, serverpath)
 
-
-@step(u'Given the internal phonebook is configured')
-def given_the_internal_phonebook_is_configured(step):
+@step(u'Given the internal directory exists')
+def given_the_internal_directory_exists(step):
     directory_manager.add_or_replace_directory(
         'internal',
         'internal',
@@ -98,6 +97,12 @@ def given_the_internal_phonebook_is_configured(step):
          'lastname': 'userfeatures.lastname',
          'phone': 'linefeatures.number'}
     )
+
+
+@step(u'Given the internal phonebook is configured')
+def given_the_internal_phonebook_is_configured(step):
+    step.given('Given the internal directory exists')
+
     directory_manager.add_or_replace_display(
         'Display',
         [('Nom', 'name', '{db-firstname} {db-lastname}'),
