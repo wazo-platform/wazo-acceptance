@@ -18,7 +18,7 @@
 import time
 
 from hamcrest import assert_that, equal_to
-from lettuce import step, world
+from lettuce import step
 from xivo_lettuce import assets, func
 from xivo_lettuce.common import open_url, remove_element_if_exist, find_line, edit_line
 from xivo_lettuce.form import submit
