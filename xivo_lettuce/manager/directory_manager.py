@@ -38,9 +38,7 @@ def add_directory_definition(directory):
 
 
 def add_or_replace_directory(name, uri, direct_match, fields):
-    while common.element_is_in_list('cti_directory', name):
-        common.remove_line(name)
-
+    remove_directory(name)
     _add_directory(name, uri, direct_match)
     _add_directory_fields(fields)
     submit.submit_form()
@@ -55,6 +53,20 @@ def add_or_replace_display(name, fields):
     for title, field_type, display in fields:
         _add_display_field(title, field_type, display)
     submit.submit_form()
+
+
+def remove_directory(name):
+    while common.element_is_in_list('cti_directory', name):
+        common.remove_line(name)
+
+    # Work around for directory associations that aren't deleted
+    common.open_url('cti_direct_directory', 'list')
+    try:
+        common.edit_line('default')
+    except Exception:
+        pass  # No default context configured
+    else:
+        submit.submit_form()
 
 
 def _type_display_name(name):

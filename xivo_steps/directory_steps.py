@@ -41,15 +41,7 @@ def given_the_following_directories_exist(step):
 
 @step(u'Given the directory definition "([^"]*)" does not exist')
 def given_the_directory_definition_does_not_exist(step, definition):
-    remove_element_if_exist('cti_directory', definition)
-    # Work around for directory associations that aren't deleted
-    open_url('cti_direct_directory', 'list')
-    try:
-        edit_line('default')
-    except Exception:
-        pass  # No default context configured
-    else:
-        submit.submit_form()
+    directory_manager.remove_directory(definition)
 
 
 @step(u'Given the CSV file "([^"]*)" is copied on the server into "([^"]*)"')
