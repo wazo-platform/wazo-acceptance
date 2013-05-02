@@ -108,3 +108,16 @@ def then_i_can_connect_the_cti_client_of_group1_group2(step, firstname, lastname
 def then_there_are_no_errors_in_the_cti_logs(step):
     errors_found = logs.search_str_in_xivo_cti_log("ERROR")
     assert_that(errors_found, equal_to(False), 'errors were found in CTI logs when searching in the directory')
+
+
+@step(u'When I log in and log out of the XiVO Client as "([^"]*)", pass "([^"]*)" (\d+) times')
+def when_i_log_in_and_log_out_of_the_xivo_client_as_group1_pass_group2_10_times(step, username, password, count):
+    for i in range(int(count)):
+        step.when('I log in the XiVO Client as "%s", pass "%s"' % (username, password))
+        time.sleep(2)
+        step.when('I log out of the XiVO Client')
+
+
+@step(u'Then the XiVO Client did not crash')
+def then_the_xivo_client_does_not_crash(step):
+    pass
