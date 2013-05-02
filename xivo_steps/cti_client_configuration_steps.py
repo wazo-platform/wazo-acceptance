@@ -49,7 +49,7 @@ def i_log_in_the_xivo_client_with_bad_server_port(step):
 
 @step(u'When I enable screen pop-up')
 def when_i_enable_screen_pop_up(step):
-    conf_dict = {'customerinfo': True}
+    conf_dict = {'enable_screen_popup': True}
     cti_client_manager.configure_client(conf_dict)
 
 
