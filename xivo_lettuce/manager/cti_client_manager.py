@@ -27,9 +27,6 @@ def configure_client(conf_dict):
 
     :param conf_dict: dict
 
-    .. note::
-        note
-
     :Example:
 
     conf_dict = {
@@ -39,9 +36,10 @@ def configure_client(conf_dict):
         'password': 'string',
         'display_profile': bool,
         'autoconnect': bool,
-        'show_agent_option': bool
-        'agent_option': enum [no, unlogged, logged]
-        'hide_unlogged_agents_for_xlet_queue_members': bool
+        'show_agent_option': bool,
+        'agent_option': enum [no, unlogged, logged],
+        'hide_unlogged_agents_for_xlet_queue_members': bool,
+        'enable_screen_popup': bool
     }
     """
     if 'main_server_address' not in conf_dict:

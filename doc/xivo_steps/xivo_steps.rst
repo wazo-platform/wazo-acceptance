@@ -1,20 +1,9 @@
-XiVO Steps Package!
-===================
+xivo_steps
+==========
 
 
-.. toctree::
-   :maxdepth: 2
-   
-
-
-:mod:`xivo_steps`
-*****************
-
-.. automodule:: xivo_steps
-
-
-:mod:`xivo_steps.admin_user_steps`
-----------------------------------
+:mod:`admin_user_steps`
+-----------------------
 
 .. automodule:: xivo_steps.admin_user_steps
    :members:
@@ -22,8 +11,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.agent_list_steps`
-----------------------------------
+:mod:`agent_list_steps`
+-----------------------
 
 .. automodule:: xivo_steps.agent_list_steps
    :members:
@@ -31,8 +20,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.agent_steps`
------------------------------
+:mod:`agent_steps`
+------------------
 
 .. automodule:: xivo_steps.agent_steps
    :members:
@@ -40,8 +29,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.asterisk_steps`
---------------------------------
+:mod:`asterisk_steps`
+---------------------
 
 .. automodule:: xivo_steps.asterisk_steps
    :members:
@@ -49,8 +38,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.backup_steps`
-------------------------------
+:mod:`backup_steps`
+-------------------
 
 .. automodule:: xivo_steps.backup_steps
    :members:
@@ -58,8 +47,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.call_steps`
-----------------------------
+:mod:`call_steps`
+-----------------
 
 .. automodule:: xivo_steps.call_steps
    :members:
@@ -67,8 +56,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.callfilter_steps`
-----------------------------------
+:mod:`callfilter_steps`
+-----------------------
 
 .. automodule:: xivo_steps.callfilter_steps
    :members:
@@ -76,8 +65,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.certificate_steps`
------------------------------------
+:mod:`certificate_steps`
+------------------------
 
 .. automodule:: xivo_steps.certificate_steps
    :members:
@@ -85,8 +74,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.common_callgen_steps`
---------------------------------------
+:mod:`common_callgen_steps`
+---------------------------
 
 .. automodule:: xivo_steps.common_callgen_steps
    :members:
@@ -94,8 +83,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.common_webi_steps`
------------------------------------
+:mod:`common_webi_steps`
+------------------------
 
 .. automodule:: xivo_steps.common_webi_steps
    :members:
@@ -103,8 +92,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.common_xivoclient_steps`
------------------------------------------
+:mod:`common_xivoclient_steps`
+------------------------------
 
 .. automodule:: xivo_steps.common_xivoclient_steps
    :members:
@@ -112,8 +101,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.conf_file_steps`
----------------------------------
+:mod:`conf_file_steps`
+----------------------
 
 .. automodule:: xivo_steps.conf_file_steps
    :members:
@@ -121,8 +110,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.configfiles_steps`
------------------------------------
+:mod:`configfiles_steps`
+------------------------
 
 .. automodule:: xivo_steps.configfiles_steps
    :members:
@@ -130,8 +119,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.cti_client_configuration_steps`
-------------------------------------------------
+:mod:`cti_client_configuration_steps`
+-------------------------------------
 
 .. automodule:: xivo_steps.cti_client_configuration_steps
    :members:
@@ -139,8 +128,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.cti_server_steps`
-----------------------------------
+:mod:`cti_server_steps`
+-----------------------
 
 .. automodule:: xivo_steps.cti_server_steps
    :members:
@@ -148,8 +137,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.device_steps`
-------------------------------
+:mod:`device_steps`
+-------------------
 
 .. automodule:: xivo_steps.device_steps
    :members:
@@ -157,8 +146,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.dhcpd_steps`
------------------------------
+:mod:`dhcpd_steps`
+------------------
 
 .. automodule:: xivo_steps.dhcpd_steps
    :members:
@@ -166,8 +155,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.directed_pickup_steps`
----------------------------------------
+:mod:`directed_pickup_steps`
+----------------------------
 
 .. automodule:: xivo_steps.directed_pickup_steps
    :members:
@@ -175,8 +164,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.directory_steps`
----------------------------------
+:mod:`directory_steps`
+----------------------
 
 .. automodule:: xivo_steps.directory_steps
    :members:
@@ -184,8 +173,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.file_steps`
-----------------------------
+:mod:`file_steps`
+-----------------
 
 .. automodule:: xivo_steps.file_steps
    :members:
@@ -193,8 +182,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.files_steps`
------------------------------
+:mod:`files_steps`
+------------------
 
 .. automodule:: xivo_steps.files_steps
    :members:
@@ -202,8 +191,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.general_settings_iax_steps`
---------------------------------------------
+:mod:`general_settings_iax_steps`
+---------------------------------
 
 .. automodule:: xivo_steps.general_settings_iax_steps
    :members:
@@ -211,8 +200,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.general_settings_sccp_steps`
----------------------------------------------
+:mod:`general_settings_sccp_steps`
+----------------------------------
 
 .. automodule:: xivo_steps.general_settings_sccp_steps
    :members:
@@ -220,8 +209,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.general_settings_sip_steps`
---------------------------------------------
+:mod:`general_settings_sip_steps`
+---------------------------------
 
 .. automodule:: xivo_steps.general_settings_sip_steps
    :members:
@@ -229,8 +218,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.general_settings_xivo_steps`
----------------------------------------------
+:mod:`general_settings_xivo_steps`
+----------------------------------
 
 .. automodule:: xivo_steps.general_settings_xivo_steps
    :members:
@@ -238,8 +227,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.group_steps`
------------------------------
+:mod:`group_steps`
+------------------
 
 .. automodule:: xivo_steps.group_steps
    :members:
@@ -247,8 +236,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.incall_steps`
-------------------------------
+:mod:`incall_steps`
+-------------------
 
 .. automodule:: xivo_steps.incall_steps
    :members:
@@ -256,8 +245,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.ipbx_count_steps`
-----------------------------------
+:mod:`ipbx_count_steps`
+-----------------------
 
 .. automodule:: xivo_steps.ipbx_count_steps
    :members:
@@ -265,8 +254,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.ldap_steps`
-----------------------------
+:mod:`ldap_steps`
+-----------------
 
 .. automodule:: xivo_steps.ldap_steps
    :members:
@@ -274,8 +263,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.line_steps`
-----------------------------
+:mod:`line_steps`
+-----------------
 
 .. automodule:: xivo_steps.line_steps
    :members:
@@ -283,8 +272,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.meetme_steps`
-------------------------------
+:mod:`meetme_steps`
+-------------------
 
 .. automodule:: xivo_steps.meetme_steps
    :members:
@@ -292,8 +281,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.outcall_steps`
--------------------------------
+:mod:`outcall_steps`
+--------------------
 
 .. automodule:: xivo_steps.outcall_steps
    :members:
@@ -301,8 +290,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.parking_steps`
--------------------------------
+:mod:`parking_steps`
+--------------------
 
 .. automodule:: xivo_steps.parking_steps
    :members:
@@ -310,8 +299,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.phonebook_steps`
----------------------------------
+:mod:`phonebook_steps`
+----------------------
 
 .. automodule:: xivo_steps.phonebook_steps
    :members:
@@ -319,8 +308,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.profile_steps`
--------------------------------
+:mod:`profile_steps`
+--------------------
 
 .. automodule:: xivo_steps.profile_steps
    :members:
@@ -328,8 +317,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.provd_plugins_steps`
--------------------------------------
+:mod:`provd_plugins_steps`
+--------------------------
 
 .. automodule:: xivo_steps.provd_plugins_steps
    :members:
@@ -337,8 +326,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.provd_proxy_steps`
------------------------------------
+:mod:`provd_proxy_steps`
+------------------------
 
 .. automodule:: xivo_steps.provd_proxy_steps
    :members:
@@ -346,8 +335,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.queue_steps`
------------------------------
+:mod:`queue_steps`
+------------------
 
 .. automodule:: xivo_steps.queue_steps
    :members:
@@ -355,8 +344,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.recording_campaigns_steps`
--------------------------------------------
+:mod:`recording_campaigns_steps`
+--------------------------------
 
 .. automodule:: xivo_steps.recording_campaigns_steps
    :members:
@@ -364,8 +353,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.schedule_steps`
---------------------------------
+:mod:`schedule_steps`
+---------------------
 
 .. automodule:: xivo_steps.schedule_steps
    :members:
@@ -373,8 +362,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.sheet_steps`
------------------------------
+:mod:`sheet_steps`
+------------------
 
 .. automodule:: xivo_steps.sheet_steps
    :members:
@@ -382,8 +371,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.skillrules_steps`
-----------------------------------
+:mod:`skillrules_steps`
+-----------------------
 
 .. automodule:: xivo_steps.skillrules_steps
    :members:
@@ -391,8 +380,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.statcenter_steps`
-----------------------------------
+:mod:`statcenter_steps`
+-----------------------
 
 .. automodule:: xivo_steps.statcenter_steps
    :members:
@@ -400,8 +389,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.supervisor_steps`
-----------------------------------
+:mod:`supervisor_steps`
+-----------------------
 
 .. automodule:: xivo_steps.supervisor_steps
    :members:
@@ -409,8 +398,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.switchboard_steps`
------------------------------------
+:mod:`switchboard_steps`
+------------------------
 
 .. automodule:: xivo_steps.switchboard_steps
    :members:
@@ -418,8 +407,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.trunk_custom_steps`
-------------------------------------
+:mod:`trunk_custom_steps`
+-------------------------
 
 .. automodule:: xivo_steps.trunk_custom_steps
    :members:
@@ -427,8 +416,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.trunk_iax_steps`
----------------------------------
+:mod:`trunk_iax_steps`
+----------------------
 
 .. automodule:: xivo_steps.trunk_iax_steps
    :members:
@@ -436,8 +425,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.trunk_sip_steps`
----------------------------------
+:mod:`trunk_sip_steps`
+----------------------
 
 .. automodule:: xivo_steps.trunk_sip_steps
    :members:
@@ -445,8 +434,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.user_import_steps`
------------------------------------
+:mod:`user_import_steps`
+------------------------
 
 .. automodule:: xivo_steps.user_import_steps
    :members:
@@ -454,8 +443,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.user_steps`
-----------------------------
+:mod:`user_steps`
+-----------------
 
 .. automodule:: xivo_steps.user_steps
    :members:
@@ -463,8 +452,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.voicemail_steps`
----------------------------------
+:mod:`voicemail_steps`
+----------------------
 
 .. automodule:: xivo_steps.voicemail_steps
    :members:
@@ -472,8 +461,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.wizard_steps`
-------------------------------
+:mod:`wizard_steps`
+-------------------
 
 .. automodule:: xivo_steps.wizard_steps
    :members:
@@ -481,8 +470,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.xivo_agent_steps`
-----------------------------------
+:mod:`xivo_agent_steps`
+-----------------------
 
 .. automodule:: xivo_steps.xivo_agent_steps
    :members:
@@ -490,8 +479,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.xlet_identity_steps`
--------------------------------------
+:mod:`xlet_identity_steps`
+--------------------------
 
 .. automodule:: xivo_steps.xlet_identity_steps
    :members:
@@ -499,8 +488,8 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-:mod:`xivo_steps.xlet_queue_member_steps`
------------------------------------------
+:mod:`xlet_queue_member_steps`
+------------------------------
 
 .. automodule:: xivo_steps.xlet_queue_member_steps
    :members:
@@ -508,8 +497,6 @@ XiVO Steps Package!
    :show-inheritance:
 
 
-Indices and tables
-==================
 
 * :ref:`genindex`
 * :ref:`modindex`

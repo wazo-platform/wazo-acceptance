@@ -10,6 +10,7 @@ Welcome to XiVO Acceptance's documentation!
 .. toctree::
    :maxdepth: 3
 
+   xivo_lettuce/xivo_lettuce
    xivo_steps/xivo_steps
 
 
