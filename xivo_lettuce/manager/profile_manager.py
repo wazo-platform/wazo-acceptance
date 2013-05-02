@@ -54,17 +54,22 @@ def remove_all_services():
     services_pane.remove_all()
 
 
-def add_xlet(xlet_label):
+def add_xlet(xlet_label, xlet_position='dock'):
     """Add a xlet."""
     add_button = world.browser.find_element_by_xpath(
         "//table[@id = 'list_xlet']//a[@id = 'lnk-add-row']")
     add_button.click()
     time.sleep(1)
+
     input_line = world.browser.find_elements_by_xpath(
         "//table[@id = 'list_xlet']//tr")[-2]
     input_xlet_name = Select(input_line.find_element_by_xpath(
         ".//select[@name = 'xlet[id][]']"))
     input_xlet_name.select_by_visible_text(xlet_label)
+
+    input_xlet_position = Select(input_line.find_element_by_xpath(
+        ".//select[@name = 'xlet[layout][]']"))
+    input_xlet_position.select_by_visible_text(xlet_position)
 
 
 def _get_services_list():

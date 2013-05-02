@@ -33,7 +33,8 @@ def given_there_is_a_profile_1_with_no_services_and_xlets(step, profile_name):
     cti_profile_config = step.hashes
     for cti_profile_element in cti_profile_config:
         xlet_name = cti_profile_element['xlet']
-        profile_manager.add_xlet(xlet_name)
+        xlet_position = cti_profile_element.get('position', 'dock')
+        profile_manager.add_xlet(xlet_name, xlet_position)
     form.submit.submit_form()
 
 
