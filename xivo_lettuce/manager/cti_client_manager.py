@@ -23,24 +23,27 @@ from lettuce.registry import world
 
 
 def configure_client(conf_dict):
-    """func: configure_client
+    """This function send a message to cticlient to configure it.
 
-    :param conf_dict: dict
+    :param conf_dict: The dict to configure.
+    :type conf_dict: dict
+    :example:
 
-    :Example:
+    .. code-block:: javascript
 
-    conf_dict = {
-        'main_server_address': 'string',
-        'main_server_port': int,
-        'login': 'string',
-        'password': 'string',
-        'display_profile': bool,
-        'autoconnect': bool,
-        'show_agent_option': bool,
-        'agent_option': enum [no, unlogged, logged],
-        'hide_unlogged_agents_for_xlet_queue_members': bool,
-        'enable_screen_popup': bool
-    }
+        conf_dict = {
+            'main_server_address': char,
+            'main_server_port': int,
+            'login': char,
+            'password': char,
+            'display_profile': boolean,
+            'autoconnect': boolean,
+            'show_agent_option': boolean,
+            'agent_option': enum [no, unlogged, logged],
+            'hide_unlogged_agents_for_xlet_queue_members': boolean,
+            'enable_screen_popup': boolean
+        }
+
     """
     if 'main_server_address' not in conf_dict:
         conf_dict['main_server_address'] = common.get_host_address()
