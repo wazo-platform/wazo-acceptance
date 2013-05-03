@@ -15,8 +15,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
+
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
+from xivo_lettuce.common import open_url, find_line
+from xivo_lettuce.manager.provd_general_manager import update_plugin_server_url
+
+
+def update_plugin_list(url):
+    update_plugin_server_url(url)
+    open_url('provd_plugin')
+    world.browser.find_element_by_id('toolbar-bt-update').click()
+    _check_for_confirmation_message(7)
+
+
+def _check_for_confirmation_message(secs):
+    time.sleep(secs)
+    world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-messages')]]")
 
 
 def plugins_successfully_updated():
