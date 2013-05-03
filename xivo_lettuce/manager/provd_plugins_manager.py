@@ -49,3 +49,45 @@ def plugins_error_during_update():
         return div is not None
     except (NoSuchElementException, ElementNotVisibleException):
         return False
+
+
+def uninstall_plugin(plugin):
+    open_url('provd_plugin')
+    plugin_line = find_line(plugin)
+
+    uninstall_btn = _find_uninstall_btn(plugin_line)
+
+    if uninstall_btn:
+        uninstall_btn.click()
+        alert = world.browser.switch_to_alert()
+        alert.accept()
+
+
+def _find_uninstall_btn(plugin_line):
+    try:
+        return plugin_line.find_element_by_xpath(".//a[@title='Uninstall']")
+    except (NoSuchElementException, ElementNotVisibleException):
+        return None
+
+
+def install_plugin(plugin):
+    open_url('provd_plugin')
+    plugin_line = find_line(plugin)
+
+    install_btn = plugin_line.find_element_by_xpath(".//a[@title='Install']")
+    install_btn.click()
+
+    _check_for_confirmation_message(2)
+
+
+def install_firmware(firmware):
+    firmware_line = _find_firmware_line(firmware)
+    install_btn = firmware_line.find_element_by_xpath(".//a[@title='Install']")
+    install_btn.click()
+
+    _check_for_confirmation_message(10)
+
+
+def _find_firmware_line(firmware):
+    xpath = "//table[@id='tb-list-pkgs']//tr[contains(td[1], '%s')]" % firmware
+    return world.browser.find_element_by_xpath(xpath)
