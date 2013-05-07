@@ -75,25 +75,6 @@ def given_there_is_an_outcall_in_context_with_trunk(step, outcall_name, outcall_
     outcall_manager_ws.add_or_replace_outcall(data)
 
 
-@step(u'Given I don\'t see any exten "([^"]*)"')
-def given_i_dont_see_any_exten(step, exten):
-    try:
-        then_i_dont_see_any_exten(step, exten)
-    except AssertionError:
-        when_i_remove_the_exten(step, exten)
-        form.submit.submit_form()
-
-
-@step(u'Given I see an exten "([^"]*)"')
-def given_i_see_an_exten(step, exten):
-    try:
-        then_i_see_an_exten(step, exten)
-    except NoSuchElementException:
-        when_i_add_an_exten(step)
-        when_i_set_the_exten_to(step, exten)
-        form.submit.submit_form()
-
-
 @step(u'Given there is no outcall "([^"]*)"')
 def given_there_is_no_outcall(step, name):
     outcall_manager_ws.delete_outcalls_with_name(name)
@@ -146,26 +127,6 @@ def when_i_remove_extension_patterns_from_outcall_1(step, outcall_name):
     form.submit.submit_form()
 
 
-@step(u'I go to the outcall "([^"]*)", tab "([^"]*)"')
-def i_go_to_the_outcall_tab(step, name, tab):
-    open_url('outcall', 'list')
-    edit_line(name)
-    go_to_tab(tab)
-
-
-@step(u'When I add an exten')
-def when_i_add_an_exten(step):
-    add_button = world.browser.find_element_by_id('lnk-add-row', 'Can\'t add an exten')
-    add_button.click()
-
-
-@step(u'When I set the exten to "([^"]*)"')
-def when_i_set_the_exten_to(step, exten):
-    input_exten = world.browser.find_elements_by_xpath(
-        "//table[@id='list_exten']//input[@name='dialpattern[exten][]']")[-1]
-    input_exten.send_keys(exten)
-
-
 @step(u'When I add the following extension patterns to the outcall "([^"]*)":')
 def when_i_add_the_following_extension_patterns_to_the_outcall_1(step, outcall_name):
     open_url('outcall', 'list')
@@ -209,31 +170,6 @@ def then_the_outcall_1_does_not_have_extension_patterns(step, outcall_name):
         else:
             raise Exception('extension pattern %s unexpectedly found in outcall %s' %
                             (outcall_extension, outcall_name))
-
-
-@step(u'Then I see an exten "([^"]*)"')
-def then_i_see_an_exten(step, exten):
-    exten_element = exten_line(exten).find_element_by_xpath(
-        ".//input[@name='dialpattern[exten][]']")
-    assert exten_element is not None
-
-
-@step(u'When I remove the exten "([^"]*)"')
-def when_i_remove_the_exten(step, exten):
-    delete_button = exten_line(exten).find_element_by_id('lnk-del-row')
-    delete_button.click()
-    # Wait for the Javascript to remove the line
-    time.sleep(1)
-
-
-@step(u'Then I don\'t see any exten "([^"]*)"')
-def then_i_dont_see_any_exten(step, exten):
-    try:
-        exten_line(exten)
-    except NoSuchElementException:
-        pass
-    else:
-        assert False
 
 
 @step(u'Then there is no outcall "([^"]*)"')
