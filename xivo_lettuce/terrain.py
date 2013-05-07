@@ -84,6 +84,7 @@ def initialize():
         if _webi_configured():
             _log_on_webi()
     world.logged_agents = []
+    world.dummy_ip_address = '10.99.99.99'
 
 
 @st_time

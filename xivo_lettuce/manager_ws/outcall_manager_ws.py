@@ -35,6 +35,12 @@ def add_outcall(data):
     world.ws.outcalls.add(outcall)
 
 
+def add_or_replace_outcall(data):
+    if _search_outcalls_with_name(data['name']):
+        delete_outcalls_with_name(data['name'])
+    add_outcall(data)
+
+
 def delete_outcalls_with_name(name):
     for outcall in _search_outcalls_with_name(name):
         world.ws.outcalls.delete(outcall.id)
