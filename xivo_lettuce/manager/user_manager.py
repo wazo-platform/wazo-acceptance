@@ -116,7 +116,7 @@ def type_func_key(key_type, destination, key_number=None, label=None, supervised
 def _fill_destination_field(key_type, line, destination):
     field = find_key_destination_field(key_type, line)
     if key_type == 'Filtering Boss - Secretary':
-        Select(field).select_by_value(destination)
+        Select(field).select_by_visible_text(destination)
     else:
         field.send_keys(destination)
 
