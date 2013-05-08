@@ -17,6 +17,8 @@
 
 from lettuce import world
 from selenium.webdriver.support.select import Select
+from xivo_lettuce.common import open_url
+from xivo_lettuce.form import submit
 from xivo_lettuce.form.list_pane import ListPane
 
 
@@ -33,3 +35,11 @@ def type_callfilter_boss(boss):
 def add_secretary(secretary):
     pane = ListPane.from_id('userlist')
     pane.add_contains(secretary)
+
+
+def add_boss_secretary_filter(callfilter_name, boss, secretary):
+    open_url('callfilter', 'add')
+    type_callfilter_name(callfilter_name)
+    type_callfilter_boss(boss)
+    add_secretary(secretary)
+    submit.submit_form()

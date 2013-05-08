@@ -17,15 +17,11 @@
 
 
 from lettuce import step
-from xivo_lettuce.manager import callfilter_manager
-from xivo_lettuce.form import submit
-from xivo_lettuce.common import open_url
+from xivo_lettuce.manager import callfilter_manager, user_manager
+from xivo_lettuce import common
+
 
 
 @step(u'^When I create a callfilter "([^"]*)" with a boss "([^"]*)" with a secretary "([^"]*)"$')
 def given_there_are_users_with_infos(step, callfilter_name, boss, secretary):
-    open_url('callfilter', 'add')
-    callfilter_manager.type_callfilter_name(callfilter_name)
-    callfilter_manager.type_callfilter_boss(boss)
-    callfilter_manager.add_secretary(secretary)
-    submit.submit_form()
+    callfilter_manager.add_boss_secretary_filter(callfilter_name, boss, secretary)
