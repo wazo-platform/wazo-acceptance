@@ -216,3 +216,11 @@ def _count_table_with_criteria(table, criteria):
         pgcommand += "\""
     result = postgres.exec_sql_request_with_return(pgcommand)
     return int(result.split('\n')[-4].strip())
+
+
+def deactivate_bsfilter(user):
+    common.open_url('user', 'search', {'search': user})
+    common.edit_line(user)
+    common.go_to_tab('Services')
+    form.select.set_select_field_with_id('it-userfeatures-bsfilter', 'No')
+    form.submit.submit_form()
