@@ -42,34 +42,83 @@ def type_user_in_group(groupName):
     add_button.click()
 
 
-def type_func_key(key_type, destination, key_number=None, label=None, supervised=None):
-    go_to_tab('Func Keys')
+def find_func_key_line(number=None):
+    if number:
+        number = str(number)
+    else:
+        number = 'last()'
 
+    xpath = "//tbody[@id='phonefunckey']/tr[%s]" % number
+    return world.browser.find_element_by_xpath(xpath)
+
+
+def find_key_number_field(line):
+    return Select(line.find_element_by_name('phonefunckey[fknum][]'))
+
+
+def find_key_type_field(line):
+    return Select(line.find_element_by_name('phonefunckey[type][]'))
+
+
+def find_key_label_field(line):
+    return line.find_element_by_name('phonefunckey[label][]')
+
+
+def find_key_supervision_field(line):
+    return Select(line.find_element_by_name('phonefunckey[supervision][]'))
+
+
+def add_funckey_line():
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-funckeys']//a[@id='add_funckey_button']")
     add_button.click()
 
-    current_line = world.browser.find_element_by_xpath('''//tbody[@id='phonefunckey']/tr[last()]''')
+
+def get_line_number(line):
+    element = line.find_element_by_name('phonefunckey[type][]')
+    line_number = int(element.get_attribute('id')[-1:])
+    return line_number
+
+
+def find_key_destination_field(key_type, line):
+    line_number = get_line_number(line)
+    if key_type == 'Filtering Boss - Secretary':
+        field_id = 'it-phonefunckey-extenfeatures-bsfilter-typeval-%s' % line_number
+    else:
+        field_id = 'it-phonefunckey-custom-typeval-%s' % line_number
+    return line.find_element_by_id(field_id)
+
+
+def type_func_key(key_type, destination, key_number=None, label=None, supervised=None):
+    go_to_tab('Func Keys')
+
+    add_funckey_line()
+
+    current_line = find_func_key_line()
+
+    key_type_field = find_key_type_field(current_line)
+    key_type_field.select_by_visible_text(key_type)
+
+    _fill_destination_field(key_type, current_line, destination)
 
     if key_number:
-        key_number_field = Select(current_line.find_element_by_name('phonefunckey[fknum][]'))
+        key_number_field = find_key_number_field(current_line)
         key_number_field.select_by_visible_text(key_number)
 
-    select_field_element = current_line.find_element_by_name('phonefunckey[type][]')
-    line_number = int(select_field_element.get_attribute('id')[-1:])
-    type_field = Select(select_field_element)
-    type_field.select_by_visible_text(key_type)
-
-    field_name = 'it-phonefunckey-custom-typeval-%s' % line_number
-    destination_field = current_line.find_element_by_id(field_name)
-    destination_field.send_keys(destination)
-
     if label:
-        label_field = current_line.find_element_by_name('phonefunckey[label][]')
+        label_field = find_key_label_field(current_line)
         label_field.send_keys(label)
 
     if supervised:
-        supervision_field = Select(current_line.find_element_by_name('phonefunckey[supervision][]'))
+        supervision_field = find_key_supervision_field(current_line)
         supervision_field.select_by_visible_text(supervised)
+
+
+def _fill_destination_field(key_type, line, destination):
+    field = find_key_destination_field(key_type, line)
+    if key_type == 'Filtering Boss - Secretary':
+        Select(field).select_by_value(destination)
+    else:
+        field.send_keys(destination)
 
 
 def change_key_order(pairs):
