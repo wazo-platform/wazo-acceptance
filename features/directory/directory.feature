@@ -205,11 +205,7 @@ Feature: Directory
           | name             | server       | username                                  | password        | base dn                          | display name | phone number    |
           | openldap-invalid | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | invalidpassword | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
         Given the internal directory exists
-        Given the CTI directory definition is configured for LDAP searches using the ldap filter "openldap-invalid"
-        Given the context "default" uses display "Display" with the following directories:
-          | Directories   |
-          | internal      |
-          | ldapdirectory |
+        Given the CTI server searches both the internal directory and the LDAP filter "openldap-invalid"
         When I start the XiVO Client
         When I log in the XiVO Client as "greatlord", pass "macdonnell"
         When I search for "greatlord" in the directory xlet
