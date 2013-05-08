@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import world, step
+from lettuce import step
 from hamcrest import assert_that, equal_to
-from xivo_lettuce import ldap_utils
 from xivo_lettuce.manager_ws import context_manager_ws
 from xivo_lettuce.manager import ldap_manager, cti_client_manager
 from xivo_lettuce.manager import directory_manager
@@ -29,7 +28,7 @@ from xivo_lettuce import func
 @step(u'Given the switchboard is configured for ldap lookup with location and department$')
 def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_department(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
-    ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
+    step.given('Given the LDAP server is configured and active')
     ldap_manager.add_or_replace_ldap_filter(
         name='openldap-dev',
         server='openldap-dev',
@@ -60,12 +59,12 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
         'switchboard',
         ['openldap']
     )
-    ldap_utils.start_ldap_server()
 
 
 @step(u'Given the switchboard is configured for ldap lookup with location$')
 def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
+    step.given('Given the LDAP server is configured and active')
     ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
     ldap_manager.add_or_replace_ldap_filter(
         name='openldap-dev',
@@ -95,13 +94,12 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
         'switchboard',
         ['openldap']
     )
-    ldap_utils.start_ldap_server()
 
 
 @step(u'Given the switchboard is configured for ldap lookup$')
 def given_the_switchboard_is_configured_for_ldap_lookup(step):
     context_manager_ws.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
-    ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
+    step.given('Given the LDAP server is configured and active')
     ldap_manager.add_or_replace_ldap_filter(
         name='openldap-dev',
         server='openldap-dev',
@@ -127,7 +125,6 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
         'switchboard',
         ['openldap']
     )
-    ldap_utils.start_ldap_server()
 
 
 @step(u'Given the switchboard is configured for internal directory lookup')
@@ -154,7 +151,6 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
         'switchboard',
         ['xivodirswitchboard']
     )
-    ldap_utils.start_ldap_server()
 
 
 @step(u'Given the display filter "([^"]*)" exists with the following fields:')
