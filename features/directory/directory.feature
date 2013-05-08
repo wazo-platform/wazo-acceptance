@@ -134,7 +134,7 @@ Feature: Directory
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are entries in the ldap server:
           | first name | last name              | email             | city   | state  | phone      |
           | explicite  | mail avencall no state | user@avencall.com | Québec |        | 3698521478 |
@@ -159,7 +159,7 @@ Feature: Directory
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are entries in the ldap server:
           | first name | last name | email               | phone |
           | Vwé        | Xyzà      | vwexyza@example.org | 987   |
@@ -182,7 +182,7 @@ Feature: Directory
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there is a user with common name "ACTIVE\Directory" on the ldap server
         Given there are the following ldap filters:
           | name            | server       | username                                             | password  | base dn                          | display name | phone number    |
@@ -200,7 +200,7 @@ Feature: Directory
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are the following ldap filters:
           | name             | server       | username                                  | password        | base dn                          | display name | phone number    |
           | openldap-invalid | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | invalidpassword | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |

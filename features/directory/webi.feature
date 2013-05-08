@@ -30,7 +30,7 @@ Feature: Phonebook
     Scenario: Phonebook searches using multiple filters
         Given the phonebook is accessible by any hosts
         Given there are no LDAP filters configured in the phonebook
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are entries in the ldap server:
           | first name | last name | city   | state  | phone      |
           | Marie      | IPad      | Québec |        | 4181111111 |
@@ -54,7 +54,7 @@ Feature: Phonebook
     Scenario: Phonebook searches LDAP using multiple attributes in display name
         Given the phonebook is accessible by any hosts
         Given there are no LDAP filters configured in the phonebook
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are entries in the ldap server:
           | first name | last name | city        | state        | phone  |
           | foobar     | city      | foobar city |              | 123789 |
@@ -72,7 +72,7 @@ Feature: Phonebook
     Scenario: Phonebook searches LDAP using multiple attriburtes in phone number
         Given the phonebook is accessible by any hosts
         Given there are no LDAP filters configured in the phonebook
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are entries in the ldap server:
           | first name  | last name   | mobile       | phone        |
           | utilisateur | mobile      | 654 456 9871 |              |
@@ -90,7 +90,7 @@ Feature: Phonebook
     Scenario: Phonebook searches LDAP using a custom filter
         Given the phonebook is accessible by any hosts
         Given there are no LDAP filters configured in the phonebook
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are entries in the ldap server:
           | first name | last name              | email             | city   | state  | phone      |
           | explicite  | mail avencall no state | user@avencall.com | Québec |        | 3698521478 |
@@ -112,7 +112,7 @@ Feature: Phonebook
     Scenario: Phonebook searches LDAP using special characters
         Given the phonebook is accessible by any hosts
         Given there are no LDAP filters configured in the phonebook
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are entries in the ldap server:
           | first name | last name | email               | phone |
           | Vwé        | Xyzà      | vwexyza@example.org | 987   |

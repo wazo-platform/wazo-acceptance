@@ -17,6 +17,7 @@
 
 from lettuce import world, step
 from hamcrest import assert_that, equal_to
+from xivo_lettuce import ldap_utils
 from xivo_lettuce.manager_ws import context_manager_ws
 from xivo_lettuce.manager import ldap_manager, cti_client_manager
 from xivo_lettuce.manager import directory_manager
@@ -59,6 +60,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
         'switchboard',
         ['openldap']
     )
+    ldap_utils.start_ldap_server()
 
 
 @step(u'Given the switchboard is configured for ldap lookup with location$')
@@ -93,6 +95,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
         'switchboard',
         ['openldap']
     )
+    ldap_utils.start_ldap_server()
 
 
 @step(u'Given the switchboard is configured for ldap lookup$')
@@ -124,6 +127,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
         'switchboard',
         ['openldap']
     )
+    ldap_utils.start_ldap_server()
 
 
 @step(u'Given the switchboard is configured for internal directory lookup')
@@ -150,6 +154,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
         'switchboard',
         ['xivodirswitchboard']
     )
+    ldap_utils.start_ldap_server()
 
 
 @step(u'Given the display filter "([^"]*)" exists with the following fields:')
