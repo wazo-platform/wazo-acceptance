@@ -130,3 +130,13 @@ def given_there_is_a_user_with_common_name_group1_on_the_ldap_server(step, commo
     }
 
     ldap_utils.add_or_replace_entry(entry)
+
+@step(u'Given the LDAP server is configured and active')
+def given_the_ldap_server_is_configured_and_active(step):
+    ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
+    ldap_utils.start_ldap_server()
+
+
+@step(u'When the LDAP service is stopped')
+def when_the_ldap_service_is_stopped(step):
+    ldap_utils.stop_ldap_server()

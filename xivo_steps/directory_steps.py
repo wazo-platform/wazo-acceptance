@@ -47,7 +47,16 @@ def given_the_csv_file_is_copied_on_the_server_into_group2(step, csvfile, server
 def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the_ldap_filter(step, ldap_filter):
     _configure_display_filter()
     _configure_ldap_directory(ldap_filter)
-    _add_ldap_directory_to_direct_directories()
+    _add_directory_to_direct_directories()
+    _restart_cti_server(step)
+
+
+@step(u'Given the CTI server searches both the internal directory and the LDAP filter "([^"]*)"')
+def given_the_cti_server_searches_both_the_internal_directory_and_the_ldap_filter_group1(step, ldap_filter):
+    _configure_display_filter()
+    _configure_ldap_directory(ldap_filter)
+    step.given('Given the internal directory exists')
+    _add_directory_to_direct_directories(['ldapdirectory', 'internal'])
     _restart_cti_server(step)
 
 
@@ -70,11 +79,11 @@ def _configure_ldap_directory(ldap_filter):
     )
 
 
-def _add_ldap_directory_to_direct_directories():
+def _add_directory_to_direct_directories(directories=['ldapdirectory']):
     directory_manager.assign_filter_and_directories_to_context(
         'default',
         'Display',
-        ['ldapdirectory']
+        directories
     )
 
 

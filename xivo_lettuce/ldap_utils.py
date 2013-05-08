@@ -1,6 +1,10 @@
 import ldap
 import ldap.modlist
 
+from xivo_lettuce.ssh import SSHClient
+
+LDAP_SSH_HOSTNAME = 'openldap-dev.lan-quebec.avencall.com'
+LDAP_SSH_LOGIN = 'root'
 LDAP_URI = 'ldap://openldap-dev.lan-quebec.avencall.com:389/'
 LDAP_LOGIN = 'cn=admin,dc=lan-quebec,dc=avencall,dc=com'
 LDAP_PASSWORD = 'superpass'
@@ -63,3 +67,15 @@ def _get_entry_id(common_name):
 def add_entry(ldap_server, dn, entry):
     entry_encoded = ldap.modlist.addModlist(entry)
     ldap_server.add_s(dn, entry_encoded)
+
+
+def start_ldap_server():
+    ssh_client = SSHClient(LDAP_SSH_HOSTNAME, LDAP_SSH_LOGIN)
+    cmd = ['service', 'slapd', 'start']
+    ssh_client.check_call(cmd)
+
+
+def stop_ldap_server():
+    ssh_client = SSHClient(LDAP_SSH_HOSTNAME, LDAP_SSH_LOGIN)
+    cmd = ['service', 'slapd', 'stop']
+    ssh_client.check_call(cmd)

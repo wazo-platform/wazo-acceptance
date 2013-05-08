@@ -128,3 +128,27 @@ Feature: Phonebook
         Then I see the following results on the phone:
           | name              | number |
           | Vwé Xyzà (Office) | 987    |
+
+    Scenario: Phonebook searches LDAP even when inactive
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
+        Given the phonebook is accessible by any hosts
+        Given there are no LDAP filters configured in the phonebook
+        Given the LDAP server is configured and active
+        Given there are entries in the ldap server:
+          | first name | last name | email          | phone |
+          | James      | Bond      | james@bond.com | 007   |
+        Given there are the following ldap filters:
+          | name              | server       | username                                  | password  | base dn                          | display name | phone number    |
+          | openldap-inactive | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
+        Given the ldap filter "openldap-inactive" has been added to the phonebook
+        When the LDAP service is stopped
+        When I search the phonebook for "james" on my Aastra
+        Then I do not see the following results on the phone:
+          | name                | number |
+          | James Bond (Office) | 007    |
+        When I search the phonebook for "greatlord" on my Aastra
+        Then I see the following results on the phone:
+          | name                 | number |
+          | GreatLord MacDonnell | 1043   |
