@@ -66,6 +66,7 @@ def given_the_ldap_server_is_configured_for_ssl_connections(step):
         display_name=['cn', 'st', 'givenName'],
         phone_number=['telephoneNumber'])
     ldap_manager.add_ldap_filter_to_phonebook('openldap-dev')
+    ldap_utils.start_ldap_server()
 
 
 def _copy_ca_certificate():
@@ -78,11 +79,6 @@ def _configure_ca_certificate():
     if not output.strip():
         command = ["echo 'TLS_CACERT /etc/ssl/certs/ca-certificates.crt' >> /etc/ldap/ldap.conf"]
         sysutils.send_command(command)
-
-
-@step(u'^Given the LDAP server is configured$')
-def given_the_ldap_server_is_configured(step):
-    ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
 
 
 @step(u'Given there are the following ldap filters:')
@@ -130,3 +126,21 @@ def given_there_is_a_user_with_common_name_group1_on_the_ldap_server(step, commo
     }
 
     ldap_utils.add_or_replace_entry(entry)
+
+
+@step(u'Given the LDAP server is configured and active')
+def given_the_ldap_server_is_configured_and_active(step):
+    ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
+    if not ldap_utils.is_ldap_booted():
+        ldap_utils.boot_ldap_server()
+    ldap_utils.start_ldap_server()
+
+
+@step(u'When the LDAP service is stopped')
+def when_the_ldap_service_is_stopped(step):
+    ldap_utils.stop_ldap_server()
+
+
+@step(u'When I shut down the LDAP server')
+def when_i_shut_down_the_ldap_server(step):
+    ldap_utils.shutdown_ldap_server()

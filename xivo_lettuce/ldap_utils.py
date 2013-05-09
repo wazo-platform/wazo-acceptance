@@ -1,6 +1,12 @@
 import ldap
 import ldap.modlist
+import time
 
+from xivo_lettuce.ssh import SSHClient
+from lettuce import world
+
+LDAP_SSH_HOSTNAME = 'openldap-dev.lan-quebec.avencall.com'
+LDAP_SSH_LOGIN = 'root'
 LDAP_URI = 'ldap://openldap-dev.lan-quebec.avencall.com:389/'
 LDAP_LOGIN = 'cn=admin,dc=lan-quebec,dc=avencall,dc=com'
 LDAP_PASSWORD = 'superpass'
@@ -63,3 +69,57 @@ def _get_entry_id(common_name):
 def add_entry(ldap_server, dn, entry):
     entry_encoded = ldap.modlist.addModlist(entry)
     ldap_server.add_s(dn, entry_encoded)
+
+
+def start_ldap_server():
+    ssh_client = SSHClient(LDAP_SSH_HOSTNAME, LDAP_SSH_LOGIN)
+    cmd = ['service', 'slapd', 'start']
+    ssh_client.check_call(cmd)
+
+
+def stop_ldap_server():
+    ssh_client = SSHClient(LDAP_SSH_HOSTNAME, LDAP_SSH_LOGIN)
+    cmd = ['service', 'slapd', 'stop']
+    ssh_client.check_call(cmd)
+
+
+def _kvm_ssh_client():
+    kvm_hostname = world.config.get('kvm_infos', 'hostname')
+    kvm_login = world.config.get('kvm_infos', 'login')
+    ssh_client = SSHClient(kvm_hostname, kvm_login)
+
+    return ssh_client
+
+
+def shutdown_ldap_server():
+    vm_name = world.config.get('kvm_infos', 'vm_name')
+    timeout = int(world.config.get('kvm_infos', 'shutdown_timeout'))
+    ssh_client = _kvm_ssh_client()
+
+    cmd = ['virsh', 'shutdown', vm_name]
+    ssh_client.check_call(cmd)
+    time.sleep(timeout)
+
+
+def boot_ldap_server():
+    vm_name = world.config.get('kvm_infos', 'vm_name')
+    timeout = int(world.config.get('kvm_infos', 'boot_timeout'))
+    ssh_client = _kvm_ssh_client()
+
+    cmd = ['virsh', 'start', vm_name]
+    ssh_client.check_call(cmd)
+    time.sleep(timeout)
+
+
+def is_ldap_booted():
+    vm_name = world.config.get('kvm_infos', 'vm_name')
+    ssh_client = _kvm_ssh_client()
+
+    cmd = ['virsh', 'list']
+
+    output = ssh_client.out_call(cmd)
+    for line in output.split('\n'):
+        if vm_name in line:
+            return True
+
+    return False

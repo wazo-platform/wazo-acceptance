@@ -134,7 +134,7 @@ Feature: Directory
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are entries in the ldap server:
           | first name | last name              | email             | city   | state  | phone      |
           | explicite  | mail avencall no state | user@avencall.com | Québec |        | 3698521478 |
@@ -159,7 +159,7 @@ Feature: Directory
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are entries in the ldap server:
           | first name | last name | email               | phone |
           | Vwé        | Xyzà      | vwexyza@example.org | 987   |
@@ -182,7 +182,7 @@ Feature: Directory
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there is a user with common name "ACTIVE\Directory" on the ldap server
         Given there are the following ldap filters:
           | name            | server       | username                                             | password  | base dn                          | display name | phone number    |
@@ -200,16 +200,12 @@ Feature: Directory
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
-        Given the LDAP server is configured
+        Given the LDAP server is configured and active
         Given there are the following ldap filters:
           | name             | server       | username                                  | password        | base dn                          | display name | phone number    |
           | openldap-invalid | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | invalidpassword | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
         Given the internal directory exists
-        Given the CTI directory definition is configured for LDAP searches using the ldap filter "openldap-invalid"
-        Given the context "default" uses display "Display" with the following directories:
-          | Directories   |
-          | internal      |
-          | ldapdirectory |
+        Given the CTI server searches both the internal directory and the LDAP filter "openldap-invalid"
         When I start the XiVO Client
         When I log in the XiVO Client as "greatlord", pass "macdonnell"
         When I search for "greatlord" in the directory xlet
@@ -224,6 +220,54 @@ Feature: Directory
           | Nom                  | Numéro |
           | GreatLord MacDonnell | 1043   |
         Then there are no errors in the CTI logs
+
+    Scenario: Search for a contact with an inactive LDAP server
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
+        Given the LDAP server is configured and active
+        Given there are entries in the ldap server:
+          | first name | last name | email          | phone |
+          | James      | Bond      | james@bond.com | 007   |
+        Given there are the following ldap filters:
+          | name              | server       | username                                  | password  | base dn                          | display name | phone number    |
+          | openldap-inactive | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
+        Given the CTI server searches both the internal directory and the LDAP filter "openldap-inactive"
+        When the LDAP service is stopped
+        When I start the XiVO Client
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
+        When I search for "james" in the directory xlet
+        Then the following results does not show up in the directory xlet:
+          | Nom        | Numéro |
+          | James Bond | 007    |
+        When I search for "greatlord" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom                  | Numéro |
+          | GreatLord MacDonnell | 1043   |
+
+    Scenario: Search for a contact with a LDAP server shut down
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
+        Given the LDAP server is configured and active
+        Given there are entries in the ldap server:
+          | first name | last name | email          | phone |
+          | James      | Bond      | james@bond.com | 007   |
+        Given there are the following ldap filters:
+          | name              | server       | username                                  | password  | base dn                          | display name | phone number    |
+          | openldap-inactive | openldap-dev | cn=admin,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
+        Given the CTI server searches both the internal directory and the LDAP filter "openldap-inactive"
+        When I shut down the LDAP server
+        When I start the XiVO Client
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
+        When I search for "james" in the directory xlet
+        Then the following results does not show up in the directory xlet:
+          | Nom        | Numéro |
+          | James Bond | 007    |
+        When I search for "greatlord" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom                  | Numéro |
+          | GreatLord MacDonnell | 1043   |
 
     Scenario: Call a contact in the directory
         Given there are no calls running
