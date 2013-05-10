@@ -20,6 +20,12 @@ from xivo_lettuce.manager import ldap_manager
 from xivo_lettuce import common, assets, sysutils, ldap_utils
 
 
+def _check_ldap_is_up():
+    if not ldap_utils.is_ldap_booted():
+        ldap_utils.boot_ldap_server()
+    ldap_utils.start_ldap_server()
+
+
 @step(u'I create an LDAP server with name "([^"]*)" and host "([^"]*)"')
 def i_create_an_ldap_server_with_name_1_and_host_2(step, name, host):
     ldap_manager.add_ldap_server(name, host)
@@ -66,7 +72,7 @@ def given_the_ldap_server_is_configured_for_ssl_connections(step):
         display_name=['cn', 'st', 'givenName'],
         phone_number=['telephoneNumber'])
     ldap_manager.add_ldap_filter_to_phonebook('openldap-dev')
-    ldap_utils.start_ldap_server()
+    _check_ldap_is_up()
 
 
 def _copy_ca_certificate():
@@ -131,9 +137,7 @@ def given_there_is_a_user_with_common_name_group1_on_the_ldap_server(step, commo
 @step(u'Given the LDAP server is configured and active')
 def given_the_ldap_server_is_configured_and_active(step):
     ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
-    if not ldap_utils.is_ldap_booted():
-        ldap_utils.boot_ldap_server()
-    ldap_utils.start_ldap_server()
+    _check_ldap_is_up()
 
 
 @step(u'When the LDAP service is stopped')
