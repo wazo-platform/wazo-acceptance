@@ -74,10 +74,6 @@ class Prerequisite(object):
                  'interface': 'dahdi/g1'
                  }
         trunkcustom_manager_ws.add_or_replace_trunkcustom(data1)
-        data2 = {'name': 'dahdi-g2',
-                 'interface': 'dahdi/g2'
-                 }
-        trunkcustom_manager_ws.add_or_replace_trunkcustom(data2)
 
     def _prepare_user(self):
         print 'Configuring User..'
@@ -138,7 +134,7 @@ class Prerequisite(object):
             outcall = Outcall()
             outcall.name = 'to_dahdi'
             outcall.context = 'to-extern'
-            outcall.trunks = [trunkcustom_manager_ws.find_trunkcustom_id_with_name('dahdi-g2')]
+            outcall.trunks = [trunkcustom_manager_ws.find_trunkcustom_id_with_name('dahdi-g1')]
             outcall.extens = [OutcallExten(exten='6XXXX', stripnum=1)]
             world.ws.outcalls.add(outcall)
 
