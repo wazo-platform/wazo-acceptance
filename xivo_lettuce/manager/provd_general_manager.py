@@ -20,6 +20,7 @@ import time
 from lettuce.registry import world
 from xivo_lettuce.common import open_url, get_value_with_label
 
+
 def rest_api_configuration():
     open_url('provd_general')
     host = get_value_with_label("API REST IP")
@@ -32,11 +33,11 @@ def rest_put(host, port, uri, value):
     url = "http://%s:%s%s" % (host, port, uri)
 
     command = [
-        'curl'        ,
-        '--write-out' , "'%{http_code}'"                                           ,
-        '-X'          , 'PUT'                                                      ,
-        '-H'          , "'Content-Type: application/vnd.proformatique.provd+json'" ,
-        '-d'          , "'%s'" % json.dumps(data)                                  ,
+        'curl',
+        '--write-out', "'%{http_code}'",
+        '-X', 'PUT',
+        '-H', "'Content-Type: application/vnd.proformatique.provd+json'",
+        '-d', "'%s'" % json.dumps(data),
         url
     ]
 

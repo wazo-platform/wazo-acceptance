@@ -15,39 +15,64 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import time
+from hamcrest import assert_that, contains_string
 from lettuce import step, world
 
-from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import provd_general_manager as provdg
-from xivo_lettuce.manager.provd_plugins_manager import plugins_error_during_update,\
-    plugins_successfully_updated
+from xivo_lettuce.manager import provd_plugins_manager as provdp
+from xivo_lettuce import sysutils
 
 
 @step(u'Given a update plugins provd with good url')
 def given_a_update_plugins_provd(step):
-    provdg.update_plugin_server_url('http://provd.xivo.fr/plugins/1/stable/')
-    open_url('provd_plugin')
-    world.browser.find_element_by_id('toolbar-bt-update').click()
-    time.sleep(3)
-    world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-messages')]]")
+    provdp.update_plugin_list('http://provd.xivo.fr/plugins/1/stable/')
 
 
 @step(u'Given a update plugins provd with bad url')
 def given_a_update_plugins_provd_with_bad_url(step):
-    provdg.update_plugin_server_url('http://provd.xivo.fr/plugins/1/lol/')
-    open_url('provd_plugin')
-    world.browser.find_element_by_id('toolbar-bt-update').click()
-    time.sleep(3)
-    world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-messages')]]")
+    provdp.update_plugin_list('http://provd.xivo.fr/plugins/1/lol/')
+
+
+@step(u'Given the plugin "([^"]*)" is not installed')
+def given_the_plugin_group1_is_not_installed(step, plugin):
+    provdp.uninstall_plugin(plugin)
+
+
+@step(u'Given the provisionning plugin cache has been cleared')
+def given_the_provisionning_plugin_cache_has_been_cleared(step):
+    sysutils.send_command(['rm', '-f', '/var/cache/xivo-provd/*'])
+
+
+@step(u'Given the plugin list has been updated')
+def given_the_plugin_list_has_been_updated(step):
+    provdp.update_plugin_list('http://provd.xivo.fr/plugins/1/stable/')
+
+
+@step(u'When I install the plugin "([^"]*)"')
+def when_i_install_the_plugin_group1(step, plugin):
+    provdp.install_plugin(plugin)
+
+
+@step(u'When I install the "([^"]*)" firmware')
+def when_i_install_the_group1_firmware(step, firmware):
+    provdp.install_firmware(firmware)
 
 
 @step(u'Then plugins list successfully updated')
 def then_plugins_list_successfully_updated(step):
-    assert plugins_successfully_updated()
+    assert provdp.plugins_successfully_updated()
 
 
 @step(u'Then plugins list has a error during update')
 def then_plugins_list_has_error_during_update(step):
-    assert plugins_error_during_update()
+    assert provdp.plugins_error_during_update()
     provdg.update_plugin_server_url('http://provd.xivo.fr/plugins/1/stable/')
+
+
+@step(u'Then the firmware is successfully installed')
+def then_the_group1_firmware_is_successfully_installed(step):
+    xpath = "//div[@class[contains(.,'xivo-messages')]]//li"
+    message = world.browser.find_element_by_xpath(xpath).text
+
+    expected = "successfully installed"
+    assert_that(message, contains_string(expected), "firmware was not successfully installed")
