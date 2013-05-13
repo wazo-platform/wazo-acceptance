@@ -57,9 +57,40 @@ def webi_logout():
     world.browser.get(url)
 
 
-def the_option_is_checked(option_label, checkstate, **kwargs):
-    """Reads or write the value of a checkbox, selected by its label text.
-       Use given = True if you want to set the checkbox"""
+def the_option_is_checked(option_label, checkstate=True, **kwargs):
+    """Read or change the value of a checkbox.
+
+    When reading the value of a checkbox, an AssertionError will be raised
+    if the checkbox value is different from `checkstate`.
+
+    Arguments:
+
+        - option_label -- the checkbox's label (visible text). Used for finding
+          the checkbox.
+
+        - checkstate -- True or False, used to set the checkbox's value.
+
+    Keyword arguments:
+
+        - given -- If True, then read the checkbox's value.  Otherwise, set the
+          checkbox's value to `checkstate`
+
+    For example, given the following html snippit::
+
+        <form>
+            <label for="checkme_id">Check me !</label>
+            <input id="checkme_id" type="checkbox">the checkbox</input>
+        </form>
+
+    The function can be used as follows::
+
+        >>> #make sure the checkbox is checked
+        >>> from xivo_lettuce import common
+        >>> common.the_option_is_checked('Check me !', True, given=True)
+        >>>
+        >>> #uncheck the checkbox
+        >>> common.the_option_is_checked('Check me !', False)
+    """
     # If given, then we set the option.
     # If not given, we assert the option is in checkstate.
     if 'given' in kwargs:
@@ -136,15 +167,79 @@ def open_url(module, act=None, qry=None):
 
 
 def find_line(line_substring):
-    """Return the tr webelement of a list table."""
+    """Return the tr webelement of a line in a list.
+
+    Used for executing operations, like clicking on a button or extracting
+    information, on an element in a list. Returns a Selenium WebElement.
+
+    Arguments:
+
+        - line_substring -- Search for a line that contains the text
+          `line_substring`
+
+    Given the following html::
+
+        <table id="table-main-listing">
+            <tr>
+                <td>User: John Doe</td>
+                <td>Number: 555-123-4567</td>
+                <td><a href="#">Edit</a></td>
+            <tr>
+            <tr>
+                <td>User: Roger Smith</td>
+                <td>Number: 555-765-4321</td>
+                <td><a href="#">Edit</a></td>
+            <tr>
+        </table>
+
+    The function can be used as follows::
+
+        >>> #fetch the line that as the phone number '555-123-4567'
+        >>> from xivo_lettuce import common
+        >>> line = common.find_line('555-1234-4567')
+        >>>
+        >>> #do stuff with `line`
+    """
     return world.browser.find_element_by_xpath(
         "//table[@id='table-main-listing']//tr[contains(.,'%s')]" % line_substring)
 
 
 def find_line_and_fetch_col(line_substring, class_name):
-    """Return the tr webelement of a list table."""
+    """Find a line in a list and return one of its columns .
+
+    Used for executing operations, like clicking on a button or extracting
+    information, on an element in a list. Returns a Selenium WebElement.
+
+    Arguments:
+
+        - line_substring -- Search for a line that contains `line_substring` in
+          the column
+
+        - class_name -- CSS class name of the column.
+
+    Given the following html::
+
+        <table id="table-main-listing">
+            <tr>
+                <td class="txt-left">John Doe</td>
+                <td class="txt-center">555-123-4567</td>
+                <td class="txt-right"><a href="#">Edit</a></td>
+            <tr>
+            <tr>
+                <td class="txt-left">Roger Smith</td>
+                <td class="txt-center">555-987-6543</td>
+                <td class="txt-right"><a href="#">Edit</a></td>
+            <tr>
+        </table>
+
+    The function can be used as follows::
+
+        >>> from xivo_lettuce import common
+        >>> column = common.find_line_and_fetch_col("Roger Smith", "txt-left")
+        >>> name = column.get_attribute('value')
+    """
     return world.browser.find_element_by_xpath(
-       ".//*[@id='table-main-listing']/tbody/tr[contains(.,'%s')]/td[@class='%s']" % (line_substring, class_name))
+        ".//*[@id='table-main-listing']/tbody/tr[contains(.,'%s')]/td[@class='%s']" % (line_substring, class_name))
 
 
 def remove_element_if_exist(module, search):
@@ -159,6 +254,7 @@ def remove_all_elements(module, search):
     open_url(module, 'list')
     remove_all_elements_from_current_page(search)
 
+
 def remove_all_elements_from_current_page(search):
     try:
         while True:
@@ -168,7 +264,13 @@ def remove_all_elements_from_current_page(search):
 
 
 def remove_line(line_substring):
-    """Remove a line in a list table."""
+    """Remove a line in a list by clicking on the delete button.
+
+    Arguments:
+
+        - line_substring -- Search for the line that contains the text
+          `line_substring`
+    """
     table_line = find_line(line_substring)
     delete_button = table_line.find_element_by_xpath(".//a[@title='Delete']")
     delete_button.click()
@@ -177,14 +279,27 @@ def remove_line(line_substring):
 
 
 def edit_line(line_substring):
-    """Edit an element of a list table."""
+    """Edit an element in a list by clicking on the edit button
+
+    Arguments:
+
+        - line_substring -- Search for the line that contains the text
+          `line_substring`
+    """
     table_line = find_line(line_substring)
     edit_button = table_line.find_element_by_xpath(".//a[@title='Edit']")
     edit_button.click()
 
 
 def go_to_tab(tab_label, ss_tab_label=None):
-    """Click a tab button."""
+    """Click a tab button inside a form.
+
+    Used when switching to another tab inside a form.
+
+    Arguments:
+
+        - tab_label -- Label of the tab to switch to.
+    """
     tab_button = world.browser.find_element_by_xpath("//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
     if ss_tab_label:
         hover = ActionChains(world.browser).move_to_element(tab_button)
