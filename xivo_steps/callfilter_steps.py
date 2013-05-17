@@ -43,17 +43,22 @@ def then_the_user_group1_has_the_following_func_keys(step, user):
     common.open_url('user', 'search', {'search': user})
     common.edit_line(user)
     common.go_to_tab('Func Keys')
-    for line in step.hashes:
-        _check_func_key(line)
+    for line_number, line in enumerate(step.hashes, 1):
+        _check_func_key(line, line_number)
 
 
-def _check_func_key(info):
-    line = user_manager.find_func_key_line(info['Key'])
+def _check_func_key(info, line_number):
+    line = user_manager.find_func_key_line(line_number)
 
+    key_num = info['Key']
     key_type = info['Type']
     key_label = info['Label']
     key_destination = info['Destination']
     key_supervision = info['Supervision']
+
+    key_num_field = user_manager.find_key_number_field(line)
+    value = _extract_dropdown_value(key_num_field)
+    assert_that(value, equal_to(key_num), "func key num differs (%s instead of %s)" % (value, key_num))
 
     key_type_field = user_manager.find_key_type_field(line)
     value = _extract_dropdown_value(key_type_field)
