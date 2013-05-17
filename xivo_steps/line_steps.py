@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import re
+
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
@@ -53,6 +55,11 @@ def given_i_set_the_following_options_in_line_1(step, line_number):
                 raise Exception('%s is not a valid key' % key)
 
     form.submit.submit_form()
+
+
+@step(u'Given the line "([^"]*)" has the codec "([^"]*)"')
+def given_the_line_group1_has_the_codec_group2(step, linenumber, codec):
+    step.when('When I add the codec "%s" to the line with number "%s"' % (codec, linenumber))
 
 
 @step(u'When I add a SIP line with infos:')
@@ -118,11 +125,28 @@ def when_i_edit_the_line_1(step, linenumber):
     open_url('line', 'edit', {'id': line_id})
 
 
+@step(u'When I remove the codec "([^"]*)" from the line with number "([^"]*)"')
+def when_i_remove_the_codec_group1_from_the_line_with_number_group2(step, codec, linenumber):
+    line_id = line_manager_ws.find_line_id_with_number(linenumber, 'default')
+    open_url('line', 'edit', {'id': line_id})
+    common.go_to_tab('Signalling')
+    ListPane.from_id('codeclist').remove(codec)
+    form.submit.submit_form()
+
+
+@step(u'Then the line with number "([^"]*)" does not have the codec "([^"]*)"')
+def then_the_line_with_number_group1_does_not_have_the_codec_group2(step, linenumber, codec):
+    line = line_manager_ws.find_line_with_number(linenumber, 'default')
+    sip_peer = line.name
+    assert not check_codec_for_sip_line(sip_peer, codec)
+
+
 def check_codec_for_sip_line(peer, codec):
     command = ['asterisk', '-rx', '"sip show peer %s"' % peer]
     output = world.ssh_client_xivo.out_call(command)
     codec_line = [x for x in output.split("\n") if 'Codecs' in x][0]
-    return ('(%s)' % codec) in codec_line
+    codec_list = re.match(r"\s+Codecs\s+:\s+\(([\w\|]*?)\)", codec_line).group(1).split('|')
+    return codec in codec_list
 
 
 @step(u'Then the codec "([^"]*)" appears after typing \'sip show peer\' in asterisk')
