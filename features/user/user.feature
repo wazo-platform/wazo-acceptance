@@ -2,7 +2,9 @@ Feature: User
 
     Scenario: Add a user with first name and last name and remove it
         Given there is no user "Bill" "Bush"
-        When I create a user "Bill" "Bush"
+        When I create a user with infos:
+        | firstname | lastname |
+        | Bill      | Bush     |
         When I search for user "Bill" "Bush"
         Then user "Bill Bush" is displayed in the list
         When I remove user "Bill" "Bush"
@@ -21,6 +23,17 @@ Feature: User
         When I add a user "Tom" "Sawyer" with a function key with type Customized and extension "1234"
         Then I see the user "Tom" "Sawyer" exists
         Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"
+
+    Scenario: Add user with SIP line and remove it
+        Given there is no user "Bill" "Bush"
+        When I create a user with infos:
+        | firstname | lastname | protocol | number |
+        | Bill      | Bush     | SIP      |  1632  |
+        Then I see a user with infos:
+        | fullname  | number | line_count |
+        | Bill Bush |   1632 |          1 |
+        When I remove user "Bill" "Bush"
+        Then user "Bill Bush" is not displayed in the list
 
     Scenario: Find a user by line number
         Given there are users with infos:
