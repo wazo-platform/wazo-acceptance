@@ -50,8 +50,8 @@ Feature: User
         |         10 |
         When I edit the user "Tom" "Sawyer" without changing anything
         Then the line "1405" has the following line options:
-        | NAT | IP addressing type | IP address |
-        | No  | Static             |   10.0.0.1 |
+        | NAT | IP addressing type | IP address | Call limit |
+        | No  | Static             |   10.0.0.1 |         10 |
 
     Scenario: Add a voicemail to an existing user
         Given there are users with infos:
