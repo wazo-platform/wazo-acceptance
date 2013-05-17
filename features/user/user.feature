@@ -15,6 +15,19 @@ Feature: User
         Then I should be at the user list page
         Then "Bob" "Dylan" is in group "rastafarien"
 
+    Scenario: Add user with function keys
+        When I add a user "Tom" "Sawyer" with a function key with type Customized and extension "1234"
+        Then I see the user "Tom" "Sawyer" exists
+        Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"
+
+    Scenario: Find a user by line number
+        Given there are users with infos:
+        | firstname | lastname | number | context |
+        | Bob       | Marley   |   1101 | default |
+        | Abraham   | Maharba  |   1456 | default |
+        When I search for user with number "1456"
+        Then user "Abraham Maharba" is displayed in the list
+
     Scenario: Update a user
         Given there is no user "Bill" "Bush"
         When I create a user "Bill" "Bush"
@@ -23,7 +36,7 @@ Feature: User
         When I search for user "George" "Orwell"
         Then user "George Orwell" is displayed in the list
 
-    Scenario: Save user and line forms
+    Scenario: Update a user with SIP line
     # The problem is that saving the user form may erase values previously
     # set in the line form (bug #2918)
         Given there are users with infos:
@@ -40,7 +53,7 @@ Feature: User
         | NAT | IP addressing type | IP address |
         | No  | Static             |   10.0.0.1 |
 
-    Scenario: Save user and voicemail forms
+    Scenario: Add a voicemail to an existing user
         Given there are users with infos:
          | firstname | lastname | number | context |
          | Tom       | Sawyer   |   1405 | default |
@@ -67,11 +80,6 @@ Feature: User
         When I remove user "Tom" "Sawyer"
         Then there is no data about this user remaining in the database.
 
-    Scenario: Add user with function keys
-        When I add a user "Tom" "Sawyer" with a function key with type Customized and extension "1234"
-        Then I see the user "Tom" "Sawyer" exists
-        Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"
-
     Scenario: Delete line from user with voicemail
         Given there are users with infos:
          | firstname | lastname | number | context | language | voicemail_name | voicemail_number |
@@ -79,11 +87,3 @@ Feature: User
         When I remove line from user "Abraham" "Maharba" with errors
         Then I see errors
         When I remove line "1456" from lines then I see errors
-
-    Scenario: Find a user by line number
-        Given there are users with infos:
-        | firstname | lastname | number | context |
-        | Bob       | Marley   |   1101 | default |
-        | Abraham   | Maharba  |   1456 | default |
-        When I search for user with number "1456"
-        Then user "Abraham Maharba" is displayed in the list
