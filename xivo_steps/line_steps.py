@@ -64,15 +64,19 @@ def when_i_add_a_sip_line_with_infos(step):
             context = line_infos['context']
             form.select.set_select_field_with_id_containing('it-protocol-context', context)
         if 'custom_codecs' in line_infos:
-            common.go_to_tab('Signalling')
-            Checkbox.from_label("Customize codecs:").check()
             codec = line_infos['custom_codecs']
-            ListPane.from_id('codeclist').add(codec)
+            _add_custom_codec(codec)
         form.submit.submit_form()
 
 
 def _get_line_name():
     return world.browser.find_element_by_id('it-protocol-name').get_attribute('value')
+
+
+def _add_custom_codec(codec):
+    common.go_to_tab('Signalling')
+    Checkbox.from_label("Customize codecs:").check()
+    ListPane.from_id('codeclist').add(codec)
 
 
 @step(u'When I add a custom line with infos:')
@@ -82,6 +86,14 @@ def when_i_add_a_custom_line(step):
         if 'interface' in line:
             form.input.set_text_field_with_id('it-protocol-interface', line['interface'])
             form.submit.submit_form()
+
+
+@step(u'When I add the codec "([^"]*)" to the line with number "([^"]*)"')
+def when_i_add_the_custom_codec_group1_to_the_line_with_number_group2(step, codec, linenumber):
+    line_id = line_manager_ws.find_line_id_with_number(linenumber, 'default')
+    open_url('line', 'edit', {'id': line_id})
+    _add_custom_codec(codec)
+    form.submit.submit_form()
 
 
 @step(u'When I disable custom codecs for this line')
@@ -121,6 +133,13 @@ def then_the_codec_appears_after_typing_sip_show_peer_in_asterisk(step, codec):
 @step(u'Then the codec "([^"]*)" does not appear after typing \'sip show peer\' in asterisk')
 def then_the_codec_does_not_appear_after_typing_sip_show_peer_in_asterisk(step, codec):
     assert check_codec_for_sip_line(world.id, codec) is False
+
+
+@step(u'Then the line with number "([^"]*)" has the codec "([^"]*)"')
+def then_the_line_with_number_group1_has_the_codec_group2(step, linenumber, codec):
+    line = line_manager_ws.find_line_with_number(linenumber, 'default')
+    sip_peer = line.name
+    assert check_codec_for_sip_line(sip_peer, codec)
 
 
 @step(u'Then this line is displayed in the list')

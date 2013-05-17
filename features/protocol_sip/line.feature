@@ -25,3 +25,11 @@ Feature: Line
         Then the codec "siren14" appears after typing 'sip show peer' in asterisk
         When I disable custom codecs for this line
         Then the codec "siren14" does not appear after typing 'sip show peer' in asterisk
+
+    Scenario: Add custom SIP codec to user line
+        Given there are users with infos:
+        | firstname | lastname   | number | context |
+        | Johnny    | Wilkinson  | 1601   | default |
+        When I add the codec "SpeeX (Audio)" to the line with number "1601"
+        When I edit the user "Johnny" "Wilkinson" without changing anything
+        Then the line with number "1601" has the codec "SpeeX (Audio)"
