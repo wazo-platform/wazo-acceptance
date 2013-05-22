@@ -3,8 +3,10 @@ Feature: User
     Scenario: Add a user with first name and last name and remove it
         Given there is no user "Bill" "Bush"
         When I create a user "Bill" "Bush"
+        When I search for user "Bill" "Bush"
         Then user "Bill Bush" is displayed in the list
         When I remove user "Bill" "Bush"
+        When I search for user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
     Scenario: Add a user in a group
@@ -31,6 +33,7 @@ Feature: User
     Scenario: Update a user
         Given there is no user "Bill" "Bush"
         When I create a user "Bill" "Bush"
+        When I search for user "Bill" "Bush"
         Then user "Bill Bush" is displayed in the list
         When I rename "Bill" "Bush" to "George" "Orwell"
         When I search for user "George" "Orwell"
