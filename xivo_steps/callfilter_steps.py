@@ -77,7 +77,8 @@ def _check_func_key(info, line_number):
 
 
 def _extract_dropdown_value(dropdown):
-    return dropdown.all_selected_options[0].get_attribute('label')
+    return dropdown.first_selected_option.text
+
 
 def _extract_destination_value(key_type, line):
     key_destination_field = user_manager.find_key_destination_field(key_type, line)
