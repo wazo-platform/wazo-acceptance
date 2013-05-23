@@ -88,3 +88,18 @@ Feature: CtiClient Configuration
         When I restart the CTI server
         Then I logged after "5" seconds
 
+    Scenario: Enable/Disable connect at startup
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile |
+         | Gonzales  | DaCosta  | 1044   | default | Client      |
+        When I start the XiVO Client
+        When I enable keep password
+        When I enable connect at startup
+        When I log in the XiVO Client as "gonzales", pass "dacosta"
+        When I stop the XiVO Client
+        When I start the XiVO Client
+        Then I logged after "2" seconds
+        When I disable connect at startup
+        When I stop the XiVO Client
+        When I start the XiVO Client
+        Then I not logged after "2" seconds

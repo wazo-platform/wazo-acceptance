@@ -36,6 +36,7 @@ def configure_client(conf_dict):
             'main_server_port': int,
             'login': char,
             'password': char,
+            'keep_password': boolean,
             'display_profile': boolean,
             'autoconnect': boolean,
             'show_agent_option': boolean,

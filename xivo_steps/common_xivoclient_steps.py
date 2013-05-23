@@ -89,10 +89,40 @@ def when_i_disable_auto_reconnect(step):
     cti_client_manager.configure_client(conf_dict)
 
 
+@step(u'When I enable connect at startup')
+def when_i_enable_connect_at_startup(step):
+    conf_dict = {'autoconnect': True}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'When I disable connect at startup')
+def when_i_disable_connect_at_startup(step):
+    conf_dict = {'autoconnect': False}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'When I enable keep password')
+def when_i_enable_keep_password(step):
+    conf_dict = {'keep_password': True}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'When I disable keep password')
+def when_i_disable_keep_password(step):
+    conf_dict = {'keep_password': False}
+    cti_client_manager.configure_client(conf_dict)
+
+
 @step(u'Then I logged after "([^"]*)" seconds')
-def then_i_must_have_reconnected_after_group1_seconds(step, wait_seconds):
+def then_i_logged_after_x_seconds(step, wait_seconds):
     time.sleep(int(wait_seconds))
     assert_that(cti_client_manager.is_logged(), equal_to(True))
+
+
+@step(u'Then I not logged after "([^"]*)" seconds')
+def then_i_not_logged_after_x_seconds(step, wait_seconds):
+    time.sleep(int(wait_seconds))
+    assert_that(cti_client_manager.is_logged(), equal_to(False))
 
 
 @step(u'Then I see menu availability are disabled')
