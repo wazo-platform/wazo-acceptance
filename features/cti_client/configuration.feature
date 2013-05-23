@@ -58,3 +58,21 @@ Feature: CtiClient Configuration
         Then I see menu availability are disabled
         When I enable menu availability
         Then I see menu availability are enabled
+
+    Scenario: Enable/Disable start systrayed
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile |
+         | Gonzales  | DaCosta  | 1044   | default | Client      |
+        When I start the XiVO Client
+        When I disable start systrayed
+        When I stop the XiVO Client
+        When I start the XiVO Client
+        Then I see the window
+        When I enable start systrayed
+        When I stop the XiVO Client
+        When I start the XiVO Client
+        Then I not see the window
+        When I disable start systrayed
+        When I stop the XiVO Client
+        When I start the XiVO Client
+        Then I see the window
