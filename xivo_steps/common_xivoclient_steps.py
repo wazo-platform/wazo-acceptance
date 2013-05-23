@@ -25,6 +25,34 @@ from hamcrest.core import assert_that
 from hamcrest.core.core.isequal import equal_to
 
 
+@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"$')
+def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
+    conf_dict = {
+        'main_server_address': common.get_host_address(),
+        'login': login,
+        'password': password
+    }
+    cti_client_manager.configure_client(conf_dict)
+    cti_client_manager.log_in_the_xivo_client()
+
+
+@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", unlogged agent$')
+def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
+    conf_dict = {
+        'main_server_address': common.get_host_address(),
+        'login': login,
+        'password': password,
+        'agent_option': 'unlogged'
+    }
+    cti_client_manager.configure_client(conf_dict)
+    cti_client_manager.log_in_the_xivo_client()
+
+
+@step(u'I log out of the XiVO Client$')
+def log_out_of_the_xivo_client(step):
+    cti_client_manager.log_out_of_the_xivo_client()
+
+
 @step(u'When I restart the CTI server')
 def when_i_restart_the_cti_server(step):
     command = ["/etc/init.d/xivo-ctid", "restart"]
@@ -113,6 +141,26 @@ def when_i_disable_keep_password(step):
     cti_client_manager.configure_client(conf_dict)
 
 
+@step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')
+def when_i_disable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
+    user_manager_ws.disable_cti_client(firstname, lastname)
+    time.sleep(1)
+
+
+@step(u'When I enable access to XiVO Client to user "([^"]*)" "([^"]*)"')
+def when_i_enable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
+    user_manager_ws.enable_cti_client(firstname, lastname)
+    time.sleep(1)
+
+
+@step(u'When I log in and log out of the XiVO Client as "([^"]*)", pass "([^"]*)" (\d+) times')
+def when_i_log_in_and_log_out_of_the_xivo_client_as_group1_pass_group2_10_times(step, username, password, count):
+    for i in range(int(count)):
+        step.when('I log in the XiVO Client as "%s", pass "%s"' % (username, password))
+        time.sleep(2)
+        step.when('I log out of the XiVO Client')
+
+
 @step(u'Then I logged after "([^"]*)" seconds')
 def then_i_logged_after_x_seconds(step, wait_seconds):
     time.sleep(int(wait_seconds))
@@ -154,46 +202,6 @@ def get_sheet_infos(step):
     cti_client_manager.get_sheet_infos()
 
 
-@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"$')
-def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
-    conf_dict = {
-        'main_server_address': common.get_host_address(),
-        'login': login,
-        'password': password
-    }
-    cti_client_manager.configure_client(conf_dict)
-    cti_client_manager.log_in_the_xivo_client()
-
-
-@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", unlogged agent$')
-def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
-    conf_dict = {
-        'main_server_address': common.get_host_address(),
-        'login': login,
-        'password': password,
-        'agent_option': 'unlogged'
-    }
-    cti_client_manager.configure_client(conf_dict)
-    cti_client_manager.log_in_the_xivo_client()
-
-
-@step(u'I log out of the XiVO Client$')
-def log_out_of_the_xivo_client(step):
-    cti_client_manager.log_out_of_the_xivo_client()
-
-
-@step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')
-def when_i_disable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
-    user_manager_ws.disable_cti_client(firstname, lastname)
-    time.sleep(1)
-
-
-@step(u'When I enable access to XiVO Client to user "([^"]*)" "([^"]*)"')
-def when_i_enable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
-    user_manager_ws.enable_cti_client(firstname, lastname)
-    time.sleep(1)
-
-
 @step(u'Then I can\'t connect the CTI client of "([^"]*)" "([^"]*)"')
 def then_i_can_t_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
     res = cti_client_manager.log_user_in_client(firstname, lastname)
@@ -210,14 +218,6 @@ def then_i_can_connect_the_cti_client_of_group1_group2(step, firstname, lastname
 def then_there_are_no_errors_in_the_cti_logs(step):
     errors_found = logs.search_str_in_xivo_cti_log("ERROR")
     assert_that(errors_found, equal_to(False), 'errors were found in CTI logs when searching in the directory')
-
-
-@step(u'When I log in and log out of the XiVO Client as "([^"]*)", pass "([^"]*)" (\d+) times')
-def when_i_log_in_and_log_out_of_the_xivo_client_as_group1_pass_group2_10_times(step, username, password, count):
-    for i in range(int(count)):
-        step.when('I log in the XiVO Client as "%s", pass "%s"' % (username, password))
-        time.sleep(2)
-        step.when('I log out of the XiVO Client')
 
 
 @step(u'Then the XiVO Client did not crash')
