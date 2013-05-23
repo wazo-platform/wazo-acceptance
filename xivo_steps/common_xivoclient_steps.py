@@ -47,6 +47,30 @@ def when_i_stop_the_xivo_client(step):
     stop_xivoclient()
 
 
+@step(u'When I enable menu availability')
+def when_i_enable_menu_availability(step):
+    conf_dict = {'enable_presence_reporting': True}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'When I disable menu availability')
+def when_i_disable_menu_availability(step):
+    conf_dict = {'enable_presence_reporting': False}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'Then I see menu availability are disabled')
+def then_i_see_menu_availability_is_disabled(step):
+    res = cti_client_manager.get_menu_availability_infos()
+    assert_that(res['enable'], equal_to(False))
+
+
+@step(u'Then I see menu availability are enabled')
+def then_i_see_menu_availability_is_enabled(step):
+    res = cti_client_manager.get_menu_availability_infos()
+    assert_that(res['enable'], equal_to(True))
+
+
 @step(u'Then I get sheet infos')
 def get_sheet_infos(step):
     cti_client_manager.get_sheet_infos()

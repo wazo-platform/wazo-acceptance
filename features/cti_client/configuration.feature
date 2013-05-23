@@ -46,3 +46,15 @@ Feature: CtiClient Configuration
         When I start the XiVO Client
         When I log in and log out of the XiVO Client as "bernard", pass "derome" 10 times
         Then the XiVO Client did not crash
+
+    Scenario: Enable/Disable menu availability
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile |
+         | Gonzales  | DaCosta  | 1044   | default | Client      |
+        When I start the XiVO Client
+        When I enable menu availability
+        Then I see menu availability are enabled
+        When I disable menu availability
+        Then I see menu availability are disabled
+        When I enable menu availability
+        Then I see menu availability are enabled

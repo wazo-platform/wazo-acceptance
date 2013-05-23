@@ -41,7 +41,8 @@ def configure_client(conf_dict):
             'show_agent_option': boolean,
             'agent_option': enum [no, unlogged, logged],
             'hide_unlogged_agents_for_xlet_queue_members': boolean,
-            'enable_screen_popup': boolean
+            'enable_screen_popup': boolean,
+            'enable_presence_reporting': boolean
         }
 
     """
@@ -121,6 +122,10 @@ def get_queue_members_infos():
 
 def get_agent_list_infos():
     return xivoclient.exec_command('get_agent_list_infos')['return_value']
+
+
+def get_menu_availability_infos():
+    return xivoclient.exec_command('get_menu_availability_infos')['return_value']
 
 
 def log_out_of_the_xivo_client():
