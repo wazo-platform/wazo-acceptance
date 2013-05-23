@@ -71,6 +71,30 @@ def when_i_disable_start_systrayed(step):
     cti_client_manager.configure_client(conf_dict)
 
 
+@step(u'When I set auto-reconnect interval to "([^"]*)" seconds')
+def when_i_set_auto_reconnect_interval_to_group1_seconds(step, interval):
+    conf_dict = {'auto_reconnect_interval': int(interval)}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'When I enable auto-reconnect')
+def when_i_enable_auto_reconnect(step):
+    conf_dict = {'enable_auto_reconnect': True}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'When I disable auto-reconnect')
+def when_i_disable_auto_reconnect(step):
+    conf_dict = {'enable_auto_reconnect': False}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'Then I logged after "([^"]*)" seconds')
+def then_i_must_have_reconnected_after_group1_seconds(step, wait_seconds):
+    time.sleep(int(wait_seconds))
+    assert_that(cti_client_manager.is_logged(), equal_to(True))
+
+
 @step(u'Then I see menu availability are disabled')
 def then_i_see_menu_availability_is_disabled(step):
     res = cti_client_manager.get_menu_availability_infos()

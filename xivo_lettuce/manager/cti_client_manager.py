@@ -43,7 +43,9 @@ def configure_client(conf_dict):
             'hide_unlogged_agents_for_xlet_queue_members': boolean,
             'enable_screen_popup': boolean,
             'enable_presence_reporting': boolean,
-            'enable_start_systrayed': boolean
+            'enable_start_systrayed': boolean,
+            'enable_auto_reconnect': boolean,
+            'auto_reconnect_interval': int
         }
 
     """
@@ -135,6 +137,11 @@ def get_main_window_infos():
 
 def log_out_of_the_xivo_client():
     return xivoclient.exec_command('i_log_out_of_the_xivo_client')
+
+
+def is_logged():
+    res = xivoclient.exec_command('is_logged')
+    return bool(res['return_value']['logged'])
 
 
 def log_in_the_xivo_client():

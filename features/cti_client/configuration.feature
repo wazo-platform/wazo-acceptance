@@ -76,3 +76,15 @@ Feature: CtiClient Configuration
         When I stop the XiVO Client
         When I start the XiVO Client
         Then I see the window
+
+    Scenario: Enable/Disable auto reconnect
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile |
+         | Gonzales  | DaCosta  | 1044   | default | Client      |
+        When I start the XiVO Client
+        When I set auto-reconnect interval to "5" seconds
+        When I enable auto-reconnect
+        When I log in the XiVO Client as "gonzales", pass "dacosta"
+        When I restart the CTI server
+        Then I logged after "5" seconds
+
