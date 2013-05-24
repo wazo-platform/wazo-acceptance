@@ -115,7 +115,7 @@ Feature: Directory
         Then nothing shows up in the directory xlet
 
     Scenario: Search for a contact in a SSL LDAP directory
-        # If this test fails on may 24th 2014, generate a new key on the ldap server
+        # If this test fails on May 24th 2014 or after, generate a new server certificate on the ldap server
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
