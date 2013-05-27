@@ -60,9 +60,14 @@ def when_i_restart_the_cti_server(step):
     time.sleep(10)
 
 
-@step(u'When I start the XiVO Client')
+@step(u'When I start the XiVO Client$')
 def i_start_the_xivo_client(step):
     start_xivoclient()
+
+
+@step(u'When I start the XiVO Client "([^"]*)"$')
+def i_start_the_xivo_client_xxx(step, instance_name):
+    start_xivoclient('', name=instance_name)
 
 
 @step(u'When I start the XiVO Client with an argument "([^"]*)"$')
@@ -70,9 +75,14 @@ def i_start_the_xivo_client_with_an_argument(step, argument):
     start_xivoclient(argument)
 
 
-@step(u'When I stop the XiVO client')
+@step(u'When I stop the XiVO client$')
 def when_i_stop_the_xivo_client(step):
     stop_xivoclient()
+
+
+@step(u'When I stop the XiVO client "([^"]*)"$')
+def when_i_stop_the_xivo_client_xxx(step, instance_name):
+    stop_xivoclient(instance_name)
 
 
 @step(u'When I enable menu availability')
@@ -159,6 +169,23 @@ def when_i_log_in_and_log_out_of_the_xivo_client_as_group1_pass_group2_10_times(
         step.when('I log in the XiVO Client as "%s", pass "%s"' % (username, password))
         time.sleep(2)
         step.when('I log out of the XiVO Client')
+
+
+@step(u'When I enable multiple instances')
+def when_i_enable_multiple_instances(step):
+    conf_dict = {'enable_multiple_instances': True}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'When I disable multiple instances')
+def when_i_disable_multiple_instances(step):
+    conf_dict = {'enable_multiple_instances': False}
+    cti_client_manager.configure_client(conf_dict)
+
+
+@step(u'Then I have "([^"]*)" instances of the client')
+def then_i_have_x_instances_of_the_client(step, nb_instances):
+    assert_that(cti_client_manager.get_nb_instances(), equal_to(int(nb_instances)))
 
 
 @step(u'Then I logged after "([^"]*)" seconds')

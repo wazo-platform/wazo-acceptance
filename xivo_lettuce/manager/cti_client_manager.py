@@ -34,6 +34,10 @@ def configure_client(conf_dict):
         conf_dict = {
             'main_server_address': char,
             'main_server_port': int,
+            'main_server_encrypted': boolean,
+            'backup_server_address': char,
+            'backup_server_port': int,
+            'backup_server_encrypted': boolean,
             'login': char,
             'password': char,
             'keep_password': boolean,
@@ -46,7 +50,8 @@ def configure_client(conf_dict):
             'enable_presence_reporting': boolean,
             'enable_start_systrayed': boolean,
             'enable_auto_reconnect': boolean,
-            'auto_reconnect_interval': int
+            'auto_reconnect_interval': int,
+            'enable_multiple_instances': boolean
         }
 
     """
@@ -143,6 +148,10 @@ def log_out_of_the_xivo_client():
 def is_logged():
     res = xivoclient.exec_command('is_logged')
     return bool(res['return_value']['logged'])
+
+
+def get_nb_instances():
+    return len(world.xc_process_dict)
 
 
 def log_in_the_xivo_client():
