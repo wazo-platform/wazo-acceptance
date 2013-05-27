@@ -160,7 +160,7 @@ def clean_xivoclient_rc(scenario):
 
 
 def exec_command(cmd, *kargs):
-    world.xc_instance.exec_command(cmd, *kargs)
+    return world.xc_instance.exec_command(cmd, *kargs)
 
 
 def start_xivoclient(argument='', name='default'):
