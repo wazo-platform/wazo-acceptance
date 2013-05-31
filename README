@@ -8,6 +8,7 @@ pip install lettuce
 pip install selenium
 pip install pyvirtualdisplay
 pip install pyhamcrest
+apt-get install libsasl2-dev
 pip install python-ldap
 apt-get install xvfb xserver-xephyr
 
