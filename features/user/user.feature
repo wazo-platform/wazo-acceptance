@@ -46,6 +46,28 @@ Feature: User
         When I remove user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
+    Scenario: Add user with SIP line and device and remove it
+        Given the plugin "xivo-aastra-3.2.2-SP3" is installed
+        Given there is a device in autoprov with infos:
+        | mac               | plugin                |
+        | 00:de:ad:be:ef:00 | xivo-aastra-3.2.2-SP3 |
+        When I search device ""
+        Given there is no user "Bill" "Bush"
+        When I create a user with infos:
+        | firstname | lastname | protocol | number | device            |
+        | Bill      | Bush     | SIP      |   1632 | 00:de:ad:be:ef:00 |
+        Then I see a user with infos:
+        | fullname  | number | line_count |
+        | Bill Bush |   1632 |          1 |
+        Then I see devices with infos:
+        | mac               | configured |
+        | 00:de:ad:be:ef:00 | True       |
+        When I remove user "Bill" "Bush"
+        Then user "Bill Bush" is not displayed in the list
+        Then I see devices with infos:
+        | mac               | configured |
+        | 00:de:ad:be:ef:00 | False      |
+
     Scenario: Find a user by line number
         Given there are users with infos:
         | firstname | lastname | number | context |
