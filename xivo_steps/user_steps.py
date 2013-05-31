@@ -277,6 +277,8 @@ def then_i_see_a_user_with_infos(step):
     fullname = user_expected_properties['fullname']
     user_actual_properties = user_manager.get_user_list_entry(fullname)
     assert_that(fullname, equal_to(user_expected_properties['fullname']))
+    if 'provisioning_code' in user_expected_properties:
+        assert_that(user_actual_properties['provisioning_code'], equal_to(user_expected_properties['provisioning_code']))
     assert_that(user_actual_properties['number'], equal_to(user_expected_properties['number']))
     assert_that(user_actual_properties['line_count'], equal_to(user_expected_properties['line_count']))
 

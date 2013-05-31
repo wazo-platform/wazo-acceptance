@@ -35,6 +35,17 @@ Feature: User
         When I remove user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
+    Scenario: Add user with SCCP line and remove it
+        Given there is no user "Bill" "Bush"
+        When I create a user with infos:
+        | firstname | lastname | protocol | number |
+        | Bill      | Bush     | SCCP     |  1632  |
+        Then I see a user with infos:
+        | fullname  | number | provisioning_code | line_count |
+        | Bill Bush |   1632 |                 0 |          1 |
+        When I remove user "Bill" "Bush"
+        Then user "Bill Bush" is not displayed in the list
+
     Scenario: Find a user by line number
         Given there are users with infos:
         | firstname | lastname | number | context |

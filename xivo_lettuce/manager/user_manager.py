@@ -119,7 +119,7 @@ def change_key_order(pairs):
         number_field.select_by_visible_text(new)
 
 
-def user_form_add_line(linenumber, context='default'):
+def user_form_add_line(linenumber, context='default', protocol='SIP'):
     go_to_tab('Lines')
     add_button = world.browser.find_element_by_id('lnk-add-row')
     add_button.click()
@@ -127,6 +127,8 @@ def user_form_add_line(linenumber, context='default'):
     input_context.send_keys(context)
     input_linenumber = world.browser.find_elements_by_id('linefeatures-number')[-2]
     input_linenumber.send_keys(linenumber)
+    input_protocol = Select(world.browser.find_elements_by_id('linefeatures-protocol')[-2])
+    input_protocol.select_by_visible_text(protocol)
     go_to_tab('General')
 
 
