@@ -119,7 +119,7 @@ def change_key_order(pairs):
         number_field.select_by_visible_text(new)
 
 
-def user_form_add_line(linenumber, context='default', protocol='SIP'):
+def user_form_add_line(linenumber, context='default', protocol='SIP', device=None):
     go_to_tab('Lines')
     add_button = world.browser.find_element_by_id('lnk-add-row')
     add_button.click()
@@ -129,6 +129,14 @@ def user_form_add_line(linenumber, context='default', protocol='SIP'):
     input_linenumber.send_keys(linenumber)
     input_protocol = Select(world.browser.find_elements_by_id('linefeatures-protocol')[-2])
     input_protocol.select_by_visible_text(protocol)
+    if device is not None:
+        input_device_1 = world.browser.find_element_by_xpath('//a[@class="select2-choice"]')
+        input_device_1.click()
+        input_device_2 = world.browser.find_element_by_xpath('//input[contains(@class, "select2-input")]')
+        input_device_2.send_keys(device)
+        input_device_3 = world.browser.find_element_by_xpath('//li[contains(@class, "select2-result")]',
+                                                             'No device %s found' % device)
+        input_device_3.click()
     go_to_tab('General')
 
 

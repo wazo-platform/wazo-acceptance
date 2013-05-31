@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from lettuce import world
 from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce import form
 from selenium.common.exceptions import NoSuchElementException
@@ -46,3 +47,32 @@ def search_device(search):
     open_url('device')
     form.input.edit_text_field_with_id('it-toolbar-search', search)
     form.submit.submit_form('it-toolbar-subsearch')
+
+
+def get_device_list_entry(mac_address):
+    search_device(mac_address)
+    try:
+        line_element = world.browser.find_element_by_xpath('//table[@id="table-main-listing"]/tbody/tr[contains(@class, "sb-content") and td[@title="%s"]]' % mac_address)
+    except NoSuchElementException:
+        search_device('')
+        raise LookupError('No device found with MAC address %s' % mac_address)
+
+    configured_icon = line_element.find_element_by_class_name('col_configured')
+    configured = 'green' in configured_icon.get_attribute('src')
+    phone_number = line_element.find_element_by_class_name('col_phone_number').text
+    ip_address = line_element.find_element_by_class_name('col_ip_address').text
+    vendor = line_element.find_element_by_class_name('col_vendor').text
+    model = line_element.find_element_by_class_name('col_model').text
+    plugin = line_element.find_element_by_class_name('col_plugin').text
+    return_device = {
+        'configured': configured,
+        'mac': mac_address,
+        'phone_number': phone_number,
+        'ip': ip_address,
+        'vendor': vendor,
+        'model': model,
+        'plugin': plugin,
+    }
+    search_device('')
+
+    return return_device

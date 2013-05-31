@@ -155,7 +155,18 @@ def when_i_create_a_user(step):
     user_properties = step.hashes[0]
     user_manager.type_user_names(user_properties['firstname'], user_properties.get('lastname', ''))
     if 'number' in user_properties:
-        user_manager.user_form_add_line(user_properties['number'])
+        if 'device' in user_properties:
+            user_manager.user_form_add_line(
+                linenumber=user_properties['number'],
+                protocol=user_properties['protocol'],
+                device=user_properties['device']
+            )
+        else:
+            user_manager.user_form_add_line(
+                linenumber=user_properties['number'],
+                protocol=user_properties['protocol'],
+            )
+
     form.submit.submit_form()
 
 
