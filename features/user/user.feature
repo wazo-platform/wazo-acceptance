@@ -42,7 +42,7 @@ Feature: User
     Scenario: Update the group's channel type of a user
         Given there are users with infos:
         | firstname | lastname | number | context | group_name
-        | Bob       | Marley   |   1041 | default | rastafarien
+        | Bob       | Marley   |   1101 | default | rastafarien
         Then the channel type of group "rastafarien" of user "Bob Marley" is "default"
         When I modify the channel type of group "rastafarien" of user "Bob Marley" to "Local"
         Then the channel type of group "rastafarien" of user "Bob Marley" is "Local"
