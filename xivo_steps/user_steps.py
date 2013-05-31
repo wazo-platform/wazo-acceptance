@@ -14,6 +14,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+from hamcrest import assert_that, equal_to
 from lettuce import step
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
@@ -53,6 +55,7 @@ def given_there_are_users_with_infos(step):
         voicemail_number
         mobile_number
         group_name
+        group_chantype
         protocol
         device
     """
@@ -286,6 +289,21 @@ def then_there_is_no_data_about_this_user_remaining_in_the_database(step):
     assert user_manager.count_callfiltermember(world.user_id) == 0, "Data is remaining in callfiltermember after user deletion."
     assert user_manager.count_queuemember(world.user_id) == 0, "Data is remaining in queuemember after user deletion."
     assert user_manager.count_schedulepath(world.user_id) == 0, "Data is remaining in schedulepath after user deletion."
+
+
+@step(u'When I modify the channel type of group "([^"]*)" of user "([^"]*)" to "([^"]*)"')
+def when_i_modify_the_channel_type_of_group_group1_of_user_group2_to_group3(step, group, fullname, chantype):
+    common.open_url('user', 'search', {'search': fullname})
+    common.edit_line(fullname)
+    user_manager.select_chantype_of_group(group, chantype)
+    form.submit.submit_form()
+
+
+@step(u'Then the channel type of group "([^"]*)" of user "([^"]*)" is "([^"]*)"')
+def then_the_channel_type_of_group_group1_of_user_group2_is_group3(step, group, fullname, chantype):
+    common.open_url('user', 'search', {'search': fullname})
+    common.edit_line(fullname)
+    assert_that(user_manager.get_chantype_of_group(group), equal_to(chantype))
 
 
 def _edit_user(firstname, lastname):
