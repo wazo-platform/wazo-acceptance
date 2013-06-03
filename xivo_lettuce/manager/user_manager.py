@@ -32,16 +32,6 @@ def type_user_names(firstName, lastName):
     input_lastName.send_keys(lastName)
 
 
-def type_user_in_group(groupName):
-    group = world.browser.find_element_by_xpath("//li[@id='dwsm-tab-6']//a[@href='#groups']")
-    group.click()
-    world.browser.find_element_by_id('sb-part-groups', 'Group tab not loaded')
-    select_group = world.browser.find_element_by_xpath('//select[@id="it-grouplist"]//option[@value="%s"]' % groupName)
-    select_group.click()
-    add_button = world.browser.find_element_by_id('bt-ingroup')
-    add_button.click()
-
-
 def find_func_key_line(number=None):
     if number:
         number = str(number)
@@ -224,3 +214,20 @@ def deactivate_bsfilter(user):
     common.go_to_tab('Services')
     form.select.set_select_field_with_id('it-userfeatures-bsfilter', 'No')
     form.submit.submit_form()
+
+
+def get_chantype_of_group(group_name):
+    chantype_select = _get_chantype_select_of_group(group_name)
+    return chantype_select.first_selected_option.text
+
+
+def select_chantype_of_group(group_name, text):
+    chantype_select = _get_chantype_select_of_group(group_name)
+    chantype_select.select_by_visible_text(text)
+
+
+def _get_chantype_select_of_group(group_name):
+    common.go_to_tab('Groups')
+    select_name = 'group[%s][chantype]' % group_name
+    select_element = world.browser.find_element_by_name(select_name)
+    return Select(select_element)
