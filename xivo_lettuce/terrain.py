@@ -23,6 +23,7 @@ from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 from selenium.webdriver import FirefoxProfile
 from xivo_dao.helpers import config as dao_config
+from xivo_dao.helpers import db_manager
 from xivo_lettuce.common import webi_login_as_default, go_to_home_page, webi_logout
 from xivo_lettuce.manager import asterisk_manager
 from xivo_lettuce.ssh import SSHClient
@@ -113,6 +114,7 @@ def _setup_browser_profile():
 def _setup_dao():
     hostname = world.config.get('xivo', 'hostname')
     dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % hostname
+    db_manager._init()
 
 
 def _setup_xivo_client():
