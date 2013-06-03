@@ -69,6 +69,7 @@ def search_str_in_xivo_cti_log(expression, delta=10):
 
 
 def _search_str_in_log_file(expression, loginfo, delta=10):
+    # WARNING: local and remote system must use the same timezone
     command = ['tail', '-n', '30', loginfo.logfile]
     result = world.ssh_client_xivo.out_call(command)
 
