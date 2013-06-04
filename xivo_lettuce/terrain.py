@@ -114,7 +114,7 @@ def _setup_browser_profile():
 def _setup_dao():
     hostname = world.config.get('xivo', 'hostname')
     dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % hostname
-    db_manager._init()
+    db_manager.reinit()
 
 
 def _setup_xivo_client():
