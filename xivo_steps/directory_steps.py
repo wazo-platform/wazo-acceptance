@@ -99,7 +99,7 @@ def given_the_internal_directory_exists(step):
         'userfeatures.firstname,userfeatures.lastname',
         {'firstname': 'userfeatures.firstname',
          'lastname': 'userfeatures.lastname',
-         'phone': 'extenumber.exten'}
+         'phone': 'extenumbers.exten'}
     )
 
 
