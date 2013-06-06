@@ -64,6 +64,14 @@ Feature: User
         | NAT | IP addressing type | IP address | Call limit |
         | No  | Static             |   10.0.0.1 |         10 |
 
+    Scenario: Add a voicemail to a user without a line
+        Given there are users with infos:
+        | firstname | lastname |
+        | Indiana   | Jones    |
+        Given there is no voicemail "1405"
+        When I add a voicemail "1405" to the user "Indiana" "Jones" with errors
+        Then I see errors
+
     Scenario: Add a voicemail to an existing user
         Given there are users with infos:
          | firstname | lastname | number | context |
