@@ -59,6 +59,8 @@ def configure_client(conf_dict):
         conf_dict['main_server_address'] = common.get_host_address()
     if 'main_server_port' not in conf_dict:
         conf_dict['main_server_port'] = 5003
+    if 'enable_multiple_instances' not in conf_dict:
+        conf_dict['enable_multiple_instances'] = True
 
     return xivoclient.exec_command('configure', conf_dict)
 
