@@ -107,10 +107,14 @@ Feature: CtiClient Configuration
     Scenario: Enable/Disable multiple instances
         When I start the XiVO Client "default"
         When I enable multiple instances
+        When I stop the XiVO Client "default"
+        When I start the XiVO Client "default"
         When I start the XiVO Client "toto"
         Then I have "2" instances of the client
         When I disable multiple instances
         When I stop the XiVO Client "toto"
+        When I stop the XiVO Client "default"
+        When I start the XiVO Client "default"
         When I start the XiVO Client "toto"
         Then I have "1" instances of the client
     
