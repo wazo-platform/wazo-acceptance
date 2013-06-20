@@ -41,11 +41,11 @@ def then_the_agent_list_xlet_shows_agent_as_in_use(step, agent_number):
     assert_that(agent['availability'], starts_with('In use'), 'agent %s not "In use"' % agent_number)
 
 
-@step(u'Then the agent list xlet shows agent "([^"]*)" as on non-ACD call')
+@step(u'Then the agent list xlet shows agent "([^"]*)" as on incoming non-ACD call')
 def then_the_agent_list_xlet_shows_agent_as_on_non_acd_call(step, agent_number):
     agent = _get_agent_infos(agent_number)
 
-    assert_that(agent['availability'], starts_with('Out of queue'), 'agent %s not "Out of queue"' % agent_number)
+    assert_that(agent['availability'], starts_with('OOQ In'), 'agent %s not "OOQ In"' % agent_number)
 
 
 @step(u'Then the agent list xlet shows agent "([^"]*)" as not in use')

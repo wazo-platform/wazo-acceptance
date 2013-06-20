@@ -49,6 +49,6 @@ Feature: Agent list xlet
         Given the agent "1110" will answer a call and hangup after 10 seconds
         When I call extension "1110@default"
         When I wait 5 seconds
-        Then the agent list xlet shows agent "1110" as on non-ACD call
+        Then the agent list xlet shows agent "1110" as on incoming non-ACD call
         When I wait 10 seconds
         Then the agent list xlet shows agent "1110" as not in use
