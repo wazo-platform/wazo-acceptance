@@ -149,19 +149,10 @@ def when_i_reorder_group1_group2_s_function_keys_such_that(step, firstname, last
     form.submit.submit_form()
 
 
-@step(u'When I create a user with infos:$')
-def when_i_create_a_user(step):
+@step(u'When I create a user "([^"]*)" "([^"]*)"$')
+def when_i_create_a_user(step, firstname, lastname):
     common.open_url('user', 'add')
-    user_properties = step.hashes[0]
-    user_manager.type_user_names(user_properties['firstname'], user_properties.get('lastname', ''))
-    if 'number' in user_properties:
-        user_manager.user_form_add_line(
-            linenumber=user_properties['number'],
-            protocol=user_properties['protocol'],
-            device=user_properties.get('device', None),
-            context=user_properties['context'],
-        )
-
+    user_manager.type_user_names(firstname, lastname)
     form.submit.submit_form()
 
 
@@ -275,18 +266,6 @@ def then_i_see_the_user_group1_group2_exists(step, firstname, lastname):
     user_line = common.find_line("%s %s" % (firstname, lastname))
     assert user_line is not None
     common.open_url('user', 'search', {'search': ''})
-
-
-@step(u'Then I see a user with infos:')
-def then_i_see_a_user_with_infos(step):
-    user_expected_properties = step.hashes[0]
-    fullname = user_expected_properties['fullname']
-    user_actual_properties = user_manager.get_user_list_entry(fullname)
-    assert_that(fullname, equal_to(user_expected_properties['fullname']))
-    if 'provisioning_code' in user_expected_properties:
-        assert_that(user_actual_properties['provisioning_code'], equal_to(user_expected_properties['provisioning_code']))
-    assert_that(user_actual_properties['number'], equal_to(user_expected_properties['number']))
-    assert_that(user_actual_properties['line_count'], equal_to(user_expected_properties['line_count']))
 
 
 @step(u'Then i see user with username "([^"]*)" "([^"]*)" has a function key with type Customized and extension "([^"]*)"$')

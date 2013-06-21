@@ -2,9 +2,7 @@ Feature: User
 
     Scenario: Add a user with first name and last name and remove it
         Given there is no user "Bill" "Bush"
-        When I create a user with infos:
-        | firstname | lastname |
-        | Bill      | Bush     |
+        When I create a user "Bill" "Bush"
         When I search for user "Bill" "Bush"
         Then user "Bill Bush" is displayed in the list
         When I remove user "Bill" "Bush"
@@ -24,50 +22,6 @@ Feature: User
         Then I see the user "Tom" "Sawyer" exists
         Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"
 
-    Scenario: Add user with SIP line and remove it
-        Given there is no user "Bill" "Bush"
-        When I create a user with infos:
-        | firstname | lastname | protocol | number | context |
-        | Bill      | Bush     | SIP      |  1632  | default |
-        Then I see a user with infos:
-        | fullname  | number | line_count |
-        | Bill Bush |   1632 |          1 |
-        When I remove user "Bill" "Bush"
-        Then user "Bill Bush" is not displayed in the list
-
-    Scenario: Add user with SCCP line and remove it
-        Given there is no user "Bill" "Bush"
-        When I create a user with infos:
-        | firstname | lastname | protocol | number | context |
-        | Bill      | Bush     | SCCP     |  1632  | default |
-        Then I see a user with infos:
-        | fullname  | number | provisioning_code | line_count |
-        | Bill Bush |   1632 |                 0 |          1 |
-        When I remove user "Bill" "Bush"
-        Then user "Bill Bush" is not displayed in the list
-
-    Scenario: Add user with SIP line and device and remove it
-        Given the plugin "xivo-aastra-3.2.2-SP3" is installed
-        Given there is a device in autoprov with infos:
-        | mac               | plugin                |
-        | 00:de:ad:be:ef:00 | xivo-aastra-3.2.2-SP3 |
-        When I search device ""
-        Given there is no user "Bill" "Bush"
-        When I create a user with infos:
-        | firstname | lastname | protocol | number | context | device            |
-        | Bill      | Bush     | SIP      |   1632 | default | 00:de:ad:be:ef:00 |
-        Then I see a user with infos:
-        | fullname  | number | line_count |
-        | Bill Bush |   1632 |          1 |
-        Then I see devices with infos:
-        | mac               | configured |
-        | 00:de:ad:be:ef:00 | True       |
-        When I remove user "Bill" "Bush"
-        Then user "Bill Bush" is not displayed in the list
-        Then I see devices with infos:
-        | mac               | configured |
-        | 00:de:ad:be:ef:00 | False      |
-
     Scenario: Find a user by line number
         Given there are users with infos:
         | firstname | lastname | number | context |
@@ -78,9 +32,7 @@ Feature: User
 
     Scenario: Update a user
         Given there is no user "Bill" "Bush"
-        When I create a user with infos:
-        | firstname | lastname |
-        | Bill      | Bush     |
+        When I create a user "Bill" "Bush"
         When I search for user "Bill" "Bush"
         Then user "Bill Bush" is displayed in the list
         When I rename "Bill" "Bush" to "George" "Orwell"

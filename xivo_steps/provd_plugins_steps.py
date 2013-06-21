@@ -38,12 +38,6 @@ def given_the_plugin_group1_is_not_installed(step, plugin):
     provdp.uninstall_plugin(plugin)
 
 
-@step(u'Given the plugin "([^"]*)" is installed')
-def given_the_plugin_group1_is_installed(step, plugin):
-    provdp.update_plugin_list('http://provd.xivo.fr/plugins/1/stable/')
-    provdp.install_plugin(plugin)
-
-
 @step(u'Given the provisionning plugin cache has been cleared')
 def given_the_provisionning_plugin_cache_has_been_cleared(step):
     sysutils.send_command(['rm', '-f', '/var/cache/xivo-provd/*'])

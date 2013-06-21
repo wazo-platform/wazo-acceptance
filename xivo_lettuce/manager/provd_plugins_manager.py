@@ -32,11 +32,7 @@ def update_plugin_list(url):
 
 def _check_for_confirmation_message(secs):
     time.sleep(secs)
-    try:
-        world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-info')]]")
-    except NoSuchElementException:
-        errors = world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-error')]]").text
-        raise Exception('Error during operation on plugins. Webi says:\n%s' % errors)
+    world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-messages')]]")
 
 
 def plugins_successfully_updated():
@@ -78,18 +74,10 @@ def install_plugin(plugin):
     open_url('provd_plugin')
     plugin_line = find_line(plugin)
 
-    install_btn = _find_install_btn(plugin_line)
+    install_btn = plugin_line.find_element_by_xpath(".//a[@title='Install']")
+    install_btn.click()
 
-    if install_btn:
-        install_btn.click()
-        _check_for_confirmation_message(2)
-
-
-def _find_install_btn(plugin_line):
-    try:
-        return plugin_line.find_element_by_xpath(".//a[@title='Install']")
-    except (NoSuchElementException, ElementNotVisibleException):
-        return None
+    _check_for_confirmation_message(2)
 
 
 def install_firmware(firmware):
