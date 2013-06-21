@@ -27,8 +27,8 @@ Feature: User
     Scenario: Add user with SIP line and remove it
         Given there is no user "Bill" "Bush"
         When I create a user with infos:
-        | firstname | lastname | protocol | number |
-        | Bill      | Bush     | SIP      |  1632  |
+        | firstname | lastname | protocol | number | context |
+        | Bill      | Bush     | SIP      |  1632  | default |
         Then I see a user with infos:
         | fullname  | number | line_count |
         | Bill Bush |   1632 |          1 |
@@ -38,8 +38,8 @@ Feature: User
     Scenario: Add user with SCCP line and remove it
         Given there is no user "Bill" "Bush"
         When I create a user with infos:
-        | firstname | lastname | protocol | number |
-        | Bill      | Bush     | SCCP     |  1632  |
+        | firstname | lastname | protocol | number | context |
+        | Bill      | Bush     | SCCP     |  1632  | default |
         Then I see a user with infos:
         | fullname  | number | provisioning_code | line_count |
         | Bill Bush |   1632 |                 0 |          1 |
@@ -54,8 +54,8 @@ Feature: User
         When I search device ""
         Given there is no user "Bill" "Bush"
         When I create a user with infos:
-        | firstname | lastname | protocol | number | device            |
-        | Bill      | Bush     | SIP      |   1632 | 00:de:ad:be:ef:00 |
+        | firstname | lastname | protocol | number | context | device            |
+        | Bill      | Bush     | SIP      |   1632 | default | 00:de:ad:be:ef:00 |
         Then I see a user with infos:
         | fullname  | number | line_count |
         | Bill Bush |   1632 |          1 |
@@ -78,7 +78,9 @@ Feature: User
 
     Scenario: Update a user
         Given there is no user "Bill" "Bush"
-        When I create a user "Bill" "Bush"
+        When I create a user with infos:
+        | firstname | lastname |
+        | Bill      | Bush     |
         When I search for user "Bill" "Bush"
         Then user "Bill Bush" is displayed in the list
         When I rename "Bill" "Bush" to "George" "Orwell"
