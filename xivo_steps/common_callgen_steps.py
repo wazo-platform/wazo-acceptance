@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from lettuce import step
 from xivo_lettuce.manager import queuelog_manager
 from xivo_lettuce.manager import call_manager, agent_status_manager
@@ -40,12 +40,12 @@ def given_there_is_no_entries_in_queue_log_table_between(step, start, end):
 
 @step(u'Given there is no entries in queue_log in the last hour')
 def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
-    now = datetime.now()
-    last_hour = datetime(now.year, now.month, now.day, now.hour - 1, 0, 0, 0)
+    current_hour = datetime.now().replace(minute=0, second=0, microsecond=0)
+    last_hour = current_hour - timedelta(hours=1)
 
     queuelog_manager.delete_event_between(
         last_hour.strftime("%Y-%m-%d %H:%M:%S.%f"),
-        now.strftime("%Y-%m-%d %H:%M:%S.%f")
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
     )
 
 
