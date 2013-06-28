@@ -36,13 +36,13 @@ def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
     cti_client_manager.log_in_the_xivo_client()
 
 
-@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", unlogged agent$')
-def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
+@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", ([a-z]*) agent$')
+def i_log_in_the_xivo_client_as_1_pass_2_logged_agent(step, login, password, login_status):
     conf_dict = {
         'main_server_address': common.get_host_address(),
         'login': login,
         'password': password,
-        'agent_option': 'unlogged'
+        'agent_option': login_status,
     }
     cti_client_manager.configure_client(conf_dict)
     cti_client_manager.log_in_the_xivo_client()
