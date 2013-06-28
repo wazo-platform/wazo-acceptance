@@ -105,3 +105,14 @@ def get_pidfile_for_service_name(service):
     if not pidfile:
         assert False, 'Service %s must be implemented' % service
     return pidfile
+
+
+def get_pid_for_service_name(service):
+    cmd = ['pidof', service]
+    return output_command(cmd).strip()
+
+
+def get_number_of_file_descriptor(service):
+    path = '/proc/%s/fd' % get_pid_for_service_name(service)
+    cmd = ['ls', path, '-l']
+    return len(output_command(cmd).split('\n')) - 1
