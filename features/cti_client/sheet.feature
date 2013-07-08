@@ -9,7 +9,7 @@ Feature: Sheet
         | xivo-agentnumber  |
 
         Given I assign the sheet "testsheet" to the "Link" event
-        
+
         Given there are users with infos:
          | firstname | lastname | number | context | agent_number | cti_profile |
          | Cedric    | Abunar   | 1153   | default | 1153         | Client      |
@@ -49,7 +49,7 @@ Feature: Sheet
         Given there are users with infos:
          | firstname | lastname | number | context | cti_profile |
          | Alice     | Gopher   | 1007   | default | Client      |
-         
+
         Given there is an incall "1007" in context "from-extern" to the "User" "Alice Gopher" with caller id name "Tux" number "5555555555"
 
         When I start the XiVO Client
@@ -303,6 +303,61 @@ Feature: Sheet
         Given there are no calls running
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I register extension "1117"
+        Given I wait call then I answer then I hang up after "5s"
+        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
+        Given I wait 10 seconds for the call processing
+        Then I should not see any sheet
+
+    Scenario: Sheet distribution of link event to a Queue agent answers
+        Given I have a sheet model named "testsheet" with the variables:
+        | variable          |
+        | xivo-calledidname |
+        | xivo-calledidnum  |
+        Given I assign the sheet "testsheet" to the "Link" event
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile | agent_number |
+         | Alice     | Gopher   |   1119 | default | Client      |         1119 |
+         | Peter     | Jenkins  |   1120 | default | Client      |         1120 |
+        Given there are queues with infos:
+         | name  | number | context | agents_number |
+         | frere |   3001 | default |    1119, 1120 |
+        Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
+
+        When I start the XiVO Client
+        When I log in the XiVO client as "alice", pass "gopher", unlogged agent
+        Given there are no calls running
+        Given I wait 5 seconds for the dialplan to be reloaded
+        Given I log agent "1119" on extension "1119@default"
+        Given I register extension "1119"
+        Given I wait call then I answer then I hang up after "5s"
+        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
+        Given I wait 10 seconds for the call processing
+        Then I see a sheet with the following values:
+        | Variable          | Value |
+        | xivo-calledidname | frere |
+        | xivo-calledidnum  | 3001  |
+
+    Scenario: Sheet distribution of link event to a Queue agent does not answer
+        Given I have a sheet model named "testsheet" with the variables:
+        | variable          |
+        | xivo-calledidname |
+        | xivo-calledidnum  |
+        Given I assign the sheet "testsheet" to the "Link" event
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile | agent_number |
+         | Alice     | Gopher   |   1119 | default | Client      |         1119 |
+         | Peter     | Jenkins  |   1120 | default | Client      |         1120 |
+        Given there are queues with infos:
+         | name  | number | context | agents_number |
+         | frere |   3001 | default |    1119, 1120 |
+        Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
+
+        When I start the XiVO Client
+        When I log in the XiVO client as "peter", pass "jenkins", logged agent
+        Given there are no calls running
+        Given I wait 5 seconds for the dialplan to be reloaded
+        Given I log agent "1119" on extension "1119@default"
+        Given I register extension "1119"
         Given I wait call then I answer then I hang up after "5s"
         When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
         Given I wait 10 seconds for the call processing
