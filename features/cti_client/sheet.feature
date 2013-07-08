@@ -9,7 +9,7 @@ Feature: Sheet
         | xivo-agentnumber  |
 
         Given I assign the sheet "testsheet" to the "Link" event
-        
+
         Given there are users with infos:
          | firstname | lastname | number | context | agent_number | cti_profile |
          | Cedric    | Abunar   | 1153   | default | 1153         | Client      |
@@ -49,7 +49,7 @@ Feature: Sheet
         Given there are users with infos:
          | firstname | lastname | number | context | cti_profile |
          | Alice     | Gopher   | 1007   | default | Client      |
-         
+
         Given there is an incall "1007" in context "from-extern" to the "User" "Alice Gopher" with caller id name "Tux" number "5555555555"
 
         When I start the XiVO Client
