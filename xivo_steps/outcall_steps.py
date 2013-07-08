@@ -60,13 +60,9 @@ def given_there_is_an_outcall_with_trunk_with_extension_patterns(step, outcall_n
     outcall_manager_ws.add_or_replace_outcall(data)
 
 
-@step(u'Given there is a outcall context "([^"]*)"')
-def given_there_is_a_ouctall_context(step, context_name):
-    context_manager_ws.add_or_replace_context(context_name, context_name, 'outcall')
-
-
 @step(u'Given there is an outcall "([^"]*)" in context "([^"]*)" with trunk "([^"]*)"')
 def given_there_is_an_outcall_in_context_with_trunk(step, outcall_name, outcall_context, trunk_name):
+    context_manager_ws.add_or_replace_context(outcall_context, outcall_context, 'outcall')
     trunksip_manager_ws.add_or_replace_trunksip(world.dummy_ip_address, trunk_name)
     trunk_id = trunksip_manager_ws.find_trunksip_id_with_name(trunk_name)
     data = {'name': outcall_name,
@@ -181,3 +177,12 @@ def then_there_is_no_outcall(step, name):
         pass
     else:
         assert False
+
+
+@step(u'Then there are outcalls with infos:')
+def then_there_are_outcalls_with_infos(step):
+    outcalls = [{u'name': outcall.name,
+                 u'context': outcall.context}
+                for outcall in outcall_manager_ws.list_outcalls()]
+    for expected_outcall_attributes in step.hashes:
+        assert_that(outcalls, has_item(has_entries(expected_outcall_attributes)))

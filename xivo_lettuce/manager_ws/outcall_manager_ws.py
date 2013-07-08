@@ -19,6 +19,10 @@ from lettuce import world
 from xivo_ws import Outcall, OutcallExten
 
 
+def list_outcalls():
+    return world.ws.outcalls.list()
+
+
 def add_outcall(data):
     outcall = Outcall()
     outcall.name = data['name']
@@ -46,7 +50,17 @@ def delete_outcalls_with_name(name):
         world.ws.outcalls.delete(outcall.id)
 
 
+def delete_outcalls_with_context(context):
+    for outcall in _find_all_outcalls_with_context(context):
+        world.ws.outcalls.delete(outcall.id)
+
+
 def _search_outcalls_with_name(name):
     name = unicode(name)
     outcalls = world.ws.outcalls.search(name)
     return [outcall for outcall in outcalls if outcall.name == name]
+
+
+def _find_all_outcalls_with_context(context):
+    outcalls = world.ws.outcalls.list()
+    return [outcall for outcall in outcalls if outcall.context == context]

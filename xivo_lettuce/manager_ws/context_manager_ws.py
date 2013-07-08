@@ -19,6 +19,7 @@ from __future__ import unicode_literals
 
 from lettuce import world
 from xivo_ws import Context, ContextRange, WebServiceRequestError
+from xivo_lettuce.manager_ws import outcall_manager_ws
 
 
 def update_contextnumbers_user(name, numberbeg, numberend):
@@ -101,10 +102,15 @@ def add_context(name, display_name, context_type,
     world.ws.contexts.add(context)
 
 
+def delete_context(context):
+    outcall_manager_ws.delete_outcalls_with_context(context.name)
+    world.ws.contexts.delete(context.id)
+
+
 def add_or_replace_context(name, display_name, context_type):
     context = get_context_with_name(name)
     if context:
-        world.ws.contexts.delete(context.id)
+        delete_context(context)
     add_context(name, display_name, context_type)
 
 

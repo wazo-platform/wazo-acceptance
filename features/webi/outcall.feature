@@ -32,9 +32,8 @@ Feature: Outcall
           |              7000 |
 
     Scenario: Edit an outcall and change the context
-        #Given there is no outcall "linguini"
-        Given there is a trunksip "pasta"
-        Given there is a outcall context "interco"
         Given there is an outcall "linguini" in context "interco" with trunk "pasta"
         When i edit the outcall "linguini" and set context to "to-extern"
-        Then outcall "linguini" is displayed in the list
+        Then there are outcalls with infos:
+          | name    | context   |
+          | linguini | to-extern |
