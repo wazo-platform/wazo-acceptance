@@ -30,7 +30,8 @@ def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
     conf_dict = {
         'main_server_address': common.get_host_address(),
         'login': login,
-        'password': password
+        'password': password,
+        'agent_option': 'no',
     }
     cti_client_manager.configure_client(conf_dict)
     cti_client_manager.log_in_the_xivo_client()
