@@ -58,7 +58,7 @@ class XivoClient(object):
         try:
             os.remove(self.socket_path)
         except OSError:
-            print 'File %s does not exist...' % self.socket_path
+            pass
 
     def clean(self):
         self.process.poll()
@@ -150,13 +150,14 @@ class XivoClient(object):
 def setup_xivoclient_rc(scenario):
     world.xc_process_dict = {}
     world.xc_instance = None
+    world.xc_result = None
 
 
 @after.each_scenario
 def clean_xivoclient_rc(scenario):
     if world.xc_process_dict:
         for xc_name in world.xc_process_dict.iterkeys():
-            world.xc_process_dict[xc_name].stop()
+            world.xc_process_dict[xc_name].clean()
 
 
 def exec_command(cmd, *kargs):
