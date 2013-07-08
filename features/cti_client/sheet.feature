@@ -316,15 +316,15 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Link" event
         Given there are users with infos:
          | firstname | lastname | number | context | cti_profile | agent_number |
-         | Alex      | Parson   |   1119 | default | Client      |         1119 |
-         | Robert    | Williams |   1120 | default | Client      |         1120 |
+         | Alice     | Gopher   |   1119 | default | Client      |         1119 |
+         | Peter     | Jenkins  |   1120 | default | Client      |         1120 |
         Given there are queues with infos:
          | name  | number | context | agents_number |
          | frere |   3001 | default |    1119, 1120 |
         Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
 
         When I start the XiVO Client
-        When I log in the XiVO client as "alex", pass "parson", unlogged agent
+        When I log in the XiVO client as "alice", pass "gopher", unlogged agent
         Given there are no calls running
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "1119" on extension "1119@default"
@@ -345,15 +345,15 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Link" event
         Given there are users with infos:
          | firstname | lastname | number | context | cti_profile | agent_number |
-         | Alex      | Parson   |   1119 | default | Client      |         1119 |
-         | Robert    | Williams |   1120 | default | Client      |         1120 |
+         | Alice     | Gopher   |   1119 | default | Client      |         1119 |
+         | Peter     | Jenkins  |   1120 | default | Client      |         1120 |
         Given there are queues with infos:
          | name  | number | context | agents_number |
          | frere |   3001 | default |    1119, 1120 |
         Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
 
         When I start the XiVO Client
-        When I log in the XiVO client as "robert", pass "williams", logged agent
+        When I log in the XiVO client as "peter", pass "jenkins", logged agent
         Given there are no calls running
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "1119" on extension "1119@default"
