@@ -229,11 +229,6 @@ def then_i_see_start_systrayed_are_disabled(step):
     assert_that(res['visible'], equal_to(False))
 
 
-@step(u'Then I get sheet infos')
-def get_sheet_infos(step):
-    cti_client_manager.get_sheet_infos()
-
-
 @step(u'Then I can\'t connect the CTI client of "([^"]*)" "([^"]*)"')
 def then_i_can_t_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
     res = cti_client_manager.log_user_in_client(firstname, lastname)

@@ -176,15 +176,3 @@ def then_the_agent_password_is(step, number, password):
     current_password = agent_manager_ws.find_agent_password_with_number(number)
 
     assert_that(current_password, equal_to(password))
-
-
-@step(u'Then the agent "([^"]*)" is not logged in')
-def then_the_agent_group1_is_not_logged_in(step, agent_number):
-    logged_in = agent_status_manager.is_agent_logged_in(agent_number)
-    assert not logged_in
-
-
-@step(u'Then the agent "([^"]*)" is logged in')
-def then_the_agent_group1_is_logged_in(step, agent_number):
-    logged_in = agent_status_manager.is_agent_logged_in(agent_number)
-    assert logged_in
