@@ -57,9 +57,6 @@ def main():
         _create_pgpass_on_remote_host()
         _allow_remote_access_to_pgsql()
 
-        print 'Activating recording campaigns on the webi'
-        _activate_recording_campaigns()
-
     finally:
         deinitialize()
 
@@ -95,14 +92,6 @@ def _add_line_to_remote_file(line_text, file_name):
 
 def _xivo_service_restart():
     command = ['xivo-service', 'restart', 'all']
-    world.ssh_client_xivo.check_call(command)
-
-
-def _activate_recording_campaigns():
-    command = ['sed',
-               '-ri',
-               '"s/\\#(.*recording)/\\1/g"',
-               '/usr/share/xivo-web-interface/object/objectconf/acl/user.inc']
     world.ssh_client_xivo.check_call(command)
 
 
