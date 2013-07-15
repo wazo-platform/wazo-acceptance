@@ -124,7 +124,16 @@ def get_identity_infos():
 
 
 def get_sheet_infos():
-    return xivoclient.exec_command('get_sheet_infos')
+    def _to_var_vals(sheet_result):
+        res = []
+        for var, val in sheet_result.iteritems():
+            res.append({u'Variable': var, u'Value': val})
+        return res
+
+    try:
+        return _to_var_vals(xivoclient.exec_command('get_sheet_infos')['return_value']['content'])
+    except KeyError:
+        return []
 
 
 def get_queue_members_infos():
