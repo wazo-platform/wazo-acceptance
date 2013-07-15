@@ -109,8 +109,9 @@ def given_the_internal_phonebook_is_configured(step):
 
     directory_manager.add_or_replace_display(
         'Display',
-        [('Nom', 'name', '{db-firstname} {db-lastname}'),
-         (u'Numéro', 'number_office', '{db-phone}'),
+        [
+            ('Nom', 'name', '{db-firstname} {db-lastname}'),
+            (u'Numéro', 'number_office', '{db-phone}'),
         ]
     )
     directory_manager.assign_filter_and_directories_to_context(
