@@ -386,4 +386,4 @@ Feature: Sheet
         Given I wait 10 seconds for the call processing
         Then I see a sheet with the following values:
         | Variable         |      Value |
-        | xivo-calledidnum | 5555555555 |
+        | xivo-calleridnum | 5555555555 |
