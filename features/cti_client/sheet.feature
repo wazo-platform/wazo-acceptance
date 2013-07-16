@@ -26,6 +26,7 @@ Feature: Sheet
 
         Given there are no calls running
         Given I wait 5 seconds for the dialplan to be reloaded
+        Given I register extension "1153"
         Given I log agent "1153" on extension "1153@default"
         Given I wait 5 seconds for the calls processing
         Given I wait call then I answer then I hang up after "3s"
