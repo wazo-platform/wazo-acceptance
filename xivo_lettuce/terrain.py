@@ -183,6 +183,8 @@ def _unregister_sccp_phones():
     for sccp_device in world.registered_sccp_devices.itervalues():
         sccp_device.unregister()
 
+    world.registered_sccp_devices.clear()
+
 
 def _check_webi_login_root():
     element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')

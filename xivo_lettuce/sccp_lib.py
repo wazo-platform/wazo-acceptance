@@ -14,3 +14,6 @@ class SCCPDevice(object):
 
     def unregister(self):
         print 'Unregistering device %s' % self._mac
+
+    def call(self, exten):
+        print '%s is calling %s' % (self._mac, exten)

@@ -25,6 +25,16 @@ from xivo_lettuce.logs import search_str_in_asterisk_log
 from xivo_lettuce.table import extract_webi_table_to_dict
 
 
+@step(u'When "([^"]*)" calls "([^"]*)"')
+def when_a_calls_exten(step, a, exten):
+    device = _get_device_from_firstname_lastname(a)
+    if not device:
+        assert False, '%s has no registered device' % a
+        return
+
+    device.call(exten)
+
+
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
 def given_there_is_group1_activated_in_extensions_page(step, option_label):
     common.open_url('extenfeatures')
@@ -64,3 +74,13 @@ def then_i_see_the_called_extension_in_call_logs_page(step, called, caller):
 
     last_call = lines.pop()
     assert last_call['Called'] == called
+
+
+def _get_device_from_firstname_lastname(firstname_lastname):
+    if ' ' in firstname_lastname:
+        firstname, lastname = firstname_lastname.split(' ', 1)
+    else:
+        firstname, lastname = firstname_lastname, ''
+
+    if hasattr(world, 'registered_sccp_devices'):
+        return world.registered_sccp_devices.get((firstname, lastname))
