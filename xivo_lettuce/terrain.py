@@ -47,6 +47,7 @@ def xivo_lettuce_before_each(scenario):
 @after.each_scenario
 def xivo_lettuce_after_each(scenario):
     _logout_agents()
+    _unregister_sccp_phones()
 
 
 @after.all
@@ -173,6 +174,14 @@ def _log_on_webi():
 def _logout_agents():
     asterisk_manager.logoff_agents(world.logged_agents)
     world.logged_agents = []
+
+
+def _unregister_sccp_phones():
+    if not hasattr(world, 'registered_sccp_devices'):
+        return
+
+    for sccp_device in world.registered_sccp_devices.itervalues():
+        sccp_device.unregister()
 
 
 def _check_webi_login_root():

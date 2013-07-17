@@ -22,6 +22,7 @@ from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.manager_ws import group_manager_ws
 from xivo_lettuce.manager_ws import device_manager_ws
 from xivo_lettuce.manager import device_manager
+from xivo_lettuce import sccp_lib
 
 
 def add_user(data_dict):
@@ -69,6 +70,16 @@ def add_user(data_dict):
     ret = world.ws.users.add(user)
     if not ret:
         return False
+
+    if data_dict['register'] == 'yes':
+        if data_dict.get('protocol', '').upper() != 'SCCP':
+            assert False, 'Only SCCP device registration is supported'
+        else:
+            sccp_device = sccp_lib.SCCPDevice(mac=data_dict['device'])
+            sccp_device.register(host='10.37.0.254', port='2000')
+            if not hasattr(world, 'registered_sccp_devices'):
+                world.registered_sccp_devices = {}
+            world.registered_sccp_devices[(data_dict['firstname'], data_dict['lastname'])] = sccp_device
 
     return int(ret)
 

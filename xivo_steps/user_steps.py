@@ -58,9 +58,11 @@ def given_there_are_users_with_infos(step):
         group_chantype
         protocol
         device
+        register
     """
     for user_data in step.hashes:
         user_data.setdefault('lastname', '')
+        user_data.setdefault('register', 'no')
 
         user_ws_data = {}
 
@@ -76,6 +78,7 @@ def given_there_are_users_with_infos(step):
                 user_ws_data['protocol'] = user_data['protocol']
             if 'device' in user_data:
                 user_ws_data['device'] = user_data['device']
+                user_ws_data['register'] = user_data['register']
 
             if user_data.get('voicemail_name') and user_data.get('voicemail_number'):
                 user_ws_data['voicemail_name'] = user_data['voicemail_name']
