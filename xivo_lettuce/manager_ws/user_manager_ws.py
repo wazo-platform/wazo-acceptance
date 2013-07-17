@@ -21,6 +21,7 @@ from xivo_ws import User, UserLine, UserVoicemail
 from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.manager_ws import group_manager_ws
 from xivo_lettuce.manager_ws import device_manager_ws
+from xivo_lettuce.manager import device_manager
 
 
 def add_user(data_dict):
@@ -51,6 +52,9 @@ def add_user(data_dict):
         if 'protocol' in data_dict:
             user.line.protocol = data_dict['protocol']
         if 'device' in data_dict:
+            if data_dict['device'] == 'auto':
+                device_info = {'protocol': data_dict['protocol']}
+                data_dict['device'] = device_manager.add_device(device_info)
             device_id = str(device_manager_ws.find_device_id_with_mac(data_dict['device']))
             user.line.device_id = device_id
 

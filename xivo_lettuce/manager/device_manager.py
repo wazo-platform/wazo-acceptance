@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import os
+
 from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce import form
 from selenium.common.exceptions import NoSuchElementException
@@ -26,12 +28,17 @@ def add_or_replace_device(info):
 
 
 def add_device(info):
+    if 'mac' not in info:
+        info['mac'] = _new_random_mac()
     open_url('device', 'add')
-    form.input.edit_text_field_with_id('it-devicefeatures-ip', info['ip'])
     form.input.edit_text_field_with_id('it-devicefeatures-mac', info['mac'])
+    if 'ip' in info:
+        form.input.edit_text_field_with_id('it-devicefeatures-ip', info['ip'])
     if 'protocol' in info:
-        form.select.set_select_field_with_id('it-config-protocol', info['protocol'])
+        form.select.set_select_field_with_id('it-config-protocol', info['protocol'].upper())
     form.submit.submit_form()
+
+    return info['mac']
 
 
 def delete_device(info):
@@ -46,3 +53,7 @@ def search_device(search):
     open_url('device')
     form.input.edit_text_field_with_id('it-toolbar-search', search)
     form.submit.submit_form('it-toolbar-subsearch')
+
+
+def _new_random_mac():
+    return ':'.join('%02x' % ord(c) for c in os.urandom(6))
