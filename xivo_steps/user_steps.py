@@ -60,6 +60,8 @@ def given_there_are_users_with_infos(step):
         device
     """
     for user_data in step.hashes:
+        user_data.setdefault('lastname', '')
+
         user_ws_data = {}
 
         user_manager_ws.delete_users_with_firstname_lastname(user_data['firstname'], user_data['lastname'])
