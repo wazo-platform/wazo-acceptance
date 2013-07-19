@@ -94,6 +94,16 @@ class _Uint8FieldType(object):
         if not 0 <= value <= self._MAXVAL:
             raise ValueError('value %s is out of range' % value)
 
+    def serialize(self, value, fobj):
+        fobj.write(chr(value))
+
+    def deserialize(self, fobj):
+        value = fobj.read(1)
+        if not value:
+            # TODO raise a more suited exception
+            raise Exception()
+        return ord(value)
+
 
 class _BytesFieldType(object):
 

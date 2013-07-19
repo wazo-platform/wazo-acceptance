@@ -69,6 +69,20 @@ class TestUint8(BaseTestFieldType, unittest.TestCase):
     def setUp(self):
         self.field_type = _Uint8FieldType()
 
+    def test_serialize(self):
+        fobj = StringIO()
+
+        self.field_type.serialize(0x11, fobj)
+
+        self.assertEqual('\x11', fobj.getvalue())
+
+    def test_deserialize(self):
+        fobj = StringIO('\x11')
+
+        value = self.field_type.deserialize(fobj)
+
+        self.assertEqual(0x11, value)
+
 
 class TestBytes(BaseTestFieldType, unittest.TestCase):
 
