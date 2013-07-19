@@ -18,66 +18,66 @@
 import unittest
 
 from StringIO import StringIO
-from xivo_lettuce.sccppy.msg.msg import Msg, RegisterMsg, Uint32, Uint8, Bytes
+from xivo_lettuce.sccppy.msg.msg import RegisterMsg, \
+    _Uint32FieldType, _Uint8FieldType, _BytesFieldType
 
 
-class BaseTestField(object):
-
-    def setUp(self):
-        self.foo_msg = self.FooMsg()
+class BaseTestFieldType(object):
 
     def test_default_value(self):
-        self.assertEqual(self.default_value, self.foo_msg.foo)
+        self.assertEqual(self.default_value, self.field_type.default)
 
-    def test_set_valid_value(self):
+    def test_check_valid_value(self):
         for value in self.valid_values:
-            self.foo_msg.foo = value
+            self.field_type.check(value)
 
-            self.assertEqual(value, self.foo_msg.foo)
-
-    def test_set_invalid_values(self):
+    def test_check_invalid_values(self):
         for value in self.invalid_values:
-            try:
-                self.foo_msg.foo = value
-            except ValueError:
-                pass
-            except Exception:
-                self.fail('setting value %s should raise a ValueError' % value)
+            self.assertRaises(ValueError, self.field_type.check, value)
 
 
-class TestUint32(BaseTestField, unittest.TestCase):
-
-    FooMsg = Msg(0, Uint32('foo'))
+class TestUint32(BaseTestFieldType, unittest.TestCase):
 
     default_value = 0
     valid_values = [0, 42, 2 ** 32 - 1]
     invalid_values = [-1, 2 ** 32, 3.14]
 
+    def setUp(self):
+        self.field_type = _Uint32FieldType()
+
     def test_serialize(self):
         fobj = StringIO()
-        self.foo_msg.foo = 0x1122
 
-        Uint32('foo').serialize(self.foo_msg, fobj)
+        self.field_type.serialize(0x1122, fobj)
 
         self.assertEqual('\x22\x11\x00\x00', fobj.getvalue())
 
+    def test_deserialize(self):
+        fobj = StringIO('\x22\x11\x00\x00')
 
-class TestUint8(BaseTestField, unittest.TestCase):
+        value = self.field_type.deserialize(fobj)
 
-    FooMsg = Msg(0, Uint8('foo'))
+        self.assertEqual(0x1122, value)
+
+
+class TestUint8(BaseTestFieldType, unittest.TestCase):
 
     default_value = 0
     valid_values = [0, 42, 2 ** 8 - 1]
     invalid_values = [-1, 2 ** 8, 3.14]
 
+    def setUp(self):
+        self.field_type = _Uint8FieldType()
 
-class TestBytes(BaseTestField, unittest.TestCase):
 
-    FooMsg = Msg(0, Bytes('foo', 4))
+class TestBytes(BaseTestFieldType, unittest.TestCase):
 
     default_value = ''
     valid_values = ['', 'abcd']
     invalid_values = ['abcde', 1, 3.14]
+
+    def setUp(self):
+        self.field_type = _BytesFieldType(4)
 
 
 class TestMsg(unittest.TestCase):
