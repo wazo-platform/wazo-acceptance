@@ -76,9 +76,6 @@ class Uint32(_BaseField):
     _MAXVAL = 2 ** 32 - 1
     _FORMAT = struct.Struct('<L')
 
-    def __set__(self, obj, value):
-        setattr(obj, self._obj_name, value)
-
     def _check_value(self, value):
         if not isinstance(value, int):
             raise ValueError('expected integer type; got %s type' % type(value).__name__)
