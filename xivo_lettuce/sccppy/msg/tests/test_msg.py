@@ -16,7 +16,36 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import unittest
-from xivo_lettuce.sccppy.msg.msg import RegisterMsg
+
+from xivo_lettuce.sccppy.msg.msg import Msg, RegisterMsg, Uint32
+
+
+class TestUint32(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.FooMsg = Msg(0, Uint32('foo'))
+
+    def setUp(self):
+        self.foo_msg = self.FooMsg()
+
+    def test_default_value(self):
+        self.assertEqual(0, self.foo_msg.foo)
+
+    def test_set_valid_value(self):
+        self.foo_msg.foo = 42
+
+        self.assertEqual(42, self.foo_msg.foo)
+
+    def test_set_invalid_values(self):
+        values = [-1, 2 ** 32, 3.1416]
+        for value in values:
+            try:
+                self.foo_msg.foo = value
+            except ValueError:
+                pass
+            except Exception:
+                self.fail('setting value %s should raise a ValueError' % value)
 
 
 class TestMsg(unittest.TestCase):
