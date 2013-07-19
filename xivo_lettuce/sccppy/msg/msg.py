@@ -24,8 +24,8 @@ def Msg(msg_id, *fields):
         raise Exception('same field name used twice')
 
     class_dict = {
-        'MSG_ID': msg_id,
-        '_FIELDS': fields,
+        'id': msg_id,
+        '_fields': fields,
     }
     class_dict.update(fields_by_name)
 
@@ -34,32 +34,28 @@ def Msg(msg_id, *fields):
 
 class _BaseMsg(object):
 
-    def serialize(self):
-        # TODO
-        pass
+    def serialize(self, fobj):
+        for field in self._fields:
+            field.field_type.serialize(getattr(self, field.name), fobj)
 
-    def deserialize(self, buf):
-        # TODO
-        pass
+    def deserialize(self, fobj):
+        for field in self._fields:
+            setattr(self, field.name, field.field_type.deserialize(fobj))
 
 
 class _Field(object):
 
     def __init__(self, name, field_type):
         self.name = name
+        self.field_type = field_type
         self._obj_name = '_fieldval_%s' % name
-        self._field_type = field_type
 
     def __get__(self, obj, objtype):
-        return getattr(obj, self._obj_name, self._field_type.default)
+        return getattr(obj, self._obj_name, self.field_type.default)
 
     def __set__(self, obj, value):
-        self._field_type.check(value)
+        self.field_type.check(value)
         setattr(obj, self._obj_name, value)
-
-    def serialize(self, obj, fobj):
-        value = getattr(obj, self._obj_name, self._field_type.default)
-        return self._field_type.serialize(value, fobj)
 
 
 class _Uint32FieldType(object):
@@ -143,7 +139,6 @@ def Bytes(name, length):
 
 
 REGISTER_MSG_ID = 0x0001
-
 
 RegisterMsg = Msg(REGISTER_MSG_ID,
     Bytes('name', 16),

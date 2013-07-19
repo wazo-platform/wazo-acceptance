@@ -18,8 +18,8 @@
 import unittest
 
 from StringIO import StringIO
-from xivo_lettuce.sccppy.msg.msg import RegisterMsg, \
-    _Uint32FieldType, _Uint8FieldType, _BytesFieldType
+from xivo_lettuce.sccppy.msg.msg import Msg, \
+    _Uint32FieldType, _Uint8FieldType, _BytesFieldType, Uint32
 
 
 class BaseTestFieldType(object):
@@ -95,17 +95,37 @@ class TestBytes(BaseTestFieldType, unittest.TestCase):
 
 class TestMsg(unittest.TestCase):
 
-    def test_register_msg(self):
-        register_msg = RegisterMsg()
+    msg_id = 42
+    field = Uint32('foo')
 
-        self.assertEqual(register_msg.name, '')
-        self.assertEqual(register_msg.user_id, 0)
-        self.assertEqual(register_msg.proto_version, 0)
+    FakeMsg = Msg(msg_id, field)
 
-        register_msg.name = 'SEP007'
-        register_msg.user_id = 42
-        register_msg.proto_version = 42
+    def setUp(self):
+        self.msg = self.FakeMsg()
 
-        self.assertEqual(register_msg.name, 'SEP007')
-        self.assertEqual(register_msg.user_id, 42)
-        self.assertEqual(register_msg.proto_version, 42)
+    def test_msg_id(self):
+        self.assertEqual(self.msg_id, self.FakeMsg.id)
+        self.assertEqual(self.msg_id, self.msg.id)
+
+    def test_msg_default_value(self):
+        self.assertEqual(0, self.msg.foo)
+
+    def test_msg_set_value(self):
+        self.msg.foo = 42
+
+        self.assertEqual(42, self.msg.foo)
+
+    def test_serialize(self):
+        fobj = StringIO()
+        self.msg.foo = 0x1122
+
+        self.msg.serialize(fobj)
+
+        self.assertEqual('\x22\x11\x00\x00', fobj.getvalue())
+
+    def test_deserialize(self):
+        fobj = StringIO('\x22\x11\x00\x00')
+
+        self.msg.deserialize(fobj)
+
+        self.assertEqual(0x1122, self.msg.foo)
