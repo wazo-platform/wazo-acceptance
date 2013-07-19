@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import struct
+
+
 def Msg(msg_id, *fields):
     fields_by_name = dict((field.name, field) for field in fields)
     if len(fields) != len(fields_by_name):
@@ -57,12 +60,21 @@ class _BaseField(object):
         # to be overriden in derived class
         pass
 
+    def serialize(self, obj):
+        value = getattr(obj, self._obj_name, self._DEFAULTVAL)
+        return self._serialize_value(value)
+
+    def _serialize_value(self, value):
+        # to be overriden in derived class
+        raise NotImplementedError()
+
 
 class Uint32(_BaseField):
 
     _DEFAULTVAL = 0
     _MINVAL = 0
     _MAXVAL = 2 ** 32 - 1
+    _FORMAT = struct.Struct('<L')
 
     def __set__(self, obj, value):
         setattr(obj, self._obj_name, value)
@@ -72,6 +84,9 @@ class Uint32(_BaseField):
             raise ValueError('expected integer type; got %s type' % type(value).__name__)
         if not self._MINVAL <= value <= self._MAXVAL:
             raise ValueError('value %s is out of range' % value)
+
+    def _serialize_value(self, value):
+        return self._FORMAT.pack(value)
 
 
 class Uint8(_BaseField):

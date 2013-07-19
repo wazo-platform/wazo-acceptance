@@ -52,6 +52,13 @@ class TestUint32(BaseTestField, unittest.TestCase):
     valid_values = [0, 42, 2 ** 32 - 1]
     invalid_values = [-1, 2 ** 32, 3.14]
 
+    def test_serialize(self):
+        field = Uint32('foo')
+
+        buf = field._serialize_value(0x1122)
+
+        self.assertEqual('\x22\x11\x00\x00', buf)
+
 
 class TestUint8(BaseTestField, unittest.TestCase):
 
