@@ -60,6 +60,10 @@ def search_str_in_asterisk_log(expression, delta=10):
     return _search_str_in_log_file(expression, ASTERISK_LOG_INFO, delta)
 
 
+def search_pattern_in_asterisk_log(pattern, delta=10):
+    return _search_pattern_in_log_file(pattern, ASTERISK_LOG_INFO, delta)
+
+
 def search_str_in_xivo_agent_log(expression, delta=10):
     return _search_str_in_log_file(expression, XIVO_AGENT_LOG_INFO, delta)
 
@@ -79,6 +83,22 @@ def _search_str_in_log_file(expression, loginfo, delta=10):
     for line in loglines:
         if expression in line:
             return True
+    return False
+
+
+def _search_pattern_in_log_file(pattern, loginfo, delta=10):
+    # WARNING: local and remote system must use the same timezone
+    command = ['tail', '-n', '30', loginfo.logfile]
+    result = world.ssh_client_xivo.out_call(command)
+
+    min_timestamp = datetime.now() - timedelta(seconds=delta)
+    loglines = _get_lines_since_timestamp(result, min_timestamp, loginfo)
+
+    for line in loglines:
+        match = re.search(pattern, line)
+        if match:
+            return True
+
     return False
 
 

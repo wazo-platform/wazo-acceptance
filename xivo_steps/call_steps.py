@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import re
 import time
 
 from lettuce import step, world
@@ -22,6 +23,7 @@ from xivo_lettuce import common
 from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.logs import search_str_in_asterisk_log
+from xivo_lettuce.logs import search_pattern_in_asterisk_log
 from xivo_lettuce.table import extract_webi_table_to_dict
 
 
@@ -33,6 +35,12 @@ def when_a_calls_exten(step, a, exten):
         return
 
     device.call(exten)
+
+
+@step(u'Then I see a "([^"]*)" "([^"]*)" on line "([^"]*)" in the asterisk log')
+def then_i_see_a_application_param_on_line_channel_in_the_asterisk_log(step, application, parameter, channel_prefix):
+    pattern = re.compile('%s\("%s-\w+", "%s"\)' % (application, channel_prefix, parameter))
+    assert search_pattern_in_asterisk_log(pattern), '%s(%s) was not found in the log for channel %s-*' % (application, parameter, channel_prefix)
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
