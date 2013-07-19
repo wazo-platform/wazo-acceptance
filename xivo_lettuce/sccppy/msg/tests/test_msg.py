@@ -17,7 +17,7 @@
 
 import unittest
 
-from xivo_lettuce.sccppy.msg.msg import Msg, RegisterMsg, Uint32, Uint8
+from xivo_lettuce.sccppy.msg.msg import Msg, RegisterMsg, Uint32, Uint8, Bytes
 
 
 class BaseTestField(object):
@@ -60,6 +60,15 @@ class TestUint8(BaseTestField, unittest.TestCase):
     default_value = 0
     valid_values = [0, 42, 2 ** 8 - 1]
     invalid_values = [-1, 2 ** 8, 3.14]
+
+
+class TestBytes(BaseTestField, unittest.TestCase):
+
+    FooMsg = Msg(0, Bytes('foo', 4))
+
+    default_value = ''
+    valid_values = ['', 'abcd']
+    invalid_values = ['abcde', 1, 3.14]
 
 
 class TestMsg(unittest.TestCase):
