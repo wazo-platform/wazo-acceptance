@@ -40,63 +40,67 @@ class _BaseMsg(object):
         pass
 
 
-class Uint32(object):
+class _BaseField(object):
 
+    def __init__(self, name):
+        self.name = name
+        self._obj_name = '_fieldval_%s' % name
+
+    def __get__(self, obj, objtype):
+        return getattr(obj, self._obj_name, self._DEFAULTVAL)
+
+    def __set__(self, obj, value):
+        self._check_value(value)
+        setattr(obj, self._obj_name, value)
+
+    def _check_value(self, value):
+        # to be overriden in derived class
+        pass
+
+
+class Uint32(_BaseField):
+
+    _DEFAULTVAL = 0
     _MINVAL = 0
     _MAXVAL = 2 ** 32 - 1
 
-    def __init__(self, name):
-        self.name = name
-        self._obj_name = '_fieldval_%s' % name
-
-    def __get__(self, obj, objtype):
-        return getattr(obj, self._obj_name, 0)
-
     def __set__(self, obj, value):
+        setattr(obj, self._obj_name, value)
+
+    def _check_value(self, value):
         if not isinstance(value, int):
             raise ValueError('expected integer type; got %s type' % type(value).__name__)
         if not self._MINVAL <= value <= self._MAXVAL:
             raise ValueError('value %s is out of range' % value)
-        setattr(obj, self._obj_name, value)
 
 
-class Uint8(object):
+class Uint8(_BaseField):
 
+    _DEFAULTVAL = 0
     _MINVAL = 0
     _MAXVAL = 2 ** 8 - 1
 
-    def __init__(self, name):
-        self.name = name
-        self._obj_name = '_fieldval_%s' % name
-
-    def __get__(self, obj, objtype):
-        return getattr(obj, self._obj_name, 0)
-
-    def __set__(self, obj, value):
+    def _check_value(self, value):
         if not isinstance(value, int):
             raise ValueError('expected integer type; got %s type' % type(value).__name__)
         if not self._MINVAL <= value <= self._MAXVAL:
             raise ValueError('value %s is out of range' % value)
-        setattr(obj, self._obj_name, value)
 
 
-class Bytes(object):
+class Bytes(_BaseField):
+
+    _DEFAULTVAL = ''
 
     def __init__(self, name, length):
-        self.name = name
+        _BaseField.__init__(self, name)
         self._length = length
-        self._obj_name = '_fieldval_%s' % name
 
-    def __get__(self, obj, objtype):
-        return getattr(obj, self._obj_name, '')
-
-    def __set__(self, obj, value):
-        # not using basestring since we really want byte string and no unicode string
+    def _check_value(self, value):
+        # str instead of basestring since unicode is not valid
         if not isinstance(value, str):
             raise ValueError('expected str type; got %s type' % type(value).__name__)
         if len(value) > self._length:
             raise ValueError('value %s is too long' % value)
-        setattr(obj, self._obj_name, value)
 
 
 REGISTER_MSG_ID = 0x0001
