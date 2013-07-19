@@ -18,7 +18,7 @@
 import unittest
 
 from StringIO import StringIO
-from xivo_lettuce.sccppy.msg.msg import Msg, \
+from xivo_lettuce.sccppy.msg.base import Msg, \
     _Uint32FieldType, _Uint8FieldType, _BytesFieldType, Uint32
 
 
