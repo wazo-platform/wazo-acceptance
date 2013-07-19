@@ -35,63 +35,62 @@ class BaseTestFieldType(object):
         for value in self.invalid_values:
             self.assertRaises(ValueError, self.field_type.check, value)
 
+    def test_serialize(self):
+        for value, expected_string in self.serialize_test_table:
+            fobj = StringIO()
+
+            self.field_type.serialize(value, fobj)
+
+            self.assertEqual(expected_string, fobj.getvalue())
+
+    def test_deserialize(self):
+        for expected_value, string in self.deserialize_test_table:
+            fobj = StringIO(string)
+
+            value = self.field_type.deserialize(fobj)
+
+            self.assertEqual(expected_value, value)
+
 
 class TestUint32(BaseTestFieldType, unittest.TestCase):
+
+    field_type = _Uint32FieldType()
 
     default_value = 0
     valid_values = [0, 42, 2 ** 32 - 1]
     invalid_values = [-1, 2 ** 32, 3.14]
 
-    def setUp(self):
-        self.field_type = _Uint32FieldType()
-
-    def test_serialize(self):
-        fobj = StringIO()
-
-        self.field_type.serialize(0x1122, fobj)
-
-        self.assertEqual('\x22\x11\x00\x00', fobj.getvalue())
-
-    def test_deserialize(self):
-        fobj = StringIO('\x22\x11\x00\x00')
-
-        value = self.field_type.deserialize(fobj)
-
-        self.assertEqual(0x1122, value)
+    serialize_test_table = [
+        (0x1122, '\x22\x11\x00\x00'),
+    ]
+    deserialize_test_table = [
+        (0x1122, '\x22\x11\x00\x00'),
+    ]
 
 
 class TestUint8(BaseTestFieldType, unittest.TestCase):
+
+    field_type = _Uint8FieldType()
 
     default_value = 0
     valid_values = [0, 42, 2 ** 8 - 1]
     invalid_values = [-1, 2 ** 8, 3.14]
 
-    def setUp(self):
-        self.field_type = _Uint8FieldType()
-
-    def test_serialize(self):
-        fobj = StringIO()
-
-        self.field_type.serialize(0x11, fobj)
-
-        self.assertEqual('\x11', fobj.getvalue())
-
-    def test_deserialize(self):
-        fobj = StringIO('\x11')
-
-        value = self.field_type.deserialize(fobj)
-
-        self.assertEqual(0x11, value)
+    serialize_test_table = [
+        (0x11, '\x11'),
+    ]
+    deserialize_test_table = [
+        (0x11, '\x11'),
+    ]
 
 
 class TestBytes(BaseTestFieldType, unittest.TestCase):
 
+    field_type = _BytesFieldType(4)
+
     default_value = ''
     valid_values = ['', 'abcd']
     invalid_values = ['abcde', 1, 3.14]
-
-    def setUp(self):
-        self.field_type = _BytesFieldType(4)
 
 
 class TestMsg(unittest.TestCase):
