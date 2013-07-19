@@ -17,6 +17,7 @@
 
 import unittest
 
+from StringIO import StringIO
 from xivo_lettuce.sccppy.msg.msg import Msg, RegisterMsg, Uint32, Uint8, Bytes
 
 
@@ -53,11 +54,20 @@ class TestUint32(BaseTestField, unittest.TestCase):
     invalid_values = [-1, 2 ** 32, 3.14]
 
     def test_serialize(self):
+        fobj = StringIO()
+        self.foo_msg.foo = 0x1122
+
+        Uint32('foo').serialize(self.foo_msg, fobj)
+
+        self.assertEqual('\x22\x11\x00\x00', fobj.getvalue())
+
+    def test_deserialize(self):
+        fobj = StringIO('\x22\x11\x00\x00')
         field = Uint32('foo')
 
-        buf = field._serialize_value(0x1122)
+        value = field._deserialize_value(fobj)
 
-        self.assertEqual('\x22\x11\x00\x00', buf)
+        self.assertEqual(0x1122, value)
 
 
 class TestUint8(BaseTestField, unittest.TestCase):

@@ -60,11 +60,11 @@ class _BaseField(object):
         # to be overriden in derived class
         pass
 
-    def serialize(self, obj):
+    def serialize(self, obj, fobj):
         value = getattr(obj, self._obj_name, self._DEFAULTVAL)
-        return self._serialize_value(value)
+        return self._serialize_value(value, fobj)
 
-    def _serialize_value(self, value):
+    def _serialize_value(self, value, fobj):
         # to be overriden in derived class
         raise NotImplementedError()
 
@@ -85,8 +85,11 @@ class Uint32(_BaseField):
         if not self._MINVAL <= value <= self._MAXVAL:
             raise ValueError('value %s is out of range' % value)
 
-    def _serialize_value(self, value):
-        return self._FORMAT.pack(value)
+    def _serialize_value(self, value, fobj):
+        fobj.write(self._FORMAT.pack(value))
+
+    def _deserialize_value(self, fobj):
+        return self._FORMAT.unpack(fobj.read(4))[0]
 
 
 class Uint8(_BaseField):
