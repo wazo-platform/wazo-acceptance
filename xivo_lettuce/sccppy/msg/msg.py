@@ -45,77 +45,86 @@ class _BaseMsg(object):
 
 class _BaseField(object):
 
-    def __init__(self, name):
+    def __init__(self, name, value_class):
+        # TODO rename value_class
         self.name = name
         self._obj_name = '_fieldval_%s' % name
+        self._value_class = value_class
 
     def __get__(self, obj, objtype):
-        return getattr(obj, self._obj_name, self._DEFAULTVAL)
+        return getattr(obj, self._obj_name, self._value_class.default)
 
     def __set__(self, obj, value):
-        self._check_value(value)
+        self._value_class.check_value(value)
         setattr(obj, self._obj_name, value)
 
-    def _check_value(self, value):
-        # to be overriden in derived class
-        pass
-
     def serialize(self, obj, fobj):
-        value = getattr(obj, self._obj_name, self._DEFAULTVAL)
-        return self._serialize_value(value, fobj)
-
-    def _serialize_value(self, value, fobj):
-        # to be overriden in derived class
-        raise NotImplementedError()
+        value = getattr(obj, self._obj_name, self._value_class.default)
+        return self._value_class.serialize_value(value, fobj)
 
 
-class Uint32(_BaseField):
+class _Uint32(object):
 
-    _DEFAULTVAL = 0
+    # TODO rename stuff
     _MINVAL = 0
     _MAXVAL = 2 ** 32 - 1
     _FORMAT = struct.Struct('<L')
 
-    def _check_value(self, value):
+    default = 0
+
+    def check_value(self, value):
         if not isinstance(value, int):
             raise ValueError('expected integer type; got %s type' % type(value).__name__)
         if not self._MINVAL <= value <= self._MAXVAL:
             raise ValueError('value %s is out of range' % value)
 
-    def _serialize_value(self, value, fobj):
+    def serialize_value(self, value, fobj):
         fobj.write(self._FORMAT.pack(value))
 
-    def _deserialize_value(self, fobj):
+    def deserialize_value(self, fobj):
         return self._FORMAT.unpack(fobj.read(4))[0]
 
 
-class Uint8(_BaseField):
+def Uint32(name):
+    return _BaseField(name, _Uint32())
 
-    _DEFAULTVAL = 0
+
+class _Uint8(object):
+
+    # TODO rename stuff
     _MINVAL = 0
     _MAXVAL = 2 ** 8 - 1
 
-    def _check_value(self, value):
+    default = 0
+
+    def check_value(self, value):
         if not isinstance(value, int):
             raise ValueError('expected integer type; got %s type' % type(value).__name__)
         if not self._MINVAL <= value <= self._MAXVAL:
             raise ValueError('value %s is out of range' % value)
 
 
-class Bytes(_BaseField):
+def Uint8(name):
+    return _BaseField(name, _Uint8())
 
-    _DEFAULTVAL = ''
 
-    def __init__(self, name, length):
-        _BaseField.__init__(self, name)
+class _Bytes(object):
+
+    default = ''
+
+    def __init__(self, length):
         self._length = length
 
-    def _check_value(self, value):
+    def check_value(self, value):
         # str instead of basestring since unicode is not valid
         if not isinstance(value, str):
             raise ValueError('expected str type; got %s type' % type(value).__name__)
         if len(value) > self._length:
             raise ValueError('value %s is too long' % value)
+
+
+def Bytes(name, length):
+    return _BaseField(name, _Bytes(length))
 
 
 REGISTER_MSG_ID = 0x0001

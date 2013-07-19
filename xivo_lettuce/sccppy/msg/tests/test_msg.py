@@ -61,14 +61,6 @@ class TestUint32(BaseTestField, unittest.TestCase):
 
         self.assertEqual('\x22\x11\x00\x00', fobj.getvalue())
 
-    def test_deserialize(self):
-        fobj = StringIO('\x22\x11\x00\x00')
-        field = Uint32('foo')
-
-        value = field._deserialize_value(fobj)
-
-        self.assertEqual(0x1122, value)
-
 
 class TestUint8(BaseTestField, unittest.TestCase):
 
