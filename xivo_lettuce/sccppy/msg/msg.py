@@ -31,10 +31,6 @@ def Msg(msg_id, *fields):
 
 class _BaseMsg(object):
 
-    def __init__(self):
-        for field in self._FIELDS:
-            field.zero(self)
-
     def serialize(self):
         # TODO
         pass
@@ -53,11 +49,8 @@ class Uint32(object):
         self.name = name
         self._obj_name = '_fieldval_%s' % name
 
-    def zero(self, obj):
-        setattr(obj, self._obj_name, 0)
-
     def __get__(self, obj, objtype):
-        return getattr(obj, self._obj_name)
+        return getattr(obj, self._obj_name, 0)
 
     def __set__(self, obj, value):
         if not isinstance(value, int):
@@ -76,11 +69,8 @@ class Uint8(object):
         self.name = name
         self._obj_name = '_fieldval_%s' % name
 
-    def zero(self, obj):
-        setattr(obj, self._obj_name, 0)
-
     def __get__(self, obj, objtype):
-        return getattr(obj, self._obj_name)
+        return getattr(obj, self._obj_name, 0)
 
     def __set__(self, obj, value):
         if not isinstance(value, int):
@@ -97,11 +87,8 @@ class Bytes(object):
         self._length = length
         self._obj_name = '_fieldval_%s' % name
 
-    def zero(self, obj):
-        setattr(obj, self._obj_name, '')
-
     def __get__(self, obj, objtype):
-        return getattr(obj, self._obj_name)
+        return getattr(obj, self._obj_name, '')
 
     def __set__(self, obj, value):
         # not using basestring since we really want byte string and no unicode string
