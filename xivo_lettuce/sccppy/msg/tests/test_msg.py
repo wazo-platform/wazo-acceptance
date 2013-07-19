@@ -44,7 +44,7 @@ class BaseTestFieldType(object):
             self.assertEqual(expected_string, fobj.getvalue())
 
     def test_deserialize(self):
-        for expected_value, string in self.deserialize_test_table:
+        for expected_value, string in self.serialize_test_table:
             fobj = StringIO(string)
 
             value = self.field_type.deserialize(fobj)
@@ -63,9 +63,6 @@ class TestUint32(BaseTestFieldType, unittest.TestCase):
     serialize_test_table = [
         (0x1122, '\x22\x11\x00\x00'),
     ]
-    deserialize_test_table = [
-        (0x1122, '\x22\x11\x00\x00'),
-    ]
 
 
 class TestUint8(BaseTestFieldType, unittest.TestCase):
@@ -79,9 +76,6 @@ class TestUint8(BaseTestFieldType, unittest.TestCase):
     serialize_test_table = [
         (0x11, '\x11'),
     ]
-    deserialize_test_table = [
-        (0x11, '\x11'),
-    ]
 
 
 class TestBytes(BaseTestFieldType, unittest.TestCase):
@@ -93,11 +87,6 @@ class TestBytes(BaseTestFieldType, unittest.TestCase):
     invalid_values = ['abcde', 1, 3.14]
 
     serialize_test_table = [
-        ('abcd', 'abcd'),
-        ('ab', 'ab\x00\x00'),
-        ('', '\x00\x00\x00\x00'),
-    ]
-    deserialize_test_table = [
         ('abcd', 'abcd'),
         ('ab', 'ab\x00\x00'),
         ('', '\x00\x00\x00\x00'),
