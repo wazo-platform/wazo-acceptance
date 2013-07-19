@@ -92,6 +92,17 @@ class TestBytes(BaseTestFieldType, unittest.TestCase):
     valid_values = ['', 'abcd']
     invalid_values = ['abcde', 1, 3.14]
 
+    serialize_test_table = [
+        ('abcd', 'abcd'),
+        ('ab', 'ab\x00\x00'),
+        ('', '\x00\x00\x00\x00'),
+    ]
+    deserialize_test_table = [
+        ('abcd', 'abcd'),
+        ('ab', 'ab\x00\x00'),
+        ('', '\x00\x00\x00\x00'),
+    ]
+
 
 class TestMsg(unittest.TestCase):
 

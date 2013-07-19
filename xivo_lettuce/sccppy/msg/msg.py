@@ -119,6 +119,16 @@ class _BytesFieldType(object):
         if len(value) > self._length:
             raise ValueError('value %s is too long' % value)
 
+    def serialize(self, value, fobj):
+        fobj.write(value.ljust(self._length, '\x00'))
+
+    def deserialize(self, fobj):
+        value = fobj.read(self._length)
+        if len(value) != self._length:
+            # TODO raise a more suited exception
+            raise Exception()
+        return value.rstrip('\x00')
+
 
 def Uint32(name):
     return _Field(name, _Uint32FieldType())
