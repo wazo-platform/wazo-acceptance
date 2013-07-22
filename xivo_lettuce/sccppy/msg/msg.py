@@ -18,6 +18,8 @@
 from xivo_lettuce.sccppy.msg.base import Msg, Bytes, Uint32, Uint8
 
 
+KeepAliveMsg = Msg(0x0000)
+
 RegisterMsg = Msg(0x0001,
     Bytes('name', 16),
     Uint32('user_id'),
@@ -28,3 +30,16 @@ RegisterMsg = Msg(0x0001,
     Uint32('active_streams'),
     Uint8('proto_version'),
 )
+
+RegisterAckMsg = Msg(0x0081,
+    Uint32('keepalive'),
+    Bytes('date_template', 6),
+    Bytes('res', 2),
+    Uint32('secondary_keep_alive'),
+    Uint8('proto_version'),
+    Uint8('unknown1'),
+    Uint8('unknown2'),
+    Uint8('unknown3'),
+)
+
+KeepAliveAckMsg = Msg(0x0100)
