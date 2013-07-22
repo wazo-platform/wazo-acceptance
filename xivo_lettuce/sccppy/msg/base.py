@@ -61,7 +61,7 @@ class _Field(object):
 class _Uint32FieldType(object):
 
     _MAXVAL = 2 ** 32 - 1
-    _FORMAT = struct.Struct('<L')
+    _FORMAT = struct.Struct('<I')
 
     default = 0
 
