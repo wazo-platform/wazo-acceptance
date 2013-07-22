@@ -34,11 +34,13 @@ def Msg(msg_id, *fields):
 
 class _BaseMsg(object):
 
-    def serialize(self, fobj):
-        for field in self._fields:
-            field.field_type.serialize(getattr(self, field.name), fobj)
+    def serialize(self):
+        return ''.join(field.field_type.serialize(getattr(self, field.name))
+                       for field in self._fields)
 
     def deserialize(self, fobj):
+        # XXX asymetry between serialize and deserialize -- deserialize still manipulate
+        #     file objects
         for field in self._fields:
             setattr(self, field.name, field.field_type.deserialize(fobj))
 
@@ -71,8 +73,8 @@ class _Uint32FieldType(object):
         if not 0 <= value <= self._MAXVAL:
             raise ValueError('value %s is out of range' % value)
 
-    def serialize(self, value, fobj):
-        fobj.write(self._FORMAT.pack(value))
+    def serialize(self, value):
+        return self._FORMAT.pack(value)
 
     def deserialize(self, fobj):
         return self._FORMAT.unpack(fobj.read(4))[0]
@@ -90,8 +92,8 @@ class _Uint8FieldType(object):
         if not 0 <= value <= self._MAXVAL:
             raise ValueError('value %s is out of range' % value)
 
-    def serialize(self, value, fobj):
-        fobj.write(chr(value))
+    def serialize(self, value):
+        return chr(value)
 
     def deserialize(self, fobj):
         value = fobj.read(1)
@@ -115,8 +117,8 @@ class _BytesFieldType(object):
         if len(value) > self._length:
             raise ValueError('value %s is too long' % value)
 
-    def serialize(self, value, fobj):
-        fobj.write(value.ljust(self._length, '\x00'))
+    def serialize(self, value):
+        return value.ljust(self._length, '\x00')
 
     def deserialize(self, fobj):
         value = fobj.read(self._length)

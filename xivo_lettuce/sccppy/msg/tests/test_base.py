@@ -37,11 +37,9 @@ class BaseTestFieldType(object):
 
     def test_serialize(self):
         for value, expected_string in self.serialize_test_table:
-            fobj = StringIO()
+            string = self.field_type.serialize(value)
 
-            self.field_type.serialize(value, fobj)
-
-            self.assertEqual(expected_string, fobj.getvalue())
+            self.assertEqual(expected_string, string)
 
     def test_deserialize(self):
         for expected_value, string in self.serialize_test_table:
@@ -116,12 +114,11 @@ class TestMsg(unittest.TestCase):
         self.assertEqual(42, self.msg.foo)
 
     def test_serialize(self):
-        fobj = StringIO()
         self.msg.foo = 0x1122
 
-        self.msg.serialize(fobj)
+        string = self.msg.serialize()
 
-        self.assertEqual('\x22\x11\x00\x00', fobj.getvalue())
+        self.assertEqual('\x22\x11\x00\x00', string)
 
     def test_deserialize(self):
         fobj = StringIO('\x22\x11\x00\x00')
