@@ -38,11 +38,13 @@ class _BaseMsg(object):
         return ''.join(field.field_type.serialize(getattr(self, field.name))
                        for field in self._fields)
 
-    def deserialize(self, fobj):
-        # XXX asymetry between serialize and deserialize -- deserialize still manipulate
-        #     file objects
+    def deserialize(self, body):
+        offset = 0
         for field in self._fields:
-            setattr(self, field.name, field.field_type.deserialize(fobj))
+            size = field.field_type.size
+            data = body[offset:offset + size]
+            offset += size
+            setattr(self, field.name, field.field_type.deserialize(data))
 
 
 class _Field(object):
@@ -66,6 +68,7 @@ class _Uint32FieldType(object):
     _FORMAT = struct.Struct('<I')
 
     default = 0
+    size = 4
 
     def check(self, value):
         if not isinstance(value, int):
@@ -76,8 +79,8 @@ class _Uint32FieldType(object):
     def serialize(self, value):
         return self._FORMAT.pack(value)
 
-    def deserialize(self, fobj):
-        return self._FORMAT.unpack(fobj.read(4))[0]
+    def deserialize(self, data):
+        return self._FORMAT.unpack(data)[0]
 
 
 class _Uint8FieldType(object):
@@ -85,6 +88,7 @@ class _Uint8FieldType(object):
     _MAXVAL = 2 ** 8 - 1
 
     default = 0
+    size = 1
 
     def check(self, value):
         if not isinstance(value, int):
@@ -95,37 +99,29 @@ class _Uint8FieldType(object):
     def serialize(self, value):
         return chr(value)
 
-    def deserialize(self, fobj):
-        value = fobj.read(1)
-        if not value:
-            # TODO raise a more suited exception
-            raise Exception()
-        return ord(value)
+    def deserialize(self, data):
+        return ord(data[0])
 
 
 class _BytesFieldType(object):
 
     default = ''
 
-    def __init__(self, length):
-        self._length = length
+    def __init__(self, size):
+        self.size = size
 
     def check(self, value):
         # str instead of basestring since unicode is not valid
         if not isinstance(value, str):
             raise ValueError('expected str type; got %s type' % type(value).__name__)
-        if len(value) > self._length:
+        if len(value) > self.size:
             raise ValueError('value %s is too long' % value)
 
     def serialize(self, value):
-        return value.ljust(self._length, '\x00')
+        return value.ljust(self.size, '\x00')
 
-    def deserialize(self, fobj):
-        value = fobj.read(self._length)
-        if len(value) != self._length:
-            # TODO raise a more suited exception
-            raise Exception()
-        return value.rstrip('\x00')
+    def deserialize(self, data):
+        return data.rstrip('\x00')
 
 
 def Uint32(name):

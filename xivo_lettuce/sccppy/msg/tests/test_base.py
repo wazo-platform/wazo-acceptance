@@ -17,7 +17,6 @@
 
 import unittest
 
-from StringIO import StringIO
 from xivo_lettuce.sccppy.msg.base import Msg, \
     _Uint32FieldType, _Uint8FieldType, _BytesFieldType, Uint32
 
@@ -43,9 +42,7 @@ class BaseTestFieldType(object):
 
     def test_deserialize(self):
         for expected_value, string in self.serialize_test_table:
-            fobj = StringIO(string)
-
-            value = self.field_type.deserialize(fobj)
+            value = self.field_type.deserialize(string)
 
             self.assertEqual(expected_value, value)
 
@@ -121,8 +118,6 @@ class TestMsg(unittest.TestCase):
         self.assertEqual('\x22\x11\x00\x00', string)
 
     def test_deserialize(self):
-        fobj = StringIO('\x22\x11\x00\x00')
-
-        self.msg.deserialize(fobj)
+        self.msg.deserialize('\x22\x11\x00\x00')
 
         self.assertEqual(0x1122, self.msg.foo)
