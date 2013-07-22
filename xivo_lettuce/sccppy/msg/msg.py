@@ -16,11 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_lettuce.sccppy.msg.base import Msg, Bytes, Uint32, Uint8
+from xivo_lettuce.sccppy.msg.registry import register_msg_factory
 
 
-KeepAliveMsg = Msg(0x0000)
+def _new_registered_msg_class(*args):
+    msg_class = Msg(*args)
+    register_msg_factory(msg_class.id, msg_class)
+    return msg_class
 
-RegisterMsg = Msg(0x0001,
+
+KeepAliveMsg = _new_registered_msg_class(0x0000)
+
+RegisterMsg = _new_registered_msg_class(0x0001,
     Bytes('name', 16),
     Uint32('user_id'),
     Uint32('line_instance'),
@@ -31,7 +38,7 @@ RegisterMsg = Msg(0x0001,
     Uint8('proto_version'),
 )
 
-RegisterAckMsg = Msg(0x0081,
+RegisterAckMsg = _new_registered_msg_class(0x0081,
     Uint32('keepalive'),
     Bytes('date_template', 6),
     Bytes('res', 2),
@@ -42,4 +49,4 @@ RegisterAckMsg = Msg(0x0081,
     Uint8('unknown3'),
 )
 
-KeepAliveAckMsg = Msg(0x0100)
+KeepAliveAckMsg = _new_registered_msg_class(0x0100)

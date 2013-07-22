@@ -17,6 +17,7 @@
 
 import collections
 import struct
+from xivo_lettuce.sccppy.msg import registry
 
 _HEADER_FORMAT = struct.Struct('<III')
 _HEADER_SIZE = _HEADER_FORMAT.size
@@ -34,7 +35,7 @@ class MsgDeserializer(object):
 
     _MAX_BODY_SIZE = 2000
 
-    def __init__(self, msg_registry):
+    def __init__(self, msg_registry=registry):
         self.msgs_queue = collections.deque()
         self._msg_registry = msg_registry
         self._buf = ''
