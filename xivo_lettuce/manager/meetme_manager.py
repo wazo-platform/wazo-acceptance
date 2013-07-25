@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce.registry import world
 from xivo_lettuce import form
 from xivo_lettuce.common import open_url, edit_line
 from xivo_lettuce.manager_ws import meetme_manager_ws

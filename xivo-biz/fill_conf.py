@@ -16,16 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import socket
 import os
 import xivo_ws
 import subprocess
 
 from lettuce.registry import world
 from xivo_lettuce import terrain
-from xivo_ws.objects.customtrunk import CustomTrunk
 from xivo_lettuce.manager_ws import context_manager_ws, user_manager_ws, \
-    trunkcustom_manager_ws, line_manager_ws, incall_manager_ws
+    trunkcustom_manager_ws, line_manager_ws
 from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
@@ -78,22 +76,23 @@ class Prerequisite(object):
 
     def _prepare_user(self):
         print 'Configuring User..'
-        user_data_tpl = {'firstname': 'user',
-                         'line_context': 'default',
-                         'enable_client': True,
-                         'client_password': '12345',
-                         'client_profile': 'Client'
-                     }
+        user_data_tpl = {
+            'firstname': 'user',
+            'line_context': 'default',
+            'enable_client': True,
+            'client_password': '12345',
+            'client_profile': 'Client'
+        }
         user_data = {'lastname': '1',
-                    'line_number': '101',
-                    'client_username': 'user1'}
+                     'line_number': '101',
+                     'client_username': 'user1'}
         user_data.update(user_data_tpl)
         user_exist = user_manager_ws.is_user_with_name_exists('user', '1')
         if not user_exist:
             user_manager_ws.add_user(user_data)
         user_data = {'lastname': '2',
-                    'line_number': '102',
-                    'client_username': 'user2'}
+                     'line_number': '102',
+                     'client_username': 'user2'}
         user_data.update(user_data_tpl)
         user_exist = user_manager_ws.is_user_with_name_exists('user', '2')
         if not user_exist:

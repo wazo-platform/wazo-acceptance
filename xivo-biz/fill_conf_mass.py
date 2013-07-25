@@ -16,16 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import socket
 import os
 import xivo_ws
 import subprocess
 
 from lettuce.registry import world
 from xivo_lettuce import terrain
-from xivo_ws.objects.customtrunk import CustomTrunk
 from xivo_lettuce.manager_ws import context_manager_ws, user_manager_ws, \
-    trunkcustom_manager_ws, line_manager_ws, incall_manager_ws
+    trunkcustom_manager_ws, line_manager_ws
 from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
@@ -82,18 +80,19 @@ class Prerequisite(object):
 
     def _prepare_user(self):
         print 'Configuring User..'
-        user_data_tpl = {'firstname': 'user',
-                         'line_context': 'default',
-                         'enable_client': True,
-                         'client_password': '12345',
-                         'client_profile': 'client'
-                     }
+        user_data_tpl = {
+            'firstname': 'user',
+            'line_context': 'default',
+            'enable_client': True,
+            'client_password': '12345',
+            'client_profile': 'client'
+        }
         nb_user = 10
         user_increment = range(0, nb_user)
         for i in user_increment:
             user_data = {'lastname': '%i' % (i),
-                        'line_number': '10%i' % (i),
-                        'client_username': 'user%i' % (i)}
+                         'line_number': '10%i' % (i),
+                         'client_username': 'user%i' % (i)}
             user_data.update(user_data_tpl)
             user_exist = user_manager_ws.is_user_with_name_exists('user', '%i' % (i))
             if not user_exist:
