@@ -161,14 +161,6 @@ def given_the_display_filter_group1_exists_with_the_following_fields(step, filte
     directory_manager.add_or_replace_display(filter_name, field_list)
 
 
-@step(u'Given the context "([^"]*)" uses display "([^"]*)" with the following directories:')
-def given_the_context_group1_uses_display_group2_with_the_following_directories(step, context, filter_name):
-    directories = [line['Directories'] for line in step.hashes]
-    directory_manager.assign_filter_and_directories_to_context(
-        context, filter_name, directories
-    )
-
-
 @step(u'Given there are entries in the ldap server:')
 def given_there_are_entries_in_the_ldap_server(step):
     for directory_entry in step.hashes:

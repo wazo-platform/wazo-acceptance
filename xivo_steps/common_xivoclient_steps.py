@@ -150,12 +150,6 @@ def when_i_enable_keep_password(step):
     cti_client_manager.configure_client(conf_dict)
 
 
-@step(u'When I disable keep password')
-def when_i_disable_keep_password(step):
-    conf_dict = {'keep_password': False}
-    cti_client_manager.configure_client(conf_dict)
-
-
 @step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')
 def when_i_disable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
     user_manager_ws.disable_cti_client(firstname, lastname)
