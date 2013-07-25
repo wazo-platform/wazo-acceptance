@@ -46,4 +46,4 @@ def given_there_are_a_lot_of_calls_on_the_date_1(step, date):
 def when_i_request_call_logs_for_1(step, date):
     common.open_url('cel')
     call_logs_manager.type_date(date)
-    form.submit.submit_form()
+    form.submit.submit_form_with_errors()
