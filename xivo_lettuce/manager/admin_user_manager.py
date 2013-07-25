@@ -49,7 +49,7 @@ def set_privileges(username, privileges):
     acl_button = line.find_element_by_xpath(".//a[@title='Rules']")
     acl_button.click()
 
-    categories = set( (x['module'], x['category']) for x in privileges )
+    categories = set((x['module'], x['category']) for x in privileges)
     for module, category in categories:
         open_category(module, category)
 

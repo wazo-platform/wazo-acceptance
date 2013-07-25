@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from hamcrest import assert_that, is_not, equal_to, is_
 from lettuce import step, world
 
 
@@ -30,8 +31,8 @@ def then_the_xlet_identity_shows_phone_number_as_1(step, linenumber):
 
 @step(u'Then the Xlet identity shows a voicemail "([^"]*)"')
 def then_the_xlet_identity_shows_a_voicemail_1(step, vm_number):
-    assert world.xc_identity_infos['voicemail_num'] != ''
-    assert world.xc_identity_infos['voicemail_button'] == True
+    assert_that(world.xc_identity_infos['voicemail_num'], is_not(equal_to('')))
+    assert_that(world.xc_identity_infos['voicemail_button'], is_(True))
 
 
 @step(u'Then the Xlet identity shows an agent "([^"]*)"')

@@ -143,8 +143,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
         [('Icon', 'status', ''),
          ('Name', 'name', '{db-name}'),
          ('Number', 'number_office', '{db-number}'),
-         ('Number', 'number_mobile', '{db-mobile}'),
-        ]
+         ('Number', 'number_mobile', '{db-mobile}')]
     )
     directory_manager.assign_filter_and_directories_to_context(
         '__switchboard_directory',
