@@ -90,7 +90,7 @@ def _build_base_configuration(config_name, work_start, work_end):
         friday=True,
         saturday=True,
         sunday=True
-        )
+    )
     return conf
 
 

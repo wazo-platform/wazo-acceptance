@@ -72,13 +72,15 @@ def update_contextnumbers_incall(name, numberbeg, numberend, didlength):
         world.ws.contexts.edit(context)
 
 
-def add_context(name, display_name, context_type,
-                 context_include=[],
-                 contextnumbers_user='',
-                 contextnumbers_group='',
-                 contextnumbers_meetme='',
-                 contextnumbers_queue='',
-                 contextnumbers_incall=''):
+def add_context(name,
+                display_name,
+                context_type,
+                context_include=[],
+                contextnumbers_user='',
+                contextnumbers_group='',
+                contextnumbers_meetme='',
+                contextnumbers_queue='',
+                contextnumbers_incall=''):
 
     context = Context()
     context.name = name

@@ -60,7 +60,7 @@ def get_last_callid(event, agent_number):
     callid = queue_log_dao.get_last_callid_with_event_for_agent(
         event,
         _build_agent_db_tag_from_number(agent_number)
-        )
+    )
     return callid
 
 
@@ -81,4 +81,4 @@ def insert_entries(entries):
             entry['data3'],
             entry['data4'],
             entry['data5']
-            )
+        )
