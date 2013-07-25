@@ -23,25 +23,29 @@ class FormErrorException(Exception):
     pass
 
 
-def submit_form_with_errors():
-    try:
-        submit_form()
-    except FormErrorException:
-        pass
-    else:
+def submit_form_with_errors(input_id='it-submit'):
+    error_element = _do_submit(input_id)
+    if not error_element:
         raise Exception('No error occurred')
 
 
 def submit_form(input_id='it-submit'):
+    error_element = _do_submit(input_id)
+    if error_element:
+        world.dump_current_page()
+        raise FormErrorException(error_element.text)
+
+
+def _do_submit(input_id):
     submit_button = world.browser.find_element_by_id(input_id)
     submit_button.click()
+
     try:
         error_element = find_form_errors()
     except NoSuchElementException:
-        pass
-    else:
-        world.dump_current_page()
-        raise FormErrorException(error_element.text)
+        error_element = None
+
+    return error_element
 
 
 def assert_form_errors():
