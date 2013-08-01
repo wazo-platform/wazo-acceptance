@@ -49,21 +49,6 @@ class TestUserWebServices(unittest.TestCase):
 
         self.assertEqual(common.nb_with_firstname_lastname('users', u'test_ws_delete_user', ''), 0)
 
-    def test_associate_existant_user_with_line(self):
-        user_id = self._add_user(u'test_ws_associate_user', 'with_line')
-        line_id = self._add_sip_line('test_associate', 'secret')
-
-        user = common.find_with_firstname_lastname('users', u'test_ws_associate_user', u'with_line')[0]
-        user.line = xivo_ws.UserLine(id=line_id)
-        self._xivo_ws.users.edit(user)
-
-        line = self._xivo_ws.lines.search_by_name(u'test_associate')[0]
-
-        self.assertEqual(user_id, line.user_id)
-
-        common.delete_with_firstname_lastname('users', u'test_ws_associate_user', u'with_line')
-        common.delete_with_name('lines', u'test_associate')
-
     def _add_user(self, firstname, lastname):
         common.delete_with_firstname_lastname('users', firstname, lastname)
         user = xivo_ws.User()
