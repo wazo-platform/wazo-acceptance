@@ -15,16 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import execnet
 from lettuce.registry import world
 
 
 def remote_exec(func, **kwargs):
-    hostname = world.config.get('xivo', 'hostname')
-    username = 'root'
-
-    gw = execnet.makegateway('ssh=%s@%s' % (username, hostname))
-
-    channel = gw.remote_exec(func, **kwargs)
+    channel = world.execnet_gateway.remote_exec(func, **kwargs)
     channel.waitclose()
-    gw.exit()

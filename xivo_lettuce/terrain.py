@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import execnet
 import ConfigParser
 import os
 import tempfile
@@ -79,6 +80,7 @@ def initialize():
     _setup_ssh_client_xivo()
     _setup_ssh_client_callgen()
     _setup_ws()
+    _setup_execnet_gateway()
     if world.browser_enable:
         _setup_browser()
         if _webi_configured():
@@ -151,7 +153,12 @@ def _setup_ws():
     login = world.config.get('webservices_infos', 'login')
     password = world.config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)
-    return world.ws
+
+
+def _setup_execnet_gateway():
+    hostname = world.config.get('xivo', 'hostname')
+    login = world.config.get('ssh_infos', 'login')
+    world.execnet_gateway = execnet.makegateway('ssh=%s@%s' % (login, hostname))
 
 
 def _webi_configured():
@@ -186,7 +193,6 @@ def _check_webi_login_root():
 def deinitialize():
     if world.browser_enable:
         _teardown_browser()
-    db_manager.close()
 
 
 def _teardown_browser():
