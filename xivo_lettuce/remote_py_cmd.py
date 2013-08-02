@@ -27,3 +27,4 @@ def remote_exec(func, **kwargs):
 
     channel = gw.remote_exec(func, **kwargs)
     channel.waitclose()
+    gw.exit()
