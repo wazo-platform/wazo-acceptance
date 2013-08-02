@@ -186,6 +186,7 @@ def _check_webi_login_root():
 def deinitialize():
     if world.browser_enable:
         _teardown_browser()
+    db_manager.close()
 
 
 def _teardown_browser():
