@@ -43,7 +43,7 @@ def find_with_extension(extension):
 
 
 def find_with_name(name):
-    return line_services.find_by_name(name)
+    return line_services.find_all_by_name(name)
 
 
 def find_with_user_id(user_id):
