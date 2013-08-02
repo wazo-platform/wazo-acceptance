@@ -17,10 +17,10 @@
 
 from lettuce import world
 from xivo_lettuce.manager_ws.voicemail_manager_ws import delete_voicemails_with_number
-from xivo_lettuce.manager_ws.user_manager_ws import delete_users_with_firstname_lastname
 from xivo_lettuce.manager_ws.line_manager_ws import delete_lines_with_number
 from xivo_lettuce.manager_ws.incall_manager_ws import delete_incalls_with_did
 from xivo_ws.objects.user import User, UserLine, UserVoicemail, UserIncall
+from xivo_lettuce.manager_dao import user_manager_dao
 
 
 def insert_simple_user(entries):
@@ -28,7 +28,7 @@ def insert_simple_user(entries):
     for entry in entries:
         delete_voicemails_with_number(entry['linenumber'])
         delete_lines_with_number(entry['linenumber'], entry['context'])
-        delete_users_with_firstname_lastname(entry['firstname'], entry['lastname'])
+        user_manager_dao.delete_user_line_extension_with_firstname_lastname(entry['firstname'], entry['lastname'])
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']
@@ -45,7 +45,7 @@ def insert_adv_user_with_mevo(entries):
     for entry in entries:
         delete_voicemails_with_number(entry['linenumber'])
         delete_lines_with_number(entry['linenumber'], entry['context'])
-        delete_users_with_firstname_lastname(entry['firstname'], entry['lastname'])
+        user_manager_dao.delete_user_line_extension_with_firstname_lastname(entry['firstname'], entry['lastname'])
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']
@@ -66,7 +66,7 @@ def insert_adv_user_with_incall(entries):
     for entry in entries:
         delete_voicemails_with_number(entry['linenumber'])
         delete_lines_with_number(entry['linenumber'], entry['context'])
-        delete_users_with_firstname_lastname(entry['firstname'], entry['lastname'])
+        user_manager_dao.delete_user_line_extension_with_firstname_lastname(entry['firstname'], entry['lastname'])
         delete_incalls_with_did(entry['incall'])
         user = User()
         user.firstname = entry['firstname']
@@ -87,7 +87,7 @@ def insert_adv_user_full_infos(entries):
     for entry in entries:
         delete_voicemails_with_number(entry['linenumber'])
         delete_lines_with_number(entry['linenumber'], entry['context'])
-        delete_users_with_firstname_lastname(entry['firstname'], entry['lastname'])
+        user_manager_dao.delete_user_line_extension_with_firstname_lastname(entry['firstname'], entry['lastname'])
         delete_incalls_with_did(entry['incall'])
         user = User()
         user.firstname = entry['firstname']

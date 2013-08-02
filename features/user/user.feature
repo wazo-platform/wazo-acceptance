@@ -13,6 +13,7 @@ Feature: User
         Given there are users with infos:
         | firstname | lastname | number | context | group_name  |
         | Bob       | Marley   |   1101 | default | rastafarien |
+        Given there is no user "Bob" "Dylan"
         When I rename "Bob" "Marley" to "Bob" "Dylan"
         Then I should be at the user list page
         Then "Bob" "Dylan" is in group "rastafarien"

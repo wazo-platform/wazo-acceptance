@@ -28,6 +28,7 @@ from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
+from xivo_lettuce.manager_dao import user_manager_dao
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
@@ -94,7 +95,7 @@ class Prerequisite(object):
                          'line_number': '10%i' % (i),
                          'client_username': 'user%i' % (i)}
             user_data.update(user_data_tpl)
-            user_exist = user_manager_ws.is_user_with_name_exists('user', '%i' % (i))
+            user_exist = user_manager_dao.is_user_with_name_exists('user', '%i' % (i))
             if not user_exist:
                 user_manager_ws.add_user(user_data)
 

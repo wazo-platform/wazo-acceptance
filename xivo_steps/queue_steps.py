@@ -23,6 +23,7 @@ from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
 from xivo_lettuce.manager import queue_manager
 from xivo_lettuce import common
 from xivo_lettuce import form
+from xivo_lettuce.manager_dao import user_manager_dao
 
 
 @step(u'^Given there are queues with infos:$')
@@ -39,16 +40,16 @@ def given_there_are_queues_with_infos(step):
         if queue_data.get('schedule_name'):
             queue_data['schedule_id'] = convert_schedule_name(queue_data.pop('schedule_name'))
 
-        queue_manager.remove_queues_with_name_or_number(queue_data['name'], queue_data['number'])
-        queue_manager_ws.add_queue(queue_data)
+        queue_manager_ws.add_or_replace_queue(queue_data)
 
 
 def convert_user_numbers(user_numbers, context):
     users = []
     user_number_list = user_numbers.split(',')
     for user_number in user_number_list:
-        user_ids = user_manager_ws.search_user_ids_with_number(user_number, context)
-        users.extend(user_ids)
+        user = user_manager_dao.get_by_exten_context(user_number, context)
+        if user:
+            users.extend([user.id])
     return users
 
 

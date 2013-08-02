@@ -169,7 +169,7 @@ def enable_call_transfer():
 
 
 def count_linefeatures(user_id):
-    return _count_table_with_criteria("linefeatures", {"iduserfeatures": user_id})
+    return _count_table_with_criteria("user_line", {"user_id": user_id})
 
 
 def count_rightcallmember(user_id):
