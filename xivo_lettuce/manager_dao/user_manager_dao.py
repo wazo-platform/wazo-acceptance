@@ -90,12 +90,11 @@ def _delete_user_line_extension_with_firstname_lastname(channel, firstname, last
     fullname = '%s %s' % (firstname, lastname)
     users = user_services.find_all_by_fullname(fullname)
 
-    if users:
-        for user in users:
-            ules = ule_services.find_all_by_user_id(user.id)
-            if ules:
-                for ule in ules:
-                    ule_services.delete_everything(ule)
+    for user in users:
+        ules = ule_services.find_all_by_user_id(user.id)
+        for ule in ules:
+            ule_services.delete_everything(ule)
+        user_services.delete(user)
 
 
 def delete_user_line_extension_with_user_id(user_id):
