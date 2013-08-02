@@ -22,7 +22,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 from xivo_lettuce import common
 from xivo_lettuce.common import find_line, open_url, remove_line, edit_line
-from xivo_lettuce.manager_ws import line_manager_ws
 from xivo_lettuce.manager import line_manager
 from xivo_lettuce import form
 from xivo_lettuce.form.checkbox import Checkbox

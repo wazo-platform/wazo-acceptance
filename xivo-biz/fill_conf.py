@@ -23,7 +23,7 @@ import subprocess
 from lettuce.registry import world
 from xivo_lettuce import terrain
 from xivo_lettuce.manager_ws import context_manager_ws, user_manager_ws, \
-    trunkcustom_manager_ws, line_manager_ws
+    trunkcustom_manager_ws
 from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
