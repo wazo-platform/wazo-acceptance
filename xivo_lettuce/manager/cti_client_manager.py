@@ -15,10 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
 
 from xivo_lettuce import common, xivoclient
-from xivo_lettuce.manager_ws import user_manager_ws
-import time
 from lettuce.registry import world
 from xivo_lettuce.manager_dao import user_manager_dao
 
@@ -180,8 +179,8 @@ def log_user_in_client(firstname, lastname):
     conf_dict = {
         'main_server_address': common.get_host_address(),
         'main_server_port': 5003,
-        'login': user.client_username,
-        'password': user.client_password
+        'login': user.username,
+        'password': user.password
     }
     configure_client(conf_dict)
     return log_in_the_xivo_client()
