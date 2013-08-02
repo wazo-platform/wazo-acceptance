@@ -74,7 +74,6 @@ def add_or_replace_user(data_dict):
     lastname = data_dict.get('lastname', '')
 
     user_manager_dao.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
-    user_manager_dao.delete_all_user_with_firstname_lastname(firstname, lastname)
 
     if 'line_number' in data_dict:
         number = data_dict['line_number']

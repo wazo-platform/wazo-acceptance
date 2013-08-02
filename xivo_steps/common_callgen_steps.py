@@ -20,7 +20,7 @@ from datetime import datetime, timedelta
 from lettuce import step
 from xivo_lettuce.manager import queuelog_manager
 from xivo_lettuce.manager import call_manager, agent_status_manager
-from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
+from xivo_lettuce.manager_dao import line_manager_dao
 
 
 @step(u'Given there is no "([A-Z_]+)" entry for agent "([^"]*)"')
@@ -51,7 +51,7 @@ def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
 
 @step(u'I register extension "([^"]*)"')
 def i_register_extension(step, extension):
-    line = find_line_with_extension(extension)
+    line = line_manager_dao.find_with_extension(extension)
     call_manager.execute_sip_register(line.name, line.secret)
 
 

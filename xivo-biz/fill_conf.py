@@ -118,14 +118,14 @@ class Prerequisite(object):
             incall = Incall()
             incall.number = '1001'
             incall.context = 'from-extern'
-            incall.destination = UserDestination(line_manager_ws.find_line_id_with_number('101', 'default'))
+            incall.destination = UserDestination(line_manager_dao.find_line_id_with_exten_context('101', 'default'))
             world.ws.incalls.add(incall)
         incall_exist = world.ws.incalls.search('1002')
         if not incall_exist:
             incall = Incall()
             incall.number = '1002'
             incall.context = 'from-extern'
-            incall.destination = UserDestination(line_manager_ws.find_line_id_with_number('102', 'default'))
+            incall.destination = UserDestination(line_manager_dao.find_line_id_with_exten_context('102', 'default'))
             world.ws.incalls.add(incall)
 
     def _prepare_outcall(self):

@@ -87,13 +87,15 @@ def _delete_user_line_extension_with_firstname_lastname(channel, firstname, last
     from xivo_dao.data_handler.user import services as user_services
     from xivo_dao.data_handler.user_line_extension import services as ule_services
 
-    user = user_services.find_by_firstname_lastname(firstname, lastname)
+    fullname = '%s %s' % (firstname, lastname)
+    users = user_services.find_all_by_fullname(fullname)
 
-    if user:
-        ules = ule_services.find_all_by_user_id(user.id)
-        if ules:
-            for ule in ules:
-                ule_services.delete_everything(ule)
+    if users:
+        for user in users:
+            ules = ule_services.find_all_by_user_id(user.id)
+            if ules:
+                for ule in ules:
+                    ule_services.delete_everything(ule)
 
 
 def delete_user_line_extension_with_user_id(user_id):

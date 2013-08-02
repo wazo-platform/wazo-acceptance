@@ -117,7 +117,7 @@ class Prerequisite(object):
                 incall = Incall()
                 incall.number = '100%s' % (i)
                 incall.context = 'from-extern'
-                incall.destination = UserDestination(line_manager_ws.find_line_id_with_number('10%s' % (i), 'default'))
+                incall.destination = UserDestination(line_manager_dao.find_line_id_with_exten_context('10%s' % (i), 'default'))
                 world.ws.incalls.add(incall)
 
     def _prepare_outcall(self):
