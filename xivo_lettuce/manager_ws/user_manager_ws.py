@@ -72,16 +72,15 @@ def add_user(data_dict):
 def add_or_replace_user(data_dict):
     firstname = data_dict['firstname']
     lastname = data_dict.get('lastname', '')
+    mailbox = data_dict.get('voicemail_number', None)
+    exten = data_dict.get('line_number', None)
+    context = data_dict.get('line_context', None)
 
-    user_manager_dao.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
-
-    if 'line_number' in data_dict:
-        number = data_dict['line_number']
-        context = data_dict.get('line_context', 'default')
-        user_manager_dao.delete_user_line_extension_with_exten_context(number, context)
-
-    if 'voicemail_name' in data_dict and 'voicemail_number' in data_dict and 'line_context' in data_dict:
-        voicemail_manager_dao.delete_voicemail_with_number_context(data_dict['voicemail_number'], data_dict['line_context'])
+    user_manager_dao.delete_user_line_extension_voicemail(firstname,
+                                                          lastname,
+                                                          exten=exten,
+                                                          context=context,
+                                                          mailbox=mailbox)
 
     return add_user(data_dict)
 

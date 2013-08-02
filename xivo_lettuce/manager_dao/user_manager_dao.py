@@ -15,9 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from execnet import RemoteError
 from xivo_lettuce.remote_py_cmd import remote_exec
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
+from xivo_lettuce.manager_dao import voicemail_manager_dao
+
+
+def delete_user_line_extension_voicemail(firstname, lastname, context=None, exten=None, mailbox=None):
+    delete_user_line_extension_with_firstname_lastname(firstname, lastname)
+    delete_all_user_with_firstname_lastname(firstname, lastname)
+    if exten and context:
+        delete_user_line_extension_with_exten_context(exten, context)
+    if mailbox and context:
+        voicemail_manager_dao.delete_voicemail_with_number_context(mailbox, context)
 
 
 def get_by_exten_context(exten, context):
@@ -52,7 +63,10 @@ def is_user_with_name_exists(firstname, lastname):
 
 
 def delete_all_user_with_firstname_lastname(firstname, lastname):
-    remote_exec(_delete_all_user_with_firstname_lastname, firstname=firstname, lastname=lastname)
+    try:
+        remote_exec(_delete_all_user_with_firstname_lastname, firstname=firstname, lastname=lastname)
+    except RemoteError:
+        pass
 
 
 def _delete_all_user_with_firstname_lastname(channel, firstname, lastname):
@@ -66,8 +80,27 @@ def _delete_all_user_with_firstname_lastname(channel, firstname, lastname):
             user_services.delete(user)
 
 
+def delete_with_user_id(user_id):
+    try:
+        remote_exec(_delete_with_user_id, user_id=user_id)
+    except RemoteError:
+        pass
+
+
+def _delete_with_user_id(channel, user_id):
+    from xivo_dao.data_handler.user import services as user_services
+
+    user = user_services.get(user_id)
+
+    if user:
+        user_services.delete(user)
+
+
 def delete_user_with_firstname_lastname(firstname, lastname):
-    remote_exec(_delete_user_with_firstname_lastname, firstname=firstname, lastname=lastname)
+    try:
+        remote_exec(_delete_user_with_firstname_lastname, firstname=firstname, lastname=lastname)
+    except RemoteError:
+        pass
 
 
 def _delete_user_with_firstname_lastname(channel, firstname, lastname):
@@ -80,7 +113,10 @@ def _delete_user_with_firstname_lastname(channel, firstname, lastname):
 
 
 def delete_user_line_extension_with_firstname_lastname(firstname, lastname):
-    remote_exec(_delete_user_line_extension_with_firstname_lastname, firstname=firstname, lastname=lastname)
+    try:
+        remote_exec(_delete_user_line_extension_with_firstname_lastname, firstname=firstname, lastname=lastname)
+    except RemoteError:
+        pass
 
 
 def _delete_user_line_extension_with_firstname_lastname(channel, firstname, lastname):
@@ -100,7 +136,10 @@ def _delete_user_line_extension_with_firstname_lastname(channel, firstname, last
 
 
 def delete_user_line_extension_with_user_id(user_id):
-    remote_exec(_delete_user_line_extension_with_user_id, user_id=user_id)
+    try:
+        remote_exec(_delete_user_line_extension_with_user_id, user_id=user_id)
+    except RemoteError:
+        pass
 
 
 def _delete_user_line_extension_with_user_id(channel, user_id):
@@ -114,7 +153,10 @@ def _delete_user_line_extension_with_user_id(channel, user_id):
 
 
 def delete_user_line_extension_with_exten_context(exten, context):
-    remote_exec(_delete_user_line_extension_with_number_context, exten=exten, context=context)
+    try:
+        remote_exec(_delete_user_line_extension_with_number_context, exten=exten, context=context)
+    except RemoteError:
+        pass
 
 
 def _delete_user_line_extension_with_number_context(channel, exten, context):

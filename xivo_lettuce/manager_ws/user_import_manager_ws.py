@@ -25,9 +25,14 @@ from xivo_lettuce.manager_dao import user_manager_dao, line_manager_dao
 def insert_simple_user(entries):
     users = list()
     for entry in entries:
-        delete_voicemails_with_number(entry['linenumber'])
-        line_manager_dao.delete_line_with_exten_context(entry['linenumber'], entry['context'])
-        user_manager_dao.delete_user_line_extension_with_firstname_lastname(entry['firstname'], entry['lastname'])
+        mailbox = entry.get('linenumber', None)
+        exten = entry.get('linenumber', None)
+        context = entry.get('context', None)
+        user_manager_dao.delete_user_line_extension_voicemail(entry['firstname'],
+                                                              entry['lastname'],
+                                                              exten=exten,
+                                                              context=context,
+                                                              mailbox=mailbox)
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']
@@ -42,9 +47,14 @@ def insert_simple_user(entries):
 def insert_adv_user_with_mevo(entries):
     users = list()
     for entry in entries:
-        delete_voicemails_with_number(entry['linenumber'])
-        line_manager_dao.delete_line_with_exten_context(entry['linenumber'], entry['context'])
-        user_manager_dao.delete_user_line_extension_with_firstname_lastname(entry['firstname'], entry['lastname'])
+        mailbox = entry.get('linenumber', None)
+        exten = entry.get('linenumber', None)
+        context = entry.get('context', None)
+        user_manager_dao.delete_user_line_extension_voicemail(entry['firstname'],
+                                                              entry['lastname'],
+                                                              exten=exten,
+                                                              context=context,
+                                                              mailbox=mailbox)
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']
@@ -63,9 +73,14 @@ def insert_adv_user_with_mevo(entries):
 def insert_adv_user_with_incall(entries):
     users = list()
     for entry in entries:
-        delete_voicemails_with_number(entry['linenumber'])
-        line_manager_dao.delete_line_with_exten_context(entry['linenumber'], entry['context'])
-        user_manager_dao.delete_user_line_extension_with_firstname_lastname(entry['firstname'], entry['lastname'])
+        mailbox = entry.get('linenumber', None)
+        exten = entry.get('linenumber', None)
+        context = entry.get('context', None)
+        user_manager_dao.delete_user_line_extension_voicemail(entry['firstname'],
+                                                              entry['lastname'],
+                                                              exten=exten,
+                                                              context=context,
+                                                              mailbox=mailbox)
         delete_incalls_with_did(entry['incall'])
         user = User()
         user.firstname = entry['firstname']
@@ -84,9 +99,14 @@ def insert_adv_user_with_incall(entries):
 def insert_adv_user_full_infos(entries):
     users = list()
     for entry in entries:
-        delete_voicemails_with_number(entry['linenumber'])
-        line_manager_dao.delete_line_with_exten_context(entry['linenumber'], entry['context'])
-        user_manager_dao.delete_user_line_extension_with_firstname_lastname(entry['firstname'], entry['lastname'])
+        mailbox = entry.get('linenumber', None)
+        exten = entry.get('linenumber', None)
+        context = entry.get('context', None)
+        user_manager_dao.delete_user_line_extension_voicemail(entry['firstname'],
+                                                              entry['lastname'],
+                                                              exten=exten,
+                                                              context=context,
+                                                              mailbox=mailbox)
         delete_incalls_with_did(entry['incall'])
         user = User()
         user.firstname = entry['firstname']
