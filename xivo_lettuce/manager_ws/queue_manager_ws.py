@@ -49,8 +49,10 @@ def add_queue(data):
 
 
 def add_or_replace_queue(queue_data):
+    queue_name = queue_data['name']
     queue_number = queue_data['number']
     delete_queues_with_number(queue_number)
+    delete_queues_with_name(queue_name)
 
     add_queue(queue_data)
 
