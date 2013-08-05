@@ -14,6 +14,7 @@ Feature: Stat
         Given I log agent "004" on extension "1004@statscenter"
         Given I wait 5 seconds for the calls processing
         Given there is 1 calls to extension "5004@statscenter" then i hang up after "20s"
+        Given I wait 2 seconds for the calls processing
         Given I logout agent "004" on extension "1004@statscenter"
         Given I wait 25 seconds for the calls processing
         Then I should see 1 "RINGNOANSWER" event in queue "q04" in the queue log
