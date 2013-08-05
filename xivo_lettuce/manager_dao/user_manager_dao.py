@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from execnet import RemoteError
+from execnet.gateway_base import RemoteError
 from xivo_lettuce.remote_py_cmd import remote_exec
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
