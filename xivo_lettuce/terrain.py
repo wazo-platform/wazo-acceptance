@@ -74,13 +74,13 @@ def read_config():
 def initialize():
     world.config = read_config()
     world.browser_enable = world.config.getboolean('browser', 'enable')
+    world.lazy = _LazyWorldAttributes()
     _setup_dao()
     _setup_xivo_client()
     _setup_login_infos()
     _setup_ssh_client_xivo()
     _setup_ssh_client_callgen()
     _setup_ws()
-    _setup_execnet_gateway()
     if world.browser_enable:
         _setup_browser()
         if _webi_configured():
@@ -155,10 +155,17 @@ def _setup_ws():
     world.ws = xivo_ws.XivoServer(hostname, login, password)
 
 
-def _setup_execnet_gateway():
-    hostname = world.config.get('xivo', 'hostname')
-    login = world.config.get('ssh_infos', 'login')
-    world.execnet_gateway = execnet.makegateway('ssh=%s@%s' % (login, hostname))
+class _LazyWorldAttributes(object):
+
+    @property
+    def execnet_gateway(self):
+        try:
+            return self._execnet_gateway
+        except AttributeError:
+            hostname = world.config.get('xivo', 'hostname')
+            login = world.config.get('ssh_infos', 'login')
+            self._execnet_gateway = execnet.makegateway('ssh=%s@%s' % (login, hostname))
+            return self._execnet_gateway
 
 
 def _webi_configured():

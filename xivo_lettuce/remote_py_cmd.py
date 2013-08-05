@@ -19,5 +19,5 @@ from lettuce.registry import world
 
 
 def remote_exec(func, **kwargs):
-    channel = world.execnet_gateway.remote_exec(func, **kwargs)
+    channel = world.lazy.execnet_gateway.remote_exec(func, **kwargs)
     channel.waitclose()
