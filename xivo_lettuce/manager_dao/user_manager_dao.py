@@ -23,12 +23,20 @@ from xivo_lettuce.manager_dao import voicemail_manager_dao
 
 
 def delete_user_line_extension_voicemail(firstname, lastname, context=None, exten=None, mailbox=None):
-    delete_user_line_extension_with_firstname_lastname(firstname, lastname)
-    delete_all_user_with_firstname_lastname(firstname, lastname)
     if exten and context:
         delete_user_line_extension_with_exten_context(exten, context)
     if mailbox and context:
         voicemail_manager_dao.delete_voicemail_with_number_context(mailbox, context)
+    delete_user_line_extension_with_firstname_lastname(firstname, lastname)
+    delete_all_user_with_firstname_lastname(firstname, lastname)
+
+
+def get_by_user_id(user_id):
+    try:
+        user = user_services.get(user_id)
+    except ElementNotExistsError:
+        return None
+    return user
 
 
 def get_by_exten_context(exten, context):
