@@ -18,6 +18,7 @@
 import execnet
 import ConfigParser
 import os
+import sys
 import tempfile
 import xivo_ws
 from lettuce import before, after, world
@@ -43,6 +44,11 @@ def xivo_lettuce_before_all():
 def xivo_lettuce_before_each(scenario):
     if world.browser_enable and _webi_configured():
         _check_webi_login_root()
+
+
+@after.each_step
+def flush_stdout(step):
+    sys.stdout.flush()
 
 
 @after.each_scenario
