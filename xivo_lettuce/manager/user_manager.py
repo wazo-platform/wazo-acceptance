@@ -169,43 +169,35 @@ def enable_call_transfer():
 
 
 def count_linefeatures(user_id):
-    return _count_table_with_criteria("user_line", {"user_id": user_id})
+    return _count_table_with_cond("user_line", {'"user_id"': user_id})
 
 
 def count_rightcallmember(user_id):
-    return _count_table_with_criteria("rightcallmember", {"type": "'user'", "typeval": "'%s'" % user_id})
+    return _count_table_with_cond("rightcallmember", {'"type"': "'user'", '"typeval"': "'%s'" % user_id})
 
 
 def count_dialaction(user_id):
-    return _count_table_with_criteria("dialaction", {"category": "'user'", "categoryval": "'%s'" % user_id})
+    return _count_table_with_cond("dialaction", {'"category"': "'user'", '"categoryval"': "'%s'" % user_id})
 
 
 def count_phonefunckey(user_id):
-    return _count_table_with_criteria("phonefunckey", {"iduserfeatures": user_id})
+    return _count_table_with_cond("phonefunckey", {'"iduserfeatures"': user_id})
 
 
 def count_callfiltermember(user_id):
-    return _count_table_with_criteria("callfiltermember", {"type": "'user'", "typeval": "'%s'" % user_id})
+    return _count_table_with_cond("callfiltermember", {'"type"': "'user'", '"typeval"': "'%s'" % user_id})
 
 
 def count_queuemember(user_id):
-    return _count_table_with_criteria("queuemember", {"usertype": "'user'", "userid": user_id})
+    return _count_table_with_cond("queuemember", {'"usertype"': "'user'", '"userid"': user_id})
 
 
 def count_schedulepath(user_id):
-    return _count_table_with_criteria("schedule_path", {"path": "'user'", "pathid": user_id})
+    return _count_table_with_cond("schedule_path", {'"path"': "'user'", '"pathid"': user_id})
 
 
-def _count_table_with_criteria(table, criteria):
-    pgcommand = "\"SELECT COUNT(*) FROM %s" % table
-    if(criteria is not None and criteria != {}):
-        pgcommand += " WHERE "
-        for key, value in criteria.iteritems():
-            pgcommand += "%s = %s AND " % (key, value)
-        pgcommand = pgcommand[:-5]
-        pgcommand += "\""
-    result = postgres.exec_sql_request_with_return(pgcommand)
-    return int(result.split('\n')[-4].strip())
+def _count_table_with_cond(table, cond_dict):
+    return postgres.exec_count_request(table, **cond_dict)
 
 
 def deactivate_bsfilter(user):

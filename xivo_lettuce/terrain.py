@@ -124,6 +124,7 @@ def _setup_dao():
     hostname = world.config.get('xivo', 'hostname')
     dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % hostname
     db_manager.reinit()
+    world.asterisk_conn = db_manager._asterisk_engine.connect()
 
 
 def _setup_xivo_client():

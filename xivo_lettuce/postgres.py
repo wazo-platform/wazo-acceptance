@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+#
 # Copyright (C) 2013 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,14 +15,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import world
+from lettuce.registry import world
 
 
 def exec_sql_request(pg_command):
-    command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
-    world.ssh_client_xivo.check_call(command)
+    return world.asterisk_conn.execute(pg_command)
 
 
-def exec_sql_request_with_return(pg_command):
-    command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
-    return world.ssh_client_xivo.out_call(command)
+def exec_count_request(table, **cond_dict):
+    pg_command = 'SELECT COUNT(*) FROM "%s"' % table
+    if len(cond_dict) > 0:
+        pg_command += " WHERE "
+        cond = []
+        for key, value in cond_dict.iteritems():
+            cond.append('%s = %s' % (key, value))
+        pg_command = '%s%s' % (pg_command, ' AND '.join(cond))
+
+    result = world.asterisk_conn.execute(pg_command)
+    row = result.fetchone()
+    return int(row[0])
