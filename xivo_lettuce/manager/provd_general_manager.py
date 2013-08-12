@@ -60,6 +60,23 @@ def configure_proxies(config):
         time.sleep(3)
 
 
+def configure_rest_api(config):
+    """
+        VALID FIELDS:
+            'net4_ip_rest',
+            'rest_port',
+            'private',
+            'username',
+            'password',
+            'secure'
+    """
+
+    for input_name, input_value in config.items():
+        element = world.browser.find_element_by_id('it-provd-%s' % input_name)
+        element.clear()
+        element.send_keys(input_value)
+
+
 def type_plugin_server_url(url):
     world.browser.find_element_by_name('plugin_server', 'plugin_server form not loaded')
     input_plugin_server = world.browser.find_element_by_name('plugin_server')

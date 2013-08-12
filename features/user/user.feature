@@ -31,8 +31,8 @@ Feature: User
         | firstname | lastname | protocol | number | context |
         | Bill      | Bush     | SIP      |  1632  | default |
         Then I see a user with infos:
-        | fullname  | number | line_count |
-        | Bill Bush |   1632 |          1 |
+        | fullname  | number | protocol | context |
+        | Bill Bush |   1632 | sip      | default |
         When I remove user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
@@ -42,8 +42,8 @@ Feature: User
         | firstname | lastname | protocol | number | context |
         | Bill      | Bush     | SCCP     |  1632  | default |
         Then I see a user with infos:
-        | fullname  | number | provisioning_code | line_count |
-        | Bill Bush |   1632 |                 0 |          1 |
+        | fullname  | number | provisioning_code | protocol | context |
+        | Bill Bush |   1632 |                 0 | sccp     | default |
         When I remove user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
@@ -58,8 +58,8 @@ Feature: User
         | firstname | lastname | protocol | number | context | device            |
         | Bill      | Bush     | SIP      |   1632 | default | 00:de:ad:be:ef:00 |
         Then I see a user with infos:
-        | fullname  | number | line_count |
-        | Bill Bush |   1632 |          1 |
+        | fullname  | number | protocol | context |
+        | Bill Bush |   1632 | sip      | default |
         Then I see devices with infos:
         | mac               | configured |
         | 00:de:ad:be:ef:00 | True       |

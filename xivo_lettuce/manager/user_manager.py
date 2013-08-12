@@ -183,12 +183,14 @@ def get_user_list_entry(user):
     fullname = user_tr.find_element_by_class_name('col_fullname').text
     provisioning_code = user_tr.find_element_by_class_name('col_provisioning_code').text
     number = user_tr.find_element_by_class_name('col_number').text
-    line_count = user_tr.find_element_by_class_name('col_line_count').text
+    context = user_tr.find_element_by_class_name('col_context').text
+    protocol = user_tr.find_element_by_class_name('col_protocol').text
     return {
         'fullname': fullname,
         'provisioning_code': provisioning_code,
         'number': number,
-        'line_count': line_count
+        'context': context,
+        'protocol': protocol
     }
 
 

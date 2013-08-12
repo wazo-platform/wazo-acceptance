@@ -21,6 +21,9 @@ import socket
 from lettuce import world
 from xivo_lettuce.manager_ws import context_manager_ws, trunksip_manager_ws
 from xivo_lettuce.terrain import initialize, deinitialize
+from xivo_lettuce.common import open_url
+from xivo_lettuce.manager import provd_general_manager
+from xivo_lettuce.form import submit
 
 
 _WEBSERVICES_SQL_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'webservices.sql'))
@@ -56,6 +59,9 @@ def main():
         print 'Configuring PostgreSQL on XiVO'
         _create_pgpass_on_remote_host()
         _allow_remote_access_to_pgsql()
+
+        print 'Configuring Provd REST API'
+        _allow_provd_listen_on_all_interfaces()
 
     finally:
         deinitialize()
@@ -94,6 +100,14 @@ def _xivo_service_restart():
     command = ['xivo-service', 'restart', 'all']
     world.ssh_client_xivo.check_call(command)
 
+
+def _allow_provd_listen_on_all_interfaces():
+    open_url('provd_general')
+    config = {
+        'net4_ip_rest': '0.0.0.0',
+    }
+    provd_general_manager.configure_rest_api(config)
+    submit.submit_form()
 
 if __name__ == '__main__':
     main()

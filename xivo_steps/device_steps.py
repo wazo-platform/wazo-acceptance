@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from hamcrest import assert_that, equal_to, has_length
+from hamcrest import assert_that, equal_to
 from xivo_lettuce.manager import device_manager
 from xivo_lettuce.manager import provd_client
 from xivo_lettuce import postgres
@@ -29,8 +29,8 @@ def given_there_is_a_device_with_infos(step):
 
 
 @step(u'^When I search device "([^"]*)"$')
-def when_i_search_device(step, str):
-    device_manager.search_device(str)
+def when_i_search_device(step, search):
+    device_manager.search_device(search)
 
 
 @step(u'Given there is a device in autoprov with infos:')
@@ -40,7 +40,7 @@ def given_there_is_a_device_in_autoprov_with_infos(step):
     plugin = device_properties['plugin']
 
     provd_client.delete_device_by_mac(mac_address)
-    postgres.exec_sql_request('"delete from devicefeatures where mac = \'%s\'"' % mac_address)
+    postgres.exec_sql_request('delete from devicefeatures where mac = \'%s\'' % mac_address)
 
     provd_client.create_device(
         mac_address=mac_address,
