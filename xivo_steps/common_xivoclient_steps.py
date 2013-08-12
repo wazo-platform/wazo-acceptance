@@ -30,22 +30,27 @@ def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
     conf_dict = {
         'main_server_address': common.get_host_address(),
         'login': login,
-        'password': password
+        'password': password,
+        'agent_option': 'no',
     }
     cti_client_manager.configure_client(conf_dict)
-    cti_client_manager.log_in_the_xivo_client()
+    result = cti_client_manager.log_in_the_xivo_client()
+    assert_that(result['test_result'], equal_to('passed'),
+                'could not log in the CTI client as %s pass %s' % (login, password))
 
 
-@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", unlogged agent$')
-def i_log_in_the_xivo_client_as_1_pass_2_unlogged_agent(step, login, password):
+@step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)", ([a-z]*) agent$')
+def i_log_in_the_xivo_client_as_1_pass_2_logged_agent(step, login, password, login_status):
     conf_dict = {
         'main_server_address': common.get_host_address(),
         'login': login,
         'password': password,
-        'agent_option': 'unlogged'
+        'agent_option': login_status,
     }
     cti_client_manager.configure_client(conf_dict)
-    cti_client_manager.log_in_the_xivo_client()
+    result = cti_client_manager.log_in_the_xivo_client()
+    assert_that(result['test_result'], equal_to('passed'),
+                'could not log in the CTI client as %s pass %s' % (login, password))
 
 
 @step(u'I log out of the XiVO Client$')
@@ -145,12 +150,6 @@ def when_i_enable_keep_password(step):
     cti_client_manager.configure_client(conf_dict)
 
 
-@step(u'When I disable keep password')
-def when_i_disable_keep_password(step):
-    conf_dict = {'keep_password': False}
-    cti_client_manager.configure_client(conf_dict)
-
-
 @step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')
 def when_i_disable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
     user_manager_ws.disable_cti_client(firstname, lastname)
@@ -222,11 +221,6 @@ def then_i_see_start_systrayed_are_enabled(step):
 def then_i_see_start_systrayed_are_disabled(step):
     res = cti_client_manager.get_main_window_infos()
     assert_that(res['visible'], equal_to(False))
-
-
-@step(u'Then I get sheet infos')
-def get_sheet_infos(step):
-    cti_client_manager.get_sheet_infos()
 
 
 @step(u'Then I can\'t connect the CTI client of "([^"]*)" "([^"]*)"')

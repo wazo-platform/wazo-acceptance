@@ -113,7 +113,7 @@ def fill_application_tab(queue):
         set_checkbox_with_id('it-queuefeatures-hitting-callee', callee_transfer)
 
     if CALLER_HANGUP in queue:
-        caller_hangup = (queue[CALLER_HANGUP]  == 'true')
+        caller_hangup = (queue[CALLER_HANGUP] == 'true')
         set_checkbox_with_id('it-queuefeatures-hitting-caller', caller_hangup)
 
 
@@ -122,7 +122,7 @@ def fill_advanced_tab(queue):
 
     if REACH_TIMEOUT in queue:
         set_select_field_with_id('it-queue-timeout',
-            queue[REACH_TIMEOUT])
+                                 queue[REACH_TIMEOUT])
 
     if CALL_RETRY in queue:
         set_select_field_with_id('it-queue-retry', queue[CALL_RETRY])

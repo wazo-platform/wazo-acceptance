@@ -45,7 +45,7 @@ def then_the_agent_list_xlet_shows_agent_as_in_use(step, agent_number):
 def then_the_agent_list_xlet_shows_agent_as_on_non_acd_call(step, agent_number):
     agent = _get_agent_infos(agent_number)
 
-    assert_that(agent['availability'], starts_with('OOQ In'), 'agent %s not "OOQ In"' % agent_number)
+    assert_that(agent['availability'], starts_with('Ext. Incoming'), 'agent %s not "OOQ In"' % agent_number)
 
 
 @step(u'Then the agent list xlet shows agent "([^"]*)" as not in use')

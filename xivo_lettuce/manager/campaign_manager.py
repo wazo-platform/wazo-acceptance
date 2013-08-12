@@ -22,19 +22,23 @@ from xivo_lettuce.common import open_url, find_line, edit_line, remove_line, \
 from xivo_lettuce.form.submit import submit_form_with_errors
 import hamcrest
 
+
 def create_campaign(info):
     open_url('campaign', 'add')
     fill_form(info)
     form.submit.submit_form()
+
 
 def edit_campaign(name, info):
     edit_line(name)
     fill_form(info)
     form.submit.submit_form()
 
+
 def add_or_replace(name):
     remove_element_if_exist('campaign', name)
     create_campaign({'name': name})
+
 
 def fill_form(info):
     if 'name' in info:
@@ -46,6 +50,7 @@ def fill_form(info):
     if 'queue' in info:
         form.select.set_select_field_with_id_containing("recordingcampaign_queueid", info['queue'])
 
+
 def remove_recordings(campaign_name):
     open_url('campaign', 'list')
     line = find_line(campaign_name)
@@ -53,14 +58,17 @@ def remove_recordings(campaign_name):
     link.click()
     remove_all_elements_from_current_page('')
 
+
 def remove_campaign(name):
     open_url('campaign', 'list')
     remove_line(name)
+
 
 def create_campaign_with_errors(infos):
     open_url('campaign', 'add')
     fill_form(infos)
     submit_form_with_errors()
+
 
 def campaign_exists(info):
     open_url('campaign', 'list', None)

@@ -117,4 +117,3 @@ Feature: CtiClient Configuration
         When I start the XiVO Client "default"
         When I start the XiVO Client "toto"
         Then I have "1" instances of the client
-    

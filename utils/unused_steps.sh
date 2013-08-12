@@ -36,7 +36,7 @@ function extract_step_pattern {
 
 function find_step_usage {
     step_pattern="$1"
-    grep -qrI --include '*.feature' "$step_pattern" .
+    grep -qrIi --include '*.feature' "$step_pattern" .
 }
 
 function list_step_definitions {

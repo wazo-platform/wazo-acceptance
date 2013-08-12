@@ -17,6 +17,7 @@
 
 import time
 
+from hamcrest import *
 from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
@@ -29,48 +30,45 @@ from selenium.webdriver.support.select import Select
 from xivo_lettuce.manager_ws import context_manager_ws
 
 
-@step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
-def given_there_is_an_outcall_with_trunk(step, outcall_name, trunk_name):
-    trunksip_manager_ws.add_or_replace_trunksip('192.168.32.254', trunk_name)
+@step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)" and no extension matched')
+def given_there_is_an_outcall_with_trunk_and_no_extensions_matched(step, outcall_name, trunk_name):
+    trunksip_manager_ws.add_or_replace_trunksip(world.dummy_ip_address, trunk_name)
     trunk_id = trunksip_manager_ws.find_trunksip_id_with_name(trunk_name)
     data = {'name': outcall_name,
             'context': 'to-extern',
             'trunks': [trunk_id]}
-    outcall_manager_ws.add_outcall(data)
+    outcall_manager_ws.add_or_replace_outcall(data)
 
 
-@step(u'Given there is a outcall context "([^"]*)"')
-def given_there_is_a_ouctall_context(step, context_name):
-    context_manager_ws.add_context(context_name, context_name, 'outcall')
+@step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)" with extension patterns')
+def given_there_is_an_outcall_with_trunk_with_extension_patterns(step, outcall_name, trunk_name):
+    trunksip_manager_ws.add_or_replace_trunksip(world.dummy_ip_address, trunk_name)
+    trunk_id = trunksip_manager_ws.find_trunksip_id_with_name(trunk_name)
+
+    extensions = []
+    for outcall_extension in step.hashes:
+        new_extension = {}
+        new_extension['exten'] = outcall_extension['extension_pattern']
+        new_extension['stripnum'] = outcall_extension.get('stripnum', 0)
+        new_extension['caller_id'] = outcall_extension.get('caller_id', '')
+        extensions.append(new_extension)
+
+    data = {'name': outcall_name,
+            'context': 'to-extern',
+            'trunks': [trunk_id],
+            'extens': extensions}
+    outcall_manager_ws.add_or_replace_outcall(data)
 
 
 @step(u'Given there is an outcall "([^"]*)" in context "([^"]*)" with trunk "([^"]*)"')
 def given_there_is_an_outcall_in_context_with_trunk(step, outcall_name, outcall_context, trunk_name):
-    trunksip_manager_ws.add_or_replace_trunksip('192.168.32.254', trunk_name)
+    context_manager_ws.add_or_replace_context(outcall_context, outcall_context, 'outcall')
+    trunksip_manager_ws.add_or_replace_trunksip(world.dummy_ip_address, trunk_name)
     trunk_id = trunksip_manager_ws.find_trunksip_id_with_name(trunk_name)
     data = {'name': outcall_name,
             'context': outcall_context,
             'trunks': [trunk_id]}
-    outcall_manager_ws.add_outcall(data)
-
-
-@step(u'Given I don\'t see any exten "([^"]*)"')
-def given_i_dont_see_any_exten(step, exten):
-    try:
-        then_i_dont_see_any_exten(step, exten)
-    except AssertionError:
-        when_i_remove_the_exten(step, exten)
-        form.submit.submit_form()
-
-
-@step(u'Given I see an exten "([^"]*)"')
-def given_i_see_an_exten(step, exten):
-    try:
-        then_i_see_an_exten(step, exten)
-    except NoSuchElementException:
-        when_i_add_an_exten(step)
-        when_i_set_the_exten_to(step, exten)
-        form.submit.submit_form()
+    outcall_manager_ws.add_or_replace_outcall(data)
 
 
 @step(u'Given there is no outcall "([^"]*)"')
@@ -110,49 +108,64 @@ def when_i_remove_the_outcall(step, name):
     remove_line(name)
 
 
-@step(u'I go to the outcall "([^"]*)", tab "([^"]*)"')
-def i_go_to_the_outcall_tab(step, name, tab):
+@step(u'When I remove extension patterns from outcall "([^"]*)":')
+def when_i_remove_extension_patterns_from_outcall_1(step, outcall_name):
     open_url('outcall', 'list')
-    edit_line(name)
-    go_to_tab(tab)
+    edit_line(outcall_name)
+    go_to_tab('Exten')
+
+    for outcall_extension in step.hashes:
+        extension_pattern = outcall_extension['extension_pattern']
+        delete_button = exten_line(extension_pattern).find_element_by_id('lnk-del-row')
+        delete_button.click()
+        # Wait for the Javascript to remove the line
+        time.sleep(1)
+    form.submit.submit_form()
 
 
-@step(u'When I add an exten')
-def when_i_add_an_exten(step):
-    add_button = world.browser.find_element_by_id('lnk-add-row', 'Can\'t add an exten')
-    add_button.click()
+@step(u'When I add the following extension patterns to the outcall "([^"]*)":')
+def when_i_add_the_following_extension_patterns_to_the_outcall_1(step, outcall_name):
+    open_url('outcall', 'list')
+    edit_line(outcall_name)
+    go_to_tab('Exten')
+
+    for outcall_extension in step.hashes:
+        add_button = world.browser.find_element_by_id('lnk-add-row', 'Can\'t add an exten')
+        add_button.click()
+        input_exten = world.browser.find_elements_by_xpath(
+            "//table[@id='list_exten']//input[@name='dialpattern[exten][]']")[-1]
+        input_exten.send_keys(outcall_extension['extension_pattern'])
+
+    form.submit.submit_form()
 
 
-@step(u'When I set the exten to "([^"]*)"')
-def when_i_set_the_exten_to(step, exten):
-    input_exten = world.browser.find_elements_by_xpath(
-        "//table[@id='list_exten']//input[@name='dialpattern[exten][]']")[-1]
-    input_exten.send_keys(exten)
+@step(u'Then the outcall "([^"]*)" has the extension patterns:')
+def then_the_outcall_1_has_the_extension_patterns(step, outcall_name):
+    open_url('outcall', 'list')
+    edit_line(outcall_name)
+    go_to_tab('Exten')
+
+    for outcall_extension in step.hashes:
+        extension_pattern = outcall_extension['extension_pattern']
+        extension_pattern_input = exten_line(extension_pattern).find_element_by_xpath(".//input[@name='dialpattern[exten][]']")
+        assert_that(extension_pattern_input, not_none())
 
 
-@step(u'Then I see an exten "([^"]*)"')
-def then_i_see_an_exten(step, exten):
-    exten_element = exten_line(exten).find_element_by_xpath(
-        ".//input[@name='dialpattern[exten][]']")
-    assert exten_element is not None
+@step(u'Then the outcall "([^"]*)" does not have extension patterns:')
+def then_the_outcall_1_does_not_have_extension_patterns(step, outcall_name):
+    open_url('outcall', 'list')
+    edit_line(outcall_name)
+    go_to_tab('Exten')
 
-
-@step(u'When I remove the exten "([^"]*)"')
-def when_i_remove_the_exten(step, exten):
-    delete_button = exten_line(exten).find_element_by_id('lnk-del-row')
-    delete_button.click()
-    # Wait for the Javascript to remove the line
-    time.sleep(1)
-
-
-@step(u'Then I don\'t see any exten "([^"]*)"')
-def then_i_dont_see_any_exten(step, exten):
-    try:
-        exten_line(exten)
-    except NoSuchElementException:
-        pass
-    else:
-        assert False
+    for outcall_extension in step.hashes:
+        extension_pattern = outcall_extension['extension_pattern']
+        try:
+            exten_line(extension_pattern)
+        except NoSuchElementException:
+            pass
+        else:
+            raise Exception('extension pattern %s unexpectedly found in outcall %s' %
+                            (outcall_extension, outcall_name))
 
 
 @step(u'Then there is no outcall "([^"]*)"')
@@ -164,3 +177,12 @@ def then_there_is_no_outcall(step, name):
         pass
     else:
         assert False
+
+
+@step(u'Then there are outcalls with infos:')
+def then_there_are_outcalls_with_infos(step):
+    outcalls = [{u'name': outcall.name,
+                 u'context': outcall.context}
+                for outcall in outcall_manager_ws.list_outcalls()]
+    for expected_outcall_attributes in step.hashes:
+        assert_that(outcalls, has_item(has_entries(expected_outcall_attributes)))

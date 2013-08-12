@@ -22,6 +22,7 @@ from xivo_lettuce.common import open_url
 
 PROXY_FIELDS = ['http_proxy', 'ftp_proxy', 'https_proxy']
 
+
 @step(u'Given I have no proxies configured')
 def given_i_have_no_proxies_configured(step):
     host, port = provd.rest_api_configuration()
@@ -35,6 +36,7 @@ def when_i_configure_the_following_proxies(step):
     open_url('provd_general')
     for config in step.hashes:
         provd.configure_proxies(config)
+
 
 @step(u'When I reload the provisionning general settings page')
 def when_i_reload_the_provisionning_general_settings_page(step):
@@ -56,5 +58,3 @@ def then_there_are_no_proxies_configured(step):
         element = world.browser.find_element_by_name(field)
         value = element.get_attribute('value')
         assert value == ""
-
-

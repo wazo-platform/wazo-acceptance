@@ -27,7 +27,6 @@ class AastraPhonebookBrowser(object):
     _REGEX_DISPLAY = re.compile(r'<Prompt><!\[CDATA\[(.+?)\]\]></Prompt>')
     _REGEX_NUMBER = re.compile(r'<URI>Dial:<!\[CDATA\[(.+?)\]\]></URI>')
 
-
     def search(self, name):
         request = self._new_request(name)
         fobj = urllib2.urlopen(request)

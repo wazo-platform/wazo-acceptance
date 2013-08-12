@@ -19,6 +19,8 @@ from xivo_lettuce import form
 from xivo_lettuce import common
 from xivo_lettuce.manager import asterisk_manager
 
+from hamcrest import assert_that, has_entries
+
 
 def set_parking_config(config_map):
     common.open_url('extenfeatures')
@@ -40,19 +42,21 @@ def set_parking_config(config_map):
     form.submit.submit_form()
 
 
-def check_parking_info(parking_info):
+def check_parking_info(expected_parking_info):
     output = asterisk_manager.check_output_asterisk_cli('features show')
-    match_count = 0
+    parking_info = _parse_parking_info(output)
 
-    for line in output.split('\n'):
+    assert_that(parking_info, has_entries(expected_parking_info))
+
+
+def _parse_parking_info(asterisk_output):
+    parking_info = {}
+    for line in asterisk_output.split('\n'):
         if ':' not in line:
             continue
         field, value = line.split(':', 1)
         field = field.strip()
-        if field in parking_info:
-            value = value.strip()
-            expected = parking_info[field]
-            assert expected == value
-            match_count += 1
+        value = value.strip()
+        parking_info[field] = value
 
-    assert match_count == len(parking_info)
+    return parking_info

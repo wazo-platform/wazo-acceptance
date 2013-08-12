@@ -15,10 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from hamcrest import assert_that, is_
 from lettuce import step, world
-from xivo_lettuce import form
 from xivo_lettuce import urls
-from xivo_lettuce.common import open_url, edit_line, webi_logout
+from xivo_lettuce.common import open_url, webi_logout
 from xivo_lettuce.manager import admin_user_manager
 
 import time
@@ -60,4 +60,4 @@ def then_i_can_access_the_sip_protocol_configuration(step):
 def then_i_cannot_access_the_sccp_protocol_configuration(step):
     open_url("sccpgeneralsettings")
     time.sleep(2)
-    assert is_browser_on_module_page("sccpgeneralsettings") == False
+    assert_that(is_browser_on_module_page("sccpgeneralsettings"), is_(False))

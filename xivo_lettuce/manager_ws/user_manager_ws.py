@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import voicemail_manager_ws
 from lettuce import world
 from xivo_ws import User, UserLine, UserVoicemail
 from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.manager_ws import group_manager_ws
 from xivo_lettuce.manager_ws import device_manager_ws
+from xivo_lettuce.manager_dao import user_manager_dao, voicemail_manager_dao
 
 
 def add_user(data_dict):
@@ -72,32 +72,17 @@ def add_user(data_dict):
 def add_or_replace_user(data_dict):
     firstname = data_dict['firstname']
     lastname = data_dict.get('lastname', '')
-    delete_users_with_firstname_lastname(firstname, lastname)
+    mailbox = data_dict.get('voicemail_number', None)
+    exten = data_dict.get('line_number', None)
+    context = data_dict.get('line_context', None)
 
-    if 'line_number' in data_dict:
-        number = data_dict['line_number']
-        context = data_dict.get('line_context', 'default')
-        delete_users_with_number(number, context)
+    user_manager_dao.delete_user_line_extension_voicemail(firstname,
+                                                          lastname,
+                                                          exten=exten,
+                                                          context=context,
+                                                          mailbox=mailbox)
 
     return add_user(data_dict)
-
-
-def delete_users_with_number(number, context):
-    user_ids = search_user_ids_with_number(number, context)
-    for user_id in user_ids:
-        _delete_user_with_id(user_id)
-
-
-def delete_users_with_firstname_lastname(firstname, lastname):
-    users = _search_users_with_firstname_lastname(firstname, lastname)
-    for user in users:
-        _delete_user(user)
-
-
-def delete_users_with_firstname(firstname):
-    users = world.ws.users.search(firstname)
-    for user in users:
-        _delete_user(user)
 
 
 def delete_users_with_profile(profile_name):
@@ -110,47 +95,9 @@ def delete_users_with_profile(profile_name):
     profile_id = profiles[0].id
     for user in users:
         if user.client_profile_id == profile_id:
-            _delete_user(user)
-
-
-def _delete_user_with_id(user_id):
-    world.ws.users.delete(user_id)
-
-
-def _delete_user(user):
-    if user.voicemail:
-        voicemail_manager_ws.delete_voicemail_with_id(user.voicemail.id)
-    world.ws.users.delete(user.id)
-
-
-def is_user_with_name_exists(firstname, lastname):
-    users = _search_users_with_firstname_lastname(firstname, lastname)
-    return bool(users)
-
-
-def find_user_with_firstname_lastname(firstname, lastname):
-    users = _search_users_with_firstname_lastname(firstname, lastname)
-    if len(users) != 1:
-        raise Exception('expecting 1 user with name %r %r; found %s' %
-                        (firstname, lastname, len(users)))
-    return users[0]
-
-
-def find_user_id_with_firstname_lastname(firstname, lastname):
-    user = find_user_with_firstname_lastname(firstname, lastname)
-    return user.id
-
-
-def _search_users_with_firstname_lastname(firstname, lastname):
-    users = world.ws.users.search('%s %s' % (firstname, lastname))
-    return [user for user in users if
-            user.firstname == firstname and
-            user.lastname == lastname]
-
-
-def search_user_ids_with_number(number, context):
-    lines = world.ws.lines.search_by_number(number)
-    return [line.user_id for line in lines if line.context == context]
+            if user.voicemail:
+                voicemail_manager_dao.delete_voicemail_with_user_id(user.id)
+            user_manager_dao.delete_user_line_extension_with_user_id(user.id)
 
 
 def user_id_is_in_group_name(group_name, user_id):
@@ -162,12 +109,21 @@ def user_id_is_in_group_name(group_name, user_id):
 
 
 def disable_cti_client(firstname, lastname):
-    user = find_user_with_firstname_lastname(firstname, lastname)
-    user.enable_client = False
-    world.ws.users.edit(user)
+    users = _search_users_with_firstname_lastname(firstname, lastname)
+    for user in users:
+        user.enable_client = False
+        world.ws.users.edit(user)
 
 
 def enable_cti_client(firstname, lastname):
-    user = find_user_with_firstname_lastname(firstname, lastname)
-    user.enable_client = True
-    world.ws.users.edit(user)
+    users = _search_users_with_firstname_lastname(firstname, lastname)
+    for user in users:
+        user.enable_client = True
+        world.ws.users.edit(user)
+
+
+def _search_users_with_firstname_lastname(firstname, lastname):
+    users = world.ws.users.search('%s %s' % (firstname, lastname))
+    return [user for user in users if
+            user.firstname == firstname and
+            user.lastname == lastname]

@@ -44,12 +44,6 @@ def then_value_is_not_displayed_in_the_list(step, type, search):
     assert element_is_not_in_list(type, search)
 
 
-@step(u'I submit$')
-def i_submit(step):
-    time.sleep(1)
-    form.submit.submit_form()
-
-
 @step(u'Then I see no errors')
 def then_i_see_no_errors(step):
     # this step is there mostly for test readability; it's a no-op in most cases

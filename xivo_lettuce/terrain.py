@@ -15,8 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import execnet
 import ConfigParser
 import os
+import sys
 import tempfile
 import xivo_ws
 from lettuce import before, after, world
@@ -42,6 +44,11 @@ def xivo_lettuce_before_all():
 def xivo_lettuce_before_each(scenario):
     if world.browser_enable and _webi_configured():
         _check_webi_login_root()
+
+
+@after.each_step
+def flush_stdout(step):
+    sys.stdout.flush()
 
 
 @after.each_scenario
@@ -73,6 +80,7 @@ def read_config():
 def initialize():
     world.config = read_config()
     world.browser_enable = world.config.getboolean('browser', 'enable')
+    world.lazy = _LazyWorldAttributes()
     _setup_dao()
     _setup_xivo_client()
     _setup_login_infos()
@@ -84,6 +92,7 @@ def initialize():
         if _webi_configured():
             _log_on_webi()
     world.logged_agents = []
+    world.dummy_ip_address = '10.99.99.99'
 
 
 @st_time
@@ -115,6 +124,7 @@ def _setup_dao():
     hostname = world.config.get('xivo', 'hostname')
     dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % hostname
     db_manager.reinit()
+    world.asterisk_conn = db_manager._asterisk_engine.connect()
 
 
 def _setup_xivo_client():
@@ -150,7 +160,19 @@ def _setup_ws():
     login = world.config.get('webservices_infos', 'login')
     password = world.config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)
-    return world.ws
+
+
+class _LazyWorldAttributes(object):
+
+    @property
+    def execnet_gateway(self):
+        try:
+            return self._execnet_gateway
+        except AttributeError:
+            hostname = world.config.get('xivo', 'hostname')
+            login = world.config.get('ssh_infos', 'login')
+            self._execnet_gateway = execnet.makegateway('ssh=%s@%s' % (login, hostname))
+            return self._execnet_gateway
 
 
 def _webi_configured():

@@ -24,7 +24,7 @@ from xivo_lettuce.common import open_url, find_line, edit_line
 from xivo_lettuce.form import submit
 from xivo_lettuce.manager import directory_manager, call_manager, \
     cti_client_manager
-from xivo_lettuce.manager_ws.line_manager_ws import find_line_with_extension
+from xivo_lettuce.manager_dao import line_manager_dao
 
 
 @step(u'Given the following directory configurations exist:')
@@ -99,7 +99,7 @@ def given_the_internal_directory_exists(step):
         'userfeatures.firstname,userfeatures.lastname',
         {'firstname': 'userfeatures.firstname',
          'lastname': 'userfeatures.lastname',
-         'phone': 'extenumbers.exten'}
+         'phone': 'extensions.exten'}
     )
 
 
@@ -109,8 +109,9 @@ def given_the_internal_phonebook_is_configured(step):
 
     directory_manager.add_or_replace_display(
         'Display',
-        [('Nom', 'name', '{db-firstname} {db-lastname}'),
-         (u'Numéro', 'number_office', '{db-phone}'),
+        [
+            ('Nom', 'name', '{db-firstname} {db-lastname}'),
+            (u'Numéro', 'number_office', '{db-phone}'),
         ]
     )
     directory_manager.assign_filter_and_directories_to_context(
@@ -131,7 +132,7 @@ def given_the_directory_definition_group1_is_included_in_the_default_directory(s
 
 @step(u'Given extension (\d+) will answer a call and wait')
 def given_extension_will_answer_a_call_and_wait(step, extension):
-    line = find_line_with_extension(extension)
+    line = line_manager_dao.find_with_extension(extension)
     call_manager.execute_sip_register(line.name, line.secret)
     time.sleep(1)
     call_manager.execute_answer_then_wait()
@@ -140,7 +141,7 @@ def given_extension_will_answer_a_call_and_wait(step, extension):
 
 @step(u'Given extension (\d+) will answer a call, wait (\d+) seconds and hangup')
 def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, seconds):
-    line = find_line_with_extension(extension)
+    line = line_manager_dao.find_with_extension(extension)
     call_manager.execute_sip_register(line.name, line.secret)
     time.sleep(1)
     call_manager.execute_answer_then_hangup()

@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step, world
+from lettuce import step
 from xivo_lettuce.manager import ldap_manager
-from xivo_lettuce import common, assets, sysutils, ldap_utils
+from xivo_lettuce import assets, sysutils, ldap_utils
 
 
 def _check_ldap_is_up():
@@ -43,19 +43,6 @@ def i_create_an_ldap_filter_with_name_and_server(step, name, server):
         server=server,
         base_dn='dc=lan-quebec,dc=avencall,dc=com'
     )
-
-
-@step(u'Given there exist an LDAP entry "([^"]*)" on ldap server "([^"]*)"')
-def given_there_exist_an_ldap_entry_on_ldap_server(step, dn, server):
-    commands = ['slapcat | grep "cn=foobar state,ou=people,dc=lan-quebec,dc=avencall,dc=com"']
-    ret = world.ssh_client_xivo.out_call(commands)
-    assert False, ret
-
-
-@step(u'Given there is an LDAP filter with name "([^"]*)" and with server "([^"]*)"')
-def given_there_is_an_ldap_filter_with_name_and_with_server(step, name, server):
-    if common.element_is_not_in_list('ldapfilter', name):
-        step.given('I create an LDAP filter with name "%s" and server "%s"' % (name, server))
 
 
 @step(u'Given the LDAP server is configured for SSL connections')

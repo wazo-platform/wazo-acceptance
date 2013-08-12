@@ -14,13 +14,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
+
 from hamcrest import assert_that, equal_to
-
-
 from lettuce import step
 from xivo_lettuce.manager import callfilter_manager, user_manager
 from xivo_lettuce import common
-
 
 
 @step(u'^When I create a callfilter "([^"]*)" with a boss "([^"]*)" with a secretary "([^"]*)"$')

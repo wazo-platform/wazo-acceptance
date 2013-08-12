@@ -15,6 +15,7 @@ Feature: User
         Given there are users with infos:
         | firstname | lastname | number | context | group_name  |
         | Bob       | Marley   |   1101 | default | rastafarien |
+        Given there is no user "Bob" "Dylan"
         When I rename "Bob" "Marley" to "Bob" "Dylan"
         Then I should be at the user list page
         Then "Bob" "Dylan" is in group "rastafarien"
@@ -129,6 +130,13 @@ Feature: User
         Then I see errors
         When I add a voicemail "1405" to the user "Tom" "Sawyer"
         Then voicemail "1405" is displayed in the list
+
+    Scenario: Delete user 
+        Given there are users with infos:
+         | firstname | lastname | number | context |
+         | Tom       | Sawyer   |   1405 | default |
+        When I remove user "Tom" "Sawyer"
+        Then there is no data about this user remaining in the database.
 
     Scenario: Delete user in group
         Given there are users with infos:

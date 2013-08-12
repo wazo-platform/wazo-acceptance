@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce.registry import world
 from xivo_lettuce import form
 from xivo_lettuce.common import open_url, edit_line
 from xivo_lettuce.manager_ws import meetme_manager_ws
@@ -27,11 +26,13 @@ def create_meetme(meetme):
     fill_form(meetme)
     form.submit.submit_form()
 
+
 def update_meetme(meetme):
     open_url('meetme', 'list')
     edit_line(meetme['name'])
     fill_form(meetme)
     form.submit.submit_form()
+
 
 def fill_form(meetme):
     form.input.set_text_field_with_id('it-meetmefeatures-name', meetme['name'])
@@ -45,5 +46,3 @@ def fill_form(meetme):
 
     if 'pin code' in meetme:
         form.input.set_text_field_with_id('it-meetmeroom-pin', meetme['pin code'])
-
-

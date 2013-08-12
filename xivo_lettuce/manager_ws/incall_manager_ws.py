@@ -18,9 +18,9 @@
 from lettuce import world
 from xivo_ws import Incall, OverwriteCallerIDMode
 from xivo_ws import GroupDestination, QueueDestination, UserDestination
-from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.manager_ws import queue_manager_ws
 from xivo_lettuce.manager_ws import group_manager_ws
+from xivo_lettuce.manager_dao import user_manager_dao
 
 
 def add_incall(number, context, dst_type, dst_name, caller_id=None):
@@ -47,7 +47,7 @@ def _new_destination(dst_type, dst_name):
 
 def _new_user_destination(fullname):
     firstname, lastname = fullname.split()
-    user_id = user_manager_ws.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_manager_dao.find_user_id_with_firstname_lastname(firstname, lastname)
     return UserDestination(user_id)
 
 

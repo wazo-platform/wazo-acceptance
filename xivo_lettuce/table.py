@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+
 def extract_webi_table_to_dict(table):
     list_tr = table.find_elements_by_tag_name('tr')
 

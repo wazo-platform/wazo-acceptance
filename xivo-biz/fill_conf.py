@@ -16,41 +16,61 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import socket
 import os
 import xivo_ws
 import subprocess
+import execnet
 
 from lettuce.registry import world
 from xivo_lettuce import terrain
-from xivo_ws.objects.customtrunk import CustomTrunk
 from xivo_lettuce.manager_ws import context_manager_ws, user_manager_ws, \
-    trunkcustom_manager_ws, line_manager_ws, incall_manager_ws
+    trunkcustom_manager_ws
 from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
+from xivo_lettuce.manager_dao import user_manager_dao, line_manager_dao
+from xivo_dao.helpers import config as dao_config
+from xivo_dao.helpers import db_manager
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
+
 def main():
-    Prerequisite(terrain.read_config())
+    world.config = terrain.read_config()
+    Prerequisite()
+
+
+class _LazyWorldAttributes(object):
+
+    @property
+    def execnet_gateway(self):
+        try:
+            return self._execnet_gateway
+        except AttributeError:
+            self._execnet_gateway = execnet.makegateway('ssh=%s@%s' % (world.ssh_login, world.xivo_host))
+            return self._execnet_gateway
 
 
 class Prerequisite(object):
 
-    def __init__(self, config):
-        hostname = config.get('xivo_biz', 'hostname')
-        world.xivo_host = hostname
-        login = config.get('ssh_infos', 'login')
-        world.ssh_client_xivo = SSHClient(hostname, login)
+    def __init__(self):
+        world.xivo_host = world.config.get('xivo_biz', 'hostname')
+        world.ssh_login = world.config.get('ssh_infos', 'login')
+        world.ws_login = world.config.get('webservices_infos', 'login')
+        world.ws_password = world.config.get('webservices_infos', 'password')
 
-        login = config.get('webservices_infos', 'login')
-        password = config.get('webservices_infos', 'password')
-        world.ws = xivo_ws.XivoServer(hostname, login, password)
+        world.ssh_client_xivo = SSHClient(world.xivo_host, world.ssh_login)
+        world.lazy = _LazyWorldAttributes()
+        world.ws = xivo_ws.XivoServer(world.xivo_host, world.ws_login, world.ws_password)
 
+
+        print 'Configuring prerequisites...'
+        self._setup_dao()
         self._init_webservices()
         self._create_pgpass_on_remote_host()
+        self._allow_remote_access_to_pgsql()
+        self._xivo_service_restart()
 
         self._check_configuration_dahdi()
         self._configuration_dahdi()
@@ -63,6 +83,10 @@ class Prerequisite(object):
 
         print 'Configuration finished.'
 
+    def _setup_dao(self):
+        dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % world.xivo_host
+        db_manager.reinit()
+
     def _prepare_context(self):
         print 'Configuring Context..'
         context_manager_ws.update_contextnumbers_user('default', 100, 199)
@@ -70,44 +94,51 @@ class Prerequisite(object):
 
     def _prepare_trunk(self):
         print 'Configuring Trunk..'
-        data1 = {'name': 'dahdi-g1',
-                 'interface': 'dahdi/g1'
-                 }
+        data1 = {
+            'name': 'dahdi-g1',
+            'interface': 'dahdi/g1'
+        }
         trunkcustom_manager_ws.add_or_replace_trunkcustom(data1)
 
     def _prepare_user(self):
         print 'Configuring User..'
-        user_data_tpl = {'firstname': 'user',
-                         'line_context': 'default',
-                         'enable_client': True,
-                         'client_password': '12345',
-                         'client_profile': 'Client'
-                     }
-        user_data = {'lastname': '1',
-                    'line_number': '101',
-                    'client_username': 'user1'}
-        user_data.update(user_data_tpl)
-        user_exist = user_manager_ws.is_user_with_name_exists('user', '1')
-        if not user_exist:
-            user_manager_ws.add_user(user_data)
-        user_data = {'lastname': '2',
-                    'line_number': '102',
-                    'client_username': 'user2'}
-        user_data.update(user_data_tpl)
-        user_exist = user_manager_ws.is_user_with_name_exists('user', '2')
-        if not user_exist:
-            user_manager_ws.add_user(user_data)
+        user_data_tpl = {
+            'firstname': 'user',
+            'line_context': 'default',
+            'enable_client': True,
+            'client_password': '12345',
+            'client_profile': 'Client'
+        }
+        user1_data = {
+             'lastname': '1',
+             'line_number': '101',
+             'client_username': 'user1'
+        }
+        user1_data.update(user_data_tpl)
+        self._user1_id = user_manager_ws.add_or_replace_user(user1_data)
+        user2_data = {
+             'lastname': '2',
+             'line_number': '102',
+             'client_username': 'user2'
+        }
+        user2_data.update(user_data_tpl)
+        self._user2_id = user_manager_ws.add_or_replace_user(user2_data)
 
-        line1 = world.ws.lines.search('101')
-        line2 = world.ws.lines.search('102')
+        self._line1 = line_manager_dao.find_with_exten_context('101', 'default')
+        self._line2 = line_manager_dao.find_with_exten_context('102', 'default')
 
         print
-        print 'User1 line infos:'
-        print 'Name: %s' % line1[0].name
-        print 'Secret: %s' % line1[0].secret
-        print 'User2 line infos:'
-        print 'Name: %s' % line2[0].name
-        print 'Secret: %s' % line2[0].secret
+        print 'User1 infos:'
+        print 'Name (line): %s' % self._line1.name
+        print 'Secret (line): %s' % self._line1.secret
+        print 'Username: %s' % user1_data['client_username']
+        print 'Password: %s' % user1_data['client_password']
+        print
+        print 'User2 infos:'
+        print 'Name (line): %s' % self._line2.name
+        print 'Secret (line): %s' % self._line2.secret
+        print 'Username: %s' % user2_data['client_username']
+        print 'Password: %s' % user2_data['client_password']
         print
 
     def _prepare_incall(self):
@@ -117,14 +148,14 @@ class Prerequisite(object):
             incall = Incall()
             incall.number = '1001'
             incall.context = 'from-extern'
-            incall.destination = UserDestination(line_manager_ws.find_line_id_with_number('101', 'default'))
+            incall.destination = UserDestination(self._user1_id)
             world.ws.incalls.add(incall)
         incall_exist = world.ws.incalls.search('1002')
         if not incall_exist:
             incall = Incall()
             incall.number = '1002'
             incall.context = 'from-extern'
-            incall.destination = UserDestination(line_manager_ws.find_line_id_with_number('102', 'default'))
+            incall.destination = UserDestination(self._user2_id)
             world.ws.incalls.add(incall)
 
     def _prepare_outcall(self):
@@ -150,6 +181,23 @@ class Prerequisite(object):
         world.ssh_client_xivo.check_call(cmd)
         cmd = ['chmod', '600', '.pgpass']
         world.ssh_client_xivo.check_call(cmd)
+
+    def _allow_remote_access_to_pgsql(self):
+        hba_file = '/etc/postgresql/9.0/main/pg_hba.conf'
+        postgres_conf_file = '/etc/postgresql/9.0/main/postgresql.conf'
+
+        self._add_line_to_remote_file('host all all 192.168.32.0/24 md5', hba_file)
+        self._add_line_to_remote_file('host all all 10.0.0.0/8 md5', hba_file)
+        self._add_line_to_remote_file("listen_addresses = '*'", postgres_conf_file)
+
+
+    def _add_line_to_remote_file(self, line_text, file_name):
+        command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
+        world.ssh_client_xivo.check_call(command)
+
+    def _xivo_service_restart(self):
+        command = ['xivo-service', 'restart', 'all']
+        world.ssh_client_xivo.check_call(command)
 
     def _configuration_dahdi(self):
         print 'Configuring Dahdi..'

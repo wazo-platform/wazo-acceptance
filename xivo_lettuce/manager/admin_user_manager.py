@@ -35,6 +35,7 @@ SECTION_MAP = {
     'Directories': 'directories',
 }
 
+
 def create_admin_user(username, password):
     open_url('admin_user', 'add')
     form.input.set_text_field_with_label("login", username)
@@ -49,7 +50,7 @@ def set_privileges(username, privileges):
     acl_button = line.find_element_by_xpath(".//a[@title='Rules']")
     acl_button.click()
 
-    categories = set( (x['module'], x['category']) for x in privileges )
+    categories = set((x['module'], x['category']) for x in privileges)
     for module, category in categories:
         open_category(module, category)
 
@@ -73,10 +74,8 @@ def set_privilege(privilege):
     category = CATEGORY_MAP[privilege['category']]
     section = SECTION_MAP[privilege['section']]
 
-
     checkbox_id = '%s-%s-%s' % (module, category, section)
     if privilege['active']:
         form.checkbox.check_checkbox_with_id(checkbox_id)
     else:
         form.checkbox.uncheck_checkbox_with_id(checkbox_id)
-

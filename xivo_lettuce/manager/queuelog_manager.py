@@ -20,13 +20,13 @@ from xivo_dao import queue_log_dao
 
 
 def delete_event_by_queue(event, queuename):
-    pg_command = '"DELETE FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'"' % (queuename, event)
+    pg_command = 'DELETE FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'' % (queuename, event)
     postgres.exec_sql_request(pg_command)
 
 
 def delete_event_by_agent_number(event, agent_number):
     agent_number = _build_agent_db_tag_from_number(agent_number)
-    pg_command = '"DELETE FROM queue_log WHERE agent = \'%s\' and event = \'%s\'"' % (agent_number, event)
+    pg_command = 'DELETE FROM queue_log WHERE agent = \'%s\' and event = \'%s\'' % (agent_number, event)
     postgres.exec_sql_request(pg_command)
 
 
@@ -39,28 +39,31 @@ def delete_event_between(start, end):
 
 
 def insert_corrupt_data():
-    pg_command = '"INSERT INTO queue_log(time, callid, queuename, agent, event, data1) VALUES (cast (localtimestamp - interval \'1 hour\' as text), \'test_exitwithtimeout\', \'q1\', \'NONE\', \'EXITWITHTIMEOUT\', \'1\')"'
+    pg_command = 'INSERT INTO queue_log(time, callid, queuename, agent, event, data1) VALUES (cast (localtimestamp - interval \'1 hour\' as text), \'test_exitwithtimeout\', \'q1\', \'NONE\', \'EXITWITHTIMEOUT\', \'1\')'
     postgres.exec_sql_request(pg_command)
 
 
 def get_event_count_queue(event, queuename):
-    pg_command = '"SELECT COUNT(*) FROM queue_log WHERE queuename = \'%s\' and event = \'%s\'"' % (queuename, event)
-    res = postgres.exec_sql_request_with_return(pg_command)
-    return int(res.split('\n')[-4].strip())
+    cond = {
+        '"queuename"': '\'%s\'' % queuename,
+        '"event"': '\'%s\'' % event
+    }
+    return postgres.exec_count_request('queue_log', **cond)
 
 
 def get_event_count_agent(event, agent_number):
-    agent_number = _build_agent_db_tag_from_number(agent_number)
-    pg_command = '"SELECT COUNT(*) FROM queue_log WHERE agent = \'%s\' and event = \'%s\'"' % (agent_number, event)
-    res = postgres.exec_sql_request_with_return(pg_command)
-    return int(res.split('\n')[-4].strip())
+    cond = {
+        '"agent"': '\'%s\'' % agent_number,
+        '"event"': '\'%s\'' % event
+    }
+    return postgres.exec_count_request('queue_log', **cond)
 
 
 def get_last_callid(event, agent_number):
     callid = queue_log_dao.get_last_callid_with_event_for_agent(
         event,
         _build_agent_db_tag_from_number(agent_number)
-        )
+    )
     return callid
 
 
@@ -81,4 +84,4 @@ def insert_entries(entries):
             entry['data3'],
             entry['data4'],
             entry['data5']
-            )
+        )

@@ -143,8 +143,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
         [('Icon', 'status', ''),
          ('Name', 'name', '{db-name}'),
          ('Number', 'number_office', '{db-number}'),
-         ('Number', 'number_mobile', '{db-mobile}'),
-        ]
+         ('Number', 'number_mobile', '{db-mobile}')]
     )
     directory_manager.assign_filter_and_directories_to_context(
         '__switchboard_directory',
@@ -159,14 +158,6 @@ def given_the_display_filter_group1_exists_with_the_following_fields(step, filte
     for line in step.hashes:
         field_list.append((line['Field title'], line['Field type'], line['Display format']))
     directory_manager.add_or_replace_display(filter_name, field_list)
-
-
-@step(u'Given the context "([^"]*)" uses display "([^"]*)" with the following directories:')
-def given_the_context_group1_uses_display_group2_with_the_following_directories(step, context, filter_name):
-    directories = [line['Directories'] for line in step.hashes]
-    directory_manager.assign_filter_and_directories_to_context(
-        context, filter_name, directories
-    )
 
 
 @step(u'Given there are entries in the ldap server:')

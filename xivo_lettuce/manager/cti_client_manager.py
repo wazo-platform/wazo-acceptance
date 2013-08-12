@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
 
 from xivo_lettuce import common, xivoclient
-from xivo_lettuce.manager_ws import user_manager_ws
-import time
 from lettuce.registry import world
+from xivo_lettuce.manager_dao import user_manager_dao
 
 
 def configure_client(conf_dict):
@@ -124,7 +124,16 @@ def get_identity_infos():
 
 
 def get_sheet_infos():
-    return xivoclient.exec_command('get_sheet_infos')
+    def _to_var_vals(sheet_result):
+        res = []
+        for var, val in sheet_result.iteritems():
+            res.append({u'Variable': var, u'Value': val})
+        return res
+
+    try:
+        return _to_var_vals(xivoclient.exec_command('get_sheet_infos')['return_value']['content'])
+    except KeyError:
+        return []
 
 
 def get_queue_members_infos():
@@ -166,12 +175,12 @@ def log_in_the_xivo_client():
 
 
 def log_user_in_client(firstname, lastname):
-    user = user_manager_ws.find_user_with_firstname_lastname(firstname, lastname)
+    user = user_manager_dao.find_user_with_firstname_lastname(firstname, lastname)
     conf_dict = {
         'main_server_address': common.get_host_address(),
         'main_server_port': 5003,
-        'login': user.client_username,
-        'password': user.client_password
+        'login': user.username,
+        'password': user.password
     }
     configure_client(conf_dict)
     return log_in_the_xivo_client()
