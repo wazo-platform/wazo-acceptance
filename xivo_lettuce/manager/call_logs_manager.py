@@ -16,8 +16,30 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-from xivo_lettuce import form
+from xivo_lettuce import form, postgres
 
 
 def type_date(date):
     form.input.set_text_field_with_id('it-dbeg', date)
+
+
+def delete_entries_between(start, end):
+    query = "DELETE FROM call_log WHERE date BETWEEN :start AND :end"
+    postgres.execute_sql(query, start=start, end=end)
+
+
+def has_call_log(entry):
+    query = """SELECT COUNT(*) FROM call_log WHERE
+        date = :date AND
+        destination_name = :destination_name AND
+        destination_exten = :destination_exten AND
+        source_name = :source_name AND
+        source_exten = :source_exten AND
+        duration = :duration AND
+        user_field = :user_field AND
+        linked_id = :linked_id AND
+        answered = :answered"""
+
+    res = postgres.execute_sql(query, **entry)
+    if res is not None and len(res.fetchall()) == 1:
+        return True
