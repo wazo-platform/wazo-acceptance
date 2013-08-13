@@ -178,8 +178,8 @@ def enable_call_transfer():
     form.checkbox.check_checkbox_with_id("it-userfeatures-enablehint")
 
 
-def get_user_list_entry(user):
-    user_tr = common.find_line(user)
+def get_user_list_entry(search_fullname):
+    user_tr = common.find_line(search_fullname)
     fullname = user_tr.find_element_by_class_name('col_fullname').text
     provisioning_code = user_tr.find_element_by_class_name('col_provisioning_code').text
     number = user_tr.find_element_by_class_name('col_number').text

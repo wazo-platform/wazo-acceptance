@@ -279,10 +279,12 @@ def then_i_see_the_user_group1_group2_exists(step, firstname, lastname):
 def then_i_see_a_user_with_infos(step):
     user_expected_properties = step.hashes[0]
     fullname = user_expected_properties['fullname']
+    common.open_url('user', 'search', {'search': '%s' % fullname})
     user_actual_properties = user_manager.get_user_list_entry(fullname)
     assert_that(fullname, equal_to(user_expected_properties['fullname']))
     for user_field, user_value in user_expected_properties.iteritems():
         assert_that(user_actual_properties[user_field], equal_to(user_value))
+    common.open_url('user', 'search', {'search': ''})
 
 
 @step(u'Then i see user with username "([^"]*)" "([^"]*)" has a function key with type Customized and extension "([^"]*)"$')
