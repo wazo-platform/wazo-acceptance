@@ -30,6 +30,7 @@ from xivo_lettuce.common import webi_login_as_default, go_to_home_page, webi_log
 from xivo_lettuce.manager import asterisk_manager
 from xivo_lettuce.ssh import SSHClient
 from xivo_lettuce.func import st_time
+from sqlalchemy.exc import OperationalError
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             '../config/config.ini'))
@@ -124,7 +125,10 @@ def _setup_dao():
     hostname = world.config.get('xivo', 'hostname')
     dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % hostname
     db_manager.reinit()
-    world.asterisk_conn = db_manager._asterisk_engine.connect()
+    try:
+        world.asterisk_conn = db_manager._asterisk_engine.connect()
+    except OperationalError:
+        print 'PGSQL ERROR: could not connect to server'
 
 
 def _setup_xivo_client():
