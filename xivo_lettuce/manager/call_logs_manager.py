@@ -43,3 +43,5 @@ def has_call_log(entry):
     res = postgres.execute_sql(query, **entry)
     if res is not None and len(res.fetchall()) == 1:
         return True
+    else:
+        return False
