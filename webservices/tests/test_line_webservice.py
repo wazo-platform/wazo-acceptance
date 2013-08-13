@@ -25,13 +25,13 @@ class TestLineWebServices(unittest.TestCase):
     def setUp(self):
         self._xivo_ws = common.xivo_server_ws
 
-    def test_add_sip(self):
-        sip_line = xivo_ws.Line(protocol=u'sip')
-        sip_line.name = u'test_ws_add_sip'
-        common.delete_with_name('lines', sip_line.name)
-        self._xivo_ws.lines.add(sip_line)
+    # def test_add_sip(self):
+    #     sip_line = xivo_ws.Line(protocol=u'sip')
+    #     sip_line.name = u'test_ws_add_sip'
+    #     common.delete_with_name('lines', sip_line.name)
+    #     self._xivo_ws.lines.add(sip_line)
 
-        self.assertEqual(common.nb_with_name('lines', sip_line.name), 1)
+    #     self.assertEqual(common.nb_with_name('lines', sip_line.name), 1)
 
     def test_edit_sip(self):
         common.delete_with_name('lines', u'test_ws_edit_sip')
