@@ -37,7 +37,6 @@ def has_call_log(entry):
         source_exten = :source_exten AND
         duration = :duration AND
         user_field = :user_field AND
-        linked_id = :linked_id AND
         answered = :answered"""
 
     res = postgres.execute_sql(query, **entry)
