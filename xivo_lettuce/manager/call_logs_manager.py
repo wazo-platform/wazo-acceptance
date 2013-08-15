@@ -34,18 +34,19 @@ def delete_entries_between(start, end):
 
 
 def has_call_log(entry):
-    query = """SELECT COUNT(*) FROM call_log WHERE
-        date = :date AND
-        destination_name = :destination_name AND
-        destination_exten = :destination_exten AND
-        source_name = :source_name AND
-        source_exten = :source_exten AND
-        duration = :duration AND
-        user_field = :user_field AND
-        answered = :answered"""
-
-    res = postgres.execute_sql(query, **entry)
-    if res is not None and len(res.fetchall()) == 1:
-        return True
+    conditions = []
+    for key, value in entry.iteritems():
+        if value == 'NULL':
+            condition = '%s IS NULL' % key
+        else:
+            condition = '%s = :%s' % (key, key)
+        conditions.append(condition)
+    base_query = """SELECT COUNT(*) FROM call_log"""
+    if conditions:
+        where = """ WHERE %s""" % ' AND '.join(conditions)
     else:
-        return False
+        where = ''
+    query = base_query + where
+
+    count = postgres.execute_sql(query, **entry).scalar()
+    return count > 0
