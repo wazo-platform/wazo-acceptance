@@ -15,7 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce.registry import world
+from lettuce import world
+from xivo_dao.helpers import db_manager
+from sqlalchemy.sql import text
 
 
 def exec_sql_request(pg_command):
@@ -34,3 +36,12 @@ def exec_count_request(table, **cond_dict):
     result = world.asterisk_conn.execute(pg_command)
     row = result.fetchone()
     return int(row[0])
+
+
+def exec_sql_request_with_return(pg_command):
+    command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
+    return world.ssh_client_xivo.out_call(command)
+
+
+def execute_sql(query, **args):
+    return db_manager._asterisk_engine.execute(text(query), args)
