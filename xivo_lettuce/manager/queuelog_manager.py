@@ -53,7 +53,7 @@ def get_event_count_queue(event, queuename):
 
 def get_event_count_agent(event, agent_number):
     cond = {
-        '"agent"': '\'%s\'' % agent_number,
+        '"agent"': '\'%s\'' % _build_agent_db_tag_from_number(agent_number),
         '"event"': '\'%s\'' % event
     }
     return postgres.exec_count_request('queue_log', **cond)
