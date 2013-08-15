@@ -31,4 +31,4 @@ def exec_sql_request_with_return(pg_command):
 
 
 def execute_sql(query, **args):
-    db_manager._asterisk_engine.execute(text(query), args)
+    return db_manager._asterisk_engine.execute(text(query), args)
