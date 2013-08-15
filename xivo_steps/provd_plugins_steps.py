@@ -25,12 +25,14 @@ from xivo_lettuce import sysutils
 
 @step(u'Given a update plugins provd with good url')
 def given_a_update_plugins_provd(step):
-    provdp.update_plugin_list('http://provd.xivo.fr/plugins/1/stable/')
+    provdp.update_plugin_list('http://provd.xivo.fr/plugins/1/stable/',
+                              check_confirmation=False)
 
 
 @step(u'Given a update plugins provd with bad url')
 def given_a_update_plugins_provd_with_bad_url(step):
-    provdp.update_plugin_list('http://provd.xivo.fr/plugins/1/lol/')
+    provdp.update_plugin_list('http://provd.xivo.fr/plugins/1/lol/',
+                              check_confirmation=False)
 
 
 @step(u'Given the plugin "([^"]*)" is not installed')

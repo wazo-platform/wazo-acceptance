@@ -23,11 +23,15 @@ from xivo_lettuce.common import open_url, find_line
 from xivo_lettuce.manager.provd_general_manager import update_plugin_server_url
 
 
-def update_plugin_list(url):
+def update_plugin_list(url, check_confirmation=True):
     update_plugin_server_url(url)
     open_url('provd_plugin')
     world.browser.find_element_by_id('toolbar-bt-update').click()
-    _check_for_confirmation_message(7)
+    wait_time = 7
+    if check_confirmation:
+        _check_for_confirmation_message(wait_time)
+    else:
+        time.sleep(wait_time)
 
 
 def _check_for_confirmation_message(secs):
