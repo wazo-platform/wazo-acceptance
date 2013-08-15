@@ -23,6 +23,11 @@ def type_date(date):
     form.input.set_text_field_with_id('it-dbeg', date)
 
 
+def delete_all():
+    query = "DELETE FROM call_log"
+    postgres.execute_sql(query)
+
+
 def delete_entries_between(start, end):
     query = "DELETE FROM call_log WHERE date BETWEEN :start AND :end"
     postgres.execute_sql(query, start=start, end=end)

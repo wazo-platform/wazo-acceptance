@@ -18,6 +18,11 @@
 from xivo_lettuce import postgres
 
 
+def delete_all():
+    query = "DELETE FROM cel"
+    postgres.execute_sql(query)
+
+
 def delete_entries_between(start, end):
     query = "DELETE FROM cel WHERE eventtime BETWEEN :start AND :end"
     postgres.execute_sql(query, start=start, end=end)
