@@ -32,6 +32,21 @@ def get_by_exten_context(exten, context):
     return extension
 
 
+def delete(extension_id):
+    remote_exec(_delete, extension_id=extension_id)
+
+
+def _delete(channel, extension_id):
+    from xivo_dao.data_handler.extension import services as extension_services
+
+    try:
+        extension = extension_services.get(extension_id)
+    except LookupError:
+        return
+
+    extension_services.delete(extension)
+
+
 def delete_extension_with_exten_context(exten, context):
     remote_exec(_delete_extension_with_exten_context, exten=exten, context=context)
 
