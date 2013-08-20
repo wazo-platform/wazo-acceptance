@@ -36,6 +36,8 @@ def insert_simple_user(entries):
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']
+        if 'enable_transfer' in entry:
+            user.enable_transfer = entry['enable_transfer']
         user.line = UserLine()
         user.line.context = entry['context']
         user.line.number = entry['linenumber']

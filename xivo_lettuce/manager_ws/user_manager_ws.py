@@ -122,6 +122,12 @@ def enable_cti_client(firstname, lastname):
         world.ws.users.edit(user)
 
 
+def has_enabled_transfer(firstname, lastname):
+    for user in _search_users_with_firstname_lastname(firstname, lastname):
+        return user.enable_transfer
+    return False
+
+
 def _search_users_with_firstname_lastname(firstname, lastname):
     users = world.ws.users.search('%s %s' % (firstname, lastname))
     return [user for user in users if

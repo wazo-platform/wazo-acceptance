@@ -325,6 +325,16 @@ def then_the_channel_type_of_group_group1_of_user_group2_is_group3(step, group, 
     assert_that(user_manager.get_chantype_of_group(group), equal_to(chantype))
 
 
+@step(u'Then "([^"]*)" has enablexfer "([^"]*)"')
+def then_user_has_enablexfer_enabled(step, fullname, enabled_string):
+    firstname, lastname = fullname.split(' ', 1)
+    expected = enabled_string == 'enabled'
+
+    result = user_manager_ws.has_enabled_transfer(firstname, lastname)
+
+    assert_that(result, equal_to(expected), 'Enable transfer for %s' % fullname)
+
+
 def _edit_user(firstname, lastname):
     user_id = user_manager_dao.find_user_id_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'edit', qry={'id': user_id})
