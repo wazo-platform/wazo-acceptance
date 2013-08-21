@@ -78,7 +78,7 @@ def when_i_create_a_user_group1_with_description_group2(step, fullname, descript
     world.result = rest_users.create_user(fullname, description, int(ctiprofileid))
 
 
-@step(u'Then I get a response with status "([^"]*)"')
+@step(u'Then I receive a response with status "([^"]*)"')
 def then_i_get_a_response_with_status_group1(step, status):
     assert world.result.status == int(status), world.result.data
 
@@ -117,7 +117,7 @@ def when_i_create_a_user_group1_with_an_field_group2_of_value_group3(step, fulln
     world.result = rest_users.create_user_with_field(fullname, fieldname, fieldvalue)
 
 
-@step(u'Then I get an error message "([^"]*)"')
+@step(u'Then I receive an error message "([^"]*)"')
 def then_i_get_an_error_message_group1(step, error_message):
     assert world.result.data[0] == error_message
 
