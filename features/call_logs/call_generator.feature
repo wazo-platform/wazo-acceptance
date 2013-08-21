@@ -76,19 +76,19 @@ Feature: Call Log Generation
             | CHAN_END     | 2013-01-01 11:03:54.0 | Bob Marley | 1002    | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
             | LINKEDID_END | 2013-01-01 11:03:54.0 | Bob Marley | 1002    | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
             | CHAN_START   | 2013-01-01 11:20:08.0 | Bob Marley | 1002    | 4185550155 | default     | 1376068808.35 | 1376068808.35 |           |
-            | APP_START    | 2013-01-01 11:20:08.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | 00548AB33 |
+            | APP_START    | 2013-01-01 11:20:08.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
             | CHAN_START   | 2013-01-01 11:20:08.0 |            |         | s          | from-extern | 1376068808.36 | 1376068808.35 |           |
             | ANSWER       | 2013-01-01 11:20:10.0 |            | dial    | dial       | from-extern | 1376068808.36 | 1376068808.35 |           |
-            | ANSWER       | 2013-01-01 11:20:10.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | 00548AB33 |
-            | BRIDGE_START | 2013-01-01 11:20:10.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | 00548AB33 |
-            | BRIDGE_END   | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | 00548AB33 |
+            | ANSWER       | 2013-01-01 11:20:10.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | BRIDGE_START | 2013-01-01 11:20:10.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | BRIDGE_END   | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
             | HANGUP       | 2013-01-01 11:20:13.0 |            | dial    |            | outcall     | 1376068808.36 | 1376068808.35 |           |
             | CHAN_END     | 2013-01-01 11:20:13.0 |            | dial    |            | outcall     | 1376068808.36 | 1376068808.35 |           |
-            | HANGUP       | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | 00548AB33 |
-            | CHAN_END     | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | 00548AB33 |
-            | LINKEDID_END | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | 00548AB33 |
+            | HANGUP       | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | CHAN_END     | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | LINKEDID_END | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
         When I generate call logs
         Then I should have the following call logs:
             | date                  | source_name | source_exten | destination_exten | duration  | user_field | answered |
             | 2013-01-01 11:03:47.0 | Bob Marley  | 1002         | 4185550155        | 0:00:03.0 |            | True     |
-            | 2013-01-01 11:20:08.0 | Bob Marley  | 1002         | 4185550155        | 0:00:03.0 | 00548AB33  | True     |
+            | 2013-01-01 11:20:08.0 | Bob Marley  | 1002         | 4185550155        | 0:00:03.0 | Père Noël  | True     |
