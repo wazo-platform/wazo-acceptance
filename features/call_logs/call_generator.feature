@@ -18,8 +18,8 @@ Feature: Call Log Generation
             | LINKEDID_END | 2013-01-01 08:46:26.860254 | Bob Marley    | 1002    | s     | user    | 1375994780.1 | 1375994780.1 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                       | source_name | source_exten | destination_exten |       duration | user_field |
-            | 2013-01-01 08:46:20.118025 | Bob Marley  |         1002 |              1001 | 0:00:03.854485 |            |
+            | date                       | source_name | source_exten | destination_exten | duration       | user_field | answered |
+            | 2013-01-01 08:46:20.118025 | Bob Marley  | 1002         | 1001              | 0:00:03.854485 |            | True     |
 
     Scenario: Generation of non-answered internal call
         Given there are no calls
@@ -35,13 +35,13 @@ Feature: Call Log Generation
             | LINKEDID_END | 2013-01-01 08:46:36.327708 | Bob Marley    | 1002    | s     | user    | 1375994791.3 | 1375994791.3 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                    | source_name | source_exten | destination_exten | duration | user_field |
-            | 2013-01-01 08:46:31.981 | Bob Marley  | 1002         | 1001              | 0        |            |
+            | date                    | source_name | source_exten | destination_exten | duration | user_field | answered |
+            | 2013-01-01 08:46:31.981 | Bob Marley  | 1002         | 1001              | 0        |            | False    |
 
     Scenario: Generation of answered incoming call
         Given there are no calls
         Given I have the following CEL entries:
-            | eventtype    | eventtime                  | cid_name   | cid_num    | exten | context     | uniqueid      | linkedid      | userfield |
+            | eventtype    | eventtime             | cid_name   | cid_num    | exten | context     | uniqueid      | linkedid      | userfield |
             | CHAN_START   | 2013-01-01 11:02:38.0 | 612345678  | 612345678  | 1002  | from-extern | 1376060558.17 | 1376060558.17 |           |
             | APP_START    | 2013-01-01 11:02:38.0 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
             | CHAN_START   | 2013-01-01 11:02:38.0 | Bob Marley | 1002       | s     | default     | 1376060558.18 | 1376060558.17 |           |
@@ -56,8 +56,8 @@ Feature: Call Log Generation
             | LINKEDID_END | 2013-01-01 11:02:45.0 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                  | source_name | source_exten | destination_exten |  duration | user_field |
-            | 2013-01-01 11:02:38.0 |   612345678 |    612345678 |              1002 | 0:00:03.0 |            |
+            | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered |
+            | 2013-01-01 11:02:38.0 |   612345678 |    612345678 |              1002 | 0:00:03.0 |            | True     |
 
     Scenario: Generation of answered outgoing call
         Given there are no calls
@@ -89,6 +89,6 @@ Feature: Call Log Generation
             | LINKEDID_END | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | 00548AB33 |
         When I generate call logs
         Then I should have the following call logs:
-            | date                  | source_name | source_exten | destination_exten | duration  | user_field |
-            | 2013-01-01 11:03:47.0 | Bob Marley  | 1002         | 4185550155        | 0:00:03.0 |            |
-            | 2013-01-01 11:20:08.0 | Bob Marley  | 1002         | 4185550155        | 0:00:03.0 | 00548AB33  |
+            | date                  | source_name | source_exten | destination_exten | duration  | user_field | answered |
+            | 2013-01-01 11:03:47.0 | Bob Marley  | 1002         | 4185550155        | 0:00:03.0 |            | True     |
+            | 2013-01-01 11:20:08.0 | Bob Marley  | 1002         | 4185550155        | 0:00:03.0 | 00548AB33  | True     |
