@@ -75,3 +75,4 @@ from xlet_queue_member_steps import *
 from xivo_agent_steps import *
 from recording_campaigns_steps import *
 from restapi_1_0 import *
+from restapi_1_1 import *
