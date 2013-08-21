@@ -47,6 +47,14 @@ def xivo_lettuce_before_each(scenario):
         _check_webi_login_root()
 
 
+@before.each_scenario
+def reset_world(scenario):
+    world.voicemailid = None
+    world.userid = None
+    world.number = None
+    world.lineid = None
+
+
 @after.each_step
 def flush_stdout(step):
     sys.stdout.flush()
