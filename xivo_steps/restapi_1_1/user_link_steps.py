@@ -24,6 +24,13 @@ from xivo_dao.data_handler.line import dao as line_dao
 from xivo_dao.data_handler.device import dao as device_dao
 
 
+@step(u'Given I have no link with the following parameters:')
+def given_i_have_no_link_with_the_following_parameters(step):
+    for link_info in step.hashes:
+        userlink = _extract_parameters(link_info)
+        world.response = user_link_ws.delete(userlink['id'])
+
+
 @step(u'When I create an empty link')
 def when_i_create_an_empty_link(step):
     world.response = user_link_ws.create_user_link({})
@@ -34,6 +41,13 @@ def when_i_create_the_following_links(step):
     for link_info in step.hashes:
         userlink = _extract_parameters(link_info)
         world.response = user_link_ws.create_user_link(userlink)
+
+
+@step(u'When I delete the following links:')
+def when_i_delete_the_following_links(step):
+    for link_info in step.hashes:
+        userlink = _extract_parameters(link_info)
+        world.response = user_link_ws.delete(userlink['id'])
 
 
 @step(u'When I create a link with the following invalid parameters:')
