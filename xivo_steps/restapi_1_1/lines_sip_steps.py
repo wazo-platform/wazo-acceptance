@@ -16,7 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from hamcrest import *
-from xivo_lettuce.restapi.v1_1 import line_sip_ws, context_helper
+from xivo_lettuce.restapi.v1_1 import context_helper
+from xivo_lettuce.manager_restapi import line_sip_ws
 from lettuce import step, world
 
 

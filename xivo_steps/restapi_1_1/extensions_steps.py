@@ -18,7 +18,8 @@
 from hamcrest import *
 from lettuce import step, world
 
-from xivo_lettuce.restapi.v1_1 import extension_helper, extension_ws
+from xivo_lettuce.restapi.v1_1 import extension_helper
+from xivo_lettuce.manager_restapi import extension_ws
 
 
 @step(u'Given I have no extensions')

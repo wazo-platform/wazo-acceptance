@@ -17,7 +17,8 @@
 
 from hamcrest import *
 from lettuce import step, world
-from xivo_lettuce.restapi.v1_1 import device_helper, provd_helper, user_link_ws
+from xivo_lettuce.restapi.v1_1 import device_helper, provd_helper
+from xivo_lettuce.manager_restapi import user_link_ws
 
 from xivo_dao.data_handler.line import dao as line_dao
 from xivo_dao.data_handler.device import dao as device_dao
