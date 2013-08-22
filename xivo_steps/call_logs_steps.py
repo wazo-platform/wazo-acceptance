@@ -19,6 +19,7 @@
 from lettuce import step, world
 from xivo_lettuce import common, form, assets, sysutils
 from xivo_lettuce.manager import call_logs_manager, cel_manager
+from xivo_lettuce.manager_dao import call_logs_manager_dao
 
 
 @step(u'When I request call_logs for today')
@@ -51,13 +52,13 @@ def when_i_request_call_logs_for_1(step, date):
 @step(u'Given there are no calls between "([^"]*)" and "([^"]*)"')
 def given_there_are_no_calls_between(step, start, end):
     cel_manager.delete_entries_between(start, end)
-    call_logs_manager.delete_entries_between(start, end)
+    call_logs_manager_dao.delete_entries_between(start, end)
 
 
 @step(u'Given there are no calls')
 def given_there_are_no_cel(step):
     cel_manager.delete_all()
-    call_logs_manager.delete_all()
+    call_logs_manager_dao.delete_all()
 
 
 @step(u'Given I have the following CEL entries:')
@@ -74,4 +75,4 @@ def when_i_generate_call_logs(step):
 @step(u'Then I should have the following call logs:')
 def then_i_should_have_the_following_call_logs(step):
     for entry in step.hashes:
-        assert call_logs_manager.has_call_log(entry), "Corresponding call_log entry was not found : %s" % entry
+        assert call_logs_manager_dao.has_call_log(entry), "Corresponding call_log entry was not found : %s" % entry
