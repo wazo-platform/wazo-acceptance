@@ -16,11 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_lettuce import postgres
+from xivo_dao.data_handler.call_log import dao
+from xivo_dao.data_handler.call_log.model import CallLog
 
 
 def delete_all():
-    query = "DELETE FROM call_log"
-    postgres.execute_sql(query)
+    dao.delete_all()
 
 
 def delete_entries_between(start, end):
@@ -45,3 +46,8 @@ def has_call_log(entry):
 
     count = postgres.execute_sql(query, **entry).scalar()
     return count > 0
+
+
+def create_call_logs(entries):
+    call_logs = [CallLog(**entry) for entry in entries]
+    dao.create_all(call_logs)
