@@ -21,6 +21,7 @@ from xivo_lettuce.manager_dao import dialpattern_manager_dao, user_manager_dao, 
     extension_manager_dao
 from xivo_lettuce.manager_ws import queue_manager_ws, group_manager_ws, \
     incall_manager_ws, meetme_manager_ws
+from xivo_dao.data_handler.exception import ElementDeletionError
 
 
 def delete_all():
@@ -30,22 +31,25 @@ def delete_all():
     extensions = [e for e in hidden_extensions + visible_extensions if e.context != 'xivo-features']
 
     for extension in extensions:
-        if extension.type == 'user':
-            user_manager_dao.delete_with_user_id(int(extension.typeval))
-        elif extension.type == 'queue':
-            queue_manager_ws.delete_queues_with_number(extension.exten)
-        elif extension.type == 'group':
-            group_manager_ws.delete_groups_with_number(extension.exten)
-        elif extension.type == 'incall':
-            incall_manager_ws.delete_incalls_with_did(extension.exten)
-        elif extension.type == 'meetme':
-            meetme_manager_ws.delete_meetme_with_confno(extension.exten)
-        elif extension.type == 'outcall':
-            dialpattern_manager_dao.delete((extension.typeval))
+        try:
+            if extension.type == 'user':
+                user_manager_dao.delete_with_user_id(int(extension.typeval))
+            elif extension.type == 'queue':
+                queue_manager_ws.delete_queues_with_number(extension.exten)
+            elif extension.type == 'group':
+                group_manager_ws.delete_groups_with_number(extension.exten)
+            elif extension.type == 'incall':
+                incall_manager_ws.delete_incalls_with_did(extension.exten)
+            elif extension.type == 'meetme':
+                meetme_manager_ws.delete_meetme_with_confno(extension.exten)
+            elif extension.type == 'outcall':
+                dialpattern_manager_dao.delete((extension.typeval))
 
-        remote_exec(_delete_all_ule_association_by_extension_id, extension_id=extension.id)
+            remote_exec(_delete_all_ule_association_by_extension_id, extension_id=extension.id)
 
-        extension_manager_dao.delete(extension.id)
+            extension_manager_dao.delete(extension.id)
+        except ElementDeletionError:
+            pass
 
 
 def _delete_all_ule_association_by_extension_id(channel, extension_id):

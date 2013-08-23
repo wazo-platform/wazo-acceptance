@@ -31,10 +31,13 @@ def _delete_all(channel):
     for user in user_services.find_all():
 
         ules = ule_services.find_all_by_user_id(user.id)
-        try:
-            for ule in ules:
+        for ule in ules:
+            try:
                 ule_services.delete_everything(ule)
+            except ElementDeletionError:
+                pass
 
+        try:
             user_services.delete(user)
         except ElementDeletionError:
             pass
