@@ -26,3 +26,7 @@ def all_lines():
 
 def get(line_id):
     return ws_utils.rest_get('%s/%s' % (LINES_URL, line_id))
+
+
+def all_user_links_by_line_id(line_id):
+    return ws_utils.rest_get('%s/%s/user_links' % (LINES_URL, line_id))
