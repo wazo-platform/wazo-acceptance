@@ -30,10 +30,12 @@ def _delete_all(channel):
     for line in line_services.find_all():
 
         links = ule_services.find_all_by_line_id(line.id)
-        try:
-            for link in links:
+        for link in links:
+            try:
                 ule_services.delete_everything(link)
-
+            except ElementDeletionError:
+                pass
+        try:
             line_services.delete(line)
         except ElementDeletionError:
             pass
