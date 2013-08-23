@@ -11,6 +11,10 @@ def get_extension(extension_id):
     return ws_utils.rest_get('%s/%s' % (EXTENSIONS_URL, extension_id))
 
 
+def all_user_links_by_extension_id(extension_id):
+    return ws_utils.rest_get('%s/%s/user_links' % (EXTENSIONS_URL, extension_id))
+
+
 def create_extension(parameters):
     return ws_utils.rest_post(EXTENSIONS_URL, parameters)
 

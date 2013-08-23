@@ -45,6 +45,11 @@ def when_i_ask_for_the_extension_with_id_group1(step, extension_id):
     world.response = extension_ws.get_extension(extension_id)
 
 
+@step(u'When I ask for the list of user_links with extension_id "([^"]*)"$')
+def when_i_ask_for_the_list_of_user_links_with_line_id(step, extension_id):
+    world.response = extension_ws.all_user_links_by_extension_id(extension_id)
+
+
 @step(u'When I access the extension with id "([^"]*)"')
 def when_i_access_the_extension_with_id_group1(step, extension_id):
     world.response = extension_ws.get_extension(extension_id)
