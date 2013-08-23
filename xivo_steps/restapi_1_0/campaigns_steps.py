@@ -30,7 +30,7 @@ def given_there_is_no_campaign(step):
     rest_campaign.delete_all_campaigns()
 
 
-@step(u'When I create a campaign "([^"]*)"')
+@step(u'When I create a campaign "([^"]*)"$')
 def when_i_create_a_campaign_named_campagne_name(step, campaign_name):
     result = rest_campaign.create(campaign_name)
     assert result.status == 201, "Cannot create campaign. %s" % result.data
@@ -66,6 +66,7 @@ def _is_campaign_activated(campaign_name):
 def given_i_create_a_campaign_with_the_following_parameters(step):
     campaign = _convert_step_to_creation_params(step.hashes[0])
     world.result = rest_campaign.create(**campaign)
+    assert world.result.status == 201, "Cannot create campaign. %s" % world.result.data
     world.campaign_id = world.result.data
 
 
@@ -166,15 +167,10 @@ def then_the_campaign_group1_is_created_with_its_start_date_and_end_date_equal_t
 
 @step(u'When I create a campaign with the following parameters:')
 def when_i_create_a_campaign_with_the_following_parameters(step):
-    values = tuple(step.hashes[0].values())
-
-    generated_step = """
-    Given I create a campaign with the following parameters:
-    | campaign_name | queue_name | start_date | end_date |
-    | %s | %s | %s | %s |
-    """ % values
-
-    step.behave_as(generated_step)
+    campaign = _convert_step_to_creation_params(step.hashes[0])
+    world.result = rest_campaign.create(**campaign)
+    assert world.result.status == 201, "Cannot create campaign. %s" % world.result.data
+    world.campaign_id = world.result.data
 
 
 @step(u'Then I get an error code "([^\']*)" with message "([^\']*)"')

@@ -6,7 +6,7 @@ Feature: Devices
             | campaignqueue | campaignqueue | 3105   | default |
         Given there is no campaign "sample campaign"
         When I create a campaign with the following parameters:
-            | name            | queue         | start_date | end_date   |
+            | campaign_name   | queue_name    | start_date | end_date   |
             | sample campaign | campaignqueue | 2012-01-01 | 2012-02-02 |
         Then there is a campaign in the list with the following values:
             | name            | queue         | start_date | end_date  |
