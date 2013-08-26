@@ -23,9 +23,9 @@ from xivo_lettuce.manager_dao import call_logs_manager_dao
 from xivo_lettuce.manager_restapi import call_logs_ws
 
 
-@step(u'Given there are only the following call logs between "([^"]*)" and "([^"]*)":')
-def given_there_are_only_the_following_call_logs_between(step, start, end):
-    call_logs_manager_dao.delete_entries_between(start, end)
+@step(u'Given there are only the following call logs:')
+def given_there_are_only_the_following_call_logs(step):
+    call_logs_manager_dao.delete_all()
     call_logs_manager_dao.create_call_logs(step.hashes)
 
 
