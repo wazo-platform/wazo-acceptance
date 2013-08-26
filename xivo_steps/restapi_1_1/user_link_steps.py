@@ -24,6 +24,14 @@ from xivo_dao.data_handler.line import dao as line_dao
 from xivo_dao.data_handler.device import dao as device_dao
 
 
+@step(u'Given the following users, lines, extensions are linked:')
+def given_the_following_users_lines_extensions_are_linked(step):
+    for link_info in step.hashes:
+        userlink = _extract_parameters(link_info)
+        response = user_link_ws.create_user_link(userlink)
+        assert_that(response.status, equal_to(201))
+
+
 @step(u'When I create an empty link')
 def when_i_create_an_empty_link(step):
     world.response = user_link_ws.create_user_link({})
