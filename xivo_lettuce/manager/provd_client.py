@@ -44,6 +44,13 @@ def create_device(mac_address, plugin):
     provd_client.device_manager().update(new_device)
 
 
+def get_config(config_id):
+    provd_url = _provd_url()
+    provd_client = new_provisioning_client(provd_url)
+    config = provd_client.config_manager().get(config_id)
+    return config
+
+
 def _provd_url():
     _, port = provd_general_manager.rest_api_configuration()
     url = "http://%s:%s/provd" % (world.xivo_host, port)

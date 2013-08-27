@@ -17,8 +17,10 @@
 
 from lettuce import world
 from xivo_lettuce.common import open_url, remove_line
-from xivo_lettuce import form
+from xivo_lettuce import form, common
 from selenium.common.exceptions import NoSuchElementException
+from xivo_lettuce.manager_dao import device_manager_dao
+from xivo_lettuce.manager import provd_client
 
 
 def add_or_replace_device(info):
@@ -33,6 +35,14 @@ def add_device(info):
     if 'protocol' in info:
         form.select.set_select_field_with_id('it-config-protocol', info['protocol'])
     form.submit.submit_form()
+
+
+def get_provd_config(device_id):
+    device = device_manager_dao.get(device_id)
+    if device is None:
+        raise 'device %s not exist' % device_id
+    config = provd_client.get_config(device.config)
+    return config
 
 
 def delete_device(info):
@@ -76,3 +86,11 @@ def get_device_list_entry(mac_address):
     search_device('')
 
     return return_device
+
+
+def type_vlan_enabled(value):
+    common.go_to_tab('Advanced')
+    if value == '':
+        form.select.set_select_empty_value_with_id('it-config-vlan_enabled')
+    else:
+        form.select.set_select_field_with_id('it-config-vlan_enabled', value)

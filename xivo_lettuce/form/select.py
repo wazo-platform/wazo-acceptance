@@ -29,6 +29,11 @@ def set_select_field_with_id(field_id, value):
     Select(select_input).select_by_visible_text(value)
 
 
+def set_select_empty_value_with_id(field_id):
+    select_input = world.browser.find_element_by_id(field_id)
+    Select(select_input).select_by_value('')
+
+
 def set_select_field_with_id_containing(field_id, filter_string):
     select_input = Select(world.browser.find_element_by_id(field_id))
     _select_option_containing(filter_string, select_input)
