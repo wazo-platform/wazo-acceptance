@@ -22,3 +22,7 @@ CALL_LOGS_URL = '/call_logs'
 
 def call_logs_list():
     return ws_utils.rest_get(CALL_LOGS_URL)
+
+
+def call_logs_list_interval(params):
+    return ws_utils.rest_get(CALL_LOGS_URL, params=params)

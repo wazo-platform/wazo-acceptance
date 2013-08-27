@@ -29,9 +29,16 @@ def given_there_are_only_the_following_call_logs(step):
     call_logs_manager_dao.create_call_logs(step.hashes)
 
 
-@step(u'When I get the list of call logs')
+@step(u'When I get the list of call logs$')
 def when_i_get_the_list_of_call_logs(step):
     world.response = call_logs_ws.call_logs_list()
+
+
+@step(u'When I get the list of call logs with arguments:')
+def when_i_get_the_list_of_call_logs_with_arguments(step):
+    args = step.hashes[0]
+    world.response = call_logs_ws.call_logs_list_interval(args)
+    world.status = world.response.status
 
 
 @step(u'Then I get the following call logs in CSV format:')
@@ -44,5 +51,7 @@ def then_i_get_the_following_call_logs_in_csv_format(step):
 
     reader = UnicodeDictReader(StringIO(call_logs_response))
     row_matchers = [has_entries(expected_row) for expected_row in step.hashes]
-    for csv_row_dict in reader:
+    csv_rows = [csv_row for csv_row in reader]
+    assert_that(csv_rows, has_length(len(step.hashes)))
+    for csv_row_dict in csv_rows:
         assert_that(csv_row_dict, any_of(*row_matchers))
