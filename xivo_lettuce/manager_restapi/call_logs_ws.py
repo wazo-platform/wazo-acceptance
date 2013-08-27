@@ -15,9 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from xivo_lettuce.restapi.v1_1 import ws_utils_session as ws_utils
 
-from xivo_lettuce import form
+CALL_LOGS_URL = '/call_logs'
 
 
-def type_date(date):
-    form.input.set_text_field_with_id('it-dbeg', date)
+def call_logs_list():
+    return ws_utils.rest_get(CALL_LOGS_URL)
