@@ -37,6 +37,7 @@ def when_i_get_the_list_of_call_logs(step):
 @step(u'Then I get the following call logs in CSV format:')
 def then_i_get_the_following_call_logs_in_csv_format(step):
     assert_that(world.response.status, equal_to(200))
+    assert_that(world.response.headers['Content-Type'], equal_to('text/csv; charset=utf8'))
 
     call_logs_response = world.response.data.encode('utf-8')
     assert_that(call_logs_response, has_length(greater_than(0)))
