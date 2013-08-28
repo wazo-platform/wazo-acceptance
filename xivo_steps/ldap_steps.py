@@ -17,13 +17,23 @@
 
 from lettuce import step
 from xivo_lettuce.manager import ldap_manager
-from xivo_lettuce import assets, sysutils, ldap_utils
+from xivo_lettuce import assets, common, sysutils, ldap_utils
 
 
 def _check_ldap_is_up():
     if not ldap_utils.is_ldap_booted():
         ldap_utils.boot_ldap_server()
     ldap_utils.start_ldap_server()
+
+
+@step(u'Given there is no LDAP server "([^"]*)"$')
+def given_there_is_no_ldap_server(step, search):
+    common.remove_element_if_exist('LDAP server', search)
+
+
+@step(u'Given there is no LDAP filter "([^"]*)"$')
+def given_there_is_no_ldap_filter(step, search):
+    common.remove_element_if_exist('LDAP filter', search)
 
 
 @step(u'I create an LDAP server with name "([^"]*)" and host "([^"]*)"')

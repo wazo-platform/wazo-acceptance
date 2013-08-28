@@ -16,7 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
+from xivo_lettuce import common
 from xivo_lettuce.manager import campaign_manager
+
+
+@step(u'Given there is no campaign "([^"]*)"$')
+def given_there_is_no_element(step, search):
+    common.remove_element_if_exist('campaign', search)
 
 
 @step(u'When I create a campaign with the following parameters:')

@@ -18,9 +18,15 @@
 from lettuce import step
 
 from xivo_lettuce import form
+from xivo_lettuce import common
 from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import incall_manager as incall_man
 from xivo_lettuce.manager_ws import incall_manager_ws
+
+
+@step(u'Given there is no incall "([^"]*)"$')
+def given_there_is_no_incall(step, search):
+    common.remove_element_if_exist('incall', search)
 
 
 @step(u'Given there is an incall "([^"]*)" in context "([^"]*)" to the "([^"]*)" "([^"]*)"$')

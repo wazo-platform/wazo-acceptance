@@ -21,6 +21,11 @@ from xivo_lettuce.manager import callfilter_manager, user_manager
 from xivo_lettuce import common
 
 
+@step(u'Given there is no callfilter "([^"]*)"$')
+def given_there_is_no_callfilter(step, search):
+    common.remove_element_if_exist('callfilter', search)
+
+
 @step(u'^When I create a callfilter "([^"]*)" with a boss "([^"]*)" with a secretary "([^"]*)"$')
 def given_there_are_users_with_infos(step, callfilter_name, boss, secretary):
     callfilter_manager.add_boss_secretary_filter(callfilter_name, boss, secretary)

@@ -21,6 +21,7 @@ from hamcrest import *
 from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
+from xivo_lettuce import common
 from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url, \
     remove_line
 from xivo_lettuce.manager.outcall_manager import exten_line
@@ -28,6 +29,11 @@ from xivo_lettuce.manager_ws import trunksip_manager_ws, outcall_manager_ws
 from xivo_lettuce import form
 from selenium.webdriver.support.select import Select
 from xivo_lettuce.manager_ws import context_manager_ws
+
+
+@step(u'Given there is no outcall "([^"]*)"$')
+def given_there_is_no_outcall(step, search):
+    common.remove_element_if_exist('outcall', search)
 
 
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)" and no extension matched')

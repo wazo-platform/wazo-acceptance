@@ -18,6 +18,7 @@
 from hamcrest import assert_that, is_
 from lettuce import step, world
 from xivo_lettuce import urls
+from xivo_lettuce import common
 from xivo_lettuce.common import open_url, webi_logout
 from xivo_lettuce.manager import admin_user_manager
 
@@ -27,6 +28,11 @@ import time
 def is_browser_on_module_page(module):
     url = urls.URLS[module]
     return url in world.browser.current_url
+
+
+@step(u'Given there is no admin_user "([^"]*)"$')
+def given_there_is_no_element(step, search):
+    common.remove_element_if_exist('admin_user', search)
 
 
 @step(u'When I create an admin user with login "([^"]*)" and password "([^"]*)"')

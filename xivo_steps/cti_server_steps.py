@@ -22,6 +22,11 @@ from xivo_lettuce import common
 from xivo_lettuce.manager import profile_manager
 
 
+@step(u'Given there is no CTI profile "([^"]*)"$')
+def given_there_is_no_cti_profile(step, search):
+    common.remove_element_if_exist('CTI profile', search)
+
+
 @step(u'Then the profile "([^"]*)" has default services activated')
 def then_the_profile_1_has_default_services_activated(step, profile_name):
     common.open_url('profile', 'list')

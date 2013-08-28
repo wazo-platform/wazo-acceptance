@@ -17,12 +17,18 @@
 
 from lettuce import step
 from xivo_lettuce import form, func
+from xivo_lettuce import common
 from xivo_lettuce.common import open_url, element_in_list_matches_field
 from xivo_lettuce.manager.group_manager import remove_group_with_name, \
     type_group_name, type_group_number, type_context
 from xivo_lettuce.manager_ws import group_manager_ws
 from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.manager_dao import user_manager_dao
+
+
+@step(u'Given there is no group "([^"]*)"$')
+def given_there_is_no_group(step, search):
+    common.remove_element_if_exist('group', search)
 
 
 @step(u'Given there is a group "([^"]*)" with extension "([^"]*)" and users:')

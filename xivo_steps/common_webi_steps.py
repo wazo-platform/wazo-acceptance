@@ -16,15 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from xivo_lettuce.common import remove_element_if_exist, \
-    element_is_in_list, element_is_not_in_list
+from xivo_lettuce.common import element_is_in_list, element_is_not_in_list
 from xivo_lettuce import form
 from selenium.common.exceptions import NoSuchElementException
-
-
-@step(u'Given there is no ([a-z _]*) "([^"]*)"$')
-def given_there_is_no_element(step, module, search):
-    remove_element_if_exist(module, search)
 
 
 @step(u'Then ([a-z ]*) "([^"]*)" is displayed in the list$')
