@@ -71,6 +71,32 @@ def given_i_clear_and_generate_the_statistics_cache_twice(step):
     stat_manager.generate_cache()
 
 
+@step(u'Given there is no "([A-Z_]+)" entry for agent "([^"]*)"')
+def given_there_is_no_entry_for_agent(step, event, agent_number):
+    queuelog_manager.delete_event_by_agent_number(event, agent_number)
+
+
+@step(u'^Given there is no "([A-Z_]+)" entry in queue "(\S+)"$')
+def given_there_is_no_entry_in_queue_queue(step, event, queue_name):
+    queuelog_manager.delete_event_by_queue(event, queue_name)
+
+
+@step(u'^Given there is no entries in queue_log between "(.+)" and "(.+)"$')
+def given_there_is_no_entries_in_queue_log_table_between(step, start, end):
+    queuelog_manager.delete_event_between(start, end)
+
+
+@step(u'Given there is no entries in queue_log in the last hour')
+def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
+    current_hour = datetime.now().replace(minute=0, second=0, microsecond=0)
+    last_hour = current_hour - timedelta(hours=1)
+
+    queuelog_manager.delete_event_between(
+        last_hour.strftime("%Y-%m-%d %H:%M:%S.%f"),
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+    )
+
+
 @step(u'^When execute xivo-stat$')
 def when_execute_xivo_stats(step):
     stat_manager.generate_cache()
