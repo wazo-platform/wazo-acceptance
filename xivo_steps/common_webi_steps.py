@@ -16,15 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from xivo_lettuce.common import webi_login, remove_element_if_exist, \
-    element_is_in_list, element_is_not_in_list, go_to_tab
+from xivo_lettuce.common import remove_element_if_exist, \
+    element_is_in_list, element_is_not_in_list
 from xivo_lettuce import form
 from selenium.common.exceptions import NoSuchElementException
-
-
-@step(u'When I login as (.*) with password (.*) in (.*)')
-def when_i_login_the_webi(step, login, password, language):
-    webi_login(login, password, language)
 
 
 @step(u'Given there is no ([a-z _]*) "([^"]*)"$')
