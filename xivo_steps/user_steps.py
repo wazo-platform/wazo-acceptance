@@ -24,6 +24,7 @@ from xivo_lettuce.manager import user_manager, line_manager
 from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
     agent_manager_ws
 from xivo_lettuce.manager_dao import user_manager_dao
+from selenium.common.exceptions import NoSuchElementException
 
 
 @step(u'^Given there are users with infos:$')
@@ -272,6 +273,18 @@ def then_i_see_the_user_group1_group2_exists(step, firstname, lastname):
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     user_line = common.find_line("%s %s" % (firstname, lastname))
     assert user_line is not None
+    common.open_url('user', 'search', {'search': ''})
+
+
+@step(u'Then the user "([^"]*)" "([^"]*)" not exist')
+def then_the_user_not_exist(step, firstname, lastname):
+    common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
+    try:
+        common.find_line("%s %s" % (firstname, lastname))
+    except NoSuchElementException:
+        pass
+    else:
+        assert False, 'User: %s %s exist' % (firstname, lastname)
     common.open_url('user', 'search', {'search': ''})
 
 

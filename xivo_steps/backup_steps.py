@@ -20,6 +20,7 @@ import time
 from lettuce import step, world
 from hamcrest import assert_that, greater_than
 from xivo_lettuce.common import open_url, find_line
+from xivo_lettuce import assets
 
 
 @step(u'Given there is a backup file "([^"]*)"')
@@ -28,12 +29,29 @@ def given_there_is_a_backup_file(step, filename):
     world.ssh_client_xivo.out_call([command])
 
 
+@step(u'Given the asset file "([^"]*)" is copied on the server into "([^"]*)"')
+def given_the_file_is_copied_on_the_server_into_group2(step, assetfile, serverpath):
+    assets.copy_asset_to_server(assetfile, serverpath)
+
+
 @step(u'When I download backup file "([^"]*)"')
 def when_i_download_backup_file(step, filename):
     open_url('backups')
     table_line = find_line(filename)
     download_link = table_line.find_element_by_xpath(".//a[@title='%s']" % filename)
     download_link.click()
+
+
+@step(u'When I execute database backup command')
+def when_i_execute_database_backup_command(step):
+    command = 'bash /tmp/xivo-backup-manager backup'
+    world.ssh_client_xivo.out_call([command])
+
+
+@step(u'When I execute database restore command')
+def when_i_execute_database_restore_command(step):
+    command = 'bash /tmp/xivo-backup-manager restore'
+    world.ssh_client_xivo.out_call([command])
 
 
 @step(u'Then a non-empty file "([^"]*)" is present on disk')
