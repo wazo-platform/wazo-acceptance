@@ -16,9 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import re
-from lettuce.decorators import step
-from xivo_lettuce import sysutils
+
 from hamcrest import assert_that, equal_to
+from lettuce import step
+
+from xivo_lettuce import sysutils
+from xivo_lettuce.manager import file_manager
 
 
 ASTERISK_VM_PATH = '/var/spool/asterisk/voicemail'
@@ -26,6 +29,21 @@ BACKUP_DIR = '/var/backups/xivo'
 MOH_PATH = '/usr/share/asterisk/moh/default'
 DAHDI_PATH = '/dev/dahdi'
 ASTERISK_SOUND_PATH = '/usr/share/asterisk/sounds/en'
+
+
+@step(u'Given a recording file with name "([^"]*)"')
+def given_a_recording_file_with_name(step, filename):
+    file_manager.create_recordings_file(filename)
+
+
+@step(u'Given a recording meetme file with name "([^"]*)"')
+def given_a_recording_meetme_file_with_name(step, filename):
+    file_manager.create_recordings_meetme_file(filename)
+
+
+@step(u'Given a musiconhold file with name "([^"]*)"')
+def given_a_musiconhold_file_with_name(step, filename):
+    file_manager.create_musiconhold_file(filename)
 
 
 @step(u'Then directory of the Asterisk voicemail is empty')
