@@ -19,8 +19,7 @@ import time
 
 from lettuce import step, world
 from xivo_lettuce import sysutils, logs
-from hamcrest import assert_that
-from hamcrest.core import equal_to
+from hamcrest import assert_that, equal_to
 
 
 @step(u'Asterisk command "([^"]*)" return no error')

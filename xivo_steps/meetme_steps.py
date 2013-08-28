@@ -18,8 +18,7 @@
 from lettuce import step
 from xivo_lettuce.manager import meetme_manager, cti_client_manager
 from xivo_lettuce.manager_ws import meetme_manager_ws
-from hamcrest.core import assert_that
-from hamcrest.library.collection.isdict_containingentries import has_entries
+from hamcrest import assert_that, has_entries
 
 
 @step(u'Given there are no conference rooms')

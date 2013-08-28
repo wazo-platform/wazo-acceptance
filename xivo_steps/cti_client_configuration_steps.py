@@ -19,8 +19,7 @@
 from lettuce.decorators import step
 from lettuce.registry import world
 from xivo_lettuce.manager import cti_client_manager
-from hamcrest.core import assert_that
-from hamcrest.core.core.isequal import equal_to
+from hamcrest import assert_that, equal_to
 
 
 @step(u'I log in the XiVO Client with bad server address$')

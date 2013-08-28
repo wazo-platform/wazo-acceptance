@@ -15,9 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import has_items
-from hamcrest import equal_to
-from hamcrest.core import assert_that
+from hamcrest import assert_that, equal_to, has_items
 from lettuce import step, world
 from selenium.webdriver.support.select import Select
 from xivo_lettuce import common

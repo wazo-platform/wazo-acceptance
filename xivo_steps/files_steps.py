@@ -18,8 +18,7 @@
 import re
 from lettuce.decorators import step
 from xivo_lettuce import sysutils
-from hamcrest.core import assert_that
-from hamcrest.core.core.isequal import equal_to
+from hamcrest import assert_that, equal_to
 
 
 ASTERISK_VM_PATH = '/var/spool/asterisk/voicemail'

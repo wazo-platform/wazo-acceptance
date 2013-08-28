@@ -19,8 +19,7 @@ from lettuce import step
 from xivo_lettuce.manager import profile_manager, cti_client_manager
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import common, form
-from hamcrest.core import assert_that
-from hamcrest.library.collection.issequence_containing import has_item
+from hamcrest import assert_that, has_item
 
 
 @step(u'Given there is a profile "([^"]*)" with no services and xlets:')
