@@ -22,6 +22,7 @@ from xivo_lettuce import common
 from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.logs import search_str_in_asterisk_log
+from xivo_lettuce.manager import call_manager
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
@@ -30,6 +31,20 @@ def given_there_is_group1_activated_in_extensions_page(step, option_label):
     option = Checkbox.from_label(option_label)
     option.check()
     form.submit.submit_form()
+
+
+@step(u'Given the agent "([^"]*)" will answer a call and hangup after (\d+) seconds')
+def given_the_agent_will_answer_a_call_and_hangup_after_10_seconds(step, agent_number, seconds):
+    call_duration_ms = int(seconds) * 1000
+    call_manager.execute_answer_then_hangup(call_duration_ms)
+
+
+@step(u'When I call extension "([^"]*)" from trunk "([^"]*)"')
+def when_i_call_extension_from_trunk(step, extension, trunk_name):
+    call_manager.execute_n_calls_then_wait(1,
+                                           extension,
+                                           username=trunk_name,
+                                           password=trunk_name)
 
 
 @step(u'Then I see no recording file of this call in monitoring audio files page')

@@ -17,21 +17,7 @@
 
 from lettuce import step
 from hamcrest import *
-from xivo_lettuce.manager import call_manager, cti_client_manager
-
-
-@step(u'Given the agent "([^"]*)" will answer a call and hangup after (\d+) seconds')
-def given_the_agent_will_answer_a_call_and_hangup_after_10_seconds(step, agent_number, seconds):
-    call_duration_ms = int(seconds) * 1000
-    call_manager.execute_answer_then_hangup(call_duration_ms)
-
-
-@step(u'When I call extension "([^"]*)" from trunk "([^"]*)"')
-def when_i_call_extension_from_trunk(step, extension, trunk_name):
-    call_manager.execute_n_calls_then_wait(1,
-                                           extension,
-                                           username=trunk_name,
-                                           password=trunk_name)
+from xivo_lettuce.manager import cti_client_manager
 
 
 @step(u'Then the agent list xlet shows agent "([^"]*)" as in use')
