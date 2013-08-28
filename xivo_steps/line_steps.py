@@ -185,12 +185,6 @@ def then_this_line_is_not_displayed_in_the_list(step):
     open_url('line', 'search', {'search': ''})
 
 
-@step(u'^Then I see in IPBX Infos tab value "([^"]*)" has set to (.*)$')
-def then_i_see_the_value_has_set_to(step, var_name, var_val):
-    expected_var_val = line_manager.get_value_from_ipbx_infos_tab(var_name)
-    assert expected_var_val == var_val
-
-
 @step(u'Then the line "([^"]*)" has the following line options:')
 def then_the_line_1_has_the_following_line_options(step, line_number):
     line_id = line_manager_dao.find_line_id_with_exten_context(line_number, 'default')
@@ -215,5 +209,8 @@ def then_the_line_1_has_the_following_line_options(step, line_number):
                 ip_address_input = world.browser.find_element_by_label('IP address')
                 ip_address_value = ip_address_input.get_attribute('value')
                 assert ip_address_value == value
+            elif key == 'Caller ID':
+                common.go_to_tab('IPBX Infos')
+                assert line_manager.get_value_from_ipbx_infos_tab('callerid') == value
             else:
                 raise Exception('%s is not a valid key' % key)

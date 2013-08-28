@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import time
-
 from lettuce import step
 from xivo_lettuce.common import webi_login, remove_element_if_exist, \
     element_is_in_list, element_is_not_in_list, go_to_tab
@@ -59,8 +57,3 @@ def then_i_see_no_errors(step):
 @step(u'Then I see errors')
 def then_i_see_errors(step):
     form.submit.assert_form_errors()
-
-
-@step('I go to the "([^"]*)" tab')
-def i_go_to_the_1_tab(step, tab_text):
-    go_to_tab(tab_text)
