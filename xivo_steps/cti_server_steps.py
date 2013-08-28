@@ -18,7 +18,7 @@
 import time
 from lettuce import step, world
 from hamcrest import assert_that, equal_to
-from xivo_lettuce import common
+from xivo_lettuce import common, logs
 from xivo_lettuce.manager import profile_manager
 
 
@@ -42,3 +42,9 @@ def then_the_profile_1_has_default_services_activated(step, profile_name):
     selected_services = profile_manager.selected_services()
 
     assert_that(selected_services, equal_to(expected_services))
+
+
+@step(u'Then there are no errors in the CTI logs')
+def then_there_are_no_errors_in_the_cti_logs(step):
+    errors_found = logs.search_str_in_xivo_cti_log("ERROR")
+    assert_that(errors_found, equal_to(False), 'errors were found in CTI logs when searching in the directory')
