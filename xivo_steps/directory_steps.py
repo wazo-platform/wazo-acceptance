@@ -55,57 +55,19 @@ def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the
 def given_the_cti_server_searches_both_the_internal_directory_and_the_ldap_filter_group1(step, ldap_filter):
     _configure_display_filter()
     _configure_ldap_directory(ldap_filter)
-    step.given('Given the internal directory exists')
+    _configure_internal_directory()
     _add_directory_to_direct_directories(['ldapdirectory', 'internal'])
     _restart_cti_server(step)
 
 
-def _configure_display_filter():
-    field_list = [
-        (u'Nom', u'', u'{db-firstname} {db-lastname}'),
-        (u'Numéro', u'', u'{db-phone}')
-    ]
-    directory_manager.add_or_replace_display("Display", field_list)
-
-
-def _configure_ldap_directory(ldap_filter):
-    directory_manager.add_or_replace_directory(
-        'ldapdirectory',
-        'ldapfilter://%s' % ldap_filter,
-        'sn,givenName,telephoneNumber',
-        {'firstname': 'givenName',
-        'lastname': 'sn',
-        'phone': 'telephoneNumber'},
-    )
-
-
-def _add_directory_to_direct_directories(directories=['ldapdirectory']):
-    directory_manager.assign_filter_and_directories_to_context(
-        'default',
-        'Display',
-        directories
-    )
-
-
-def _restart_cti_server(step):
-    step.when('When I restart the CTI server')
-
-
 @step(u'Given the internal directory exists')
 def given_the_internal_directory_exists(step):
-    directory_manager.add_or_replace_directory(
-        'internal',
-        'internal',
-        'userfeatures.firstname,userfeatures.lastname',
-        {'firstname': 'userfeatures.firstname',
-         'lastname': 'userfeatures.lastname',
-         'phone': 'extensions.exten'}
-    )
+    _configure_internal_directory()
 
 
 @step(u'Given the internal phonebook is configured')
 def given_the_internal_phonebook_is_configured(step):
-    step.given('Given the internal directory exists')
+    _configure_internal_directory()
 
     directory_manager.add_or_replace_display(
         'Display',
@@ -219,3 +181,45 @@ def then_the_following_results_show_up_in_the_directory_xlet(step):
     res = cti_client_manager.get_remote_directory_infos()
     assert_res = func.has_subsets_of_dicts(step.hashes, res['return_value']['content'])
     assert_that(assert_res, equal_to(True))
+
+
+def _configure_display_filter():
+    field_list = [
+        (u'Nom', u'', u'{db-firstname} {db-lastname}'),
+        (u'Numéro', u'', u'{db-phone}')
+    ]
+    directory_manager.add_or_replace_display("Display", field_list)
+
+
+def _configure_ldap_directory(ldap_filter):
+    directory_manager.add_or_replace_directory(
+        name='ldapdirectory',
+        uri='ldapfilter://%s' % ldap_filter,
+        direct_match='sn,givenName,telephoneNumber',
+        fields={'firstname': 'givenName',
+                'lastname': 'sn',
+                'phone': 'telephoneNumber'},
+    )
+
+
+def _configure_internal_directory():
+    directory_manager.add_or_replace_directory(
+        name='internal',
+        uri='internal',
+        direct_match='userfeatures.firstname,userfeatures.lastname',
+        fields={'firstname': 'userfeatures.firstname',
+                'lastname': 'userfeatures.lastname',
+                'phone': 'extensions.exten'}
+    )
+
+
+def _add_directory_to_direct_directories(directories=['ldapdirectory']):
+    directory_manager.assign_filter_and_directories_to_context(
+        'default',
+        'Display',
+        directories
+    )
+
+
+def _restart_cti_server(step):
+    step.when('When I restart the CTI server')
