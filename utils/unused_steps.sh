@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
 function usage {
-    echo "Usage : $0"
+    echo "Usage : $0 [restapi_repo_path]"
 }
 
 echo "Here are the definitions of steps that are unused by feature files."
 
 STEP_NOT_FOUND="1"
+RESTAPI_REPO="$1"
 
 function project_root {
     this_script_directory="$(dirname $0)"
@@ -36,7 +37,7 @@ function extract_step_pattern {
 
 function find_step_usage {
     step_pattern="$1"
-    grep -qrIi --include '*.feature' "$step_pattern" .
+    grep -qrIi --include '*.feature' "$step_pattern" . "$RESTAPI_REPO"
 }
 
 function list_step_definitions {
