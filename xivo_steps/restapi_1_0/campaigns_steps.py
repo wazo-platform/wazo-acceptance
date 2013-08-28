@@ -122,14 +122,6 @@ def given_i_create_an_activated_campaign_group1_pointing_to_queue_group2_current
                          (now + d).strftime("%Y-%m-%d"))
 
 
-@step(u'Given I create a non activated campaign "([^"]*)" pointing to queue "([^"]*)" currently running')
-def given_i_create_a_non_activated_campaign_group1_pointing_to_queue_group2_currently_running(step, campaign_name, queue_id):
-    now = datetime.datetime.now()
-    d = datetime.timedelta(days=1)
-    rest_campaign.create(campaign_name, queue_id, False, (now - d).strftime("%Y-%m-%d"),
-                         (now + d).strftime("%Y-%m-%d"))
-
-
 @step(u'Given I create an activated campaign "([^"]*)" pointing to queue "([^"]*)" currently not running')
 def given_i_create_an_activated_campaign_group1_pointing_to_queue_group2_currently_not_running(step, campaign_name, queue_id):
     now = datetime.datetime.now()
@@ -228,11 +220,6 @@ def given_i_ask_for_a_list_of_campaigns_with_page_group1_and_page_size_group2(st
 def then_the_two_results_do_not_overlap(step):
     intersection = [item for item in world.result_list[0]['items'] if item in world.result_list[1]['items']]
     assert intersection == [], 'The results overlap: %s' % intersection
-
-
-@step(u'When I try to create a campaign "([^"]*)" pointing to queue "([^"]*)" with start date "([^"]*)" and end date "([^"]*)"')
-def when_i_try_to_create_a_campaign_group1_pointing_to_queue_group2_with_start_date_group3_and_end_date_group4(step, name, queue, start, end):
-    world.result = rest_campaign.create_with_errors(name, queue, True, start, end)
 
 
 @step(u'When I delete the queue "([^"]*)"')

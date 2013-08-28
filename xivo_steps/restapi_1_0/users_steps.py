@@ -106,12 +106,6 @@ def then_i_have_a_user_group1(step, fullname):
     assert userid is not None and userid > 0
 
 
-@step(u'Then the user "([^"]*)" is actually deleted')
-def then_the_user_group1_is_actually_deleted(step, fullname):
-    userid = rest_users.id_from_fullname(fullname)
-    assert userid is None
-
-
 @step(u'When I create a user "([^"]*)" with an field "([^"]*)" of value "([^"]*)"')
 def when_i_create_a_user_group1_with_an_field_group2_of_value_group3(step, fullname, fieldname, fieldvalue):
     world.result = rest_users.create_user_with_field(fullname, fieldname, fieldvalue)

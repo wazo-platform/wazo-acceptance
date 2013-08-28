@@ -202,11 +202,3 @@ def then_the_two_lists_of_recording_do_not_overlap(step):
 def when_we_search_recordings_in_the_campaign_with_the_key_page_and_page_size(step, campaign_name, key, page, pagesize):
     campaign_id = record_campaigns_dao.id_from_name(campaign_name)
     world.single_result = rest_campaign.search_paginated_recordings(str(campaign_id), key, page, pagesize)
-
-
-@step(u'Given there is a recording in campaign "([^"]*)" referenced by a "([^"]*)" answered by agent "([^"]*)"')
-def given_there_is_a_recording_in_campaign_group1_referenced_by_a_group2_answered_by_agent_group3(step, campaign_name, callid, agent_no):
-    campaign_id = record_campaigns_dao.id_from_name(campaign_name)
-    time = "2012-01-01 00:00:00"
-    assert rest_campaign.add_recording_details(campaign_id, callid, "caller",
-                                               agent_no, time), "Impossible to create recording"
