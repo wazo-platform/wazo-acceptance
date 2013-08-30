@@ -16,11 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-from lettuce import step, world
-from xivo_lettuce import common, form, sysutils
+from lettuce import step
+from xivo_lettuce import sysutils
 from xivo_lettuce.manager import cel_manager
 from xivo_lettuce.manager_dao import call_logs_manager_dao
-from xivo_lettuce.table import extract_webi_table_to_dict
 
 
 @step(u'Given there are no calls between "([^"]*)" and "([^"]*)"')
