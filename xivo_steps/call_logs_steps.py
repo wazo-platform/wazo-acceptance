@@ -50,17 +50,3 @@ def when_i_generate_call_logs(step):
 def then_i_should_have_the_following_call_logs(step):
     for entry in step.hashes:
         assert call_logs_manager_dao.has_call_log(entry), "Corresponding call_log entry was not found : %s" % entry
-
-
-@step(u'Then I see the called extension "([^"]*)" by "([^"]*)" in call logs page')
-def then_i_see_the_called_extension_in_call_logs_page(step, called, caller):
-    common.open_url('cel')
-    form.submit.submit_form()
-
-    common.go_to_last_page()
-
-    table = world.browser.find_element_by_xpath("//div[@id='sb-part-result']/div/table")
-    lines = extract_webi_table_to_dict(table)
-
-    last_call = lines.pop()
-    assert last_call['Called'] == called

@@ -286,4 +286,7 @@ Feature: Directory
         When I search for "greatlord" in the directory xlet
         When I double-click on the phone number for "GreatLord MacDonnell"
         When I wait 10 seconds
-        Then I see the called extension "1043" by "1042" in call logs page
+        When I generate call logs
+        Then I should have the following call logs:
+            | source_name    | source_exten | duration | answered |
+            | Lord Sanderson | 1042         | 0:00:00  | True     |

@@ -20,7 +20,10 @@ Feature: Callgen
         Given I wait call then I answer and wait
         Given there is 1 calls to extension "1101@default" then I hang up after "3s"
         Given I wait 5 seconds for the calls processing
-        Then I see the called extension "1101" by "1100" in call logs page
+        When I generate call logs
+        Then I should have the following call logs:
+            | destination_exten | duration | user_field | answered |
+            | 1101              | 0:00:03  |            | True     |
 
     Scenario: Call with extension call recording activated
         Given there are no calls running
