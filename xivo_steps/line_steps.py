@@ -59,7 +59,7 @@ def given_i_set_the_following_options_in_line_1(step, line_number):
 
 @step(u'Given the line "([^"]*)" has the codec "([^"]*)"')
 def given_the_line_group1_has_the_codec_group2(step, linenumber, codec):
-    step.when('When I add the codec "%s" to the line with number "%s"' % (codec, linenumber))
+    _add_codec_to_line(codec, linenumber)
 
 
 @step(u'When I add a SIP line with infos:')
@@ -97,10 +97,7 @@ def when_i_add_a_custom_line(step):
 
 @step(u'When I add the codec "([^"]*)" to the line with number "([^"]*)"')
 def when_i_add_the_custom_codec_group1_to_the_line_with_number_group2(step, codec, linenumber):
-    line_id = line_manager_dao.find_line_id_with_exten_context(linenumber, 'default')
-    open_url('line', 'edit', {'id': line_id})
-    _add_custom_codec(codec)
-    form.submit.submit_form()
+    _add_codec_to_line(codec, linenumber)
 
 
 @step(u'When I disable custom codecs for this line')
@@ -214,3 +211,10 @@ def then_the_line_1_has_the_following_line_options(step, line_number):
                 assert line_manager.get_value_from_ipbx_infos_tab('callerid') == value
             else:
                 raise Exception('%s is not a valid key' % key)
+
+
+def _add_codec_to_line(codec_name, line_exten):
+    line_id = line_manager_dao.find_line_id_with_exten_context(line_exten, 'default')
+    open_url('line', 'edit', {'id': line_id})
+    _add_custom_codec(codec_name)
+    form.submit.submit_form()
