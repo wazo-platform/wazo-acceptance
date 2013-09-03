@@ -116,3 +116,8 @@ def get_number_of_file_descriptor(service):
     path = '/proc/%s/fd' % get_pid_for_service_name(service)
     cmd = ['ls', path, '-l']
     return len(output_command(cmd).split('\n')) - 1
+
+
+def restart_service(service_name):
+    command = ['service', service_name, 'restart']
+    world.ssh_client_xivo.check_call(command)

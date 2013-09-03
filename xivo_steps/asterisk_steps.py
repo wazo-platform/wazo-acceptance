@@ -36,8 +36,7 @@ def when_i_stop_asterisk(step):
 
 @step(u'When I restart Asterisk')
 def when_i_restart_asterisk(step):
-    command = ['service', 'asterisk', 'restart']
-    sysutils.send_command(command)
+    sysutils.restart_service('asterisk')
 
 
 @step(u'When I wait for the service "([^"]*)" to stop')

@@ -59,9 +59,7 @@ def log_out_of_the_xivo_client(step):
 
 @step(u'When I restart the CTI server')
 def when_i_restart_the_cti_server(step):
-    command = ["/etc/init.d/xivo-ctid", "restart"]
-    world.ssh_client_xivo.check_call(command)
-    time.sleep(10)
+    cti_client_manager.restart_server()
 
 
 @step(u'When I start the XiVO Client$')

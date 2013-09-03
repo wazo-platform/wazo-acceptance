@@ -17,7 +17,7 @@
 
 import time
 
-from xivo_lettuce import common, xivoclient
+from xivo_lettuce import common, sysutils, xivoclient
 from lettuce.registry import world
 from xivo_lettuce.manager_dao import user_manager_dao
 
@@ -184,3 +184,8 @@ def log_user_in_client(firstname, lastname):
     }
     configure_client(conf_dict)
     return log_in_the_xivo_client()
+
+
+def restart_server():
+    sysutils.restart_service('xivo_ctid')
+    time.sleep(10)

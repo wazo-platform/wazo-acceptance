@@ -48,7 +48,7 @@ def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the
     _configure_display_filter()
     _configure_ldap_directory(ldap_filter)
     _add_directory_to_direct_directories()
-    _restart_cti_server(step)
+    cti_client_manager.restart_server()
 
 
 @step(u'Given the CTI server searches both the internal directory and the LDAP filter "([^"]*)"')
@@ -57,7 +57,7 @@ def given_the_cti_server_searches_both_the_internal_directory_and_the_ldap_filte
     _configure_ldap_directory(ldap_filter)
     _configure_internal_directory()
     _add_directory_to_direct_directories(['ldapdirectory', 'internal'])
-    _restart_cti_server(step)
+    cti_client_manager.restart_server()
 
 
 @step(u'Given the internal directory exists')
@@ -219,7 +219,3 @@ def _add_directory_to_direct_directories(directories=['ldapdirectory']):
         'Display',
         directories
     )
-
-
-def _restart_cti_server(step):
-    step.when('When I restart the CTI server')
