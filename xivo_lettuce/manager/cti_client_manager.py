@@ -187,5 +187,5 @@ def log_user_in_client(firstname, lastname):
 
 
 def restart_server():
-    sysutils.restart_service('xivo_ctid')
+    sysutils.restart_service('xivo-ctid')
     time.sleep(10)
