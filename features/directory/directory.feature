@@ -287,6 +287,6 @@ Feature: Directory
         When I double-click on the phone number for "GreatLord MacDonnell"
         When I wait 10 seconds
         When I generate call logs
-        Then I should have the following call logs:
+        Then I have the last call log matching:
             | source_name    | source_exten | duration | answered |
             | Lord Sanderson | 1042         | 0:00:00  | True     |

@@ -49,3 +49,9 @@ def when_i_generate_call_logs(step):
 def then_i_should_have_the_following_call_logs(step):
     for entry in step.hashes:
         assert call_logs_manager_dao.has_call_log(entry), "Corresponding call_log entry was not found : %s" % entry
+
+
+@step(u'Then I have the last call log matching:')
+def then_i_have_the_last_call_log_matching(step):
+    entry = step.hashes[0]
+    assert call_logs_manager_dao.matches_last_call_log(entry), "The last call_log entry did not match : %s" % entry

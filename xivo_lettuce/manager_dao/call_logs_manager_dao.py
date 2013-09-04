@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from datetime import datetime
 from xivo_lettuce import postgres
 from xivo_dao.data_handler.call_log import dao
 from xivo_dao.data_handler.call_log.model import CallLog
@@ -35,19 +34,28 @@ def _format_condition(key, value):
         return '%s IS NULL' % key
     elif key == 'duration':
         return '%s BETWEEN :%s AND :%s + interval \'1 second\'' % (key, key, key)
-    elif key == 'date':
-        return '%s BETWEEN :%s - interval \'1 minute\' AND :%s' % (key, key, key)
     else:
         return '%s = :%s' % (key, key)
 
 
 def has_call_log(entry):
-    entry['date'] = datetime.now()
+    query = _query_from_entry(entry)
+
+    return postgres.execute_sql(query, **entry).scalar()
+
+
+def matches_last_call_log(entry):
+    base_query = _query_from_entry(entry)
+    query = '%s ORDER BY eventtime desc LIMIT 1' % base_query
+
+    return postgres.execute_sql(query, **entry).scalar()
+
+
+def _query_from_entry(entry):
     base_query = """SELECT count(*) FROM call_log"""
     conditions = ' AND '.join(_format_condition(k, v) for k, v in entry.iteritems())
     query = '%s WHERE %s' % (base_query, conditions)
-
-    return postgres.execute_sql(query, **entry).scalar()
+    return query
 
 
 def create_call_logs(entries):
