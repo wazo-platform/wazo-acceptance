@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.restapi.v1_1 import device_helper
+from xivo_lettuce.restapi.v1_1 import device_helper, provd_helper
 from xivo_lettuce.manager_restapi import device_ws
 
 from hamcrest import assert_that, has_entries
@@ -51,3 +51,17 @@ def then_the_created_device_has_the_following_parameters(step):
     expected_device = step.hashes[0]
 
     assert_that(device_response, has_entries(expected_device))
+
+
+@step(u'When I create a device using the device template id "([^"]*)"')
+def when_i_create_a_device_using_the_device_template_id_group1(step, device_template_id):
+    device = {
+        'template_id': device_template_id
+    }
+    world.response = device_ws.create_device(device)
+
+
+@step(u'Given there exists the following device templates:')
+def given_there_exists_the_following_device_template(step):
+    for template in step.hashes:
+        provd_helper.add_or_replace_device_template(template)

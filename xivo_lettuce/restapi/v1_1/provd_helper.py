@@ -22,3 +22,28 @@ def _device_config_has_properties(channel, config, properties):
         message = u"Invalid %s ('%s' instead of '%s')" % (key, sip_line[key], properties[key])
         message = message.encode('utf8')
         assert sip_line[key] == properties[key], message
+
+
+def add_or_replace_device_template(properties):
+    remote_exec(_add_or_replace_device_template, properties=dict(properties))
+
+
+def _add_or_replace_device_template(channel, properties):
+    from xivo_dao.helpers import provd_connector
+    config_manager = provd_connector.config_manager()
+
+    if 'id' in properties:
+        existing = config_manager.find({'X_type': 'device', 'id': properties['id']})
+        if len(existing) > 0:
+            return
+
+    default_properties = {
+        'X_type': 'device',
+        'deletable': True,
+        'parent_ids': [],
+        'raw_config': {}
+    }
+
+    properties.update(default_properties)
+
+    config_manager.add(properties)
