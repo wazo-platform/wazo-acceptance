@@ -16,7 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_lettuce.restapi.v1_1 import device_helper
-from lettuce import step
+from xivo_lettuce.manager_restapi import device_ws
+
+from hamcrest import assert_that, has_entries
+from lettuce import step, world
 
 
 @step(u'Given I have no devices')
@@ -29,3 +32,22 @@ def given_there_are_the_following_devices(step):
     device_helper.delete_all()
     for deviceinfo in step.hashes:
         device_helper.create_device(deviceinfo)
+
+
+@step(u'When I create an empty device')
+def when_i_create_an_empty_device(step):
+    world.response = device_ws.create_device({})
+
+
+@step(u'When I create the following devices:')
+def when_i_create_the_following_devices(step):
+    for device_info in step.hashes:
+        world.response = device_ws.create_device(device_info)
+
+
+@step(u'Then the created device has the following parameters:')
+def then_the_created_device_has_the_following_parameters(step):
+    device_response = world.response.data
+    expected_device = step.hashes[0]
+
+    assert_that(device_response, has_entries(expected_device))
