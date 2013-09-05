@@ -41,19 +41,19 @@ Feature: Call Log Generation
     Scenario: Generation of answered incoming call
         Given there are no calls
         Given I have the following CEL entries:
-            | eventtype    | eventtime             | cid_name   | cid_num    | exten | context     | uniqueid      | linkedid      | userfield |
-            | CHAN_START   | 2013-01-01 11:02:38.0 | 612345678  | 612345678  | 1002  | from-extern | 1376060558.17 | 1376060558.17 |           |
-            | APP_START    | 2013-01-01 11:02:38.0 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
-            | CHAN_START   | 2013-01-01 11:02:38.0 | Bob Marley | 1002       | s     | default     | 1376060558.18 | 1376060558.17 |           |
-            | ANSWER       | 2013-01-01 11:02:42.0 | Bob Marley | 1002       | s     | default     | 1376060558.18 | 1376060558.17 |           |
-            | ANSWER       | 2013-01-01 11:02:42.0 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
-            | BRIDGE_START | 2013-01-01 11:02:42.0 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
+            | eventtype    | eventtime             | cid_name   |    cid_num | exten | context     |      uniqueid |      linkedid | userfield |
+            | CHAN_START   | 2013-01-01 11:02:38.0 | 612345678  |  612345678 | 1002  | from-extern | 1376060558.17 | 1376060558.17 |           |
+            | APP_START    | 2013-01-01 11:02:38.1 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
+            | CHAN_START   | 2013-01-01 11:02:38.2 | Bob Marley |       1002 | s     | default     | 1376060558.18 | 1376060558.17 |           |
+            | ANSWER       | 2013-01-01 11:02:42.0 | Bob Marley |       1002 | s     | default     | 1376060558.18 | 1376060558.17 |           |
+            | ANSWER       | 2013-01-01 11:02:42.1 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
+            | BRIDGE_START | 2013-01-01 11:02:42.2 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
             | BRIDGE_END   | 2013-01-01 11:02:45.0 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
-            | HANGUP       | 2013-01-01 11:02:45.0 | Bob Marley | 1002       |       | user        | 1376060558.18 | 1376060558.17 |           |
-            | CHAN_END     | 2013-01-01 11:02:45.0 | Bob Marley | 1002       |       | user        | 1376060558.18 | 1376060558.17 |           |
-            | HANGUP       | 2013-01-01 11:02:45.0 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
-            | CHAN_END     | 2013-01-01 11:02:45.0 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
-            | LINKEDID_END | 2013-01-01 11:02:45.0 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
+            | HANGUP       | 2013-01-01 11:02:45.1 | Bob Marley |       1002 |       | user        | 1376060558.18 | 1376060558.17 |           |
+            | CHAN_END     | 2013-01-01 11:02:45.2 | Bob Marley |       1002 |       | user        | 1376060558.18 | 1376060558.17 |           |
+            | HANGUP       | 2013-01-01 11:02:45.3 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
+            | CHAN_END     | 2013-01-01 11:02:45.4 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
+            | LINKEDID_END | 2013-01-01 11:02:45.5 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
         When I generate call logs
         Then I should have the following call logs:
             | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered |
@@ -62,31 +62,31 @@ Feature: Call Log Generation
     Scenario: Generation of answered outgoing call
         Given there are no calls
         Given I have the following CEL entries:
-            | eventtype    | eventtime             | cid_name   | cid_num | exten      | context     | uniqueid      | linkedid      | userfield |
-            | CHAN_START   | 2013-01-01 11:03:47.0 | Bob Marley | 1002    | 4185550155 | default     | 1376060627.21 | 1376060627.21 |           |
-            | APP_START    | 2013-01-01 11:03:47.0 | Bob Marley | 1002    | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
-            | CHAN_START   | 2013-01-01 11:03:47.0 |            |         | s          | from-extern | 1376060627.22 | 1376060627.21 |           |
-            | ANSWER       | 2013-01-01 11:03:51.0 |            | dial    | dial       | from-extern | 1376060627.22 | 1376060627.21 |           |
-            | ANSWER       | 2013-01-01 11:03:51.0 | Bob Marley | 1002    | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
-            | BRIDGE_START | 2013-01-01 11:03:51.0 | Bob Marley | 1002    | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
-            | BRIDGE_END   | 2013-01-01 11:03:54.0 | Bob Marley | 1002    | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
-            | HANGUP       | 2013-01-01 11:03:54.0 |            | dial    |            | outcall     | 1376060627.22 | 1376060627.21 |           |
-            | CHAN_END     | 2013-01-01 11:03:54.0 |            | dial    |            | outcall     | 1376060627.22 | 1376060627.21 |           |
-            | HANGUP       | 2013-01-01 11:03:54.0 | Bob Marley | 1002    | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
-            | CHAN_END     | 2013-01-01 11:03:54.0 | Bob Marley | 1002    | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
-            | LINKEDID_END | 2013-01-01 11:03:54.0 | Bob Marley | 1002    | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
-            | CHAN_START   | 2013-01-01 11:20:08.0 | Bob Marley | 1002    | 4185550155 | default     | 1376068808.35 | 1376068808.35 |           |
-            | APP_START    | 2013-01-01 11:20:08.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
-            | CHAN_START   | 2013-01-01 11:20:08.0 |            |         | s          | from-extern | 1376068808.36 | 1376068808.35 |           |
-            | ANSWER       | 2013-01-01 11:20:10.0 |            | dial    | dial       | from-extern | 1376068808.36 | 1376068808.35 |           |
-            | ANSWER       | 2013-01-01 11:20:10.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
-            | BRIDGE_START | 2013-01-01 11:20:10.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
-            | BRIDGE_END   | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
-            | HANGUP       | 2013-01-01 11:20:13.0 |            | dial    |            | outcall     | 1376068808.36 | 1376068808.35 |           |
-            | CHAN_END     | 2013-01-01 11:20:13.0 |            | dial    |            | outcall     | 1376068808.36 | 1376068808.35 |           |
-            | HANGUP       | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
-            | CHAN_END     | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
-            | LINKEDID_END | 2013-01-01 11:20:13.0 | Bob Marley | 1002    | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | eventtype    | eventtime             | cid_name   | cid_num | exten      | context     |      uniqueid |      linkedid | userfield |
+            | CHAN_START   | 2013-01-01 11:03:47.0 | Bob Marley |    1002 | 4185550155 | default     | 1376060627.21 | 1376060627.21 |           |
+            | APP_START    | 2013-01-01 11:03:47.1 | Bob Marley |    1002 | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
+            | CHAN_START   | 2013-01-01 11:03:47.2 |            |         | s          | from-extern | 1376060627.22 | 1376060627.21 |           |
+            | ANSWER       | 2013-01-01 11:03:51.0 |            |    dial | dial       | from-extern | 1376060627.22 | 1376060627.21 |           |
+            | ANSWER       | 2013-01-01 11:03:51.1 | Bob Marley |    1002 | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
+            | BRIDGE_START | 2013-01-01 11:03:51.2 | Bob Marley |    1002 | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
+            | BRIDGE_END   | 2013-01-01 11:03:54.0 | Bob Marley |    1002 | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
+            | HANGUP       | 2013-01-01 11:03:54.1 |            |    dial |            | outcall     | 1376060627.22 | 1376060627.21 |           |
+            | CHAN_END     | 2013-01-01 11:03:54.2 |            |    dial |            | outcall     | 1376060627.22 | 1376060627.21 |           |
+            | HANGUP       | 2013-01-01 11:03:54.3 | Bob Marley |    1002 | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
+            | CHAN_END     | 2013-01-01 11:03:54.4 | Bob Marley |    1002 | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
+            | LINKEDID_END | 2013-01-01 11:03:54.5 | Bob Marley |    1002 | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
+            | CHAN_START   | 2013-01-01 11:20:08.0 | Bob Marley |    1002 | 4185550155 | default     | 1376068808.35 | 1376068808.35 |           |
+            | APP_START    | 2013-01-01 11:20:08.1 | Bob Marley |    1002 | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | CHAN_START   | 2013-01-01 11:20:08.2 |            |         | s          | from-extern | 1376068808.36 | 1376068808.35 |           |
+            | ANSWER       | 2013-01-01 11:20:10.0 |            |    dial | dial       | from-extern | 1376068808.36 | 1376068808.35 |           |
+            | ANSWER       | 2013-01-01 11:20:10.1 | Bob Marley |    1002 | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | BRIDGE_START | 2013-01-01 11:20:10.2 | Bob Marley |    1002 | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | BRIDGE_END   | 2013-01-01 11:20:13.0 | Bob Marley |    1002 | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | HANGUP       | 2013-01-01 11:20:13.1 |            |    dial |            | outcall     | 1376068808.36 | 1376068808.35 |           |
+            | CHAN_END     | 2013-01-01 11:20:13.2 |            |    dial |            | outcall     | 1376068808.36 | 1376068808.35 |           |
+            | HANGUP       | 2013-01-01 11:20:13.3 | Bob Marley |    1002 | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | CHAN_END     | 2013-01-01 11:20:13.4 | Bob Marley |    1002 | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
+            | LINKEDID_END | 2013-01-01 11:20:13.5 | Bob Marley |    1002 | dial       | outcall     | 1376068808.35 | 1376068808.35 | Père Noël |
         When I generate call logs
         Then I should have the following call logs:
             | date                  | source_name | source_exten | destination_exten | duration  | user_field | answered |
