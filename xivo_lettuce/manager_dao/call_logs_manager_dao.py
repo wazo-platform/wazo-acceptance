@@ -34,6 +34,8 @@ def _format_condition(key, value):
         return '%s IS NULL' % key
     elif key == 'duration':
         return '%s BETWEEN :%s AND :%s + interval \'1 second\'' % (key, key, key)
+    elif key == 'last' and value is True:
+        return 'id IN (SELECT id FROM call_log ORDER BY date DESC LIMIT 1)'
     else:
         return '%s = :%s' % (key, key)
 
@@ -45,8 +47,8 @@ def has_call_log(entry):
 
 
 def matches_last_call_log(entry):
-    base_query = _query_from_entry(entry)
-    query = '%s ORDER BY eventtime desc LIMIT 1' % base_query
+    entry['last'] = True
+    query = _query_from_entry(entry)
 
     return postgres.execute_sql(query, **entry).scalar()
 
