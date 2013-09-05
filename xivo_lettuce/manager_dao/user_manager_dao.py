@@ -151,6 +151,7 @@ def delete_user_line_extension_with_user_id(user_id):
 
 
 def _delete_user_line_extension_with_user_id(channel, user_id):
+    from xivo_dao.data_handler.user import services as user_services
     from xivo_dao.data_handler.user_line_extension import services as ule_services
 
     ules = ule_services.find_all_by_user_id(user_id)
@@ -158,6 +159,9 @@ def _delete_user_line_extension_with_user_id(channel, user_id):
     if ules:
         for ule in ules:
             ule_services.delete_everything(ule)
+    else:
+        user = user_services.get(user_id)
+        user_services.delete(user)
 
 
 def delete_user_line_extension_with_exten_context(exten, context):
