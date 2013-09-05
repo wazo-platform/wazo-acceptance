@@ -40,7 +40,7 @@ def given_i_have_the_following_cel_entries(step):
     cel_manager.insert_entries(step.hashes)
 
 
-@step(u'When I generate call logs')
+@step(u'When I generate call logs$')
 def when_i_generate_call_logs(step):
     command = ['xivo-call-logs']
     sysutils.send_command(command)
@@ -63,6 +63,12 @@ def then_the_rest_api_received_a_request_with_infos(step):
     restapi_requests_manager.assert_last_request_matches(action, query)
 
 
+@step(u'When I generate call logs using the last \d CEL entries$')
+def when_i_generate_call_logs_using_the_last_1_cel_entries(step, cel_count):
+    command = ['xivo-call-logs', '-c', cel_count]
+    sysutils.send_command(command)
+
+
 @step(u'Then I should have the following call logs:')
 def then_i_should_have_the_following_call_logs(step):
     for entry in step.hashes:
@@ -73,3 +79,9 @@ def then_i_should_have_the_following_call_logs(step):
 def then_i_have_the_last_call_log_matching(step):
     entry = step.hashes[0]
     assert call_logs_manager_dao.matches_last_call_log(entry), "The last call_log entry did not match : %s" % entry
+
+
+@step(u'Then I should not have the following call logs:')
+def then_i_should_not_have_the_following_call_logs(step):
+    for entry in step.hashes:
+        assert not call_logs_manager_dao.has_call_log(entry), "Corresponding call_log entry was found : %s" % entry
