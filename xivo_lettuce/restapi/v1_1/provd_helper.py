@@ -47,3 +47,17 @@ def _add_or_replace_device_template(channel, properties):
     properties.update(default_properties)
 
     config_manager.add(properties)
+
+
+def delete_device_with_mac(mac):
+    remote_exec(_delete_device_with_mac, mac=mac)
+
+
+def _delete_device_with_mac(channel, mac):
+    from xivo_dao.helpers import provd_connector
+    config_manager = provd_connector.config_manager()
+    device_manager = provd_connector.device_manager()
+
+    for device in device_manager.find({'mac': mac}):
+        device_manager.remove(device['id'])
+        config_manager.remove(device['id'])

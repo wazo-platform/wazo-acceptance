@@ -18,13 +18,18 @@
 from xivo_lettuce.restapi.v1_1 import device_helper, provd_helper
 from xivo_lettuce.manager_restapi import device_ws
 
-from hamcrest import assert_that, has_entries
+from hamcrest import assert_that, has_entries, has_entry, has_length
 from lettuce import step, world
 
 
 @step(u'Given I have no devices')
 def given_there_are_no_devices(step):
     device_helper.delete_all()
+
+
+@step(u'Given there are no devices with mac "([^"]*)"')
+def given_there_are_no_devices_with_mac_group1(step, mac):
+    provd_helper.delete_device_with_mac(mac)
 
 
 @step(u'Given I only have the following devices:')
