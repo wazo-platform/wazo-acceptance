@@ -50,6 +50,12 @@ def when_i_create_the_following_devices(step):
         world.response = device_ws.create_device(device_info)
 
 
+@step(u'Then I get a response with a device id')
+def then_i_get_a_response_with_a_device_id(step):
+    assert_that(world.response.data,
+                has_entry('id', has_length(32)))
+
+
 @step(u'Then the created device has the following parameters:')
 def then_the_created_device_has_the_following_parameters(step):
     device_response = world.response.data
