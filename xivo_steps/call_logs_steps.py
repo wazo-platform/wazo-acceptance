@@ -16,10 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-from datetime import datetime
 from lettuce import step
 from xivo_lettuce import common, form, sysutils
-from xivo_lettuce.manager import cel_manager, call_logs_manager, restapi_requests_manager
+from xivo_lettuce.manager import cel_manager, call_logs_manager
 from xivo_lettuce.manager_dao import call_logs_manager_dao
 
 
@@ -52,15 +51,6 @@ def when_i_request_call_logs_in_the_webi_with_dates(step):
     form_info = step.hashes[0]
     call_logs_manager.type_dates(form_info['start'], form_info['end'])
     form.submit.submit_form()
-
-
-@step(u'Then the REST API received a request with infos:$')
-def then_the_rest_api_received_a_request_with_infos(step):
-    request_infos = step.hashes[0]
-    action = request_infos['path']
-    query = request_infos['query'] % {'today': datetime.now().strftime('%Y-%m-%d'),
-                                      'timenow': '\d\d:\d\d:\d\d'}
-    restapi_requests_manager.assert_last_request_matches(action, query)
 
 
 @step(u'When I generate call logs using the last \d CEL entries$')
