@@ -1,7 +1,19 @@
 # -*- coding: UTF-8 -*-
 
 
-from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+
+
+def total_devices():
+    return remote_exec_with_result(_total_devices)
+
+
+def _total_devices(channel):
+    from xivo_dao.helpers import provd_connector
+
+    device_manager = provd_connector.device_manager()
+    total = len(device_manager.find())
+    channel.send(total)
 
 
 def device_config_has_properties(device, properties):
@@ -59,6 +71,39 @@ def _delete_device_with_mac(channel, mac):
     device_manager = provd_connector.device_manager()
 
     for device in device_manager.find({'mac': mac}):
+        device_manager.remove(device['id'])
+        if 'config' in device:
+            config_manager.remove(device['id'])
+
+
+def delete_device_with_id(device_id):
+    remote_exec(_delete_device_with_id, device_id=device_id)
+
+
+def _delete_device_with_id(channel, device_id):
+    from xivo_dao.helpers import provd_connector
+    config_manager = provd_connector.config_manager()
+    device_manager = provd_connector.device_manager()
+
+    for device in device_manager.find({'id': device_id}):
+        device_manager.remove(device['id'])
+        if 'config' in device:
+            config_manager.remove(device['id'])
+
+
+def remove_devices_over(max_devices):
+    remote_exec(_remove_devices_over, max_devices=max_devices)
+
+
+def _remove_devices_over(channel, max_devices):
+    from xivo_dao.helpers import provd_connector
+    config_manager = provd_connector.config_manager()
+    device_manager = provd_connector.device_manager()
+
+    all_devices = device_manager.find()
+    extra_devices = all_devices[max_devices:]
+
+    for device in extra_devices:
         device_manager.remove(device['id'])
         if 'config' in device:
             config_manager.remove(device['id'])
