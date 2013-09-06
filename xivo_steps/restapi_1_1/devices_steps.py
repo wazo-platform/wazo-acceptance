@@ -27,6 +27,11 @@ def given_there_are_no_devices(step):
     device_helper.delete_all()
 
 
+@step(u'Given there are no devices with id "([^"]*)"')
+def given_there_are_no_devices_with_id_group1(step, device_id):
+    provd_helper.delete_device_with_id(device_id)
+
+
 @step(u'Given there are no devices with mac "([^"]*)"')
 def given_there_are_no_devices_with_mac_group1(step, mac):
     provd_helper.delete_device_with_mac(mac)
@@ -37,6 +42,14 @@ def given_there_are_the_following_devices(step):
     device_helper.delete_all()
     for deviceinfo in step.hashes:
         device_helper.create_device(deviceinfo)
+
+
+
+
+@step(u'Given there exists the following device templates:')
+def given_there_exists_the_following_device_template(step):
+    for template in step.hashes:
+        provd_helper.add_or_replace_device_template(template)
 
 
 @step(u'When I create an empty device')
@@ -50,20 +63,6 @@ def when_i_create_the_following_devices(step):
         world.response = device_ws.create_device(device_info)
 
 
-@step(u'Then I get a response with a device id')
-def then_i_get_a_response_with_a_device_id(step):
-    assert_that(world.response.data,
-                has_entry('id', has_length(32)))
-
-
-@step(u'Then the created device has the following parameters:')
-def then_the_created_device_has_the_following_parameters(step):
-    device_response = world.response.data
-    expected_device = step.hashes[0]
-
-    assert_that(device_response, has_entries(expected_device))
-
-
 @step(u'When I create a device using the device template id "([^"]*)"')
 def when_i_create_a_device_using_the_device_template_id_group1(step, device_template_id):
     device = {
@@ -72,7 +71,19 @@ def when_i_create_a_device_using_the_device_template_id_group1(step, device_temp
     world.response = device_ws.create_device(device)
 
 
-@step(u'Given there exists the following device templates:')
-def given_there_exists_the_following_device_template(step):
-    for template in step.hashes:
-        provd_helper.add_or_replace_device_template(template)
+@step(u'Then I get a response with a device id')
+def then_i_get_a_response_with_a_device_id(step):
+    assert_that(world.response.data,
+                has_entry('id', has_length(32)))
+
+
+@step(u'Then the device has the following parameters:')
+def then_the_device_has_the_following_parameters(step):
+    device_response = world.response.data
+    expected_device = step.hashes[0]
+
+    assert_that(device_response, has_entries(expected_device))
+
+
+
+
