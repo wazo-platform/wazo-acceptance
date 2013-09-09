@@ -73,7 +73,7 @@ def _delete_device_with_mac(channel, mac):
     for device in device_manager.find({'mac': mac}):
         device_manager.remove(device['id'])
         if 'config' in device:
-            config_manager.remove(device['id'])
+            config_manager.remove(device['config'])
 
 
 def delete_device_with_id(device_id):
