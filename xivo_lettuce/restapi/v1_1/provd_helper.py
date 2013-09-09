@@ -107,3 +107,18 @@ def _remove_devices_over(channel, max_devices):
         device_manager.remove(device['id'])
         if 'config' in device:
             config_manager.remove(device['id'])
+
+
+def find_by_mac(mac):
+    return remote_exec_with_result(_find_by_mac, mac=mac)
+
+
+def _find_by_mac(channel, mac):
+    from xivo_dao.helpers import provd_connector
+    device_manager = provd_connector.device_manager()
+
+    devices = device_manager.find({'mac': mac})
+    if len(devices) == 0:
+        channel.send(None)
+    else:
+        channel.send(devices[0])
