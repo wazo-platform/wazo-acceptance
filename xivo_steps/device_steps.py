@@ -43,18 +43,39 @@ def given_there_is_a_device_in_autoprov_with_infos(step):
     )
 
 
+@step(u'When I request devices in the webi')
+def when_i_request_devices_in_the_webi(step):
+    common.open_url('device')
+
+
 @step(u'^When I search device "([^"]*)"$')
 def when_i_search_device(step, search):
     device_manager.search_device(search)
 
 
+@step(u'When I create the device with infos:')
+def when_i_create_the_device_with_infos(step):
+    common.open_url('device', 'add')
+    device_infos = step.hashes[0]
+    if 'mac' in device_infos:
+        provd_client.delete_device_by_mac(device_infos['mac'])
+    if 'vlan_enabled' in device_infos:
+        device_manager.type_vlan_enabled(device_infos['vlan_enabled'])
+    form.submit.submit_form()
+
+
 @step(u'When I edit the device "([^"]*)" with infos:')
-def when_i_edit_the_device_1_2_without_changing_anything(step, device_id):
+def when_i_edit_the_device_with_infos(step, device_id):
     common.open_url('device', 'edit', qry={'id': '%s' % device_id})
     device_infos = step.hashes[0]
     if 'vlan_enabled' in device_infos:
         device_manager.type_vlan_enabled(device_infos['vlan_enabled'])
     form.submit.submit_form()
+
+
+@step(u'^When I delete the device "([^"]*)"$')
+def when_i_delete_device(step, device_id):
+    common.open_url('device', 'delete', qry={'id': '%s' % device_id})
 
 
 @step(u'Then I see devices with infos:')

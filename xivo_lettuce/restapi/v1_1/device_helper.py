@@ -4,6 +4,7 @@ import json
 import requests
 from xivo_lettuce.restapi.config import get_config_value
 from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_lettuce.restapi.v1_1.provd_helper import delete_device_with_mac
 
 AUTOPROV_URL = 'https://%s/xivo/configuration/json.php/restricted/provisioning/autoprov?act=configure'
 HEADERS = {'Content-Type': 'application/json'}
@@ -45,6 +46,9 @@ def create_device(deviceinfo):
 def _create_device(channel, deviceinfo):
     from xivo_dao.data_handler.device import services as device_services
     from xivo_dao.data_handler.device.model import Device
+
+    if 'template_id' not in deviceinfo:
+        deviceinfo['template_id'] = 'defaultconfigdevice'
 
     device = Device(**deviceinfo)
     device_services.create(device)

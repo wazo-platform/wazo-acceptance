@@ -35,7 +35,10 @@ def assert_last_request_matches(**expected_request_infos):
     request_infos = _extract_request_infos(last_request)
 
     for request_info_key, request_info_value in expected_request_infos.iteritems():
-        result = re.match(request_info_value, request_infos[request_info_key])
+        try:
+            result = re.match(request_info_value, request_infos[request_info_key])
+        except TypeError:
+            result = request_info_value == request_infos[request_info_key]
         assert_that(result, is_not(none()), '%s != %s' % (request_info_value, request_infos[request_info_key]))
 
 

@@ -30,8 +30,8 @@ def add_or_replace_device(info):
 
 def add_device(info):
     open_url('device', 'add')
-    form.input.edit_text_field_with_id('it-devicefeatures-ip', info['ip'])
-    form.input.edit_text_field_with_id('it-devicefeatures-mac', info['mac'])
+    form.input.edit_text_field_with_id('it-device-ip', info['ip'])
+    form.input.edit_text_field_with_id('it-device-mac', info['mac'])
     if 'protocol' in info:
         form.select.set_select_field_with_id('it-config-protocol', info['protocol'])
     form.submit.submit_form()

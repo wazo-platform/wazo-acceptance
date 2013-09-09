@@ -32,11 +32,28 @@ def given_there_are_no_devices_with_mac_group1(step, mac):
     provd_helper.delete_device_with_mac(mac)
 
 
+@step(u'Given there are no devices with id "([^"]*)"')
+def given_there_are_no_devices_with_id_group1(step, device_id):
+    provd_helper.delete_device(device_id)
+
+
 @step(u'Given I only have the following devices:')
 def given_there_are_the_following_devices(step):
     device_helper.delete_all()
     for deviceinfo in step.hashes:
         device_helper.create_device(deviceinfo)
+
+
+@step(u'Given I have the following devices:')
+def given_i_have_the_following_devices(step):
+    for deviceinfo in step.hashes:
+        device_helper.create_device(deviceinfo)
+
+
+@step(u'Given there exists the following device templates:')
+def given_there_exists_the_following_device_template(step):
+    for template in step.hashes:
+        provd_helper.add_or_replace_device_template(template)
 
 
 @step(u'When I create an empty device')
@@ -48,6 +65,19 @@ def when_i_create_an_empty_device(step):
 def when_i_create_the_following_devices(step):
     for device_info in step.hashes:
         world.response = device_ws.create_device(device_info)
+
+
+@step(u'When I create a device using the device template id "([^"]*)"')
+def when_i_create_a_device_using_the_device_template_id_group1(step, device_template_id):
+    device = {
+        'template_id': device_template_id
+    }
+    world.response = device_ws.create_device(device)
+
+
+@step(u'When I provision my device "([^"]*)" with my line "([^"]*)"')
+def when_i_provision_my_device_group1_with_my_line_group2(step, device_mac, line_id):
+    assert False, 'This step must be implemented'
 
 
 @step(u'Then I get a response with a device id')
@@ -62,17 +92,3 @@ def then_the_created_device_has_the_following_parameters(step):
     expected_device = step.hashes[0]
 
     assert_that(device_response, has_entries(expected_device))
-
-
-@step(u'When I create a device using the device template id "([^"]*)"')
-def when_i_create_a_device_using_the_device_template_id_group1(step, device_template_id):
-    device = {
-        'template_id': device_template_id
-    }
-    world.response = device_ws.create_device(device)
-
-
-@step(u'Given there exists the following device templates:')
-def given_there_exists_the_following_device_template(step):
-    for template in step.hashes:
-        provd_helper.add_or_replace_device_template(template)

@@ -19,9 +19,10 @@ def _device_config_has_properties(channel, config, properties):
 
     keys = [u'username', u'auth_username', u'display_name', u'password', u'number']
     for key in keys:
-        message = u"Invalid %s ('%s' instead of '%s')" % (key, sip_line[key], properties[key])
-        message = message.encode('utf8')
-        assert sip_line[key] == properties[key], message
+        if key in properties:
+            message = u"Invalid %s ('%s' instead of '%s')" % (key, sip_line[key], properties[key])
+            message = message.encode('utf8')
+            assert sip_line[key] == properties[key], message
 
 
 def add_or_replace_device_template(properties):
@@ -49,6 +50,25 @@ def _add_or_replace_device_template(channel, properties):
     config_manager.add(properties)
 
 
+def delete_device(device_id):
+    remote_exec(_delete_device, device_id=device_id)
+
+
+def _delete_device(channel, device_id):
+    from xivo_dao.helpers import provd_connector
+    config_manager = provd_connector.config_manager()
+    device_manager = provd_connector.device_manager()
+
+    try:
+        config_manager.remove(device_id)
+    except Exception:
+        pass
+    try:
+        device_manager.remove(device_id)
+    except Exception:
+        pass
+
+
 def delete_device_with_mac(mac):
     remote_exec(_delete_device_with_mac, mac=mac)
 
@@ -59,6 +79,8 @@ def _delete_device_with_mac(channel, mac):
     device_manager = provd_connector.device_manager()
 
     for device in device_manager.find({'mac': mac}):
-        device_manager.remove(device['id'])
-        if 'config' in device:
+        try:
             config_manager.remove(device['id'])
+        except Exception:
+            pass
+        device_manager.remove(device['id'])

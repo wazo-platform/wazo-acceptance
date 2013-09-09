@@ -26,7 +26,8 @@ def delete_device_by_mac(mac_address):
     provd_client = new_provisioning_client(provd_url)
     devices = provd_client.device_manager().find({'mac': mac_address})
     for device in devices:
-        provd_client.config_manager().remove(device['config'])
+        if 'config' in device:
+            provd_client.config_manager().remove(device['config'])
         provd_client.device_manager().remove(device['id'])
 
 
