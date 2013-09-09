@@ -4,7 +4,6 @@ import json
 import requests
 from xivo_lettuce.restapi.config import get_config_value
 from xivo_lettuce.remote_py_cmd import remote_exec
-from xivo_lettuce.restapi.v1_1.provd_helper import delete_device_with_mac
 
 AUTOPROV_URL = 'https://%s/xivo/configuration/json.php/restricted/provisioning/autoprov?act=configure'
 HEADERS = {'Content-Type': 'application/json'}
@@ -33,10 +32,16 @@ def delete_all():
 
 
 def _delete_all(channel):
-    from xivo_dao.data_handler.device import services as device_services
+    from xivo_dao.helpers import provd_connector
+    config_manager = provd_connector.config_manager()
+    device_manager = provd_connector.device_manager()
 
-    for device in device_services.find_all():
-        device_services.delete(device)
+    for device in device_manager.find():
+        try:
+            config_manager.remove(device['id'])
+        except Exception:
+            pass
+        device_manager.remove(device['id'])
 
 
 def create_device(deviceinfo):

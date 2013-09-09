@@ -17,11 +17,7 @@
 
 from hamcrest import *
 from lettuce import step, world
-from xivo_lettuce.restapi.v1_1 import device_helper, provd_helper
 from xivo_lettuce.manager_restapi import user_link_ws
-
-from xivo_dao.data_handler.line import dao as line_dao
-from xivo_dao.data_handler.device import dao as device_dao
 
 
 @step(u'Given the following users, lines, extensions are linked:')
@@ -70,18 +66,6 @@ def then_i_get_the_lines_with_the_following_parameters(step):
         assert_that(world.response.data['items'], has_item(
             has_entries(_extract_parameters(expected_data))
         ))
-
-
-@step(u'When I provision my device with my line_id "([^"]*)" and ip "([^"]*)"')
-def when_i_provision_my_device_with_my_line_id_group1(step, line_id, device_ip):
-    line = line_dao.get(line_id)
-    device_helper.provision_device_using_webi(line.provisioning_extension, device_ip)
-
-
-@step(u'Then the device "([^"]*)" has been provisioned with a configuration:')
-def then_the_device_has_been_provisioned_with_a_configuration(step, device_id):
-    device = device_dao.get(device_id)
-    provd_helper.device_config_has_properties(device, step.hashes)
 
 
 def _extract_parameters(user_line):

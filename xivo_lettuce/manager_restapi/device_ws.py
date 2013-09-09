@@ -24,3 +24,7 @@ def device_list(parameters={}):
 
 def reset_to_autoprov(device_id):
     return ws_utils.rest_get('%s/%s/autoprov' % (DEVICES_URL, device_id))
+
+
+def associate_line_to_device(device_id, line_id):
+    return ws_utils.rest_get('%s/%s/associate_line/%s' % (DEVICES_URL, device_id, line_id))

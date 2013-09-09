@@ -77,6 +77,11 @@ def when_i_create_a_device_using_the_device_template_id_group1(step, device_temp
     world.response = device_ws.create_device(device)
 
 
+@step(u'When I associate my line_id "([^"]*)" to the device "([^"]*)"')
+def when_i_associate_my_line_id_to_the_device(step, line_id, device_id):
+    world.response = device_ws.associate_line_to_device(device_id, line_id)
+
+
 @step(u'^When I synchronize the device "([^"]*)" from restapi$')
 def when_i_synchronize_the_device_group1_from_restapi(step, device_id):
     world.response = device_ws.synchronize(device_id)
