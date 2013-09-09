@@ -85,6 +85,11 @@ def when_i_provision_my_device_group1_with_my_line_group2(step, device_mac, line
     assert False, 'This step must be implemented'
 
 
+@step(u'When I reset the device "([^"]*)" to autoprov from restapi')
+def when_i_reset_the_device_to_autoprov_from_restapi(step, device_id):
+    world.response = device_ws.reset_to_autoprov(device_id)
+
+
 @step(u'Then I get a response with a device id')
 def then_i_get_a_response_with_a_device_id(step):
     assert_that(world.response.data,

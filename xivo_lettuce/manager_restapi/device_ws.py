@@ -12,3 +12,7 @@ def create_device(parameters):
 
 def synchronize(device_id):
     return ws_utils.rest_get('%s/%s/synchronize' % (DEVICES_URL, device_id))
+
+
+def reset_to_autoprov(device_id):
+    return ws_utils.rest_get('%s/%s/autoprov' % (DEVICES_URL, device_id))
