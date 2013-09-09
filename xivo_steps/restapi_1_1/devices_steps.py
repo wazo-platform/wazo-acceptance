@@ -75,6 +75,11 @@ def when_i_create_a_device_using_the_device_template_id_group1(step, device_temp
     world.response = device_ws.create_device(device)
 
 
+@step(u'^When I synchronize the device "([^"]*)" from restapi$')
+def when_i_synchronize_the_device_group1_from_restapi(step, device_id):
+    world.response = device_ws.synchronize(device_id)
+
+
 @step(u'When I provision my device "([^"]*)" with my line "([^"]*)"')
 def when_i_provision_my_device_group1_with_my_line_group2(step, device_mac, line_id):
     assert False, 'This step must be implemented'
