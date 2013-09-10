@@ -109,6 +109,11 @@ def when_i_request_a_list_of_devices_with_the_following_query_parameters(step):
     world.response = device_ws.device_list(parameters)
 
 
+@step(u'When I reset the device "([^"]*)" to autoprov from restapi')
+def when_i_reset_the_device_to_autoprov_from_restapi(step, device_id):
+    world.response = device_ws.reset_to_autoprov(device_id)
+
+
 @step(u'Then I get a response with a device id')
 def then_i_get_a_response_with_a_device_id(step):
     assert_that(world.response.data,

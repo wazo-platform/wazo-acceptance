@@ -20,3 +20,7 @@ def get_device(device_id):
 
 def device_list(parameters={}):
     return ws_utils.rest_get(DEVICES_URL, params=parameters)
+
+
+def reset_to_autoprov(device_id):
+    return ws_utils.rest_get('%s/%s/autoprov' % (DEVICES_URL, device_id))

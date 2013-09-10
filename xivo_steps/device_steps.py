@@ -53,6 +53,11 @@ def when_i_synchronize_the_device_group1_from_webi(step, device_id):
     common.open_url('device', 'synchronize', qry={'id': '%s' % device_id})
 
 
+@step(u'When I reset to autoprov the device "([^"]*)" from webi')
+def when_i_reset_to_autoprov_the_device_from_webi(step, device_id):
+    common.open_url('device', 'modeautoprov', qry={'id': '%s' % device_id})
+
+
 @step(u'^When I search device "([^"]*)"$')
 def when_i_search_device(step, search):
     device_manager.search_device(search)
@@ -112,4 +117,12 @@ def then_the_device_group1_has_no_config_with_the_following_keys(step, device_id
 
 @step(u'Then I see in the log file device "([^"]*)" synchronized')
 def then_i_see_in_the_log_file_device_synchronized(step, device_id):
-    logs.search_str_in_daemon_log('Synchronizing device %s' % device_id)
+    assert logs.search_str_in_daemon_log('Synchronizing device %s' % device_id)
+
+
+@step(u'Then I see in the log file device "([^"]*)" autoprovisioned')
+def then_i_see_in_the_log_file_device_group1_autoprovisioned(step, device_id):
+    assert logs.search_str_in_daemon_log('Creating new config')
+    assert logs.search_str_in_daemon_log('/provd/cfg_mgr/autocreate')
+    assert logs.search_str_in_daemon_log('Updating config')
+    assert logs.search_str_in_daemon_log('/provd/cfg_mgr/configs/123')
