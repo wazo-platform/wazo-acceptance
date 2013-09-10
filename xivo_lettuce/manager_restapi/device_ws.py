@@ -12,3 +12,11 @@ def create_device(parameters):
 
 def synchronize(device_id):
     return ws_utils.rest_get('%s/%s/synchronize' % (DEVICES_URL, device_id))
+
+
+def get_device(device_id):
+    return ws_utils.rest_get("%s/%s" % (DEVICES_URL, device_id))
+
+
+def device_list(parameters={}):
+    return ws_utils.rest_get(DEVICES_URL, params=parameters)

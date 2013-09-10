@@ -52,3 +52,15 @@ def _create_device(channel, deviceinfo):
 
     device = Device(**deviceinfo)
     device_services.create(device)
+
+
+def create_dummy_devices(nb_devices):
+    remote_exec(_create_dummy_devices, nb_devices=nb_devices)
+
+
+def _create_dummy_devices(channel, nb_devices):
+    from xivo_dao.data_handler.device import services as device_services
+    from xivo_dao.data_handler.device.model import Device
+
+    for i in range(nb_devices):
+        device_services.create(Device())
