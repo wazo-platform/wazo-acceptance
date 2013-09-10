@@ -147,7 +147,7 @@ def _contains_all_devices(devices):
 
 
 def _extract_matching_devices(devices):
-    matcher = any_of(_all_items(devices))
+    matcher = any_of(*_all_items(devices))
     return [device for device in devices if matcher.matches(device)]
 
 
