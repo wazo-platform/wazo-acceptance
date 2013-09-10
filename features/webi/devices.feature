@@ -36,7 +36,7 @@ Feature: Devices
           | ip             |
           | 192.168.54.219 |
         Then the REST API received a request with infos:
-          | method | path         | data                     |
+          | method | path          | data                     |
           | PUT    | /1.1/devices/ | {"ip": "192.168.54.219"} |
 
     Scenario: Delete
@@ -48,3 +48,13 @@ Feature: Devices
         Then the REST API received a request with infos:
           | method | path         | data                     |
           | DELETE | /1.1/devices | {"ip": "192.168.54.219"} |
+
+    Scenario: Synchronize
+        Given there are no devices with id "123"
+        Given I have the following devices:
+          | id  | ip             | mac               |
+          | 123 | 192.168.32.197 | 00:00:00:00:aa:01 |
+        When I synchronize the device "123" from webi
+        Then the REST API received a request with infos:
+          | method | path                 |
+          | GET    | /1.1/123/synchronize |

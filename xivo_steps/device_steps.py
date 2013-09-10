@@ -19,7 +19,7 @@ from lettuce import step
 from hamcrest import assert_that, equal_to, is_not, has_key
 from xivo_lettuce.manager import device_manager
 from xivo_lettuce.manager import provd_client
-from xivo_lettuce import postgres, form, common
+from xivo_lettuce import postgres, form, common, logs
 
 
 @step(u'^Given there is a device with infos:$')
@@ -46,6 +46,11 @@ def given_there_is_a_device_in_autoprov_with_infos(step):
 @step(u'When I request devices in the webi')
 def when_i_request_devices_in_the_webi(step):
     common.open_url('device')
+
+
+@step(u'When I synchronize the device "([^"]*)" from webi')
+def when_i_synchronize_the_device_group1_from_webi(step, device_id):
+    common.open_url('device', 'synchronize', qry={'id': '%s' % device_id})
 
 
 @step(u'^When I search device "([^"]*)"$')
@@ -103,3 +108,8 @@ def then_the_device_group1_has_no_config_with_the_following_keys(step, device_id
     for expected_keys in step.hashes:
         if 'vlan_enabled' in expected_keys:
             assert_that(config['raw_config'], is_not(has_key('vlan_enabled')))
+
+
+@step(u'Then I see in the log file device "([^"]*)" synchronized')
+def then_i_see_in_the_log_file_device_synchronized(step, device_id):
+    logs.search_str_in_daemon_log('Synchronizing device %s' % device_id)
