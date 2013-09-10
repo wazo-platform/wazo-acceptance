@@ -160,6 +160,10 @@ def given_i_only_have_n_devices(step, nb_devices):
     nb_devices = int(nb_devices)
     provd_helper.remove_devices_over(nb_devices)
 
+    total_devices = provd_helper.total_devices()
+    if total_devices < nb_devices:
+        device_helper.create_dummy_devices(nb_devices - total_devices)
+
 
 @step(u'Then I get a list with (\d+) devices')
 def then_i_get_a_list_with_5_devices(step, nb_devices):
