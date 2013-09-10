@@ -84,8 +84,8 @@ def when_i_go_get_the_device_with_id_group1(step, device_id):
 
 @step(u'When I go get the device with mac "([^"]*)" using its id')
 def when_i_go_get_the_device_with_mac_group1_using_its_id(step, mac):
-    device = provd_helper.find_by_mac(mac)
-    world.response = device_ws.get_device(device['id'])
+    device_id = _device_id_from_mac(mac)
+    world.response = device_ws.get_device(device_id)
 
 
 @step(u'When I request the list of devices')
@@ -97,6 +97,25 @@ def when_i_access_the_list_of_devices(step):
 def when_i_request_a_list_of_devices_with_the_following_query_parameters(step):
     parameters = step.hashes[0]
     world.response = device_ws.device_list(parameters)
+
+
+@step(u'When I edit the device with mac "([^"]*)" using no parameters')
+def when_i_edit_the_device_with_mac_group1_using_no_parameters(step, mac):
+    device_id = _device_id_from_mac(mac)
+    world.response = device_ws.edit_device(device_id, {})
+
+
+def _device_id_from_mac(mac):
+    device = provd_helper.find_by_mac(mac)
+    device_id = device['id']
+    return device_id
+
+
+@step(u'When I edit the device with mac "([^"]*)" using the following parameters:')
+def when_i_edit_the_device_with_mac_group1_using_the_following_parameters(step, mac):
+    device_id = _device_id_from_mac(mac)
+    parameters = step.hashes[0]
+    world.response = device_ws.edit_device(device_id, parameters)
 
 
 @step(u'Then I get a response with a device id')

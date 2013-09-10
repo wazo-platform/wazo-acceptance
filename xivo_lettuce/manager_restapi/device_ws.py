@@ -13,3 +13,7 @@ def get_device(device_id):
 
 def device_list(parameters={}):
     return ws_utils.rest_get(DEVICES_URL, params=parameters)
+
+
+def edit_device(device_id, parameters):
+    return ws_utils.rest_put("%s/%s" % (DEVICES_URL, device_id), parameters)
