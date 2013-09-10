@@ -52,6 +52,13 @@ def get_config(config_id):
     return config
 
 
+def get_device(device_id):
+    provd_url = _provd_url()
+    provd_client = new_provisioning_client(provd_url)
+    device = provd_client.device_manager().get(device_id)
+    return device
+
+
 def _provd_url():
     _, port = provd_general_manager.rest_api_configuration()
     url = "http://%s:%s/provd" % (world.xivo_host, port)

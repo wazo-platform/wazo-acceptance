@@ -19,7 +19,6 @@ from lettuce import world
 from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce import form, common
 from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce.manager_dao import device_manager_dao
 from xivo_lettuce.manager import provd_client
 
 
@@ -38,7 +37,7 @@ def add_device(info):
 
 
 def get_provd_config(device_id):
-    device = device_manager_dao.get(device_id)
+    device = provd_client.get_device(device_id)
     if device is None:
         raise 'device %s not exist' % device_id
     config = provd_client.get_config(device.config)
