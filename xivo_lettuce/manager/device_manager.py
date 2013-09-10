@@ -40,7 +40,7 @@ def get_provd_config(device_id):
     device = provd_cfg_dev_manager.get_device(device_id)
     if device is None:
         raise 'device %s not exist' % device_id
-    config = provd_cfg_dev_manager.get_config(device.config)
+    config = provd_cfg_dev_manager.get_config(device['config'])
     return config
 
 

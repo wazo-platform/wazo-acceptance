@@ -27,23 +27,6 @@ def _prepare_auth():
     return auth
 
 
-def delete_all():
-    remote_exec(_delete_all)
-
-
-def _delete_all(channel):
-    from xivo_dao.helpers import provd_connector
-    config_manager = provd_connector.config_manager()
-    device_manager = provd_connector.device_manager()
-
-    for device in device_manager.find():
-        try:
-            config_manager.remove(device['id'])
-        except Exception:
-            pass
-        device_manager.remove(device['id'])
-
-
 def create_device(deviceinfo):
     remote_exec(_create_device, deviceinfo=deviceinfo)
 

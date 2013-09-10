@@ -19,7 +19,7 @@ from lettuce import step
 from hamcrest import assert_that, equal_to, is_not, has_key, starts_with
 from xivo_lettuce.manager import device_manager
 from xivo_lettuce.manager import provd_cfg_dev_manager
-from xivo_lettuce import postgres, form, common, logs
+from xivo_lettuce import form, common, logs
 from xivo_lettuce.restapi.v1_1 import device_helper
 
 from xivo_dao.data_handler.line import dao as line_dao
@@ -37,13 +37,8 @@ def given_there_is_a_device_in_autoprov_with_infos(step):
     mac_address = device_properties['mac']
     plugin = device_properties['plugin']
 
-    provd_cfg_dev_manager.delete_device_by_mac(mac_address)
-    postgres.exec_sql_request('delete from devicefeatures where mac = \'%s\'' % mac_address)
-
-    provd_cfg_dev_manager.create_device(
-        mac_address=mac_address,
-        plugin=plugin
-    )
+    device_helper.create_device(mac=mac_address,
+                                plugin=plugin)
 
 
 @step(u'When I request devices in the webi')
@@ -145,5 +140,5 @@ def then_i_see_in_the_log_file_device_synchronized(step, device_id):
 def then_i_see_in_the_log_file_device_group1_autoprovisioned(step, device_id):
     assert logs.search_str_in_daemon_log('Creating new config')
     assert logs.search_str_in_daemon_log('/provd/cfg_mgr/autocreate')
-    assert logs.search_str_in_daemon_log('Updating config')
-    assert logs.search_str_in_daemon_log('/provd/cfg_mgr/configs/123')
+    assert logs.search_str_in_daemon_log('Updating device')
+    assert logs.search_str_in_daemon_log('/provd/dev_mgr/devices/%s' % device_id)
