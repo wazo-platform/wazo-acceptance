@@ -16,25 +16,30 @@ def _total_devices(channel):
     channel.send(total)
 
 
-def device_config_has_properties(device, properties):
-    remote_exec(_device_config_has_properties, config=device.config, properties=dict(properties[0]))
+def device_config_has_properties(device_id, properties):
+    remote_exec(_device_config_has_properties, device_id=device_id, properties=dict(properties[0]))
 
 
-def _device_config_has_properties(channel, config, properties):
+def _device_config_has_properties(channel, device_id, properties):
     from xivo_dao.helpers import provd_connector
 
     provd_config_manager = provd_connector.config_manager()
-    config = provd_config_manager.get(config)
-    sip_lines = config['raw_config']['sip_lines']
+    provd_device_manager = provd_connector.device_manager()
+    device = provd_device_manager.get(device_id)
+    if 'config' in device:
+        config = provd_config_manager.get(device['config'])
+        sip_lines = config['raw_config']['sip_lines']
 
-    sip_line = sip_lines['1']
+        sip_line = sip_lines['1']
 
-    keys = [u'username', u'auth_username', u'display_name', u'password', u'number']
-    for key in keys:
-        if key in properties:
-            message = u"Invalid %s ('%s' instead of '%s')" % (key, sip_line[key], properties[key])
-            message = message.encode('utf8')
-            assert sip_line[key] == properties[key], message
+        keys = [u'username', u'auth_username', u'display_name', u'password', u'number']
+        for key in keys:
+            if key in properties:
+                message = u"Invalid %s ('%s' instead of '%s')" % (key, sip_line[key], properties[key])
+                message = message.encode('utf8')
+                assert sip_line[key] == properties[key], message
+    else:
+        assert False, 'Device has no config key.'
 
 
 def add_or_replace_device_template(properties):

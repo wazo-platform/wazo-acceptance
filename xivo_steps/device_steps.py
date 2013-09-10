@@ -16,14 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from hamcrest import assert_that, equal_to, is_not, has_key
+from hamcrest import assert_that, equal_to, is_not, has_key, starts_with
 from xivo_lettuce.manager import device_manager
 from xivo_lettuce.manager import provd_client
 from xivo_lettuce import postgres, form, common, logs
 from xivo_lettuce.restapi.v1_1 import device_helper, provd_helper
 
 from xivo_dao.data_handler.line import dao as line_dao
-from xivo_dao.data_handler.device import dao as device_dao
 
 
 @step(u'^Given there is a device with infos:$')
@@ -100,8 +99,7 @@ def when_i_provision_my_device_with_my_line_id_group1(step, line_id, device_ip):
 
 @step(u'Then the device "([^"]*)" has been provisioned with a configuration:')
 def then_the_device_has_been_provisioned_with_a_configuration(step, device_id):
-    device = device_dao.get(device_id)
-    provd_helper.device_config_has_properties(device, step.hashes)
+    provd_helper.device_config_has_properties(device_id, step.hashes)
 
 
 @step(u'Then I see devices with infos:')
@@ -129,6 +127,13 @@ def then_the_device_group1_has_no_config_with_the_following_keys(step, device_id
     for expected_keys in step.hashes:
         if 'vlan_enabled' in expected_keys:
             assert_that(config['raw_config'], is_not(has_key('vlan_enabled')))
+
+
+@step(u'Then the device "([^"]*)" is in autoprov mode')
+def then_the_device_group1_is_in_autoprov_mode(step, device_id):
+    device = device_manager.get_provd_config(device_id)
+    if 'config' in device:
+        assert_that(device['config'], starts_with('autoprov'))
 
 
 @step(u'Then I see in the log file device "([^"]*)" synchronized')

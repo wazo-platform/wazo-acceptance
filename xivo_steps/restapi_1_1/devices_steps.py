@@ -119,6 +119,11 @@ def when_i_reset_the_device_to_autoprov_from_restapi(step, device_id):
     world.response = device_ws.reset_to_autoprov(device_id)
 
 
+@step(u'When I remove line_id "([^"]*)" from device "([^"]*)"')
+def when_i_remove_line_id_group1_from_device_group2(step, line_id, device_id):
+    world.response = device_ws.remove_line_from_device(device_id, line_id)
+
+
 @step(u'Then I get a response with a device id')
 def then_i_get_a_response_with_a_device_id(step):
     assert_that(world.response.data,
