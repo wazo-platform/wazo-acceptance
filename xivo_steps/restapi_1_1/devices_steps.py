@@ -15,47 +15,48 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.restapi.v1_1 import device_helper, provd_helper
-from xivo_lettuce.manager_restapi import device_ws
 
 from hamcrest import *
 from lettuce import step, world
 
+from xivo_lettuce.manager import provd_cfg_dev_manager, device_manager
+from xivo_lettuce.manager_restapi import device_ws
+
 
 @step(u'Given I have no devices')
 def given_there_are_no_devices(step):
-    device_helper.delete_all()
+    device_manager.delete_all()
 
 
 @step(u'Given there are no devices with mac "([^"]*)"')
 def given_there_are_no_devices_with_mac_group1(step, mac):
-    provd_helper.delete_device_with_mac(mac)
+    provd_cfg_dev_manager.delete_device_with_mac(mac)
 
 
 @step(u'Given there are no devices with id "([^"]*)"')
 def given_there_are_no_devices_with_id_group1(step, device_id):
-    provd_helper.delete_device(device_id)
+    provd_cfg_dev_manager.delete_device(device_id)
 
 
 @step(u'Given I only have the following devices:')
 def given_there_are_the_following_devices(step):
-    device_helper.delete_all()
+    device_manager.delete_all()
     for deviceinfo in step.hashes:
-        device_helper.create_device(deviceinfo)
+        device_manager.create_device(deviceinfo)
 
 
 @step(u'Given I have the following devices:')
 def given_i_have_the_following_devices(step):
     for deviceinfo in step.hashes:
         if 'mac' in deviceinfo:
-            provd_helper.delete_device_with_mac(deviceinfo['mac'])
-        device_helper.create_device(deviceinfo)
+            provd_cfg_dev_manager.delete_device_with_mac(deviceinfo['mac'])
+        device_manager.create_device(deviceinfo)
 
 
 @step(u'Given there exists the following device templates:')
 def given_there_exists_the_following_device_template(step):
     for template in step.hashes:
-        provd_helper.add_or_replace_device_template(template)
+        provd_cfg_dev_manager.add_or_replace_device_template(template)
 
 
 @step(u'When I create an empty device')
@@ -99,7 +100,7 @@ def when_i_go_get_the_device_with_id_group1(step, device_id):
 
 @step(u'When I go get the device with mac "([^"]*)" using its id')
 def when_i_go_get_the_device_with_mac_group1_using_its_id(step, mac):
-    device = provd_helper.find_by_mac(mac)
+    device = provd_cfg_dev_manager.find_by_mac(mac)
     world.response = device_ws.get_device(device['id'])
 
 
@@ -152,7 +153,7 @@ def then_i_get_a_list_containing_the_following_devices(step):
 
 @step(u'Then the list contains the same number of devices as on the provisioning server')
 def then_the_list_contains_the_same_number_of_devices_as_on_the_provisioning_server(step):
-    total_provd = provd_helper.total_devices()
+    total_provd = provd_cfg_dev_manager.total_devices()
 
     device_list = world.response.data['items']
     total = world.response.data['total']
@@ -183,11 +184,11 @@ def _all_items(devices):
 @step(u'Given I only have (\d+) devices')
 def given_i_only_have_n_devices(step, nb_devices):
     nb_devices = int(nb_devices)
-    provd_helper.remove_devices_over(nb_devices)
+    provd_cfg_dev_manager.remove_devices_over(nb_devices)
 
-    total_devices = provd_helper.total_devices()
+    total_devices = provd_cfg_dev_manager.total_devices()
     if total_devices < nb_devices:
-        device_helper.create_dummy_devices(nb_devices - total_devices)
+        device_manager.create_dummy_devices(nb_devices - total_devices)
 
 
 @step(u'Then I get a list with (\d+) devices')
@@ -201,4 +202,4 @@ def then_i_get_a_list_with_5_devices(step, nb_devices):
 @step(u'Given I have at least (\d+) dummy devices')
 def given_i_have_at_least_30_dummy_devices(step, nb_devices):
     nb_devices = int(nb_devices)
-    device_helper.create_dummy_devices(nb_devices)
+    device_manager.create_dummy_devices(nb_devices)

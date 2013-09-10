@@ -18,9 +18,9 @@
 from lettuce import step
 from hamcrest import assert_that, equal_to, is_not, has_key, starts_with
 from xivo_lettuce.manager import device_manager
-from xivo_lettuce.manager import provd_client
+from xivo_lettuce.manager import provd_cfg_dev_manager
 from xivo_lettuce import postgres, form, common, logs
-from xivo_lettuce.restapi.v1_1 import device_helper, provd_helper
+from xivo_lettuce.restapi.v1_1 import device_helper
 
 from xivo_dao.data_handler.line import dao as line_dao
 
@@ -37,10 +37,10 @@ def given_there_is_a_device_in_autoprov_with_infos(step):
     mac_address = device_properties['mac']
     plugin = device_properties['plugin']
 
-    provd_client.delete_device_by_mac(mac_address)
+    provd_cfg_dev_manager.delete_device_by_mac(mac_address)
     postgres.exec_sql_request('delete from devicefeatures where mac = \'%s\'' % mac_address)
 
-    provd_client.create_device(
+    provd_cfg_dev_manager.create_device(
         mac_address=mac_address,
         plugin=plugin
     )
@@ -71,7 +71,7 @@ def when_i_create_the_device_with_infos(step):
     common.open_url('device', 'add')
     device_infos = step.hashes[0]
     if 'mac' in device_infos:
-        provd_client.delete_device_by_mac(device_infos['mac'])
+        provd_cfg_dev_manager.delete_device_by_mac(device_infos['mac'])
     if 'vlan_enabled' in device_infos:
         device_manager.type_vlan_enabled(device_infos['vlan_enabled'])
     form.submit.submit_form()
@@ -99,7 +99,7 @@ def when_i_provision_my_device_with_my_line_id_group1(step, line_id, device_ip):
 
 @step(u'Then the device "([^"]*)" has been provisioned with a configuration:')
 def then_the_device_has_been_provisioned_with_a_configuration(step, device_id):
-    provd_helper.device_config_has_properties(device_id, step.hashes)
+    provd_cfg_dev_manager.device_config_has_properties(device_id, step.hashes)
 
 
 @step(u'Then I see devices with infos:')
