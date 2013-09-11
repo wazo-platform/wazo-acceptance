@@ -14,6 +14,10 @@ def synchronize(device_id):
     return ws_utils.rest_get('%s/%s/synchronize' % (DEVICES_URL, device_id))
 
 
+def delete_device(device_id):
+    return ws_utils.rest_delete("%s/%s" % (DEVICES_URL, device_id))
+
+
 def get_device(device_id):
     return ws_utils.rest_get("%s/%s" % (DEVICES_URL, device_id))
 

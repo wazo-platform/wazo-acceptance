@@ -23,6 +23,7 @@ from xivo_lettuce import form, common, logs
 from xivo_lettuce.restapi.v1_1 import device_helper
 
 from xivo_dao.data_handler.line import dao as line_dao
+from urllib2 import HTTPError
 
 
 @step(u'^Given there is a device with infos:$')
@@ -142,3 +143,21 @@ def then_i_see_in_the_log_file_device_group1_autoprovisioned(step, device_id):
     assert logs.search_str_in_daemon_log('/provd/cfg_mgr/autocreate')
     assert logs.search_str_in_daemon_log('Updating device')
     assert logs.search_str_in_daemon_log('/provd/dev_mgr/devices/%s' % device_id)
+
+
+@step(u'Then the device "([^"]*)" is no longer exists in provd')
+def then_the_device_is_no_longer_exists_in_provd(step, device_id):
+    try:
+        provd_cfg_dev_manager.get_device(device_id)
+    except HTTPError:
+        assert True
+    else:
+        assert False, 'The device %s is longer exists in provd' % device_id
+
+
+@step(u'Then I see in the log file device "([^"]*)" deleted')
+def then_i_see_in_the_log_file_device_deleted(step, device_id):
+    assert logs.search_str_in_daemon_log('Deleting device %s' % device_id)
+    assert logs.search_str_in_daemon_log('/provd/dev_mgr/devices/%s' % device_id)
+    assert logs.search_str_in_daemon_log('Deleting config %s' % device_id)
+    assert logs.search_str_in_daemon_log('/provd/cfg_mgr/configs/%s' % device_id)
