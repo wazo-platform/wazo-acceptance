@@ -36,6 +36,10 @@ def insert_entries(entries):
             cel.setdefault(key, '')
 
         cel.setdefault('amaflags', 0)
+        if 'call_log_id' in cel and cel['call_log_id']:
+            cel['call_log_id'] = int(cel['call_log_id'])
+        else:
+            cel['call_log_id'] = None
 
         query = """INSERT INTO cel VALUES (
                       DEFAULT,
@@ -58,7 +62,8 @@ def insert_entries(entries):
                       :uniqueid,
                       :linkedid,
                       :userfield,
-                      :peer
+                      :peer,
+                      :call_log_id
                       )"""
 
         postgres.execute_sql(query, **cel)
