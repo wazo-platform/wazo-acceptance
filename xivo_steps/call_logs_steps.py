@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-
-from lettuce import step
+from hamcrest import assert_that, equal_to
+from lettuce import step, world
 from xivo_lettuce import common, form, sysutils
 from xivo_lettuce.manager import cel_manager, call_logs_manager
 from xivo_lettuce.manager_dao import call_logs_manager_dao
@@ -57,6 +57,17 @@ def when_i_request_call_logs_in_the_webi_with_dates(step):
 def when_i_generate_call_logs_using_the_last_unprocessed_1_cel_entries(step, cel_count):
     command = ['xivo-call-logs', '-c', cel_count]
     sysutils.send_command(command)
+
+
+@step(u'When I generate call logs twice in parallel')
+def when_i_generate_call_logs_twice_in_parallel(step):
+    command = ['xivo-call-logs', '&', 'xivo-call-logs']
+    world.command_output = sysutils.output_command(command)
+
+
+@step(u'Then I see that call log generation is already running')
+def then_i_see_that_call_log_generation_is_already_running(step):
+    assert_that(world.command_output.rstrip(), equal_to('xivo-call-logs is already running'))
 
 
 @step(u'Then I should have the following call logs:')
