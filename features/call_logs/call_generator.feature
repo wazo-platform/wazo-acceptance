@@ -1,8 +1,8 @@
 Feature: Call Log Generation
 
     Scenario: Generation of answered internal call
-        Given there are no calls
-        Given I have the following CEL entries:
+        Given there are no call logs
+        Given I have only the following CEL entries:
             | eventtype    | eventtime                  | cid_name      | cid_num | exten | context | uniqueid     | linkedid     | userfield |
             | CHAN_START   | 2013-01-01 08:46:20.118025 | Bob Marley    | 1002    | 1001  | default | 1375994780.1 | 1375994780.1 |           |
             | APP_START    | 2013-01-01 08:46:20.156126 | Bob Marley    | 1002    | s     | user    | 1375994780.1 | 1375994780.1 |           |
@@ -22,8 +22,8 @@ Feature: Call Log Generation
             | 2013-01-01 08:46:20.118025 | Bob Marley  | 1002         | 1001              | 0:00:03.854485 |            | True     |
 
     Scenario: Generation of non-answered internal call
-        Given there are no calls
-        Given I have the following CEL entries:
+        Given there are no call logs
+        Given I have only the following CEL entries:
             | eventtype    | eventtime                  | cid_name      | cid_num | exten | context | uniqueid     | linkedid     | userfield |
             | CHAN_START   | 2013-01-01 08:46:31.981    | Bob Marley    | 1002    | 1001  | default | 1375994791.3 | 1375994791.3 |           |
             | APP_START    | 2013-01-01 08:46:32.016612 | Bob Marley    | 1002    | s     | user    | 1375994791.3 | 1375994791.3 |           |
@@ -39,8 +39,8 @@ Feature: Call Log Generation
             | 2013-01-01 08:46:31.981 | Bob Marley  | 1002         | 1001              | 0        |            | False    |
 
     Scenario: Generation of answered incoming call
-        Given there are no calls
-        Given I have the following CEL entries:
+        Given there are no call logs
+        Given I have only the following CEL entries:
             | eventtype    | eventtime             | cid_name   |    cid_num | exten | context     |      uniqueid |      linkedid | userfield |
             | CHAN_START   | 2013-01-01 11:02:38.0 | 612345678  |  612345678 | 1002  | from-extern | 1376060558.17 | 1376060558.17 |           |
             | APP_START    | 2013-01-01 11:02:38.1 |            | 0612345678 | s     | user        | 1376060558.17 | 1376060558.17 |           |
@@ -60,8 +60,8 @@ Feature: Call Log Generation
             | 2013-01-01 11:02:38.0 |   612345678 |    612345678 |              1002 | 0:00:03.0 |            | True     |
 
     Scenario: Generation of answered outgoing call
-        Given there are no calls
-        Given I have the following CEL entries:
+        Given there are no call logs
+        Given I have only the following CEL entries:
             | eventtype    | eventtime             | cid_name   | cid_num | exten      | context     |      uniqueid |      linkedid | userfield |
             | CHAN_START   | 2013-01-01 11:03:47.0 | Bob Marley |    1002 | 4185550155 | default     | 1376060627.21 | 1376060627.21 |           |
             | APP_START    | 2013-01-01 11:03:47.1 | Bob Marley |    1002 | dial       | outcall     | 1376060627.21 | 1376060627.21 |           |
@@ -94,8 +94,8 @@ Feature: Call Log Generation
             | 2013-01-01 11:20:08.0 | Bob Marley  | 1002         | 4185550155        | 0:00:03.0 | Père Noël  | True     |
 
      Scenario: Generation for a specified latest CEL count
-         Given there are no calls
-         Given I have the following CEL entries:
+         Given there are no call logs
+         Given I have only the following CEL entries:
             | eventtype    | eventtime           | cid_name      | cid_num | exten | context |     uniqueid |     linkedid | userfield |
             | CHAN_START   | 2013-01-01 08:00:00 | Bob Marley    |    1002 | 1001  | default | 1375994780.1 | 1375994780.1 |           |
             | APP_START    | 2013-01-01 08:00:01 | Bob Marley    |    1002 | s     | user    | 1375994780.1 | 1375994780.1 |           |
@@ -143,8 +143,8 @@ Feature: Call Log Generation
             | 2013-01-01 09:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     |
 
      Scenario: Generation for a specified latest CEL count
-         Given there are no calls
-         Given I have the following CEL entries:
+         Given there are no call logs
+         Given I have only the following CEL entries:
             | eventtype    | eventtime           | cid_name      | cid_num | exten | context |     uniqueid |     linkedid | userfield |
             | CHAN_START   | 2013-01-01 08:00:00 | Bob Marley    |    1002 | 1001  | default | 1375994780.1 | 1375994780.1 |           |
             | APP_START    | 2013-01-01 08:00:01 | Bob Marley    |    1002 | s     | user    | 1375994780.1 | 1375994780.1 |           |

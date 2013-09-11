@@ -28,14 +28,14 @@ def given_there_are_no_calls_between(step, start, end):
     call_logs_manager_dao.delete_entries_between(start, end)
 
 
-@step(u'Given there are no calls')
-def given_there_are_no_cel(step):
-    cel_manager.delete_all()
+@step(u'Given there are no call logs$')
+def given_there_are_no_call_logs(step):
     call_logs_manager_dao.delete_all()
 
 
-@step(u'Given I have the following CEL entries:')
-def given_i_have_the_following_cel_entries(step):
+@step(u'Given I have only the following CEL entries:')
+def given_i_have_only_the_following_cel_entries(step):
+    cel_manager.delete_all()
     cel_manager.insert_entries(step.hashes)
 
 
