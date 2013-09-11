@@ -142,6 +142,19 @@ def when_i_remove_line_id_group1_from_device_group2(step, line_id, device_id):
     world.response = device_ws.remove_line_from_device(device_id, line_id)
 
 
+@step(u'When I edit the device with mac "([^"]*)" using no parameters')
+def when_i_edit_the_device_with_mac_group1_using_no_parameters(step, mac):
+    device = provd_cfg_dev_manager.find_by_mac(mac)
+    world.response = device_ws.edit_device(device['id'], {})
+
+
+@step(u'When I edit the device with mac "([^"]*)" using the following parameters:')
+def when_i_edit_the_device_with_mac_group1_using_the_following_parameters(step, mac):
+    device = provd_cfg_dev_manager.find_by_mac(mac)
+    parameters = step.hashes[0]
+    world.response = device_ws.edit_device(device['id'], parameters)
+
+
 @step(u'Then I get a response with a device id')
 def then_i_get_a_response_with_a_device_id(step):
     assert_that(world.response.data,

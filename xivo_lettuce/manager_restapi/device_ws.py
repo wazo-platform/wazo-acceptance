@@ -21,7 +21,6 @@ def get_device(device_id):
 def device_list(parameters={}):
     return ws_utils.rest_get(DEVICES_URL, params=parameters)
 
-
 def reset_to_autoprov(device_id):
     return ws_utils.rest_get('%s/%s/autoprov' % (DEVICES_URL, device_id))
 
@@ -32,3 +31,6 @@ def associate_line_to_device(device_id, line_id):
 
 def remove_line_from_device(device_id, line_id):
     return ws_utils.rest_get('%s/%s/remove_line/%s' % (DEVICES_URL, device_id, line_id))
+
+def edit_device(device_id, parameters):
+    return ws_utils.rest_put("%s/%s" % (DEVICES_URL, device_id), parameters)
