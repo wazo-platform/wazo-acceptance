@@ -53,8 +53,8 @@ def when_i_request_call_logs_in_the_webi_with_dates(step):
     form.submit.submit_form()
 
 
-@step(u'When I generate call logs using the last (\d+) CEL entries$')
-def when_i_generate_call_logs_using_the_last_1_cel_entries(step, cel_count):
+@step(u'When I generate call logs using the last (\d+) unprocessed CEL entries$')
+def when_i_generate_call_logs_using_the_last_unprocessed_1_cel_entries(step, cel_count):
     command = ['xivo-call-logs', '-c', cel_count]
     sysutils.send_command(command)
 
