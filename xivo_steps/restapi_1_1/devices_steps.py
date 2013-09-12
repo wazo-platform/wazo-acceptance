@@ -191,9 +191,7 @@ def then_the_list_contains_the_same_number_of_devices_as_on_the_provisioning_ser
     total_provd = provd_cfg_dev_manager.total_devices()
 
     device_list = world.response.data['items']
-    total = world.response.data['total']
 
-    assert_that(total_provd, equal_to(total))
     assert_that(device_list, has_length(total_provd))
 
 
@@ -207,7 +205,7 @@ def then_i_get_a_list_of_devices_in_the_following_order(step):
 def then_i_get_a_list_with_5_devices(step, nb_devices):
     nb_devices = int(nb_devices)
     assert_that(world.response.data, all_of(
-        has_entry('total', nb_devices),
+        has_entry('total', instance_of(int)),
         has_entry('items', has_length(nb_devices))))
 
 
