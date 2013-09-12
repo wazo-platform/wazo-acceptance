@@ -26,7 +26,7 @@ PID_PATTERN = r'xivo-restapid\[([0-9]+)\]\s*'
 LOG_LVL_PATTERN = r'\(([A-Z]+)\)\s*'
 FILE_LOGGER_PATTERN = r'\(([a-z\._]+)\):\s*'
 HTTP_METHOD_PATTERN = r'([A-Z]+)\s*'
-URL_PATTERN = r'([\w\:\./_\?\&\%]+)\s*'
+URL_PATTERN = r'([\w\:\./_\?\&\%=\-]+)\s*'
 DATA_PATTERN = r'(?:with data (.*))?'
 
 
