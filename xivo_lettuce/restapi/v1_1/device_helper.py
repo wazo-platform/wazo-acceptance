@@ -27,17 +27,6 @@ def _prepare_auth():
     return auth
 
 
-def delete_all():
-    remote_exec(_delete_all)
-
-
-def _delete_all(channel):
-    from xivo_dao.data_handler.device import services as device_services
-
-    for device in device_services.find_all():
-        device_services.delete(device)
-
-
 def create_device(deviceinfo):
     remote_exec(_create_device, deviceinfo=deviceinfo)
 
@@ -46,5 +35,20 @@ def _create_device(channel, deviceinfo):
     from xivo_dao.data_handler.device import services as device_services
     from xivo_dao.data_handler.device.model import Device
 
+    if 'template_id' not in deviceinfo:
+        deviceinfo['template_id'] = 'defaultconfigdevice'
+
     device = Device(**deviceinfo)
     device_services.create(device)
+
+
+def create_dummy_devices(nb_devices):
+    remote_exec(_create_dummy_devices, nb_devices=nb_devices)
+
+
+def _create_dummy_devices(channel, nb_devices):
+    from xivo_dao.data_handler.device import services as device_services
+    from xivo_dao.data_handler.device.model import Device
+
+    for i in range(nb_devices):
+        device_services.create(Device())

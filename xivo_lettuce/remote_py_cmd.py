@@ -21,3 +21,10 @@ from lettuce.registry import world
 def remote_exec(func, **kwargs):
     channel = world.lazy.execnet_gateway.remote_exec(func, **kwargs)
     channel.waitclose()
+
+
+def remote_exec_with_result(func, **kwargs):
+    channel = world.lazy.execnet_gateway.remote_exec(func, **kwargs)
+    result = channel.receive()
+    channel.waitclose()
+    return result

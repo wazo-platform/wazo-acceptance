@@ -16,15 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-from datetime import datetime
 from lettuce import step
 from xivo_lettuce.manager import restapi_requests_manager
 
 
 @step(u'Then the REST API received a request with infos:$')
 def then_the_rest_api_received_a_request_with_infos(step):
-    request_infos = step.hashes[0]
-    action = request_infos['path']
-    query = request_infos['query'] % {'today': datetime.now().strftime('%Y-%m-%d'),
-                                      'timenow': '\d\d:\d\d:\d\d'}
-    restapi_requests_manager.assert_last_request_matches(action, query)
+    for request_infos in step.hashes:
+        restapi_requests_manager.assert_last_request_matches(**request_infos)
