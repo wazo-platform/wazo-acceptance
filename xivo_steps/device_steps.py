@@ -38,7 +38,7 @@ def given_there_is_a_device_in_autoprov_with_infos(step):
     mac_address = device_properties['mac']
     plugin = device_properties['plugin']
 
-    device_helper.create_device(mac=mac_address,
+    provd_cfg_dev_manager.create_device(mac=mac_address,
                                 plugin=plugin)
 
 

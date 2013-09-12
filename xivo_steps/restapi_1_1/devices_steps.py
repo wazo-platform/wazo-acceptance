@@ -43,7 +43,7 @@ def given_there_are_no_devices_with_id_group1(step, device_id):
 def given_there_are_the_following_devices(step):
     provd_cfg_dev_manager.delete_all()
     for deviceinfo in step.hashes:
-        device_helper.create_device(deviceinfo)
+        provd_cfg_dev_manager.create_device(deviceinfo)
 
 
 @step(u'Given I have the following devices:')
@@ -51,7 +51,7 @@ def given_i_have_the_following_devices(step):
     for deviceinfo in step.hashes:
         if 'mac' in deviceinfo:
             provd_cfg_dev_manager.delete_device_with_mac(deviceinfo['mac'])
-        device_helper.create_device(deviceinfo)
+        provd_cfg_dev_manager.create_device(deviceinfo)
 
 
 @step(u'Given there exists the following device templates:')

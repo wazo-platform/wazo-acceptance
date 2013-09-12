@@ -27,21 +27,6 @@ def _prepare_auth():
     return auth
 
 
-def create_device(deviceinfo):
-    remote_exec(_create_device, deviceinfo=deviceinfo)
-
-
-def _create_device(channel, deviceinfo):
-    from xivo_dao.data_handler.device import services as device_services
-    from xivo_dao.data_handler.device.model import Device
-
-    if 'template_id' not in deviceinfo:
-        deviceinfo['template_id'] = 'defaultconfigdevice'
-
-    device = Device(**deviceinfo)
-    device_services.create(device)
-
-
 def create_dummy_devices(nb_devices):
     remote_exec(_create_dummy_devices, nb_devices=nb_devices)
 

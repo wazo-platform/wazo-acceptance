@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-
 from lettuce import world
 from provd.rest.client.client import new_provisioning_client
 from xivo_lettuce.manager import provd_general_manager
@@ -27,6 +26,34 @@ def _provd_client():
     provd_url = "http://%s:%s/provd" % (world.xivo_host, port)
     provd_client = new_provisioning_client(provd_url)
     return provd_client
+
+
+def create_device(deviceinfo):
+    remote_exec(_create_device, deviceinfo=deviceinfo)
+
+
+def _create_device(channel, deviceinfo):
+    import uuid
+    from xivo_dao.helpers import provd_connector
+
+    device_manager = provd_connector.device_manager()
+    config_manager = provd_connector.config_manager()
+
+    config = {
+        'id': deviceinfo.get('id', str(uuid.uuid4())),
+        'deletable': True,
+        'parent_ids': ['base', deviceinfo.get('template_id', 'defaultconfigdevice')],
+        'configdevice': deviceinfo.get('template_id', 'defaultconfigdevice'),
+        'raw_config': {}
+    }
+
+    if 'template_id' in deviceinfo:
+        del deviceinfo['template_id']
+
+    deviceinfo['config'] = config['id']
+
+    device_manager.add(deviceinfo)
+    config_manager.add(config)
 
 
 def delete_device_by_mac(mac_address):
