@@ -62,4 +62,4 @@ def _query_from_entry(entry):
 
 def create_call_logs(entries):
     call_logs = [CallLog(**entry) for entry in entries]
-    dao.create_all(call_logs)
+    dao.create_from_list(call_logs)
