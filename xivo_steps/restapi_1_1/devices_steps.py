@@ -201,12 +201,19 @@ def then_i_get_a_list_of_devices_in_the_following_order(step):
     assert_that(matching_devices, _contains_all_devices(step.hashes))
 
 
-@step(u'Then I get a list with (\d+) devices')
-def then_i_get_a_list_with_5_devices(step, nb_devices):
-    nb_devices = int(nb_devices)
+@step(u'Then I get a list with (\d+) of (\d+) devices')
+def then_i_get_a_list_with_n_of_n_devices(step, nb_list, nb_total):
+    nb_list = int(nb_list)
+    nb_total = int(nb_total)
     assert_that(world.response.data, all_of(
-        has_entry('total', instance_of(int)),
-        has_entry('items', has_length(nb_devices))))
+        has_entry('total', equal_to(nb_total)),
+        has_entry('items', has_length(nb_list))))
+
+
+@step(u'Then I get a list with (\d+) devices')
+def then_i_get_a_list_with_n_devices(step, nb_list):
+    nb_list = int(nb_list)
+    assert_that(world.response.data, has_entry('items', has_length(nb_list)))
 
 
 def _contains_all_devices(devices):
