@@ -98,8 +98,10 @@ def _device_config_has_properties(channel, device_id, properties):
     device = provd_device_manager.get(device_id)
     if 'config' in device:
         config = provd_config_manager.get(device['config'])
-        sip_lines = config['raw_config']['sip_lines']
 
+        assert 'sip_lines' in config['raw_config'], "device does not have any SIP lines configured"
+
+        sip_lines = config['raw_config']['sip_lines']
         sip_line = sip_lines['1']
 
         keys = [u'username', u'auth_username', u'display_name', u'password', u'number']
