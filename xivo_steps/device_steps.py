@@ -26,12 +26,6 @@ from xivo_dao.data_handler.line import dao as line_dao
 from urllib2 import HTTPError
 
 
-@step(u'^Given there is a device with infos:$')
-def given_there_is_a_device_with_infos(step):
-    for info in step.hashes:
-        device_manager.add_or_replace_device(info)
-
-
 @step(u'Given there is a device in autoprov with infos:')
 def given_there_is_a_device_in_autoprov_with_infos(step):
     device_properties = step.hashes[0]
@@ -39,7 +33,7 @@ def given_there_is_a_device_in_autoprov_with_infos(step):
     plugin = device_properties['plugin']
 
     provd_cfg_dev_manager.create_device(mac=mac_address,
-                                plugin=plugin)
+                                        plugin=plugin)
 
 
 @step(u'When I request devices in the webi')
@@ -111,7 +105,7 @@ def then_i_see_devices_with_infos(step):
 
 @step(u'Then the device "([^"]*)" has a config with the following parameters:')
 def then_the_device_has_a_config_with_the_following_parameters(step, device_id):
-    config = device_manager.get_provd_config(device_id)
+    config = provd_cfg_dev_manager.get_provd_config(device_id)
     for expected_config in step.hashes:
         if 'vlan_enabled' in expected_config:
             assert_that(config['raw_config']['vlan_enabled'], equal_to(int(expected_config['vlan_enabled'])))
@@ -119,7 +113,7 @@ def then_the_device_has_a_config_with_the_following_parameters(step, device_id):
 
 @step(u'Then the device "([^"]*)" has no config with the following keys:')
 def then_the_device_group1_has_no_config_with_the_following_keys(step, device_id):
-    config = device_manager.get_provd_config(device_id)
+    config = provd_cfg_dev_manager.get_provd_config(device_id)
     for expected_keys in step.hashes:
         if 'vlan_enabled' in expected_keys:
             assert_that(config['raw_config'], is_not(has_key('vlan_enabled')))
@@ -127,7 +121,7 @@ def then_the_device_group1_has_no_config_with_the_following_keys(step, device_id
 
 @step(u'Then the device "([^"]*)" is in autoprov mode')
 def then_the_device_group1_is_in_autoprov_mode(step, device_id):
-    device = device_manager.get_provd_config(device_id)
+    device = provd_cfg_dev_manager.get_provd_config(device_id)
     if 'config' in device:
         assert_that(device['config'], starts_with('autoprov'))
 

@@ -64,6 +64,14 @@ def delete_device_by_mac(mac_address):
         _provd_client().device_manager().remove(device['id'])
 
 
+def get_provd_config(device_id):
+    device = get_device(device_id)
+    if device is None:
+        raise 'device %s not exist' % device_id
+    config = get_config(device['config'])
+    return config
+
+
 def get_config(config_id):
     config = _provd_client().config_manager().get(config_id)
     return config
