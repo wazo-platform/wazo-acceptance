@@ -93,6 +93,27 @@ Feature: Call Log Generation
             | 2013-01-01 11:03:47.0 | Bob Marley  | 1002         | 4185550155        | 0:00:03.0 |            | True     |
             | 2013-01-01 11:20:08.0 | Bob Marley  | 1002         | 4185550155        | 0:00:03.0 | Père Noël  | True     |
 
+    Scenario: Generation of originate call
+        Given there are no call logs
+        Given I have only the following CEL entries:
+            | eventtype    | eventtime             | cid_name      | cid_num | exten | context |       uniqueid |       linkedid | userfield |
+            | CHAN_START   | 2013-01-01 15:47:39.0 | Bob Marley    |    1002 | s     | default | 1379101659.670 | 1379101659.670 |           |
+            | ANSWER       | 2013-01-01 15:47:40.0 | 1001          |    1001 |       | default | 1379101659.670 | 1379101659.670 |           |
+            | APP_START    | 2013-01-01 15:47:41.0 | Bob Marley    |    1002 | s     | user    | 1379101659.670 | 1379101659.670 |           |
+            | CHAN_START   | 2013-01-01 15:47:41.1 | Alice Aglisse |    1001 | s     | default | 1379101661.671 | 1379101659.670 |           |
+            | ANSWER       | 2013-01-01 15:47:42.0 | Alice Aglisse |    1001 | s     | default | 1379101661.671 | 1379101659.670 |           |
+            | BRIDGE_START | 2013-01-01 15:47:42.1 | Bob Marley    |    1002 | s     | user    | 1379101659.670 | 1379101659.670 |           |
+            | BRIDGE_END   | 2013-01-01 15:47:44.0 | Bob Marley    |    1002 | s     | user    | 1379101659.670 | 1379101659.670 |           |
+            | HANGUP       | 2013-01-01 15:47:44.1 | Alice Aglisse |    1001 |       | user    | 1379101661.671 | 1379101659.670 |           |
+            | CHAN_END     | 2013-01-01 15:47:44.2 | Alice Aglisse |    1001 |       | user    | 1379101661.671 | 1379101659.670 |           |
+            | HANGUP       | 2013-01-01 15:47:44.3 | Bob Marley    |    1002 | s     | user    | 1379101659.670 | 1379101659.670 |           |
+            | CHAN_END     | 2013-01-01 15:47:44.4 | Bob Marley    |    1002 | s     | user    | 1379101659.670 | 1379101659.670 |           |
+            | LINKEDID_END | 2013-01-01 15:47:44.5 | Bob Marley    |    1002 | s     | user    | 1379101659.670 | 1379101659.670 |           |
+        When I generate call logs
+        Then I should have the following call logs:
+            | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered |
+            | 2013-01-01 15:47:39.0 | Bob Marley  |         1002 |              1001 | 0:00:04.3 |            | True     |
+
      Scenario: Generation for a specified latest CEL count
          Given there are no call logs
          Given I have only the following CEL entries:
