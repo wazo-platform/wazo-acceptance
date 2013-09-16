@@ -49,9 +49,10 @@ Feature: User
 
     Scenario: Add user with SIP line and device and remove it
         Given the plugin "xivo-aastra-3.2.2-SP3" is installed
-        Given there is a device in autoprov with infos:
-        | mac               | plugin                |
-        | 00:de:ad:be:ef:00 | xivo-aastra-3.2.2-SP3 |
+        Given there are no devices with mac "00:de:ad:be:ef:00"
+        Given I have the following devices:
+        | mac               | plugin                | model | ip          | vendor |
+        | 00:de:ad:be:ef:00 | xivo-aastra-3.2.2-SP3 | 6731i | 10.39.5.104 | Aastra |
         When I search device ""
         Given there is no user "Bill" "Bush"
         When I create a user with infos:

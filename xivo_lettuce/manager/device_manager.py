@@ -57,7 +57,6 @@ def get_device_list_entry(mac_address):
 
     configured_icon = line_element.find_element_by_class_name('col_configured')
     configured = 'green' in configured_icon.get_attribute('src')
-    phone_number = line_element.find_element_by_class_name('col_phone_number').text
     ip_address = line_element.find_element_by_class_name('col_ip_address').text
     vendor = line_element.find_element_by_class_name('col_vendor').text
     model = line_element.find_element_by_class_name('col_model').text
@@ -65,7 +64,6 @@ def get_device_list_entry(mac_address):
     return_device = {
         'configured': configured,
         'mac': mac_address,
-        'phone_number': phone_number,
         'ip': ip_address,
         'vendor': vendor,
         'model': model,

@@ -26,16 +26,6 @@ from xivo_dao.data_handler.line import dao as line_dao
 from urllib2 import HTTPError
 
 
-@step(u'Given there is a device in autoprov with infos:')
-def given_there_is_a_device_in_autoprov_with_infos(step):
-    device_properties = step.hashes[0]
-    mac_address = device_properties['mac']
-    plugin = device_properties['plugin']
-
-    provd_cfg_dev_manager.create_device(mac=mac_address,
-                                        plugin=plugin)
-
-
 @step(u'When I request devices in the webi')
 def when_i_request_devices_in_the_webi(step):
     common.open_url('device')
