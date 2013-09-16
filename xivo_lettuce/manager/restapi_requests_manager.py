@@ -18,8 +18,8 @@
 import re
 from urlparse import urlparse
 
-from hamcrest import assert_that, is_not, none
-from xivo_lettuce import sysutils, logs
+from hamcrest import assert_that, equal_to, has_entries
+from xivo_lettuce import logs
 
 DATE_PATTERN = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d+)\s*'
 PID_PATTERN = r'xivo-restapid\[([0-9]+)\]\s*'
@@ -31,20 +31,25 @@ DATA_PATTERN = r'(?:with data (.*))?'
 
 
 def assert_last_request_matches(**expected_request_infos):
-    last_request = _get_last_request()
-    request_infos = _extract_request_infos(last_request)
+    last_requests = logs.find_line_in_xivo_restapi_log()
 
-    for request_info_key, request_info_value in expected_request_infos.iteritems():
+    if len(last_requests) == 0:
+        assert False, 'No logs found in %s' % logs.XIVO_RESTAPI_LOGFILE
+
+    test_passed = False
+    msg = ''
+    for request in last_requests:
+        request_infos = _extract_request_infos(request)
+
         try:
-            result = re.match(request_info_value, request_infos[request_info_key])
-        except TypeError:
-            result = request_info_value == request_infos[request_info_key]
-        assert_that(result, is_not(none()), '%s != %s' % (request_info_value, request_infos[request_info_key]))
+            assert_that(request_infos, has_entries(expected_request_infos))
+        except AssertionError, e:
+            msg = "Assertion error: %s" % e.args
+            # print msg  # FOR DEBUG
+        else:
+            test_passed = True
 
-
-def _get_last_request():
-    last_line = sysutils.output_command(['tail', '-n', '1', logs.XIVO_RESTAPI_LOGFILE])
-    return last_line
+    assert_that(test_passed, equal_to(True), msg)
 
 
 def _extract_request_infos(request):
@@ -69,6 +74,6 @@ def _extract_request_infos(request):
     res['params'] = url_obj.params
     res['query'] = url_obj.query
     res['hostname'] = url_obj.hostname
-    res['data'] = data
+    res['data'] = data.strip() if data else None
 
     return res

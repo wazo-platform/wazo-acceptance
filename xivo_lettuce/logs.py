@@ -31,8 +31,10 @@ DAEMON_DATE_FORMAT = "%b %d %H:%M:%S"
 DAEMON_DATE_PATTERN = "([\w]{3} [\d ]{2} [\d]{2}:[\d]{2}:[\d]{2})"
 
 PYTHON_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
-PYTHON_DATE_PATTERN = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"
+PYTHON_DATE_PATTERN = r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})"
 
+RESTAPI_DATE_FORMAT = "%Y-%m-%d %H:%M:%S,%f"
+RESTAPI_DATE_PATTERN = r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})"
 
 LogfileInfo = namedtuple('LogfileInfo', ['logfile', 'date_format', 'date_pattern'])
 
@@ -53,8 +55,8 @@ XIVO_CTI_LOG_INFO = LogfileInfo(logfile=XIVO_CTI_LOGFILE,
                                 date_pattern=PYTHON_DATE_PATTERN)
 
 XIVO_RESTAPI_LOG_INFO = LogfileInfo(logfile=XIVO_RESTAPI_LOGFILE,
-                                    date_format=PYTHON_DATE_FORMAT,
-                                    date_pattern=PYTHON_DATE_PATTERN)
+                                    date_format=RESTAPI_DATE_FORMAT,
+                                    date_pattern=RESTAPI_DATE_PATTERN)
 
 
 def search_str_in_daemon_log(expression, delta=10):
@@ -77,13 +79,23 @@ def search_str_in_xivo_restapi_log(expression, delta=10):
     return _search_str_in_log_file(expression, XIVO_RESTAPI_LOG_INFO, delta)
 
 
-def _search_str_in_log_file(expression, loginfo, delta=10):
+def find_line_in_xivo_restapi_log(delta=10):
+    return _find_line_in_log_file(XIVO_RESTAPI_LOG_INFO, delta)
+
+
+def _find_line_in_log_file(loginfo, delta=10):
     # WARNING: local and remote system must use the same timezone
     command = ['tail', '-n', '30', loginfo.logfile]
     result = world.ssh_client_xivo.out_call(command)
 
     min_timestamp = datetime.now() - timedelta(seconds=delta)
     loglines = _get_lines_since_timestamp(result, min_timestamp, loginfo)
+    return loglines
+
+
+def _search_str_in_log_file(expression, loginfo, delta=10):
+    # WARNING: local and remote system must use the same timezone
+    loglines = _find_line_in_log_file(loginfo, delta)
 
     for line in loglines:
         if expression in line:

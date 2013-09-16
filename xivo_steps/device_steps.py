@@ -31,14 +31,18 @@ def when_i_request_devices_in_the_webi(step):
     common.open_url('device')
 
 
-@step(u'When I synchronize the device "([^"]*)" from webi')
-def when_i_synchronize_the_device_group1_from_webi(step, device_id):
-    common.open_url('device', 'synchronize', qry={'id': '%s' % device_id})
+@step(u'When I synchronize the device with mac "([^"]*)" from webi')
+def when_i_synchronize_the_device_group1_from_webi(step, mac):
+    common.open_url('device', 'search', {'search': '%s' % mac})
+    common.click_on_line_with_alert('Synchronize', mac)
+    common.open_url('device', 'search', {'search': ''})
 
 
-@step(u'When I reset to autoprov the device "([^"]*)" from webi')
-def when_i_reset_to_autoprov_the_device_from_webi(step, device_id):
-    common.open_url('device', 'modeautoprov', qry={'id': '%s' % device_id})
+@step(u'When I reset to autoprov the device with mac "([^"]*)" from webi')
+def when_i_reset_to_autoprov_the_device_from_webi(step, mac):
+    common.open_url('device', 'search', {'search': '%s' % mac})
+    common.click_on_line_with_alert('Reset to autoprov mode', mac)
+    common.open_url('device', 'search', {'search': ''})
 
 
 @step(u'^When I search device "([^"]*)"$')
@@ -51,9 +55,15 @@ def when_i_create_the_device_with_infos(step):
     common.open_url('device', 'add')
     device_infos = step.hashes[0]
     if 'mac' in device_infos:
-        provd_cfg_dev_manager.delete_device_by_mac(device_infos['mac'])
-    if 'vlan_enabled' in device_infos:
-        device_manager.type_vlan_enabled(device_infos['vlan_enabled'])
+        provd_cfg_dev_manager.delete_device_with_mac(device_infos['mac'])
+        device_manager.type_input('mac', device_infos['mac'])
+    if 'ip' in device_infos:
+        provd_cfg_dev_manager.delete_device_with_ip(device_infos['ip'])
+        device_manager.type_input('ip', device_infos['ip'])
+    if 'plugin' in device_infos:
+        device_manager.type_input('plugin', device_infos['plugin'])
+    if 'template_id' in device_infos:
+        device_manager.type_select('template_id', device_infos['template_id'])
     form.submit.submit_form()
 
 
@@ -61,8 +71,12 @@ def when_i_create_the_device_with_infos(step):
 def when_i_edit_the_device_with_infos(step, device_id):
     common.open_url('device', 'edit', qry={'id': '%s' % device_id})
     device_infos = step.hashes[0]
-    if 'vlan_enabled' in device_infos:
-        device_manager.type_vlan_enabled(device_infos['vlan_enabled'])
+    if 'plugin' in device_infos:
+        device_manager.type_input('plugin', device_infos['plugin'])
+    if 'template_id' in device_infos:
+        device_manager.type_select('template_id', device_infos['template_id'])
+    if 'description' in device_infos:
+        device_manager.type_input('description', device_infos['description'])
     form.submit.submit_form()
 
 

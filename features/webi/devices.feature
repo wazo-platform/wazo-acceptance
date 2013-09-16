@@ -22,7 +22,7 @@ Feature: Devices
         Given there are no devices with mac "00:00:00:00:bb:02"
         When I create the device with infos:
           | ip             | mac               |
-          | 192.168.54.219 | 00:00:00:00:bb:02 |
+          | 192.168.32.21 | 00:00:00:00:bb:02 |
         Then the REST API received a request with infos:
           | method | path         |
           | POST   | /1.1/devices |
@@ -33,11 +33,11 @@ Feature: Devices
           | id  | ip             | mac               |
           | 123 | 192.168.32.197 | 00:00:00:00:aa:01 |
         When I edit the device "123" with infos:
-          | ip             |
-          | 192.168.54.219 |
+          | description    |
+          | toto           |
         Then the REST API received a request with infos:
-          | method | path          | data                     |
-          | PUT    | /1.1/devices/ | {"ip": "192.168.54.219"} |
+          | method | path             | data                                                                                                       |
+          | PUT    | /1.1/devices/123 | {"ip":"192.168.32.197","mac":"00:00:00:00:aa:01","template_id":"defaultconfigdevice","description":"toto"} |
 
     Scenario: Delete
         Given there are no devices with id "123"
@@ -46,25 +46,26 @@ Feature: Devices
           | 123 | 192.168.32.197 | 00:00:00:00:aa:01 |
         When I delete the device "123"
         Then the REST API received a request with infos:
-          | method | path         | data                     |
-          | DELETE | /1.1/devices | {"ip": "192.168.54.219"} |
+          | method | path             |
+          | DELETE | /1.1/devices/123 |
 
-    Scenario: Synchronize
-        Given there are no devices with id "123"
-        Given I have the following devices:
-          | id  | ip             | mac               |
-          | 123 | 192.168.32.197 | 00:00:00:00:aa:01 |
-        When I synchronize the device "123" from webi
-        Then the REST API received a request with infos:
-          | method | path                 |
-          | GET    | /1.1/123/synchronize |
+#    Scenario: Synchronize
+#       Given there are no devices with id "123"
+#        Given I have the following devices:
+#          | id  | ip             | mac               |
+#          | 123 | 192.168.32.197 | 00:00:00:00:aa:01 |
+#        When I synchronize the device with mac "00:00:00:00:aa:01" from webi
+#        Then the REST API received a request with infos:
+#          | method | path                 |
+#          | GET    | /1.1/devices/123/synchronize |
 
     Scenario: Autoprov
         Given there are no devices with id "123"
         Given I have the following devices:
           | id  | ip             | mac               |
           | 123 | 192.168.32.197 | 00:00:00:00:aa:01 |
-        When I synchronize the device "123" from webi
+        When I reset to autoprov the device with mac "00:00:00:00:aa:01" from webi
         Then the REST API received a request with infos:
-          | method | path              |
-          | GET    | /1.1/123/autoprov |
+          | method | path                 |
+          | GET    | /1.1/devices/123/autoprov    |
+          | GET    | /1.1/devices/123/synchronize |

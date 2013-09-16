@@ -17,20 +17,8 @@
 
 from lettuce import world
 from xivo_lettuce.common import open_url, remove_line
-from xivo_lettuce import form, common
+from xivo_lettuce import form
 from selenium.common.exceptions import NoSuchElementException
-
-
-def add_or_replace_device(info):
-    delete_device(info)
-    add_device_from_webi(info)
-
-
-def add_device_from_webi(info):
-    open_url('device', 'add')
-    form.input.edit_text_field_with_id('it-device-ip', info['ip'])
-    form.input.edit_text_field_with_id('it-device-mac', info['mac'])
-    form.submit.submit_form()
 
 
 def delete_device(info):
@@ -74,9 +62,12 @@ def get_device_list_entry(mac_address):
     return return_device
 
 
-def type_vlan_enabled(value):
-    common.go_to_tab('Advanced')
+def type_input(field, value):
+    form.input.edit_text_field_with_id('it-device-%s' % field, value)
+
+
+def type_select(field, value):
     if value == '':
-        form.select.set_select_empty_value_with_id('it-config-vlan_enabled')
+        form.select.set_select_empty_value_with_id('it-device-%s' % field)
     else:
-        form.select.set_select_field_with_id('it-config-vlan_enabled', value)
+        form.select.set_select_field_with_id('it-device-%s' % field, value)

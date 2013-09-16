@@ -56,14 +56,6 @@ def _create_device(channel, deviceinfo):
     config_manager.add(config)
 
 
-def delete_device_by_mac(mac_address):
-    devices = _provd_client().device_manager().find({'mac': mac_address})
-    for device in devices:
-        if 'config' in device:
-            _provd_client().config_manager().remove(device['config'])
-        _provd_client().device_manager().remove(device['id'])
-
-
 def get_provd_config(device_id):
     device = get_device(device_id)
     if device is None:
@@ -176,6 +168,23 @@ def _delete_device_with_mac(channel, mac):
     device_manager = provd_connector.device_manager()
 
     for device in device_manager.find({'mac': mac}):
+        try:
+            config_manager.remove(device['id'])
+        except Exception:
+            pass
+        device_manager.remove(device['id'])
+
+
+def delete_device_with_ip(ip):
+    remote_exec(_delete_device_with_ip, ip=ip)
+
+
+def _delete_device_with_ip(channel, ip):
+    from xivo_dao.helpers import provd_connector
+    config_manager = provd_connector.config_manager()
+    device_manager = provd_connector.device_manager()
+
+    for device in device_manager.find({'ip': ip}):
         try:
             config_manager.remove(device['id'])
         except Exception:

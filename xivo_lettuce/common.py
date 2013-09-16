@@ -271,8 +271,12 @@ def remove_line(line_substring):
         - line_substring -- Search for the line that contains the text
           `line_substring`
     """
+    click_on_line_with_alert('Delete', line_substring)
+
+
+def click_on_line_with_alert(act, line_substring):
     table_line = find_line(line_substring)
-    delete_button = table_line.find_element_by_xpath(".//a[@title='Delete']")
+    delete_button = table_line.find_element_by_xpath(".//a[@title='%s']" % act)
     delete_button.click()
     alert = world.browser.switch_to_alert()
     alert.accept()
