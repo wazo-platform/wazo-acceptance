@@ -70,6 +70,14 @@ def _extract_line_parameters(step):
     return parameters
 
 
+@step(u'Then I have a line_sip with the following attributes:')
+def then_i_have_an_line_sip_with_the_following_attributes(step):
+    line = world.response.data
+
+    for line_attribute in step.hashes:
+        assert_that(line.keys(), has_item(line_attribute['attribute']))
+
+
 @step(u'Then the line sip "([^"]*)" no longer exists')
 def then_the_line_group1_no_longer_exists(step, line_id):
     response = line_sip_ws.get(line_id)
