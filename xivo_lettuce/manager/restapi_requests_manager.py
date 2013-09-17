@@ -18,7 +18,8 @@
 import re
 from urlparse import urlparse
 
-from hamcrest import assert_that, equal_to, has_entries
+from hamcrest import assert_that, has_item
+from hamcrest.core.base_matcher import BaseMatcher
 from xivo_lettuce import logs
 
 DATE_PATTERN = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d+)\s*'
@@ -30,26 +31,32 @@ URL_PATTERN = r'([\w\:\./_\?\&\%=\-]+)\s*'
 DATA_PATTERN = r'(?:with data (.*))?'
 
 
+def has_request_infos(expected_request_infos):
+    return HasEntriesRegex(expected_request_infos)
+
+
+class HasEntriesRegex(BaseMatcher):
+    def __init__(self, expected_request_infos):
+        self.expected_request_infos = expected_request_infos
+
+    def _matches(self, item):
+        test_passed = True
+        for key, expected_value in self.expected_request_infos.iteritems():
+            test_passed = test_passed and (re.match(expected_value, item[key]) is not None)
+
+        return test_passed
+
+    def describe_to(self, description):
+        description.append_text('dict having entries matching').append_value(self.expected_request_infos)
+
+
 def assert_last_request_matches(**expected_request_infos):
-    last_requests = logs.find_line_in_xivo_restapi_log()
+    last_requests = [_extract_request_infos(log_line) for log_line in logs.find_line_in_xivo_restapi_log()]
 
     if len(last_requests) == 0:
         assert False, 'No logs found in %s' % logs.XIVO_RESTAPI_LOGFILE
 
-    test_passed = False
-    msg = ''
-    for request in last_requests:
-        request_infos = _extract_request_infos(request)
-
-        try:
-            assert_that(request_infos, has_entries(expected_request_infos))
-        except AssertionError, e:
-            msg = "Assertion error: %s" % e.args
-            # print msg  # FOR DEBUG
-        else:
-            test_passed = True
-
-    assert_that(test_passed, equal_to(True), msg)
+    assert_that(last_requests, has_item(has_request_infos(expected_request_infos)))
 
 
 def _extract_request_infos(request):
@@ -74,6 +81,6 @@ def _extract_request_infos(request):
     res['params'] = url_obj.params
     res['query'] = url_obj.query
     res['hostname'] = url_obj.hostname
-    res['data'] = data.strip() if data else None
+    res['data'] = data.strip() if data else ''
 
     return res
