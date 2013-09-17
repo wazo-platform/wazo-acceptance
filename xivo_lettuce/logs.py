@@ -19,7 +19,7 @@ import re
 
 from collections import namedtuple
 from datetime import datetime, timedelta
-from lettuce.registry import world
+from xivo_lettuce import sysutils
 
 DAEMON_LOGFILE = '/var/log/daemon.log'
 ASTERISK_LOGFILE = '/var/log/asterisk/messages'
@@ -84,17 +84,21 @@ def find_line_in_xivo_restapi_log(delta=10):
 
 
 def _find_line_in_log_file(loginfo, delta=10):
-    # WARNING: local and remote system must use the same timezone
     command = ['tail', '-n', '30', loginfo.logfile]
-    result = world.ssh_client_xivo.out_call(command)
+    result = sysutils.output_command(command)
 
-    min_timestamp = datetime.now() - timedelta(seconds=delta)
-    loglines = _get_lines_since_timestamp(result, min_timestamp, loginfo)
+    min_datetime = _xivo_current_datetime() - timedelta(seconds=delta)
+    loglines = _get_lines_since_timestamp(result, min_datetime, loginfo)
     return loglines
 
 
+def _xivo_current_datetime():
+    command = ['date', '+%s']
+    output = sysutils.output_command(command).strip()
+    return datetime.fromtimestamp(float(output))
+
+
 def _search_str_in_log_file(expression, loginfo, delta=10):
-    # WARNING: local and remote system must use the same timezone
     loglines = _find_line_in_log_file(loginfo, delta)
 
     for line in loglines:
