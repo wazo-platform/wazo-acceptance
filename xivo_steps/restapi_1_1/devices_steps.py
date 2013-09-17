@@ -51,6 +51,8 @@ def given_i_have_the_following_devices(step):
     for deviceinfo in step.hashes:
         if 'mac' in deviceinfo:
             provd_cfg_dev_manager.delete_device_with_mac(deviceinfo['mac'])
+        if 'ip' in deviceinfo:
+            provd_cfg_dev_manager.delete_device_with_ip(deviceinfo['ip'])
         provd_cfg_dev_manager.create_device(deviceinfo)
 
 
