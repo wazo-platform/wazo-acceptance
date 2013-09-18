@@ -132,7 +132,8 @@ def then_the_device_group1_is_in_autoprov_mode(step, device_id):
 
 @step(u'Then I see in the log file device "([^"]*)" synchronized')
 def then_i_see_in_the_log_file_device_synchronized(step, device_id):
-    assert logs.search_str_in_daemon_log('Synchronizing device %s' % device_id)
+    log_line = 'Synchronizing device %s' % device_id
+    assert logs.search_str_in_daemon_log(log_line), 'No log line "%s" found in daemon.log' % log_line
 
 
 @step(u'Then I see in the log file device "([^"]*)" autoprovisioned')

@@ -27,7 +27,7 @@ def then_there_should_be_a_file_name_group1(step, filename_pattern):
 
     path = '~/%s' % filename
 
-    assert sysutils.path_exists(path)
+    assert sysutils.path_exists(path), 'No such file or directory %s' % path
 
 
 def _replace_variables(raw_string):
