@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+
+import os
+from StringIO import StringIO
+import xml.etree.ElementTree as ET
+from docutils.core import publish_string
+
+
+TEST_RESULT_FILE = '/tmp/test_result.html'
+path = '/data/test_results'
+dirs = os.listdir(path)
+
+TEXT_HEADER = """
+***************************
+XiVO AUTOMATIC TEST REPORTS
+***************************
+"""
+
+export = {}
+for file in dirs:
+    if file.endswith('xml'):
+        xml_file_path = os.path.join(path, file)
+        tree = ET.parse(xml_file_path)
+        root = tree.getroot()
+
+        tmp = []
+        for child in root:
+            feature_name, scenario_title = child.attrib['classname'].split(':')
+            feature_name = feature_name.strip()
+            scenario_title = scenario_title.strip()
+            if feature_name not in tmp:
+                tmp.append(feature_name)
+                export[feature_name] = []
+            if scenario_title not in export[feature_name]:
+                export[feature_name].append(scenario_title)
+
+fobj = StringIO()
+fobj.write('%s\n\n' % TEXT_HEADER)
+
+for feature_name, scenario_title_list in export.iteritems():
+    fobj.write('\n\n%s\n' % feature_name)
+    feature_name_len = len(feature_name)
+    fobj.write('%s\n\n' % ''.join(['='] * feature_name_len))
+    for scenario_title in scenario_title_list:
+        fobj.write('* %s\n' % scenario_title)
+
+    output_html = publish_string(fobj.getvalue(), writer_name='html')
+
+fobj.close()
+
+
+with open(TEST_RESULT_FILE, 'w') as fobj:
+    fobj.write(output_html)
