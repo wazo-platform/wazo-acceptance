@@ -1,0 +1,43 @@
+#!/bin/bash
+
+JENKINS_WORKSPACE_PATH=$1
+JENKINS_JOB_NAME=$2
+FEATURE_NAME=$3
+GIT_ROOT="git://git.xivo.fr/official"
+REPOSITORIES="xivo-dao xivo-acceptance xivo-lib-python xivo-dird xivo-restapi xivo-provisioning"
+PYTHONPATH_STR=''
+
+export PYTHONIOENCODING=UTF-8
+export XC_PATH=/tmp/cticlient_bin
+
+function clone_or_pull_repo() {
+    repo="$1"
+    if [ ! -d "$repo" ]; then
+        git clone $GIT_ROOT/$repo.git
+    else
+        cd $repo
+        git fetch -p
+        cd ..
+    fi
+}
+
+for repo in $REPOSITORIES ; do
+    repo_path="/data/$repo"
+    echo "processing $repo ..."
+    cd $repo_path
+    clone_or_pull_repo $repo
+    extra=''
+    if [ $repo == 'xivo-provisioning' ]; then
+        extra='/src'
+    fi
+    PYTHONPATH_STR="${PYTHONPATH_STR}:/data/${repo}/${repo}${extra}"
+done
+
+export PYTHONPATH=$PYTHONPATH_STR
+
+cd /data/xivo-acceptance/
+cp -r features/$FEATURE_NAME $JENKINS_WORKSPACE_PATH
+
+cd $JENKINS_WORKSPACE_PATH
+lettuce $FEATURE_NAME --with-xunit --verbosity=3 --xunit-file=xunit-tests.xml
+cp xunit-tests.xml /data/test_results/$JENKINS_JOB_NAME.xml
