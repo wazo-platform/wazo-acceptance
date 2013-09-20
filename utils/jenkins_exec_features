@@ -1,11 +1,9 @@
 #!/bin/bash
 
-JENKINS_WORKSPACE_PATH=$1
-JENKINS_JOB_NAME=$2
-FEATURE_NAME=$3
 GIT_ROOT="git://git.xivo.fr/official"
 REPOSITORIES="xivo-dao xivo-acceptance xivo-lib-python xivo-dird xivo-restapi xivo-provisioning"
 PYTHONPATH_STR=''
+FEATURE_NAME=$(echo $JOB_NAME | sed 's/acceptance_//g')
 
 export PYTHONIOENCODING=UTF-8
 export XC_PATH=/tmp/cticlient_bin
@@ -35,9 +33,13 @@ done
 
 export PYTHONPATH=$PYTHONPATH_STR
 
-cd /data/xivo-acceptance/
-cp -r features/$FEATURE_NAME $JENKINS_WORKSPACE_PATH
+if [ $FEATURE_NAME == 'post_wizard' ]; then
+    python /data/xivo-acceptance/utils/prerequisite.py
+fi
 
-cd $JENKINS_WORKSPACE_PATH
+cd /data/xivo-acceptance/
+cp -r features/$FEATURE_NAME $WORKSPACE
+
+cd $WORKSPACE
 lettuce $FEATURE_NAME --with-xunit --verbosity=3 --xunit-file=xunit-tests.xml
-cp xunit-tests.xml /data/test_results/$JENKINS_JOB_NAME.xml
+cp xunit-tests.xml /data/test_results/$JOB_NAME.xml
