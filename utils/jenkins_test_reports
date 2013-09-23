@@ -7,7 +7,7 @@ from docutils.core import publish_string
 
 
 TEST_RESULT_FILE = '/tmp/test_result.html'
-path = '/home/seb/data/tmp/test-report'
+path = '/data/test_results'
 
 TEXT_HEADER = """
 ***************************
