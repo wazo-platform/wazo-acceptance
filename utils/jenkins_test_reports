@@ -7,8 +7,7 @@ from docutils.core import publish_string
 
 
 TEST_RESULT_FILE = '/tmp/test_result.html'
-path = '/data/test_results'
-dirs = os.listdir(path)
+path = '/home/seb/data/tmp/test-report'
 
 TEXT_HEADER = """
 ***************************
@@ -18,39 +17,51 @@ XiVO AUTOMATIC TEST REPORTS
 .. contents::
 """
 
-export = {}
-for file in dirs:
-    if file.endswith('xml'):
-        xml_file_path = os.path.join(path, file)
-        tree = ET.parse(xml_file_path)
-        root = tree.getroot()
+def get_features(path):
+    dirs = os.listdir(path)
+    export = {}
+    for file in dirs:
+        if file.endswith('xml'):
+            xml_file_path = os.path.join(path, file)
+            tree = ET.parse(xml_file_path)
+            root = tree.getroot()
 
-        tmp = []
-        for child in root:
-            feature_name, scenario_title = child.attrib['classname'].split(':')
-            feature_name = feature_name.strip()
-            scenario_title = scenario_title.strip()
-            if feature_name not in tmp:
-                tmp.append(feature_name)
-                export[feature_name] = []
-            if scenario_title not in export[feature_name]:
-                export[feature_name].append(scenario_title)
-
-fobj = StringIO()
-fobj.write('%s\n\n' % TEXT_HEADER)
-
-for feature_name in sorted(export.keys()):
-    scenario_title_list = export[feature_name]
-    fobj.write('\n\n%s\n' % feature_name)
-    feature_name_len = len(feature_name)
-    fobj.write('%s\n\n' % ''.join(['='] * feature_name_len))
-    for scenario_title in scenario_title_list:
-        fobj.write('* %s\n' % scenario_title)
-
-    output_html = publish_string(fobj.getvalue(), writer_name='html')
-
-fobj.close()
+            for child in root:
+                feature_name, scenario_title = child.attrib['classname'].split(':')
+                feature_name = feature_name.strip()
+                scenario_title = scenario_title.strip()
+                if feature_name not in export:
+                    export[feature_name] = []
+                if scenario_title not in export[feature_name]:
+                    export[feature_name].append(scenario_title)
+    return export
 
 
-with open(TEST_RESULT_FILE, 'w') as fobj:
-    fobj.write(output_html)
+def format_features(export):
+    fobj = StringIO()
+    fobj.write('%s\n\n' % TEXT_HEADER)
+
+    for feature_name in sorted(export.keys()):
+        scenario_title_list = export[feature_name]
+        fobj.write('\n\n%s\n' % feature_name)
+        feature_name_len = len(feature_name)
+        fobj.write('%s\n\n' % ''.join(['='] * feature_name_len))
+        for scenario_title in scenario_title_list:
+            fobj.write('* %s\n' % scenario_title)
+
+    result = fobj.getvalue()
+    fobj.close()
+    return result
+
+
+def write_output_file(formatted_text, output_file):
+    output_html = publish_string(formatted_text, writer_name='html')
+
+    with open(output_file, 'w') as fobj:
+        fobj.write(output_html)
+
+
+if __name__ == '__main__':
+    features = get_features(path)
+    formatted_text = format_features(features)
+    write_output_file(formatted_text, TEST_RESULT_FILE)
