@@ -15,6 +15,8 @@ XiVO AUTOMATIC TEST REPORTS
 ***************************
 
 .. contents::
+
+
 """
 
 def get_features(path):
@@ -39,19 +41,23 @@ def get_features(path):
 
 def format_features(export):
     fobj = StringIO()
-    fobj.write('%s\n\n' % TEXT_HEADER)
+    fobj.write(TEXT_HEADER)
 
     for feature_name in sorted(export.keys()):
         scenario_title_list = export[feature_name]
-        fobj.write('\n\n%s\n' % feature_name)
-        feature_name_len = len(feature_name)
-        fobj.write('%s\n\n' % ''.join(['='] * feature_name_len))
-        for scenario_title in scenario_title_list:
-            fobj.write('* %s\n' % scenario_title)
+        _format_feature(fobj, feature_name, scenario_title_list)
 
     result = fobj.getvalue()
     fobj.close()
     return result
+
+
+def _format_feature(fobj, feature_name, scenarios):
+    formatted_scenarios = ['* %s' % scenario for scenario in scenarios]
+    feature_info = {'feature_name': feature_name,
+                    'title_decoration': '=' * len(feature_name),
+                    'scenarios': '\n'.join(formatted_scenarios)}
+    fobj.write('\n\n%(feature_name)s\n%(title_decoration)s\n\n%(scenarios)s\n' % feature_info)
 
 
 def write_output_file(formatted_text, output_file):
