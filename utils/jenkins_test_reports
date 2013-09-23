@@ -14,6 +14,8 @@ TEXT_HEADER = """
 ***************************
 XiVO AUTOMATIC TEST REPORTS
 ***************************
+
+.. contents::
 """
 
 export = {}
@@ -37,7 +39,8 @@ for file in dirs:
 fobj = StringIO()
 fobj.write('%s\n\n' % TEXT_HEADER)
 
-for feature_name, scenario_title_list in export.iteritems():
+for feature_name in sorted(export.keys()):
+    scenario_title_list = export[feature_name]
     fobj.write('\n\n%s\n' % feature_name)
     feature_name_len = len(feature_name)
     fobj.write('%s\n\n' % ''.join(['='] * feature_name_len))
