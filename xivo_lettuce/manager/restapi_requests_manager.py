@@ -51,7 +51,7 @@ class HasEntriesRegex(BaseMatcher):
 
 
 def assert_last_request_matches(**expected_request_infos):
-    last_requests = [_extract_request_infos(log_line) for log_line in logs.find_line_in_xivo_restapi_log()]
+    last_requests = [_extract_request_infos(log_line) for log_line in logs.find_line_in_xivo_restapi_log(delta=20)]
 
     if len(last_requests) == 0:
         assert False, 'No logs found in %s' % logs.XIVO_RESTAPI_LOGFILE
