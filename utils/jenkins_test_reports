@@ -14,6 +14,8 @@ TEXT_HEADER = """
 XiVO AUTOMATIC TEST REPORTS
 ***************************
 
+The tests listed here were all passing at the moment of the release.
+
 .. contents::
 
 
