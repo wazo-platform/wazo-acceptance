@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from hamcrest import assert_that, equal_to, is_not, has_key, starts_with
+from hamcrest import assert_that, contains_string, equal_to, has_item, is_not, has_key, starts_with
 from xivo_lettuce.manager import device_manager
 from xivo_lettuce.manager import provd_cfg_dev_manager
 from xivo_lettuce import form, common, logs
@@ -132,16 +132,19 @@ def then_the_device_group1_is_in_autoprov_mode(step, device_id):
 
 @step(u'Then I see in the log file device "([^"]*)" synchronized')
 def then_i_see_in_the_log_file_device_synchronized(step, device_id):
-    log_line = 'Synchronizing device %s' % device_id
-    assert logs.search_str_in_daemon_log(log_line), 'No log line "%s" found in daemon.log' % log_line
+    expected_log_lines = ['Synchronizing device %s' % device_id]
+    actual_log_lines = logs.find_line_in_daemon_log()
+    _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
 
 
 @step(u'Then I see in the log file device "([^"]*)" autoprovisioned')
 def then_i_see_in_the_log_file_device_group1_autoprovisioned(step, device_id):
-    assert logs.search_str_in_daemon_log('Creating new config')
-    assert logs.search_str_in_daemon_log('/provd/cfg_mgr/autocreate')
-    assert logs.search_str_in_daemon_log('Updating device')
-    assert logs.search_str_in_daemon_log('/provd/dev_mgr/devices/%s' % device_id)
+    expected_log_lines = ['Creating new config',
+                          '/provd/cfg_mgr/autocreate',
+                          'Updating device',
+                          '/provd/dev_mgr/devices/%s' % device_id]
+    actual_log_lines = logs.find_line_in_daemon_log()
+    _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
 
 
 @step(u'Then the device "([^"]*)" is no longer exists in provd')
@@ -156,7 +159,14 @@ def then_the_device_is_no_longer_exists_in_provd(step, device_id):
 
 @step(u'Then I see in the log file device "([^"]*)" deleted')
 def then_i_see_in_the_log_file_device_deleted(step, device_id):
-    assert logs.search_str_in_daemon_log('Deleting device %s' % device_id)
-    assert logs.search_str_in_daemon_log('/provd/dev_mgr/devices/%s' % device_id)
-    assert logs.search_str_in_daemon_log('Deleting config %s' % device_id)
-    assert logs.search_str_in_daemon_log('/provd/cfg_mgr/configs/%s' % device_id)
+    expected_log_lines = ['Deleting device %s' % device_id,
+                          '/provd/dev_mgr/devices/%s' % device_id,
+                          'Deleting config %s' % device_id,
+                          '/provd/cfg_mgr/configs/%s' % device_id]
+    actual_log_lines = logs.find_line_in_daemon_log()
+    _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
+
+
+def _assert_all_lines_in_log(actual_log, expected_lines):
+    for expected_line in expected_lines:
+        assert_that(actual_log, has_item(contains_string(expected_line)))

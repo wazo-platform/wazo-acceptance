@@ -79,6 +79,10 @@ def search_str_in_xivo_restapi_log(expression, delta=10):
     return _search_str_in_log_file(expression, XIVO_RESTAPI_LOG_INFO, delta)
 
 
+def find_line_in_daemon_log(delta=10):
+    return _find_line_in_log_file(DAEMON_LOG_INFO, delta)
+
+
 def find_line_in_xivo_restapi_log(delta=10):
     return _find_line_in_log_file(XIVO_RESTAPI_LOG_INFO, delta)
 
