@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import re
+import hashlib
 
 from hamcrest import assert_that, equal_to
 from lettuce import step
@@ -113,3 +114,14 @@ def then_max_open_file_descriptors_are_equals_to_8192(step):
         string_limit = sysutils.output_command(cmd)
         limit = re.sub('\s+', ' ', string_limit).split()[3]
         assert_that(int(limit), equal_to(8192))
+
+
+@step(u'Then sources.list point on right mirrors')
+def then_sourceslist_point_on_right_mirrors(step):
+    #md5 of source uris pointing on http.debian.net
+    expected_md5 = '2af89231c8f5089e08c56257eb394276'
+
+    content = sysutils.get_content_file('/etc/apt/sources.list')
+    content_md5 = hashlib.md5(content).hexdigest()
+
+    assert_that(content_md5, equal_to(expected_md5))

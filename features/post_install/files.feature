@@ -17,3 +17,6 @@ Feature: PostInstall Files
 
     Scenario: Asterisk Max File Descriptors
         Then max open file descriptors are equals to 8192
+
+    Scenario: Debian sources list points on right mirrors
+        Then sources.list point on right mirrors
