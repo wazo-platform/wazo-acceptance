@@ -107,29 +107,6 @@ def then_i_see_devices_with_infos(step):
             assert_that(actual_device['configured'], equal_to(expected_configured))
 
 
-@step(u'Then the device "([^"]*)" has a config with the following parameters:')
-def then_the_device_has_a_config_with_the_following_parameters(step, device_id):
-    config = provd_cfg_dev_manager.get_provd_config(device_id)
-    for expected_config in step.hashes:
-        if 'vlan_enabled' in expected_config:
-            assert_that(config['raw_config']['vlan_enabled'], equal_to(int(expected_config['vlan_enabled'])))
-
-
-@step(u'Then the device "([^"]*)" has no config with the following keys:')
-def then_the_device_group1_has_no_config_with_the_following_keys(step, device_id):
-    config = provd_cfg_dev_manager.get_provd_config(device_id)
-    for expected_keys in step.hashes:
-        if 'vlan_enabled' in expected_keys:
-            assert_that(config['raw_config'], is_not(has_key('vlan_enabled')))
-
-
-@step(u'Then the device "([^"]*)" is in autoprov mode')
-def then_the_device_group1_is_in_autoprov_mode(step, device_id):
-    device = provd_cfg_dev_manager.get_provd_config(device_id)
-    if 'config' in device:
-        assert_that(device['config'], starts_with('autoprov'))
-
-
 @step(u'Then I see in the log file device "([^"]*)" synchronized')
 def then_i_see_in_the_log_file_device_synchronized(step, device_id):
     expected_log_lines = ['Synchronizing device %s' % device_id]

@@ -24,11 +24,6 @@ from xivo_lettuce.manager_restapi import device_ws
 from xivo_lettuce.restapi.v1_1 import device_helper
 
 
-@step(u'Given I have no devices')
-def given_there_are_no_devices(step):
-    provd_cfg_dev_manager.delete_all()
-
-
 @step(u'Given there are no devices with mac "([^"]*)"')
 def given_there_are_no_devices_with_mac_group1(step, mac):
     provd_cfg_dev_manager.delete_device_with_mac(mac)
@@ -60,12 +55,6 @@ def given_i_have_the_following_devices(step):
 def given_there_exists_the_following_device_template(step):
     for template in step.hashes:
         provd_cfg_dev_manager.add_or_replace_device_template(template)
-
-
-@step(u'Given I have at least (\d+) dummy devices')
-def given_i_have_at_least_30_dummy_devices(step, nb_devices):
-    nb_devices = int(nb_devices)
-    device_helper.create_dummy_devices(nb_devices)
 
 
 @step(u'Given I only have (\d+) devices')
@@ -110,11 +99,6 @@ def when_i_associate_my_line_id_to_the_device(step, line_id, device_id):
 @step(u'^When I synchronize the device "([^"]*)" from restapi$')
 def when_i_synchronize_the_device_group1_from_restapi(step, device_id):
     world.response = device_ws.synchronize(device_id)
-
-
-@step(u'When I provision my device "([^"]*)" with my line "([^"]*)"')
-def when_i_provision_my_device_group1_with_my_line_group2(step, device_mac, line_id):
-    assert False, 'This step must be implemented'
 
 
 @step(u'When I go get the device with id "([^"]*)"')

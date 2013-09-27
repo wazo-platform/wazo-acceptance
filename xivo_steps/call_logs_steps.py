@@ -22,12 +22,6 @@ from xivo_lettuce.manager import cel_manager, call_logs_manager
 from xivo_lettuce.manager_dao import call_logs_manager_dao
 
 
-@step(u'Given there are no calls between "([^"]*)" and "([^"]*)"')
-def given_there_are_no_calls_between(step, start, end):
-    cel_manager.delete_entries_between(start, end)
-    call_logs_manager_dao.delete_entries_between(start, end)
-
-
 @step(u'Given there are no call logs$')
 def given_there_are_no_call_logs(step):
     call_logs_manager_dao.delete_all()
