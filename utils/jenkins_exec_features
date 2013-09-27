@@ -14,6 +14,7 @@ function clone_or_pull_repo() {
         git clone $GIT_ROOT/$repo.git
     else
         cd $repo
+        git pull
         git fetch -p
         cd ..
     fi
