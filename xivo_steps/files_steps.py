@@ -122,7 +122,7 @@ def then_sourceslist_point_on_right_mirrors(step):
     expected_md5 = '6c01e6432075b0ab60ff9b1f5ebce40d'
 
     content = sysutils.get_content_file('/etc/apt/sources.list')
-    print content
+    print "-------\n%s\n------" % content
     content_md5 = hashlib.md5(content).hexdigest()
 
     assert_that(content_md5, equal_to(expected_md5))
