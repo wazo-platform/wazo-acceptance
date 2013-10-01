@@ -145,6 +145,12 @@ def when_i_include_phonebook_in_the_default_directory(step, phonebook):
     )
 
 
+@step(u'When I set the following directories for directory reverse lookup:')
+def when_i_set_the_following_directories_for_directory_reverse_lookup(step):
+    directories = [entry['directory'] for entry in step.hashes]
+    directory_manager.set_reverse_directories(directories)
+
+
 @step(u'When I search for "([^"]*)" in the directory xlet')
 def when_i_search_for_1_in_the_directory_xlet(step, search):
     cti_client_manager.set_search_for_remote_directory(search)

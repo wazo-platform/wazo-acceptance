@@ -42,7 +42,8 @@ def add_directory_definition(directory):
         directory['name'],
         directory['URI'],
         directory['direct match'],
-        directory.get('delimiter')
+        directory.get('delimiter'),
+        directory.get('reverse match'),
     )
 
 
@@ -87,12 +88,14 @@ def _add_directory_fields(fields):
         add_field(field_name, value)
 
 
-def _add_directory(name, uri, direct_match, delimiter=None):
+def _add_directory(name, uri, direct_match, delimiter=None, reverse_match=None):
     common.open_url('cti_directory', 'add')
     input.set_text_field_with_label("Name", name)
     if delimiter:
         input.set_text_field_with_label("Delimiter", delimiter)
     input.set_text_field_with_label("Direct match", direct_match)
+    if reverse_match:
+        input.set_text_field_with_label("Match reverse directories", reverse_match)
     select.set_select_field_with_label("URI", uri)
 
 
@@ -143,3 +146,23 @@ def assign_filter_and_directories_to_context(context, filter_name, directories):
         add_directory_to_context(directory)
 
     submit.submit_form()
+
+
+def set_reverse_directories(directories):
+    common.open_url('cti_reverse_directory', '')
+    _remove_all_reverse_directories()
+    for directory in directories:
+        _add_reverse_directory(directory)
+    submit.submit_form()
+
+
+def _add_reverse_directory(directory):
+    select.set_select_field_with_id_containing("it-directorieslist", directory)
+    button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[1]")
+    button.click()
+
+
+def _remove_all_reverse_directories():
+    select.select_all_with_id("it-directories")
+    button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[2]")
+    button.click()

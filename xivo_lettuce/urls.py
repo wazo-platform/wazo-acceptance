@@ -88,6 +88,7 @@ URLS = {
     'directory_config': '/xivo/configuration/index.php/manage/directories',
     'cti_directory': '/cti/index.php/directories',
     'cti_direct_directory': '/cti/index.php/contexts',
+    'cti_reverse_directory': '/cti/index.php/reversedirectories',
     'cti_display_filter': '/cti/index.php/displays',
     'admin_user': '/xivo/configuration/index.php/manage/user',
     'schedule': '/service/ipbx/index.php/call_management/schedule',
