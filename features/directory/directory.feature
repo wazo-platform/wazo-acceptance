@@ -81,6 +81,57 @@ Feature: Directory
           | Nom              | Numéro |
           | Pierre DÉSPROGES | 12345  |
 
+    Scenario: Reverse lookup in a directory definition from UTF-8 CSV file
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
+        Given the CSV file "phonebook-unicode.csv" is copied on the server into "/tmp"
+        Given the following directory configurations exist:
+          | name              | type | URI                        |
+          | phonebook-unicode | File | /tmp/phonebook-unicode.csv |
+        Given the directory definition "phonebookunicode" does not exist
+        Given the display filter "Display" exists with the following fields:
+          | Field title | Field type | Default value | Display format               |
+          | Nom         |            |               | {db-firstname} {db-lastname} |
+          | Numéro      | phone      |               | {db-phone}                   |
+        When I add the following CTI directory definition:
+          | name             | URI                               | delimiter | direct match   | reverse match |
+          | phonebookunicode | file:///tmp/phonebook-unicode.csv | ;         | nom,prenom,tel | tel           |
+        When I map the following fields and save the directory definition:
+          | field name | value  |
+          | firstname  | prenom |
+          | lastname   | nom    |
+          | phone      | tel    |
+          | reverse    | nom    |
+        When I include "phonebookunicode" in the default directory
+        When I set the following directories for directory reverse lookup:
+        | directory        |
+        | phonebookunicode |
+        When I restart the CTI server
+        Given I have a sheet model named "testsheet" with the variables:
+        | variable          |
+        | xivo-calleridnum  |
+        | xivo-calleridname |
+        Given I assign the sheet "testsheet" to the "Link" event
+        Given there is an incall "1043" in context "from-extern" to the "User" "GreatLord MacDonnell"
+        Given there is a SIP trunk "12345" in context "from-extern"
+        When I start the XiVO Client
+        When I enable screen pop-up
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
+
+        Given there are no calls running
+        Given I wait 5 seconds for the dialplan to be reloaded
+        Given I register extension "1043"
+        Given I wait call then I answer then I hang up after "3s"
+        When there is 1 calls to extension "1043@from-extern" on trunk "12345" and wait
+
+        Given I wait 10 seconds for the call processing
+
+        Then I see a sheet with the following values:
+        | Variable          | Value     |
+        | xivo-calleridname | DÉSPROGES |
+        | xivo-calleridnum  | 12345     |
+
     Scenario: Search for a contact without a line
         Given there are users with infos:
          | firstname | lastname   | cti_profile |
