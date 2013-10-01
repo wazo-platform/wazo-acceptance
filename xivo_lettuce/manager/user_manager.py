@@ -65,8 +65,8 @@ def add_funckey_line():
 
 def get_line_number(line):
     element = line.find_element_by_name('phonefunckey[type][]')
-    line_number = int(element.get_attribute('id')[-1:])
-    return line_number
+    _, _, line_number = element.get_attribute('id').rpartition('-')
+    return int(line_number)
 
 
 def find_key_destination_field(key_type, line):
