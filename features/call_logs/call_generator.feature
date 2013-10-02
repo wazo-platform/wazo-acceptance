@@ -114,7 +114,7 @@ Feature: Call Log Generation
             | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered |
             | 2013-01-01 15:47:39.0 | Bob Marley  |         1002 |              1001 | 0:00:04.3 |            | True     |
 
-     Scenario: Generation for a specified latest CEL count
+     Scenario: Generation for a specified latest CEL count with no processed calls
          Given there are no call logs
          Given I have only the following CEL entries:
             | eventtype    | eventtime           | cid_name      | cid_num | exten | context |     uniqueid |     linkedid | userfield |
@@ -163,7 +163,7 @@ Feature: Call Log Generation
             | 2013-01-01 08:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     |
             | 2013-01-01 09:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     |
 
-     Scenario: Generation for a specified latest CEL count
+     Scenario: Generation for a specified latest CEL count with processed calls
          Given there are no call logs
          Given I have only the following CEL entries:
             | eventtype    | eventtime           | cid_name      | cid_num | exten | context |     uniqueid |     linkedid | userfield |
