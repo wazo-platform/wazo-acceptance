@@ -15,11 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from hamcrest import assert_that, contains_string, has_item, is_not
 from lettuce import step
 from xivo_lettuce import form
+from xivo_lettuce import logs
 from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import general_settings_xivo_manager
-from xivo_lettuce.logs import search_str_in_daemon_log
 
 
 @step(u'Given a live reload configuration is enable')
@@ -41,11 +42,13 @@ def when_i_enable_live_reload_configuration(step):
 @step(u'Then i see live reload request in daemon log file')
 def then_i_see_messages_in_daemon_log_file(step):
     expression = "'POST /exec_request_handlers HTTP/1.1' 200"
-    assert search_str_in_daemon_log(expression)
+    log_lines = logs.find_line_in_daemon_log()
+    assert_that(log_lines, has_item(contains_string(expression)))
 
 
 @step(u'Then i see no live reload request in daemon log file')
 def then_i_see_no_messages_in_daemon_log_file(step):
     expression = "'POST /exec_request_handlers HTTP/1.1' 200"
-    assert not search_str_in_daemon_log(expression)
+    log_lines = logs.find_line_in_daemon_log()
+    assert_that(log_lines, is_not(has_item(contains_string(expression))))
     general_settings_xivo_manager.enable_live_reload()
