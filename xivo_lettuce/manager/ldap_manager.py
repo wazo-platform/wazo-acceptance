@@ -194,7 +194,7 @@ def add_ldap_filter_to_phonebook(ldap_filter):
 
 
 def _move_filter_to_right_pane(ldap_filter):
-    form.select.set_select_field_with_id_containing("it-ldapfilterlist", ldap_filter)
+    form.select.set_multiselect_field_with_id_containing("it-ldapfilterlist", ldap_filter)
     button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[1]")
     button.click()
 

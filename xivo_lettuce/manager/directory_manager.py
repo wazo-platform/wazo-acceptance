@@ -157,7 +157,7 @@ def set_reverse_directories(directories):
 
 
 def _add_reverse_directory(directory):
-    select.set_select_field_with_id_containing("it-directorieslist", directory)
+    select.set_multiselect_field_with_id_containing("it-directorieslist", directory)
     button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[1]")
     button.click()
 

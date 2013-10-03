@@ -36,6 +36,11 @@ def set_select_empty_value_with_id(field_id):
 
 def set_select_field_with_id_containing(field_id, filter_string):
     select_input = Select(world.browser.find_element_by_id(field_id))
+    _select_option_containing(filter_string, select_input)
+
+
+def set_multiselect_field_with_id_containing(field_id, filter_string):
+    select_input = Select(world.browser.find_element_by_id(field_id))
     select_input.deselect_all()
     _select_option_containing(filter_string, select_input)
 
