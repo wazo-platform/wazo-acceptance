@@ -106,10 +106,12 @@ def initialize():
 def _setup_browser():
     visible = world.config.getboolean('browser', 'visible')
     timeout = world.config.getint('browser', 'timeout')
+    resolution = world.config.get('browser', 'resolution')
 
     from pyvirtualdisplay import Display
     profile = _setup_browser_profile()
-    world.display = Display(visible=visible, size=(1024, 768))
+    browser_size = (resolution.split('x')[0], resolution.split('x')[1])
+    world.display = Display(visible=visible, size=browser_size)
     world.display.start()
     world.browser = XiVOBrowser(firefox_profile=profile)
     world.timeout = timeout
