@@ -22,6 +22,7 @@ import sys
 import tempfile
 import xivo_ws
 from lettuce import before, after, world
+
 from xivobrowser import XiVOBrowser
 from selenium.webdriver import FirefoxProfile
 from xivo_dao.helpers import config as dao_config
@@ -43,13 +44,9 @@ def xivo_lettuce_before_all():
 
 
 @before.each_scenario
-def xivo_lettuce_before_each(scenario):
+def xivo_lettuce_before_each_scenario(scenario):
     if world.browser_enable and _webi_configured():
         _check_webi_login_root()
-
-
-@before.each_scenario
-def reset_world(scenario):
     world.voicemailid = None
     world.userid = None
     world.number = None
@@ -57,12 +54,12 @@ def reset_world(scenario):
 
 
 @after.each_step
-def flush_stdout(step):
+def xivo_lettuce_after_each_step(step):
     sys.stdout.flush()
 
 
 @after.each_scenario
-def xivo_lettuce_after_each(scenario):
+def xivo_lettuce_after_each_scenario(scenario):
     _logout_agents()
 
 
@@ -157,7 +154,6 @@ def _setup_ssh_client_xivo():
     world.xivo_host = hostname
     world.xivo_login = login
     world.ssh_client_xivo = SSHClient(hostname, login)
-    return world.ssh_client_xivo
 
 
 def _setup_ssh_client_callgen():
