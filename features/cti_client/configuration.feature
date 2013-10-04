@@ -1,4 +1,4 @@
-Feature: CtiClient Configuration
+Feature: CTI Client Configuration
 
     Scenario: Bad server address
         When I start the XiVO Client
