@@ -41,12 +41,12 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 @before.all
 def xivo_lettuce_before_all():
     initialize()
+    if world.browser_enable and _webi_configured():
+        _check_webi_login_root()
 
 
 @before.each_scenario
 def xivo_lettuce_before_each_scenario(scenario):
-    if world.browser_enable and _webi_configured():
-        _check_webi_login_root()
     world.voicemailid = None
     world.userid = None
     world.number = None
