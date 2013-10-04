@@ -18,8 +18,6 @@
 from lettuce import step, world
 from hamcrest import *
 
-from xivo_lettuce.restapi.config import get_config_value
-
 
 @step(u'Then I get an empty list')
 def then_i_get_an_empty_list(step):
@@ -73,8 +71,8 @@ def then_i_get_a_response_with_the_following_link_resources(step):
 
 
 def _assert_response_has_resource_link(resource, resource_id):
-    host = get_config_value('xivo', 'hostname')
-    port = get_config_value('restapi', 'port')
+    host = world.config.get('xivo', 'hostname')
+    port = world.config.get('restapi', 'port')
 
     expected_url = "https://%s:%s/1.1/%s/%s" % (host, port, resource, resource_id)
 

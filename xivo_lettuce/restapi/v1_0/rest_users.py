@@ -27,16 +27,13 @@ from xivo_dao.data_handler.extension.model import Extension
 from xivo_dao.data_handler.user_line_extension import dao as user_line_extension_newdao
 from xivo_dao.data_handler.user_line_extension.model import UserLineExtension
 from xivo_lettuce.restapi.v1_0.restapi_config import RestAPIConfig
-from xivo_lettuce.restapi.v1_0 import ws_utils_session
+from lettuce.registry import world
 
 
 class RestUsers():
 
-    def __init__(self):
-        self.ws_utils = ws_utils_session
-
     def get_all_users(self):
-        return self.ws_utils.rest_get(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/")
+        return world.restapi_utils_1_0.rest_get(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/")
 
     def id_from_fullname(self, fullname):
         (firstname, lastname) = self.decompose_fullname(fullname)
@@ -47,7 +44,7 @@ class RestUsers():
         return None
 
     def get_user(self, userid):
-        return self.ws_utils.rest_get(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/" + str(userid))
+        return world.restapi_utils_1_0.rest_get(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/" + str(userid))
 
     def decompose_fullname(self, fullname):
         [firstname, lastname] = fullname.split(" ")
@@ -59,7 +56,7 @@ class RestUsers():
                 'lastname': lastname,
                 'description': description,
                 'ctiprofileid': ctiprofileid}
-        return self.ws_utils.rest_post(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/", data)
+        return world.restapi_utils_1_0.rest_post(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/", data)
 
     def update_user(self, userid, firstname=None, lastname=None):
         data = {}
@@ -67,7 +64,7 @@ class RestUsers():
             data['lastname'] = lastname
         if(firstname is not None):
             data['firstname'] = firstname
-        return self.ws_utils.rest_put(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/%d" % userid,
+        return world.restapi_utils_1_0.rest_put(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/%d" % userid,
                                       data)
 
     def create_user_with_field(self, fullname, fieldname, fieldvalue):
@@ -75,12 +72,12 @@ class RestUsers():
         data = {'firstname': firstname,
                 'lastname': lastname,
                 fieldname: fieldvalue}
-        return self.ws_utils.rest_post(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/", data)
+        return world.restapi_utils_1_0.rest_post(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/", data)
 
     def update_user_with_field(self, userid, field, value):
         data = {}
         data[field] = value
-        return self.ws_utils.rest_put(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/%d" % userid,
+        return world.restapi_utils_1_0.rest_put(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/%d" % userid,
                                       data)
 
     def voicemail_from_user(self, userid):
@@ -148,7 +145,7 @@ class RestUsers():
         url = RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/" + str(userid)
         if delete_voicemail:
             url += "?deleteVoicemail"
-        return self.ws_utils.rest_delete(url)
+        return world.restapi_utils_1_0.rest_delete(url)
 
     def is_user_deleted(self, userid):
         try:

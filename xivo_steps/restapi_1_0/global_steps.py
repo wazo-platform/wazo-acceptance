@@ -18,14 +18,13 @@
 import httplib
 
 from lettuce import step, world
-from xivo_lettuce.restapi.config import get_config_value
 from xivo_lettuce.restapi.v1_0.restapi_config import RestAPIConfig
 
 
 @step(u'When I send a "([^"]*)" request to "([^"]*)"')
 def when_i_send_a_group1_request_to_group2(step, method, url):
-    hostname = get_config_value('xivo', 'hostname')
-    port = get_config_value('restapi', 'port')
+    hostname = world.config.get('xivo', 'hostname')
+    port = world.config.get('restapi', 'port')
     url = "%s:%s" % (hostname, port)
     connection = httplib.HTTPConnection(url)
     headers = RestAPIConfig.CTI_REST_DEFAULT_CONTENT_TYPE

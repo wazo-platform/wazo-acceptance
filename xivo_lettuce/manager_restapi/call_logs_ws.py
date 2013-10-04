@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+#
 # Copyright (C) 2013 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,14 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.restapi.v1_1 import ws_utils_session as ws_utils
+from lettuce.registry import world
+
 
 CALL_LOGS_URL = '/call_logs'
 
 
 def call_logs_list():
-    return ws_utils.rest_get(CALL_LOGS_URL)
+    return world.restapi_utils_1_1.rest_get(CALL_LOGS_URL)
 
 
 def call_logs_list_interval(params):
-    return ws_utils.rest_get(CALL_LOGS_URL, params=params)
+    return world.restapi_utils_1_1.rest_get(CALL_LOGS_URL, params=params)

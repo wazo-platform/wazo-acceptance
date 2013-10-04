@@ -17,16 +17,13 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 from string import upper
+from lettuce.registry import world
 from xivo_dao import agent_dao
 from xivo_dao.alchemy.agentfeatures import AgentFeatures
 from xivo_lettuce.restapi.v1_0.restapi_config import RestAPIConfig
-from xivo_lettuce.restapi.v1_0 import ws_utils_session
 
 
 class RestAgents(object):
-
-    def __init__(self):
-        self.ws_utils = ws_utils_session
 
     def create(self, agent_first_name, agent_number):
         agent = AgentFeatures()
@@ -55,5 +52,5 @@ class RestAgents(object):
 
     def list_agents(self, agent_id=""):
         url = "%s/%s" % (RestAPIConfig.XIVO_AGENTS_SERVICE_PATH, agent_id)
-        reply = self.ws_utils.rest_get(url)
+        reply = world.restapi_utils_1_0.rest_get(url)
         return reply.data

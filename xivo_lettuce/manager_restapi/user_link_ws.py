@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+#
 # Copyright (C) 2013 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,15 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.restapi.v1_1 import ws_utils_session as ws_utils
-
+from lettuce.registry import world
 
 USER_LINK_PATH = 'user_links'
 
 
 def create_user_link(parameters):
-    return ws_utils.rest_post(USER_LINK_PATH, parameters)
+    return world.restapi_utils_1_1.rest_post(USER_LINK_PATH, parameters)
 
 
 def delete(userlink_id):
-    return ws_utils.rest_delete('%s/%s' % (USER_LINK_PATH, userlink_id))
+    return world.restapi_utils_1_1.rest_delete('%s/%s' % (USER_LINK_PATH, userlink_id))

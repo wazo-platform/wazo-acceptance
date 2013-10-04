@@ -19,7 +19,7 @@
 import requests
 import json
 
-from xivo_lettuce.restapi.config import get_config_value
+from lettuce.registry import world
 
 
 class WsUtils(object):
@@ -35,17 +35,17 @@ class WsUtils(object):
         self.session = requests.Session()
 
     def _prepare_baseurl(self, api_version=None):
-        hostname = get_config_value('xivo', 'hostname')
-        protocol = get_config_value('restapi', 'protocol')
-        port = get_config_value('restapi', 'port')
-        api_version = api_version or get_config_value('restapi', 'api_version')
+        hostname = world.config.get('xivo', 'hostname')
+        protocol = world.config.get('restapi', 'protocol')
+        port = world.config.getint('restapi', 'port')
+        api_version = api_version or  world.config.get('restapi', 'api_version')
 
         baseurl = "%s://%s:%s/%s" % (protocol, hostname, port, api_version)
         return baseurl
 
     def _prepare_auth(self):
-        username = get_config_value('webservices_infos', 'login')
-        password = get_config_value('webservices_infos', 'password')
+        username = world.config.get('webservices_infos', 'login')
+        password = world.config.get('webservices_infos', 'password')
 
         auth = requests.auth.HTTPDigestAuth(username, password)
         return auth

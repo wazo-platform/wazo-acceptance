@@ -31,6 +31,7 @@ from xivo_lettuce.manager import asterisk_manager
 from xivo_lettuce.ssh import SSHClient
 from xivo_lettuce.func import st_time
 from sqlalchemy.exc import OperationalError
+from xivo_lettuce.ws_utils import WsUtils
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             '../config/config.ini'))
@@ -172,6 +173,9 @@ def _setup_ws():
     login = world.config.get('webservices_infos', 'login')
     password = world.config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)
+
+    world.restapi_utils_1_0 = WsUtils('1.0')
+    world.restapi_utils_1_1 = WsUtils('1.1')
 
 
 class _LazyWorldAttributes(object):

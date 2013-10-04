@@ -22,7 +22,7 @@ import traceback
 from xivo_dao import queue_dao
 from xivo_dao.alchemy.queuefeatures import QueueFeatures
 from xivo_lettuce.restapi.v1_0.restapi_config import RestAPIConfig
-from xivo_lettuce.restapi.v1_0 import ws_utils_session
+from lettuce.registry import world
 
 
 class RestQueues(object):
@@ -56,7 +56,7 @@ class RestQueues(object):
             raise e
 
     def find(self, columnName, searchItem):
-        queues_result = ws_utils_session.rest_get(RestAPIConfig.XIVO_QUEUES_SERVICE_PATH + '/')
+        queues_result = world.restapi_utils_1_0.rest_get(RestAPIConfig.XIVO_QUEUES_SERVICE_PATH + '/')
 
         queues = queues_result.data
         assert len(queues) > 0

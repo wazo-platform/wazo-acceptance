@@ -1,8 +1,24 @@
 # -*- coding: UTF-8 -*-
+#
+# Copyright (C) 2013 Avencall
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import json
 import requests
-from xivo_lettuce.restapi.config import get_config_value
+from lettuce.registry import world
+
 from xivo_lettuce.remote_py_cmd import remote_exec
 
 AUTOPROV_URL = 'https://%s/xivo/configuration/json.php/restricted/provisioning/autoprov?act=configure'
@@ -10,7 +26,7 @@ HEADERS = {'Content-Type': 'application/json'}
 
 
 def provision_device_using_webi(provcode, device_ip):
-    hostname = get_config_value('xivo', 'hostname')
+    hostname = world.config.get('xivo', 'hostname')
     data = json.dumps({'code': provcode, 'ip': device_ip})
     requests.post(url=AUTOPROV_URL % hostname,
                   headers=HEADERS,
@@ -20,8 +36,8 @@ def provision_device_using_webi(provcode, device_ip):
 
 
 def _prepare_auth():
-    username = get_config_value('webservices_infos', 'login')
-    password = get_config_value('webservices_infos', 'password')
+    username = world.config.get('webservices_infos', 'login')
+    password = world.config.get('webservices_infos', 'password')
 
     auth = requests.auth.HTTPBasicAuth(username, password)
     return auth

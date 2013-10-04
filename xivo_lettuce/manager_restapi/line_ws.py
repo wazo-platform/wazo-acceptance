@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+#
 # Copyright (C) 2013 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,18 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.restapi.v1_1 import ws_utils_session as ws_utils
+from lettuce.registry import world
 
 LINES_URL = 'lines'
 
 
 def all_lines():
-    return ws_utils.rest_get(LINES_URL)
+    return world.restapi_utils_1_1.rest_get(LINES_URL)
 
 
 def get(line_id):
-    return ws_utils.rest_get('%s/%s' % (LINES_URL, line_id))
+    return world.restapi_utils_1_1.rest_get('%s/%s' % (LINES_URL, line_id))
 
 
 def all_user_links_by_line_id(line_id):
-    return ws_utils.rest_get('%s/%s/user_links' % (LINES_URL, line_id))
+    return world.restapi_utils_1_1.rest_get('%s/%s/user_links' % (LINES_URL, line_id))

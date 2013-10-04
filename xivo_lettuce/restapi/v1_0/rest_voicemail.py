@@ -18,13 +18,10 @@ import random
 from xivo_dao import voicemail_dao, user_dao
 from xivo_dao.alchemy.voicemail import Voicemail
 from xivo_lettuce.restapi.v1_0.restapi_config import RestAPIConfig
-from xivo_lettuce.restapi.v1_0 import ws_utils_session
+from lettuce.registry import world
 
 
 class RestVoicemail(object):
-
-    def __init__(self):
-        self.ws_utils = ws_utils_session
 
     def create_voicemail(self, fullname=None, number=None, context="default"):
         voicemail = Voicemail()
@@ -35,7 +32,7 @@ class RestVoicemail(object):
         return voicemail.uniqueid
 
     def list(self):
-        return self.ws_utils.rest_get(RestAPIConfig.XIVO_VOICEMAIL_SERVICE_PATH + "/")
+        return world.restapi_utils_1_0.rest_get(RestAPIConfig.XIVO_VOICEMAIL_SERVICE_PATH + "/")
 
     def update_voicemail(self, number, newnumber=None, newfullname=None, newdeleteaftersend=False):
         voicemail_id = voicemail_dao.id_from_mailbox(number, "default")
@@ -45,7 +42,7 @@ class RestVoicemail(object):
         return self.update_voicemail_by_id(voicemail_id, data)
 
     def update_voicemail_by_id(self, voicemailid, data):
-        return self.ws_utils.rest_put("%s/%d" % (RestAPIConfig.XIVO_VOICEMAIL_SERVICE_PATH, voicemailid),
+        return world.restapi_utils_1_0.rest_put("%s/%d" % (RestAPIConfig.XIVO_VOICEMAIL_SERVICE_PATH, voicemailid),
                                       data)
 
     def update_voicemail_field(self, number, fieldname, fieldvalue):
