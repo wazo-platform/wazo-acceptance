@@ -47,7 +47,7 @@ ALIAS = {
 }
 
 URLS = {
-    'login': 'index.php',
+    'login': '/index.php',
     'logout': '/xivo/logoff.php',
     'user': '/service/ipbx/index.php/pbx_settings/users',
     'group': '/service/ipbx/index.php/pbx_settings/groups',
