@@ -27,10 +27,9 @@ from xivobrowser import XiVOBrowser
 from selenium.webdriver import FirefoxProfile
 from xivo_dao.helpers import config as dao_config
 from xivo_dao.helpers import db_manager
-from xivo_lettuce.common import webi_login_as_default, go_to_home_page, webi_logout
+from xivo_lettuce.common import webi_login_as_default, webi_logout
 from xivo_lettuce.manager import asterisk_manager
 from xivo_lettuce.ssh import SSHClient
-from xivo_lettuce.func import st_time
 from sqlalchemy.exc import OperationalError
 from xivo_lettuce.ws_utils import WsUtils
 
@@ -40,6 +39,7 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 
 @before.all
 def xivo_lettuce_before_all():
+    print 'Configuring...'
     initialize()
     if world.browser_enable and _webi_configured():
         _check_webi_login_root()
@@ -97,12 +97,11 @@ def initialize():
     if world.browser_enable:
         _setup_browser()
         if _webi_configured():
-            _log_on_webi()
+            webi_login_as_default()
     world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
 
 
-@st_time
 def _setup_browser():
     visible = world.config.getboolean('browser', 'visible')
     timeout = world.config.getint('browser', 'timeout')
@@ -198,12 +197,6 @@ def _webi_configured():
         return False
     else:
         return True
-
-
-@st_time
-def _log_on_webi():
-    go_to_home_page()
-    webi_login_as_default()
 
 
 def _logout_agents():
