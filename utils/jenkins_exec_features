@@ -18,7 +18,6 @@ function clone_or_pull_repo() {
         cd $repo
         git pull
         git fetch -p
-        cd ..
     fi
 }
 
