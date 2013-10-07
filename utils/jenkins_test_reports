@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 
 import os
+import argparse
 import xml.etree.ElementTree as ET
 from StringIO import StringIO
 from docutils.core import publish_string
-from fabric.api import run, settings
-from fabric.decorators import hosts
-from fabric.context_managers import hide
-from fabric.tasks import execute
 
 
-MIRROR_HOST = "root@mirror.xivo.fr"
 TEST_RESULT_FILE = '/tmp/tests-report-xivo-auto-%s.html'
 path = '/data/test_results'
 
@@ -25,14 +21,6 @@ The tests listed here were all passing at the moment of the release.
 
 
 """
-
-
-@hosts(MIRROR_HOST)
-def get_xivo_rc_version():
-    with settings():
-        with hide('running', 'stdout'):
-            output = run('reprepro -vb /data/reprepro/xivo ls pf-xivo | grep squeeze-xivo-skaro-rc | egrep -Eo "([0-9]{2}\.[0-9]{2})~" | sed "s/~//"')
-    return output
 
 
 def get_features(path):
@@ -84,7 +72,11 @@ def write_output_file(formatted_text, output_file):
 
 
 if __name__ == '__main__':
-    xivo_version_rc = execute(get_xivo_rc_version)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('version', help='Version to freeze')
+
+    args = parser.parse_args()
+
     features = get_features(path)
     formatted_text = format_features(features)
-    write_output_file(formatted_text, TEST_RESULT_FILE % xivo_version_rc[MIRROR_HOST])
+    write_output_file(formatted_text, TEST_RESULT_FILE % args.version)
