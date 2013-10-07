@@ -38,6 +38,12 @@ done
 
 export PYTHONPATH=$PYTHONPATH_STR
 
+
+if [ ! -d "features" ]; then
+    echo "ERROR: no features found"
+    exit 1
+fi
+
 if [ $FEATURE_NAME == 'post_wizard' ]; then
     python /data/xivo-acceptance/utils/prerequisite.py
 fi
