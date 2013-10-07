@@ -38,19 +38,19 @@ done
 
 export PYTHONPATH=$PYTHONPATH_STR
 
+if [ $FEATURE_NAME == 'post_wizard' ]; then
+    python /${REPO_DIR}/xivo-acceptance/utils/prerequisite.py
+fi
+
+cd /${REPO_DIR}/xivo-acceptance/
 
 if [ ! -d "features" ]; then
     echo "ERROR: no features found"
     exit 1
 fi
 
-if [ $FEATURE_NAME == 'post_wizard' ]; then
-    python /data/xivo-acceptance/utils/prerequisite.py
-fi
-
-cd /data/xivo-acceptance/
 cp -r features/$FEATURE_NAME $WORKSPACE
 
 cd $WORKSPACE
 lettuce $FEATURE_NAME --with-xunit --verbosity=3 --xunit-file=xunit-tests.xml
-cp xunit-tests.xml /data/test_results/$JOB_NAME.xml
+cp xunit-tests.xml /${REPO_DIR}/test_results/$JOB_NAME.xml
