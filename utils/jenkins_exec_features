@@ -42,13 +42,7 @@ if [ $FEATURE_NAME == 'post_wizard' ]; then
     python /${REPO_DIR}/xivo-acceptance/utils/prerequisite.py
 fi
 
-cd /${REPO_DIR}/xivo-acceptance/
-
-if [ ! -d "features" ]; then
-    echo "ERROR: no features found"
-    exit 1
-fi
-
+cd /${REPO_DIR}/xivo-acceptance
 cp -r features/$FEATURE_NAME $WORKSPACE
 
 cd $WORKSPACE
