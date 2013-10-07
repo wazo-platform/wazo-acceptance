@@ -1,5 +1,6 @@
 #!/bin/bash
 
+REPO_DIR='/data'
 GIT_ROOT="git://git.xivo.fr/official"
 REPOSITORIES="xivo-dao xivo-acceptance xivo-lib-python xivo-dird xivo-restapi xivo-provisioning"
 PYTHONPATH_STR=''
@@ -10,8 +11,9 @@ export XC_PATH=/tmp/cticlient_bin
 
 function clone_or_pull_repo() {
     repo="$1"
+    cd $REPO_DIR
     if [ ! -d "$repo" ]; then
-        git clone $GIT_ROOT/$repo.git .
+        git clone $GIT_ROOT/$repo.git
     else
         cd $repo
         git pull
@@ -21,19 +23,17 @@ function clone_or_pull_repo() {
 }
 
 for repo in $REPOSITORIES ; do
-    repo_path="/data/$repo"
     echo "processing $repo ..."
-    cd $repo_path
     clone_or_pull_repo $repo
 
     if [ $repo == 'xivo-acceptance' ]; then
-        PYTHONPATH_STR="${PYTHONPATH_STR}:/data/${repo}
+        PYTHONPATH_STR="${PYTHONPATH_STR}:/${REPO_DIR}/${repo}
     else
         extra=''
         if [ $repo == 'xivo-provisioning' ]; then
             extra='/src'
         fi
-        PYTHONPATH_STR="${PYTHONPATH_STR}:/data/${repo}/${repo}${extra}"
+        PYTHONPATH_STR="${PYTHONPATH_STR}:/${REPO_DIR}/${repo}/${repo}${extra}"
     fi
 done
 
