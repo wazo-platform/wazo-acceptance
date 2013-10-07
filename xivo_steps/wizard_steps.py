@@ -100,10 +100,3 @@ def when_i_fill_the_entity_context_page(step, entity, start, end):
 def then_i_should_be_redirected_to_the_login_page(step):
     waitForLoginPage()
     assert world.browser.find_element_by_id('it-login') is not None
-
-
-@step(u'Then I should be logged')
-def then_i_should_be_in_the_monitoring_window(step):
-    element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
-    username = element.text
-    assert username is 'root'
