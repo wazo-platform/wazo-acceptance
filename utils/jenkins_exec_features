@@ -26,7 +26,7 @@ for repo in $REPOSITORIES ; do
     clone_or_pull_repo $repo
 
     if [ $repo == 'xivo-acceptance' ]; then
-        PYTHONPATH_STR="${PYTHONPATH_STR}:/${REPO_DIR}/${repo}
+        PYTHONPATH_STR="${PYTHONPATH_STR}:/${REPO_DIR}/${repo}"
     else
         extra=''
         if [ $repo == 'xivo-provisioning' ]; then
