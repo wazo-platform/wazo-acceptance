@@ -11,7 +11,7 @@ export XC_PATH=/tmp/cticlient_bin
 function clone_or_pull_repo() {
     repo="$1"
     if [ ! -d "$repo" ]; then
-        git clone $GIT_ROOT/$repo.git
+        git clone $GIT_ROOT/$repo.git .
     else
         cd $repo
         git pull
