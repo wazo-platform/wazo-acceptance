@@ -25,11 +25,16 @@ for repo in $REPOSITORIES ; do
     echo "processing $repo ..."
     cd $repo_path
     clone_or_pull_repo $repo
-    extra=''
-    if [ $repo == 'xivo-provisioning' ]; then
-        extra='/src'
+
+    if [ $repo == 'xivo-acceptance' ]; then
+        PYTHONPATH_STR="${PYTHONPATH_STR}:/data/${repo}
+    else
+        extra=''
+        if [ $repo == 'xivo-provisioning' ]; then
+            extra='/src'
+        fi
+        PYTHONPATH_STR="${PYTHONPATH_STR}:/data/${repo}/${repo}${extra}"
     fi
-    PYTHONPATH_STR="${PYTHONPATH_STR}:/data/${repo}/${repo}${extra}"
 done
 
 export PYTHONPATH=$PYTHONPATH_STR
