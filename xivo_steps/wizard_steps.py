@@ -102,7 +102,8 @@ def then_i_should_be_redirected_to_the_login_page(step):
     assert world.browser.find_element_by_id('it-login') is not None
 
 
-@step(u'Then I should be in the monitoring window')
+@step(u'Then I should be logged')
 def then_i_should_be_in_the_monitoring_window(step):
-    div = world.browser.find_element_by_id('system-infos', 'Could not load the system info page')
-    assert div is not None
+    element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
+    username = element.text
+    assert username is 'root'

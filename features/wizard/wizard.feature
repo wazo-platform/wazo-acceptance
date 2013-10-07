@@ -23,4 +23,4 @@ Feature: Wizard
         When I click validate
         Then I should be redirected to the login page
         When I login as root with password superpass in en
-        Then I should be in the monitoring window
+        Then I should be logged
