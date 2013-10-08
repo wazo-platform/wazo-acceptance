@@ -21,10 +21,10 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
-from xivo_acceptance.helpers import user_helper, agent_helper
+from xivo_acceptance.helpers import user_helper, agent_helper, group_helper
 from xivo_lettuce import common, form
 from xivo_lettuce.manager import user_manager, line_manager
-from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws
+from xivo_lettuce.manager_ws import user_manager_ws
 
 
 @step(u'^Given there are users with infos:$')
@@ -114,7 +114,7 @@ def given_there_are_users_with_infos(step):
             agent_helper.add_agent(agent_data)
 
         if user_data.get('group_name'):
-            group_manager_ws.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
+            group_helper.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
 
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')

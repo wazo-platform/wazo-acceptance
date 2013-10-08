@@ -16,10 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
-from xivo_ws import User, UserLine, UserVoicemail
+
+from xivo_acceptance.helpers import voicemail_helper, user_helper, device_helper, \
+    group_helper
 from xivo_lettuce.exception import NoSuchProfileException
-from xivo_lettuce.manager_ws import group_manager_ws
-from xivo_acceptance.helpers import voicemail_helper, user_helper, device_helper
+from xivo_ws import User, UserLine, UserVoicemail
 
 
 def add_user(data_dict):
@@ -101,7 +102,7 @@ def delete_users_with_profile(profile_name):
 
 
 def user_id_is_in_group_name(group_name, user_id):
-    group = group_manager_ws.get_group_with_name(group_name)
+    group = group_helper.get_group_with_name(group_name)
     for id in group.user_ids:
         if id == user_id:
             return True

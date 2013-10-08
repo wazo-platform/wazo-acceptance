@@ -17,11 +17,12 @@
 
 from xivo_lettuce.remote_py_cmd import remote_exec
 from xivo_dao.data_handler.extension import services as extension_services
-from xivo_lettuce.manager_ws import queue_manager_ws, group_manager_ws, \
+from xivo_lettuce.manager_ws import queue_manager_ws, \
     incall_manager_ws, meetme_manager_ws
 from xivo_dao.data_handler.exception import ElementDeletionError, \
     ElementNotExistsError
-from xivo_acceptance.helpers import dialpattern_helper, user_helper
+from xivo_acceptance.helpers import dialpattern_helper, user_helper, \
+    group_helper
 
 
 def find_extension_by_exten(exten):
@@ -79,7 +80,7 @@ def delete_all():
             elif extension.type == 'queue':
                 queue_manager_ws.delete_queues_with_number(extension.exten)
             elif extension.type == 'group':
-                group_manager_ws.delete_groups_with_number(extension.exten)
+                group_helper.delete_groups_with_number(extension.exten)
             elif extension.type == 'incall':
                 incall_manager_ws.delete_incalls_with_did(extension.exten)
             elif extension.type == 'meetme':

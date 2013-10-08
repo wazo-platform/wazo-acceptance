@@ -16,11 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
+
+from xivo_acceptance.helpers import user_helper, group_helper
+from xivo_lettuce.manager_ws import queue_manager_ws
 from xivo_ws import Incall, OverwriteCallerIDMode
 from xivo_ws import GroupDestination, QueueDestination, UserDestination
-from xivo_lettuce.manager_ws import queue_manager_ws
-from xivo_lettuce.manager_ws import group_manager_ws
-from xivo_acceptance.helpers import user_helper
 
 
 def add_incall(number, context, dst_type, dst_name, caller_id=None):
@@ -57,7 +57,7 @@ def _new_queue_destination(queue_name):
 
 
 def _new_group_destination(group_name):
-    group_id = group_manager_ws.find_group_id_with_name(group_name)
+    group_id = group_helper.find_group_id_with_name(group_name)
     return GroupDestination(group_id)
 
 
