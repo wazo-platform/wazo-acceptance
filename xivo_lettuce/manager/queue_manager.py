@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_acceptance.helpers import context_helper, queue_helper
-from xivo_lettuce import sysutils
 from xivo_lettuce.common import open_url, go_to_tab
 from xivo_lettuce.form.input import set_text_field_with_label
 from xivo_lettuce.form.select import set_select_field_with_label, \
@@ -34,17 +33,12 @@ REASSIGN_DELAY = 'reassign delay'
 AUTOPAUSE_AGENTS = 'autopause agents'
 
 
-def remove_queues_with_name_or_number(queue_name, queue_number):
-    queue_helper.delete_queues_with_name(queue_name)
-    queue_helper.delete_queues_with_number(queue_number)
-
-
 def type_queue_ring_strategy(ring_strategy):
     set_select_field_with_label('Ring strategy', ring_strategy)
 
 
 def add_or_replace_queue(queue):
-    remove_queues_with_name_or_number(queue['name'], queue['number'])
+    queue_helper.delete_queues_with_name_or_number(queue['name'], queue['number'])
     open_url('queue', 'add')
     fill_form(queue)
 
@@ -147,46 +141,3 @@ def remove_agents_from_queue(agents):
     pane = ListPane.from_id('agentlist')
     for agent in agents:
         pane.remove_contains(agent)
-
-
-def agent_numbers_from_asterisk(queue_name):
-    output = _asterisk_queue_show(queue_name)
-    agent_numbers = _parse_members(output)
-    return agent_numbers
-
-
-def _asterisk_queue_show(queue_name):
-    command = ['asterisk', '-rx', '"queue show %s"' % queue_name]
-    output = sysutils.output_command(command)
-    return output
-
-
-def _parse_members(output):
-    lines = output.split("\n")
-
-    lines.pop(0).strip()
-    member_header = lines.pop(0).strip()
-
-    if member_header == "No Members":
-        return []
-
-    agent_numbers = []
-    while lines[0].strip() not in ['Callers:', 'No Callers']:
-        line = lines.pop(0).strip()
-        agent_number = _parse_member_line(line)
-        agent_numbers.append(agent_number)
-
-    return agent_numbers
-
-
-def _parse_member_line(member_line):
-    agent, _, _ = member_line.partition(" ")
-    membertype, number = agent.split("/")
-    if membertype != "Agent":
-        raise Exception("membertype %s different from Agent" % membertype)
-    return int(number)
-
-
-def does_queue_exist_in_asterisk(queue_name):
-    output = _asterisk_queue_show(queue_name)
-    return not output.startswith("No such queue")

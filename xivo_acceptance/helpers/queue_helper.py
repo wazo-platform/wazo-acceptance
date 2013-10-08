@@ -16,7 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
+
 from xivo_ws import Queue
+from xivo_lettuce import sysutils
 
 
 def add_queue(data):
@@ -55,6 +57,11 @@ def add_or_replace_queue(queue_data):
     delete_queues_with_name(queue_name)
 
     add_queue(queue_data)
+
+
+def delete_queues_with_name_or_number(queue_name, queue_number):
+    delete_queues_with_name(queue_name)
+    delete_queues_with_number(queue_number)
 
 
 def delete_queues_with_name(name):
@@ -104,3 +111,46 @@ def _search_queues_with_number(number):
     number = unicode(number)
     queues = world.ws.queues.search(number)
     return [queue for queue in queues if queue.number == number]
+
+
+def does_queue_exist_in_asterisk(queue_name):
+    output = _asterisk_queue_show(queue_name)
+    return not output.startswith("No such queue")
+
+
+def agent_numbers_from_asterisk(queue_name):
+    output = _asterisk_queue_show(queue_name)
+    agent_numbers = _parse_members(output)
+    return agent_numbers
+
+
+def _asterisk_queue_show(queue_name):
+    command = ['asterisk', '-rx', '"queue show %s"' % queue_name]
+    output = sysutils.output_command(command)
+    return output
+
+
+def _parse_members(output):
+    lines = output.split("\n")
+
+    lines.pop(0).strip()
+    member_header = lines.pop(0).strip()
+
+    if member_header == "No Members":
+        return []
+
+    agent_numbers = []
+    while lines[0].strip() not in ['Callers:', 'No Callers']:
+        line = lines.pop(0).strip()
+        agent_number = _parse_member_line(line)
+        agent_numbers.append(agent_number)
+
+    return agent_numbers
+
+
+def _parse_member_line(member_line):
+    agent, _, _ = member_line.partition(" ")
+    membertype, number = agent.split("/")
+    if membertype != "Agent":
+        raise Exception("membertype %s different from Agent" % membertype)
+    return int(number)
