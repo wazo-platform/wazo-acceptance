@@ -19,14 +19,14 @@ from execnet.gateway_base import RemoteError
 from xivo_lettuce.remote_py_cmd import remote_exec
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
-from xivo_lettuce.manager_dao import voicemail_manager_dao
+from xivo_acceptance.helpers import voicemail_helper
 
 
 def delete_user_line_extension_voicemail(firstname, lastname, context=None, exten=None, mailbox=None):
     if exten and context:
         delete_user_line_extension_with_exten_context(exten, context)
     if mailbox and context:
-        voicemail_manager_dao.delete_voicemail_with_number_context(mailbox, context)
+        voicemail_helper.delete_voicemail_with_number_context(mailbox, context)
     delete_user_line_extension_with_firstname_lastname(firstname, lastname)
     delete_all_user_with_firstname_lastname(firstname, lastname)
 

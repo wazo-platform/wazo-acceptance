@@ -20,7 +20,8 @@ from xivo_ws import User, UserLine, UserVoicemail
 from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.manager_ws import group_manager_ws
 from xivo_lettuce.manager_ws import device_manager_ws
-from xivo_lettuce.manager_dao import user_manager_dao, voicemail_manager_dao
+from xivo_lettuce.manager_dao import user_manager_dao
+from xivo_acceptance.helpers import voicemail_helper
 
 
 def add_user(data_dict):
@@ -96,7 +97,7 @@ def delete_users_with_profile(profile_name):
     for user in users:
         if user.client_profile_id == profile_id:
             if user.voicemail:
-                voicemail_manager_dao.delete_voicemail_with_user_id(user.id)
+                voicemail_helper.delete_voicemail_with_user_id(user.id)
             user_manager_dao.delete_user_line_extension_with_user_id(user.id)
 
 
