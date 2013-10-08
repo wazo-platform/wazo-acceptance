@@ -19,9 +19,8 @@ import copy
 from hamcrest import *
 from lettuce.registry import world
 
-from xivo_lettuce.manager_ws import queue_manager_ws, \
-    statconfs_manager_ws
-from xivo_acceptance.helpers import agent_helper
+from xivo_acceptance.helpers import agent_helper, queue_helper
+from xivo_lettuce.manager_ws import statconfs_manager_ws
 
 
 def regenerate_cache():
@@ -36,7 +35,7 @@ def generate_cache():
 
 def open_queue_stat_page_on_day(queue_name, day, config_name):
     conf_id = statconfs_manager_ws.find_conf_id_with_name(config_name)
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     host = world.xivo_host
 
     uri = '''https://%s/statistics/call_center/index.php/data/stats1''' % host

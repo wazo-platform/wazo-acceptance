@@ -19,9 +19,8 @@ import time
 
 from lettuce import step, world
 
-from xivo_acceptance.helpers import user_helper, agent_helper
-from xivo_lettuce.manager_ws import queue_manager_ws, \
-    schedule_manager_ws, user_manager_ws
+from xivo_acceptance.helpers import user_helper, agent_helper, queue_helper
+from xivo_lettuce.manager_ws import schedule_manager_ws, user_manager_ws
 from xivo_lettuce.manager import queue_manager
 from xivo_lettuce import common
 from xivo_lettuce import form
@@ -41,7 +40,7 @@ def given_there_are_queues_with_infos(step):
         if queue_data.get('schedule_name'):
             queue_data['schedule_id'] = convert_schedule_name(queue_data.pop('schedule_name'))
 
-        queue_manager_ws.add_or_replace_queue(queue_data)
+        queue_helper.add_or_replace_queue(queue_data)
 
 
 def convert_user_numbers(user_numbers, context):
@@ -90,7 +89,7 @@ def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(st
         'agents': agent_ids,
     }
 
-    queue_manager_ws.add_or_replace_queue(queue_data)
+    queue_helper.add_or_replace_queue(queue_data)
 
 
 @step(u'When I create the following queues:')
@@ -109,14 +108,14 @@ def when_i_create_the_following_invalid_queues(step):
 
 @step(u'When I edit the queue "([^"]*)"$')
 def when_i_edit_the_queue_group1(step, queue_name):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     form.submit.submit_form()
 
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)"$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_name, ring_strategy):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     queue_manager.type_queue_ring_strategy(ring_strategy)
     form.submit.submit_form()
@@ -124,7 +123,7 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_nam
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)" with errors$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(step, queue_name, ring_strategy):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     queue_manager.type_queue_ring_strategy(ring_strategy)
     form.submit.submit_form_with_errors()
@@ -132,7 +131,7 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(ste
 
 @step(u'When I add agent "([^"]*)" to "([^"]*)"')
 def when_i_add_agent_1_to_2(step, agent_number, queue_name):
-    queue = queue_manager_ws.get_queue_with_name(queue_name)
+    queue = queue_helper.get_queue_with_name(queue_name)
     agent_id = agent_helper.find_agent_id_with_number(agent_number)
     queue.agents.append(agent_id)
     world.ws.queues.edit(queue)
@@ -141,7 +140,7 @@ def when_i_add_agent_1_to_2(step, agent_number, queue_name):
 
 @step(u'When I add the agent with extension "([^"]*)" to the queue "([^"]*)"')
 def when_i_add_the_agent_with_extension_group1_to_the_queue_group2(step, extension, queue_name):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     queue_manager.add_agents_to_queue([extension])
     form.submit.submit_form()
@@ -149,7 +148,7 @@ def when_i_add_the_agent_with_extension_group1_to_the_queue_group2(step, extensi
 
 @step(u'When I remove agent "([^"]*)" from "([^"]*)"')
 def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
-    queue = queue_manager_ws.get_queue_with_name(queue_name)
+    queue = queue_helper.get_queue_with_name(queue_name)
     agent_id = agent_helper.find_agent_id_with_number(agent_number)
     queue.agents.remove(agent_id)
     world.ws.queues.edit(queue)
@@ -158,7 +157,7 @@ def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
 
 @step(u'When I remove the agent with extension "([^"]*)" from the queue "([^"]*)"')
 def when_i_remove_the_agent_with_extension_group1_from_the_queue_group2(step, extension, queue_name):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     queue_manager.remove_agents_from_queue([extension])
     form.submit.submit_form()

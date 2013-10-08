@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_acceptance.helpers import context_helper
+from xivo_acceptance.helpers import context_helper, queue_helper
 from xivo_lettuce import sysutils
 from xivo_lettuce.common import open_url, go_to_tab
 from xivo_lettuce.form.input import set_text_field_with_label
@@ -24,7 +24,6 @@ from xivo_lettuce.form.select import set_select_field_with_label, \
 from xivo_lettuce.form.checkbox import set_checkbox_with_id
 from xivo_lettuce.form.list_pane import ListPane
 from xivo_lettuce.form.submit import submit_form
-from xivo_lettuce.manager_ws import queue_manager_ws
 
 
 CALLEE_TRANSFER = 'allow allee transfer'
@@ -36,8 +35,8 @@ AUTOPAUSE_AGENTS = 'autopause agents'
 
 
 def remove_queues_with_name_or_number(queue_name, queue_number):
-    queue_manager_ws.delete_queues_with_name(queue_name)
-    queue_manager_ws.delete_queues_with_number(queue_number)
+    queue_helper.delete_queues_with_name(queue_name)
+    queue_helper.delete_queues_with_number(queue_number)
 
 
 def type_queue_ring_strategy(ring_strategy):

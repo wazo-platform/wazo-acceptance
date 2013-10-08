@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from hamcrest import assert_that, equal_to
-from hamcrest.library.number.ordering_comparison import greater_than
-from xivo_lettuce.manager_ws import queue_manager_ws
+from hamcrest import *
+
+from xivo_acceptance.helpers import queue_helper
 from xivo_lettuce.manager import cti_client_manager
 
 
@@ -30,7 +30,7 @@ def then_the_queue_members_xlet_is_empty(step):
 
 @step(u'Then the Queue members xlet for queue "([^"]*)" is empty')
 def then_the_queue_members_xlet_for_queue_1_is_empty(step, queue_name):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     cti_client_manager.set_queue_for_queue_members(queue_id)
     res = cti_client_manager.get_queue_members_infos()
     assert_that(res['return_value']['row_count'], equal_to(0))
@@ -38,7 +38,7 @@ def then_the_queue_members_xlet_for_queue_1_is_empty(step, queue_name):
 
 @step(u'Then the Queue members xlet for queue "([^"]*)" should display agents:')
 def then_the_queue_members_xlet_for_queue_1_should_display_agents(step, queue_name):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     cti_client_manager.set_queue_for_queue_members(queue_id)
     res = cti_client_manager.get_queue_members_infos()
     assert_that(res['return_value']['row_count'], greater_than(0))

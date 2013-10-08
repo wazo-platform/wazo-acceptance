@@ -16,12 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_acceptance.helpers import dialpattern_helper, user_helper, \
-    group_helper, incall_helper, meetme_helper
+    group_helper, incall_helper, meetme_helper, queue_helper
 from xivo_dao.data_handler.extension import services as extension_services
 from xivo_dao.data_handler.exception import ElementDeletionError, \
     ElementNotExistsError
 from xivo_lettuce.remote_py_cmd import remote_exec
-from xivo_lettuce.manager_ws import queue_manager_ws
 
 
 def find_extension_by_exten(exten):
@@ -77,7 +76,7 @@ def delete_all():
             if extension.type == 'user':
                 user_helper.delete_with_user_id(int(extension.typeval))
             elif extension.type == 'queue':
-                queue_manager_ws.delete_queues_with_number(extension.exten)
+                queue_helper.delete_queues_with_number(extension.exten)
             elif extension.type == 'group':
                 group_helper.delete_groups_with_number(extension.exten)
             elif extension.type == 'incall':

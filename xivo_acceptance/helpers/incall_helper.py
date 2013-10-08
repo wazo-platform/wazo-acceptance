@@ -17,8 +17,7 @@
 
 from lettuce import world
 
-from xivo_acceptance.helpers import user_helper, group_helper
-from xivo_lettuce.manager_ws import queue_manager_ws
+from xivo_acceptance.helpers import user_helper, group_helper, queue_helper
 from xivo_ws import Incall, OverwriteCallerIDMode
 from xivo_ws import GroupDestination, QueueDestination, UserDestination
 
@@ -52,7 +51,7 @@ def _new_user_destination(fullname):
 
 
 def _new_queue_destination(queue_name):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     return QueueDestination(queue_id)
 
 
