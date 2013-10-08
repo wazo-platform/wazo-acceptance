@@ -17,11 +17,12 @@
 
 from xivo_lettuce.remote_py_cmd import remote_exec
 from xivo_dao.data_handler.extension import services as extension_services
-from xivo_lettuce.manager_dao import dialpattern_manager_dao, user_manager_dao, \
+from xivo_lettuce.manager_dao import user_manager_dao, \
     extension_manager_dao
 from xivo_lettuce.manager_ws import queue_manager_ws, group_manager_ws, \
     incall_manager_ws, meetme_manager_ws
 from xivo_dao.data_handler.exception import ElementDeletionError
+from xivo_acceptance.helpers import dialpattern_helper
 
 
 def delete_all():
@@ -43,7 +44,7 @@ def delete_all():
             elif extension.type == 'meetme':
                 meetme_manager_ws.delete_meetme_with_confno(extension.exten)
             elif extension.type == 'outcall':
-                dialpattern_manager_dao.delete((extension.typeval))
+                dialpattern_helper.delete((extension.typeval))
 
             remote_exec(_delete_all_ule_association_by_extension_id, extension_id=extension.id)
 
