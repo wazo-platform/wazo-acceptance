@@ -19,14 +19,14 @@ from StringIO import StringIO
 from hamcrest import any_of, assert_that, equal_to, greater_than, has_entries, has_length
 from lettuce import step, world
 from xivo.unicode_csv import UnicodeDictReader
-from xivo_lettuce.manager_dao import call_logs_manager_dao
 from xivo_lettuce.manager_restapi import call_logs_ws
+from xivo_acceptance.helpers import call_logs_helper
 
 
 @step(u'Given there are only the following call logs:')
 def given_there_are_only_the_following_call_logs(step):
-    call_logs_manager_dao.delete_all()
-    call_logs_manager_dao.create_call_logs(step.hashes)
+    call_logs_helper.delete_all()
+    call_logs_helper.create_call_logs(step.hashes)
 
 
 @step(u'When I get the list of call logs$')
