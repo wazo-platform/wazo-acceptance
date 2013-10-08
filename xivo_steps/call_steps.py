@@ -19,12 +19,11 @@ import time
 
 from lettuce import step
 
-from xivo_acceptance.helpers import line_helper, callgen_helper
+from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper
 from xivo_lettuce import common
 from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.logs import search_str_in_asterisk_log
-from xivo_lettuce.manager import agent_status_manager
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
@@ -49,12 +48,12 @@ def i_register_extension(step, extension):
 
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
 def given_i_log_the_phone(step, agent_number, extension):
-    agent_status_manager.log_agent(agent_number, extension)
+    agent_helper.log_agent(agent_number, extension)
 
 
 @step(u'Given I logout agent "([^"]*)" on extension "([^"]*)"')
 def given_i_logout_the_phone(step, agent_number, extension):
-    agent_status_manager.unlog_agent(agent_number, extension)
+    agent_helper.unlog_agent(agent_number, extension)
 
 
 @step(u'Given there are no calls running')

@@ -21,7 +21,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.helpers import agent_helper, user_helper
 from xivo_lettuce import form, func
-from xivo_lettuce.manager import agent_manager, agent_status_manager
+from xivo_lettuce.manager import agent_manager
 from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce.manager.agent_manager import is_agent_in_agent_group, \
     remove_agent_group_if_exist, get_agent_group_id, get_nb_agents_in_group, \
@@ -58,32 +58,32 @@ def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastna
         'users': [user_id]
     }
     agent_helper.add_or_replace_agent(agent_data)
-    agent_status_manager.log_agent_on_user(number)
+    agent_helper.log_agent_on_user(number)
 
 
 @step(u'Given there is no agents logged')
 def given_there_is_no_agents_logged(step):
-    agent_status_manager.unlog_all_agents()
+    agent_helper.unlog_all_agents()
 
 
 @step(u'When I log agent "([^"]*)"')
 def when_i_log_agent_1(step, agent_number):
-    agent_status_manager.log_agent_on_user(agent_number)
+    agent_helper.log_agent_on_user(agent_number)
 
 
 @step(u'When I unlog agent "([^"]*)"')
 def when_i_unlog_agent_group1(step, agent_number):
-    agent_status_manager.unlog_agent_from_user(agent_number)
+    agent_helper.unlog_agent_from_user(agent_number)
 
 
 @step(u'When I pause agent "([^"]*)"')
 def when_i_pause_agent_1(step, agent_number):
-    agent_status_manager.pause_agent(agent_number)
+    agent_helper.pause_agent(agent_number)
 
 
 @step(u'When I unpause agent "([^"]*)"')
 def when_i_unpause_agent_1(step, agent_number):
-    agent_status_manager.unpause_agent(agent_number)
+    agent_helper.unpause_agent(agent_number)
 
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)"$')

@@ -15,8 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
+
 from lettuce import world
 from xivo_ws import Agent
+
+from xivo_acceptance.helpers import line_helper, agent_helper, callgen_helper
+from xivo_lettuce import sysutils
 
 
 def add_agent(data_dict):
@@ -70,3 +75,60 @@ def _find_agent_with_number(number):
 
 def _search_agents_with_number(number):
     return world.ws.agents.search_by_number(number)
+
+
+def log_agent_on_user(agent_number):
+    line = _get_line_from_agent(agent_number)
+    log_agent(agent_number, line.number)
+
+
+def unlog_agent_from_user(agent_number):
+    line = _get_line_from_agent(agent_number)
+    unlog_agent(agent_number, line.number)
+
+
+def log_agent(agent_number, extension):
+    line = line_helper.find_with_extension(extension)
+    callgen_helper.execute_sip_register(line.name, line.secret)
+    callgen_helper.execute_n_calls_then_wait(1, '*31%s' % agent_number, username=line.name, password=line.secret)
+    world.logged_agents.append(agent_number)
+    time.sleep(5)
+
+
+def unlog_agent(agent_number, extension):
+    line = line_helper.find_with_extension(extension)
+    callgen_helper.execute_n_calls_then_wait(1, '*32%s' % agent_number, username=line.name, password=line.secret)
+    time.sleep(5)
+
+
+def is_agent_logged_in(agent_number):
+    command = ['xivo-agentctl', '-c', '"status %s"' % agent_number]
+    output = sysutils.output_command(command)
+
+    log_line = output.split("\n")[1]
+    log_status = log_line.split(": ")[1].strip()
+
+    return log_status == "True"
+
+
+def unlog_all_agents():
+    sysutils.send_command(['xivo-agentctl', '-c', '"logoff all"'])
+
+
+def pause_agent(agent_number):
+    command = ['xivo-agentctl', '-c', '"pause %s"' % agent_number]
+    sysutils.send_command(command)
+
+
+def unpause_agent(agent_number):
+    command = ['xivo-agentctl', '-c', '"unpause %s"' % agent_number]
+    sysutils.send_command(command)
+
+
+def _get_line_from_agent(agent_number):
+    agent = agent_helper.get_agent_with_number(agent_number)
+    if not agent.users:
+        raise Exception('agent %s has no users' % agent_number)
+    user_id = agent.users[0]
+    line = line_helper.find_with_user_id(user_id)
+    return line
