@@ -17,12 +17,54 @@
 
 from xivo_lettuce.remote_py_cmd import remote_exec
 from xivo_dao.data_handler.extension import services as extension_services
-from xivo_lettuce.manager_dao import user_manager_dao, \
-    extension_manager_dao
+from xivo_lettuce.manager_dao import user_manager_dao
 from xivo_lettuce.manager_ws import queue_manager_ws, group_manager_ws, \
     incall_manager_ws, meetme_manager_ws
-from xivo_dao.data_handler.exception import ElementDeletionError
-from xivo_acceptance.helpers import dialpattern_helper
+from xivo_dao.data_handler.exception import ElementDeletionError, \
+    ElementNotExistsError
+from xivo_acceptance.helpers import dialpattern_helper, extension_helper
+
+
+def find_extension_by_exten(exten):
+    return extension_services.find_by_exten(exten)
+
+
+def get_by_exten_context(exten, context):
+    try:
+        extension = extension_services.get_by_exten_context(exten, context)
+    except ElementNotExistsError:
+        return None
+    return extension
+
+
+def delete(extension_id):
+    remote_exec(_delete, extension_id=extension_id)
+
+
+def _delete(channel, extension_id):
+    from xivo_dao.data_handler.extension import services as extension_services
+
+    try:
+        extension = extension_services.get(extension_id)
+    except LookupError:
+        return
+
+    extension_services.delete(extension)
+
+
+def delete_extension_with_exten_context(exten, context):
+    remote_exec(_delete_extension_with_exten_context, exten=exten, context=context)
+
+
+def _delete_extension_with_exten_context(channel, exten, context):
+    from xivo_dao.data_handler.extension import services as extension_services
+
+    try:
+        extension = extension_services.get_by_exten_context(exten, context)
+    except LookupError:
+        return
+
+    extension_services.delete(extension)
 
 
 def delete_all():
@@ -48,7 +90,7 @@ def delete_all():
 
             remote_exec(_delete_all_ule_association_by_extension_id, extension_id=extension.id)
 
-            extension_manager_dao.delete(extension.id)
+            extension_helper.delete(extension.id)
         except ElementDeletionError:
             pass
 
