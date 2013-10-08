@@ -18,9 +18,10 @@
 from StringIO import StringIO
 from hamcrest import any_of, assert_that, equal_to, greater_than, has_entries, has_length
 from lettuce import step, world
+
 from xivo.unicode_csv import UnicodeDictReader
-from xivo_lettuce.manager_restapi import call_logs_ws
 from xivo_acceptance.helpers import call_logs_helper
+from xivo_acceptance.action.restapi import call_logs_action_restapi
 
 
 @step(u'Given there are only the following call logs:')
@@ -31,13 +32,13 @@ def given_there_are_only_the_following_call_logs(step):
 
 @step(u'When I get the list of call logs$')
 def when_i_get_the_list_of_call_logs(step):
-    world.response = call_logs_ws.call_logs_list()
+    world.response = call_logs_action_restapi.call_logs_list()
 
 
 @step(u'When I get the list of call logs with arguments:')
 def when_i_get_the_list_of_call_logs_with_arguments(step):
     args = step.hashes[0]
-    world.response = call_logs_ws.call_logs_list_interval(args)
+    world.response = call_logs_action_restapi.call_logs_list_interval(args)
     world.status = world.response.status
 
 
