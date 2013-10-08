@@ -18,12 +18,13 @@
 import time
 
 from lettuce import step, world
-from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
+
+from xivo_acceptance.helpers import user_helper, agent_helper
+from xivo_lettuce.manager_ws import queue_manager_ws, \
     schedule_manager_ws, user_manager_ws
 from xivo_lettuce.manager import queue_manager
 from xivo_lettuce import common
 from xivo_lettuce import form
-from xivo_acceptance.helpers import user_helper
 
 
 @step(u'^Given there are queues with infos:$')
@@ -57,7 +58,7 @@ def convert_agent_numbers(agent_numbers):
     agent_ids = []
     agent_number_list = agent_numbers.split(',')
     for agent_number in agent_number_list:
-        agent_id = agent_manager_ws.find_agent_id_with_number(agent_number.strip())
+        agent_id = agent_helper.find_agent_id_with_number(agent_number.strip())
         agent_ids.append(agent_id)
     return agent_ids
 
@@ -79,7 +80,7 @@ def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(st
         }
         user_id = user_manager_ws.add_or_replace_user(user_data)
         agent_data['users'] = [user_id]
-        agent_id = agent_manager_ws.add_or_replace_agent(agent_data)
+        agent_id = agent_helper.add_or_replace_agent(agent_data)
         agent_ids.append(agent_id)
 
     queue_data = {
@@ -132,7 +133,7 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(ste
 @step(u'When I add agent "([^"]*)" to "([^"]*)"')
 def when_i_add_agent_1_to_2(step, agent_number, queue_name):
     queue = queue_manager_ws.get_queue_with_name(queue_name)
-    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
     queue.agents.append(agent_id)
     world.ws.queues.edit(queue)
     time.sleep(5)
@@ -149,7 +150,7 @@ def when_i_add_the_agent_with_extension_group1_to_the_queue_group2(step, extensi
 @step(u'When I remove agent "([^"]*)" from "([^"]*)"')
 def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
     queue = queue_manager_ws.get_queue_with_name(queue_name)
-    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
     queue.agents.remove(agent_id)
     world.ws.queues.edit(queue)
     time.sleep(10)

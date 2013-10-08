@@ -15,12 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce.registry import world
-from xivo_lettuce.manager_ws import agent_manager_ws, queue_manager_ws, \
-    statconfs_manager_ws
 import copy
-
 from hamcrest import *
+from lettuce.registry import world
+
+from xivo_lettuce.manager_ws import queue_manager_ws, \
+    statconfs_manager_ws
+from xivo_acceptance.helpers import agent_helper
 
 
 def regenerate_cache():
@@ -48,7 +49,7 @@ def open_queue_stat_page_on_day(queue_name, day, config_name):
 
 def open_agent_stat_page_on_day(agent_number, day, config_name):
     conf_id = statconfs_manager_ws.find_conf_id_with_name(config_name)
-    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
     host = world.xivo_host
 
     uri = '''https://%s/statistics/call_center/index.php/data/stats2''' % host

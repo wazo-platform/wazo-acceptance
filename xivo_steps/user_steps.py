@@ -18,13 +18,13 @@
 from hamcrest import assert_that, equal_to
 from lettuce import step
 from lettuce.registry import world
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
+
+from xivo_acceptance.helpers import user_helper, agent_helper
 from xivo_lettuce import common, form
 from xivo_lettuce.manager import user_manager, line_manager
-from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
-    agent_manager_ws
-from selenium.common.exceptions import NoSuchElementException
-from xivo_acceptance.helpers import user_helper
+from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws
 
 
 @step(u'^Given there are users with infos:$')
@@ -105,13 +105,13 @@ def given_there_are_users_with_infos(step):
         user_id = user_manager_ws.add_or_replace_user(user_ws_data)
 
         if user_data.get('agent_number'):
-            agent_manager_ws.delete_agents_with_number(user_data['agent_number'])
+            agent_helper.delete_agents_with_number(user_data['agent_number'])
             agent_data = {'firstname': user_data['firstname'],
                           'lastname': user_data['lastname'],
                           'number': user_data['agent_number'],
                           'context': user_data.get('context', 'default'),
                           'users': [int(user_id)]}
-            agent_manager_ws.add_agent(agent_data)
+            agent_helper.add_agent(agent_data)
 
         if user_data.get('group_name'):
             group_manager_ws.add_or_replace_group(user_data['group_name'], user_ids=[user_id])

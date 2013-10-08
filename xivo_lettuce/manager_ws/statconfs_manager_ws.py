@@ -16,13 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
+
 from xivo_ws import Statconf
-from xivo_lettuce.manager_ws import agent_manager_ws, queue_manager_ws
+from xivo_lettuce.manager_ws import queue_manager_ws
+from xivo_acceptance.helpers import agent_helper
 
 
 def add_configuration_with_agent(config_name, work_start, work_end, agent_number):
     delete_confs_with_name(config_name)
-    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
 
     conf = _build_base_configuration(config_name, work_start, work_end)
     conf.agent = [agent_id]
@@ -44,7 +46,7 @@ def add_configuration_with_queue(config_name, work_start, work_end, queue_name):
 def add_configuration_with_queue_and_agent(config_name, work_start, work_end, queue_name, agent_number):
     delete_confs_with_name(config_name)
     queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
-    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
 
     conf = _build_base_configuration(config_name, work_start, work_end)
     conf.queue = [queue_id]
@@ -66,7 +68,7 @@ def add_configuration_with_infos(config_name, work_start, work_end, data):
 
     list_agent_id = []
     for agent_number in data['agents']:
-        agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
+        agent_id = agent_helper.find_agent_id_with_number(agent_number)
         list_agent_id.append(agent_id)
 
     conf = _build_base_configuration(config_name, work_start, work_end)

@@ -19,8 +19,7 @@ import time
 from lettuce import world
 from xivo_lettuce import sysutils
 from xivo_lettuce.manager import call_manager
-from xivo_lettuce.manager_ws import agent_manager_ws
-from xivo_acceptance.helpers import line_helper
+from xivo_acceptance.helpers import line_helper, agent_helper
 
 
 def log_agent_on_user(agent_number):
@@ -72,7 +71,7 @@ def unpause_agent(agent_number):
 
 
 def _get_line_from_agent(agent_number):
-    agent = agent_manager_ws.get_agent_with_number(agent_number)
+    agent = agent_helper.get_agent_with_number(agent_number)
     if not agent.users:
         raise Exception('agent %s has no users' % agent_number)
     user_id = agent.users[0]

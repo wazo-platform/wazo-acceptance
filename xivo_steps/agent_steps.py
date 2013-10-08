@@ -17,27 +17,29 @@
 
 from lettuce import step, world
 from hamcrest import assert_that, equal_to
+from selenium.webdriver.common.action_chains import ActionChains
+
+from xivo_acceptance.helpers import agent_helper
 from xivo_lettuce import form, func
 from xivo_lettuce.manager import agent_manager, agent_status_manager
-from xivo_lettuce.manager_ws import agent_manager_ws, user_manager_ws
+from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce.manager.agent_manager import is_agent_in_agent_group, \
     remove_agent_group_if_exist, get_agent_group_id, get_nb_agents_in_group, \
     select_agent_group_list
-from selenium.webdriver.common.action_chains import ActionChains
 
 
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
 def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    agent_manager_ws.delete_agents_with_number(number)
+    agent_helper.delete_agents_with_number(number)
     agent_data = {
         'firstname': firstname,
         'lastname': lastname,
         'number': number,
         'context': context
     }
-    agent_manager_ws.add_agent(agent_data)
+    agent_helper.add_agent(agent_data)
 
 
 @step(u'Given there is a logged agent "([^"]*)" "([^"]*)" with number "([^"]*)" in "([^"]*)"$')
@@ -56,7 +58,7 @@ def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastna
         'context': context,
         'users': [user_id]
     }
-    agent_manager_ws.add_or_replace_agent(agent_data)
+    agent_helper.add_or_replace_agent(agent_data)
     agent_status_manager.log_agent_on_user(number)
 
 
@@ -87,7 +89,7 @@ def when_i_unpause_agent_1(step, agent_number):
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)"$')
 def when_i_create_an_agent(step, firstname, lastname, number):
-    agent_manager_ws.delete_agents_with_number(number)
+    agent_helper.delete_agents_with_number(number)
     open_url('agent', 'addagent', {'group': '1'})
     agent_manager.type_agent_info(firstname, lastname, number)
     form.submit.submit_form()
@@ -95,7 +97,7 @@ def when_i_create_an_agent(step, firstname, lastname, number):
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)" in group "([^"]*)"$')
 def when_i_create_an_agent_in_group(step, firstname, lastname, number, agent_group):
-    agent_manager_ws.delete_agents_with_number(number)
+    agent_helper.delete_agents_with_number(number)
     group_id = get_agent_group_id(agent_group)
     open_url('agent', 'addagent', {'group': group_id})
     agent_manager.type_agent_info(firstname, lastname, number)
@@ -133,7 +135,7 @@ def when_i_remove_selected_agent_group(step):
 
 @step(u'When I change the agent "([^"]*)" password to "([^"]*)"')
 def when_i_change_the_agent_password_to_group1(step, number, password):
-    agent_id = agent_manager_ws.find_agent_id_with_number(number)
+    agent_id = agent_helper.find_agent_id_with_number(number)
     open_url('agent', 'editagent', {'group': '1', 'id': agent_id})
     agent_manager.change_password(password)
     form.submit.submit_form()
@@ -173,6 +175,6 @@ def then_agent_group_has_x_agents(step, agent_group, nb_agents):
 
 @step(u'Then the agent "([^"]*)" password is "([^"]*)"')
 def then_the_agent_password_is(step, number, password):
-    current_password = agent_manager_ws.find_agent_password_with_number(number)
+    current_password = agent_helper.find_agent_password_with_number(number)
 
     assert_that(current_password, equal_to(password))
