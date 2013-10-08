@@ -19,13 +19,13 @@ from datetime import datetime, timedelta
 from hamcrest import *
 from lettuce import step
 
-from xivo_acceptance.helpers import stat_helper
-from xivo_lettuce.manager import stat_manager, queuelog_manager
+from xivo_acceptance.helpers import stat_helper, queuelog_helper
+from xivo_lettuce.manager import stat_manager
 
 
 @step(u'^Given there are a corrupt entry in queue_log$')
 def given_there_are_a_corrupt_entry_in_queue_log(step):
-    queuelog_manager.insert_corrupt_data()
+    queuelog_helper.insert_corrupt_data()
 
 
 @step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with agent "(\S+)"$')
@@ -45,7 +45,7 @@ def given_there_is_a_configuration_with_queue_and_agent(step, config_name, start
 
 @step(u'^Given I have the following queue_log entries:$')
 def given_i_have_the_following_queue_log_entries(step):
-    queuelog_manager.insert_entries(step.hashes)
+    queuelog_helper.insert_entries(step.hashes)
 
 
 @step(u'^Given I have the following queue_log entries in the last hour:$')
@@ -57,7 +57,7 @@ def given_i_have_to_following_queue_log_entries_in_the_last_hour(step):
         offset = timedelta(minutes=t.minute, seconds=t.second, microseconds=t.microsecond)
         entry['time'] = (last_hour + offset).strftime("%Y-%m-%d %H:%M:%S.%f")
 
-    queuelog_manager.insert_entries(step.hashes)
+    queuelog_helper.insert_entries(step.hashes)
 
 
 @step(u'^Given I clear and generate the statistics cache$')
@@ -73,17 +73,17 @@ def given_i_clear_and_generate_the_statistics_cache_twice(step):
 
 @step(u'Given there is no "([A-Z_]+)" entry for agent "([^"]*)"')
 def given_there_is_no_entry_for_agent(step, event, agent_number):
-    queuelog_manager.delete_event_by_agent_number(event, agent_number)
+    queuelog_helper.delete_event_by_agent_number(event, agent_number)
 
 
 @step(u'^Given there is no "([A-Z_]+)" entry in queue "(\S+)"$')
 def given_there_is_no_entry_in_queue_queue(step, event, queue_name):
-    queuelog_manager.delete_event_by_queue(event, queue_name)
+    queuelog_helper.delete_event_by_queue(event, queue_name)
 
 
 @step(u'^Given there is no entries in queue_log between "(.+)" and "(.+)"$')
 def given_there_is_no_entries_in_queue_log_table_between(step, start, end):
-    queuelog_manager.delete_event_between(start, end)
+    queuelog_helper.delete_event_between(start, end)
 
 
 @step(u'Given there is no entries in queue_log in the last hour')
@@ -91,7 +91,7 @@ def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
     current_hour = datetime.now().replace(minute=0, second=0, microsecond=0)
     last_hour = current_hour - timedelta(hours=1)
 
-    queuelog_manager.delete_event_between(
+    queuelog_helper.delete_event_between(
         last_hour.strftime("%Y-%m-%d %H:%M:%S.%f"),
         datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
     )
@@ -109,14 +109,14 @@ def then_i_dont_should_not_have_error(step):
 
 @step(u'Then i should see ([0-9]+) "([^"]*)" event in queue "([^"]*)" in the queue log')
 def then_i_should_see_nb_n_event_in_queue_in_the_queue_log(step, expected_count, event, queue_name):
-    count = queuelog_manager.get_event_count_queue(event, queue_name)
+    count = queuelog_helper.get_event_count_queue(event, queue_name)
 
     assert_that(count, equal_to(int(expected_count)), 'Number of %s in %s' % (event, queue_name))
 
 
 @step(u'Then i should see ([0-9]+) "([^"]*)" event for agent "([^"]*)" in the queue log')
 def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, event, agent_number):
-    count = queuelog_manager.get_event_count_agent(event, agent_number)
+    count = queuelog_helper.get_event_count_agent(event, agent_number)
 
     assert_that(count, equal_to(int(expected_count)), 'Number of %s for agent %s' % (event, agent_number))
 
