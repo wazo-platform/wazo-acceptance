@@ -16,10 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
+from xivo_acceptance.helpers import voicemail_helper
 
-from xivo_lettuce.manager_ws import voicemail_manager_ws
 
-
-@step(u'Given there is no voicemail "([^"]*)"')
-def given_there_is_no_voicemail_1(step, voicemail_number):
-    voicemail_manager_ws.delete_voicemails_with_number(voicemail_number)
+@step(u'Given there is no voicemail with number "([^"]*)" and context "([^"]*)"')
+def given_there_is_no_voicemail_1(step, voicemail_number, context):
+    voicemail_helper.delete_voicemail_with_number_context(voicemail_number, context)
