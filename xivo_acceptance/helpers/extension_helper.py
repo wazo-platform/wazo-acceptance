@@ -21,8 +21,7 @@ from xivo_lettuce.manager_ws import queue_manager_ws, group_manager_ws, \
     incall_manager_ws, meetme_manager_ws
 from xivo_dao.data_handler.exception import ElementDeletionError, \
     ElementNotExistsError
-from xivo_acceptance.helpers import dialpattern_helper, extension_helper, \
-    user_helper
+from xivo_acceptance.helpers import dialpattern_helper, user_helper
 
 
 def find_extension_by_exten(exten):
@@ -90,7 +89,7 @@ def delete_all():
 
             remote_exec(_delete_all_ule_association_by_extension_id, extension_id=extension.id)
 
-            extension_helper.delete(extension.id)
+            delete(extension.id)
         except ElementDeletionError:
             pass
 
