@@ -20,8 +20,7 @@ import socket
 
 from lettuce import world
 
-from xivo_acceptance.helpers import context_helper
-from xivo_lettuce.manager_ws import trunksip_manager_ws
+from xivo_acceptance.helpers import context_helper, trunksip_helper
 from xivo_lettuce.terrain import initialize, deinitialize
 from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import provd_general_manager
@@ -50,13 +49,13 @@ def main():
         context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
         print 'Adding default SIP trunk'
-        trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')
+        trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')
 
         print 'Adding statscenter SIP trunk'
-        trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_statscenter', 'statscenter')
+        trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_statscenter', 'statscenter')
 
         print 'Adding default SIP trunk'
-        trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_incall', 'from-extern')
+        trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_incall', 'from-extern')
 
         print 'Configuring PostgreSQL on XiVO'
         _create_pgpass_on_remote_host()

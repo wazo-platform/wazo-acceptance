@@ -16,7 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step, world
-from xivo_lettuce.manager_ws import trunksip_manager_ws
+
+from xivo_acceptance.helpers import trunksip_helper
 
 IPBX_COUNT_URL = '/service/ipbx/index.php'
 SIP_TRUNK_STAT_XPATH = "//div[@id='ipbx-stats']//tr[8]//td[%d]"
@@ -60,7 +61,7 @@ def _get_total_sip_trunk_count():
 @step(u'Given I have (\d+) enabled trunk')
 def given_i_have_trunk(step, count):
     for i in range(int(count)):
-        trunksip_manager_ws.add_trunksip('169.10.0.54', 'trunk_%s' % i)
+        trunksip_helper.add_trunksip('169.10.0.54', 'trunk_%s' % i)
 
 
 @step(u'Given i remember the number of available trunk as "([^"]*)"')
