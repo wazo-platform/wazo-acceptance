@@ -15,34 +15,34 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step, world
+from lettuce import step
+
+from xivo_acceptance.helpers import sccp_helper
 from xivo_lettuce import form
 from xivo_lettuce.form import submit
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import asterisk_manager
-from xivo_lettuce.manager_ws import general_settings_sccp_manager_ws as sccp_manager_ws
-from selenium.webdriver.support.select import Select
 
 
 @step(u'Given the SCCP directmedia is disabled')
 def given_the_sccp_directmedia_is_disabled(step):
-    sccp_manager_ws.disable_directmedia()
+    sccp_helper.disable_directmedia()
 
 
 @step(u'Given the SCCP directmedia is enabled')
 def given_the_sccp_directmedia_is_enabled(step):
-    sccp_manager_ws.enable_directmedia()
+    sccp_helper.enable_directmedia()
 
 
 @step(u'Given the SCCP dial timeout is at "(\d+)" seconds')
 def given_the_sccp_dial_timeout_is_at_1_seconds(step, timeout):
-    sccp_manager_ws.set_dialtimeout(timeout)
+    sccp_helper.set_dialtimeout(timeout)
 
 
 @step(u'Given the SCCP language is "([^"]*)"')
 def given_the_sccp_language_is_1(step, language):
-    sccp_manager_ws.set_language(language)
+    sccp_helper.set_language(language)
 
 
 @step(u'When I enable the SCCP directmedia')
