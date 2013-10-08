@@ -22,6 +22,7 @@ from xivo_ws import Outcall, OutcallExten
 def list_outcalls():
     return world.ws.outcalls.list()
 
+
 def add_outcall(data):
     outcall = Outcall()
     outcall.name = data['name']

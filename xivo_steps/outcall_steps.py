@@ -23,17 +23,17 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
-from xivo_acceptance.helpers import context_helper
+from xivo_acceptance.helpers import context_helper, outcall_helper
 from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url, \
     remove_line
 from xivo_lettuce.manager.outcall_manager import exten_line
-from xivo_lettuce.manager_ws import trunksip_manager_ws, outcall_manager_ws
+from xivo_lettuce.manager_ws import trunksip_manager_ws
 from xivo_lettuce import form
 
 
 @step(u'Given there is no outcall "([^"]*)"')
 def given_there_is_no_outcall(step, name):
-    outcall_manager_ws.delete_outcalls_with_name(name)
+    outcall_helper.delete_outcalls_with_name(name)
 
 
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)" and no extension matched')
@@ -43,7 +43,7 @@ def given_there_is_an_outcall_with_trunk_and_no_extensions_matched(step, outcall
     data = {'name': outcall_name,
             'context': 'to-extern',
             'trunks': [trunk_id]}
-    outcall_manager_ws.add_or_replace_outcall(data)
+    outcall_helper.add_or_replace_outcall(data)
 
 
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)" with extension patterns')
@@ -63,7 +63,7 @@ def given_there_is_an_outcall_with_trunk_with_extension_patterns(step, outcall_n
             'context': 'to-extern',
             'trunks': [trunk_id],
             'extens': extensions}
-    outcall_manager_ws.add_or_replace_outcall(data)
+    outcall_helper.add_or_replace_outcall(data)
 
 
 @step(u'Given there is an outcall "([^"]*)" in context "([^"]*)" with trunk "([^"]*)"')
@@ -74,7 +74,7 @@ def given_there_is_an_outcall_in_context_with_trunk(step, outcall_name, outcall_
     data = {'name': outcall_name,
             'context': outcall_context,
             'trunks': [trunk_id]}
-    outcall_manager_ws.add_or_replace_outcall(data)
+    outcall_helper.add_or_replace_outcall(data)
 
 
 @step(u'When I create an outcall with name "([^"]*)" and trunk "([^"]*)"')
@@ -184,6 +184,6 @@ def then_there_is_no_outcall(step, name):
 def then_there_are_outcalls_with_infos(step):
     outcalls = [{u'name': outcall.name,
                  u'context': outcall.context}
-                for outcall in outcall_manager_ws.list_outcalls()]
+                for outcall in outcall_helper.list_outcalls()]
     for expected_outcall_attributes in step.hashes:
         assert_that(outcalls, has_item(has_entries(expected_outcall_attributes)))
