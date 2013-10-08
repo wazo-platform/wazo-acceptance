@@ -26,7 +26,7 @@ from xivo_lettuce.manager import line_manager
 from xivo_lettuce import form
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.form.list_pane import ListPane
-from xivo_lettuce.manager_dao import line_manager_dao
+from xivo_acceptance.helpers import line_helper
 
 
 @step(u'Given there are no custom lines with interface beginning with "([^"]*)"')
@@ -36,7 +36,7 @@ def given_there_are_no_custom_lines_with_interface_beginning_with_1(step, interf
 
 @step(u'Given I set the following options in line "([^"]*)":')
 def given_i_set_the_following_options_in_line_1(step, line_number):
-    line_id = line_manager_dao.find_line_id_with_exten_context(line_number, 'default')
+    line_id = line_helper.find_line_id_with_exten_context(line_number, 'default')
     open_url('line', 'edit', {'id': line_id})
 
     for line_data in step.hashes:
@@ -118,13 +118,13 @@ def when_i_remove_this_line(step):
 
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
-    line_id = line_manager_dao.find_line_id_with_exten_context(linenumber, 'default')
+    line_id = line_helper.find_line_id_with_exten_context(linenumber, 'default')
     open_url('line', 'edit', {'id': line_id})
 
 
 @step(u'When I remove the codec "([^"]*)" from the line with number "([^"]*)"')
 def when_i_remove_the_codec_group1_from_the_line_with_number_group2(step, codec, linenumber):
-    line_id = line_manager_dao.find_line_id_with_exten_context(linenumber, 'default')
+    line_id = line_helper.find_line_id_with_exten_context(linenumber, 'default')
     open_url('line', 'edit', {'id': line_id})
     common.go_to_tab('Signalling')
     ListPane.from_id('codeclist').remove(codec)
@@ -133,7 +133,7 @@ def when_i_remove_the_codec_group1_from_the_line_with_number_group2(step, codec,
 
 @step(u'Then the line with number "([^"]*)" does not have the codec "([^"]*)"')
 def then_the_line_with_number_group1_does_not_have_the_codec_group2(step, linenumber, codec):
-    line = line_manager_dao.find_with_exten_context(linenumber, 'default')
+    line = line_helper.find_with_exten_context(linenumber, 'default')
     sip_peer = line.name
     assert not check_codec_for_sip_line(sip_peer, codec)
 
@@ -158,7 +158,7 @@ def then_the_codec_does_not_appear_after_typing_sip_show_peer_in_asterisk(step, 
 
 @step(u'Then the line with number "([^"]*)" has the codec "([^"]*)"')
 def then_the_line_with_number_group1_has_the_codec_group2(step, linenumber, codec):
-    line = line_manager_dao.find_with_exten_context(linenumber, 'default')
+    line = line_helper.find_with_exten_context(linenumber, 'default')
     sip_peer = line.name
     assert check_codec_for_sip_line(sip_peer, codec)
 
@@ -184,7 +184,7 @@ def then_this_line_is_not_displayed_in_the_list(step):
 
 @step(u'Then the line "([^"]*)" has the following line options:')
 def then_the_line_1_has_the_following_line_options(step, line_number):
-    line_id = line_manager_dao.find_line_id_with_exten_context(line_number, 'default')
+    line_id = line_helper.find_line_id_with_exten_context(line_number, 'default')
     open_url('line', 'edit', {'id': line_id})
     for line_data in step.hashes:
         for key, value in line_data.iteritems():
@@ -214,7 +214,7 @@ def then_the_line_1_has_the_following_line_options(step, line_number):
 
 
 def _add_codec_to_line(codec_name, line_exten):
-    line_id = line_manager_dao.find_line_id_with_exten_context(line_exten, 'default')
+    line_id = line_helper.find_line_id_with_exten_context(line_exten, 'default')
     open_url('line', 'edit', {'id': line_id})
     _add_custom_codec(codec_name)
     form.submit.submit_form()

@@ -18,7 +18,8 @@
 from lettuce import step
 from xivo_lettuce.manager_ws import user_import_manager_ws
 from xivo_lettuce import func
-from xivo_lettuce.manager_dao import user_manager_dao, line_manager_dao
+from xivo_lettuce.manager_dao import user_manager_dao
+from xivo_acceptance.helpers import line_helper
 
 
 @step(u'^When I import a list of users with voicemail:$')
@@ -50,4 +51,4 @@ def then_user_with_name_exists(step, name):
 @step(u'Then line with number "([^"]*)" exists')
 def then_line_with_number_exists(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    assert line_manager_dao.is_with_exten_context_exists(number, context)
+    assert line_helper.is_with_exten_context_exists(number, context)

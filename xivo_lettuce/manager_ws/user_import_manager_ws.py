@@ -16,10 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
-from xivo_lettuce.manager_ws.voicemail_manager_ws import delete_voicemails_with_number
 from xivo_lettuce.manager_ws.incall_manager_ws import delete_incalls_with_did
 from xivo_ws.objects.user import User, UserLine, UserVoicemail, UserIncall
-from xivo_lettuce.manager_dao import user_manager_dao, line_manager_dao
+from xivo_lettuce.manager_dao import user_manager_dao
 
 
 def insert_simple_user(entries):

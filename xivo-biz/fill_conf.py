@@ -29,9 +29,10 @@ from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
-from xivo_lettuce.manager_dao import user_manager_dao, line_manager_dao
+from xivo_lettuce.manager_dao import user_manager_dao
 from xivo_dao.helpers import config as dao_config
 from xivo_dao.helpers import db_manager
+from xivo_acceptance.helpers import line_helper
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
@@ -124,8 +125,8 @@ class Prerequisite(object):
         user2_data.update(user_data_tpl)
         self._user2_id = user_manager_ws.add_or_replace_user(user2_data)
 
-        self._line1 = line_manager_dao.find_with_exten_context('101', 'default')
-        self._line2 = line_manager_dao.find_with_exten_context('102', 'default')
+        self._line1 = line_helper.find_with_exten_context('101', 'default')
+        self._line2 = line_helper.find_with_exten_context('102', 'default')
 
         print
         print 'User1 infos:'

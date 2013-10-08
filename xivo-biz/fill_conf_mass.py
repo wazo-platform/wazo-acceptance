@@ -29,6 +29,7 @@ from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
 from xivo_lettuce.manager_dao import user_manager_dao
+from xivo_acceptance.helpers import line_helper
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
@@ -117,7 +118,7 @@ class Prerequisite(object):
                 incall = Incall()
                 incall.number = '100%s' % (i)
                 incall.context = 'from-extern'
-                incall.destination = UserDestination(line_manager_dao.find_line_id_with_exten_context('10%s' % (i), 'default'))
+                incall.destination = UserDestination(line_helper.find_line_id_with_exten_context('10%s' % (i), 'default'))
                 world.ws.incalls.add(incall)
 
     def _prepare_outcall(self):

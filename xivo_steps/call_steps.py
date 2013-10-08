@@ -23,7 +23,7 @@ from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.logs import search_str_in_asterisk_log
 from xivo_lettuce.manager import call_manager, agent_status_manager
-from xivo_lettuce.manager_dao import line_manager_dao
+from xivo_acceptance.helpers import line_helper
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
@@ -42,7 +42,7 @@ def given_the_agent_will_answer_a_call_and_hangup_after_10_seconds(step, agent_n
 
 @step(u'I register extension "([^"]*)"')
 def i_register_extension(step, extension):
-    line = line_manager_dao.find_with_extension(extension)
+    line = line_helper.find_with_extension(extension)
     call_manager.execute_sip_register(line.name, line.secret)
 
 
