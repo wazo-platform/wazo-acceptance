@@ -23,9 +23,9 @@ import execnet
 
 from lettuce.registry import world
 
-from xivo_acceptance.helpers import line_helper, context_helper
+from xivo_acceptance.helpers import line_helper, context_helper, trunkcustom_helper
 from xivo_lettuce import terrain
-from xivo_lettuce.manager_ws import user_manager_ws, trunkcustom_manager_ws
+from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
@@ -98,7 +98,7 @@ class Prerequisite(object):
             'name': 'dahdi-g1',
             'interface': 'dahdi/g1'
         }
-        trunkcustom_manager_ws.add_or_replace_trunkcustom(data1)
+        trunkcustom_helper.add_or_replace_trunkcustom(data1)
 
     def _prepare_user(self):
         print 'Configuring User..'
@@ -165,7 +165,7 @@ class Prerequisite(object):
             outcall = Outcall()
             outcall.name = 'to_dahdi'
             outcall.context = 'to-extern'
-            outcall.trunks = [trunkcustom_manager_ws.find_trunkcustom_id_with_name('dahdi-g1')]
+            outcall.trunks = [trunkcustom_helper.find_trunkcustom_id_with_name('dahdi-g1')]
             outcall.extens = [OutcallExten(exten='6XXXX', stripnum=1)]
             world.ws.outcalls.add(outcall)
 
