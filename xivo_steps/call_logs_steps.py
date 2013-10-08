@@ -17,9 +17,10 @@
 
 from hamcrest import assert_that, equal_to
 from lettuce import step, world
+
+from xivo_acceptance.helpers import call_logs_helper, cel_helper
 from xivo_lettuce import common, form, sysutils
-from xivo_lettuce.manager import cel_manager, call_logs_manager
-from xivo_acceptance.helpers import call_logs_helper
+from xivo_lettuce.manager import call_logs_manager
 
 
 @step(u'Given there are no call logs$')
@@ -29,8 +30,8 @@ def given_there_are_no_call_logs(step):
 
 @step(u'Given I have only the following CEL entries:')
 def given_i_have_only_the_following_cel_entries(step):
-    cel_manager.delete_all()
-    cel_manager.insert_entries(step.hashes)
+    cel_helper.delete_all()
+    cel_helper.insert_entries(step.hashes)
 
 
 @step(u'When I generate call logs$')
