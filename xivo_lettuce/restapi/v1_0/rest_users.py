@@ -26,7 +26,7 @@ from xivo_dao.data_handler.extension import dao as extension_newdao
 from xivo_dao.data_handler.extension.model import Extension
 from xivo_dao.data_handler.user_line_extension import dao as user_line_extension_newdao
 from xivo_dao.data_handler.user_line_extension.model import UserLineExtension
-from xivo_lettuce.restapi.v1_0.restapi_config import RestAPIConfig
+from restapi_config import RestAPIConfig
 from lettuce.registry import world
 
 

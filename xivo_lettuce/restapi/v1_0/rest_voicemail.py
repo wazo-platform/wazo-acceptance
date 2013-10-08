@@ -17,7 +17,7 @@ import random
 
 from xivo_dao import voicemail_dao, user_dao
 from xivo_dao.alchemy.voicemail import Voicemail
-from xivo_lettuce.restapi.v1_0.restapi_config import RestAPIConfig
+from restapi_config import RestAPIConfig
 from lettuce.registry import world
 
 

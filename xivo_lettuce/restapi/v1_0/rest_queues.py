@@ -21,7 +21,7 @@ import traceback
 
 from xivo_dao import queue_dao
 from xivo_dao.alchemy.queuefeatures import QueueFeatures
-from xivo_lettuce.restapi.v1_0.restapi_config import RestAPIConfig
+from restapi_config import RestAPIConfig
 from lettuce.registry import world
 
 
