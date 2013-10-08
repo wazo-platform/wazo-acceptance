@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
+from hamcrest import *
 from lettuce import step
-from hamcrest import assert_that, equal_to
+
+from xivo_acceptance.helpers import stat_helper
 from xivo_lettuce.manager import stat_manager, queuelog_manager
-from xivo_lettuce.manager_ws import statconfs_manager_ws
 
 
 @step(u'^Given there are a corrupt entry in queue_log$')
@@ -30,17 +30,17 @@ def given_there_are_a_corrupt_entry_in_queue_log(step):
 
 @step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with agent "(\S+)"$')
 def given_there_is_a_configuration_with_agent(step, config_name, start, end, agent_number):
-    statconfs_manager_ws.add_configuration_with_agent(config_name, start, end, agent_number)
+    stat_helper.add_configuration_with_agent(config_name, start, end, agent_number)
 
 
 @step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with queue "(\S+)"$')
 def given_there_is_a_configuration_with(step, config_name, start, end, queue_name):
-    statconfs_manager_ws.add_configuration_with_queue(config_name, start, end, queue_name)
+    stat_helper.add_configuration_with_queue(config_name, start, end, queue_name)
 
 
 @step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with queue "(\S+)" and agent "(\S+)"$')
 def given_there_is_a_configuration_with_queue_and_agent(step, config_name, start, end, queue_name, agent_number):
-    statconfs_manager_ws.add_configuration_with_queue_and_agent(config_name, start, end, queue_name, agent_number)
+    stat_helper.add_configuration_with_queue_and_agent(config_name, start, end, queue_name, agent_number)
 
 
 @step(u'^Given I have the following queue_log entries:$')
