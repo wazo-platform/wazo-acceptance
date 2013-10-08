@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from hamcrest import assert_that, contains_string, equal_to, has_item, is_not, has_key, starts_with
+from hamcrest import assert_that, contains_string, equal_to, has_item
 from xivo_lettuce.manager import device_manager
 from xivo_lettuce.manager import provd_cfg_dev_manager
 from xivo_lettuce import form, common, logs
