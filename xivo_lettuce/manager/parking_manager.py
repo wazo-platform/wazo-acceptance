@@ -15,11 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce import form
-from xivo_lettuce import common
-from xivo_lettuce.manager import asterisk_manager
+from hamcrest import *
 
-from hamcrest import assert_that, has_entries
+from xivo_acceptance.helpers import asterisk_helper
+from xivo_lettuce import form, common
 
 
 def set_parking_config(config_map):
@@ -43,7 +42,7 @@ def set_parking_config(config_map):
 
 
 def check_parking_info(expected_parking_info):
-    output = asterisk_manager.check_output_asterisk_cli('features show')
+    output = asterisk_helper.check_output_asterisk_cli('features show')
     parking_info = _parse_parking_info(output)
 
     assert_that(parking_info, has_entries(expected_parking_info))

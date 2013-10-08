@@ -21,16 +21,17 @@ import os
 import sys
 import tempfile
 import xivo_ws
-from lettuce import before, after, world
 
-from xivobrowser import XiVOBrowser
+from lettuce import before, after, world
 from selenium.webdriver import FirefoxProfile
+from sqlalchemy.exc import OperationalError
+from xivobrowser import XiVOBrowser
+
+from xivo_acceptance.helpers import asterisk_helper
 from xivo_dao.helpers import config as dao_config
 from xivo_dao.helpers import db_manager
 from xivo_lettuce.common import webi_login_as_default, webi_logout
-from xivo_lettuce.manager import asterisk_manager
 from xivo_lettuce.ssh import SSHClient
-from sqlalchemy.exc import OperationalError
 from xivo_lettuce.ws_utils import WsUtils
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -200,7 +201,7 @@ def _webi_configured():
 
 
 def _logout_agents():
-    asterisk_manager.logoff_agents(world.logged_agents)
+    asterisk_helper.logoff_agents(world.logged_agents)
     world.logged_agents = []
 
 

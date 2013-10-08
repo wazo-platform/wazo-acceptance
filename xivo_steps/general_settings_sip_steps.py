@@ -16,10 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
+
+from xivo_acceptance.helpers import asterisk_helper
 from xivo_lettuce import form
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.common import go_to_tab, open_url
-from xivo_lettuce.manager import asterisk_manager
 
 
 @step(u'I go on the General Settings > SIP Protocol page, tab "([^"]*)"')
@@ -44,7 +45,7 @@ def when_i_disable_the_sip_encryption_option(step, label):
 
 @step(u'^Then I should see "([^"]*)" to "([^"]*)" in "([^"]*)"$')
 def then_i_see_sip_encryption_in_file(step, var_name, expected_var_val, file):
-    var_val = asterisk_manager.get_asterisk_conf(file, var_name)
+    var_val = asterisk_helper.get_asterisk_conf(file, var_name)
     assert(expected_var_val == var_val)
 
 

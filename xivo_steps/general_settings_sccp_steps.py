@@ -17,12 +17,11 @@
 
 from lettuce import step
 
-from xivo_acceptance.helpers import sccp_helper
+from xivo_acceptance.helpers import sccp_helper, asterisk_helper
 from xivo_lettuce import form
 from xivo_lettuce.form import submit
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.common import open_url
-from xivo_lettuce.manager import asterisk_manager
 
 
 @step(u'Given the SCCP directmedia is disabled')
@@ -77,5 +76,5 @@ def when_i_select_the_sccp_language_group1(step, language):
 
 @step('Then the option "([^"]*)" is at "([^"]*)" in sccp.conf')
 def then_the_option_is_at_x_in_sccp_conf(step, option, expected_value):
-    value = asterisk_manager.get_asterisk_conf("sccp.conf", option)
+    value = asterisk_helper.get_asterisk_conf("sccp.conf", option)
     assert(value == expected_value)

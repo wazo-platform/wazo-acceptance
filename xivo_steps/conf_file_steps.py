@@ -18,9 +18,9 @@
 from hamcrest import *
 from itertools import ifilter
 from lettuce.decorators import step
+
+from xivo_acceptance.helpers import user_helper, asterisk_helper
 from xivo_lettuce import sysutils
-from xivo_lettuce.manager import asterisk_manager
-from xivo_acceptance.helpers import user_helper
 
 
 @step(u'Then cti configuration file correctly generated')
@@ -41,7 +41,7 @@ datastorage = "postgresql://asterisk:proformatique@localhost/asterisk?charset=ut
 def then_the_sccp_conf_file_should_contain_function_keys_sorted_by_key_number(step, count, firstname, lastname):
     user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
     expected_speeddials = ['speeddial = %s-%s' % (user_id, n) for n in xrange(1, int(count) + 1)]
-    sccp_conf_content = asterisk_manager.get_confgen_file('sccp.conf')
+    sccp_conf_content = asterisk_helper.get_confgen_file('sccp.conf')
     pattern = 'speeddial = %s-' % user_id
     users_speeddial = ifilter(lambda line: pattern in line, sccp_conf_content.split('\n'))
     assert_that(users_speeddial, contains(*expected_speeddials), 'Configured speeddials')
