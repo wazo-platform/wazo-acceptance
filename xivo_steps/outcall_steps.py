@@ -21,19 +21,19 @@ from hamcrest import *
 from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce import common
+from selenium.webdriver.support.select import Select
+
+from xivo_acceptance.helpers import context_helper
 from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url, \
     remove_line
 from xivo_lettuce.manager.outcall_manager import exten_line
 from xivo_lettuce.manager_ws import trunksip_manager_ws, outcall_manager_ws
 from xivo_lettuce import form
-from selenium.webdriver.support.select import Select
-from xivo_lettuce.manager_ws import context_manager_ws
 
 
-@step(u'Given there is no outcall "([^"]*)"$')
-def given_there_is_no_outcall(step, search):
-    common.remove_element_if_exist('outcall', search)
+@step(u'Given there is no outcall "([^"]*)"')
+def given_there_is_no_outcall(step, name):
+    outcall_manager_ws.delete_outcalls_with_name(name)
 
 
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)" and no extension matched')
@@ -68,18 +68,13 @@ def given_there_is_an_outcall_with_trunk_with_extension_patterns(step, outcall_n
 
 @step(u'Given there is an outcall "([^"]*)" in context "([^"]*)" with trunk "([^"]*)"')
 def given_there_is_an_outcall_in_context_with_trunk(step, outcall_name, outcall_context, trunk_name):
-    context_manager_ws.add_or_replace_context(outcall_context, outcall_context, 'outcall')
+    context_helper.add_or_replace_context(outcall_context, outcall_context, 'outcall')
     trunksip_manager_ws.add_or_replace_trunksip(world.dummy_ip_address, trunk_name)
     trunk_id = trunksip_manager_ws.find_trunksip_id_with_name(trunk_name)
     data = {'name': outcall_name,
             'context': outcall_context,
             'trunks': [trunk_id]}
     outcall_manager_ws.add_or_replace_outcall(data)
-
-
-@step(u'Given there is no outcall "([^"]*)"')
-def given_there_is_no_outcall(step, name):
-    outcall_manager_ws.delete_outcalls_with_name(name)
 
 
 @step(u'When I create an outcall with name "([^"]*)" and trunk "([^"]*)"')

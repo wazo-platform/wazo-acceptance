@@ -22,16 +22,16 @@ import subprocess
 import execnet
 
 from lettuce.registry import world
+
+from xivo_acceptance.helpers import line_helper, context_helper
 from xivo_lettuce import terrain
-from xivo_lettuce.manager_ws import context_manager_ws, user_manager_ws, \
-    trunkcustom_manager_ws
+from xivo_lettuce.manager_ws import user_manager_ws, trunkcustom_manager_ws
 from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
 from xivo_dao.helpers import config as dao_config
 from xivo_dao.helpers import db_manager
-from xivo_acceptance.helpers import line_helper
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
@@ -89,8 +89,8 @@ class Prerequisite(object):
 
     def _prepare_context(self):
         print 'Configuring Context..'
-        context_manager_ws.update_contextnumbers_user('default', 100, 199)
-        context_manager_ws.update_contextnumbers_incall('from-extern', 1000, 2000, 4)
+        context_helper.update_contextnumbers_user('default', 100, 199)
+        context_helper.update_contextnumbers_incall('from-extern', 1000, 2000, 4)
 
     def _prepare_trunk(self):
         print 'Configuring Trunk..'

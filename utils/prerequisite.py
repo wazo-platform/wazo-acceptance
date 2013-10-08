@@ -19,7 +19,9 @@ import os
 import socket
 
 from lettuce import world
-from xivo_lettuce.manager_ws import context_manager_ws, trunksip_manager_ws
+
+from xivo_acceptance.helpers import context_helper
+from xivo_lettuce.manager_ws import trunksip_manager_ws
 from xivo_lettuce.terrain import initialize, deinitialize
 from xivo_lettuce.common import open_url
 from xivo_lettuce.manager import provd_general_manager
@@ -39,13 +41,13 @@ def main():
         _create_webservices_access()
 
         print 'Adding context'
-        context_manager_ws.update_contextnumbers_queue('statscenter', 5000, 5100)
-        context_manager_ws.update_contextnumbers_user('statscenter', 1000, 1100)
-        context_manager_ws.update_contextnumbers_user('default', 1000, 1999)
-        context_manager_ws.update_contextnumbers_group('default', 2000, 2999)
-        context_manager_ws.update_contextnumbers_queue('default', 3000, 3999)
-        context_manager_ws.update_contextnumbers_meetme('default', 4000, 4999)
-        context_manager_ws.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
+        context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
+        context_helper.update_contextnumbers_user('statscenter', 1000, 1100)
+        context_helper.update_contextnumbers_user('default', 1000, 1999)
+        context_helper.update_contextnumbers_group('default', 2000, 2999)
+        context_helper.update_contextnumbers_queue('default', 3000, 3999)
+        context_helper.update_contextnumbers_meetme('default', 4000, 4999)
+        context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
         print 'Adding default SIP trunk'
         trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')

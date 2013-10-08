@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from xivo_acceptance.helpers import context_helper
 from xivo_lettuce import sysutils
 from xivo_lettuce.common import open_url, go_to_tab
 from xivo_lettuce.form.input import set_text_field_with_label
@@ -23,7 +24,7 @@ from xivo_lettuce.form.select import set_select_field_with_label, \
 from xivo_lettuce.form.checkbox import set_checkbox_with_id
 from xivo_lettuce.form.list_pane import ListPane
 from xivo_lettuce.form.submit import submit_form
-from xivo_lettuce.manager_ws import queue_manager_ws, context_manager_ws
+from xivo_lettuce.manager_ws import queue_manager_ws
 
 
 CALLEE_TRANSFER = 'allow allee transfer'
@@ -97,7 +98,7 @@ def fill_general_tab(queue):
     set_text_field_with_label('Display name', queue['display name'])
     set_text_field_with_label('Number', queue['number'])
 
-    context = context_manager_ws.get_context_with_name(queue['context'])
+    context = context_helper.get_context_with_name(queue['context'])
     context_field_value = '%s (%s)' % (context.display_name, context.name)
     set_select_field_with_label('Context', context_field_value)
 
