@@ -16,14 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce.decorators import step
+
+from xivo_acceptance.helpers import skill_rule_helper
 from xivo_lettuce.manager import skill_rule_manager
-from xivo_lettuce.manager_ws import skill_rule_manager_ws
 from xivo_lettuce import common, form
 
 
 @step(u'Given the skill rule "([^"]*)" does not exist')
 def given_the_skill_rule_does_not_exist(step, skill_rule_name):
-    skill_rule_manager_ws.delete_skill_rules_with_name(skill_rule_name)
+    skill_rule_helper.delete_skill_rules_with_name(skill_rule_name)
 
 
 @step(u'When I create a skill rule "([^"]*)"')
