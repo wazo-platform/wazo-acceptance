@@ -19,8 +19,9 @@ import time
 
 from lettuce import step, world
 
-from xivo_acceptance.helpers import user_helper, agent_helper, queue_helper
-from xivo_lettuce.manager_ws import schedule_manager_ws, user_manager_ws
+from xivo_acceptance.helpers import user_helper, agent_helper, queue_helper, \
+    schedule_helper
+from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.manager import queue_manager
 from xivo_lettuce import common
 from xivo_lettuce import form
@@ -63,7 +64,7 @@ def convert_agent_numbers(agent_numbers):
 
 
 def convert_schedule_name(schedule_name):
-    schedule_id = schedule_manager_ws.find_schedule_id_with_name(schedule_name)
+    schedule_id = schedule_helper.find_schedule_id_with_name(schedule_name)
     return schedule_id
 
 
