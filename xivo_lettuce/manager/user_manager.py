@@ -19,7 +19,7 @@ import time
 from xivo_lettuce.common import go_to_tab
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
-from xivo_lettuce import common, form, postgres
+from xivo_lettuce import common, form
 
 
 def type_user_names(firstName, lastName):
@@ -192,38 +192,6 @@ def get_user_list_entry(search_fullname):
         'context': context,
         'protocol': protocol
     }
-
-
-def count_linefeatures(user_id):
-    return _count_table_with_cond("user_line", {'"user_id"': user_id})
-
-
-def count_rightcallmember(user_id):
-    return _count_table_with_cond("rightcallmember", {'"type"': "'user'", '"typeval"': "'%s'" % user_id})
-
-
-def count_dialaction(user_id):
-    return _count_table_with_cond("dialaction", {'"category"': "'user'", '"categoryval"': "'%s'" % user_id})
-
-
-def count_phonefunckey(user_id):
-    return _count_table_with_cond("phonefunckey", {'"iduserfeatures"': user_id})
-
-
-def count_callfiltermember(user_id):
-    return _count_table_with_cond("callfiltermember", {'"type"': "'user'", '"typeval"': "'%s'" % user_id})
-
-
-def count_queuemember(user_id):
-    return _count_table_with_cond("queuemember", {'"usertype"': "'user'", '"userid"': user_id})
-
-
-def count_schedulepath(user_id):
-    return _count_table_with_cond("schedule_path", {'"path"': "'user'", '"pathid"': user_id})
-
-
-def _count_table_with_cond(table, cond_dict):
-    return postgres.exec_count_request(table, **cond_dict)
 
 
 def deactivate_bsfilter(user):

@@ -22,6 +22,7 @@ from xivo_acceptance.helpers import voicemail_helper, device_helper, group_helpe
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
+from xivo_lettuce import postgres
 from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.remote_py_cmd import remote_exec
 from xivo_ws import User, UserLine, UserVoicemail
@@ -348,3 +349,35 @@ def _search_users_with_firstname_lastname(firstname, lastname):
     return [user for user in users if
             user.firstname == firstname and
             user.lastname == lastname]
+
+
+def count_linefeatures(user_id):
+    return _count_table_with_cond("user_line", {'"user_id"': user_id})
+
+
+def count_rightcallmember(user_id):
+    return _count_table_with_cond("rightcallmember", {'"type"': "'user'", '"typeval"': "'%s'" % user_id})
+
+
+def count_dialaction(user_id):
+    return _count_table_with_cond("dialaction", {'"category"': "'user'", '"categoryval"': "'%s'" % user_id})
+
+
+def count_phonefunckey(user_id):
+    return _count_table_with_cond("phonefunckey", {'"iduserfeatures"': user_id})
+
+
+def count_callfiltermember(user_id):
+    return _count_table_with_cond("callfiltermember", {'"type"': "'user'", '"typeval"': "'%s'" % user_id})
+
+
+def count_queuemember(user_id):
+    return _count_table_with_cond("queuemember", {'"usertype"': "'user'", '"userid"': user_id})
+
+
+def count_schedulepath(user_id):
+    return _count_table_with_cond("schedule_path", {'"path"': "'user'", '"pathid"': user_id})
+
+
+def _count_table_with_cond(table, cond_dict):
+    return postgres.exec_count_request(table, **cond_dict)

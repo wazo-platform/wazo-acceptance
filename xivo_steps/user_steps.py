@@ -313,13 +313,13 @@ def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstna
 
 @step(u'Then there is no data about this user remaining in the database.$')
 def then_there_is_no_data_about_this_user_remaining_in_the_database(step):
-    assert user_manager.count_linefeatures(world.user_id) == 0, "Data is remaining in linefeatures after user deletion."
-    assert user_manager.count_rightcallmember(world.user_id) == 0, "Data is remaining in rightcallmember after user deletion."
-    assert user_manager.count_dialaction(world.user_id) == 0, "Data is remaining in dialaction after user deletion."
-    assert user_manager.count_phonefunckey(world.user_id) == 0, "Data is remaining in phonefunckey after user deletion."
-    assert user_manager.count_callfiltermember(world.user_id) == 0, "Data is remaining in callfiltermember after user deletion."
-    assert user_manager.count_queuemember(world.user_id) == 0, "Data is remaining in queuemember after user deletion."
-    assert user_manager.count_schedulepath(world.user_id) == 0, "Data is remaining in schedulepath after user deletion."
+    assert user_helper.count_linefeatures(world.user_id) == 0, "Data is remaining in linefeatures after user deletion."
+    assert user_helper.count_rightcallmember(world.user_id) == 0, "Data is remaining in rightcallmember after user deletion."
+    assert user_helper.count_dialaction(world.user_id) == 0, "Data is remaining in dialaction after user deletion."
+    assert user_helper.count_phonefunckey(world.user_id) == 0, "Data is remaining in phonefunckey after user deletion."
+    assert user_helper.count_callfiltermember(world.user_id) == 0, "Data is remaining in callfiltermember after user deletion."
+    assert user_helper.count_queuemember(world.user_id) == 0, "Data is remaining in queuemember after user deletion."
+    assert user_helper.count_schedulepath(world.user_id) == 0, "Data is remaining in schedulepath after user deletion."
 
 
 @step(u'When I modify the channel type of group "([^"]*)" of user "([^"]*)" to "([^"]*)"')
