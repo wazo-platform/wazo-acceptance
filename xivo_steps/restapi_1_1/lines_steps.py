@@ -16,9 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from hamcrest import *
-from xivo_lettuce.restapi.v1_1 import line_helper, line_sip_helper
-from xivo_lettuce.manager_restapi import line_ws
 from lettuce import step, world
+
+from xivo_acceptance.helpers import line_helper, line_sip_helper
+from xivo_lettuce.manager_restapi import line_ws
 
 
 @step(u'Given I only have the following lines:')

@@ -16,14 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from hamcrest import assert_that, contains_string, equal_to, has_item
+from hamcrest import *
+from urllib2 import HTTPError
+
+from xivo_acceptance.helpers import device_helper
+from xivo_dao.data_handler.line import dao as line_dao
 from xivo_lettuce.manager import device_manager
 from xivo_lettuce.manager import provd_cfg_dev_manager
 from xivo_lettuce import form, common, logs
-from xivo_lettuce.restapi.v1_1 import device_helper
-
-from xivo_dao.data_handler.line import dao as line_dao
-from urllib2 import HTTPError
 
 
 @step(u'When I request devices in the webi')

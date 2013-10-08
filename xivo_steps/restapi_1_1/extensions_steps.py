@@ -18,7 +18,7 @@
 from hamcrest import *
 from lettuce import step, world
 
-from xivo_lettuce.restapi.v1_1 import extension_helper
+from xivo_acceptance.helpers import extension_helper
 from xivo_lettuce.manager_restapi import extension_ws
 
 

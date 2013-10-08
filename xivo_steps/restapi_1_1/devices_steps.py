@@ -15,13 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-
 from hamcrest import *
 from lettuce import step, world
 
 from xivo_lettuce.manager import provd_cfg_dev_manager
 from xivo_lettuce.manager_restapi import device_ws
-from xivo_lettuce.restapi.v1_1 import device_helper
+from xivo_acceptance.helpers import device_helper
 
 
 @step(u'Given there are no devices with mac "([^"]*)"')

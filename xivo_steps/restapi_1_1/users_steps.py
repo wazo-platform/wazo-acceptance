@@ -16,9 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from hamcrest import *
-from xivo_lettuce.restapi.v1_1 import user_helper
-from xivo_lettuce.manager_restapi import user_ws
 from lettuce import step, world
+
+from xivo_acceptance.helpers import user_helper
+from xivo_lettuce.manager_restapi import user_ws
 
 
 @step(u'Given I have no users')

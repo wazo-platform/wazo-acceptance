@@ -18,7 +18,7 @@
 import httplib
 
 from lettuce import step, world
-from xivo_lettuce.restapi.v1_0.restapi_config import RestAPIConfig
+from xivo_acceptance.helpers.restapi_v1_0.restapi_config import RestAPIConfig
 
 
 @step(u'When I send a "([^"]*)" request to "([^"]*)"')

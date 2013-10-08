@@ -17,7 +17,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA..
 
 from lettuce import step
-from xivo_lettuce.restapi.v1_0.rest_queues import RestQueues
+from xivo_acceptance.helpers.restapi_v1_0.rest_queues import RestQueues
 
 restqueues = RestQueues()
 
