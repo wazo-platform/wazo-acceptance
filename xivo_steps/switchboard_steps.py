@@ -18,8 +18,8 @@
 from lettuce import step
 from hamcrest import assert_that, equal_to
 
-from xivo_acceptance.helpers import context_helper
-from xivo_lettuce.manager import ldap_manager, cti_client_manager
+from xivo_acceptance.helpers import context_helper, cti_helper
+from xivo_lettuce.manager import ldap_manager
 from xivo_lettuce.manager import directory_manager
 from xivo_lettuce.manager import user_manager
 from xivo_lettuce.manager import queue_manager
@@ -189,17 +189,17 @@ def given_there_is_a_switchboard_configured_as(step):
 
 @step(u'When I search a transfer destination "([^"]*)"')
 def when_i_search_a_transfer_destination_1(step, search):
-    cti_client_manager.set_search_for_directory(search)
+    cti_helper.set_search_for_directory(search)
 
 
 @step(u'Then I see transfer destinations:')
 def then_i_see_transfer_destinations(step):
-    res = cti_client_manager.get_switchboard_infos()
+    res = cti_helper.get_switchboard_infos()
     assert_res = func.has_subsets_of_dicts(step.hashes, res['return_value']['content'])
     assert_that(assert_res, equal_to(True))
 
 
 @step(u'Then I see no transfer destinations')
 def then_i_see_no_transfer_destinations(step):
-    res = cti_client_manager.get_switchboard_infos()
+    res = cti_helper.get_switchboard_infos()
     assert_that(res['return_value']['content'], equal_to([]))

@@ -18,8 +18,8 @@
 from hamcrest import assert_that, has_entries
 from lettuce import step
 
-from xivo_acceptance.helpers import meetme_helper
-from xivo_lettuce.manager import meetme_manager, cti_client_manager
+from xivo_acceptance.helpers import meetme_helper, cti_helper
+from xivo_lettuce.manager import meetme_manager
 
 
 @step(u'Given there are no conference rooms')
@@ -41,6 +41,6 @@ def when_i_update_the_following_conference_rooms(step):
 
 @step(u'Then the following conference rooms appear in the conference room xlet:')
 def then_the_following_conference_rooms_appear_in_the_list(step):
-    res = cti_client_manager.get_conference_room_infos()
+    res = cti_helper.get_conference_room_infos()
     for src_dict, expected_dict in zip(res['return_value']['content'], step.hashes):
         assert_that(src_dict, has_entries(expected_dict))

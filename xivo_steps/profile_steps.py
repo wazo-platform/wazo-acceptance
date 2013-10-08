@@ -16,10 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from xivo_lettuce.manager import profile_manager, cti_client_manager
+from xivo_lettuce.manager import profile_manager
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import common, form
 from hamcrest import assert_that, has_item
+from xivo_acceptance.helpers import cti_helper
 
 
 @step(u'Given there is a profile "([^"]*)" with no services and xlets:')
@@ -67,11 +68,11 @@ def then_i_see_errors(step, profile_label):
 
 @step(u'Then I don\'t see xlet "([^"]*)"')
 def then_i_don_t_see_xlet_group1(step, xlet):
-    res = cti_client_manager.get_xlets()
+    res = cti_helper.get_xlets()
     assert_that(res['xlets'], not has_item(xlet))
 
 
 @step(u'Then I see xlet "([^"]*)"')
 def then_i_see_xlet_group1(step, xlet):
-    res = cti_client_manager.get_xlets()
+    res = cti_helper.get_xlets()
     assert_that(res['xlets'], has_item(xlet))

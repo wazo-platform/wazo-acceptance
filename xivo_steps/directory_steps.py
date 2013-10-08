@@ -20,11 +20,11 @@ import time
 from hamcrest import assert_that, equal_to
 from lettuce import step
 
-from xivo_acceptance.helpers import line_helper, callgen_helper
+from xivo_acceptance.helpers import line_helper, callgen_helper, cti_helper
 from xivo_lettuce import assets, func
 from xivo_lettuce.common import open_url, find_line, edit_line
 from xivo_lettuce.form import submit
-from xivo_lettuce.manager import directory_manager, cti_client_manager
+from xivo_lettuce.manager import directory_manager
 
 
 @step(u'Given the following directory configurations exist:')
@@ -48,7 +48,7 @@ def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the
     _configure_display_filter()
     _configure_ldap_directory(ldap_filter)
     _add_directory_to_direct_directories()
-    cti_client_manager.restart_server()
+    cti_helper.restart_server()
 
 
 @step(u'Given the CTI server searches both the internal directory and the LDAP filter "([^"]*)"')
@@ -57,7 +57,7 @@ def given_the_cti_server_searches_both_the_internal_directory_and_the_ldap_filte
     _configure_ldap_directory(ldap_filter)
     _configure_internal_directory()
     _add_directory_to_direct_directories(['ldapdirectory', 'internal'])
-    cti_client_manager.restart_server()
+    cti_helper.restart_server()
 
 
 @step(u'Given the internal directory exists')
@@ -153,12 +153,12 @@ def when_i_set_the_following_directories_for_directory_reverse_lookup(step):
 
 @step(u'When I search for "([^"]*)" in the directory xlet')
 def when_i_search_for_1_in_the_directory_xlet(step, search):
-    cti_client_manager.set_search_for_remote_directory(search)
+    cti_helper.set_search_for_remote_directory(search)
 
 
 @step(u'When I double-click on the phone number for "([^"]*)"')
 def when_i_double_click_on_the_phone_number_for_name(step, name):
-    cti_client_manager.exec_double_click_on_number_for_name(name)
+    cti_helper.exec_double_click_on_number_for_name(name)
 
 
 @step(u'Then the directory configuration "([^"]*)" has the URI "([^"]*)"')
@@ -171,20 +171,20 @@ def then_the_directory_has_the_uri(step, directory, uri):
 
 @step(u'Then nothing shows up in the directory xlet')
 def then_nothing_shows_up_in_the_directory_xlet(step):
-    res = cti_client_manager.get_remote_directory_infos()
+    res = cti_helper.get_remote_directory_infos()
     assert_that(res['return_value']['content'], equal_to([]))
 
 
 @step(u'Then the following results does not show up in the directory xlet:')
 def then_the_following_results_does_not_show_up_in_the_directory_xlet(step):
-    res = cti_client_manager.get_remote_directory_infos()
+    res = cti_helper.get_remote_directory_infos()
     assert_res = func.has_subsets_of_dicts(step.hashes, res['return_value']['content'])
     assert_that(assert_res, equal_to(False))
 
 
 @step(u'Then the following results show up in the directory xlet:')
 def then_the_following_results_show_up_in_the_directory_xlet(step):
-    res = cti_client_manager.get_remote_directory_infos()
+    res = cti_helper.get_remote_directory_infos()
     assert_res = func.has_subsets_of_dicts(step.hashes, res['return_value']['content'])
     assert_that(assert_res, equal_to(True))
 

@@ -17,7 +17,8 @@
 
 from lettuce import step
 from hamcrest import *
-from xivo_lettuce.manager import cti_client_manager
+
+from xivo_acceptance.helpers import cti_helper
 
 
 @step(u'Then the agent list xlet shows agent "([^"]*)" as in use')
@@ -49,7 +50,7 @@ def then_the_agent_list_xlet_shows_agent_as_unlogged(step, agent_number):
 
 
 def _get_agent_infos(agent_number):
-    agent_list_infos = cti_client_manager.get_agent_list_infos()
+    agent_list_infos = cti_helper.get_agent_list_infos()
     agent_list = agent_list_infos['content']
     agent_list = [agent for agent in agent_list if agent['number'] == agent_number]
 
