@@ -19,12 +19,12 @@ import time
 
 from hamcrest import assert_that, equal_to
 from lettuce import step
+
+from xivo_acceptance.helpers import line_helper, callgen_helper
 from xivo_lettuce import assets, func
 from xivo_lettuce.common import open_url, find_line, edit_line
 from xivo_lettuce.form import submit
-from xivo_lettuce.manager import directory_manager, call_manager, \
-    cti_client_manager
-from xivo_acceptance.helpers import line_helper
+from xivo_lettuce.manager import directory_manager, cti_client_manager
 
 
 @step(u'Given the following directory configurations exist:')
@@ -95,18 +95,18 @@ def given_the_directory_definition_group1_is_included_in_the_default_directory(s
 @step(u'Given extension (\d+) will answer a call and wait')
 def given_extension_will_answer_a_call_and_wait(step, extension):
     line = line_helper.find_with_extension(extension)
-    call_manager.execute_sip_register(line.name, line.secret)
+    callgen_helper.execute_sip_register(line.name, line.secret)
     time.sleep(1)
-    call_manager.execute_answer_then_wait()
+    callgen_helper.execute_answer_then_wait()
     time.sleep(1)
 
 
 @step(u'Given extension (\d+) will answer a call, wait (\d+) seconds and hangup')
 def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, seconds):
     line = line_helper.find_with_extension(extension)
-    call_manager.execute_sip_register(line.name, line.secret)
+    callgen_helper.execute_sip_register(line.name, line.secret)
     time.sleep(1)
-    call_manager.execute_answer_then_hangup()
+    callgen_helper.execute_answer_then_hangup()
     time.sleep(1)
 
 
