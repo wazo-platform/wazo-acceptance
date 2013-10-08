@@ -19,8 +19,7 @@ from lettuce import world
 from xivo_ws import User, UserLine, UserVoicemail
 from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.manager_ws import group_manager_ws
-from xivo_lettuce.manager_ws import device_manager_ws
-from xivo_acceptance.helpers import voicemail_helper, user_helper
+from xivo_acceptance.helpers import voicemail_helper, user_helper, device_helper
 
 
 def add_user(data_dict):
@@ -51,7 +50,8 @@ def add_user(data_dict):
         if 'protocol' in data_dict:
             user.line.protocol = data_dict['protocol']
         if 'device' in data_dict:
-            device_id = str(device_manager_ws.find_device_id_with_mac(data_dict['device']))
+            device = device_helper.find_device_with_mac(data_dict['device'])
+            device_id = str(device.id)
             user.line.device_id = device_id
 
     if 'voicemail_name' in data_dict and 'voicemail_number' in data_dict:
