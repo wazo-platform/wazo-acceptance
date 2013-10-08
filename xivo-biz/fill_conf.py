@@ -23,9 +23,9 @@ import execnet
 
 from lettuce.registry import world
 
-from xivo_acceptance.helpers import line_helper, context_helper, trunkcustom_helper
+from xivo_acceptance.helpers import line_helper, context_helper, \
+    trunkcustom_helper, user_helper
 from xivo_lettuce import terrain
-from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
@@ -115,14 +115,14 @@ class Prerequisite(object):
              'client_username': 'user1'
         }
         user1_data.update(user_data_tpl)
-        self._user1_id = user_manager_ws.add_or_replace_user(user1_data)
+        self._user1_id = user_helper.add_or_replace_user(user1_data)
         user2_data = {
              'lastname': '2',
              'line_number': '102',
              'client_username': 'user2'
         }
         user2_data.update(user_data_tpl)
-        self._user2_id = user_manager_ws.add_or_replace_user(user2_data)
+        self._user2_id = user_helper.add_or_replace_user(user2_data)
 
         self._line1 = line_helper.find_with_exten_context('101', 'default')
         self._line2 = line_helper.find_with_exten_context('102', 'default')

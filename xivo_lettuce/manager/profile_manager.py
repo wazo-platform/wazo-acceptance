@@ -16,17 +16,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
+
 from lettuce import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
+
+from xivo_acceptance.helpers import user_helper
 from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.form.list_pane import ListPane
-from xivo_lettuce.manager_ws.user_manager_ws import delete_users_with_profile
 
 
 def delete_profile(profile_label):
-    delete_users_with_profile(profile_label)
+    user_helper.delete_users_with_profile(profile_label)
     open_url('profile', 'list')
     remove_line(profile_label)
 

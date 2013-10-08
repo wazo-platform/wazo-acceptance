@@ -16,12 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
-from lettuce import step, world
-from xivo_lettuce.xivoclient import start_xivoclient, stop_xivoclient
-from xivo_lettuce import common
-from xivo_lettuce.manager_ws import user_manager_ws
-from xivo_lettuce.manager import cti_client_manager
+
 from hamcrest import assert_that, equal_to
+from lettuce import step
+
+from xivo_acceptance.helpers import user_helper
+from xivo_lettuce import common
+from xivo_lettuce.manager import cti_client_manager
+from xivo_lettuce.xivoclient import start_xivoclient, stop_xivoclient
 
 
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"$')
@@ -89,13 +91,13 @@ def when_i_stop_the_xivo_client_xxx(step, instance_name):
 
 @step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')
 def when_i_disable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
-    user_manager_ws.disable_cti_client(firstname, lastname)
+    user_helper.disable_cti_client(firstname, lastname)
     time.sleep(1)
 
 
 @step(u'When I enable access to XiVO Client to user "([^"]*)" "([^"]*)"')
 def when_i_enable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
-    user_manager_ws.enable_cti_client(firstname, lastname)
+    user_helper.enable_cti_client(firstname, lastname)
     time.sleep(1)
 
 

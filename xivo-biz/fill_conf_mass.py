@@ -22,9 +22,9 @@ import subprocess
 
 from lettuce.registry import world
 
-from xivo_acceptance.helpers import line_helper, user_helper, context_helper, trunkcustom_helper
+from xivo_acceptance.helpers import line_helper, user_helper, context_helper, \
+    trunkcustom_helper, user_helper
 from xivo_lettuce import terrain
-from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
@@ -97,7 +97,7 @@ class Prerequisite(object):
             user_data.update(user_data_tpl)
             user_exist = user_helper.is_user_with_name_exists('user', '%i' % (i))
             if not user_exist:
-                user_manager_ws.add_user(user_data)
+                user_helper.add_user(user_data)
 
             line = world.ws.lines.search('10%s' % (i))
 

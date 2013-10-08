@@ -21,7 +21,6 @@ from lettuce import step, world
 
 from xivo_acceptance.helpers import user_helper, agent_helper, queue_helper, \
     schedule_helper
-from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.manager import queue_manager
 from xivo_lettuce import common
 from xivo_lettuce import form
@@ -78,7 +77,7 @@ def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(st
             'line_number': agent_data['number'],
             'line_context': agent_data['context'],
         }
-        user_id = user_manager_ws.add_or_replace_user(user_data)
+        user_id = user_helper.add_or_replace_user(user_data)
         agent_data['users'] = [user_id]
         agent_id = agent_helper.add_or_replace_agent(agent_data)
         agent_ids.append(agent_id)

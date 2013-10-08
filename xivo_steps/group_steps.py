@@ -22,7 +22,6 @@ from xivo_lettuce import form, func, common
 from xivo_lettuce.common import open_url, element_in_list_matches_field
 from xivo_lettuce.manager.group_manager import remove_group_with_name, \
     type_group_name, type_group_number, type_context
-from xivo_lettuce.manager_ws import user_manager_ws
 
 
 @step(u'Given there is no group "([^"]*)"$')
@@ -77,7 +76,7 @@ def given_there_is_a_group_with_n_users(step, group_size):
     group_name = 'random'
     group_members = []
     for i in range(int(group_size)):
-        user_id = user_manager_ws.add_or_replace_user(
+        user_id = user_helper.add_or_replace_user(
             {'firstname': 'random',
              'lastname': str(i),
              'line_number': str(1100 + i),

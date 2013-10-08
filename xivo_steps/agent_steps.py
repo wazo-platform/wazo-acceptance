@@ -19,10 +19,9 @@ from lettuce import step, world
 from hamcrest import assert_that, equal_to
 from selenium.webdriver.common.action_chains import ActionChains
 
-from xivo_acceptance.helpers import agent_helper
+from xivo_acceptance.helpers import agent_helper, user_helper
 from xivo_lettuce import form, func
 from xivo_lettuce.manager import agent_manager, agent_status_manager
-from xivo_lettuce.manager_ws import user_manager_ws
 from xivo_lettuce.common import open_url, remove_line
 from xivo_lettuce.manager.agent_manager import is_agent_in_agent_group, \
     remove_agent_group_if_exist, get_agent_group_id, get_nb_agents_in_group, \
@@ -50,7 +49,7 @@ def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastna
         'line_number': number,
         'line_context': context
     }
-    user_id = user_manager_ws.add_or_replace_user(user_data)
+    user_id = user_helper.add_or_replace_user(user_data)
     agent_data = {
         'firstname': firstname,
         'lastname': lastname,

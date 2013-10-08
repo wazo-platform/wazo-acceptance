@@ -24,7 +24,6 @@ from selenium.webdriver.support.select import Select
 from xivo_acceptance.helpers import user_helper, agent_helper, group_helper
 from xivo_lettuce import common, form
 from xivo_lettuce.manager import user_manager, line_manager
-from xivo_lettuce.manager_ws import user_manager_ws
 
 
 @step(u'^Given there are users with infos:$')
@@ -102,7 +101,7 @@ def given_there_are_users_with_infos(step):
         if user_data.get('mobile_number'):
             user_ws_data['mobile_number'] = user_data['mobile_number']
 
-        user_id = user_manager_ws.add_or_replace_user(user_ws_data)
+        user_id = user_helper.add_or_replace_user(user_ws_data)
 
         if user_data.get('agent_number'):
             agent_helper.delete_agents_with_number(user_data['agent_number'])
@@ -253,7 +252,7 @@ def when_i_remove_the_mobile_number_of_user_group1_group2(step, firstname, lastn
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"$')
 def then_user_is_in_group(step, firstname, lastname, group_name):
     user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
-    assert user_manager_ws.user_id_is_in_group_name(group_name, user_id)
+    assert user_helper.user_id_is_in_group_name(group_name, user_id)
 
 
 @step(u'Then I should be at the user list page$')
@@ -343,7 +342,7 @@ def then_user_has_enablexfer_enabled(step, fullname, enabled_string):
     firstname, lastname = fullname.split(' ', 1)
     expected = enabled_string == 'enabled'
 
-    result = user_manager_ws.has_enabled_transfer(firstname, lastname)
+    result = user_helper.has_enabled_transfer(firstname, lastname)
 
     assert_that(result, equal_to(expected), 'Enable transfer for %s' % fullname)
 
