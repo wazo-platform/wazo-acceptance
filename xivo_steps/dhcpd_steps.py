@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
+
+from xivo_acceptance.helpers import monit_helper
 from xivo_lettuce import form, sysutils
 from xivo_lettuce.terrain import _webi_configured
 from xivo_lettuce.manager import dhcpd_manager, commonconf_manager
@@ -47,12 +49,12 @@ def when_i_desactivate_dhcpd_server(step):
 
 @step(u'Then I see "([^"]*)" monitored by monit')
 def then_i_see_process_monitored_by_monit(step, process_name):
-    assert dhcpd_manager.process_monitored(process_name)
+    assert monit_helper.process_monitored(process_name)
 
 
 @step(u'Then I not see "([^"]*)" monitored by monit')
 def then_i_not_see_process_monitored_by_monit(step, process_name):
-    assert not dhcpd_manager.process_monitored(process_name)
+    assert not monit_helper.process_monitored(process_name)
 
 
 @step(u'Then directory of the dhcpd update not empty')
