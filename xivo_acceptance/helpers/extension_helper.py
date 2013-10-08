@@ -15,14 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_acceptance.helpers import dialpattern_helper, user_helper, \
+    group_helper, incall_helper
 from xivo_dao.data_handler.extension import services as extension_services
-from xivo_lettuce.manager_ws import queue_manager_ws, \
-    incall_manager_ws, meetme_manager_ws
 from xivo_dao.data_handler.exception import ElementDeletionError, \
     ElementNotExistsError
-from xivo_acceptance.helpers import dialpattern_helper, user_helper, \
-    group_helper
+from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_lettuce.manager_ws import queue_manager_ws, meetme_manager_ws
 
 
 def find_extension_by_exten(exten):
@@ -82,7 +81,7 @@ def delete_all():
             elif extension.type == 'group':
                 group_helper.delete_groups_with_number(extension.exten)
             elif extension.type == 'incall':
-                incall_manager_ws.delete_incalls_with_did(extension.exten)
+                incall_helper.delete_incalls_with_did(extension.exten)
             elif extension.type == 'meetme':
                 meetme_manager_ws.delete_meetme_with_confno(extension.exten)
             elif extension.type == 'outcall':

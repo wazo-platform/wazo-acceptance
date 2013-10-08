@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
-from xivo_lettuce.manager_ws.incall_manager_ws import delete_incalls_with_did
+
+from xivo_acceptance.helpers import user_helper, incall_helper
 from xivo_ws.objects.user import User, UserLine, UserVoicemail, UserIncall
-from xivo_acceptance.helpers import user_helper
 
 
 def insert_simple_user(entries):
@@ -82,7 +82,7 @@ def insert_adv_user_with_incall(entries):
                                                               exten=exten,
                                                               context=context,
                                                               mailbox=mailbox)
-        delete_incalls_with_did(entry['incall'])
+        incall_helper.delete_incalls_with_did(entry['incall'])
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']
@@ -108,7 +108,7 @@ def insert_adv_user_full_infos(entries):
                                                               exten=exten,
                                                               context=context,
                                                               mailbox=mailbox)
-        delete_incalls_with_did(entry['incall'])
+        incall_helper.delete_incalls_with_did(entry['incall'])
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']
