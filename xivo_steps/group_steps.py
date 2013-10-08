@@ -23,7 +23,7 @@ from xivo_lettuce.manager.group_manager import remove_group_with_name, \
     type_group_name, type_group_number, type_context
 from xivo_lettuce.manager_ws import group_manager_ws
 from xivo_lettuce.manager_ws import user_manager_ws
-from xivo_lettuce.manager_dao import user_manager_dao
+from xivo_acceptance.helpers import user_helper
 
 
 @step(u'Given there is no group "([^"]*)"$')
@@ -38,7 +38,7 @@ def given_there_is_a_group_with_extension_and_users(step, name, extension):
 
     user_ids = []
     for info in step.hashes:
-        user_id = user_manager_dao.find_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
+        user_id = user_helper.find_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
         user_ids.append(user_id)
 
     group_manager_ws.add_group(name, number, context, user_ids)

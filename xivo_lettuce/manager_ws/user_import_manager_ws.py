@@ -18,7 +18,7 @@
 from lettuce import world
 from xivo_lettuce.manager_ws.incall_manager_ws import delete_incalls_with_did
 from xivo_ws.objects.user import User, UserLine, UserVoicemail, UserIncall
-from xivo_lettuce.manager_dao import user_manager_dao
+from xivo_acceptance.helpers import user_helper
 
 
 def insert_simple_user(entries):
@@ -27,7 +27,7 @@ def insert_simple_user(entries):
         mailbox = entry.get('linenumber', None)
         exten = entry.get('linenumber', None)
         context = entry.get('context', None)
-        user_manager_dao.delete_user_line_extension_voicemail(entry['firstname'],
+        user_helper.delete_user_line_extension_voicemail(entry['firstname'],
                                                               entry['lastname'],
                                                               exten=exten,
                                                               context=context,
@@ -51,7 +51,7 @@ def insert_adv_user_with_mevo(entries):
         mailbox = entry.get('linenumber', None)
         exten = entry.get('linenumber', None)
         context = entry.get('context', None)
-        user_manager_dao.delete_user_line_extension_voicemail(entry['firstname'],
+        user_helper.delete_user_line_extension_voicemail(entry['firstname'],
                                                               entry['lastname'],
                                                               exten=exten,
                                                               context=context,
@@ -77,7 +77,7 @@ def insert_adv_user_with_incall(entries):
         mailbox = entry.get('linenumber', None)
         exten = entry.get('linenumber', None)
         context = entry.get('context', None)
-        user_manager_dao.delete_user_line_extension_voicemail(entry['firstname'],
+        user_helper.delete_user_line_extension_voicemail(entry['firstname'],
                                                               entry['lastname'],
                                                               exten=exten,
                                                               context=context,
@@ -103,7 +103,7 @@ def insert_adv_user_full_infos(entries):
         mailbox = entry.get('linenumber', None)
         exten = entry.get('linenumber', None)
         context = entry.get('context', None)
-        user_manager_dao.delete_user_line_extension_voicemail(entry['firstname'],
+        user_helper.delete_user_line_extension_voicemail(entry['firstname'],
                                                               entry['lastname'],
                                                               exten=exten,
                                                               context=context,

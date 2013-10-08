@@ -29,7 +29,6 @@ from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
-from xivo_lettuce.manager_dao import user_manager_dao
 from xivo_dao.helpers import config as dao_config
 from xivo_dao.helpers import db_manager
 from xivo_acceptance.helpers import line_helper

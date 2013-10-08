@@ -23,8 +23,8 @@ from xivo_lettuce import common, form
 from xivo_lettuce.manager import user_manager, line_manager
 from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
     agent_manager_ws
-from xivo_lettuce.manager_dao import user_manager_dao
 from selenium.common.exceptions import NoSuchElementException
+from xivo_acceptance.helpers import user_helper
 
 
 @step(u'^Given there are users with infos:$')
@@ -119,7 +119,7 @@ def given_there_are_users_with_infos(step):
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
 def given_there_is_a_no_user_1_2(step, firstname, lastname):
-    user_manager_dao.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
+    user_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
 
 
 @step(u'Given user "([^"]*)" "([^"]*)" has the following function keys:')
@@ -166,8 +166,8 @@ def when_i_create_a_user(step):
 
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"$')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
-    user_id = user_manager_dao.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
-    user_manager_dao.delete_user_line_extension_with_firstname_lastname(dest_firstname, dest_lastname)
+    user_id = user_helper.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
+    user_helper.delete_user_line_extension_with_firstname_lastname(dest_firstname, dest_lastname)
     common.open_url('user', 'edit', {'id': user_id})
     user_manager.type_user_names(dest_firstname, dest_lastname)
     form.submit.submit_form()
@@ -175,7 +175,7 @@ def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest
 
 @step(u'When I remove user "([^"]*)" "([^"]*)"$')
 def remove_user(step, firstname, lastname):
-    world.user_id = user_manager_dao.find_user_id_with_firstname_lastname(firstname, lastname)
+    world.user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     common.remove_line('%s %s' % (firstname, lastname))
     common.open_url('user', 'search', {'search': ''})
@@ -199,7 +199,7 @@ def when_i_delete_agent_number_1(step, agent_number):
 
 @step(u'When I add a user "([^"]*)" "([^"]*)" with a function key with type Customized and extension "([^"]*)"$')
 def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastname, extension):
-    user_manager_dao.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
+    user_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'add')
     user_manager.type_user_names(firstname, lastname)
     user_manager.type_func_key('Customized', extension)
@@ -252,7 +252,7 @@ def when_i_remove_the_mobile_number_of_user_group1_group2(step, firstname, lastn
 
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"$')
 def then_user_is_in_group(step, firstname, lastname, group_name):
-    user_id = user_manager_dao.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
     assert user_manager_ws.user_id_is_in_group_name(group_name, user_id)
 
 
@@ -349,5 +349,5 @@ def then_user_has_enablexfer_enabled(step, fullname, enabled_string):
 
 
 def _edit_user(firstname, lastname):
-    user_id = user_manager_dao.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'edit', qry={'id': user_id})

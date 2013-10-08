@@ -19,7 +19,7 @@ import time
 
 from xivo_lettuce import common, sysutils, xivoclient
 from lettuce.registry import world
-from xivo_lettuce.manager_dao import user_manager_dao
+from xivo_acceptance.helpers import user_helper
 
 
 def configure_client(conf_dict):
@@ -175,7 +175,7 @@ def log_in_the_xivo_client():
 
 
 def log_user_in_client(firstname, lastname):
-    user = user_manager_dao.find_user_with_firstname_lastname(firstname, lastname)
+    user = user_helper.find_user_with_firstname_lastname(firstname, lastname)
     conf_dict = {
         'main_server_address': common.get_host_address(),
         'main_server_port': 5003,

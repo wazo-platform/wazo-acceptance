@@ -23,7 +23,7 @@ from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
 from xivo_lettuce.manager import queue_manager
 from xivo_lettuce import common
 from xivo_lettuce import form
-from xivo_lettuce.manager_dao import user_manager_dao
+from xivo_acceptance.helpers import user_helper
 
 
 @step(u'^Given there are queues with infos:$')
@@ -47,7 +47,7 @@ def convert_user_numbers(user_numbers, context):
     users = []
     user_number_list = user_numbers.split(',')
     for user_number in user_number_list:
-        user = user_manager_dao.get_by_exten_context(user_number, context)
+        user = user_helper.get_by_exten_context(user_number, context)
         if user:
             users.extend([user.id])
     return users
