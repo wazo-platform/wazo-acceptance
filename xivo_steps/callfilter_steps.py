@@ -17,7 +17,7 @@
 
 from hamcrest import assert_that, equal_to
 from lettuce import step
-from xivo_lettuce.manager import callfilter_manager, user_manager
+from xivo_lettuce.manager_webi import callfilter_manager, user_manager
 from xivo_lettuce import common
 
 

@@ -21,11 +21,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.helpers import agent_helper, user_helper
 from xivo_lettuce import form, func
-from xivo_lettuce.manager import agent_manager
+from xivo_lettuce.manager_webi import agent_manager
 from xivo_lettuce.common import open_url, remove_line
-from xivo_lettuce.manager.agent_manager import is_agent_in_agent_group, \
-    remove_agent_group_if_exist, get_agent_group_id, get_nb_agents_in_group, \
-    select_agent_group_list
 
 
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
@@ -97,7 +94,7 @@ def when_i_create_an_agent(step, firstname, lastname, number):
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)" in group "([^"]*)"$')
 def when_i_create_an_agent_in_group(step, firstname, lastname, number, agent_group):
     agent_helper.delete_agents_with_number(number)
-    group_id = get_agent_group_id(agent_group)
+    group_id = agent_manager.get_agent_group_id(agent_group)
     open_url('agent', 'addagent', {'group': group_id})
     agent_manager.type_agent_info(firstname, lastname, number)
     form.submit.submit_form()
@@ -142,7 +139,7 @@ def when_i_change_the_agent_password_to_group1(step, number, password):
 
 @step(u'When I create an agent group "([^"]*)"')
 def when_i_create_an_agent_group(step, agent_group_name):
-    remove_agent_group_if_exist(agent_group_name)
+    agent_manager.remove_agent_group_if_exist(agent_group_name)
     open_url('agent', 'add')
     form.input.edit_text_field_with_id('it-agentgroup-name', agent_group_name)
     form.submit.submit_form()
@@ -152,24 +149,24 @@ def when_i_create_an_agent_group(step, agent_group_name):
 def when_i_select_an_agent_group(step, agent_group_list):
     open_url('agent', 'list')
     list = agent_group_list.split(',')
-    select_agent_group_list(list)
+    agent_manager.select_agent_group_list(list)
 
 
 @step(u'Then agent "([^"]*)" is displayed in the list of "([^"]*)" agent group')
 def then_agent_group1_is_displayed_in_the_list_of_group2_agent_group(step, agent_name, agent_group):
-    assert is_agent_in_agent_group(agent_group, agent_name)
+    assert agent_manager.is_agent_in_agent_group(agent_group, agent_name)
 
 
 @step(u'Then agent "([^"]*)" is not displayed in the list of "([^"]*)" agent group')
 def then_agent_is_not_displayed_in_the_list_of_default_agent_group(step, agent_name, agent_group):
-    assert not is_agent_in_agent_group(agent_group, agent_name)
+    assert not agent_manager.is_agent_in_agent_group(agent_group, agent_name)
 
 
 @step(u'Then agent group "([^"]*)" has "([^"]*)" agents')
 def then_agent_group_has_x_agents(step, agent_group, nb_agents):
     nb_agents = int(nb_agents)
 
-    assert_that(get_nb_agents_in_group(agent_group), equal_to(nb_agents))
+    assert_that(agent_manager.get_nb_agents_in_group(agent_group), equal_to(nb_agents))
 
 
 @step(u'Then the agent "([^"]*)" password is "([^"]*)"')

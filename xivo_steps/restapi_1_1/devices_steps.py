@@ -18,7 +18,7 @@
 from hamcrest import *
 from lettuce import step, world
 
-from xivo_lettuce.manager import provd_cfg_dev_manager
+from xivo_lettuce.manager_webi import provd_cfg_dev_manager
 from xivo_lettuce.manager_restapi import device_ws
 from xivo_acceptance.helpers import device_helper
 

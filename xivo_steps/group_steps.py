@@ -20,8 +20,7 @@ from lettuce import step
 from xivo_acceptance.helpers import user_helper, group_helper
 from xivo_lettuce import form, func, common
 from xivo_lettuce.common import open_url, element_in_list_matches_field
-from xivo_lettuce.manager.group_manager import remove_group_with_name, \
-    type_group_name, type_group_number, type_context
+from xivo_lettuce.manager_webi import group_manager
 
 
 @step(u'Given there is no group "([^"]*)"$')
@@ -63,7 +62,7 @@ def when_i_create_group_with_number_with_errors(step, group_name, group_number):
 
 @step(u'When I remove the group "([^"]*)"')
 def when_i_remove_the_group_1(step, group_name):
-    remove_group_with_name(group_name)
+    group_manager.remove_group_with_name(group_name)
 
 
 @step(u'Then I see a group "([^"]*)" with no users')
@@ -87,6 +86,6 @@ def given_there_is_a_group_with_n_users(step, group_size):
 
 
 def _type_group_name_number_context(name, number, context='default'):
-    type_group_name(name)
-    type_group_number(number)
-    type_context(context)
+    group_manager.type_group_name(name)
+    group_manager.type_group_number(number)
+    group_manager.type_context(context)

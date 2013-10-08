@@ -18,8 +18,8 @@
 from hamcrest import assert_that, contains_string
 from lettuce import step, world
 
-from xivo_lettuce.manager import provd_general_manager as provdg
-from xivo_lettuce.manager import provd_plugins_manager as provdp
+from xivo_lettuce.manager_webi import provd_general_manager as provdg
+from xivo_lettuce.manager_webi import provd_plugins_manager as provdp
 from xivo_lettuce import sysutils
 
 

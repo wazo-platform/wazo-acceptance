@@ -23,7 +23,7 @@ from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.helpers import user_helper, agent_helper, group_helper
 from xivo_lettuce import common, form
-from xivo_lettuce.manager import user_manager, line_manager
+from xivo_lettuce.manager_webi import user_manager, line_manager
 
 
 @step(u'^Given there are users with infos:$')

@@ -21,7 +21,7 @@ from hamcrest import assert_that, has_items, is_not
 from xivo_lettuce import assets
 from xivo_lettuce.aastra import AastraPhonebookBrowser
 from xivo_lettuce.common import find_line
-from xivo_lettuce.manager import phonebook_manager
+from xivo_lettuce.manager_webi import phonebook_manager
 
 
 @step(u'Given "([^"]*)" is not in the phonebook')

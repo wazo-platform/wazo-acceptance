@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from xivo_lettuce.manager import profile_manager
+from xivo_lettuce.manager_webi import profile_manager
 from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import common, form
 from hamcrest import assert_that, has_item

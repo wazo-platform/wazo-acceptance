@@ -24,7 +24,7 @@ from xivo_acceptance.helpers import line_helper, callgen_helper, cti_helper
 from xivo_lettuce import assets, func
 from xivo_lettuce.common import open_url, find_line, edit_line
 from xivo_lettuce.form import submit
-from xivo_lettuce.manager import directory_manager
+from xivo_lettuce.manager_webi import directory_manager
 
 
 @step(u'Given the following directory configurations exist:')

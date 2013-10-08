@@ -18,7 +18,7 @@
 from lettuce import step
 
 from xivo_acceptance.helpers import schedule_helper
-from xivo_lettuce.manager import schedule_manager
+from xivo_lettuce.manager_webi import schedule_manager
 
 
 @step(u'Given I have a schedule "([^"]*)" in "([^"]*)" with the following schedules:')

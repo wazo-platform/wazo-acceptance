@@ -20,7 +20,7 @@ from lettuce import step
 from xivo_acceptance.helpers import monit_helper
 from xivo_lettuce import form, sysutils
 from xivo_lettuce.terrain import _webi_configured
-from xivo_lettuce.manager import dhcpd_manager, commonconf_manager
+from xivo_lettuce.manager_webi import dhcpd_manager, commonconf_manager
 from xivo_lettuce.common import open_url
 from xivo_lettuce.form.checkbox import Checkbox
 

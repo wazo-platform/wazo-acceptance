@@ -19,7 +19,7 @@ import time
 from lettuce import step, world
 from hamcrest import assert_that, equal_to
 from xivo_lettuce import common, logs
-from xivo_lettuce.manager import profile_manager
+from xivo_lettuce.manager_webi import profile_manager
 
 
 @step(u'Given there is no CTI profile "([^"]*)"$')

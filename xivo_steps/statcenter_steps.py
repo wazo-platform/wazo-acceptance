@@ -20,7 +20,7 @@ from hamcrest import *
 from lettuce import step
 
 from xivo_acceptance.helpers import stat_helper, queuelog_helper
-from xivo_lettuce.manager import stat_manager
+from xivo_lettuce.manager_webi import stat_manager
 
 
 @step(u'^Given there are a corrupt entry in queue_log$')

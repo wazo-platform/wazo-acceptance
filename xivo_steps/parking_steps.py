@@ -17,7 +17,7 @@
 
 from lettuce import step
 
-from xivo_lettuce.manager import parking_manager
+from xivo_lettuce.manager_webi import parking_manager
 
 
 @step(u'When I change the parking configuration to be:')

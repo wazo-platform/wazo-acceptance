@@ -20,7 +20,7 @@ from lettuce import step
 from xivo_lettuce import form
 from xivo_lettuce import logs
 from xivo_lettuce.common import open_url
-from xivo_lettuce.manager import general_settings_xivo_manager
+from xivo_lettuce.manager_webi import general_settings_xivo_manager
 
 
 @step(u'Given a live reload configuration is enable')

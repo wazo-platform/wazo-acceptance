@@ -17,7 +17,7 @@
 
 from lettuce import world
 from provd.rest.client.client import new_provisioning_client
-from xivo_lettuce.manager import provd_general_manager
+from xivo_lettuce.manager_webi import provd_general_manager
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 
 

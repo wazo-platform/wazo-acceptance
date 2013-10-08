@@ -19,10 +19,10 @@ from lettuce import step
 from hamcrest import assert_that, equal_to
 
 from xivo_acceptance.helpers import context_helper, cti_helper
-from xivo_lettuce.manager import ldap_manager
-from xivo_lettuce.manager import directory_manager
-from xivo_lettuce.manager import user_manager
-from xivo_lettuce.manager import queue_manager
+from xivo_lettuce.manager_webi import ldap_manager
+from xivo_lettuce.manager_webi import directory_manager
+from xivo_lettuce.manager_webi import user_manager
+from xivo_lettuce.manager_webi import queue_manager
 from xivo_lettuce import func
 
 

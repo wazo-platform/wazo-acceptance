@@ -18,7 +18,7 @@
 from lettuce.decorators import step
 
 from xivo_acceptance.helpers import skill_rule_helper
-from xivo_lettuce.manager import skill_rule_manager
+from xivo_lettuce.manager_webi import skill_rule_manager
 from xivo_lettuce import common, form
 
 

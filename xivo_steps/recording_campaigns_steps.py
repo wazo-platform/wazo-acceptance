@@ -17,7 +17,7 @@
 
 from lettuce import step
 from xivo_lettuce import common
-from xivo_lettuce.manager import campaign_manager
+from xivo_lettuce.manager_webi import campaign_manager
 
 
 @step(u'Given there is no campaign "([^"]*)"$')

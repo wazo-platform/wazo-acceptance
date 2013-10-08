@@ -19,7 +19,7 @@ from lettuce import step
 
 from xivo_acceptance.helpers import incall_helper
 from xivo_lettuce import form, common
-from xivo_lettuce.manager import incall_manager as incall_man
+from xivo_lettuce.manager_webi import incall_manager as incall_man
 
 
 @step(u'Given there is no incall "([^"]*)"$')

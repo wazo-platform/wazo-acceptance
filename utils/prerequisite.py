@@ -23,7 +23,7 @@ from lettuce import world
 from xivo_acceptance.helpers import context_helper, trunksip_helper
 from xivo_lettuce.terrain import initialize, deinitialize
 from xivo_lettuce.common import open_url
-from xivo_lettuce.manager import provd_general_manager
+from xivo_lettuce.manager_webi import provd_general_manager
 from xivo_lettuce.form import submit
 
 

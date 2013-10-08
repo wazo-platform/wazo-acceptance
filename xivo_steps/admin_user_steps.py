@@ -20,7 +20,7 @@ from lettuce import step, world
 from xivo_lettuce import urls
 from xivo_lettuce import common
 from xivo_lettuce.common import open_url, webi_logout
-from xivo_lettuce.manager import admin_user_manager
+from xivo_lettuce.manager_webi import admin_user_manager
 
 import time
 

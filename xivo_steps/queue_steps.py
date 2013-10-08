@@ -21,7 +21,7 @@ from lettuce import step, world
 
 from xivo_acceptance.helpers import user_helper, agent_helper, queue_helper, \
     schedule_helper
-from xivo_lettuce.manager import queue_manager
+from xivo_lettuce.manager_webi import queue_manager
 from xivo_lettuce import common
 from xivo_lettuce import form
 

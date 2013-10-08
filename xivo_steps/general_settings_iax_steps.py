@@ -17,7 +17,7 @@
 
 from lettuce import step
 from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce.manager import general_settings_iax_manager
+from xivo_lettuce.manager_webi import general_settings_iax_manager
 from xivo_lettuce import form, common
 from xivo_lettuce.form.checkbox import Checkbox
 

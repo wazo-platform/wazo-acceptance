@@ -17,7 +17,7 @@
 
 import time
 from lettuce import step, world
-from xivo_lettuce.manager import provd_general_manager as provd
+from xivo_lettuce.manager_webi import provd_general_manager as provd
 from xivo_lettuce.common import open_url
 
 PROXY_FIELDS = ['http_proxy', 'ftp_proxy', 'https_proxy']

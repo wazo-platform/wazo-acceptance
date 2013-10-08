@@ -19,7 +19,7 @@ from hamcrest import assert_that, has_entries
 from lettuce import step
 
 from xivo_acceptance.helpers import meetme_helper, cti_helper
-from xivo_lettuce.manager import meetme_manager
+from xivo_lettuce.manager_webi import meetme_manager
 
 
 @step(u'Given there are no conference rooms')

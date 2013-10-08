@@ -20,11 +20,11 @@ import time
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from xivo_lettuce.common import open_url, find_line
-from xivo_lettuce.manager.provd_general_manager import update_plugin_server_url
+from xivo_lettuce.manager_webi import provd_general_manager
 
 
 def update_plugin_list(url, check_confirmation=True):
-    update_plugin_server_url(url)
+    provd_general_manager.update_plugin_server_url(url)
     open_url('provd_plugin')
     world.browser.find_element_by_id('toolbar-bt-update').click()
     wait_time = 7

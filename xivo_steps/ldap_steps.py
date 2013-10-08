@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from xivo_lettuce.manager import ldap_manager
+from xivo_lettuce.manager_webi import ldap_manager
 from xivo_lettuce import assets, common, sysutils, ldap_utils
 
 
