@@ -108,10 +108,11 @@ def _setup_browser():
     resolution = world.config.get('browser', 'resolution')
 
     from pyvirtualdisplay import Display
-    browser_size = tuple(resolution.split('x'))
+    browser_size = width, height = tuple(resolution.split('x', 1))
     world.display = Display(visible=visible, size=browser_size)
     world.display.start()
     world.browser = XiVOBrowser()
+    world.browser.set_window_size(width, height)
     world.timeout = timeout
 
 
