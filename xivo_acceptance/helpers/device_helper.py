@@ -20,22 +20,10 @@ import requests
 
 from lettuce.registry import world
 
-from xivo_dao.data_handler.device import services as device_services
-from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+from xivo_lettuce.remote_py_cmd import remote_exec
 
 AUTOPROV_URL = 'https://%s/xivo/configuration/json.php/restricted/provisioning/autoprov?act=configure'
 HEADERS = {'Content-Type': 'application/json'}
-
-
-def find_device_with_mac(mac):
-    remote_exec_with_result(_find_device_with_mac, mac=mac)
-
-
-def _find_device_with_mac(channel, mac):
-    devices = device_services.find_all(search=mac)
-    if len(devices) != 1:
-        raise Exception('expecting 1 device with mac %s' % mac)
-    channel.send(devices[0])
 
 
 def provision_device_using_webi(provcode, device_ip):

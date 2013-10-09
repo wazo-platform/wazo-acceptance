@@ -18,7 +18,7 @@
 from lettuce import world
 from execnet.gateway_base import RemoteError
 
-from xivo_acceptance.helpers import voicemail_helper, device_helper, group_helper
+from xivo_acceptance.helpers import voicemail_helper, group_helper, provd_helper
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
@@ -233,10 +233,10 @@ def _delete_all(channel):
         except ElementDeletionError:
             pass
 
-
 '''
     #TODO refactor to use dao
 '''
+
 
 def add_user(data_dict):
     user = User()
@@ -266,8 +266,8 @@ def add_user(data_dict):
         if 'protocol' in data_dict:
             user.line.protocol = data_dict['protocol']
         if 'device' in data_dict:
-            device = device_helper.find_device_with_mac(data_dict['device'])
-            device_id = str(device.id)
+            device = provd_helper.find_by_mac(data_dict['device'])
+            device_id = str(device['id'])
             user.line.device_id = device_id
 
     if 'voicemail_name' in data_dict and 'voicemail_number' in data_dict:
