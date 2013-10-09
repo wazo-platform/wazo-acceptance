@@ -26,9 +26,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 
-
-class MissingTranslationException(Exception):
-    pass
+from xivo_lettuce.exception import MissingTranslationException
 
 
 class XiVOBrowser(webdriver.Firefox):
