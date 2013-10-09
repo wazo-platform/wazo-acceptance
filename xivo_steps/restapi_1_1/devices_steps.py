@@ -18,50 +18,49 @@
 from hamcrest import *
 from lettuce import step, world
 
-from xivo_acceptance.action.webi import provd_cfg_dev as provd_cfg_dev_action_webi
 from xivo_acceptance.action.restapi import device_action_restapi
-from xivo_acceptance.helpers import device_helper
+from xivo_acceptance.helpers import device_helper, provd_helper
 
 
 @step(u'Given there are no devices with mac "([^"]*)"')
 def given_there_are_no_devices_with_mac_group1(step, mac):
-    provd_cfg_dev_action_webi.delete_device_with_mac(mac)
+    provd_helper.delete_device_with_mac(mac)
 
 
 @step(u'Given there are no devices with id "([^"]*)"')
 def given_there_are_no_devices_with_id_group1(step, device_id):
-    provd_cfg_dev_action_webi.delete_device(device_id)
+    provd_helper.delete_device(device_id)
 
 
 @step(u'Given I only have the following devices:')
 def given_there_are_the_following_devices(step):
-    provd_cfg_dev_action_webi.delete_all()
+    provd_helper.delete_all()
     for deviceinfo in step.hashes:
-        provd_cfg_dev_action_webi.create_device(deviceinfo)
+        provd_helper.create_device(deviceinfo)
 
 
 @step(u'Given I have the following devices:')
 def given_i_have_the_following_devices(step):
     for deviceinfo in step.hashes:
         if 'mac' in deviceinfo:
-            provd_cfg_dev_action_webi.delete_device_with_mac(deviceinfo['mac'])
+            provd_helper.delete_device_with_mac(deviceinfo['mac'])
         if 'ip' in deviceinfo:
-            provd_cfg_dev_action_webi.delete_device_with_ip(deviceinfo['ip'])
-        provd_cfg_dev_action_webi.create_device(deviceinfo)
+            provd_helper.delete_device_with_ip(deviceinfo['ip'])
+        provd_helper.create_device(deviceinfo)
 
 
 @step(u'Given there exists the following device templates:')
 def given_there_exists_the_following_device_template(step):
     for template in step.hashes:
-        provd_cfg_dev_action_webi.add_or_replace_device_template(template)
+        provd_helper.add_or_replace_device_template(template)
 
 
 @step(u'Given I only have (\d+) devices')
 def given_i_only_have_n_devices(step, nb_devices):
     nb_devices = int(nb_devices)
-    provd_cfg_dev_action_webi.remove_devices_over(nb_devices)
+    provd_helper.remove_devices_over(nb_devices)
 
-    total_devices = provd_cfg_dev_action_webi.total_devices()
+    total_devices = provd_helper.total_devices()
     if total_devices < nb_devices:
         device_helper.create_dummy_devices(nb_devices - total_devices)
 
@@ -107,7 +106,7 @@ def when_i_go_get_the_device_with_id_group1(step, device_id):
 
 @step(u'When I go get the device with mac "([^"]*)" using its id')
 def when_i_go_get_the_device_with_mac_group1_using_its_id(step, mac):
-    device = provd_cfg_dev_action_webi.find_by_mac(mac)
+    device = provd_helper.find_by_mac(mac)
     world.response = device_action_restapi.get_device(device['id'])
 
 
@@ -134,13 +133,13 @@ def when_i_remove_line_id_group1_from_device_group2(step, line_id, device_id):
 
 @step(u'When I edit the device with mac "([^"]*)" using no parameters')
 def when_i_edit_the_device_with_mac_group1_using_no_parameters(step, mac):
-    device = provd_cfg_dev_action_webi.find_by_mac(mac)
+    device = provd_helper.find_by_mac(mac)
     world.response = device_action_restapi.edit_device(device['id'], {})
 
 
 @step(u'When I edit the device with mac "([^"]*)" using the following parameters:')
 def when_i_edit_the_device_with_mac_group1_using_the_following_parameters(step, mac):
-    device = provd_cfg_dev_action_webi.find_by_mac(mac)
+    device = provd_helper.find_by_mac(mac)
     parameters = step.hashes[0]
     world.response = device_action_restapi.edit_device(device['id'], parameters)
 
@@ -173,7 +172,7 @@ def then_i_get_a_list_containing_the_following_devices(step):
 
 @step(u'Then the list contains the same number of devices as on the provisioning server')
 def then_the_list_contains_the_same_number_of_devices_as_on_the_provisioning_server(step):
-    total_provd = provd_cfg_dev_action_webi.total_devices()
+    total_provd = provd_helper.total_devices()
 
     device_list = world.response.data['items']
 
