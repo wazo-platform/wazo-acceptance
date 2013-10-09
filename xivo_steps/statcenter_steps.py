@@ -50,8 +50,13 @@ def given_i_have_the_following_queue_log_entries(step):
 
 @step(u'^Given I have the following queue_log entries in the last hour:$')
 def given_i_have_to_following_queue_log_entries_in_the_last_hour(step):
-    now = datetime.now()
-    last_hour = datetime(now.year, now.month, now.day, now.hour - 1, 0, 0, 0)
+    one_hour_ago = datetime.now() - timedelta(hours=1)
+    last_hour = datetime(
+        one_hour_ago.year,
+        one_hour_ago.month,
+        one_hour_ago.day,
+        one_hour_ago.hour
+    )
     for entry in step.hashes:
         t = datetime.strptime(entry['time'], "%M:%S.%f")
         offset = timedelta(minutes=t.minute, seconds=t.second, microseconds=t.microsecond)
