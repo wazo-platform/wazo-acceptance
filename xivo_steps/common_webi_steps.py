@@ -16,9 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from xivo_lettuce.common import element_is_in_list, element_is_not_in_list
-from xivo_lettuce import form
 from selenium.common.exceptions import NoSuchElementException
+
+from xivo_lettuce import form
+from xivo_lettuce.common import element_is_in_list, element_is_not_in_list
 
 
 @step(u'Then ([a-z ]*) "([^"]*)" is displayed in the list$')

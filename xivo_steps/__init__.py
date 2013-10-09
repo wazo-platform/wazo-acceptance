@@ -37,6 +37,7 @@ from dhcpd_steps import *
 from directed_pickup_steps import *
 from directory_steps import *
 from files_steps import *
+from funckeys_steps import *
 from general_settings_iax_steps import *
 from general_settings_sccp_steps import *
 from general_settings_sip_steps import *
