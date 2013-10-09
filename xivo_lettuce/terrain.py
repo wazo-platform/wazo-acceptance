@@ -23,7 +23,6 @@ import tempfile
 import xivo_ws
 
 from lettuce import before, after, world
-from selenium.webdriver import FirefoxProfile
 from sqlalchemy.exc import OperationalError
 from xivobrowser import XiVOBrowser
 
@@ -109,24 +108,12 @@ def _setup_browser():
     resolution = world.config.get('browser', 'resolution')
 
     from pyvirtualdisplay import Display
-    profile = _setup_browser_profile()
     browser_size = (resolution.split('x')[0], resolution.split('x')[1])
     world.display = Display(visible=visible, size=browser_size)
     world.display.start()
-    world.browser = XiVOBrowser(firefox_profile=profile)
+    world.browser = XiVOBrowser()
     world.timeout = timeout
     world.stocked_infos = {}
-
-
-def _setup_browser_profile():
-    fp = FirefoxProfile()
-
-    fp.set_preference("browser.download.folderList", 2)
-    fp.set_preference("browser.download.manager.showWhenStarting", False)
-    fp.set_preference("browser.download.dir", "/tmp/")
-    fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download")
-
-    return fp
 
 
 def _setup_dao():
