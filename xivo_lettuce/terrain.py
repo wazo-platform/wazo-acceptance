@@ -113,7 +113,6 @@ def _setup_browser():
     world.display.start()
     world.browser = XiVOBrowser()
     world.timeout = timeout
-    world.stocked_infos = {}
 
 
 def _setup_dao():
@@ -135,7 +134,6 @@ def _setup_login_infos():
     world.host = 'http://%s/' % world.config.get('xivo', 'hostname')
     world.login = world.config.get('login_infos', 'login')
     world.password = world.config.get('login_infos', 'password')
-    world.logged = False
 
 
 def _setup_ssh_client_xivo():

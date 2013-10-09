@@ -38,7 +38,6 @@ def webi_login(login, password, language):
         'go': '%252Fservice%252Fipbx%252Findex.php'
     }
     open_url('login', None, query)
-    world.logged = True
 
 
 def webi_login_as_default():
