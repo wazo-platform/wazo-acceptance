@@ -23,12 +23,12 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
+from xivo_acceptance.action.webi import outcall as outcall_action_webi
 from xivo_acceptance.helpers import context_helper, outcall_helper, \
     trunksip_helper
 from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url, \
     remove_line
 from xivo_lettuce import form
-from xivo_lettuce.manager_webi import outcall_manager
 
 
 @step(u'Given there is no outcall "([^"]*)"')
@@ -117,7 +117,7 @@ def when_i_remove_extension_patterns_from_outcall_1(step, outcall_name):
 
     for outcall_extension in step.hashes:
         extension_pattern = outcall_extension['extension_pattern']
-        delete_button = outcall_manager.exten_line(extension_pattern).find_element_by_id('lnk-del-row')
+        delete_button = outcall_action_webi.exten_line(extension_pattern).find_element_by_id('lnk-del-row')
         delete_button.click()
         # Wait for the Javascript to remove the line
         time.sleep(1)
@@ -148,7 +148,7 @@ def then_the_outcall_1_has_the_extension_patterns(step, outcall_name):
 
     for outcall_extension in step.hashes:
         extension_pattern = outcall_extension['extension_pattern']
-        extension_pattern_input = outcall_manager.exten_line(extension_pattern).find_element_by_xpath(".//input[@name='dialpattern[exten][]']")
+        extension_pattern_input = outcall_action_webi.exten_line(extension_pattern).find_element_by_xpath(".//input[@name='dialpattern[exten][]']")
         assert_that(extension_pattern_input, not_none())
 
 
@@ -161,7 +161,7 @@ def then_the_outcall_1_does_not_have_extension_patterns(step, outcall_name):
     for outcall_extension in step.hashes:
         extension_pattern = outcall_extension['extension_pattern']
         try:
-            outcall_manager.exten_line(extension_pattern)
+            outcall_action_webi.exten_line(extension_pattern)
         except NoSuchElementException:
             pass
         else:

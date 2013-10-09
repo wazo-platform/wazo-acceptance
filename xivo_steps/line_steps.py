@@ -20,13 +20,14 @@ import re
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
+
+from xivo_acceptance.action.webi import line as line_action_webi
+from xivo_acceptance.helpers import line_helper
 from xivo_lettuce import common
 from xivo_lettuce.common import find_line, open_url, remove_line, edit_line
-from xivo_lettuce.manager_webi import line_manager
 from xivo_lettuce import form
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.form.list_pane import ListPane
-from xivo_acceptance.helpers import line_helper
 
 
 @step(u'Given there are no custom lines with interface beginning with "([^"]*)"')
@@ -102,7 +103,7 @@ def when_i_add_the_custom_codec_group1_to_the_line_with_number_group2(step, code
 
 @step(u'When I disable custom codecs for this line')
 def when_i_disable_custom_codecs_for_this_line(step):
-    line_manager.search_line_number(world.id)
+    line_action_webi.search_line_number(world.id)
     edit_line(world.id)
     common.go_to_tab('Signalling')
     Checkbox.from_label("Customize codecs:").uncheck()
@@ -190,7 +191,7 @@ def then_the_line_1_has_the_following_line_options(step, line_number):
         for key, value in line_data.iteritems():
             if key == 'Call limit':
                 common.go_to_tab('IPBX Infos')
-                assert line_manager.get_value_from_ipbx_infos_tab('call_limit') == value
+                assert line_action_webi.get_value_from_ipbx_infos_tab('call_limit') == value
             elif key == 'NAT':
                 common.go_to_tab('General')
                 nat_select = world.browser.find_element_by_label('NAT')
@@ -208,7 +209,7 @@ def then_the_line_1_has_the_following_line_options(step, line_number):
                 assert ip_address_value == value
             elif key == 'Caller ID':
                 common.go_to_tab('IPBX Infos')
-                assert line_manager.get_value_from_ipbx_infos_tab('callerid') == value
+                assert line_action_webi.get_value_from_ipbx_infos_tab('callerid') == value
             else:
                 raise Exception('%s is not a valid key' % key)
 

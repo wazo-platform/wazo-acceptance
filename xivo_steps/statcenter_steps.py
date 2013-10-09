@@ -19,8 +19,8 @@ from datetime import datetime, timedelta
 from hamcrest import *
 from lettuce import step
 
+from xivo_acceptance.action.webi import stat as stat_action_webi
 from xivo_acceptance.helpers import stat_helper, queuelog_helper
-from xivo_lettuce.manager_webi import stat_manager
 
 
 @step(u'^Given there are a corrupt entry in queue_log$')
@@ -67,13 +67,13 @@ def given_i_have_to_following_queue_log_entries_in_the_last_hour(step):
 
 @step(u'^Given I clear and generate the statistics cache$')
 def given_i_clear_and_generate_the_statistics_cache(step):
-    stat_manager.regenerate_cache()
+    stat_action_webi.regenerate_cache()
 
 
 @step(u'^Given I clear and generate the statistics cache twice$')
 def given_i_clear_and_generate_the_statistics_cache_twice(step):
-    stat_manager.regenerate_cache()
-    stat_manager.generate_cache()
+    stat_action_webi.regenerate_cache()
+    stat_action_webi.generate_cache()
 
 
 @step(u'Given there is no "([A-Z_]+)" entry for agent "([^"]*)"')
@@ -104,7 +104,7 @@ def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
 
 @step(u'^When execute xivo-stat$')
 def when_execute_xivo_stats(step):
-    stat_manager.generate_cache()
+    stat_action_webi.generate_cache()
 
 
 @step('^Then I don\'t should not have an error$')
@@ -128,21 +128,21 @@ def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, e
 
 @step(u'^Then I should have the following statististics on "(.+)" on "(.+)" on configuration "(\S+)":$')
 def then_i_should_have_stats_for_config(step, queue_name, day, config_name):
-    stat_manager.open_queue_stat_page_on_day(queue_name, day, config_name)
-    stat_manager.check_queue_statistic(step.hashes)
+    stat_action_webi.open_queue_stat_page_on_day(queue_name, day, config_name)
+    stat_action_webi.check_queue_statistic(step.hashes)
 
 
 @step(u'^Then I should have the following statististics on agent "(.+)" on "(.+)" on configuration "(\S+)":$')
 def then_i_should_have_stats_on_agent_for_config(step, agent_number, day, config_name):
-    stat_manager.open_agent_stat_page_on_day(agent_number, day, config_name)
-    stat_manager.check_agent_statistic(step.hashes)
+    stat_action_webi.open_agent_stat_page_on_day(agent_number, day, config_name)
+    stat_action_webi.check_agent_statistic(step.hashes)
 
 
 @step(u'Then I should have "([^"]*)" minutes login in the last hour on agent "([^"]*)" on configuration "([^"]*)":')
 def then_i_should_have_group1_minutes_login_in_the_last_hour_on_agent_group2_on_configuration_group3(step, login_time, agent_number, config_name):
     now = datetime.now()
     day = datetime(now.year, now.month, now.day)
-    stat_manager.open_agent_stat_page_on_day(agent_number, day, config_name)
+    stat_action_webi.open_agent_stat_page_on_day(agent_number, day, config_name)
 
     hour = datetime(now.year, now.month, now.day, now.hour - 1, 0, 0, 0)
-    stat_manager.check_agent_login_time(login_time, hour)
+    stat_action_webi.check_agent_login_time(login_time, hour)

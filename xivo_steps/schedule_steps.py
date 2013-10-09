@@ -17,8 +17,8 @@
 
 from lettuce import step
 
+from xivo_acceptance.action.webi import schedule as schedule_action_webi
 from xivo_acceptance.helpers import schedule_helper
-from xivo_lettuce.manager_webi import schedule_manager
 
 
 @step(u'Given I have a schedule "([^"]*)" in "([^"]*)" with the following schedules:')
@@ -31,9 +31,9 @@ def when_i_delete_the_group1_group2_schedule(step, order, status, name):
     if order != 'Second':
         assert False, 'This step not completely implemented'
     if status == 'Closed':
-        schedule_manager.remove_closed_schedule(name, 2)
+        schedule_action_webi.remove_closed_schedule(name, 2)
     elif status == 'Opened':
-        schedule_manager.remove_opened_schedule(name, 2)
+        schedule_action_webi.remove_opened_schedule(name, 2)
     else:
         assert False, 'Unknown schedule status %s' % status
 

@@ -17,7 +17,9 @@
 
 import json
 import time
+
 from lettuce.registry import world
+
 from xivo_lettuce.common import open_url, get_value_with_label
 
 

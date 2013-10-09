@@ -21,9 +21,10 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
+from xivo_acceptance.action.webi import user as user_action_webi
+from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import user_helper, agent_helper, group_helper
 from xivo_lettuce import common, form
-from xivo_lettuce.manager_webi import user_manager, line_manager
 
 
 @step(u'^Given there are users with infos:$')
@@ -134,7 +135,7 @@ def given_user_has_the_following_function_keys(step, firstname, lastname):
     }
     for key_definition in step.hashes:
         key = dict((name_map[k], v) for k, v in key_definition.iteritems())
-        user_manager.type_func_key(**key)
+        user_action_webi.type_func_key(**key)
     form.submit.submit_form()
 
 
@@ -143,7 +144,7 @@ def when_i_reorder_group1_group2_s_function_keys_such_that(step, firstname, last
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     common.edit_line("%s %s" % (firstname, lastname))
     pairs = [(k['Old'], k['New']) for k in step.hashes]
-    user_manager.change_key_order(pairs)
+    user_action_webi.change_key_order(pairs)
     form.submit.submit_form()
 
 
@@ -151,9 +152,9 @@ def when_i_reorder_group1_group2_s_function_keys_such_that(step, firstname, last
 def when_i_create_a_user(step):
     common.open_url('user', 'add')
     user_properties = step.hashes[0]
-    user_manager.type_user_names(user_properties['firstname'], user_properties.get('lastname', ''))
+    user_action_webi.type_user_names(user_properties['firstname'], user_properties.get('lastname', ''))
     if 'number' in user_properties:
-        user_manager.user_form_add_line(
+        user_action_webi.user_form_add_line(
             linenumber=user_properties['number'],
             protocol=user_properties['protocol'],
             device=user_properties.get('device', None),
@@ -168,7 +169,7 @@ def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest
     user_id = user_helper.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
     user_helper.delete_user_line_extension_with_firstname_lastname(dest_firstname, dest_lastname)
     common.open_url('user', 'edit', {'id': user_id})
-    user_manager.type_user_names(dest_firstname, dest_lastname)
+    user_action_webi.type_user_names(dest_firstname, dest_lastname)
     form.submit.submit_form()
 
 
@@ -200,52 +201,52 @@ def when_i_delete_agent_number_1(step, agent_number):
 def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastname, extension):
     user_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'add')
-    user_manager.type_user_names(firstname, lastname)
-    user_manager.type_func_key('Customized', extension)
+    user_action_webi.type_user_names(firstname, lastname)
+    user_action_webi.type_func_key('Customized', extension)
     form.submit.submit_form()
 
 
 @step(u'When I remove line from user "([^"]*)" "([^"]*)" with errors$')
 def when_i_remove_line_from_user_1_2_with_errors(step, firstname, lastname):
     _edit_user(firstname, lastname)
-    user_manager.remove_line()
+    user_action_webi.remove_line()
     form.submit.submit_form_with_errors()
 
 
 @step(u'When I remove line "([^"]*)" from lines then I see errors$')
 def when_i_remove_line_from_lines_then_i_see_errors(step, line_number):
     common.open_url('line')
-    line_manager.search_line_number(line_number)
+    line_action_webi.search_line_number(line_number)
     common.remove_line(line_number)
     form.submit.assert_form_errors()
-    line_manager.unsearch_line()
+    line_action_webi.unsearch_line()
 
 
 @step(u'When I add a voicemail "([^"]*)" to the user "([^"]*)" "([^"]*)" with errors$')
 def when_i_add_a_voicemail_1_to_the_user_2_3_with_errors(step, voicemail_number, firstname, lastname):
     _edit_user(firstname, lastname)
-    user_manager.type_voicemail(voicemail_number)
+    user_action_webi.type_voicemail(voicemail_number)
     form.submit.submit_form_with_errors()
 
 
 @step(u'When I add a voicemail "([^"]*)" to the user "([^"]*)" "([^"]*)"$')
 def when_i_add_a_voicemail_1_to_the_user_2_3(step, voicemail_number, firstname, lastname):
     _edit_user(firstname, lastname)
-    user_manager.type_voicemail(voicemail_number)
+    user_action_webi.type_voicemail(voicemail_number)
     form.submit.submit_form()
 
 
 @step(u'When I modify the mobile number of user "([^"]*)" "([^"]*)" to "([^"]*)"')
 def when_i_modify_the_mobile_number_of_user_1_2_to_3(step, firstname, lastname, mobile_number):
     _edit_user(firstname, lastname)
-    user_manager.type_mobile_number(mobile_number)
+    user_action_webi.type_mobile_number(mobile_number)
     form.submit.submit_form()
 
 
 @step(u'When I remove the mobile number of user "([^"]*)" "([^"]*)"')
 def when_i_remove_the_mobile_number_of_user_group1_group2(step, firstname, lastname):
     _edit_user(firstname, lastname)
-    user_manager.type_mobile_number('')
+    user_action_webi.type_mobile_number('')
     form.submit.submit_form()
 
 
@@ -292,7 +293,7 @@ def then_i_see_a_user_with_infos(step):
     user_expected_properties = step.hashes[0]
     fullname = user_expected_properties['fullname']
     common.open_url('user', 'search', {'search': '%s' % fullname})
-    user_actual_properties = user_manager.get_user_list_entry(fullname)
+    user_actual_properties = user_action_webi.get_user_list_entry(fullname)
     assert_that(fullname, equal_to(user_expected_properties['fullname']))
     for user_field, user_value in user_expected_properties.iteritems():
         assert_that(user_actual_properties[user_field], equal_to(user_value))
@@ -326,7 +327,7 @@ def then_there_is_no_data_about_this_user_remaining_in_the_database(step):
 def when_i_modify_the_channel_type_of_group_group1_of_user_group2_to_group3(step, group, fullname, chantype):
     common.open_url('user', 'search', {'search': fullname})
     common.edit_line(fullname)
-    user_manager.select_chantype_of_group(group, chantype)
+    user_action_webi.select_chantype_of_group(group, chantype)
     form.submit.submit_form()
 
 
@@ -334,7 +335,7 @@ def when_i_modify_the_channel_type_of_group_group1_of_user_group2_to_group3(step
 def then_the_channel_type_of_group_group1_of_user_group2_is_group3(step, group, fullname, chantype):
     common.open_url('user', 'search', {'search': fullname})
     common.edit_line(fullname)
-    assert_that(user_manager.get_chantype_of_group(group), equal_to(chantype))
+    assert_that(user_action_webi.get_chantype_of_group(group), equal_to(chantype))
 
 
 @step(u'Then "([^"]*)" has enablexfer "([^"]*)"')

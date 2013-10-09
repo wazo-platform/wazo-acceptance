@@ -20,22 +20,22 @@ import time
 from hamcrest import assert_that, equal_to
 from lettuce import step
 
+from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.helpers import line_helper, callgen_helper, cti_helper
 from xivo_lettuce import assets, func
 from xivo_lettuce.common import open_url, find_line, edit_line
 from xivo_lettuce.form import submit
-from xivo_lettuce.manager_webi import directory_manager
 
 
 @step(u'Given the following directory configurations exist:')
 def given_the_following_directories_exist(step):
     for directory in step.hashes:
-        directory_manager.add_or_replace_directory_config(directory)
+        directory_action_webi.add_or_replace_directory_config(directory)
 
 
 @step(u'Given the directory definition "([^"]*)" does not exist')
 def given_the_directory_definition_does_not_exist(step, definition):
-    directory_manager.remove_directory(definition)
+    directory_action_webi.remove_directory(definition)
 
 
 @step(u'Given the CSV file "([^"]*)" is copied on the server into "([^"]*)"')
@@ -69,14 +69,14 @@ def given_the_internal_directory_exists(step):
 def given_the_internal_phonebook_is_configured(step):
     _configure_internal_directory()
 
-    directory_manager.add_or_replace_display(
+    directory_action_webi.add_or_replace_display(
         'Display',
         [
             ('Nom', 'name', '{db-firstname} {db-lastname}'),
             (u'Numéro', 'number_office', '{db-phone}'),
         ]
     )
-    directory_manager.assign_filter_and_directories_to_context(
+    directory_action_webi.assign_filter_and_directories_to_context(
         'default',
         'Display',
         ['internal']
@@ -85,7 +85,7 @@ def given_the_internal_phonebook_is_configured(step):
 
 @step(u'Given the directory definition "([^"]*)" is included in the default directory')
 def given_the_directory_definition_group1_is_included_in_the_default_directory(step, definition):
-    directory_manager.assign_filter_and_directories_to_context(
+    directory_action_webi.assign_filter_and_directories_to_context(
         'default',
         'Display',
         [definition]
@@ -113,7 +113,7 @@ def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, 
 @step(u'When I create the following directory configurations:')
 def when_i_configure_the_following_directories(step):
     for directory in step.hashes:
-        directory_manager.add_or_replace_directory_config(directory)
+        directory_action_webi.add_or_replace_directory_config(directory)
 
 
 @step(u'When I edit and save the directory configuration "([^"]*)"')
@@ -126,19 +126,19 @@ def when_i_edit_and_save_the_directory(step, directory):
 @step(u'When I add the following CTI directory definition:')
 def when_i_add_the_following_cti_directory_definition(step):
     for directory in step.hashes:
-        directory_manager.add_directory_definition(directory)
+        directory_action_webi.add_directory_definition(directory)
 
 
 @step(u'When I map the following fields and save the directory definition:')
 def when_i_map_the_following_fields_and_save_the_directory_definition(step):
     for field in step.hashes:
-        directory_manager.add_field(field['field name'], field['value'])
+        directory_action_webi.add_field(field['field name'], field['value'])
     submit.submit_form()
 
 
 @step(u'When I include "([^"]*)" in the default directory')
 def when_i_include_phonebook_in_the_default_directory(step, phonebook):
-    directory_manager.assign_filter_and_directories_to_context(
+    directory_action_webi.assign_filter_and_directories_to_context(
         'default',
         'Display',
         [phonebook]
@@ -148,7 +148,7 @@ def when_i_include_phonebook_in_the_default_directory(step, phonebook):
 @step(u'When I set the following directories for directory reverse lookup:')
 def when_i_set_the_following_directories_for_directory_reverse_lookup(step):
     directories = [entry['directory'] for entry in step.hashes]
-    directory_manager.set_reverse_directories(directories)
+    directory_action_webi.set_reverse_directories(directories)
 
 
 @step(u'When I search for "([^"]*)" in the directory xlet')
@@ -194,11 +194,11 @@ def _configure_display_filter():
         (u'Nom', u'', u'{db-firstname} {db-lastname}'),
         (u'Numéro', u'', u'{db-phone}')
     ]
-    directory_manager.add_or_replace_display("Display", field_list)
+    directory_action_webi.add_or_replace_display("Display", field_list)
 
 
 def _configure_ldap_directory(ldap_filter):
-    directory_manager.add_or_replace_directory(
+    directory_action_webi.add_or_replace_directory(
         name='ldapdirectory',
         uri='ldapfilter://%s' % ldap_filter,
         direct_match='sn,givenName,telephoneNumber',
@@ -209,7 +209,7 @@ def _configure_ldap_directory(ldap_filter):
 
 
 def _configure_internal_directory():
-    directory_manager.add_or_replace_directory(
+    directory_action_webi.add_or_replace_directory(
         name='internal',
         uri='internal',
         direct_match='userfeatures.firstname,userfeatures.lastname',
@@ -220,7 +220,7 @@ def _configure_internal_directory():
 
 
 def _add_directory_to_direct_directories(directories=['ldapdirectory']):
-    directory_manager.assign_filter_and_directories_to_context(
+    directory_action_webi.assign_filter_and_directories_to_context(
         'default',
         'Display',
         directories

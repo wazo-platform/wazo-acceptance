@@ -18,9 +18,9 @@
 from hamcrest import assert_that, equal_to
 from lettuce import step, world
 
+from xivo_acceptance.action.webi import call_logs as call_logs_action_webi
 from xivo_acceptance.helpers import call_logs_helper, cel_helper
 from xivo_lettuce import common, form, sysutils
-from xivo_lettuce.manager_webi import call_logs_manager
 
 
 @step(u'Given there are no call logs$')
@@ -44,7 +44,7 @@ def when_i_generate_call_logs(step):
 def when_i_request_call_logs_in_the_webi_with_dates(step):
     common.open_url('cel')
     form_info = step.hashes[0]
-    call_logs_manager.type_dates(form_info['start'], form_info['end'])
+    call_logs_action_webi.type_dates(form_info['start'], form_info['end'])
     form.submit.submit_form()
 
 

@@ -16,7 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from xivo_lettuce.manager_webi import ldap_manager
+
+from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_lettuce import assets, common, sysutils, ldap_utils
 
 
@@ -38,17 +39,17 @@ def given_there_is_no_ldap_filter(step, search):
 
 @step(u'I create an LDAP server with name "([^"]*)" and host "([^"]*)"')
 def i_create_an_ldap_server_with_name_1_and_host_2(step, name, host):
-    ldap_manager.add_ldap_server(name, host)
+    ldap_action_webi.add_ldap_server(name, host)
 
 
 @step(u'Given there is a LDAP server with name "([^"]*)" and with host "([^"]*)"')
 def given_there_is_a_ldap_server_with_name_1_and_with_host_2(step, name, host):
-    ldap_manager.add_or_replace_ldap_server(name, host)
+    ldap_action_webi.add_or_replace_ldap_server(name, host)
 
 
 @step(u'I create an LDAP filter with name "([^"]*)" and server "([^"]*)"')
 def i_create_an_ldap_filter_with_name_and_server(step, name, server):
-    ldap_manager.add_or_replace_ldap_filter(
+    ldap_action_webi.add_or_replace_ldap_filter(
         name=name,
         server=server,
         base_dn='dc=lan-quebec,dc=avencall,dc=com'
@@ -59,8 +60,8 @@ def i_create_an_ldap_filter_with_name_and_server(step, name, server):
 def given_the_ldap_server_is_configured_for_ssl_connections(step):
     _copy_ca_certificate()
     _configure_ca_certificate()
-    ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com', True)
-    ldap_manager.add_or_replace_ldap_filter(
+    ldap_action_webi.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com', True)
+    ldap_action_webi.add_or_replace_ldap_filter(
         name='openldap-dev',
         server='openldap-dev',
         base_dn='dc=lan-quebec,dc=avencall,dc=com',
@@ -68,7 +69,7 @@ def given_the_ldap_server_is_configured_for_ssl_connections(step):
         password='superpass',
         display_name=['cn', 'st', 'givenName'],
         phone_number=['telephoneNumber'])
-    ldap_manager.add_ldap_filter_to_phonebook('openldap-dev')
+    ldap_action_webi.add_ldap_filter_to_phonebook('openldap-dev')
     _check_ldap_is_up()
 
 
@@ -106,17 +107,17 @@ def given_there_are_the_following_ldap_filters(step):
         if 'phone number type' in ldap_filter:
             options['number_type'] = ldap_filter['phone number type']
 
-        ldap_manager.add_or_replace_ldap_filter(**options)
+        ldap_action_webi.add_or_replace_ldap_filter(**options)
 
 
 @step(u'Given the ldap filter "([^"]*)" has been added to the phonebook')
 def given_the_ldap_filter_group1_has_been_added_to_the_phonebook(step, ldap_filter):
-    ldap_manager.add_ldap_filter_to_phonebook(ldap_filter)
+    ldap_action_webi.add_ldap_filter_to_phonebook(ldap_filter)
 
 
 @step(u'Given there are no LDAP filters configured in the phonebook')
 def given_there_are_no_ldap_filters_configured_in_the_phonebook(step):
-    ldap_manager.remove_all_filters_from_phonebook()
+    ldap_action_webi.remove_all_filters_from_phonebook()
 
 
 @step(u'Given there is a user with common name "([^"]*)" on the ldap server')
@@ -133,7 +134,7 @@ def given_there_is_a_user_with_common_name_group1_on_the_ldap_server(step, commo
 
 @step(u'Given the LDAP server is configured and active')
 def given_the_ldap_server_is_configured_and_active(step):
-    ldap_manager.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
+    ldap_action_webi.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
     _check_ldap_is_up()
 
 

@@ -20,10 +20,10 @@ import socket
 
 from lettuce import world
 
+from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
 from xivo_acceptance.helpers import context_helper, trunksip_helper
 from xivo_lettuce.terrain import initialize, deinitialize
 from xivo_lettuce.common import open_url
-from xivo_lettuce.manager_webi import provd_general_manager
 from xivo_lettuce.form import submit
 
 
@@ -107,7 +107,7 @@ def _allow_provd_listen_on_all_interfaces():
     config = {
         'net4_ip_rest': '0.0.0.0',
     }
-    provd_general_manager.configure_rest_api(config)
+    provd_general_action_webi.configure_rest_api(config)
     submit.submit_form()
 
 if __name__ == '__main__':

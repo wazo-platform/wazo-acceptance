@@ -18,8 +18,8 @@
 from hamcrest import assert_that, has_entries
 from lettuce import step
 
+from xivo_acceptance.action.webi import meetme as meetme_action_webi
 from xivo_acceptance.helpers import meetme_helper, cti_helper
-from xivo_lettuce.manager_webi import meetme_manager
 
 
 @step(u'Given there are no conference rooms')
@@ -30,13 +30,13 @@ def given_there_are_no_conference_rooms(step):
 @step(u'When I add the following conference rooms:')
 def when_i_add_the_following_conference_rooms(step):
     for meetme in step.hashes:
-        meetme_manager.create_meetme(meetme)
+        meetme_action_webi.create_meetme(meetme)
 
 
 @step(u'When I update the following conference rooms:')
 def when_i_update_the_following_conference_rooms(step):
     for meetme in step.hashes:
-        meetme_manager.update_meetme(meetme)
+        meetme_action_webi.update_meetme(meetme)
 
 
 @step(u'Then the following conference rooms appear in the conference room xlet:')

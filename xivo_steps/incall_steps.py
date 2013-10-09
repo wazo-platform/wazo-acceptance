@@ -17,9 +17,9 @@
 
 from lettuce import step
 
+from xivo_acceptance.action.webi import incall as incall_action_webi
 from xivo_acceptance.helpers import incall_helper
 from xivo_lettuce import form, common
-from xivo_lettuce.manager_webi import incall_manager as incall_man
 
 
 @step(u'Given there is no incall "([^"]*)"$')
@@ -43,11 +43,11 @@ def given_there_is_an_incall_group1_in_context_group2_to_the_queue_group3(step, 
 @step(u'When I create an incall with DID "([^"]*)" in context "([^"]*)"')
 def when_i_create_incall_with_did(step, incall_did, context):
     common.open_url('incall', 'add')
-    incall_man.type_incall_did(incall_did)
-    incall_man.type_incall_context(context)
+    incall_action_webi.type_incall_did(incall_did)
+    incall_action_webi.type_incall_context(context)
     form.submit.submit_form()
 
 
 @step(u'When incall "([^"]*)" is removed')
 def when_incall_is_removed(step, incall_did):
-    incall_man.remove_incall_with_did(incall_did)
+    incall_action_webi.remove_incall_with_did(incall_did)

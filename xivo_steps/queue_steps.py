@@ -19,9 +19,9 @@ import time
 
 from lettuce import step, world
 
+from xivo_acceptance.action.webi import queue as queue_action_webi
 from xivo_acceptance.helpers import user_helper, agent_helper, queue_helper, \
     schedule_helper
-from xivo_lettuce.manager_webi import queue_manager
 from xivo_lettuce import common
 from xivo_lettuce import form
 
@@ -95,14 +95,14 @@ def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(st
 @step(u'When I create the following queues:')
 def when_i_create_the_following_queues(step):
     for queue in step.hashes:
-        queue_manager.add_or_replace_queue(queue)
+        queue_action_webi.add_or_replace_queue(queue)
         form.submit.submit_form()
 
 
 @step(u'When I create the following invalid queues:')
 def when_i_create_the_following_invalid_queues(step):
     for queue in step.hashes:
-        queue_manager.add_or_replace_queue(queue)
+        queue_action_webi.add_or_replace_queue(queue)
         form.submit.submit_form_with_errors()
 
 
@@ -117,7 +117,7 @@ def when_i_edit_the_queue_group1(step, queue_name):
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_name, ring_strategy):
     queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
-    queue_manager.type_queue_ring_strategy(ring_strategy)
+    queue_action_webi.type_queue_ring_strategy(ring_strategy)
     form.submit.submit_form()
 
 
@@ -125,7 +125,7 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_nam
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(step, queue_name, ring_strategy):
     queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
-    queue_manager.type_queue_ring_strategy(ring_strategy)
+    queue_action_webi.type_queue_ring_strategy(ring_strategy)
     form.submit.submit_form_with_errors()
 
 
@@ -142,7 +142,7 @@ def when_i_add_agent_1_to_2(step, agent_number, queue_name):
 def when_i_add_the_agent_with_extension_group1_to_the_queue_group2(step, extension, queue_name):
     queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
-    queue_manager.add_agents_to_queue([extension])
+    queue_action_webi.add_agents_to_queue([extension])
     form.submit.submit_form()
 
 
@@ -159,7 +159,7 @@ def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
 def when_i_remove_the_agent_with_extension_group1_from_the_queue_group2(step, extension, queue_name):
     queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
-    queue_manager.remove_agents_from_queue([extension])
+    queue_action_webi.remove_agents_from_queue([extension])
     form.submit.submit_form()
 
 
