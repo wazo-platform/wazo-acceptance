@@ -17,21 +17,21 @@
 
 from lettuce import step, world
 
+from xivo_acceptance.helpers import trunkiax_helper
 from xivo_lettuce import form
 from xivo_lettuce.common import open_url, remove_line
-from xivo_lettuce.manager_ws import trunkiax_manager_ws
 
 
 @step(u'Given there is a trunkiax "([^"]*)"')
 def given_there_is_a_trunkiax(step, name):
     data = {'name': name,
             'context': 'default'}
-    trunkiax_manager_ws.add_or_replace_trunkiax(data)
+    trunkiax_helper.add_or_replace_trunkiax(data)
 
 
 @step(u'Given there is no trunkiax "([^"]*)"')
 def given_there_is_no_trunkiax(step, name):
-    trunkiax_manager_ws.delete_trunkiaxs_with_name(name)
+    trunkiax_helper.delete_trunkiaxs_with_name(name)
 
 
 @step(u'When I create a trunkiax with name "([^"]*)"')

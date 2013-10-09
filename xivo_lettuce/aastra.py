@@ -22,7 +22,7 @@ from lettuce import world
 
 class AastraPhonebookBrowser(object):
 
-    _PATH = 'service/ipbx/web_services.php/phonebook/search/'
+    _PATH = '/service/ipbx/web_services.php/phonebook/search/'
     _HEADERS = {'User-Agent': 'Aastra6731i MAC:00-08-5D-31-EF-D2 V:3.2.2.1136-SIP'}
     _REGEX_DISPLAY = re.compile(r'<Prompt><!\[CDATA\[(.+?)\]\]></Prompt>')
     _REGEX_NUMBER = re.compile(r'<URI>Dial:<!\[CDATA\[(.+?)\]\]></URI>')
@@ -43,7 +43,7 @@ class AastraPhonebookBrowser(object):
 
     def _new_request(self, name):
         encoded_name = name.encode('utf8')
-        url = '%s%s?name=%s' % (world.host, self._PATH, encoded_name)
+        url = '%s%s?name=%s' % (world.xivo_url, self._PATH, encoded_name)
         return urllib2.Request(url, headers=self._HEADERS)
 
     def _accumulate_display(self, lines):

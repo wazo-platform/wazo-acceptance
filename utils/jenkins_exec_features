@@ -1,5 +1,6 @@
 #!/bin/bash
 
+REPO_DIR='/data'
 GIT_ROOT="git://git.xivo.fr/official"
 REPOSITORIES="xivo-dao xivo-acceptance xivo-lib-python xivo-dird xivo-restapi xivo-provisioning"
 PYTHONPATH_STR=''
@@ -10,37 +11,40 @@ export XC_PATH=/tmp/cticlient_bin
 
 function clone_or_pull_repo() {
     repo="$1"
+    cd $REPO_DIR
     if [ ! -d "$repo" ]; then
         git clone $GIT_ROOT/$repo.git
     else
         cd $repo
         git pull
         git fetch -p
-        cd ..
     fi
 }
 
 for repo in $REPOSITORIES ; do
-    repo_path="/data/$repo"
     echo "processing $repo ..."
-    cd $repo_path
     clone_or_pull_repo $repo
-    extra=''
-    if [ $repo == 'xivo-provisioning' ]; then
-        extra='/src'
+
+    if [ $repo == 'xivo-acceptance' ]; then
+        PYTHONPATH_STR="${PYTHONPATH_STR}:/${REPO_DIR}/${repo}"
+    else
+        extra=''
+        if [ $repo == 'xivo-provisioning' ]; then
+            extra='/src'
+        fi
+        PYTHONPATH_STR="${PYTHONPATH_STR}:/${REPO_DIR}/${repo}/${repo}${extra}"
     fi
-    PYTHONPATH_STR="${PYTHONPATH_STR}:/data/${repo}/${repo}${extra}"
 done
 
 export PYTHONPATH=$PYTHONPATH_STR
 
 if [ $FEATURE_NAME == 'post_wizard' ]; then
-    python /data/xivo-acceptance/utils/prerequisite.py
+    python /${REPO_DIR}/xivo-acceptance/utils/prerequisite.py
 fi
 
-cd /data/xivo-acceptance/
+cd /${REPO_DIR}/xivo-acceptance
 cp -r features/$FEATURE_NAME $WORKSPACE
 
 cd $WORKSPACE
 lettuce $FEATURE_NAME --with-xunit --verbosity=3 --xunit-file=xunit-tests.xml
-cp xunit-tests.xml /data/test_results/$JOB_NAME.xml
+cp xunit-tests.xml /${REPO_DIR}/test_results/$JOB_NAME.xml

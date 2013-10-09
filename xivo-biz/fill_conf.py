@@ -22,14 +22,14 @@ import subprocess
 import execnet
 
 from lettuce.registry import world
+
+from xivo_acceptance.helpers import line_helper, context_helper, \
+    trunkcustom_helper, user_helper
 from xivo_lettuce import terrain
-from xivo_lettuce.manager_ws import context_manager_ws, user_manager_ws, \
-    trunkcustom_manager_ws
 from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
-from xivo_lettuce.manager_dao import user_manager_dao, line_manager_dao
 from xivo_dao.helpers import config as dao_config
 from xivo_dao.helpers import db_manager
 
@@ -89,8 +89,8 @@ class Prerequisite(object):
 
     def _prepare_context(self):
         print 'Configuring Context..'
-        context_manager_ws.update_contextnumbers_user('default', 100, 199)
-        context_manager_ws.update_contextnumbers_incall('from-extern', 1000, 2000, 4)
+        context_helper.update_contextnumbers_user('default', 100, 199)
+        context_helper.update_contextnumbers_incall('from-extern', 1000, 2000, 4)
 
     def _prepare_trunk(self):
         print 'Configuring Trunk..'
@@ -98,7 +98,7 @@ class Prerequisite(object):
             'name': 'dahdi-g1',
             'interface': 'dahdi/g1'
         }
-        trunkcustom_manager_ws.add_or_replace_trunkcustom(data1)
+        trunkcustom_helper.add_or_replace_trunkcustom(data1)
 
     def _prepare_user(self):
         print 'Configuring User..'
@@ -115,17 +115,17 @@ class Prerequisite(object):
              'client_username': 'user1'
         }
         user1_data.update(user_data_tpl)
-        self._user1_id = user_manager_ws.add_or_replace_user(user1_data)
+        self._user1_id = user_helper.add_or_replace_user(user1_data)
         user2_data = {
              'lastname': '2',
              'line_number': '102',
              'client_username': 'user2'
         }
         user2_data.update(user_data_tpl)
-        self._user2_id = user_manager_ws.add_or_replace_user(user2_data)
+        self._user2_id = user_helper.add_or_replace_user(user2_data)
 
-        self._line1 = line_manager_dao.find_with_exten_context('101', 'default')
-        self._line2 = line_manager_dao.find_with_exten_context('102', 'default')
+        self._line1 = line_helper.find_with_exten_context('101', 'default')
+        self._line2 = line_helper.find_with_exten_context('102', 'default')
 
         print
         print 'User1 infos:'
@@ -165,7 +165,7 @@ class Prerequisite(object):
             outcall = Outcall()
             outcall.name = 'to_dahdi'
             outcall.context = 'to-extern'
-            outcall.trunks = [trunkcustom_manager_ws.find_trunkcustom_id_with_name('dahdi-g1')]
+            outcall.trunks = [trunkcustom_helper.find_trunkcustom_id_with_name('dahdi-g1')]
             outcall.extens = [OutcallExten(exten='6XXXX', stripnum=1)]
             world.ws.outcalls.add(outcall)
 

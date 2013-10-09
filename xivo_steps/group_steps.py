@@ -16,14 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from xivo_lettuce import form, func
-from xivo_lettuce import common
+
+from xivo_acceptance.action.webi import group as group_action_webi
+from xivo_acceptance.helpers import user_helper, group_helper
+from xivo_lettuce import form, func, common
 from xivo_lettuce.common import open_url, element_in_list_matches_field
-from xivo_lettuce.manager.group_manager import remove_group_with_name, \
-    type_group_name, type_group_number, type_context
-from xivo_lettuce.manager_ws import group_manager_ws
-from xivo_lettuce.manager_ws import user_manager_ws
-from xivo_lettuce.manager_dao import user_manager_dao
 
 
 @step(u'Given there is no group "([^"]*)"$')
@@ -34,19 +31,19 @@ def given_there_is_no_group(step, search):
 @step(u'Given there is a group "([^"]*)" with extension "([^"]*)" and users:')
 def given_there_is_a_group_with_extension_and_users(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    group_manager_ws.delete_groups_with_number(number)
+    group_helper.delete_groups_with_number(number)
 
     user_ids = []
     for info in step.hashes:
-        user_id = user_manager_dao.find_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
+        user_id = user_helper.find_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
         user_ids.append(user_id)
 
-    group_manager_ws.add_group(name, number, context, user_ids)
+    group_helper.add_group(name, number, context, user_ids)
 
 
 @step(u'Given the group named "([^"]*)" does not exist')
 def given_the_group_named_1_does_not_exist(step, name):
-    group_manager_ws.delete_groups_with_name(name)
+    group_helper.delete_groups_with_name(name)
 
 
 @step(u'When I create a group "([^"]*)" with number "([^"]*)"$')
@@ -65,7 +62,7 @@ def when_i_create_group_with_number_with_errors(step, group_name, group_number):
 
 @step(u'When I remove the group "([^"]*)"')
 def when_i_remove_the_group_1(step, group_name):
-    remove_group_with_name(group_name)
+    group_action_webi.remove_group_with_name(group_name)
 
 
 @step(u'Then I see a group "([^"]*)" with no users')
@@ -78,17 +75,17 @@ def given_there_is_a_group_with_n_users(step, group_size):
     group_name = 'random'
     group_members = []
     for i in range(int(group_size)):
-        user_id = user_manager_ws.add_or_replace_user(
+        user_id = user_helper.add_or_replace_user(
             {'firstname': 'random',
              'lastname': str(i),
              'line_number': str(1100 + i),
              'line_context': 'default'})
         group_members.append(user_id)
 
-    group_manager_ws.add_or_replace_group(group_name, user_ids=group_members)
+    group_helper.add_or_replace_group(group_name, user_ids=group_members)
 
 
 def _type_group_name_number_context(name, number, context='default'):
-    type_group_name(name)
-    type_group_number(number)
-    type_context(context)
+    group_action_webi.type_group_name(name)
+    group_action_webi.type_group_number(number)
+    group_action_webi.type_context(context)

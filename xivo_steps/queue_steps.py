@@ -18,12 +18,12 @@
 import time
 
 from lettuce import step, world
-from xivo_lettuce.manager_ws import queue_manager_ws, agent_manager_ws, \
-    schedule_manager_ws, user_manager_ws
-from xivo_lettuce.manager import queue_manager
+
+from xivo_acceptance.action.webi import queue as queue_action_webi
+from xivo_acceptance.helpers import user_helper, agent_helper, queue_helper, \
+    schedule_helper
 from xivo_lettuce import common
 from xivo_lettuce import form
-from xivo_lettuce.manager_dao import user_manager_dao
 
 
 @step(u'^Given there are queues with infos:$')
@@ -40,14 +40,14 @@ def given_there_are_queues_with_infos(step):
         if queue_data.get('schedule_name'):
             queue_data['schedule_id'] = convert_schedule_name(queue_data.pop('schedule_name'))
 
-        queue_manager_ws.add_or_replace_queue(queue_data)
+        queue_helper.add_or_replace_queue(queue_data)
 
 
 def convert_user_numbers(user_numbers, context):
     users = []
     user_number_list = user_numbers.split(',')
     for user_number in user_number_list:
-        user = user_manager_dao.get_by_exten_context(user_number, context)
+        user = user_helper.get_by_exten_context(user_number, context)
         if user:
             users.extend([user.id])
     return users
@@ -57,13 +57,13 @@ def convert_agent_numbers(agent_numbers):
     agent_ids = []
     agent_number_list = agent_numbers.split(',')
     for agent_number in agent_number_list:
-        agent_id = agent_manager_ws.find_agent_id_with_number(agent_number.strip())
+        agent_id = agent_helper.find_agent_id_with_number(agent_number.strip())
         agent_ids.append(agent_id)
     return agent_ids
 
 
 def convert_schedule_name(schedule_name):
-    schedule_id = schedule_manager_ws.find_schedule_id_with_name(schedule_name)
+    schedule_id = schedule_helper.find_schedule_id_with_name(schedule_name)
     return schedule_id
 
 
@@ -77,9 +77,9 @@ def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(st
             'line_number': agent_data['number'],
             'line_context': agent_data['context'],
         }
-        user_id = user_manager_ws.add_or_replace_user(user_data)
+        user_id = user_helper.add_or_replace_user(user_data)
         agent_data['users'] = [user_id]
-        agent_id = agent_manager_ws.add_or_replace_agent(agent_data)
+        agent_id = agent_helper.add_or_replace_agent(agent_data)
         agent_ids.append(agent_id)
 
     queue_data = {
@@ -89,50 +89,50 @@ def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(st
         'agents': agent_ids,
     }
 
-    queue_manager_ws.add_or_replace_queue(queue_data)
+    queue_helper.add_or_replace_queue(queue_data)
 
 
 @step(u'When I create the following queues:')
 def when_i_create_the_following_queues(step):
     for queue in step.hashes:
-        queue_manager.add_or_replace_queue(queue)
+        queue_action_webi.add_or_replace_queue(queue)
         form.submit.submit_form()
 
 
 @step(u'When I create the following invalid queues:')
 def when_i_create_the_following_invalid_queues(step):
     for queue in step.hashes:
-        queue_manager.add_or_replace_queue(queue)
+        queue_action_webi.add_or_replace_queue(queue)
         form.submit.submit_form_with_errors()
 
 
 @step(u'When I edit the queue "([^"]*)"$')
 def when_i_edit_the_queue_group1(step, queue_name):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     form.submit.submit_form()
 
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)"$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_name, ring_strategy):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
-    queue_manager.type_queue_ring_strategy(ring_strategy)
+    queue_action_webi.type_queue_ring_strategy(ring_strategy)
     form.submit.submit_form()
 
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)" with errors$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(step, queue_name, ring_strategy):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
-    queue_manager.type_queue_ring_strategy(ring_strategy)
+    queue_action_webi.type_queue_ring_strategy(ring_strategy)
     form.submit.submit_form_with_errors()
 
 
 @step(u'When I add agent "([^"]*)" to "([^"]*)"')
 def when_i_add_agent_1_to_2(step, agent_number, queue_name):
-    queue = queue_manager_ws.get_queue_with_name(queue_name)
-    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
+    queue = queue_helper.get_queue_with_name(queue_name)
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
     queue.agents.append(agent_id)
     world.ws.queues.edit(queue)
     time.sleep(5)
@@ -140,16 +140,16 @@ def when_i_add_agent_1_to_2(step, agent_number, queue_name):
 
 @step(u'When I add the agent with extension "([^"]*)" to the queue "([^"]*)"')
 def when_i_add_the_agent_with_extension_group1_to_the_queue_group2(step, extension, queue_name):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
-    queue_manager.add_agents_to_queue([extension])
+    queue_action_webi.add_agents_to_queue([extension])
     form.submit.submit_form()
 
 
 @step(u'When I remove agent "([^"]*)" from "([^"]*)"')
 def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
-    queue = queue_manager_ws.get_queue_with_name(queue_name)
-    agent_id = agent_manager_ws.find_agent_id_with_number(agent_number)
+    queue = queue_helper.get_queue_with_name(queue_name)
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
     queue.agents.remove(agent_id)
     world.ws.queues.edit(queue)
     time.sleep(10)
@@ -157,9 +157,9 @@ def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
 
 @step(u'When I remove the agent with extension "([^"]*)" from the queue "([^"]*)"')
 def when_i_remove_the_agent_with_extension_group1_from_the_queue_group2(step, extension, queue_name):
-    queue_id = queue_manager_ws.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
-    queue_manager.remove_agents_from_queue([extension])
+    queue_action_webi.remove_agents_from_queue([extension])
     form.submit.submit_form()
 
 
@@ -172,16 +172,16 @@ def when_i_delete_the_queue_with_number_group1(step, queue_number):
 
 @step(u'Then the agent "([^"]*)" is a member of the queue "([^"]*)" in asterisk')
 def then_the_agent_group1_is_a_member_of_the_queue_group2_in_asterisk(step, agent_number, queue_name):
-    agent_numbers = queue_manager.agent_numbers_from_asterisk(queue_name)
+    agent_numbers = queue_helper.agent_numbers_from_asterisk(queue_name)
     assert int(agent_number) in agent_numbers
 
 
 @step(u'Then the agent "([^"]*)" is not a member of the queue "([^"]*)" in asterisk')
 def then_the_agent_group1_is_not_a_member_of_the_queue_group2_in_asterisk(step, agent_number, queue_name):
-    agent_numbers = queue_manager.agent_numbers_from_asterisk(queue_name)
+    agent_numbers = queue_helper.agent_numbers_from_asterisk(queue_name)
     assert int(agent_number) not in agent_numbers
 
 
 @step(u'Then the queue "([^"]*)" does not exist in asterisk')
 def then_the_queue_group1_does_not_exist_in_asterisk(step, queue_name):
-    assert not queue_manager.does_queue_exist_in_asterisk(queue_name)
+    assert not queue_helper.does_queue_exist_in_asterisk(queue_name)

@@ -21,16 +21,17 @@ import os
 import sys
 import tempfile
 import xivo_ws
+
 from lettuce import before, after, world
+from sqlalchemy.exc import OperationalError
 from xivobrowser import XiVOBrowser
-from selenium.webdriver import FirefoxProfile
+
+from xivo_acceptance.helpers import asterisk_helper
 from xivo_dao.helpers import config as dao_config
 from xivo_dao.helpers import db_manager
-from xivo_lettuce.common import webi_login_as_default, go_to_home_page, webi_logout
-from xivo_lettuce.manager import asterisk_manager
+from xivo_lettuce.common import webi_login_as_default, webi_logout
 from xivo_lettuce.ssh import SSHClient
-from xivo_lettuce.func import st_time
-from sqlalchemy.exc import OperationalError
+from xivo_lettuce.ws_utils import WsUtils
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             '../config/config.ini'))
@@ -38,30 +39,27 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 
 @before.all
 def xivo_lettuce_before_all():
+    print 'Configuring...'
     initialize()
 
 
 @before.each_scenario
-def xivo_lettuce_before_each(scenario):
-    if world.browser_enable and _webi_configured():
-        _check_webi_login_root()
-
-
-@before.each_scenario
-def reset_world(scenario):
+def xivo_lettuce_before_each_scenario(scenario):
     world.voicemailid = None
     world.userid = None
     world.number = None
     world.lineid = None
+    if world.browser_enable and _webi_configured():
+        _check_webi_login_root()
 
 
 @after.each_step
-def flush_stdout(step):
+def xivo_lettuce_after_each_step(step):
     sys.stdout.flush()
 
 
 @after.each_scenario
-def xivo_lettuce_after_each(scenario):
+def xivo_lettuce_after_each_scenario(scenario):
     _logout_agents()
 
 
@@ -99,39 +97,29 @@ def initialize():
     if world.browser_enable:
         _setup_browser()
         if _webi_configured():
-            _log_on_webi()
+            webi_login_as_default()
     world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
 
 
-@st_time
 def _setup_browser():
     visible = world.config.getboolean('browser', 'visible')
     timeout = world.config.getint('browser', 'timeout')
+    resolution = world.config.get('browser', 'resolution')
 
     from pyvirtualdisplay import Display
-    profile = _setup_browser_profile()
-    world.display = Display(visible=visible, size=(1024, 768))
+    browser_size = width, height = tuple(resolution.split('x', 1))
+    world.display = Display(visible=visible, size=browser_size)
     world.display.start()
-    world.browser = XiVOBrowser(firefox_profile=profile)
+    world.browser = XiVOBrowser()
+    world.browser.set_window_size(width, height)
     world.timeout = timeout
-    world.stocked_infos = {}
-
-
-def _setup_browser_profile():
-    fp = FirefoxProfile()
-
-    fp.set_preference("browser.download.folderList", 2)
-    fp.set_preference("browser.download.manager.showWhenStarting", False)
-    fp.set_preference("browser.download.dir", "/tmp/")
-    fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download")
-
-    return fp
 
 
 def _setup_dao():
     hostname = world.config.get('xivo', 'hostname')
     dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % hostname
+    dao_config.XIVO_DB_URI = 'postgresql://xivo:proformatique@%s/xivo' % hostname
     db_manager.reinit()
     try:
         world.asterisk_conn = db_manager._asterisk_engine.connect()
@@ -144,10 +132,9 @@ def _setup_xivo_client():
 
 
 def _setup_login_infos():
-    world.host = 'http://%s/' % world.config.get('xivo', 'hostname')
+    world.xivo_url = 'https://%s' % world.config.get('xivo', 'hostname')
     world.login = world.config.get('login_infos', 'login')
     world.password = world.config.get('login_infos', 'password')
-    world.logged = False
 
 
 def _setup_ssh_client_xivo():
@@ -156,7 +143,6 @@ def _setup_ssh_client_xivo():
     world.xivo_host = hostname
     world.xivo_login = login
     world.ssh_client_xivo = SSHClient(hostname, login)
-    return world.ssh_client_xivo
 
 
 def _setup_ssh_client_callgen():
@@ -172,6 +158,9 @@ def _setup_ws():
     login = world.config.get('webservices_infos', 'login')
     password = world.config.get('webservices_infos', 'password')
     world.ws = xivo_ws.XivoServer(hostname, login, password)
+
+    world.restapi_utils_1_0 = WsUtils('1.0')
+    world.restapi_utils_1_1 = WsUtils('1.1')
 
 
 class _LazyWorldAttributes(object):
@@ -197,14 +186,8 @@ def _webi_configured():
         return True
 
 
-@st_time
-def _log_on_webi():
-    go_to_home_page()
-    webi_login_as_default()
-
-
 def _logout_agents():
-    asterisk_manager.logoff_agents(world.logged_agents)
+    asterisk_helper.logoff_agents(world.logged_agents)
     world.logged_agents = []
 
 

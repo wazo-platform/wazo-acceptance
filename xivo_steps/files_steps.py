@@ -21,8 +21,8 @@ import hashlib
 from hamcrest import assert_that, equal_to
 from lettuce import step
 
+from xivo_acceptance.helpers import file_helper
 from xivo_lettuce import sysutils
-from xivo_lettuce.manager import file_manager
 
 
 ASTERISK_VM_PATH = '/var/spool/asterisk/voicemail'
@@ -34,17 +34,17 @@ ASTERISK_SOUND_PATH = '/usr/share/asterisk/sounds/en'
 
 @step(u'Given a recording file with name "([^"]*)"')
 def given_a_recording_file_with_name(step, filename):
-    file_manager.create_recordings_file(filename)
+    file_helper.create_recordings_file(filename)
 
 
 @step(u'Given a recording meetme file with name "([^"]*)"')
 def given_a_recording_meetme_file_with_name(step, filename):
-    file_manager.create_recordings_meetme_file(filename)
+    file_helper.create_recordings_meetme_file(filename)
 
 
 @step(u'Given a musiconhold file with name "([^"]*)"')
 def given_a_musiconhold_file_with_name(step, filename):
-    file_manager.create_musiconhold_file(filename)
+    file_helper.create_musiconhold_file(filename)
 
 
 @step(u'Then directory of the Asterisk voicemail is empty')
@@ -118,7 +118,7 @@ def then_max_open_file_descriptors_are_equals_to_8192(step):
 
 @step(u'Then sources.list point on right mirrors')
 def then_sourceslist_point_on_right_mirrors(step):
-    #md5 of source uris pointing on http.debian.net
+    # md5 of source uris pointing on http.debian.net
     expected_md5 = '6c01e6432075b0ab60ff9b1f5ebce40d'
 
     content = sysutils.get_content_file('/etc/apt/sources.list')

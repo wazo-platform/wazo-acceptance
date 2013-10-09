@@ -21,14 +21,14 @@ import xivo_ws
 import subprocess
 
 from lettuce.registry import world
+
+from xivo_acceptance.helpers import line_helper, user_helper, context_helper, \
+    trunkcustom_helper, user_helper
 from xivo_lettuce import terrain
-from xivo_lettuce.manager_ws import context_manager_ws, user_manager_ws, \
-    trunkcustom_manager_ws
 from xivo_lettuce.ssh import SSHClient
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
-from xivo_lettuce.manager_dao import user_manager_dao
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
@@ -65,19 +65,19 @@ class Prerequisite(object):
 
     def _prepare_context(self):
         print 'Configuring Context..'
-        context_manager_ws.update_contextnumbers_user('default', 100, 199)
-        context_manager_ws.update_contextnumbers_incall('from-extern', 1000, 2000, 4)
+        context_helper.update_contextnumbers_user('default', 100, 199)
+        context_helper.update_contextnumbers_incall('from-extern', 1000, 2000, 4)
 
     def _prepare_trunk(self):
         print 'Configuring Trunk..'
         data1 = {'name': 'dahdi-g1',
                  'interface': 'dahdi/g1'
                  }
-        trunkcustom_manager_ws.add_or_replace_trunkcustom(data1)
+        trunkcustom_helper.add_or_replace_trunkcustom(data1)
         data2 = {'name': 'dahdi-g2',
                  'interface': 'dahdi/g2'
                  }
-        trunkcustom_manager_ws.add_or_replace_trunkcustom(data2)
+        trunkcustom_helper.add_or_replace_trunkcustom(data2)
 
     def _prepare_user(self):
         print 'Configuring User..'
@@ -95,9 +95,9 @@ class Prerequisite(object):
                          'line_number': '10%i' % (i),
                          'client_username': 'user%i' % (i)}
             user_data.update(user_data_tpl)
-            user_exist = user_manager_dao.is_user_with_name_exists('user', '%i' % (i))
+            user_exist = user_helper.is_user_with_name_exists('user', '%i' % (i))
             if not user_exist:
-                user_manager_ws.add_user(user_data)
+                user_helper.add_user(user_data)
 
             line = world.ws.lines.search('10%s' % (i))
 
@@ -117,7 +117,7 @@ class Prerequisite(object):
                 incall = Incall()
                 incall.number = '100%s' % (i)
                 incall.context = 'from-extern'
-                incall.destination = UserDestination(line_manager_dao.find_line_id_with_exten_context('10%s' % (i), 'default'))
+                incall.destination = UserDestination(line_helper.find_line_id_with_exten_context('10%s' % (i), 'default'))
                 world.ws.incalls.add(incall)
 
     def _prepare_outcall(self):
@@ -127,7 +127,7 @@ class Prerequisite(object):
             outcall = Outcall()
             outcall.name = 'to_dahdi'
             outcall.context = 'to-extern'
-            outcall.trunks = [trunkcustom_manager_ws.find_trunkcustom_id_with_name('dahdi-g2')]
+            outcall.trunks = [trunkcustom_helper.find_trunkcustom_id_with_name('dahdi-g2')]
             outcall.extens = [OutcallExten(exten='6XXXX', stripnum=1)]
             world.ws.outcalls.add(outcall)
 

@@ -18,16 +18,14 @@
 from hamcrest import *
 from lettuce import step, world
 
-from xivo_lettuce.manager_ws import voicemail_manager_ws as old_voicemail_ws
-from xivo_lettuce.manager_dao import voicemail_manager_dao
-from xivo_lettuce.restapi.v1_1 import voicemail_helper
-from xivo_lettuce.manager_restapi import voicemail_ws
+from xivo_acceptance.helpers import voicemail_helper
+from xivo_acceptance.action.restapi import voicemail_action_restapi as voicemail_ws
 from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order, assert_does_not_have_any_dicts
 
 
 @step(u'Given there is no voicemail "([^"]*)"')
 def given_there_is_no_voicemail_1(step, voicemail_number):
-    old_voicemail_ws.delete_voicemails_with_number(voicemail_number)
+    voicemail_helper.delete_voicemail_with_number_context(voicemail_number, 'default')
 
 
 @step(u'Given I have no voicemail with id "([^"]*)"')
@@ -122,7 +120,7 @@ def then_i_have_a_list_with_n_results(step, nb_list):
 
 @step(u'Then the list contains the same total voicemails as on the server')
 def then_the_list_contains_the_same_total_voicemails_as_on_the_server(step):
-    total_server = voicemail_manager_dao.total_voicemails()
+    total_server = voicemail_helper.total_voicemails()
     total_response = world.response.data['total']
     assert_that(total_server, equal_to(total_response))
 
@@ -133,3 +131,8 @@ def then_i_dot_not_have_the_following_voicemails_in_the_list(step):
     not_expected_voicemails = [_extract_voicemail_info(v) for v in step.hashes]
 
     assert_does_not_have_any_dicts(all_voicemails, not_expected_voicemails)
+
+
+@step(u'Given there is no voicemail with number "([^"]*)" and context "([^"]*)"')
+def given_there_is_no_voicemail_with_number_and_context(step, voicemail_number, context):
+    voicemail_helper.delete_voicemail_with_number_context(voicemail_number, context)

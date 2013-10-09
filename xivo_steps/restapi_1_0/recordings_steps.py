@@ -20,7 +20,7 @@ import random
 from lettuce import step, world
 from time import strftime, localtime
 from xivo_dao import record_campaigns_dao
-from xivo_lettuce.restapi.v1_0.rest_campaign import RestCampaign
+from xivo_acceptance.helpers.restapi_v1_0.rest_campaign import RestCampaign
 
 rest_campaign = RestCampaign()
 

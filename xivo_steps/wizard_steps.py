@@ -27,7 +27,7 @@ def given_there_is_xivo_not_configured(step):
 
 @step(u'When I start the wizard')
 def when_i_start_the_wizard(step):
-    world.browser.get(world.host)
+    world.browser.get(world.xivo_url)
 
 
 @step(u'Then I should see the welcome message (.*)')
@@ -100,9 +100,3 @@ def when_i_fill_the_entity_context_page(step, entity, start, end):
 def then_i_should_be_redirected_to_the_login_page(step):
     waitForLoginPage()
     assert world.browser.find_element_by_id('it-login') is not None
-
-
-@step(u'Then I should be in the monitoring window')
-def then_i_should_be_in_the_monitoring_window(step):
-    div = world.browser.find_element_by_id('system-infos', 'Could not load the system info page')
-    assert div is not None

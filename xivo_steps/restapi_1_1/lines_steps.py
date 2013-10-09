@@ -16,9 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from hamcrest import *
-from xivo_lettuce.restapi.v1_1 import line_helper, line_sip_helper
-from xivo_lettuce.manager_restapi import line_ws
 from lettuce import step, world
+
+from xivo_acceptance.action.restapi import line_action_restapi
+from xivo_acceptance.helpers import line_helper, line_sip_helper
 
 
 @step(u'Given I only have the following lines:')
@@ -39,15 +40,15 @@ def given_there_are_no_lines(step):
 
 @step(u'When I ask for the list of lines$')
 def when_i_ask_for_the_list_of_lines(step):
-    world.response = line_ws.all_lines()
+    world.response = line_action_restapi.all_lines()
 
 
 @step(u'When I ask for the list of user_links with line_id "([^"]*)"$')
 def when_i_ask_for_the_list_of_user_links_with_line_id(step, line_id):
-    world.response = line_ws.all_user_links_by_line_id(line_id)
+    world.response = line_action_restapi.all_user_links_by_line_id(line_id)
 
 
 @step(u'Then the line "([^"]*)" no longer exists')
 def then_the_line_group1_no_longer_exists(step, line_id):
-    response = line_ws.get(line_id)
+    response = line_action_restapi.get(line_id)
     assert_that(response.status, equal_to(404))

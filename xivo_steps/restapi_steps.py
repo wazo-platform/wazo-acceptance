@@ -16,15 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import re
+
 from hamcrest import assert_that, has_item
 from hamcrest.core.base_matcher import BaseMatcher
 from lettuce import step
-from xivo_lettuce.manager import restapi_requests_manager
+
+from xivo_acceptance.helpers import restapi_requests_helper
 
 
 @step(u'Then the REST API received a request with infos:$')
 def then_the_rest_api_received_a_request_with_infos(step):
-    last_requests = restapi_requests_manager.last_requests_infos()
+    last_requests = restapi_requests_helper.last_requests_infos()
     for expected_request_infos in step.hashes:
         assert_that(last_requests, has_item(has_request_infos(expected_request_infos)))
 

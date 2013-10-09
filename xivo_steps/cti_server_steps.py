@@ -16,10 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
+
 from lettuce import step, world
 from hamcrest import assert_that, equal_to
+
+from xivo_acceptance.action.webi import profile as profile_action_webi
 from xivo_lettuce import common, logs
-from xivo_lettuce.manager import profile_manager
 
 
 @step(u'Given there is no CTI profile "([^"]*)"$')
@@ -39,7 +41,7 @@ def then_the_profile_1_has_default_services_activated(step, profile_name):
         'Transfer on busy',
         'Transfer on no-answer',
     ]
-    selected_services = profile_manager.selected_services()
+    selected_services = profile_action_webi.selected_services()
 
     assert_that(selected_services, equal_to(expected_services))
 

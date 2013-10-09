@@ -1,4 +1,4 @@
-Feature: backup
+Feature: Backup
 
     Test X-65
 

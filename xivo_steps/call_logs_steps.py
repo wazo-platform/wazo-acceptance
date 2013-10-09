@@ -17,20 +17,21 @@
 
 from hamcrest import assert_that, equal_to
 from lettuce import step, world
+
+from xivo_acceptance.action.webi import call_logs as call_logs_action_webi
+from xivo_acceptance.helpers import call_logs_helper, cel_helper
 from xivo_lettuce import common, form, sysutils
-from xivo_lettuce.manager import cel_manager, call_logs_manager
-from xivo_lettuce.manager_dao import call_logs_manager_dao
 
 
 @step(u'Given there are no call logs$')
 def given_there_are_no_call_logs(step):
-    call_logs_manager_dao.delete_all()
+    call_logs_helper.delete_all()
 
 
 @step(u'Given I have only the following CEL entries:')
 def given_i_have_only_the_following_cel_entries(step):
-    cel_manager.delete_all()
-    cel_manager.insert_entries(step.hashes)
+    cel_helper.delete_all()
+    cel_helper.insert_entries(step.hashes)
 
 
 @step(u'When I generate call logs$')
@@ -43,7 +44,7 @@ def when_i_generate_call_logs(step):
 def when_i_request_call_logs_in_the_webi_with_dates(step):
     common.open_url('cel')
     form_info = step.hashes[0]
-    call_logs_manager.type_dates(form_info['start'], form_info['end'])
+    call_logs_action_webi.type_dates(form_info['start'], form_info['end'])
     form.submit.submit_form()
 
 
@@ -67,16 +68,16 @@ def then_i_see_that_call_log_generation_is_already_running(step):
 @step(u'Then I should have the following call logs:')
 def then_i_should_have_the_following_call_logs(step):
     for entry in step.hashes:
-        assert call_logs_manager_dao.has_call_log(entry), "Corresponding call_log entry was not found : %s" % entry
+        assert call_logs_helper.has_call_log(entry), "Corresponding call_log entry was not found : %s" % entry
 
 
 @step(u'Then I have the last call log matching:')
 def then_i_have_the_last_call_log_matching(step):
     entry = step.hashes[0]
-    assert call_logs_manager_dao.matches_last_call_log(entry), "The last call_log entry did not match : %s" % entry
+    assert call_logs_helper.matches_last_call_log(entry), "The last call_log entry did not match : %s" % entry
 
 
 @step(u'Then I should not have the following call logs:')
 def then_i_should_not_have_the_following_call_logs(step):
     for entry in step.hashes:
-        assert not call_logs_manager_dao.has_call_log(entry), "Corresponding call_log entry was found : %s" % entry
+        assert not call_logs_helper.has_call_log(entry), "Corresponding call_log entry was found : %s" % entry

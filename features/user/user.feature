@@ -118,7 +118,7 @@ Feature: User
         Given there are users with infos:
         | firstname | lastname |
         | Indiana   | Jones    |
-        Given there is no voicemail "1405"
+        Given there is no voicemail with number "1405" and context "default"
         When I add a voicemail "1405" to the user "Indiana" "Jones" with errors
         Then I see errors
 
@@ -126,7 +126,7 @@ Feature: User
         Given there are users with infos:
          | firstname | lastname | number | context |
          | Tom       | Sawyer   |   1405 | default |
-        Given there is no voicemail "1405"
+        Given there is no voicemail with number "1405" and context "default"
         When I add a voicemail "" to the user "Tom" "Sawyer" with errors
         Then I see errors
         When I add a voicemail "1405" to the user "Tom" "Sawyer"

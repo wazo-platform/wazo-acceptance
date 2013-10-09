@@ -388,3 +388,57 @@ Feature: Sheet
         Then I see a sheet with the following values:
         | Variable         |      Value |
         | xivo-calleridnum | 5555555555 |
+
+    Scenario: db-variables on reverse lookup in a directory definition
+        Given there are users with infos:
+         | firstname | lastname   | number | context | cti_profile |
+         | GreatLord | MacDonnell | 1043   | default | Client      |
+        Given the CSV file "phonebook-dbvars.csv" is copied on the server into "/tmp"
+        Given the following directory configurations exist:
+          | name              | type | URI                       |
+          | phonebook-dbvars | File | /tmp/phonebook-dbvars.csv |
+        Given the directory definition "dbvars" does not exist
+        When I add the following CTI directory definition:
+          | name   | URI                              | delimiter | direct match   | reverse match |
+          | dbvars | file:///tmp/phonebook-dbvars.csv | ;         | nom,prenom,tel | tel           |
+        When I map the following fields and save the directory definition:
+          | field name | value   |
+          | firstname  | prenom  |
+          | lastname   | nom     |
+          | phone      | tel     |
+          | mail       | mail    |
+          | special    | special |
+          | reverse    | nom     |
+        When I set the following directories for directory reverse lookup:
+        | directory |
+        | dbvars    |
+        When I restart the CTI server
+        Given I have a sheet model named "testsheet" with the variables:
+        | variable     |
+        | db-firstname |
+        | db-lastname  |
+        | db-phone     |
+        | db-mail      |
+        | db-special   |
+        Given I assign the sheet "testsheet" to the "Link" event
+        Given there is an incall "1043" in context "from-extern" to the "User" "GreatLord MacDonnell"
+        Given there is a SIP trunk "12345" in context "from-extern"
+        When I start the XiVO Client
+        When I enable screen pop-up
+        When I log in the XiVO Client as "greatlord", pass "macdonnell"
+
+        Given there are no calls running
+        Given I wait 5 seconds for the dialplan to be reloaded
+        Given I register extension "1043"
+        Given I wait call then I answer then I hang up after "3s"
+        When there is 1 calls to extension "1043@from-extern" on trunk "12345" and wait
+
+        Given I wait 10 seconds for the call processing
+
+        Then I see a sheet with the following values:
+        | Variable     | Value         |
+        | db-firstname | Pierre        |
+        | db-lastname  | DESPROGES     |
+        | db-phone     | 12345         |
+        | db-mail      | asdf@asdf.com |
+        | db-special   | asdf : ésdf  |

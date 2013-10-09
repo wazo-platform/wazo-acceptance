@@ -22,7 +22,6 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from form.checkbox import Checkbox
 from xivo_lettuce import urls
-from xivo_lettuce.form import submit
 from selenium.webdriver.common.action_chains import ActionChains
 
 
@@ -31,16 +30,14 @@ def get_value_with_label(field_label):
     return element.get_attribute('value')
 
 
-def webi_login(user, password, language):
-    input_login = world.browser.find_element_by_id('it-login')
-    input_password = world.browser.find_element_by_id('it-password')
-    input_login.send_keys(user)
-    input_password.send_keys(password)
-    language_option = world.browser.find_element_by_xpath('//option[@value="%s"]' % language)
-    language_option.click()
-    submit.submit_form()
-    world.browser.find_element_by_id('loginbox', 'Cannot login as ' + user)
-    world.logged = True
+def webi_login(login, password, language):
+    query = {
+        'login': login,
+        'password': password,
+        'language': language,
+        'go': '%252Fservice%252Fipbx%252Findex.php'
+    }
+    open_url('login', None, query)
 
 
 def webi_login_as_default():
@@ -52,9 +49,7 @@ def waitForLoginPage():
 
 
 def webi_logout():
-    logout = '/xivo/logoff.php'
-    url = '%s%s' % (world.host, logout)
-    world.browser.get(url)
+    open_url('logout')
 
 
 def the_option_is_checked(option_label, checkstate=True, **kwargs):
@@ -160,7 +155,7 @@ def open_url(module, act=None, qry=None):
         raise Exception("Unknown module : %s" % module)
 
     qry_encode = urllib.urlencode(qry)
-    url = '%s%s' % (world.host, uri)
+    url = '%s%s' % (world.xivo_url, uri)
     if qry_encode:
         url = '%s?%s' % (url, qry_encode)
     world.browser.get(url)
@@ -316,34 +311,8 @@ def go_to_tab(tab_label, ss_tab_label=None):
     time.sleep(1)
 
 
-def go_to_last_page():
-    try:
-        page_links = world.browser.find_elements_by_xpath("//div[@class='b-page']/a[starts-with(@title, 'Page ')]")
-    except NoSuchElementException:
-        pass
-    else:
-        last_page_link = page_links[-1]
-        last_page_link.click()
-
-
 def get_host_address():
-    host = world.host
+    host = world.xivo_url
     host = host.rstrip('/')
     host = host.partition('//')[2]
     return host
-
-
-def go_to_home_page():
-    home_page = '%s%s' % (world.host, '?go=%252Fservice%252Fipbx%252Findex.php')
-    world.browser.get(home_page)
-
-
-def logged():
-    if world.logged:
-        return True
-    else:
-        try:
-            world.browser.find_element_by_id('loginbox')
-            return True
-        except NoSuchElementException:
-            return False

@@ -18,9 +18,10 @@
 import datetime
 
 from lettuce import step, world
+
+from xivo_acceptance.helpers import asterisk_helper
 from xivo_lettuce import form, logs
 from xivo_lettuce.common import open_url, remove_all_elements, go_to_tab
-from xivo_lettuce.manager import asterisk_manager
 from xivo_lettuce.form.checkbox import Checkbox
 
 
@@ -110,11 +111,11 @@ def then_sip_tls_connections_use_the_group1_certificate_for_encryption(step, cer
     configfile = "sip.conf"
     certificate_path = "/var/lib/pf-xivo/certificates/%s.pem" % certificate
     variable = "tlscertfile"
-    current_path = asterisk_manager.get_asterisk_conf(configfile, variable)
+    current_path = asterisk_helper.get_asterisk_conf(configfile, variable)
     assert(current_path == certificate_path)
 
 
 @step(u'Then there are no warnings when reloading sip configuration')
 def then_there_are_no_warnings_when_reloading_sip_configuration(step):
-    asterisk_manager.send_to_asterisk_cli("sip reload")
+    asterisk_helper.send_to_asterisk_cli("sip reload")
     assert not logs.search_str_in_asterisk_log('WARNING')

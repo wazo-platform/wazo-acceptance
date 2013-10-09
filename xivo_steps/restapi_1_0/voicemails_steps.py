@@ -17,7 +17,7 @@
 
 from lettuce import step, world
 from xivo_dao import voicemail_dao
-from xivo_lettuce.restapi.v1_0.rest_voicemail import RestVoicemail
+from xivo_acceptance.helpers.restapi_v1_0.rest_voicemail import RestVoicemail
 
 rest_voicemail = RestVoicemail()
 

@@ -18,8 +18,8 @@
 from hamcrest import *
 from lettuce import step, world
 
-from xivo_lettuce.restapi.v1_1 import extension_helper
-from xivo_lettuce.manager_restapi import extension_ws
+from xivo_acceptance.action.restapi import extension_action_restapi
+from xivo_acceptance.helpers import extension_helper
 
 
 @step(u'Given I have no extensions')
@@ -37,44 +37,44 @@ def given_i_have_the_following_extensions(step):
 
 @step(u'When I access the list of extensions')
 def when_i_access_the_list_of_extensions(step):
-    world.response = extension_ws.all_extensions()
+    world.response = extension_action_restapi.all_extensions()
 
 
 @step(u'When I ask for the extension with id "([^"]*)"')
 def when_i_ask_for_the_extension_with_id_group1(step, extension_id):
-    world.response = extension_ws.get_extension(extension_id)
+    world.response = extension_action_restapi.get_extension(extension_id)
 
 
 @step(u'When I ask for the list of user_links with extension_id "([^"]*)"$')
 def when_i_ask_for_the_list_of_user_links_with_line_id(step, extension_id):
-    world.response = extension_ws.all_user_links_by_extension_id(extension_id)
+    world.response = extension_action_restapi.all_user_links_by_extension_id(extension_id)
 
 
 @step(u'When I access the extension with id "([^"]*)"')
 def when_i_access_the_extension_with_id_group1(step, extension_id):
-    world.response = extension_ws.get_extension(extension_id)
+    world.response = extension_action_restapi.get_extension(extension_id)
 
 
 @step(u'When I create an empty extension')
 def when_i_create_an_empty_extension(step):
-    world.response = extension_ws.create_extension({})
+    world.response = extension_action_restapi.create_extension({})
 
 
 @step(u'When I create an extension with the following parameters:')
 def when_i_create_an_extension_with_the_following_parameters(step):
     parameters = _extract_extension_parameters(step.hashes[0])
-    world.response = extension_ws.create_extension(parameters)
+    world.response = extension_action_restapi.create_extension(parameters)
 
 
 @step(u'When I update the extension with id "([^"]*)" using the following parameters:')
 def when_i_update_the_extension_with_id_group1_using_the_following_parameters(step, extensionid):
     extensioninfo = _extract_extension_parameters(step.hashes[0])
-    world.response = extension_ws.update(extensionid, extensioninfo)
+    world.response = extension_action_restapi.update(extensionid, extensioninfo)
 
 
 @step(u'When I delete extension "([^"]*)"')
 def when_i_delete_extension_group1(step, extension_id):
-    world.response = extension_ws.delete_extension(extension_id)
+    world.response = extension_action_restapi.delete_extension(extension_id)
 
 
 @step(u'Then I get a list with only the default extensions')
@@ -102,7 +102,7 @@ def then_i_have_an_extension_with_the_following_parameters(step):
 
 @step(u'Then the extension "([^"]*)" no longer exists')
 def then_the_extension_group1_no_longer_exists(step, extension_id):
-    response = extension_ws.get_extension(extension_id)
+    response = extension_action_restapi.get_extension(extension_id)
     assert_that(response.status, equal_to(404))
 
 

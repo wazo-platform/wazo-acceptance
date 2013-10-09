@@ -16,8 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
+
+from xivo_acceptance.action.webi import campaign as campaign_action_webi
 from xivo_lettuce import common
-from xivo_lettuce.manager import campaign_manager
 
 
 @step(u'Given there is no campaign "([^"]*)"$')
@@ -28,37 +29,37 @@ def given_there_is_no_element(step, search):
 @step(u'When I create a campaign with the following parameters:')
 def when_i_create_a_campaign_with_the_following_parameters(step):
     params = step.hashes[0]
-    campaign_manager.create_campaign(params)
+    campaign_action_webi.create_campaign(params)
 
 
 @step(u'Then there is a campaign in the list with the following values:')
 def then_there_is_a_campaign_in_the_list_with_the_following_values(step):
     for info in step.hashes:
-        campaign_manager.campaign_exists(info)
+        campaign_action_webi.campaign_exists(info)
 
 
 @step(u'Given there is a campaign "([^"]*)"$')
 def given_there_is_a_campaign(step, name):
-    campaign_manager.add_or_replace(name)
+    campaign_action_webi.add_or_replace(name)
 
 
 @step(u'When I edit the campaign "([^"]*)" with the values:')
 def when_i_edit_the_campaign_with_the_values(step, name):
-    campaign_manager.edit_campaign(name, step.hashes[0])
+    campaign_action_webi.edit_campaign(name, step.hashes[0])
 
 
 @step(u'Given there is a campaign "([^"]*)" with no recording$')
 def given_there_is_a_campaign_with_no_recording(step, name):
     step.given('Given there is a campaign "%s"' % name)
-    campaign_manager.remove_recordings(name)
+    campaign_action_webi.remove_recordings(name)
 
 
 @step(u'When I delete the campaign "([^"]*)"')
 def when_i_delete_the_campaign(step, name):
-    campaign_manager.remove_campaign(name)
+    campaign_action_webi.remove_campaign(name)
 
 
 @step(u'When I try to create a campaign with the following parameters:')
 def when_i_try_to_create_a_campaign_with_the_following_parameters(step):
     for info in step.hashes:
-        campaign_manager.create_campaign_with_errors(info)
+        campaign_action_webi.create_campaign_with_errors(info)

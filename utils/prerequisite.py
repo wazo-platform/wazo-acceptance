@@ -19,10 +19,11 @@ import os
 import socket
 
 from lettuce import world
-from xivo_lettuce.manager_ws import context_manager_ws, trunksip_manager_ws
+
+from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
+from xivo_acceptance.helpers import context_helper, trunksip_helper
 from xivo_lettuce.terrain import initialize, deinitialize
 from xivo_lettuce.common import open_url
-from xivo_lettuce.manager import provd_general_manager
 from xivo_lettuce.form import submit
 
 
@@ -39,22 +40,22 @@ def main():
         _create_webservices_access()
 
         print 'Adding context'
-        context_manager_ws.update_contextnumbers_queue('statscenter', 5000, 5100)
-        context_manager_ws.update_contextnumbers_user('statscenter', 1000, 1100)
-        context_manager_ws.update_contextnumbers_user('default', 1000, 1999)
-        context_manager_ws.update_contextnumbers_group('default', 2000, 2999)
-        context_manager_ws.update_contextnumbers_queue('default', 3000, 3999)
-        context_manager_ws.update_contextnumbers_meetme('default', 4000, 4999)
-        context_manager_ws.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
+        context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
+        context_helper.update_contextnumbers_user('statscenter', 1000, 1100)
+        context_helper.update_contextnumbers_user('default', 1000, 1999)
+        context_helper.update_contextnumbers_group('default', 2000, 2999)
+        context_helper.update_contextnumbers_queue('default', 3000, 3999)
+        context_helper.update_contextnumbers_meetme('default', 4000, 4999)
+        context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
         print 'Adding default SIP trunk'
-        trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')
+        trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')
 
         print 'Adding statscenter SIP trunk'
-        trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_statscenter', 'statscenter')
+        trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_statscenter', 'statscenter')
 
         print 'Adding default SIP trunk'
-        trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, 'to_incall', 'from-extern')
+        trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_incall', 'from-extern')
 
         print 'Configuring PostgreSQL on XiVO'
         _create_pgpass_on_remote_host()
@@ -106,7 +107,7 @@ def _allow_provd_listen_on_all_interfaces():
     config = {
         'net4_ip_rest': '0.0.0.0',
     }
-    provd_general_manager.configure_rest_api(config)
+    provd_general_action_webi.configure_rest_api(config)
     submit.submit_form()
 
 if __name__ == '__main__':

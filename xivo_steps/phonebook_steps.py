@@ -16,40 +16,40 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step, world
+from hamcrest import *
 
-from hamcrest import assert_that, has_items, is_not
+from xivo_acceptance.action.webi import phonebook as phonebook_action_webi
 from xivo_lettuce import assets
 from xivo_lettuce.aastra import AastraPhonebookBrowser
 from xivo_lettuce.common import find_line
-from xivo_lettuce.manager import phonebook_manager
 
 
 @step(u'Given "([^"]*)" is not in the phonebook')
 def given_entry_is_not_in_the_phonebook(step, search):
-    phonebook_manager.remove_entry_matching(search)
+    phonebook_action_webi.remove_entry_matching(search)
 
 
 @step(u'Given the phonebook is accessible by any hosts')
 def given_phone_is_accessible_by_any_hosts(step):
-    phonebook_manager.set_accessibility_to_any_host()
+    phonebook_action_webi.set_accessibility_to_any_host()
 
 
 @step(u'Given there are entries in the phonebook:')
 def given_there_are_entries_in_the_phonebook(step):
     for entry in step.hashes:
-        phonebook_manager.remove_entry_if_exists(entry)
-        phonebook_manager.create_entry(entry)
+        phonebook_action_webi.remove_entry_if_exists(entry)
+        phonebook_action_webi.create_entry(entry)
 
 
 @step(u'When I add the following entries to the phonebook:')
 def when_i_add_the_following_entries_to_the_phonebook(step):
     for entry in step.hashes:
-        phonebook_manager.create_entry(entry)
+        phonebook_action_webi.create_entry(entry)
 
 
 @step(u'When I search for "([^"]*)"$')
 def when_i_search_for_term(step, term):
-    phonebook_manager.phonebook_search(term)
+    phonebook_action_webi.phonebook_search(term)
 
 
 @step(u'When I search the phonebook for "([^"]*)" on my Aastra')
@@ -83,7 +83,7 @@ def then_entry_appears_in_the_list(step, entry):
 @step(u'When I import the CSV file "([^"]*)" into the phonebook')
 def when_i_import_the_csv_file_into_the_phonebook(step, csvfile):
     path = assets.full_path(csvfile)
-    phonebook_manager.import_csv_file(path)
+    phonebook_action_webi.import_csv_file(path)
 
 
 def _extract_results(keys, phone_results):

@@ -17,15 +17,16 @@
 
 from hamcrest import assert_that, contains_string, has_item, is_not
 from lettuce import step
+
+from xivo_acceptance.action.webi import general_settings_xivo as general_settings_xivo_action_webi
 from xivo_lettuce import form
 from xivo_lettuce import logs
 from xivo_lettuce.common import open_url
-from xivo_lettuce.manager import general_settings_xivo_manager
 
 
 @step(u'Given a live reload configuration is enable')
 def given_a_live_reload_configuration_is_enable(step):
-    general_settings_xivo_manager.enable_live_reload()
+    general_settings_xivo_action_webi.enable_live_reload()
 
 
 @step(u'When i edit extenfeatures page')
@@ -36,7 +37,7 @@ def when_i_edit_extenfeatures_page(step):
 
 @step(u'When i disable live reload configuration')
 def when_i_enable_live_reload_configuration(step):
-    general_settings_xivo_manager.disable_live_reload()
+    general_settings_xivo_action_webi.disable_live_reload()
 
 
 @step(u'Then i see live reload request in daemon log file')
@@ -51,4 +52,4 @@ def then_i_see_no_messages_in_daemon_log_file(step):
     expression = "'POST /exec_request_handlers HTTP/1.1' 200"
     log_lines = logs.find_line_in_daemon_log()
     assert_that(log_lines, is_not(has_item(contains_string(expression))))
-    general_settings_xivo_manager.enable_live_reload()
+    general_settings_xivo_action_webi.enable_live_reload()

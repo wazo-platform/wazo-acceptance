@@ -18,26 +18,27 @@
 import socket
 
 from lettuce import step, world
+
+from xivo_acceptance.helpers import trunksip_helper
 from xivo_lettuce import form
 from xivo_lettuce.common import open_url, remove_line
-from xivo_lettuce.manager_ws import trunksip_manager_ws
 
 
 @step(u'Given there is no trunksip "([^"]*)"')
 def given_there_is_no_trunksip(step, name):
-    trunksip_manager_ws.delete_trunksips_with_name(name)
+    trunksip_helper.delete_trunksips_with_name(name)
 
 
 @step(u'Given there is a trunksip "([^"]*)"')
 def given_there_is_a_trunksip(step, name):
-    trunksip_manager_ws.delete_trunksips_with_name(name)
-    trunksip_manager_ws.add_trunksip('192.168.32.1', name)
+    trunksip_helper.delete_trunksips_with_name(name)
+    trunksip_helper.add_trunksip('192.168.32.1', name)
 
 
 @step(u'Given there is a SIP trunk "([^"]*)" in context "([^"]*)"$')
 def given_there_is_a_siptrunk_with_callerid(step, name, context):
     callgen_ip = socket.gethostbyname(world.callgen_host),
-    trunksip_manager_ws.add_or_replace_trunksip(callgen_ip, name, context)
+    trunksip_helper.add_or_replace_trunksip(callgen_ip, name, context)
 
 
 @step(u'When I create a trunksip with name "([^"]*)"')

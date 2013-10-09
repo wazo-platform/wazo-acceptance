@@ -1,4 +1,4 @@
-Feature: ldap
+Feature: LDAP
 
     Scenario: Add LDAP Server
         Given there is no LDAP server "test-ldap-server"

@@ -16,12 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
-from lettuce import step, world
-from xivo_lettuce.xivoclient import start_xivoclient, stop_xivoclient
-from xivo_lettuce import common
-from xivo_lettuce.manager_ws import user_manager_ws
-from xivo_lettuce.manager import cti_client_manager
+
 from hamcrest import assert_that, equal_to
+from lettuce import step
+
+from xivo_acceptance.helpers import user_helper, cti_helper
+from xivo_lettuce import common
+from xivo_lettuce.xivoclient import start_xivoclient, stop_xivoclient
 
 
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"$')
@@ -32,8 +33,8 @@ def i_log_in_the_xivo_client_as_1_pass_2(step, login, password):
         'password': password,
         'agent_option': 'no',
     }
-    cti_client_manager.configure_client(conf_dict)
-    result = cti_client_manager.log_in_the_xivo_client()
+    cti_helper.configure_client(conf_dict)
+    result = cti_helper.log_in_the_xivo_client()
     assert_that(result['test_result'], equal_to('passed'),
                 'could not log in the CTI client as %s pass %s' % (login, password))
 
@@ -46,20 +47,20 @@ def i_log_in_the_xivo_client_as_1_pass_2_logged_agent(step, login, password, log
         'password': password,
         'agent_option': login_status,
     }
-    cti_client_manager.configure_client(conf_dict)
-    result = cti_client_manager.log_in_the_xivo_client()
+    cti_helper.configure_client(conf_dict)
+    result = cti_helper.log_in_the_xivo_client()
     assert_that(result['test_result'], equal_to('passed'),
                 'could not log in the CTI client as %s pass %s' % (login, password))
 
 
 @step(u'I log out of the XiVO Client$')
 def log_out_of_the_xivo_client(step):
-    cti_client_manager.log_out_of_the_xivo_client()
+    cti_helper.log_out_of_the_xivo_client()
 
 
 @step(u'When I restart the CTI server')
 def when_i_restart_the_cti_server(step):
-    cti_client_manager.restart_server()
+    cti_helper.restart_server()
 
 
 @step(u'When I start the XiVO Client$')
@@ -89,13 +90,13 @@ def when_i_stop_the_xivo_client_xxx(step, instance_name):
 
 @step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')
 def when_i_disable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
-    user_manager_ws.disable_cti_client(firstname, lastname)
+    user_helper.disable_cti_client(firstname, lastname)
     time.sleep(1)
 
 
 @step(u'When I enable access to XiVO Client to user "([^"]*)" "([^"]*)"')
 def when_i_enable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
-    user_manager_ws.enable_cti_client(firstname, lastname)
+    user_helper.enable_cti_client(firstname, lastname)
     time.sleep(1)
 
 
@@ -109,30 +110,30 @@ def when_i_log_in_and_log_out_of_the_xivo_client_as_group1_pass_group2_10_times(
 
 @step(u'Then I have "([^"]*)" instances of the client')
 def then_i_have_x_instances_of_the_client(step, nb_instances):
-    assert_that(cti_client_manager.get_nb_instances(), equal_to(int(nb_instances)))
+    assert_that(cti_helper.get_nb_instances(), equal_to(int(nb_instances)))
 
 
 @step(u'Then I logged after "([^"]*)" seconds')
 def then_i_logged_after_x_seconds(step, wait_seconds):
     time.sleep(int(wait_seconds))
-    assert_that(cti_client_manager.is_logged(), equal_to(True))
+    assert_that(cti_helper.is_logged(), equal_to(True))
 
 
 @step(u'Then I not logged after "([^"]*)" seconds')
 def then_i_not_logged_after_x_seconds(step, wait_seconds):
     time.sleep(int(wait_seconds))
-    assert_that(cti_client_manager.is_logged(), equal_to(False))
+    assert_that(cti_helper.is_logged(), equal_to(False))
 
 
 @step(u'Then I can\'t connect the CTI client of "([^"]*)" "([^"]*)"')
 def then_i_can_t_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
-    res = cti_client_manager.log_user_in_client(firstname, lastname)
+    res = cti_helper.log_user_in_client(firstname, lastname)
     assert_that(res['test_result'], equal_to('failed'))
 
 
 @step(u'Then I can connect the CTI client of "([^"]*)" "([^"]*)"')
 def then_i_can_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
-    res = cti_client_manager.log_user_in_client(firstname, lastname)
+    res = cti_helper.log_user_in_client(firstname, lastname)
     assert_that(res['test_result'], equal_to('passed'))
 
 

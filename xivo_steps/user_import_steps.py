@@ -16,38 +16,38 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from xivo_lettuce.manager_ws import user_import_manager_ws
+
+from xivo_acceptance.helpers import line_helper, user_helper, user_import_helper
 from xivo_lettuce import func
-from xivo_lettuce.manager_dao import user_manager_dao, line_manager_dao
 
 
 @step(u'^When I import a list of users with voicemail:$')
 def when_i_import_a_user_with_sip_line_and_voicemail(step):
-    user_import_manager_ws.insert_adv_user_with_mevo(step.hashes)
+    user_import_helper.insert_adv_user_with_mevo(step.hashes)
 
 
 @step(u'^When I import a list of users with incall:$')
 def when_i_import_a_user_with_sip_line_and_incall(step):
-    user_import_manager_ws.insert_adv_user_with_incall(step.hashes)
+    user_import_helper.insert_adv_user_with_incall(step.hashes)
 
 
 @step(u'^When I import a list of users with incall and voicemail - full:$')
 def when_i_import_a_user_with_sip_line_and_incall_and_voicemail_full(step):
-    user_import_manager_ws.insert_adv_user_full_infos(step.hashes)
+    user_import_helper.insert_adv_user_full_infos(step.hashes)
 
 
 @step(u'^When I import a list of users:$')
 def when_i_import_a_list_of_users(step):
-    user_import_manager_ws.insert_simple_user(step.hashes)
+    user_import_helper.insert_simple_user(step.hashes)
 
 
 @step(u'Then user with name "([^"]*)" exists')
 def then_user_with_name_exists(step, name):
     firstname, lastname = name.split(' ', 1)
-    assert user_manager_dao.is_user_with_name_exists(firstname, lastname)
+    assert user_helper.is_user_with_name_exists(firstname, lastname)
 
 
 @step(u'Then line with number "([^"]*)" exists')
 def then_line_with_number_exists(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    assert line_manager_dao.is_with_exten_context_exists(number, context)
+    assert line_helper.is_with_exten_context_exists(number, context)

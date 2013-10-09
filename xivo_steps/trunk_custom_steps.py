@@ -17,21 +17,21 @@
 
 from lettuce import step, world
 
+from xivo_acceptance.helpers import trunkcustom_helper
 from xivo_lettuce import form
 from xivo_lettuce.common import open_url, remove_line
-from xivo_lettuce.manager_ws import trunkcustom_manager_ws
 
 
 @step(u'Given there is a trunkcustom "([^"]*)"')
 def given_there_is_a_trunkcustom(step, name):
     data = {'name': name,
             'interface': name}
-    trunkcustom_manager_ws.add_or_replace_trunkcustom(data)
+    trunkcustom_helper.add_or_replace_trunkcustom(data)
 
 
 @step(u'Given there is no trunkcustom "([^"]*)"')
 def given_there_is_no_trunkcustom(step, name):
-    trunkcustom_manager_ws.delete_trunkcustoms_with_name(name)
+    trunkcustom_helper.delete_trunkcustoms_with_name(name)
 
 
 @step(u'When I create a trunkcustom with name "([^"]*)"')

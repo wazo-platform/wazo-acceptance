@@ -15,10 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step
+from hamcrest import *
+from lettuce import step, world
 from xivo_lettuce.common import webi_login
 
 
 @step(u'When I login as (.*) with password (.*) in (.*)')
 def when_i_login_the_webi(step, login, password, language):
     webi_login(login, password, language)
+
+
+@step(u'Then I should be logged in "(.*)"')
+def then_i_should_be_logged(step, username_expected):
+    element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
+    username = element.text
+    assert_that(username, equal_to(username_expected))

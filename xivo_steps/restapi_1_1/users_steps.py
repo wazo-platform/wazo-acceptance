@@ -16,9 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from hamcrest import *
-from xivo_lettuce.restapi.v1_1 import user_helper
-from xivo_lettuce.manager_restapi import user_ws
 from lettuce import step, world
+
+from xivo_acceptance.helpers import user_helper
+from xivo_acceptance.action.restapi import user_action_restapi
 
 
 @step(u'Given I have no users')
@@ -35,44 +36,44 @@ def given_there_are_the_following_users(step):
 
 @step(u'When I ask for the list of users$')
 def when_i_ask_for_the_list_of_users(step):
-    world.response = user_ws.all_users()
+    world.response = user_action_restapi.all_users()
 
 
 @step(u'When I ask for the user with id "([^"]*)"')
 def when_i_ask_for_the_user_with_id_group1(step, userid):
-    world.response = user_ws.get_user(userid)
+    world.response = user_action_restapi.get_user(userid)
 
 
 @step(u'When I search for the user "([^"]*)"')
 def when_i_search_for_user_group1(step, search):
-    world.response = user_ws.user_search(search)
+    world.response = user_action_restapi.user_search(search)
 
 
 @step(u'When I create an empty user')
 def when_i_create_an_empty_user(step):
-    world.response = user_ws.create_user({})
+    world.response = user_action_restapi.create_user({})
 
 
 @step(u'When I create users with the following parameters:')
 def when_i_create_users_with_the_following_parameters(step):
     for userinfo in step.hashes:
-        world.response = user_ws.create_user(userinfo)
+        world.response = user_action_restapi.create_user(userinfo)
 
 
 @step(u'When I update the user with id "([^"]*)" using the following parameters:')
 def when_i_update_the_user_with_id_group1_using_the_following_parameters(step, userid):
     userinfo = _get_user_info(step.hashes)
-    world.response = user_ws.update_user(userid, userinfo)
+    world.response = user_action_restapi.update_user(userid, userinfo)
 
 
 @step(u'When I delete the user with id "([^"]*)"')
 def when_i_delete_the_user_with_id_group1(step, userid):
-    world.response = user_ws.delete_user(userid)
+    world.response = user_action_restapi.delete_user(userid)
 
 
 @step(u'When I get the lines associated to user "([^"]*)"')
 def when_i_get_the_lines_associated_to_a_user(step, userid):
-    world.response = user_ws.get_lines_associated_to_a_user(userid)
+    world.response = user_action_restapi.get_lines_associated_to_a_user(userid)
 
 
 @step(u'Then I get a list with the following users:')
@@ -108,7 +109,7 @@ def _get_user_info(hashes):
 def then_the_created_user_has_the_following_parameters(step):
     userid = world.response.data['id']
 
-    user = user_ws.get_user(userid).data
+    user = user_action_restapi.get_user(userid).data
     expected_user = _get_user_info(step.hashes)
 
     assert_that(user, has_entries(expected_user))
@@ -116,5 +117,5 @@ def then_the_created_user_has_the_following_parameters(step):
 
 @step(u'Then the user with id "([^"]*)" no longer exists')
 def then_the_user_with_id_group1_no_longer_exists(step, userid):
-    response = user_ws.get_user(userid)
+    response = user_action_restapi.get_user(userid)
     assert_that(response.status, equal_to(404))

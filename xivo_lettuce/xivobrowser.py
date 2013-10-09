@@ -25,13 +25,26 @@ from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 
-
-class MissingTranslationException(Exception):
-    pass
+from xivo_lettuce.exception import MissingTranslationException
 
 
 class XiVOBrowser(webdriver.Firefox):
+
+    def __init__(self):
+        profile = self._setup_browser_profile()
+        webdriver.Firefox.__init__(self, firefox_profile=profile)
+
+    def _setup_browser_profile(self):
+        fp = FirefoxProfile()
+
+        fp.set_preference("browser.download.folderList", 2)
+        fp.set_preference("browser.download.manager.showWhenStarting", False)
+        fp.set_preference("browser.download.dir", "/tmp/")
+        fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download")
+
+        return fp
 
     def get(self, url):
         """Get the url and check that there is no missing translation, or raise an exception.

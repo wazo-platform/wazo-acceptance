@@ -18,3 +18,7 @@
 
 class NoSuchProfileException(Exception):
     pass
+
+
+class MissingTranslationException(Exception):
+    pass

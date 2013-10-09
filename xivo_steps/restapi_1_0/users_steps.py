@@ -29,7 +29,7 @@ from xivo_dao.alchemy.userfeatures import UserFeatures
 from xivo_dao.data_handler.extension import dao as extension_dao
 from xivo_dao.data_handler.line import dao as line_dao
 from xivo_dao.data_handler.user_line_extension import dao as user_line_extension_dao
-from xivo_lettuce.restapi.v1_0.rest_users import RestUsers
+from xivo_acceptance.helpers.restapi_v1_0.rest_users import RestUsers
 
 rest_users = RestUsers()
 

@@ -15,14 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
+
 from hamcrest import assert_that, is_
 from lettuce import step, world
+
+from xivo_acceptance.action.webi import admin_user as admin_user_action_webi
 from xivo_lettuce import urls
 from xivo_lettuce import common
 from xivo_lettuce.common import open_url, webi_logout
-from xivo_lettuce.manager import admin_user_manager
-
-import time
 
 
 def is_browser_on_module_page(module):
@@ -37,12 +38,12 @@ def given_there_is_no_element(step, search):
 
 @step(u'When I create an admin user with login "([^"]*)" and password "([^"]*)"')
 def when_i_create_an_admin_user_with_login_and_password(step, login, password):
-    admin_user_manager.create_admin_user(login, password)
+    admin_user_action_webi.create_admin_user(login, password)
 
 
 @step(u'When I assign the following rights to the admin user "([^"]*)":')
 def when_i_assign_the_following_rights_to_the_admin_user(step, admin):
-    admin_user_manager.set_privileges(admin, step.hashes)
+    admin_user_action_webi.set_privileges(admin, step.hashes)
 
 
 @step(u'When I logout from the web interface')

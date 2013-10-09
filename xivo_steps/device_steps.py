@@ -16,14 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from hamcrest import assert_that, contains_string, equal_to, has_item, is_not, has_key, starts_with
-from xivo_lettuce.manager import device_manager
-from xivo_lettuce.manager import provd_cfg_dev_manager
-from xivo_lettuce import form, common, logs
-from xivo_lettuce.restapi.v1_1 import device_helper
-
-from xivo_dao.data_handler.line import dao as line_dao
+from hamcrest import *
 from urllib2 import HTTPError
+
+from xivo_acceptance.action.webi import device as device_action_webi
+from xivo_acceptance.helpers import device_helper, provd_helper
+from xivo_dao.data_handler.line import dao as line_dao
+from xivo_lettuce import form, common, logs
 
 
 @step(u'When I request devices in the webi')
@@ -47,7 +46,7 @@ def when_i_reset_to_autoprov_the_device_from_webi(step, mac):
 
 @step(u'^When I search device "([^"]*)"$')
 def when_i_search_device(step, search):
-    device_manager.search_device(search)
+    device_action_webi.search_device(search)
 
 
 @step(u'When I create the device with infos:')
@@ -55,15 +54,15 @@ def when_i_create_the_device_with_infos(step):
     common.open_url('device', 'add')
     device_infos = step.hashes[0]
     if 'mac' in device_infos:
-        provd_cfg_dev_manager.delete_device_with_mac(device_infos['mac'])
-        device_manager.type_input('mac', device_infos['mac'])
+        provd_helper.delete_device_with_mac(device_infos['mac'])
+        device_action_webi.type_input('mac', device_infos['mac'])
     if 'ip' in device_infos:
-        provd_cfg_dev_manager.delete_device_with_ip(device_infos['ip'])
-        device_manager.type_input('ip', device_infos['ip'])
+        provd_helper.delete_device_with_ip(device_infos['ip'])
+        device_action_webi.type_input('ip', device_infos['ip'])
     if 'plugin' in device_infos:
-        device_manager.type_input('plugin', device_infos['plugin'])
+        device_action_webi.type_input('plugin', device_infos['plugin'])
     if 'template_id' in device_infos:
-        device_manager.type_select('template_id', device_infos['template_id'])
+        device_action_webi.type_select('template_id', device_infos['template_id'])
     form.submit.submit_form()
 
 
@@ -72,11 +71,11 @@ def when_i_edit_the_device_with_infos(step, device_id):
     common.open_url('device', 'edit', qry={'id': '%s' % device_id})
     device_infos = step.hashes[0]
     if 'plugin' in device_infos:
-        device_manager.type_input('plugin', device_infos['plugin'])
+        device_action_webi.type_input('plugin', device_infos['plugin'])
     if 'template_id' in device_infos:
-        device_manager.type_select('template_id', device_infos['template_id'])
+        device_action_webi.type_select('template_id', device_infos['template_id'])
     if 'description' in device_infos:
-        device_manager.type_input('description', device_infos['description'])
+        device_action_webi.type_input('description', device_infos['description'])
     form.submit.submit_form()
 
 
@@ -93,13 +92,13 @@ def when_i_provision_my_device_with_my_line_id_group1(step, line_id, device_ip):
 
 @step(u'Then the device "([^"]*)" has been provisioned with a configuration:')
 def then_the_device_has_been_provisioned_with_a_configuration(step, device_id):
-    provd_cfg_dev_manager.device_config_has_properties(device_id, step.hashes)
+    provd_helper.device_config_has_properties(device_id, step.hashes)
 
 
 @step(u'Then I see devices with infos:')
 def then_i_see_devices_with_infos(step):
     for expected_device in step.hashes:
-        actual_device = device_manager.get_device_list_entry(expected_device['mac'])
+        actual_device = device_action_webi.get_device_list_entry(expected_device['mac'])
         if 'ip' in expected_device:
             assert_that(actual_device['ip'], equal_to(expected_device['ip']))
         if 'configured' in expected_device:
@@ -127,7 +126,7 @@ def then_i_see_in_the_log_file_device_group1_autoprovisioned(step, device_id):
 @step(u'Then the device "([^"]*)" is no longer exists in provd')
 def then_the_device_is_no_longer_exists_in_provd(step, device_id):
     try:
-        provd_cfg_dev_manager.get_device(device_id)
+        provd_helper.get_device(device_id)
     except HTTPError:
         assert True
     else:

@@ -16,16 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
+
+from xivo_acceptance.helpers import context_helper
 from xivo_dao.data_handler.context.model import ContextType
-from xivo_lettuce.manager_ws import context_manager_ws
 
 
 @step(u'Given I have the following context:')
 def given_i_have_the_following_extensions(step):
     for context_data in step.hashes:
-        context_manager_ws.add_or_replace_context(context_data['name'],
-                                                  context_data['name'],
-                                                  ContextType.internal)
-        context_manager_ws.update_contextnumbers_user(context_data['name'],
-                                                      context_data['numberbeg'],
-                                                      context_data['numberend'])
+        context_helper.add_or_replace_context(context_data['name'],
+                                              context_data['name'],
+                                              ContextType.internal)
+        context_helper.update_contextnumbers_user(context_data['name'],
+                                                  context_data['numberbeg'],
+                                                  context_data['numberend'])

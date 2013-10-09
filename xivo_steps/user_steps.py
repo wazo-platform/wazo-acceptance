@@ -18,13 +18,13 @@
 from hamcrest import assert_that, equal_to
 from lettuce import step
 from lettuce.registry import world
-from selenium.webdriver.support.select import Select
-from xivo_lettuce import common, form
-from xivo_lettuce.manager import user_manager, line_manager
-from xivo_lettuce.manager_ws import user_manager_ws, group_manager_ws, \
-    agent_manager_ws
-from xivo_lettuce.manager_dao import user_manager_dao
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.select import Select
+
+from xivo_acceptance.action.webi import user as user_action_webi
+from xivo_acceptance.action.webi import line as line_action_webi
+from xivo_acceptance.helpers import user_helper, agent_helper, group_helper
+from xivo_lettuce import common, form
 
 
 @step(u'^Given there are users with infos:$')
@@ -102,24 +102,24 @@ def given_there_are_users_with_infos(step):
         if user_data.get('mobile_number'):
             user_ws_data['mobile_number'] = user_data['mobile_number']
 
-        user_id = user_manager_ws.add_or_replace_user(user_ws_data)
+        user_id = user_helper.add_or_replace_user(user_ws_data)
 
         if user_data.get('agent_number'):
-            agent_manager_ws.delete_agents_with_number(user_data['agent_number'])
+            agent_helper.delete_agents_with_number(user_data['agent_number'])
             agent_data = {'firstname': user_data['firstname'],
                           'lastname': user_data['lastname'],
                           'number': user_data['agent_number'],
                           'context': user_data.get('context', 'default'),
                           'users': [int(user_id)]}
-            agent_manager_ws.add_agent(agent_data)
+            agent_helper.add_agent(agent_data)
 
         if user_data.get('group_name'):
-            group_manager_ws.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
+            group_helper.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
 
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
 def given_there_is_a_no_user_1_2(step, firstname, lastname):
-    user_manager_dao.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
+    user_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
 
 
 @step(u'Given user "([^"]*)" "([^"]*)" has the following function keys:')
@@ -135,7 +135,7 @@ def given_user_has_the_following_function_keys(step, firstname, lastname):
     }
     for key_definition in step.hashes:
         key = dict((name_map[k], v) for k, v in key_definition.iteritems())
-        user_manager.type_func_key(**key)
+        user_action_webi.type_func_key(**key)
     form.submit.submit_form()
 
 
@@ -144,7 +144,7 @@ def when_i_reorder_group1_group2_s_function_keys_such_that(step, firstname, last
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     common.edit_line("%s %s" % (firstname, lastname))
     pairs = [(k['Old'], k['New']) for k in step.hashes]
-    user_manager.change_key_order(pairs)
+    user_action_webi.change_key_order(pairs)
     form.submit.submit_form()
 
 
@@ -152,9 +152,9 @@ def when_i_reorder_group1_group2_s_function_keys_such_that(step, firstname, last
 def when_i_create_a_user(step):
     common.open_url('user', 'add')
     user_properties = step.hashes[0]
-    user_manager.type_user_names(user_properties['firstname'], user_properties.get('lastname', ''))
+    user_action_webi.type_user_names(user_properties['firstname'], user_properties.get('lastname', ''))
     if 'number' in user_properties:
-        user_manager.user_form_add_line(
+        user_action_webi.user_form_add_line(
             linenumber=user_properties['number'],
             protocol=user_properties['protocol'],
             device=user_properties.get('device', None),
@@ -166,16 +166,16 @@ def when_i_create_a_user(step):
 
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"$')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
-    user_id = user_manager_dao.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
-    user_manager_dao.delete_user_line_extension_with_firstname_lastname(dest_firstname, dest_lastname)
+    user_id = user_helper.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
+    user_helper.delete_user_line_extension_with_firstname_lastname(dest_firstname, dest_lastname)
     common.open_url('user', 'edit', {'id': user_id})
-    user_manager.type_user_names(dest_firstname, dest_lastname)
+    user_action_webi.type_user_names(dest_firstname, dest_lastname)
     form.submit.submit_form()
 
 
 @step(u'When I remove user "([^"]*)" "([^"]*)"$')
 def remove_user(step, firstname, lastname):
-    world.user_id = user_manager_dao.find_user_id_with_firstname_lastname(firstname, lastname)
+    world.user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     common.remove_line('%s %s' % (firstname, lastname))
     common.open_url('user', 'search', {'search': ''})
@@ -199,61 +199,61 @@ def when_i_delete_agent_number_1(step, agent_number):
 
 @step(u'When I add a user "([^"]*)" "([^"]*)" with a function key with type Customized and extension "([^"]*)"$')
 def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastname, extension):
-    user_manager_dao.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
+    user_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'add')
-    user_manager.type_user_names(firstname, lastname)
-    user_manager.type_func_key('Customized', extension)
+    user_action_webi.type_user_names(firstname, lastname)
+    user_action_webi.type_func_key('Customized', extension)
     form.submit.submit_form()
 
 
 @step(u'When I remove line from user "([^"]*)" "([^"]*)" with errors$')
 def when_i_remove_line_from_user_1_2_with_errors(step, firstname, lastname):
     _edit_user(firstname, lastname)
-    user_manager.remove_line()
+    user_action_webi.remove_line()
     form.submit.submit_form_with_errors()
 
 
 @step(u'When I remove line "([^"]*)" from lines then I see errors$')
 def when_i_remove_line_from_lines_then_i_see_errors(step, line_number):
     common.open_url('line')
-    line_manager.search_line_number(line_number)
+    line_action_webi.search_line_number(line_number)
     common.remove_line(line_number)
     form.submit.assert_form_errors()
-    line_manager.unsearch_line()
+    line_action_webi.unsearch_line()
 
 
 @step(u'When I add a voicemail "([^"]*)" to the user "([^"]*)" "([^"]*)" with errors$')
 def when_i_add_a_voicemail_1_to_the_user_2_3_with_errors(step, voicemail_number, firstname, lastname):
     _edit_user(firstname, lastname)
-    user_manager.type_voicemail(voicemail_number)
+    user_action_webi.type_voicemail(voicemail_number)
     form.submit.submit_form_with_errors()
 
 
 @step(u'When I add a voicemail "([^"]*)" to the user "([^"]*)" "([^"]*)"$')
 def when_i_add_a_voicemail_1_to_the_user_2_3(step, voicemail_number, firstname, lastname):
     _edit_user(firstname, lastname)
-    user_manager.type_voicemail(voicemail_number)
+    user_action_webi.type_voicemail(voicemail_number)
     form.submit.submit_form()
 
 
 @step(u'When I modify the mobile number of user "([^"]*)" "([^"]*)" to "([^"]*)"')
 def when_i_modify_the_mobile_number_of_user_1_2_to_3(step, firstname, lastname, mobile_number):
     _edit_user(firstname, lastname)
-    user_manager.type_mobile_number(mobile_number)
+    user_action_webi.type_mobile_number(mobile_number)
     form.submit.submit_form()
 
 
 @step(u'When I remove the mobile number of user "([^"]*)" "([^"]*)"')
 def when_i_remove_the_mobile_number_of_user_group1_group2(step, firstname, lastname):
     _edit_user(firstname, lastname)
-    user_manager.type_mobile_number('')
+    user_action_webi.type_mobile_number('')
     form.submit.submit_form()
 
 
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"$')
 def then_user_is_in_group(step, firstname, lastname, group_name):
-    user_id = user_manager_dao.find_user_id_with_firstname_lastname(firstname, lastname)
-    assert user_manager_ws.user_id_is_in_group_name(group_name, user_id)
+    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    assert user_helper.user_id_is_in_group_name(group_name, user_id)
 
 
 @step(u'Then I should be at the user list page$')
@@ -293,7 +293,7 @@ def then_i_see_a_user_with_infos(step):
     user_expected_properties = step.hashes[0]
     fullname = user_expected_properties['fullname']
     common.open_url('user', 'search', {'search': '%s' % fullname})
-    user_actual_properties = user_manager.get_user_list_entry(fullname)
+    user_actual_properties = user_action_webi.get_user_list_entry(fullname)
     assert_that(fullname, equal_to(user_expected_properties['fullname']))
     for user_field, user_value in user_expected_properties.iteritems():
         assert_that(user_actual_properties[user_field], equal_to(user_value))
@@ -314,20 +314,20 @@ def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstna
 
 @step(u'Then there is no data about this user remaining in the database.$')
 def then_there_is_no_data_about_this_user_remaining_in_the_database(step):
-    assert user_manager.count_linefeatures(world.user_id) == 0, "Data is remaining in linefeatures after user deletion."
-    assert user_manager.count_rightcallmember(world.user_id) == 0, "Data is remaining in rightcallmember after user deletion."
-    assert user_manager.count_dialaction(world.user_id) == 0, "Data is remaining in dialaction after user deletion."
-    assert user_manager.count_phonefunckey(world.user_id) == 0, "Data is remaining in phonefunckey after user deletion."
-    assert user_manager.count_callfiltermember(world.user_id) == 0, "Data is remaining in callfiltermember after user deletion."
-    assert user_manager.count_queuemember(world.user_id) == 0, "Data is remaining in queuemember after user deletion."
-    assert user_manager.count_schedulepath(world.user_id) == 0, "Data is remaining in schedulepath after user deletion."
+    assert user_helper.count_linefeatures(world.user_id) == 0, "Data is remaining in linefeatures after user deletion."
+    assert user_helper.count_rightcallmember(world.user_id) == 0, "Data is remaining in rightcallmember after user deletion."
+    assert user_helper.count_dialaction(world.user_id) == 0, "Data is remaining in dialaction after user deletion."
+    assert user_helper.count_phonefunckey(world.user_id) == 0, "Data is remaining in phonefunckey after user deletion."
+    assert user_helper.count_callfiltermember(world.user_id) == 0, "Data is remaining in callfiltermember after user deletion."
+    assert user_helper.count_queuemember(world.user_id) == 0, "Data is remaining in queuemember after user deletion."
+    assert user_helper.count_schedulepath(world.user_id) == 0, "Data is remaining in schedulepath after user deletion."
 
 
 @step(u'When I modify the channel type of group "([^"]*)" of user "([^"]*)" to "([^"]*)"')
 def when_i_modify_the_channel_type_of_group_group1_of_user_group2_to_group3(step, group, fullname, chantype):
     common.open_url('user', 'search', {'search': fullname})
     common.edit_line(fullname)
-    user_manager.select_chantype_of_group(group, chantype)
+    user_action_webi.select_chantype_of_group(group, chantype)
     form.submit.submit_form()
 
 
@@ -335,7 +335,7 @@ def when_i_modify_the_channel_type_of_group_group1_of_user_group2_to_group3(step
 def then_the_channel_type_of_group_group1_of_user_group2_is_group3(step, group, fullname, chantype):
     common.open_url('user', 'search', {'search': fullname})
     common.edit_line(fullname)
-    assert_that(user_manager.get_chantype_of_group(group), equal_to(chantype))
+    assert_that(user_action_webi.get_chantype_of_group(group), equal_to(chantype))
 
 
 @step(u'Then "([^"]*)" has enablexfer "([^"]*)"')
@@ -343,11 +343,11 @@ def then_user_has_enablexfer_enabled(step, fullname, enabled_string):
     firstname, lastname = fullname.split(' ', 1)
     expected = enabled_string == 'enabled'
 
-    result = user_manager_ws.has_enabled_transfer(firstname, lastname)
+    result = user_helper.has_enabled_transfer(firstname, lastname)
 
     assert_that(result, equal_to(expected), 'Enable transfer for %s' % fullname)
 
 
 def _edit_user(firstname, lastname):
-    user_id = user_manager_dao.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'edit', qry={'id': user_id})

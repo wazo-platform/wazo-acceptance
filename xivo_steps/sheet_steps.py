@@ -20,7 +20,7 @@ from lettuce import step, world
 from selenium.webdriver.support.select import Select
 from xivo_lettuce import common
 from xivo_lettuce import form
-from xivo_lettuce.manager import cti_client_manager
+from xivo_acceptance.helpers import cti_helper
 
 
 EVENT_ELEMENT_MAP = {
@@ -76,7 +76,7 @@ def given_i_assign_the_sheet_group1_to_the_agent_linked_event(step, sheet_name, 
 
 @step(u'Then I see a sheet with the following values:')
 def then_i_see_a_sheet_with_the_following_values(step):
-    res = cti_client_manager.get_sheet_infos()
+    res = cti_helper.get_sheet_infos()
     expected = step.hashes
 
     assert_that(res, has_items(*expected))
@@ -84,5 +84,5 @@ def then_i_see_a_sheet_with_the_following_values(step):
 
 @step(u'Then I should not see any sheet')
 def then_i_should_not_see_any_sheet(step):
-    res = cti_client_manager.get_sheet_infos()
+    res = cti_helper.get_sheet_infos()
     assert_that(res, equal_to([]))

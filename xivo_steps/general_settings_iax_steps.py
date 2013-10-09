@@ -17,14 +17,15 @@
 
 from lettuce import step
 from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce.manager import general_settings_iax_manager
+
+from xivo_acceptance.action.webi import general_settings_iax as general_settings_iax_action_webi
 from xivo_lettuce import form, common
 from xivo_lettuce.form.checkbox import Checkbox
 
 
 @step(u'Given the IAX call limit to "([^"]*)" netmask "([^"]*)" does not exist')
 def given_the_iax_call_limit_to_1_netmask_2_does_not_exist(step, destination, netmask):
-    general_settings_iax_manager.remove_call_limit_if_exists(destination, netmask)
+    general_settings_iax_action_webi.remove_call_limit_if_exists(destination, netmask)
 
 
 @step(u'When I add IAX call limits with errors:')
@@ -37,7 +38,7 @@ def when_i_add_iax_call_limit_with_errors(step):
 @step(u'When I remove IAX call limits:')
 def when_i_remove_iax_call_limits(step):
     call_limits_to_remove = step.hashes
-    general_settings_iax_manager.remove_call_limits(call_limits_to_remove)
+    general_settings_iax_action_webi.remove_call_limits(call_limits_to_remove)
 
 
 @step(u'When I add IAX call limits:')
@@ -54,7 +55,7 @@ def then_i_see_iax_call_limits(step):
         address = expected_call_limit['address']
         netmask = expected_call_limit['netmask']
         call_count = expected_call_limit['call_count']
-        general_settings_iax_manager.find_call_limit_line(address, netmask, call_count)
+        general_settings_iax_action_webi.find_call_limit_line(address, netmask, call_count)
 
 
 @step(u'Then I don\'t see IAX call limits:')
@@ -65,7 +66,7 @@ def then_i_don_t_see_iax_call_limits(step):
         netmask = unexpected_call_limit['netmask']
         call_count = unexpected_call_limit['call_count']
         try:
-            general_settings_iax_manager.find_call_limit_line(address, netmask, call_count)
+            general_settings_iax_action_webi.find_call_limit_line(address, netmask, call_count)
         except NoSuchElementException:
             pass
         else:
@@ -171,4 +172,4 @@ def _go_to_call_limits_form():
 
 def _type_call_limits(call_limits_config):
     for call_limit in call_limits_config:
-        general_settings_iax_manager.type_iax_call_limit(call_limit)
+        general_settings_iax_action_webi.type_iax_call_limit(call_limit)

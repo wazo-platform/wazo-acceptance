@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
 import os
-from StringIO import StringIO
+import argparse
 import xml.etree.ElementTree as ET
+from StringIO import StringIO
 from docutils.core import publish_string
 
 
-TEST_RESULT_FILE = '/tmp/test_result.html'
+TEST_RESULT_FILE = '/tmp/tests-report-xivo-auto-%s.html'
 path = '/data/test_results'
 
 TEXT_HEADER = """
@@ -20,6 +21,7 @@ The tests listed here were all passing at the moment of the release.
 
 
 """
+
 
 def get_features(path):
     dirs = os.listdir(path)
@@ -70,6 +72,11 @@ def write_output_file(formatted_text, output_file):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('version', help='Version to freeze')
+
+    args = parser.parse_args()
+
     features = get_features(path)
     formatted_text = format_features(features)
-    write_output_file(formatted_text, TEST_RESULT_FILE)
+    write_output_file(formatted_text, TEST_RESULT_FILE % args.version)
