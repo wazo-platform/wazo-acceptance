@@ -22,6 +22,7 @@ from lettuce import step, world
 from xivo_lettuce.manager import provd_cfg_dev_manager
 from xivo_lettuce.manager_restapi import device_ws
 from xivo_lettuce.restapi.v1_1 import device_helper
+from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order
 
 
 @step(u'Given there are no devices with mac "([^"]*)"')
@@ -183,8 +184,9 @@ def then_the_list_contains_the_same_number_of_devices_as_on_the_provisioning_ser
 
 @step(u'Then I get a list of devices in the following order:')
 def then_i_get_a_list_of_devices_in_the_following_order(step):
-    matching_devices = _extract_matching_devices(step.hashes)
-    assert_that(matching_devices, _contains_all_devices(step.hashes))
+    all_devices = world.response.data['items']
+    expected_devices = [d for d in step.hashes]
+    assert_has_dicts_in_order(all_devices, expected_devices)
 
 
 @step(u'Then I get a list with (\d+) of (\d+) devices')
@@ -200,16 +202,3 @@ def then_i_get_a_list_with_n_of_n_devices(step, nb_list, nb_total):
 def then_i_get_a_list_with_n_devices(step, nb_list):
     nb_list = int(nb_list)
     assert_that(world.response.data, has_entry('items', has_length(nb_list)))
-
-
-def _contains_all_devices(devices):
-    return contains(*_all_items(devices))
-
-
-def _extract_matching_devices(devices):
-    matcher = any_of(*_all_items(devices))
-    return [device for device in devices if matcher.matches(device)]
-
-
-def _all_items(devices):
-    return [has_entries(device) for device in devices]

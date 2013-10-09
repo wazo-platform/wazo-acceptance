@@ -19,8 +19,10 @@ from hamcrest import *
 from lettuce import step, world
 
 from xivo_lettuce.manager_ws import voicemail_manager_ws as old_voicemail_ws
+from xivo_lettuce.manager_dao import voicemail_manager_dao
 from xivo_lettuce.restapi.v1_1 import voicemail_helper
 from xivo_lettuce.manager_restapi import voicemail_ws
+from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order, assert_does_not_have_any_dicts
 
 
 @step(u'Given there is no voicemail "([^"]*)"')
@@ -98,22 +100,9 @@ def then_i_get_a_list_containing_the_following_voicemails(step):
 
 @step(u'Then I get a list of voicemails in the following order:')
 def then_i_get_a_list_of_voicemails_in_the_following_order(step):
+    all_voicemails = world.response.data['items']
     expected_voicemails = [_extract_voicemail_info(v) for v in step.hashes]
-    matching_voicemails = _extract_matching_voicemails(expected_voicemails)
-    assert_that(matching_voicemails, _contains_all_voicemails(expected_voicemails))
-
-
-def _contains_all_voicemails(voicemails):
-    return contains(*_all_items(voicemails))
-
-
-def _extract_matching_voicemails(voicemails):
-    matcher = any_of(*_all_items(voicemails))
-    return [v for v in voicemails if matcher.matches(v)]
-
-
-def _all_items(voicemails):
-    return [has_entries(v) for v in voicemails]
+    assert_has_dicts_in_order(all_voicemails, expected_voicemails)
 
 
 @step(u'Then I have a list with (\d+) of (\d+) results')
@@ -126,7 +115,7 @@ def then_i_have_a_list_with_n_of_n_results(step, nb_list, nb_total):
 
 
 @step(u'Then I have a list with (\d+) results$')
-def then_i_have_a_list_with_n_results(step, nb_list, nb_total):
+def then_i_have_a_list_with_n_results(step, nb_list):
     nb_list = int(nb_list)
     assert_that(world.response.data, has_entry('items', has_length(nb_list)))
 
@@ -140,6 +129,7 @@ def then_the_list_contains_the_same_total_voicemails_as_on_the_server(step):
 
 @step(u'Then I do not have the following voicemails in the list:')
 def then_i_dot_not_have_the_following_voicemails_in_the_list(step):
-    expected_voicemails = [_extract_voicemail_info(v) for v in step.hashes]
-    matching_voicemails = _extract_matching_voicemails(expected_voicemails)
-    assert_that(matching_voicemails, is_not(_contains_all_voicemails(expected_voicemails)))
+    all_voicemails = world.response.data['items']
+    not_expected_voicemails = [_extract_voicemail_info(v) for v in step.hashes]
+
+    assert_does_not_have_any_dicts(all_voicemails, not_expected_voicemails)
