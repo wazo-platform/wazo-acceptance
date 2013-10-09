@@ -19,5 +19,5 @@ from lettuce import world
 
 
 def webi_exec_commonconf():
-    url = '%s%s' % (world.host, '/xivo/configuration/index.php/controlsystem/commonconf')
+    url = '%s%s' % (world.xivo_url, '/xivo/configuration/index.php/controlsystem/commonconf')
     world.browser.get(url)

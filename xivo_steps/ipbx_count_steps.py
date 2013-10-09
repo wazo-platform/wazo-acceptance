@@ -28,7 +28,7 @@ TOTAL_INDEX = 4
 
 
 def _open_ipbx_count_url():
-    world.browser.get('%s%s' % (world.host, IPBX_COUNT_URL))
+    world.browser.get('%s%s' % (world.xivo_url, IPBX_COUNT_URL))
 
 
 def _sip_trunk_enabled_xpath():

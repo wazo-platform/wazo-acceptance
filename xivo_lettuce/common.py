@@ -155,7 +155,7 @@ def open_url(module, act=None, qry=None):
         raise Exception("Unknown module : %s" % module)
 
     qry_encode = urllib.urlencode(qry)
-    url = '%s%s' % (world.host, uri)
+    url = '%s%s' % (world.xivo_url, uri)
     if qry_encode:
         url = '%s?%s' % (url, qry_encode)
     world.browser.get(url)
@@ -312,7 +312,7 @@ def go_to_tab(tab_label, ss_tab_label=None):
 
 
 def get_host_address():
-    host = world.host
+    host = world.xivo_url
     host = host.rstrip('/')
     host = host.partition('//')[2]
     return host

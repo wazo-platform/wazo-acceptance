@@ -41,8 +41,6 @@ _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
 def xivo_lettuce_before_all():
     print 'Configuring...'
     initialize()
-    if world.browser_enable and _webi_configured():
-        _check_webi_login_root()
 
 
 @before.each_scenario
@@ -51,6 +49,8 @@ def xivo_lettuce_before_each_scenario(scenario):
     world.userid = None
     world.number = None
     world.lineid = None
+    if world.browser_enable and _webi_configured():
+        _check_webi_login_root()
 
 
 @after.each_step
@@ -132,7 +132,7 @@ def _setup_xivo_client():
 
 
 def _setup_login_infos():
-    world.host = 'http://%s/' % world.config.get('xivo', 'hostname')
+    world.xivo_url = 'https://%s' % world.config.get('xivo', 'hostname')
     world.login = world.config.get('login_infos', 'login')
     world.password = world.config.get('login_infos', 'password')
 
