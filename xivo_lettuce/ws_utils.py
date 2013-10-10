@@ -19,8 +19,6 @@
 import requests
 import json
 
-from lettuce.registry import world
-
 
 class WsUtils(object):
     '''
@@ -29,23 +27,26 @@ class WsUtils(object):
     REST web services
     '''
 
-    def __init__(self, api_version=None):
-        self.baseurl = self._prepare_baseurl(api_version)
-        self.auth = self._prepare_auth()
+    def __init__(self, rest_configuration_obj):
+        self.baseurl = self._prepare_baseurl(rest_configuration_obj)
+        self.auth = self._prepare_auth(rest_configuration_obj)
         self.session = requests.Session()
 
-    def _prepare_baseurl(self, api_version=None):
-        hostname = world.config.get('xivo', 'hostname')
-        protocol = world.config.get('restapi', 'protocol')
-        port = world.config.getint('restapi', 'port')
-        api_version = api_version or  world.config.get('restapi', 'api_version')
+    def _prepare_baseurl(self, rest_configuration_obj):
+        protocol = rest_configuration_obj.protocol
+        hostname = rest_configuration_obj.hostname
+        port = rest_configuration_obj.port
+        api_version = rest_configuration_obj.api_version
 
         baseurl = "%s://%s:%s/%s" % (protocol, hostname, port, api_version)
         return baseurl
 
-    def _prepare_auth(self):
-        username = world.config.get('webservices_infos', 'login')
-        password = world.config.get('webservices_infos', 'password')
+    def _prepare_auth(self, rest_configuration_obj):
+        username = rest_configuration_obj.auth_username
+        password = rest_configuration_obj.auth_passwd
+
+        if username is None and password is None:
+            return None
 
         auth = requests.auth.HTTPDigestAuth(username, password)
         return auth
@@ -102,3 +103,14 @@ class RestResponse(object):
         self.status = status
         self.headers = headers
         self.data = data
+
+
+class RestConfiguration(object):
+
+    def __init__(self, protocol, hostname, port, auth_username=None, auth_passwd=None, api_version=None):
+        self.protocol = protocol
+        self.hostname = hostname
+        self.port = port
+        self.auth_username = auth_username
+        self.auth_passwd = auth_passwd
+        self.api_version = api_version

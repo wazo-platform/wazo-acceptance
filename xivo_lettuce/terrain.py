@@ -31,7 +31,8 @@ from xivo_dao.helpers import config as dao_config
 from xivo_dao.helpers import db_manager
 from xivo_lettuce.common import webi_login_as_default, webi_logout
 from xivo_lettuce.ssh import SSHClient
-from xivo_lettuce.ws_utils import WsUtils
+from xivo_lettuce.ws_utils import WsUtils, RestConfiguration
+from xivo_lettuce.remote_py_cmd import remote_exec_with_result
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             '../config/config.ini'))
@@ -94,6 +95,7 @@ def initialize():
     _setup_ssh_client_xivo()
     _setup_ssh_client_callgen()
     _setup_ws()
+    _setup_provd()
     if world.browser_enable:
         _setup_browser()
         if _webi_configured():
@@ -154,13 +156,53 @@ def _setup_ssh_client_callgen():
 
 
 def _setup_ws():
-    hostname = world.config.get('xivo', 'hostname')
-    login = world.config.get('webservices_infos', 'login')
-    password = world.config.get('webservices_infos', 'password')
-    world.ws = xivo_ws.XivoServer(hostname, login, password)
+    xivo_hostname = world.config.get('xivo', 'hostname')
+    auth_username = world.config.get('webservices_infos', 'login')
+    auth_passwd = world.config.get('webservices_infos', 'password')
+    protocol = world.config.get('restapi', 'protocol')
+    port = world.config.getint('restapi', 'port')
 
-    world.restapi_utils_1_0 = WsUtils('1.0')
-    world.restapi_utils_1_1 = WsUtils('1.1')
+    world.ws = xivo_ws.XivoServer(xivo_hostname, auth_username, auth_passwd)
+
+    restapi_config_1_0 = RestConfiguration(protocol, xivo_hostname, port, auth_username, auth_passwd, '1.0')
+    restapi_config_1_1 = RestConfiguration(protocol, xivo_hostname, port, auth_username, auth_passwd, '1.1')
+
+    world.restapi_utils_1_0 = WsUtils(restapi_config_1_0)
+    world.restapi_utils_1_1 = WsUtils(restapi_config_1_1)
+
+
+def _setup_provd():
+    xivo_hostname = world.config.get('xivo', 'hostname')
+    provd_config = _provd_configuration()
+
+    world.provd_rest_authentication = provd_config['rest_authentication']
+    world.provd_rest_username = provd_config['rest_username']
+    world.provd_rest_password = provd_config['rest_password']
+    world.provd_rest_port = provd_config['rest_port']
+
+    provd_config_obj = RestConfiguration('http', xivo_hostname, world.provd_rest_port)
+    world.rest_provd = WsUtils(provd_config_obj)
+
+
+def _provd_configuration():
+    return remote_exec_with_result(_get_provd_configuration)
+
+
+def _get_provd_configuration(channel):
+    import ConfigParser
+
+    provd_conf_file = '/etc/pf-xivo/provd/provd.conf'
+    config = ConfigParser.RawConfigParser()
+    config.read(provd_conf_file)
+
+    provd_config = {}
+    provd_config['rest_ip'] = config.get('general', 'rest_ip')
+    provd_config['rest_authentication'] = config.get('general', 'rest_authentication')
+    provd_config['rest_username'] = config.get('general', 'rest_username')
+    provd_config['rest_password'] = config.get('general', 'rest_password')
+    provd_config['rest_port'] = config.getint('general', 'rest_port')
+
+    channel.send(provd_config)
 
 
 class _LazyWorldAttributes(object):

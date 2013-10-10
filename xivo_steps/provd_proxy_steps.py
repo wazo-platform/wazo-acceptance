@@ -27,22 +27,21 @@ PROXY_FIELDS = ['http_proxy', 'ftp_proxy', 'https_proxy']
 
 @step(u'Given I have no proxies configured')
 def given_i_have_no_proxies_configured(step):
-    host, port = provdg_action_webi.rest_api_configuration()
-    provdg_action_webi.rest_put(host, port, "/provdg_action_webi/configure/http_proxy", None)
-    provdg_action_webi.rest_put(host, port, "/provdg_action_webi/configure/ftp_proxy", None)
-    provdg_action_webi.rest_put(host, port, "/provdg_action_webi/configure/https_proxy", None)
+    world.rest_provd.rest_put("/provdg_action_webi/configure/http_proxy", None)
+    world.rest_provd.rest_put("/provdg_action_webi/configure/ftp_proxy", None)
+    world.rest_provd.rest_put("/provdg_action_webi/configure/https_proxy", None)
 
 
 @step(u'When I configure the following proxies:')
 def when_i_configure_the_following_proxies(step):
-    open_url('provdg_action_webi_general')
+    open_url('provd_general')
     for config in step.hashes:
         provdg_action_webi.configure_proxies(config)
 
 
 @step(u'When I reload the provisionning general settings page')
 def when_i_reload_the_provisionning_general_settings_page(step):
-    open_url('provdg_action_webi_general')
+    open_url('provd_general')
 
 
 @step(u'When I remove all proxy configurations')

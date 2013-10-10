@@ -15,37 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import json
 import time
 
 from lettuce.registry import world
-
-from xivo_lettuce.common import open_url, get_value_with_label
-
-
-def rest_api_configuration():
-    open_url('provd_general')
-    host = get_value_with_label("API REST IP")
-    port = get_value_with_label("API REST port")
-    return host, int(port)
-
-
-def rest_put(host, port, uri, value):
-    data = {'param': {'value': value}}
-    url = "http://%s:%s%s" % (host, port, uri)
-
-    command = [
-        'curl',
-        '--write-out', "'%{http_code}'",
-        '-X', 'PUT',
-        '-H', "'Content-Type: application/vnd.proformatique.provd+json'",
-        '-d', "'%s'" % json.dumps(data),
-        url
-    ]
-
-    output = world.ssh_client_xivo.out_call(command)
-    if int(output) >= 400:
-        raise Exception("could not update provd through rest API")
+from xivo_lettuce.common import open_url
 
 
 def configure_proxies(config):

@@ -18,13 +18,11 @@
 from lettuce import world
 from provd.rest.client.client import new_provisioning_client
 
-from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 
 
 def _provd_client():
-    _, port = provd_general_action_webi.rest_api_configuration()
-    provd_url = "http://%s:%s/provd" % (world.xivo_host, port)
+    provd_url = "http://%s:%s/provd" % (world.xivo_host, world.provd_rest_port)
     provd_client = new_provisioning_client(provd_url)
     return provd_client
 
