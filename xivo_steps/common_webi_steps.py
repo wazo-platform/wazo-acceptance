@@ -23,13 +23,15 @@ from xivo_lettuce.common import element_is_in_list, element_is_not_in_list
 
 
 @step(u'Then ([a-z ]*) "([^"]*)" is displayed in the list$')
-def then_value_is_displayed_in_the_list(step, type, search):
-    assert element_is_in_list(type, search)
+def then_value_is_displayed_in_the_list(step, module, search):
+    query = {'search': search}
+    assert element_is_in_list(module, search, query)
 
 
 @step(u'Then ([a-z ]*) "([^"]*)" is not displayed in the list$')
-def then_value_is_not_displayed_in_the_list(step, type, search):
-    assert element_is_not_in_list(type, search)
+def then_value_is_not_displayed_in_the_list(step, module, search):
+    query = {'search': search}
+    assert element_is_not_in_list(module, search, query)
 
 
 @step(u'Then I see no errors')
