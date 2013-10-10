@@ -35,7 +35,7 @@ def webi_login(login, password, language):
         'login': login,
         'password': password,
         'language': language,
-        'go': '%252Fservice%252Fipbx%252Findex.php'
+        'go': '/service/ipbx/index.php'
     }
     open_url('login', None, query)
 
@@ -154,11 +154,22 @@ def open_url(module, act=None, qry=None):
     else:
         raise Exception("Unknown module : %s" % module)
 
-    qry_encode = urllib.urlencode(qry)
-    url = '%s%s' % (world.xivo_url, uri)
+    url = _build_url(world.xivo_url, uri, qry)
+
+    world.browser.get(url)
+
+
+def _build_url(host, uri, query):
+    if not uri.startswith('/'):
+        uri = '/%s' % uri
+
+    url = '%s%s' % (host, uri)
+
+    qry_encode = urllib.urlencode(query)
     if qry_encode:
         url = '%s?%s' % (url, qry_encode)
-    world.browser.get(url)
+
+    return url
 
 
 def find_line(line_substring):
