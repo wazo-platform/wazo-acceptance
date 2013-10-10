@@ -172,6 +172,9 @@ def _setup_ws():
 
 
 def _setup_provd():
+    if not _webi_configured():
+        return
+
     xivo_hostname = world.config.get('xivo', 'hostname')
     provd_config = _provd_configuration()
 
