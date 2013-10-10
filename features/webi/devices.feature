@@ -6,11 +6,13 @@ Feature: Devices
           | 192.168.32.197 | 00:00:00:00:aa:01 |
           | 192.168.32.198 | 00:00:00:00:bb:02 |
         When I search device "bb:02"
-        Then device "00:00:00:00:bb:02" is displayed in the list
-        Then device "00:00:00:00:aa:01" is not displayed in the list
+        Then the search results are:
+          | present           | not present       |
+          | 00:00:00:00:bb:02 | 00:00:00:00:aa:01 |
         When I search device "197"
-        Then device "00:00:00:00:aa:01" is displayed in the list
-        Then device "00:00:00:00:bb:02" is not displayed in the list
+        Then the search results are:
+          | present           | not present       |
+          | 00:00:00:00:aa:01 | 00:00:00:00:bb:02 |
 
     Scenario: List
         When I request devices in the webi

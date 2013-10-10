@@ -18,20 +18,36 @@
 from lettuce import step
 from selenium.common.exceptions import NoSuchElementException
 
-from xivo_lettuce import form
-from xivo_lettuce.common import element_is_in_list, element_is_not_in_list
+from xivo_lettuce import common, form
 
 
 @step(u'Then ([a-z ]*) "([^"]*)" is displayed in the list$')
 def then_value_is_displayed_in_the_list(step, module, search):
     query = {'search': search.encode('utf-8')}
-    assert element_is_in_list(module, search, query)
+    assert common.element_is_in_list(module, search, query)
 
 
 @step(u'Then ([a-z ]*) "([^"]*)" is not displayed in the list$')
 def then_value_is_not_displayed_in_the_list(step, module, search):
     query = {'search': search.encode('utf-8')}
-    assert element_is_not_in_list(module, search, query)
+    assert common.element_is_not_in_list(module, search, query)
+
+
+@step(u'Then the search results are:')
+def then_the_search_results_are(step):
+    expected_list = [info['present'] for info in step.hashes if info['present']]
+    not_expected_list = [info['not present'] for info in step.hashes if info['not present']]
+
+    for expected in expected_list:
+        common.find_line(expected)
+
+    for not_expected in not_expected_list:
+        try:
+            common.find_line(not_expected)
+        except NoSuchElementException:
+            pass
+        else:
+            raise Exception('element %s unexpectedly found' % not_expected)
 
 
 @step(u'Then I see no errors')
