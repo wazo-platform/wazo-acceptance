@@ -20,12 +20,12 @@ from xivo_lettuce import postgres
 
 def delete_all():
     query = "DELETE FROM cel"
-    postgres.execute_sql(query)
+    postgres.exec_sql_request(query)
 
 
 def delete_entries_between(start, end):
     query = "DELETE FROM cel WHERE eventtime BETWEEN :start AND :end"
-    postgres.execute_sql(query, start=start, end=end)
+    postgres.exec_sql_request(query, start=start, end=end)
 
 
 def insert_entries(entries):
@@ -66,4 +66,4 @@ def insert_entries(entries):
                       :call_log_id
                       )"""
 
-        postgres.execute_sql(query, **cel)
+        postgres.exec_sql_request(query, **cel)

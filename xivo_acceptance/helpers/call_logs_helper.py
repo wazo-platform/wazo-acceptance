@@ -26,7 +26,7 @@ def delete_all():
 
 def delete_entries_between(start, end):
     query = "DELETE FROM call_log WHERE date BETWEEN :start AND :end"
-    postgres.execute_sql(query, start=start, end=end)
+    postgres.exec_sql_request(query, start=start, end=end)
 
 
 def _format_condition(key, value):
@@ -43,14 +43,14 @@ def _format_condition(key, value):
 def has_call_log(entry):
     query = _query_from_entry(entry)
 
-    return postgres.execute_sql(query, **entry).scalar()
+    return postgres.exec_sql_request(query, **entry).scalar()
 
 
 def matches_last_call_log(entry):
     entry['last'] = True
     query = _query_from_entry(entry)
 
-    return postgres.execute_sql(query, **entry).scalar()
+    return postgres.exec_sql_request(query, **entry).scalar()
 
 
 def _query_from_entry(entry):

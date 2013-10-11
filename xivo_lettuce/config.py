@@ -80,8 +80,8 @@ class XivoAcceptanceConfig(object):
         dao_config.XIVO_DB_URI = 'postgresql://xivo:proformatique@%s/xivo' % self.xivo_host
         db_manager.reinit()
         try:
-            self.asterisk_conn = db_manager._asterisk_engine.connect()
-            self.xivo_conn = db_manager._xivo_engine.connect()
+            self.asterisk_conn = db_manager._asterisk_engine
+            self.xivo_conn = db_manager._xivo_engine
         except OperationalError:
             print 'PGSQL ERROR: could not connect to server'
 
