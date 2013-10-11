@@ -21,7 +21,7 @@ from sqlalchemy.sql import text
 
 
 def exec_sql_request(pg_command):
-    return world.asterisk_conn.execute(pg_command)
+    return world.config.asterisk_conn.execute(pg_command)
 
 
 def exec_count_request(table, **cond_dict):
@@ -33,7 +33,7 @@ def exec_count_request(table, **cond_dict):
             cond.append('%s = %s' % (key, value))
         pg_command = '%s%s' % (pg_command, ' AND '.join(cond))
 
-    result = world.asterisk_conn.execute(pg_command)
+    result = world.config.asterisk_conn.execute(pg_command)
     row = result.fetchone()
     return int(row[0])
 
