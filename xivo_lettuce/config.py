@@ -2,15 +2,15 @@
 
 import os
 import ConfigParser
-import execnet
+import xivo_ws
 
 from sqlalchemy.exc import OperationalError
+from execnet.multi import makegateway
 
 from xivo_dao.helpers import config as dao_config
 from xivo_dao.helpers import db_manager
 from xivo_lettuce.ssh import SSHClient
 from xivo_lettuce.ws_utils import RestConfiguration, WsUtils
-import xivo_ws
 
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -90,6 +90,9 @@ class XivoAcceptanceConfig(object):
         self.ssh_client_callgen = SSHClient(self.callgen_host, self.callgen_login)
 
     def _setup_ws(self):
+        rest_config_dict = {
+
+        }
         self.restapi_config_1_0 = RestConfiguration(self.rest_protocol,
                                                     self.xivo_host,
                                                     self.rest_port,
@@ -113,5 +116,5 @@ class XivoAcceptanceConfig(object):
         try:
             return self._execnet_gateway
         except AttributeError:
-            self._execnet_gateway = execnet.makegateway('ssh=%s@%s' % (self.ssh_login, self.xivo_host))
+            self._execnet_gateway = makegateway('ssh=%s@%s' % (self.ssh_login, self.xivo_host))
             return self._execnet_gateway
