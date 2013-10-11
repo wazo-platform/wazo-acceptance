@@ -21,7 +21,8 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 
 from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
-from xivo_lettuce.common import open_url, find_line
+from xivo_lettuce import common
+from xivo_lettuce.common import open_url
 
 
 def update_plugin_list(url, check_confirmation=True):
@@ -62,7 +63,7 @@ def plugins_error_during_update():
 
 def uninstall_plugin(plugin):
     open_url('provd_plugin')
-    plugin_line = find_line(plugin)
+    plugin_line = common.get_line(plugin)
 
     uninstall_btn = _find_uninstall_btn(plugin_line)
 
@@ -81,7 +82,7 @@ def _find_uninstall_btn(plugin_line):
 
 def install_plugin(plugin):
     open_url('provd_plugin')
-    plugin_line = find_line(plugin)
+    plugin_line = common.get_line(plugin)
 
     install_btn = _find_install_btn(plugin_line)
 

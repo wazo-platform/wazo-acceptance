@@ -272,19 +272,15 @@ def when_i_edit_the_user_1_2_without_changing_anything(step, firstname, lastname
 def then_i_see_the_user_group1_group2_exists(step, firstname, lastname):
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     user_line = common.find_line("%s %s" % (firstname, lastname))
-    assert user_line is not None
+    assert user_line is not None, 'User: %s %s does not exist' % (firstname, lastname)
     common.open_url('user', 'search', {'search': ''})
 
 
 @step(u'Then the user "([^"]*)" "([^"]*)" not exist')
 def then_the_user_not_exist(step, firstname, lastname):
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
-    try:
-        common.find_line("%s %s" % (firstname, lastname))
-    except NoSuchElementException:
-        pass
-    else:
-        assert False, 'User: %s %s exist' % (firstname, lastname)
+    user_line = common.find_line("%s %s" % (firstname, lastname))
+    assert user_line is None, 'User: %s %s exist' % (firstname, lastname)
     common.open_url('user', 'search', {'search': ''})
 
 

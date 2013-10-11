@@ -76,8 +76,7 @@ def then_i_do_not_see_the_following_results_on_the_phone(step):
 
 @step(u'Then "([^"]*)" appears in the list')
 def then_entry_appears_in_the_list(step, entry):
-    element = find_line(entry)
-    assert element is not None
+    assert find_line(entry) is not None
 
 
 @step(u'When I import the CSV file "([^"]*)" into the phonebook')

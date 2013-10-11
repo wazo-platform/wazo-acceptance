@@ -58,7 +58,7 @@ def when_i_add_the_cti_profile_1(step, profile_name):
 @step(u'Then I can\'t remove profile "([^"]*)"')
 def then_i_see_errors(step, profile_label):
     common.open_url('profile', 'list')
-    table_line = common.find_line(profile_label)
+    table_line = common.get_line(profile_label)
     try:
         table_line.find_element_by_xpath(".//a[@title='Delete']")
     except NoSuchElementException:

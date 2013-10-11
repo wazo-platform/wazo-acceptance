@@ -109,22 +109,12 @@ def element_is_in_list(module, search, qry=None, action='list'):
     if qry is None:
         qry = {}
     open_url(module, action, qry)
-    try:
-        find_line(search)
-    except NoSuchElementException:
-        return False
-    return True
+
+    return bool(find_line(search))
 
 
 def element_is_not_in_list(module, search, qry=None, action='list'):
-    if qry is None:
-        qry = {}
-    open_url(module, action, qry)
-    try:
-        find_line(search)
-    except NoSuchElementException:
-        return True
-    return False
+    return not element_is_in_list(module, search, qry=qry, action=action)
 
 
 def element_in_list_matches_field(module, search, class_name, value, qry=None, action='list'):
@@ -172,7 +162,7 @@ def _build_url(host, uri, query):
     return url
 
 
-def find_line(line_substring):
+def get_line(line_substring):
     """Return the tr webelement of a line in a list.
 
     Used for executing operations, like clicking on a button or extracting
@@ -202,12 +192,19 @@ def find_line(line_substring):
 
         >>> #fetch the line that as the phone number '555-123-4567'
         >>> from xivo_lettuce import common
-        >>> line = common.find_line('555-1234-4567')
+        >>> line = common.get_line('555-1234-4567')
         >>>
         >>> #do stuff with `line`
     """
     return world.browser.find_element_by_xpath(
         "//table[@id='table-main-listing']//tr[contains(.,'%s')]" % line_substring)
+
+
+def find_line(line_substring):
+    try:
+        return get_line(line_substring)
+    except NoSuchElementException:
+        return None
 
 
 def find_line_and_fetch_col(line_substring, class_name):
@@ -281,7 +278,7 @@ def remove_line(line_substring):
 
 
 def click_on_line_with_alert(act, line_substring):
-    table_line = find_line(line_substring)
+    table_line = get_line(line_substring)
     delete_button = table_line.find_element_by_xpath(".//a[@title='%s']" % act)
     delete_button.click()
     alert = world.browser.switch_to_alert()
@@ -296,7 +293,7 @@ def edit_line(line_substring):
         - line_substring -- Search for the line that contains the text
           `line_substring`
     """
-    table_line = find_line(line_substring)
+    table_line = get_line(line_substring)
     edit_button = table_line.find_element_by_xpath(".//a[@title='Edit']")
     edit_button.click()
 

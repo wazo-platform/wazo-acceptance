@@ -174,12 +174,7 @@ def then_this_line_is_displayed_in_the_list(step):
 @step(u'Then this line is not displayed in the list')
 def then_this_line_is_not_displayed_in_the_list(step):
     open_url('line', 'search', {'search': world.id})
-    try:
-        find_line(world.id)
-    except NoSuchElementException:
-        pass
-    else:
-        assert False
+    assert find_line(world.id) is None
     open_url('line', 'search', {'search': ''})
 
 

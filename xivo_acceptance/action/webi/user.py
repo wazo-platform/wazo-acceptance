@@ -179,7 +179,7 @@ def enable_call_transfer():
 
 
 def get_user_list_entry(search_fullname):
-    user_tr = common.find_line(search_fullname)
+    user_tr = common.get_line(search_fullname)
     fullname = user_tr.find_element_by_class_name('col_fullname').text
     provisioning_code = user_tr.find_element_by_class_name('col_provisioning_code').text
     number = user_tr.find_element_by_class_name('col_number').text

@@ -22,8 +22,8 @@ from lettuce import step
 
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.helpers import line_helper, callgen_helper, cti_helper
-from xivo_lettuce import assets, func
-from xivo_lettuce.common import open_url, find_line, edit_line
+from xivo_lettuce import assets, common, func
+from xivo_lettuce.common import open_url, edit_line
 from xivo_lettuce.form import submit
 
 
@@ -163,7 +163,7 @@ def when_i_double_click_on_the_phone_number_for_name(step, name):
 
 @step(u'Then the directory configuration "([^"]*)" has the URI "([^"]*)"')
 def then_the_directory_has_the_uri(step, directory, uri):
-    line = find_line(directory)
+    line = common.get_line(directory)
     cells = line.find_elements_by_tag_name("td")
     uri_cell = cells[2]
     assert uri_cell.text == uri

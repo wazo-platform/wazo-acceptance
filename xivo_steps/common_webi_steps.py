@@ -39,15 +39,10 @@ def then_the_search_results_are(step):
     not_expected_list = [info['not present'] for info in step.hashes if info['not present']]
 
     for expected in expected_list:
-        common.find_line(expected)
+        assert common.find_line(expected) is not None
 
     for not_expected in not_expected_list:
-        try:
-            common.find_line(not_expected)
-        except NoSuchElementException:
-            pass
-        else:
-            raise Exception('element %s unexpectedly found' % not_expected)
+        assert common.find_line(expected) is None, 'element %s unexpectedly found' % not_expected
 
 
 @step(u'Then I see no errors')

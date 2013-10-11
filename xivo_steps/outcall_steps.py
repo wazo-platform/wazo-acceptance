@@ -172,12 +172,7 @@ def then_the_outcall_1_does_not_have_extension_patterns(step, outcall_name):
 @step(u'Then there is no outcall "([^"]*)"')
 def then_there_is_no_outcall(step, name):
     open_url('outcall', 'list')
-    try:
-        find_line(name)
-    except NoSuchElementException:
-        pass
-    else:
-        assert False
+    assert find_line(name) is None
 
 
 @step(u'Then there are outcalls with infos:')

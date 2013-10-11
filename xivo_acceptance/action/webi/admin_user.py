@@ -17,8 +17,8 @@
 
 from lettuce import world
 
-from xivo_lettuce.common import open_url, find_line
-from xivo_lettuce import form
+from xivo_lettuce.common import open_url
+from xivo_lettuce import common, form
 
 MODULE_MAP = {
     'Configuration': 'xivo-configuration',
@@ -46,7 +46,7 @@ def create_admin_user(username, password):
 def set_privileges(username, privileges):
     open_url('admin_user', 'list')
 
-    line = find_line(username)
+    line = common.get_line(username)
     acl_button = line.find_element_by_xpath(".//a[@title='Rules']")
     acl_button.click()
 

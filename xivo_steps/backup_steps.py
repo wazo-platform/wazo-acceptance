@@ -37,7 +37,7 @@ def given_the_file_is_copied_on_the_server_into_group2(step, assetfile, serverpa
 @step(u'When I download backup file "([^"]*)"')
 def when_i_download_backup_file(step, filename):
     open_url('backups')
-    table_line = find_line(filename)
+    table_line = get_line(filename)
     download_link = table_line.find_element_by_xpath(".//a[@title='%s']" % filename)
     download_link.click()
 

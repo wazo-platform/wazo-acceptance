@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce import form
-from xivo_lettuce.common import open_url, find_line, edit_line, remove_line, \
+from xivo_lettuce import common, form
+from xivo_lettuce.common import open_url, edit_line, remove_line, \
     remove_element_if_exist, remove_all_elements_from_current_page
 from xivo_lettuce.form.submit import submit_form_with_errors
 import hamcrest
@@ -53,7 +53,7 @@ def fill_form(info):
 
 def remove_recordings(campaign_name):
     open_url('campaign', 'list')
-    line = find_line(campaign_name)
+    line = common.get_line(campaign_name)
     link = line.find_element_by_xpath(".//a[@title='%s']" % campaign_name)
     link.click()
     remove_all_elements_from_current_page('')
@@ -72,7 +72,7 @@ def create_campaign_with_errors(infos):
 
 def campaign_exists(info):
     open_url('campaign', 'list', None)
-    line = find_line(info['name'])
+    line = common.get_line(info['name'])
     for value in info.values():
         try:
             line.find_element_by_xpath(".//td[contains(.,'%s')]" % value)
