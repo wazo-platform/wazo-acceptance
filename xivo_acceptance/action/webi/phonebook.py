@@ -17,19 +17,17 @@
 
 from lettuce import world
 
-from xivo_lettuce import form
-from xivo_lettuce.common import remove_element_if_exist, open_url, \
-    go_to_tab
+from xivo_lettuce import common, form
 
 
 def phonebook_search(term):
-    open_url('phonebook')
+    common.open_url('phonebook')
     form.input.set_text_field_with_id("it-toolbar-search", term)
     form.submit.submit_form("it-subsearch")
 
 
 def create_entry(entry):
-    open_url('phonebook', 'add')
+    common.open_url('phonebook', 'add')
 
     display_name = _get_display_name_from_entry(entry)
 
@@ -39,7 +37,7 @@ def create_entry(entry):
     if 'mobile' in entry:
         form.input.set_text_field_with_label("Mobile phone", entry['mobile'])
 
-    go_to_tab("Office")
+    common.go_to_tab("Office")
     form.input.set_text_field_with_label('Phone', entry.get('phone', ''))
 
     form.submit.submit_form()
@@ -60,12 +58,12 @@ def _get_display_name_from_entry(entry):
 
 def remove_entry_matching(search):
     phonebook_search(search)
-    remove_element_if_exist("phonebook", search)
+    common.remove_element_if_exist("phonebook", search)
     phonebook_search('')
 
 
 def import_csv_file(path):
-    open_url('phonebook', 'import')
+    common.open_url('phonebook', 'import')
     element = world.browser.find_element_by_id("it-import")
     element.send_keys(path)
     form.submit.submit_form()
@@ -73,7 +71,7 @@ def import_csv_file(path):
 
 # phonebook settings
 def set_accessibility_to_any_host():
-    open_url('phonebook_settings')
+    common.open_url('phonebook_settings')
     multilist = form.PhonebookSettingsMultilist.from_id('accesslist')
     multilist.remove_all()
     multilist.add('0.0.0.0/1')

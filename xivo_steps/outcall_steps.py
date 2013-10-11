@@ -26,9 +26,7 @@ from selenium.webdriver.support.select import Select
 from xivo_acceptance.action.webi import outcall as outcall_action_webi
 from xivo_acceptance.helpers import context_helper, outcall_helper, \
     trunksip_helper
-from xivo_lettuce.common import edit_line, find_line, go_to_tab, open_url, \
-    remove_line
-from xivo_lettuce import form
+from xivo_lettuce import common, form
 
 
 @step(u'Given there is no outcall "([^"]*)"')
@@ -79,7 +77,7 @@ def given_there_is_an_outcall_in_context_with_trunk(step, outcall_name, outcall_
 
 @step(u'When I create an outcall with name "([^"]*)" and trunk "([^"]*)"')
 def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
-    open_url('outcall', 'add')
+    common.open_url('outcall', 'add')
     input_name = world.browser.find_element_by_id('it-outcall-name', 'Outcall form not loaded')
     input_name.send_keys(name)
 
@@ -96,8 +94,8 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
 
 @step(u'When i edit the outcall "([^"]*)" and set context to "([^"]*)"')
 def when_i_edit_the_outcall_and_set_context(step, name, context):
-    open_url('outcall', 'list')
-    edit_line(name)
+    common.open_url('outcall', 'list')
+    common.edit_line(name)
     type_field = Select(world.browser.find_element_by_id('it-outcall-context', 'Outcall form not loaded'))
     type_field.select_by_value(context)
     form.submit.submit_form()
@@ -105,15 +103,15 @@ def when_i_edit_the_outcall_and_set_context(step, name, context):
 
 @step(u'When I remove the outcall "([^"]*)"')
 def when_i_remove_the_outcall(step, name):
-    open_url('outcall', 'list')
-    remove_line(name)
+    common.open_url('outcall', 'list')
+    common.remove_line(name)
 
 
 @step(u'When I remove extension patterns from outcall "([^"]*)":')
 def when_i_remove_extension_patterns_from_outcall_1(step, outcall_name):
-    open_url('outcall', 'list')
-    edit_line(outcall_name)
-    go_to_tab('Exten')
+    common.open_url('outcall', 'list')
+    common.edit_line(outcall_name)
+    common.go_to_tab('Exten')
 
     for outcall_extension in step.hashes:
         extension_pattern = outcall_extension['extension_pattern']
@@ -126,9 +124,9 @@ def when_i_remove_extension_patterns_from_outcall_1(step, outcall_name):
 
 @step(u'When I add the following extension patterns to the outcall "([^"]*)":')
 def when_i_add_the_following_extension_patterns_to_the_outcall_1(step, outcall_name):
-    open_url('outcall', 'list')
-    edit_line(outcall_name)
-    go_to_tab('Exten')
+    common.open_url('outcall', 'list')
+    common.edit_line(outcall_name)
+    common.go_to_tab('Exten')
 
     for outcall_extension in step.hashes:
         add_button = world.browser.find_element_by_id('lnk-add-row', 'Can\'t add an exten')
@@ -142,9 +140,9 @@ def when_i_add_the_following_extension_patterns_to_the_outcall_1(step, outcall_n
 
 @step(u'Then the outcall "([^"]*)" has the extension patterns:')
 def then_the_outcall_1_has_the_extension_patterns(step, outcall_name):
-    open_url('outcall', 'list')
-    edit_line(outcall_name)
-    go_to_tab('Exten')
+    common.open_url('outcall', 'list')
+    common.edit_line(outcall_name)
+    common.go_to_tab('Exten')
 
     for outcall_extension in step.hashes:
         extension_pattern = outcall_extension['extension_pattern']
@@ -154,9 +152,9 @@ def then_the_outcall_1_has_the_extension_patterns(step, outcall_name):
 
 @step(u'Then the outcall "([^"]*)" does not have extension patterns:')
 def then_the_outcall_1_does_not_have_extension_patterns(step, outcall_name):
-    open_url('outcall', 'list')
-    edit_line(outcall_name)
-    go_to_tab('Exten')
+    common.open_url('outcall', 'list')
+    common.edit_line(outcall_name)
+    common.go_to_tab('Exten')
 
     for outcall_extension in step.hashes:
         extension_pattern = outcall_extension['extension_pattern']
@@ -171,8 +169,8 @@ def then_the_outcall_1_does_not_have_extension_patterns(step, outcall_name):
 
 @step(u'Then there is no outcall "([^"]*)"')
 def then_there_is_no_outcall(step, name):
-    open_url('outcall', 'list')
-    assert find_line(name) is None
+    common.open_url('outcall', 'list')
+    assert common.find_line(name) is None
 
 
 @step(u'Then there are outcalls with infos:')

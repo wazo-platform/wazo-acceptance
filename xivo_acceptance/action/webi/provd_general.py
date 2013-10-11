@@ -18,7 +18,7 @@
 import time
 
 from lettuce.registry import world
-from xivo_lettuce.common import open_url
+from xivo_lettuce import common
 
 
 def configure_proxies(config):
@@ -61,5 +61,5 @@ def type_plugin_server_url(url):
 
 
 def update_plugin_server_url(url):
-    open_url('provd_general')
+    common.open_url('provd_general')
     type_plugin_server_url(url)

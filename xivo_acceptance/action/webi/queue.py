@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_acceptance.helpers import context_helper, queue_helper
-from xivo_lettuce.common import open_url, go_to_tab
+from xivo_lettuce import common
 from xivo_lettuce.form.input import set_text_field_with_label
 from xivo_lettuce.form.select import set_select_field_with_label, \
     set_select_field_with_id
@@ -39,7 +39,7 @@ def type_queue_ring_strategy(ring_strategy):
 
 def add_or_replace_queue(queue):
     queue_helper.delete_queues_with_name_or_number(queue['name'], queue['number'])
-    open_url('queue', 'add')
+    common.open_url('queue', 'add')
     fill_form(queue)
 
 
@@ -85,7 +85,7 @@ def fill_form(queue):
 
 
 def fill_general_tab(queue):
-    go_to_tab('General')
+    common.go_to_tab('General')
 
     set_text_field_with_label('Name', queue['name'])
     set_text_field_with_label('Display name', queue['display name'])
@@ -100,7 +100,7 @@ def fill_general_tab(queue):
 
 
 def fill_application_tab(queue):
-    go_to_tab('Application')
+    common.go_to_tab('Application')
 
     if CALLEE_TRANSFER in queue:
         callee_transfer = (queue[CALLEE_TRANSFER] == 'true')
@@ -112,7 +112,7 @@ def fill_application_tab(queue):
 
 
 def fill_advanced_tab(queue):
-    go_to_tab('Advanced')
+    common.go_to_tab('Advanced')
 
     if REACH_TIMEOUT in queue:
         set_select_field_with_id('it-queue-timeout',
@@ -130,14 +130,14 @@ def fill_advanced_tab(queue):
 
 
 def add_agents_to_queue(agents):
-    go_to_tab('Members')
+    common.go_to_tab('Members')
     pane = ListPane.from_id('agentlist')
     for agent in agents:
         pane.add_contains(agent)
 
 
 def remove_agents_from_queue(agents):
-    go_to_tab('Members')
+    common.go_to_tab('Members')
     pane = ListPane.from_id('agentlist')
     for agent in agents:
         pane.remove_contains(agent)

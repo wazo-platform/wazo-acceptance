@@ -21,8 +21,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
 from xivo_acceptance.helpers import agent_helper, user_helper
-from xivo_lettuce import form, func
-from xivo_lettuce.common import open_url, remove_line
+from xivo_lettuce import common, form, func
 
 
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
@@ -86,7 +85,7 @@ def when_i_unpause_agent_1(step, agent_number):
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)"$')
 def when_i_create_an_agent(step, firstname, lastname, number):
     agent_helper.delete_agents_with_number(number)
-    open_url('agent', 'addagent', {'group': '1'})
+    common.open_url('agent', 'addagent', {'group': '1'})
     agent_action_webi.type_agent_info(firstname, lastname, number)
     form.submit.submit_form()
 
@@ -95,26 +94,26 @@ def when_i_create_an_agent(step, firstname, lastname, number):
 def when_i_create_an_agent_in_group(step, firstname, lastname, number, agent_group):
     agent_helper.delete_agents_with_number(number)
     group_id = agent_action_webi.get_agent_group_id(agent_group)
-    open_url('agent', 'addagent', {'group': group_id})
+    common.open_url('agent', 'addagent', {'group': group_id})
     agent_action_webi.type_agent_info(firstname, lastname, number)
     form.submit.submit_form()
 
 
 @step(u'When I search an agent "([^"]*)"')
 def when_i_search_an_agent_group1(step, search):
-    open_url('agent', 'listagent', {'group': '1'})
+    common.open_url('agent', 'listagent', {'group': '1'})
     form.input.edit_text_field_with_id('it-toolbar-search', search)
     form.submit.submit_form('it-toolbar-subsearch')
 
 
 @step(u'When I remove agent "([^"]*)" "([^"]*)"')
 def when_i_remove_agent(step, firstname, lastname):
-    remove_line('%s %s' % (firstname, lastname))
+    common.remove_line('%s %s' % (firstname, lastname))
 
 
 @step(u'When I remove agent group "([^"]*)"')
 def when_i_remove_agent_group(step, agent_group_name):
-    remove_line(agent_group_name)
+    common.remove_line(agent_group_name)
 
 
 @step(u'When I remove selected agent group')
@@ -132,7 +131,7 @@ def when_i_remove_selected_agent_group(step):
 @step(u'When I change the agent "([^"]*)" password to "([^"]*)"')
 def when_i_change_the_agent_password_to_group1(step, number, password):
     agent_id = agent_helper.find_agent_id_with_number(number)
-    open_url('agent', 'editagent', {'group': '1', 'id': agent_id})
+    common.open_url('agent', 'editagent', {'group': '1', 'id': agent_id})
     agent_action_webi.change_password(password)
     form.submit.submit_form()
 
@@ -140,14 +139,14 @@ def when_i_change_the_agent_password_to_group1(step, number, password):
 @step(u'When I create an agent group "([^"]*)"')
 def when_i_create_an_agent_group(step, agent_group_name):
     agent_action_webi.remove_agent_group_if_exist(agent_group_name)
-    open_url('agent', 'add')
+    common.open_url('agent', 'add')
     form.input.edit_text_field_with_id('it-agentgroup-name', agent_group_name)
     form.submit.submit_form()
 
 
 @step(u'When I select a list of agent group "([^"]*)"')
 def when_i_select_an_agent_group(step, agent_group_list):
-    open_url('agent', 'list')
+    common.open_url('agent', 'list')
     list = agent_group_list.split(',')
     agent_action_webi.select_agent_group_list(list)
 

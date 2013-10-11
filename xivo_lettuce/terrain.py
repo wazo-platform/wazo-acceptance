@@ -22,8 +22,8 @@ from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 
 from xivo_acceptance.helpers import asterisk_helper
-from xivo_lettuce.common import webi_login_as_default, webi_logout
 from xivo_lettuce.config import XivoAcceptanceConfig
+from xivo_lettuce import common
 
 
 @before.all
@@ -97,7 +97,7 @@ def _setup_browser():
     world.timeout = world.config.browser_timeout
 
     if _webi_configured():
-        webi_login_as_default()
+        common.webi_login_as_default()
 
 
 def _webi_configured():
@@ -119,8 +119,8 @@ def _check_webi_login_root():
     element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
     username = element.text
     if username != "root":
-        webi_logout()
-        webi_login_as_default()
+        common.webi_logout()
+        common.webi_login_as_default()
 
 
 def deinitialize():

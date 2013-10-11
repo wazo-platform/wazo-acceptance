@@ -18,8 +18,7 @@
 from lettuce import step, world
 
 from xivo_acceptance.helpers import trunkiax_helper
-from xivo_lettuce import form
-from xivo_lettuce.common import open_url, remove_line
+from xivo_lettuce import common, form
 
 
 @step(u'Given there is a trunkiax "([^"]*)"')
@@ -36,7 +35,7 @@ def given_there_is_no_trunkiax(step, name):
 
 @step(u'When I create a trunkiax with name "([^"]*)"')
 def when_i_create_a_trunkiax_with_name_and_trunk(step, name):
-    open_url('trunkiax', 'add')
+    common.open_url('trunkiax', 'add')
     input_name = world.browser.find_element_by_id('it-protocol-name', 'trunkiax form not loaded')
     input_name.send_keys(name)
     form.submit.submit_form()
@@ -44,5 +43,5 @@ def when_i_create_a_trunkiax_with_name_and_trunk(step, name):
 
 @step(u'When I remove the trunkiax "([^"]*)"')
 def when_i_remove_the_trunkiax(step, name):
-    open_url('trunkiax', 'list')
-    remove_line(name)
+    common.open_url('trunkiax', 'list')
+    common.remove_line(name)

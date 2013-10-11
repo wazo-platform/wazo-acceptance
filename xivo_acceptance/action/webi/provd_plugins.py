@@ -22,12 +22,11 @@ from selenium.common.exceptions import NoSuchElementException, ElementNotVisible
 
 from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
 from xivo_lettuce import common
-from xivo_lettuce.common import open_url
 
 
 def update_plugin_list(url, check_confirmation=True):
     provd_general_action_webi.update_plugin_server_url(url)
-    open_url('provd_plugin')
+    common.open_url('provd_plugin')
     world.browser.find_element_by_id('toolbar-bt-update').click()
     wait_time = 7
     if check_confirmation:
@@ -62,7 +61,7 @@ def plugins_error_during_update():
 
 
 def uninstall_plugin(plugin):
-    open_url('provd_plugin')
+    common.open_url('provd_plugin')
     plugin_line = common.get_line(plugin)
 
     uninstall_btn = _find_uninstall_btn(plugin_line)
@@ -81,7 +80,7 @@ def _find_uninstall_btn(plugin_line):
 
 
 def install_plugin(plugin):
-    open_url('provd_plugin')
+    common.open_url('provd_plugin')
     plugin_line = common.get_line(plugin)
 
     install_btn = _find_install_btn(plugin_line)

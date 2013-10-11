@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
-from xivo_lettuce.common import remove_element_if_exist
+from xivo_lettuce import common
 
 
 def type_group_name(group_name):
@@ -40,4 +40,4 @@ def type_context(context):
 
 
 def remove_group_with_name(group_name):
-    remove_element_if_exist('group', group_name)
+    common.remove_element_if_exist('group', group_name)

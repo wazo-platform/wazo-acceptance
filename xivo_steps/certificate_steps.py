@@ -20,15 +20,14 @@ import datetime
 from lettuce import step, world
 
 from xivo_acceptance.helpers import asterisk_helper
-from xivo_lettuce import form, logs
-from xivo_lettuce.common import open_url, remove_all_elements, go_to_tab
+from xivo_lettuce import common, form, logs
 from xivo_lettuce.form.checkbox import Checkbox
 
 
 def create_or_replace_certificate(info):
-    remove_all_elements('certificat', info['name'])
+    common.remove_all_elements('certificat', info['name'])
 
-    open_url('certificat', 'add')
+    common.open_url('certificat', 'add')
 
     input_name = world.browser.find_element_by_id('it-name')
     input_name.send_keys(info['name'])
@@ -66,8 +65,8 @@ def insert_hostname_into_form():
 
 
 def update_sip_configuration(info):
-    open_url('general_sip')
-    go_to_tab('Security')
+    common.open_url('general_sip')
+    common.go_to_tab('Security')
 
     checked = info['allow tls connections'] == "yes"
     Checkbox.from_label("Allow TLS connections").set_checked(checked)

@@ -23,7 +23,7 @@ from lettuce import world
 from xivo_acceptance.helpers import context_helper, trunksip_helper
 from xivo_dao.helpers import db_manager
 from xivo_lettuce.terrain import initialize, deinitialize
-from xivo_lettuce.common import open_url
+from xivo_lettuce import common
 
 
 _WEBSERVICES_SQL_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'webservices.sql'))
@@ -107,7 +107,7 @@ def _xivo_service_restart_all():
 def _allow_provd_listen_on_all_interfaces():
     query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
     world.config.dao_xivo_engine.execute(query)
-    open_url('commonconf')
+    common.open_url('commonconf')
 
 
 if __name__ == '__main__':

@@ -19,8 +19,7 @@ from lettuce import step
 
 from xivo_acceptance.action.webi import group as group_action_webi
 from xivo_acceptance.helpers import user_helper, group_helper
-from xivo_lettuce import form, func, common
-from xivo_lettuce.common import open_url, element_in_list_matches_field
+from xivo_lettuce import common, form, func
 
 
 @step(u'Given there is no group "([^"]*)"$')
@@ -48,14 +47,14 @@ def given_the_group_named_1_does_not_exist(step, name):
 
 @step(u'When I create a group "([^"]*)" with number "([^"]*)"$')
 def when_i_create_group_with_number(step, group_name, group_number):
-    open_url('group', 'add')
+    common.open_url('group', 'add')
     _type_group_name_number_context(group_name, group_number)
     form.submit.submit_form()
 
 
 @step(u'When I create a group "([^"]*)" with number "([^"]*)" with errors')
 def when_i_create_group_with_number_with_errors(step, group_name, group_number):
-    open_url('group', 'add')
+    common.open_url('group', 'add')
     _type_group_name_number_context(group_name, group_number)
     form.submit.submit_form_with_errors()
 
@@ -67,7 +66,7 @@ def when_i_remove_the_group_1(step, group_name):
 
 @step(u'Then I see a group "([^"]*)" with no users')
 def then_I_see_a_group_1_with_no_users(step, group_name):
-    element_in_list_matches_field('group', group_name, 'nbqmember', 0)
+    common.element_in_list_matches_field('group', group_name, 'nbqmember', 0)
 
 
 @step(u'Given there is a group with "(\d+)" users')

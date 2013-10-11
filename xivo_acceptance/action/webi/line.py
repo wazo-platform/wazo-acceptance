@@ -16,11 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce.registry import world
-from xivo_lettuce.common import open_url, go_to_tab
+from xivo_lettuce import common
 
 
 def search_line_number(line_number):
-    open_url('line')
+    common.open_url('line')
     searchbox_id = 'it-toolbar-search'
     text_input = world.browser.find_element_by_id(searchbox_id)
     text_input.clear()
@@ -30,7 +30,7 @@ def search_line_number(line_number):
 
 
 def unsearch_line():
-    open_url('line')
+    common.open_url('line')
     searchbox_id = 'it-toolbar-search'
     text_input = world.browser.find_element_by_id(searchbox_id)
     text_input.clear()
@@ -39,7 +39,7 @@ def unsearch_line():
 
 
 def get_value_from_ipbx_infos_tab(var_name):
-    go_to_tab('IPBX Infos')
+    common.go_to_tab('IPBX Infos')
     value_cell = world.browser.find_element_by_xpath(
         "//table"
         "//tr[td[@class = 'td-left' and text() = '%s']]"

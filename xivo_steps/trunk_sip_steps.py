@@ -20,8 +20,7 @@ import socket
 from lettuce import step, world
 
 from xivo_acceptance.helpers import trunksip_helper
-from xivo_lettuce import form
-from xivo_lettuce.common import open_url, remove_line
+from xivo_lettuce import common, form
 
 
 @step(u'Given there is no trunksip "([^"]*)"')
@@ -43,7 +42,7 @@ def given_there_is_a_siptrunk_with_callerid(step, name, context):
 
 @step(u'When I create a trunksip with name "([^"]*)"')
 def when_i_create_a_trunksip_with_name_and_trunk(step, name):
-    open_url('trunksip', 'add')
+    common.open_url('trunksip', 'add')
     input_name = world.browser.find_element_by_id('it-protocol-name', 'trunksip form not loaded')
     input_name.send_keys(name)
     form.submit.submit_form()
@@ -51,5 +50,5 @@ def when_i_create_a_trunksip_with_name_and_trunk(step, name):
 
 @step(u'When I remove the trunksip "([^"]*)"')
 def when_i_remove_the_trunksip(step, name):
-    open_url('trunksip', 'list')
-    remove_line(name)
+    common.open_url('trunksip', 'list')
+    common.remove_line(name)

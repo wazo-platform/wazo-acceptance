@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step, world
-from xivo_lettuce.common import waitForLoginPage
+from xivo_lettuce import common
 
 
 @step(u'Given there is XiVO not configured')
@@ -98,5 +98,5 @@ def when_i_fill_the_entity_context_page(step, entity, start, end):
 
 @step(u'Then I should be redirected to the login page')
 def then_i_should_be_redirected_to_the_login_page(step):
-    waitForLoginPage()
+    common.waitForLoginPage()
     assert world.browser.find_element_by_id('it-login') is not None

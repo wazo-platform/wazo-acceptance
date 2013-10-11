@@ -16,20 +16,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_acceptance.helpers import meetme_helper
-from xivo_lettuce import form
-from xivo_lettuce.common import open_url, edit_line
+from xivo_lettuce import common, form
 
 
 def create_meetme(meetme):
     meetme_helper.delete_meetme_with_confno(meetme['number'])
-    open_url('meetme', 'add')
+    common.open_url('meetme', 'add')
     fill_form(meetme)
     form.submit.submit_form()
 
 
 def update_meetme(meetme):
-    open_url('meetme', 'list')
-    edit_line(meetme['name'])
+    common.open_url('meetme', 'list')
+    common.edit_line(meetme['name'])
     fill_form(meetme)
     form.submit.submit_form()
 

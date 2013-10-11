@@ -16,21 +16,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
-from xivo_lettuce.common import open_url, remove_line
-from xivo_lettuce import form
+from xivo_lettuce import common, form
 from selenium.common.exceptions import NoSuchElementException
 
 
 def delete_device(info):
     search_device(info['mac'])
     try:
-        remove_line(info['mac'])
+        common.remove_line(info['mac'])
     except NoSuchElementException:
         pass
 
 
 def search_device(search):
-    open_url('device')
+    common.open_url('device')
     form.input.edit_text_field_with_id('it-toolbar-search', search)
     form.submit.submit_form('it-toolbar-subsearch')
 

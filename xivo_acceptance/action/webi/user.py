@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
-from xivo_lettuce.common import go_to_tab
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
 from xivo_lettuce import common, form
@@ -79,7 +78,7 @@ def find_key_destination_field(key_type, line):
 
 
 def type_func_key(key_type, destination, key_number=None, label=None, supervised=None):
-    go_to_tab('Func Keys')
+    common.go_to_tab('Func Keys')
 
     add_funckey_line()
 
@@ -112,7 +111,7 @@ def _fill_destination_field(key_type, line, destination):
 
 
 def change_key_order(pairs):
-    go_to_tab('Func Keys')
+    common.go_to_tab('Func Keys')
     for old, new in pairs:
         current_line = world.browser.find_element_by_xpath('''//tbody[@id='phonefunckey']/tr[%s]''' % old)
         number_field = Select(current_line.find_element_by_name('phonefunckey[fknum][]'))
@@ -120,7 +119,7 @@ def change_key_order(pairs):
 
 
 def user_form_add_line(linenumber, context='default', protocol='SIP', device=None):
-    go_to_tab('Lines')
+    common.go_to_tab('Lines')
     add_button = world.browser.find_element_by_id('lnk-add-row')
     add_button.click()
     input_context = world.browser.find_elements_by_id('linefeatures-context')[-2]
@@ -137,7 +136,7 @@ def user_form_add_line(linenumber, context='default', protocol='SIP', device=Non
         input_device_3 = world.browser.find_element_by_xpath('//li[contains(@class, "select2-result")]',
                                                              'No device %s found' % device)
         input_device_3.click()
-    go_to_tab('General')
+    common.go_to_tab('General')
 
 
 def type_voicemail(voicemail_number):
@@ -174,7 +173,7 @@ def select_simultaneous_calls(nb_calls):
 
 
 def enable_call_transfer():
-    go_to_tab("Services")
+    common.go_to_tab("Services")
     form.checkbox.check_checkbox_with_id("it-userfeatures-enablehint")
 
 

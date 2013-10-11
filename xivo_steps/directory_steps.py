@@ -23,7 +23,6 @@ from lettuce import step
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.helpers import line_helper, callgen_helper, cti_helper
 from xivo_lettuce import assets, common, func
-from xivo_lettuce.common import open_url, edit_line
 from xivo_lettuce.form import submit
 
 
@@ -118,8 +117,8 @@ def when_i_configure_the_following_directories(step):
 
 @step(u'When I edit and save the directory configuration "([^"]*)"')
 def when_i_edit_and_save_the_directory(step, directory):
-    open_url('directory_config', 'list')
-    edit_line(directory)
+    common.open_url('directory_config', 'list')
+    common.edit_line(directory)
     submit.submit_form()
 
 

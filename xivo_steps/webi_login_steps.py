@@ -17,12 +17,12 @@
 
 from hamcrest import *
 from lettuce import step, world
-from xivo_lettuce.common import webi_login
+from xivo_lettuce import common
 
 
 @step(u'When I login as (.*) with password (.*) in (.*)')
 def when_i_login_the_webi(step, login, password, language):
-    webi_login(login, password, language)
+    common.webi_login(login, password, language)
 
 
 @step(u'Then I should be logged in "(.*)"')

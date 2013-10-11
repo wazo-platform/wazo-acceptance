@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.common import open_url
 from xivo_lettuce.form.checkbox import Checkbox
-from xivo_lettuce import form
+from xivo_lettuce import common, form
 
 
 def enable_live_reload():
@@ -29,7 +28,7 @@ def disable_live_reload():
 
 
 def _toggle_live_reload(state):
-    open_url('general_settings')
+    common.open_url('general_settings')
     option = Checkbox.from_label('Live reload configuration')
     if state == 'enable':
         option.check()

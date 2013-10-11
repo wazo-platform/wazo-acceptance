@@ -19,8 +19,7 @@ import os
 import time
 from lettuce import step, world
 from hamcrest import assert_that, greater_than
-from xivo_lettuce.common import open_url, find_line
-from xivo_lettuce import assets
+from xivo_lettuce import assets, common
 
 
 @step(u'Given there is a backup file "([^"]*)"')
@@ -36,8 +35,8 @@ def given_the_file_is_copied_on_the_server_into_group2(step, assetfile, serverpa
 
 @step(u'When I download backup file "([^"]*)"')
 def when_i_download_backup_file(step, filename):
-    open_url('backups')
-    table_line = get_line(filename)
+    common.open_url('backups')
+    table_line = common.get_line(filename)
     download_link = table_line.find_element_by_xpath(".//a[@title='%s']" % filename)
     download_link.click()
 

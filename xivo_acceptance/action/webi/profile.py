@@ -22,15 +22,15 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.helpers import user_helper
-from xivo_lettuce.common import open_url, remove_line
+from xivo_lettuce import common
 from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.form.list_pane import ListPane
 
 
 def delete_profile(profile_label):
     user_helper.delete_users_with_profile(profile_label)
-    open_url('profile', 'list')
-    remove_line(profile_label)
+    common.open_url('profile', 'list')
+    common.remove_line(profile_label)
 
 
 def delete_profile_if_exists(profile_label):

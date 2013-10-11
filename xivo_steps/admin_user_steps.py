@@ -23,7 +23,6 @@ from lettuce import step, world
 from xivo_acceptance.action.webi import admin_user as admin_user_action_webi
 from xivo_lettuce import urls
 from xivo_lettuce import common
-from xivo_lettuce.common import open_url, webi_logout
 
 
 def is_browser_on_module_page(module):
@@ -48,23 +47,23 @@ def when_i_assign_the_following_rights_to_the_admin_user(step, admin):
 
 @step(u'When I logout from the web interface')
 def when_i_logout_from_the_web_interface(step):
-    webi_logout()
+    common.webi_logout()
 
 
 @step(u'Then I can access the directory configuration')
 def then_i_can_access_the_directory_configuration(step):
-    open_url("directory_config", "list")
+    common.open_url("directory_config", "list")
     assert is_browser_on_module_page("directory_config")
 
 
 @step(u'Then I can access the SIP Protocol configuration')
 def then_i_can_access_the_sip_protocol_configuration(step):
-    open_url("general_sip")
+    common.open_url("general_sip")
     assert is_browser_on_module_page("general_sip")
 
 
 @step(u'Then I cannot access the SCCP Protocol configuration')
 def then_i_cannot_access_the_sccp_protocol_configuration(step):
-    open_url("sccpgeneralsettings")
+    common.open_url("sccpgeneralsettings")
     time.sleep(2)
     assert_that(is_browser_on_module_page("sccpgeneralsettings"), is_(False))

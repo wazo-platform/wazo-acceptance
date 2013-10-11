@@ -19,9 +19,8 @@ from hamcrest import assert_that, contains_string, has_item, is_not
 from lettuce import step
 
 from xivo_acceptance.action.webi import general_settings_xivo as general_settings_xivo_action_webi
-from xivo_lettuce import form
+from xivo_lettuce import common, form
 from xivo_lettuce import logs
-from xivo_lettuce.common import open_url
 
 
 @step(u'Given a live reload configuration is enable')
@@ -31,7 +30,7 @@ def given_a_live_reload_configuration_is_enable(step):
 
 @step(u'When i edit extenfeatures page')
 def when_i_edit_extenfeatures_page(step):
-    open_url('extenfeatures')
+    common.open_url('extenfeatures')
     form.submit.submit_form()
 
 

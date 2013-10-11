@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.common import open_url
+from xivo_lettuce import common
 
 
 def webi_exec_commonconf():
-    open_url('commonconf')
+    common.open_url('commonconf')

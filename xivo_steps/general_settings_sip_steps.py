@@ -18,15 +18,14 @@
 from lettuce import step
 
 from xivo_acceptance.helpers import asterisk_helper
-from xivo_lettuce import form
+from xivo_lettuce import common, form
 from xivo_lettuce.form.checkbox import Checkbox
-from xivo_lettuce.common import go_to_tab, open_url
 
 
 @step(u'I go on the General Settings > SIP Protocol page, tab "([^"]*)"')
 def i_go_on_the_general_settings_sip_protocol_page_tab(step, tab):
-    open_url('general_sip')
-    go_to_tab(tab)
+    common.open_url('general_sip')
+    common.go_to_tab(tab)
 
 
 @step(u'When I enable the "([^"]*)" option')

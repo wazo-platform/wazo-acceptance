@@ -19,9 +19,8 @@ from lettuce import step, world
 from hamcrest import *
 
 from xivo_acceptance.action.webi import phonebook as phonebook_action_webi
-from xivo_lettuce import assets
+from xivo_lettuce import assets, common
 from xivo_lettuce.aastra import AastraPhonebookBrowser
-from xivo_lettuce.common import find_line
 
 
 @step(u'Given "([^"]*)" is not in the phonebook')
@@ -76,7 +75,7 @@ def then_i_do_not_see_the_following_results_on_the_phone(step):
 
 @step(u'Then "([^"]*)" appears in the list')
 def then_entry_appears_in_the_list(step, entry):
-    assert find_line(entry) is not None
+    assert common.find_line(entry) is not None
 
 
 @step(u'When I import the CSV file "([^"]*)" into the phonebook')

@@ -20,7 +20,7 @@ import time
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import provd_general as provdg_action_webi
-from xivo_lettuce.common import open_url
+from xivo_lettuce import common
 
 PROXY_FIELDS = ['http_proxy', 'ftp_proxy', 'https_proxy']
 
@@ -34,14 +34,14 @@ def given_i_have_no_proxies_configured(step):
 
 @step(u'When I configure the following proxies:')
 def when_i_configure_the_following_proxies(step):
-    open_url('provd_general')
+    common.open_url('provd_general')
     for config in step.hashes:
         provdg_action_webi.configure_proxies(config)
 
 
 @step(u'When I reload the provisionning general settings page')
 def when_i_reload_the_provisionning_general_settings_page(step):
-    open_url('provd_general')
+    common.open_url('provd_general')
 
 
 @step(u'When I remove all proxy configurations')
