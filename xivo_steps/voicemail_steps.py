@@ -23,9 +23,9 @@ from xivo_acceptance.action.restapi import voicemail_action_restapi as voicemail
 from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order, assert_does_not_have_any_dicts
 
 
-@step(u'Given there is no voicemail "([^"]*)"')
-def given_there_is_no_voicemail_1(step, voicemail_number):
-    voicemail_helper.delete_voicemail_with_number_context(voicemail_number, 'default')
+@step(u'Given there is no voicemail with number "([^"]*)" and context "([^"]*)"')
+def given_there_is_no_voicemail_with_number_and_context(step, voicemail_number, context):
+    voicemail_helper.delete_voicemail_with_number_context(voicemail_number, context)
 
 
 @step(u'Given I have no voicemail with id "([^"]*)"')
@@ -131,8 +131,3 @@ def then_i_dot_not_have_the_following_voicemails_in_the_list(step):
     not_expected_voicemails = [_extract_voicemail_info(v) for v in step.hashes]
 
     assert_does_not_have_any_dicts(all_voicemails, not_expected_voicemails)
-
-
-@step(u'Given there is no voicemail with number "([^"]*)" and context "([^"]*)"')
-def given_there_is_no_voicemail_with_number_and_context(step, voicemail_number, context):
-    voicemail_helper.delete_voicemail_with_number_context(voicemail_number, context)
