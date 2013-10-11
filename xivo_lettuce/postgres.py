@@ -20,7 +20,7 @@ from sqlalchemy.sql import text
 
 
 def exec_sql_request(query, **args):
-    return world.config.asterisk_conn.execute(text(query), args)
+    return world.config.dao_asterisk_engine.execute(text(query), args)
 
 
 def exec_count_request(table, **cond_dict):
@@ -32,7 +32,7 @@ def exec_count_request(table, **cond_dict):
             cond.append('%s = %s' % (key, value))
         pg_command = '%s%s' % (pg_command, ' AND '.join(cond))
 
-    result = world.config.asterisk_conn.execute(pg_command)
+    result = world.config.dao_asterisk_engine.execute(pg_command)
     row = result.fetchone()
     return int(row[0])
 
