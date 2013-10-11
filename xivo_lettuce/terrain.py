@@ -92,9 +92,12 @@ def _setup_provd():
     world.provd_rest_password = provd_config['rest_password']
     world.provd_rest_port = provd_config['rest_port']
 
-    # content_type = 'Content-Type: application/vnd.proformatique.provd+json'
+    provd_content_type = 'Content-Type: application/vnd.proformatique.provd+json'
 
-    provd_config_obj = RestConfiguration('http', world.config.xivo_host, world.provd_rest_port)
+    provd_config_obj = RestConfiguration(protocol='http',
+                                         hostname=world.config.xivo_host,
+                                         port=world.provd_rest_port,
+                                         content_type=provd_content_type)
     world.rest_provd = WsUtils(provd_config_obj)
 
 

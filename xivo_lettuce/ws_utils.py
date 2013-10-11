@@ -19,6 +19,8 @@
 import requests
 import json
 
+DEFAULT_CONTENT_TYPE = {'Content-Type': 'application/json'}
+
 
 class WsUtils(object):
     '''
@@ -30,6 +32,7 @@ class WsUtils(object):
     def __init__(self, rest_configuration_obj):
         self.baseurl = self._prepare_baseurl(rest_configuration_obj)
         self.auth = self._prepare_auth(rest_configuration_obj)
+        self.headers = self._prepare_headers(rest_configuration_obj)
         self.session = requests.Session()
 
     def _prepare_baseurl(self, rest_configuration_obj):
@@ -51,6 +54,11 @@ class WsUtils(object):
         auth = requests.auth.HTTPDigestAuth(username, password)
         return auth
 
+    def _prepare_headers(self, rest_configuration_obj):
+        headers = {}
+        headers.update({'Content-Type': rest_configuration_obj.content_type})
+        return headers
+
     def rest_get(self, path, **kwargs):
         request = self._prepare_request('GET', path, **kwargs)
         return self._process_request(request)
@@ -70,12 +78,11 @@ class WsUtils(object):
         return self._process_request(request)
 
     def _prepare_request(self, method, path, **kwargs):
-        headers = {'Content-Type': 'application/json'}
         url = "%s/%s" % (self.baseurl, path)
 
         return requests.Request(method=method,
                                 url=url,
-                                headers=headers,
+                                headers=self.headers,
                                 auth=self.auth,
                                 **kwargs)
 
@@ -107,10 +114,12 @@ class RestResponse(object):
 
 class RestConfiguration(object):
 
-    def __init__(self, protocol, hostname, port, auth_username=None, auth_passwd=None, api_version=None):
+    def __init__(self, protocol, hostname, port, auth_username=None, auth_passwd=None,
+                 api_version=None, content_type=DEFAULT_CONTENT_TYPE):
         self.protocol = protocol
         self.hostname = hostname
         self.port = port
         self.auth_username = auth_username
         self.auth_passwd = auth_passwd
         self.api_version = api_version
+        self.content_type = content_type
