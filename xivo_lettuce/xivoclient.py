@@ -21,6 +21,8 @@ import socket
 import json
 import time
 import errno
+import uuid
+
 from pprint import pprint
 from lettuce import before, after, world
 
@@ -36,11 +38,11 @@ class XivoClient(object):
     socket_dir = '/tmp'
     socket_name = ''
     socket_path = ''
-    debug = False
 
-    def __init__(self, argument='', name='default', debug=False):
+    def __init__(self, argument='', name='default', debug=True):
         self.arguments.append(argument)
-        self.socket_name = 'xc-%s.sock' % name
+        uid = uuid.uuid4()
+        self.socket_name = 'xc-%s-%s.sock' % (name, uid.hex)
         self.socket_path = os.path.join(self.socket_dir, self.socket_name)
         self.debug = debug
 
@@ -51,11 +53,17 @@ class XivoClient(object):
         return self.listen_socket()
 
     def stop(self):
+        if self.debug:
+            print '-------------------- STOP CLIENT ---------------------'
+            print
         self.process.terminate()
         self.process = None
         self.socket.close()
         self.socket = None
         try:
+            if self.debug:
+                print '-------------------- REMOVE SOCKET %s ---------------------' % self.socket_path
+                print
             os.remove(self.socket_path)
         except OSError:
             pass
