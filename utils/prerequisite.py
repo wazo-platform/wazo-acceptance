@@ -20,11 +20,9 @@ import socket
 
 from lettuce import world
 
-from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
 from xivo_acceptance.helpers import context_helper, trunksip_helper
 from xivo_lettuce.terrain import initialize, deinitialize
 from xivo_lettuce.common import open_url
-from xivo_lettuce.form import submit
 
 
 _WEBSERVICES_SQL_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'webservices.sql'))
@@ -34,8 +32,15 @@ def main():
     print 'Initializing ...'
     initialize()
     try:
-        print 'Adding WebService Access'
+        print 'Configuring WebService Access on XiVO'
         _create_webservices_access()
+
+        print 'Configuring PostgreSQL on XiVO'
+        _create_pgpass_on_remote_host()
+        _allow_remote_access_to_pgsql()
+
+        print 'Configuring Provd REST API on XiVO'
+        _allow_provd_listen_on_all_interfaces()
 
         print 'Adding context'
         context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
@@ -56,13 +61,8 @@ def main():
         print 'Adding default SIP trunk'
         trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_incall', 'from-extern')
 
-        print 'Configuring PostgreSQL on XiVO'
-        _create_pgpass_on_remote_host()
-        _allow_remote_access_to_pgsql()
-
-        print 'Configuring Provd REST API'
-        _allow_provd_listen_on_all_interfaces()
-
+        print 'Restarting All XiVO Services'
+        _xivo_service_restart_all()
     finally:
         deinitialize()
 
@@ -88,26 +88,22 @@ def _allow_remote_access_to_pgsql():
     _add_line_to_remote_file('host all all 10.0.0.0/8 md5', hba_file)
     _add_line_to_remote_file("listen_addresses = '*'", postgres_conf_file)
 
-    _xivo_service_restart()
-
 
 def _add_line_to_remote_file(line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
     world.ssh_client_xivo.check_call(command)
 
 
-def _xivo_service_restart():
+def _xivo_service_restart_all():
     command = ['xivo-service', 'restart', 'all']
     world.ssh_client_xivo.check_call(command)
 
 
 def _allow_provd_listen_on_all_interfaces():
-    open_url('provd_general')
-    config = {
-        'net4_ip_rest': '0.0.0.0',
-    }
-    provd_general_action_webi.configure_rest_api(config)
-    submit.submit_form()
+    query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
+    world.config.dao_xivo_engine.execute(query)
+    open_url('commonconf')
+
 
 if __name__ == '__main__':
     main()

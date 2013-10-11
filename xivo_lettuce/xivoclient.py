@@ -39,7 +39,7 @@ class XivoClient(object):
     socket_name = ''
     socket_path = ''
 
-    def __init__(self, argument='', name='default', debug=True):
+    def __init__(self, argument='', name='default', debug=False):
         self.arguments.append(argument)
         uid = uuid.uuid4()
         self.socket_name = 'xc-%s-%s.sock' % (name, uid.hex)

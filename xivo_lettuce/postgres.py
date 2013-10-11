@@ -19,8 +19,14 @@ from lettuce import world
 from sqlalchemy.sql import text
 
 
-def exec_sql_request(query, **args):
-    return world.config.dao_asterisk_engine.execute(text(query), args)
+def exec_sql_request(query, database='asterisk', **args):
+    if database == 'asterisk':
+        enguine = world.config.dao_asterisk_engine
+    elif database == 'xivo':
+        enguine = world.config.dao_xivo_engine
+    else:
+        raise 'Invalid database: %s' % database
+    return enguine.execute(text(query), args)
 
 
 def exec_count_request(table, **cond_dict):
@@ -35,8 +41,3 @@ def exec_count_request(table, **cond_dict):
     result = world.config.dao_asterisk_engine.execute(pg_command)
     row = result.fetchone()
     return int(row[0])
-
-
-def exec_sql_request_with_return(pg_command):
-    command = ['psql', '-h', 'localhost', '-U', 'asterisk', '-c', pg_command]
-    return world.ssh_client_xivo.out_call(command)

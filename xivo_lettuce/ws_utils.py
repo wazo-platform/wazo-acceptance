@@ -39,9 +39,13 @@ class WsUtils(object):
         protocol = rest_configuration_obj.protocol
         hostname = rest_configuration_obj.hostname
         port = rest_configuration_obj.port
-        api_version = rest_configuration_obj.api_version
 
-        baseurl = "%s://%s:%s/%s" % (protocol, hostname, port, api_version)
+        baseurl = "%s://%s:%s" % (protocol, hostname, port)
+
+        api_version = rest_configuration_obj.api_version
+        if api_version is not None:
+            baseurl = '%s/%s' % (baseurl, api_version)
+
         return baseurl
 
     def _prepare_auth(self, rest_configuration_obj):
@@ -78,7 +82,9 @@ class WsUtils(object):
         return self._process_request(request)
 
     def _prepare_request(self, method, path, **kwargs):
-        url = "%s/%s" % (self.baseurl, path)
+        if not path.startswith('/'):
+            path = '/%s' % path
+        url = "%s%s" % (self.baseurl, path)
 
         return requests.Request(method=method,
                                 url=url,

@@ -26,6 +26,7 @@ from xivo_lettuce.common import webi_login_as_default, webi_logout
 from xivo_lettuce.ws_utils import WsUtils, RestConfiguration
 from xivo_lettuce.remote_py_cmd import remote_exec_with_result
 from xivo_lettuce.config import XivoAcceptanceConfig
+from xivo_lettuce import postgres
 
 
 @before.all
@@ -82,44 +83,14 @@ def _setup_ws():
 
 
 def _setup_provd():
-    if not _webi_configured():
-        return
-
-    provd_config = _provd_configuration()
-
-    world.provd_rest_authentication = provd_config['rest_authentication']
-    world.provd_rest_username = provd_config['rest_username']
-    world.provd_rest_password = provd_config['rest_password']
-    world.provd_rest_port = provd_config['rest_port']
-
-    provd_content_type = 'Content-Type: application/vnd.proformatique.provd+json'
+    query = 'SELECT * FROM "provisioning" WHERE id = 1;'
+    result = postgres.exec_sql_request(query, database='xivo').fetchone()
 
     provd_config_obj = RestConfiguration(protocol='http',
                                          hostname=world.config.xivo_host,
-                                         port=world.provd_rest_port,
-                                         content_type=provd_content_type)
+                                         port=result['rest_port'],
+                                         content_type='application/vnd.proformatique.provd+json')
     world.rest_provd = WsUtils(provd_config_obj)
-
-
-def _provd_configuration():
-    return remote_exec_with_result(_get_provd_configuration)
-
-
-def _get_provd_configuration(channel):
-    import ConfigParser
-
-    provd_conf_file = '/etc/pf-xivo/provd/provd.conf'
-    config = ConfigParser.RawConfigParser()
-    config.read(provd_conf_file)
-
-    provd_config = {}
-    provd_config['rest_ip'] = config.get('general', 'rest_ip')
-    provd_config['rest_authentication'] = config.get('general', 'rest_authentication')
-    provd_config['rest_username'] = config.get('general', 'rest_username')
-    provd_config['rest_password'] = config.get('general', 'rest_password')
-    provd_config['rest_port'] = config.getint('general', 'rest_port')
-
-    channel.send(provd_config)
 
 
 def _setup_browser():
