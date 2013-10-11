@@ -110,7 +110,7 @@ def shutdown_ldap_server():
 
     cmd = ['virsh', 'shutdown', world.config.kvm_vm_name]
     ssh_client.check_call(cmd)
-    time.sleep(world.config.shutdown_timeout)
+    time.sleep(world.config.kvm_shutdown_timeout)
 
 
 def boot_ldap_server():
