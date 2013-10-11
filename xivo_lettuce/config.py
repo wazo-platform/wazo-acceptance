@@ -91,20 +91,18 @@ class XivoAcceptanceConfig(object):
 
     def _setup_ws(self):
         rest_config_dict = {
-
+            'protocol': self.rest_protocol,
+            'hostname': self.xivo_host,
+            'port': self.rest_port,
+            'auth_username': self.rest_username,
+            'auth_passwd': self.rest_passwd
         }
-        self.restapi_config_1_0 = RestConfiguration(self.rest_protocol,
-                                                    self.xivo_host,
-                                                    self.rest_port,
-                                                    self.rest_username,
-                                                    self.rest_passwd,
-                                                    '1.0')
-        self.restapi_config_1_1 = RestConfiguration(self.rest_protocol,
-                                                    self.xivo_host,
-                                                    self.rest_port,
-                                                    self.rest_username,
-                                                    self.rest_passwd,
-                                                    '1.1')
+        rest_config_dict.update({'api_version': '1.0'})
+        self.restapi_config_1_0 = RestConfiguration(**rest_config_dict)
+
+        rest_config_dict.update({'api_version': '1.1'})
+        self.restapi_config_1_1 = RestConfiguration(**rest_config_dict)
+
         self.ws_utils = xivo_ws.XivoServer(self.xivo_host,
                                            self.rest_username,
                                            self.rest_passwd)
