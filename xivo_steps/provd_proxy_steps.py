@@ -27,9 +27,9 @@ PROXY_FIELDS = ['http_proxy', 'ftp_proxy', 'https_proxy']
 
 @step(u'Given I have no proxies configured')
 def given_i_have_no_proxies_configured(step):
-    world.rest_provd.rest_put("/provdg_action_webi/configure/http_proxy", None)
-    world.rest_provd.rest_put("/provdg_action_webi/configure/ftp_proxy", None)
-    world.rest_provd.rest_put("/provdg_action_webi/configure/https_proxy", None)
+    world.rest_provd.rest_put("/provd/configure/http_proxy", None)
+    world.rest_provd.rest_put("/provd/configure/ftp_proxy", None)
+    world.rest_provd.rest_put("/provd/configure/https_proxy", None)
 
 
 @step(u'When I configure the following proxies:')
