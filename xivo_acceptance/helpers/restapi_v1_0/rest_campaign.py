@@ -84,12 +84,10 @@ class RestCampaign(object):
 
         # we create the file
         dirname = RestAPIConfig.RECORDING_FILE_ROOT_PATH
-        remote_host = world.config.get('xivo', 'hostname')
 
         file_path = dirname + "/" + recording['filename']
         cmd = ['touch', file_path]
-        sshclient = SSHClient(remote_host, 'root')
-        sshclient.call(cmd)
+        world.ssh_client_xivo.call(cmd)
         return reply
 
     def verify_recording_details(self, campaign_id, callid):

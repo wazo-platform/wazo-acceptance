@@ -1,5 +1,0 @@
-#!/bin/sh
-
-export PYTHONPATH="../:$PYTHONPATH"
-
-python -m fill_conf "$@"

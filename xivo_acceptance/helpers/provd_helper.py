@@ -22,7 +22,7 @@ from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 
 
 def _provd_client():
-    provd_url = "http://%s:%s/provd" % (world.xivo_host, world.provd_rest_port)
+    provd_url = "http://%s:%s/provd" % (world.config.xivo_host, world.provd_rest_port)
     provd_client = new_provisioning_client(provd_url)
     return provd_client
 

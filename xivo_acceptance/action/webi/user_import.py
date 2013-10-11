@@ -16,12 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce.registry import world
-
-
-USER_URL = '/service/ipbx/index.php/pbx_settings/users/%s'
+from xivo_lettuce.common import open_url
 
 
 def open_import_user_form():
-    URL = USER_URL % '?act=import'
-    world.browser.get('%s%s' % (world.xivo_url, URL))
+    open_url('user', 'import')
     world.browser.find_element_by_id('it-import', 'User import form not loaded')

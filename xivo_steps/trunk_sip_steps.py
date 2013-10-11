@@ -37,7 +37,7 @@ def given_there_is_a_trunksip(step, name):
 
 @step(u'Given there is a SIP trunk "([^"]*)" in context "([^"]*)"$')
 def given_there_is_a_siptrunk_with_callerid(step, name, context):
-    callgen_ip = socket.gethostbyname(world.callgen_host),
+    callgen_ip = socket.gethostbyname(world.config.callgen_host),
     trunksip_helper.add_or_replace_trunksip(callgen_ip, name, context)
 
 

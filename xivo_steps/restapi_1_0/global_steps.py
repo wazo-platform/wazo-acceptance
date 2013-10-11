@@ -23,9 +23,7 @@ from xivo_acceptance.helpers.restapi_v1_0.restapi_config import RestAPIConfig
 
 @step(u'When I send a "([^"]*)" request to "([^"]*)"')
 def when_i_send_a_group1_request_to_group2(step, method, url):
-    hostname = world.config.get('xivo', 'hostname')
-    port = world.config.get('restapi', 'port')
-    url = "%s:%s" % (hostname, port)
+    url = "%s:%s" % (world.config.xivo_host, world.config.rest_port)
     connection = httplib.HTTPConnection(url)
     headers = RestAPIConfig.CTI_REST_DEFAULT_CONTENT_TYPE
     connection.request(method, url, None, headers)

@@ -43,7 +43,7 @@ class AastraPhonebookBrowser(object):
 
     def _new_request(self, name):
         encoded_name = name.encode('utf8')
-        url = '%s%s?name=%s' % (world.xivo_url, self._PATH, encoded_name)
+        url = '%s%s?name=%s' % (world.config.webi_url, self._PATH, encoded_name)
         return urllib2.Request(url, headers=self._HEADERS)
 
     def _accumulate_display(self, lines):

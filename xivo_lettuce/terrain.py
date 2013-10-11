@@ -15,27 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import execnet
-import ConfigParser
-import os
 import sys
 import tempfile
-import xivo_ws
 
 from lettuce import before, after, world
-from sqlalchemy.exc import OperationalError
 from xivobrowser import XiVOBrowser
 
 from xivo_acceptance.helpers import asterisk_helper
-from xivo_dao.helpers import config as dao_config
-from xivo_dao.helpers import db_manager
 from xivo_lettuce.common import webi_login_as_default, webi_logout
-from xivo_lettuce.ssh import SSHClient
 from xivo_lettuce.ws_utils import WsUtils, RestConfiguration
 from xivo_lettuce.remote_py_cmd import remote_exec_with_result
-
-_CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                            '../config/config.ini'))
+from xivo_lettuce.config import XivoAcceptanceConfig
 
 
 @before.all
@@ -50,7 +40,7 @@ def xivo_lettuce_before_each_scenario(scenario):
     world.userid = None
     world.number = None
     world.lineid = None
-    if world.browser_enable and _webi_configured():
+    if world.config.browser_enable and _webi_configured():
         _check_webi_login_root()
 
 
@@ -69,113 +59,32 @@ def xivo_lettuce_after_all(total):
     deinitialize()
 
 
-def read_config():
-    config = ConfigParser.RawConfigParser()
-    config_environ = os.getenv('LETTUCE_CONFIG')
-    if config_environ and os.path.exists(config_environ):
-        config_file = config_environ
-    else:
-        local_config = '%s.local' % _CONFIG_FILE
-        if os.path.exists(local_config):
-            config_file = local_config
-        else:
-            config_file = _CONFIG_FILE
-    with open(config_file) as fobj:
-        config.readfp(fobj)
-    return config
-
-
 def initialize():
-    world.config = read_config()
-    world.browser_enable = world.config.getboolean('browser', 'enable')
-    world.lazy = _LazyWorldAttributes()
-    _setup_dao()
-    _setup_xivo_client()
-    _setup_login_infos()
-    _setup_ssh_client_xivo()
-    _setup_ssh_client_callgen()
+    world.config = XivoAcceptanceConfig()
+    world.config.setup()
+    _setup_ssh_client()
     _setup_ws()
     _setup_provd()
-    if world.browser_enable:
-        _setup_browser()
-        if _webi_configured():
-            webi_login_as_default()
+    _setup_browser()
     world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
 
 
-def _setup_browser():
-    visible = world.config.getboolean('browser', 'visible')
-    timeout = world.config.getint('browser', 'timeout')
-    resolution = world.config.get('browser', 'resolution')
-
-    from pyvirtualdisplay import Display
-    browser_size = width, height = tuple(resolution.split('x', 1))
-    world.display = Display(visible=visible, size=browser_size)
-    world.display.start()
-    world.browser = XiVOBrowser()
-    world.browser.set_window_size(width, height)
-    world.timeout = timeout
-
-
-def _setup_dao():
-    hostname = world.config.get('xivo', 'hostname')
-    dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % hostname
-    dao_config.XIVO_DB_URI = 'postgresql://xivo:proformatique@%s/xivo' % hostname
-    db_manager.reinit()
-    try:
-        world.asterisk_conn = db_manager._asterisk_engine.connect()
-    except OperationalError:
-        print 'PGSQL ERROR: could not connect to server'
-
-
-def _setup_xivo_client():
-    world.xc_login_timeout = world.config.getint('xivo_client', 'login_timeout')
-
-
-def _setup_login_infos():
-    world.xivo_url = 'https://%s' % world.config.get('xivo', 'hostname')
-    world.login = world.config.get('login_infos', 'login')
-    world.password = world.config.get('login_infos', 'password')
-
-
-def _setup_ssh_client_xivo():
-    hostname = world.config.get('xivo', 'hostname')
-    login = world.config.get('ssh_infos', 'login')
-    world.xivo_host = hostname
-    world.xivo_login = login
-    world.ssh_client_xivo = SSHClient(hostname, login)
-
-
-def _setup_ssh_client_callgen():
-    hostname = world.config.get('callgen', 'hostname')
-    login = world.config.get('callgen', 'login')
-    world.callgen_host = hostname
-    world.callgen_login = login
-    world.ssh_client_callgen = SSHClient(hostname, login)
+def _setup_ssh_client():
+    world.ssh_client_xivo = world.config.ssh_client_xivo
+    world.ssh_client_callgen = world.config.ssh_client_callgen
 
 
 def _setup_ws():
-    xivo_hostname = world.config.get('xivo', 'hostname')
-    auth_username = world.config.get('webservices_infos', 'login')
-    auth_passwd = world.config.get('webservices_infos', 'password')
-    protocol = world.config.get('restapi', 'protocol')
-    port = world.config.getint('restapi', 'port')
-
-    world.ws = xivo_ws.XivoServer(xivo_hostname, auth_username, auth_passwd)
-
-    restapi_config_1_0 = RestConfiguration(protocol, xivo_hostname, port, auth_username, auth_passwd, '1.0')
-    restapi_config_1_1 = RestConfiguration(protocol, xivo_hostname, port, auth_username, auth_passwd, '1.1')
-
-    world.restapi_utils_1_0 = WsUtils(restapi_config_1_0)
-    world.restapi_utils_1_1 = WsUtils(restapi_config_1_1)
+    world.ws = world.config.ws_utils
+    world.restapi_utils_1_0 = world.config.restapi_utils_1_0
+    world.restapi_utils_1_1 = world.config.restapi_utils_1_1
 
 
 def _setup_provd():
     if not _webi_configured():
         return
 
-    xivo_hostname = world.config.get('xivo', 'hostname')
     provd_config = _provd_configuration()
 
     world.provd_rest_authentication = provd_config['rest_authentication']
@@ -183,7 +92,9 @@ def _setup_provd():
     world.provd_rest_password = provd_config['rest_password']
     world.provd_rest_port = provd_config['rest_port']
 
-    provd_config_obj = RestConfiguration('http', xivo_hostname, world.provd_rest_port)
+    # content_type = 'Content-Type: application/vnd.proformatique.provd+json'
+
+    provd_config_obj = RestConfiguration('http', world.config.xivo_host, world.provd_rest_port)
     world.rest_provd = WsUtils(provd_config_obj)
 
 
@@ -208,17 +119,20 @@ def _get_provd_configuration(channel):
     channel.send(provd_config)
 
 
-class _LazyWorldAttributes(object):
+def _setup_browser():
+    if not world.config.browser_enable:
+        return
 
-    @property
-    def execnet_gateway(self):
-        try:
-            return self._execnet_gateway
-        except AttributeError:
-            hostname = world.config.get('xivo', 'hostname')
-            login = world.config.get('ssh_infos', 'login')
-            self._execnet_gateway = execnet.makegateway('ssh=%s@%s' % (login, hostname))
-            return self._execnet_gateway
+    from pyvirtualdisplay import Display
+    browser_size = width, height = tuple(world.config.browser_resolution.split('x', 1))
+    world.display = Display(visible=world.config.browser_visible, size=browser_size)
+    world.display.start()
+    world.browser = XiVOBrowser()
+    world.browser.set_window_size(width, height)
+    world.timeout = world.config.browser_timeout
+
+    if _webi_configured():
+        webi_login_as_default()
 
 
 def _webi_configured():
@@ -245,7 +159,7 @@ def _check_webi_login_root():
 
 
 def deinitialize():
-    if world.browser_enable:
+    if world.config.browser_enable:
         _teardown_browser()
 
 

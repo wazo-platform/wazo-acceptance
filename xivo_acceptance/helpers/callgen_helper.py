@@ -38,8 +38,8 @@ def execute_n_calls_then_hangup(count, extension, duration=3000, username='', pa
 
     command = ['xivo-callgen',
                '-bg',
-               '-li', socket.gethostbyname(world.callgen_host),
-               '-rh', world.xivo_host,
+               '-li', socket.gethostbyname(world.config.callgen_host),
+               '-rh', world.config.xivo_host,
                'call-then-hangup',
                '-nc', count,
                '-ce', number,
@@ -60,8 +60,8 @@ def execute_n_calls_then_wait(count, extension, username='', password=''):
 
     command = ['xivo-callgen',
                '-bg',
-               '-li', socket.gethostbyname(world.callgen_host),
-               '-rh', world.xivo_host,
+               '-li', socket.gethostbyname(world.config.callgen_host),
+               '-rh', world.config.xivo_host,
                'call-then-wait',
                '-nc', count,
                '-ce', number,
@@ -73,8 +73,8 @@ def execute_n_calls_then_wait(count, extension, username='', password=''):
 def execute_sip_register(username, password, expires=120):
     command = ['xivo-callgen',
                '-bg',
-               '-li', socket.gethostbyname(world.callgen_host),
-               '-rh', world.xivo_host,
+               '-li', socket.gethostbyname(world.config.callgen_host),
+               '-rh', world.config.xivo_host,
                'send-sip-register',
                '-u', username,
                '-p', password,
@@ -85,8 +85,8 @@ def execute_sip_register(username, password, expires=120):
 def execute_answer_then_hangup(duration=5000, ring_time=2000):
     command = ['xivo-callgen',
                '-bg',
-               '-li', socket.gethostbyname(world.callgen_host),
-               '-rh', world.xivo_host,
+               '-li', socket.gethostbyname(world.config.callgen_host),
+               '-rh', world.config.xivo_host,
                'answer-then-hangup',
                '-cd', duration,
                '-rt', ring_time]
@@ -96,8 +96,8 @@ def execute_answer_then_hangup(duration=5000, ring_time=2000):
 def execute_answer_then_wait(ring_time=2000):
     command = ['xivo-callgen',
                '-bg',
-               '-li', socket.gethostbyname(world.callgen_host),
-               '-rh', world.xivo_host,
+               '-li', socket.gethostbyname(world.config.callgen_host),
+               '-rh', world.config.xivo_host,
                'answer-then-wait',
                '-rt', ring_time]
     _exec_cmd(command)
@@ -105,8 +105,8 @@ def execute_answer_then_wait(ring_time=2000):
 
 def execute_pickup_call(number, username, password):
     command = ['xivo-callgen',
-               '-li', socket.gethostbyname(world.callgen_host),
-               '-rh', world.xivo_host,
+               '-li', socket.gethostbyname(world.config.callgen_host),
+               '-rh', world.config.xivo_host,
                'call-then-hangup',
                '-ce', number,
                '-clu', username,
@@ -126,10 +126,10 @@ def _exec_cmd(command, extra_ssh_args=None):
                    '-o', 'PreferredAuthentications=publickey',
                    '-o', 'StrictHostKeyChecking=no',
                    '-o', 'UserKnownHostsFile=/dev/null',
-                   '-l', world.callgen_login]
+                   '-l', world.config.callgen_login]
     if extra_ssh_args:
         ssh_command.extend(extra_ssh_args)
-    ssh_command.append(socket.gethostbyname(world.callgen_host))
+    ssh_command.append(socket.gethostbyname(world.config.callgen_host))
     ssh_command.extend(cmds)
 
     p = Popen(ssh_command,

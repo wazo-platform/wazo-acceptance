@@ -34,8 +34,6 @@ def main():
     print 'Initializing ...'
     initialize()
     try:
-        callgen_ip = socket.gethostbyname(world.callgen_host)
-
         print 'Adding WebService Access'
         _create_webservices_access()
 
@@ -48,6 +46,7 @@ def main():
         context_helper.update_contextnumbers_meetme('default', 4000, 4999)
         context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
+        callgen_ip = socket.gethostbyname(world.config.callgen_host)
         print 'Adding default SIP trunk'
         trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')
 

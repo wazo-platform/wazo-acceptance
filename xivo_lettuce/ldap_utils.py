@@ -100,42 +100,35 @@ def stop_ldap_server():
 
 
 def _kvm_ssh_client():
-    kvm_hostname = world.config.get('kvm_infos', 'hostname')
-    kvm_login = world.config.get('kvm_infos', 'login')
-    ssh_client = SSHClient(kvm_hostname, kvm_login)
+    ssh_client = SSHClient(world.config.kvm_hostname, world.config.kvm_login)
 
     return ssh_client
 
 
 def shutdown_ldap_server():
-    vm_name = world.config.get('kvm_infos', 'vm_name')
-    timeout = int(world.config.get('kvm_infos', 'shutdown_timeout'))
     ssh_client = _kvm_ssh_client()
 
-    cmd = ['virsh', 'shutdown', vm_name]
+    cmd = ['virsh', 'shutdown', world.config.kvm_vm_name]
     ssh_client.check_call(cmd)
-    time.sleep(timeout)
+    time.sleep(world.config.shutdown_timeout)
 
 
 def boot_ldap_server():
-    vm_name = world.config.get('kvm_infos', 'vm_name')
-    timeout = int(world.config.get('kvm_infos', 'boot_timeout'))
     ssh_client = _kvm_ssh_client()
 
-    cmd = ['virsh', 'start', vm_name]
+    cmd = ['virsh', 'start', world.config.kvm_vm_name]
     ssh_client.check_call(cmd)
-    time.sleep(timeout)
+    time.sleep(world.config.kvm_boot_timeout)
 
 
 def is_ldap_booted():
-    vm_name = world.config.get('kvm_infos', 'vm_name')
     ssh_client = _kvm_ssh_client()
 
     cmd = ['virsh', 'list']
 
     output = ssh_client.out_call(cmd)
     for line in output.split('\n'):
-        if vm_name in line:
+        if world.config.kvm_vm_name in line:
             return True
 
     return False

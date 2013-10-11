@@ -41,7 +41,7 @@ def webi_login(login, password, language):
 
 
 def webi_login_as_default():
-    webi_login(world.login, world.password, 'en')
+    webi_login(world.config.webi_login, world.config.webi_password, 'en')
 
 
 def waitForLoginPage():
@@ -154,7 +154,7 @@ def open_url(module, act=None, qry=None):
     else:
         raise Exception("Unknown module : %s" % module)
 
-    url = _build_url(world.xivo_url, uri, qry)
+    url = _build_url(world.config.webi_url, uri, qry)
 
     world.browser.get(url)
 
@@ -323,7 +323,7 @@ def go_to_tab(tab_label, ss_tab_label=None):
 
 
 def get_host_address():
-    host = world.xivo_url
+    host = world.config.webi_url
     host = host.rstrip('/')
     host = host.partition('//')[2]
     return host

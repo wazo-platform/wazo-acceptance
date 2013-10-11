@@ -71,8 +71,8 @@ def then_i_get_a_response_with_the_following_link_resources(step):
 
 
 def _assert_response_has_resource_link(resource, resource_id):
-    host = world.config.get('xivo', 'hostname')
-    port = world.config.get('restapi', 'port')
+    host = world.config.xivo_host
+    port = world.config.rest_port
 
     expected_url = "https://%s:%s/1.1/%s/%s" % (host, port, resource, resource_id)
 

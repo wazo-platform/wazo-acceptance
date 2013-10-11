@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import world
+from xivo_lettuce.common import open_url
 
 
 def webi_exec_commonconf():
-    url = '%s%s' % (world.xivo_url, '/xivo/configuration/index.php/controlsystem/commonconf')
-    world.browser.get(url)
+    open_url('commonconf')

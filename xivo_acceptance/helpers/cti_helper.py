@@ -67,25 +67,25 @@ def configure_client(conf_dict):
 
 def set_search_for_directory(search):
     res = xivoclient.exec_command('set_search_for_directory', search)
-    time.sleep(world.xc_login_timeout)
+    time.sleep(world.config.xc_login_timeout)
     return res
 
 
 def set_search_for_remote_directory(search):
     res = xivoclient.exec_command('set_search_for_remote_directory', search)
-    time.sleep(world.xc_login_timeout)
+    time.sleep(world.config.xc_login_timeout)
     return res
 
 
 def exec_double_click_on_number_for_name(name):
     res = xivoclient.exec_command('exec_double_click_on_number_for_name', name)
-    time.sleep(world.xc_login_timeout)
+    time.sleep(world.config.xc_login_timeout)
     return res
 
 
 def set_queue_for_queue_members(queue_id):
     res = xivoclient.exec_command('set_queue_for_queue_members', queue_id)
-    time.sleep(world.xc_login_timeout)
+    time.sleep(world.config.xc_login_timeout)
     return res
 
 
@@ -167,7 +167,7 @@ def get_nb_instances():
 
 def log_in_the_xivo_client():
     res = xivoclient.exec_command('i_log_in_the_xivo_client')
-    time.sleep(world.xc_login_timeout)
+    time.sleep(world.config.xc_login_timeout)
     if res['test_result'] == 'passed':
         identity_infos = get_identity_infos()
         world.xc_identity_infos = identity_infos['return_value']

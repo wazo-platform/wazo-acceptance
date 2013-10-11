@@ -27,9 +27,8 @@ HEADERS = {'Content-Type': 'application/json'}
 
 
 def provision_device_using_webi(provcode, device_ip):
-    hostname = world.config.get('xivo', 'hostname')
     data = json.dumps({'code': provcode, 'ip': device_ip})
-    requests.post(url=AUTOPROV_URL % hostname,
+    requests.post(url=AUTOPROV_URL % world.config.xivo_host,
                   headers=HEADERS,
                   auth=_prepare_auth(),
                   data=data,
@@ -37,10 +36,7 @@ def provision_device_using_webi(provcode, device_ip):
 
 
 def _prepare_auth():
-    username = world.config.get('webservices_infos', 'login')
-    password = world.config.get('webservices_infos', 'password')
-
-    auth = requests.auth.HTTPBasicAuth(username, password)
+    auth = requests.auth.HTTPBasicAuth(world.config.rest_username, world.config.rest_passwd)
     return auth
 
 
