@@ -19,7 +19,7 @@
 import requests
 import json
 
-DEFAULT_CONTENT_TYPE = {'Content-Type': 'application/json'}
+DEFAULT_CONTENT_TYPE = 'application/json'
 
 
 class WsUtils(object):
