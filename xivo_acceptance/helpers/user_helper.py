@@ -26,6 +26,7 @@ from xivo_lettuce import postgres
 from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.remote_py_cmd import remote_exec
 from xivo_ws import User, UserLine, UserVoicemail
+from xivo_ws.exception import WebServiceRequestError
 
 
 def get_by_user_id(user_id):
@@ -278,7 +279,10 @@ def add_user(data_dict):
     if 'mobile_number' in data_dict:
         user.mobile_number = data_dict['mobile_number']
 
-    ret = world.ws.users.add(user)
+    try:
+        ret = world.ws.users.add(user)
+    except WebServiceRequestError as e:
+        raise Exception('Could not add user %s %s: %s' % (user.firstname, user.lastname, e))
     if not ret:
         return False
 
@@ -293,10 +297,10 @@ def add_or_replace_user(data_dict):
     context = data_dict.get('line_context', None)
 
     delete_user_line_extension_voicemail(firstname,
-                                                          lastname,
-                                                          exten=exten,
-                                                          context=context,
-                                                          mailbox=mailbox)
+                                         lastname,
+                                         exten=exten,
+                                         context=context,
+                                         mailbox=mailbox)
 
     return add_user(data_dict)
 
