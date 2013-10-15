@@ -11,6 +11,7 @@ from xivo_dao.helpers import config as dao_config
 from xivo_dao.helpers import db_manager
 from xivo_lettuce.ssh import SSHClient
 from xivo_lettuce.ws_utils import RestConfiguration, WsUtils
+from xivo_lettuce import postgres
 
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -24,6 +25,10 @@ class XivoAcceptanceConfig(object):
 
         self.dao_asterisk_engine = None
         self.dao_xivo_engine = None
+        self.rest_provd = None
+        self.ws_utils = None
+        self.restapi_utils_1_0 = None
+        self.restapi_utils_1_1 = None
 
         self.xivo_host = self._config.get('xivo', 'hostname')
         self.xivo_biz_host = self._config.get('xivo_biz', 'hostname')
@@ -59,6 +64,7 @@ class XivoAcceptanceConfig(object):
         self._setup_dao()
         self._setup_ssh_client()
         self._setup_ws()
+        self._setup_provd()
 
     def _read_config(self):
         config = ConfigParser.RawConfigParser()
@@ -108,6 +114,16 @@ class XivoAcceptanceConfig(object):
                                            self.rest_passwd)
         self.restapi_utils_1_0 = WsUtils(self.restapi_config_1_0)
         self.restapi_utils_1_1 = WsUtils(self.restapi_config_1_1)
+
+    def _setup_provd(self):
+        query = 'SELECT * FROM "provisioning" WHERE id = 1;'
+        result = postgres.exec_sql_request(query, database='xivo').fetchone()
+
+        provd_config_obj = RestConfiguration(protocol='http',
+                                             hostname=self.xivo_host,
+                                             port=result['rest_port'],
+                                             content_type='application/vnd.proformatique.provd+json')
+        self.rest_provd = WsUtils(provd_config_obj)
 
     @property
     def execnet_gateway(self):

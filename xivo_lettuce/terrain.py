@@ -23,10 +23,7 @@ from xivobrowser import XiVOBrowser
 
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_lettuce.common import webi_login_as_default, webi_logout
-from xivo_lettuce.ws_utils import WsUtils, RestConfiguration
-from xivo_lettuce.remote_py_cmd import remote_exec_with_result
 from xivo_lettuce.config import XivoAcceptanceConfig
-from xivo_lettuce import postgres
 
 
 @before.all
@@ -83,17 +80,7 @@ def _setup_ws():
 
 
 def _setup_provd():
-    if not _webi_configured():
-        return
-
-    query = 'SELECT * FROM "provisioning" WHERE id = 1;'
-    result = postgres.exec_sql_request(query, database='xivo').fetchone()
-
-    provd_config_obj = RestConfiguration(protocol='http',
-                                         hostname=world.config.xivo_host,
-                                         port=result['rest_port'],
-                                         content_type='application/vnd.proformatique.provd+json')
-    world.rest_provd = WsUtils(provd_config_obj)
+    world.rest_provd = world.config.rest_provd
 
 
 def _setup_browser():
