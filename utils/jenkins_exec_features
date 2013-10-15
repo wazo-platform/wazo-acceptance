@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPO_DIR='/data'
-GIT_ROOT="git://git.xivo.fr/official"
+GIT_ROOT="git://github.com/xivo-pbx"
 REPOSITORIES="xivo-dao xivo-acceptance xivo-lib-python xivo-dird xivo-restapi xivo-provisioning"
 PYTHONPATH_STR=''
 FEATURE_NAME=$(echo $JOB_NAME | sed 's/acceptance_//g')
