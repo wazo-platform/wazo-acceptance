@@ -88,6 +88,9 @@ def _allow_remote_access_to_pgsql():
     _add_line_to_remote_file('host all all 10.0.0.0/8 md5', hba_file)
     _add_line_to_remote_file("listen_addresses = '*'", postgres_conf_file)
 
+    command = ['service', 'postgresql', 'restart']
+    world.ssh_client_xivo.check_call(command)
+
 
 def _add_line_to_remote_file(line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
