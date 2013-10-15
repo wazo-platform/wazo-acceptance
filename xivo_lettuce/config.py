@@ -116,17 +116,17 @@ class XivoAcceptanceConfig(object):
         self.restapi_utils_1_1 = WsUtils(self.restapi_config_1_1)
 
     def _setup_provd(self):
-        if self.dao_xivo_engine is None:
-            return
+        try:
+            query = 'SELECT * FROM "provisioning" WHERE id = 1;'
+            result = postgres.exec_sql_request(query, database='xivo').fetchone()
 
-        query = 'SELECT * FROM "provisioning" WHERE id = 1;'
-        result = postgres.exec_sql_request(query, database='xivo').fetchone()
-
-        provd_config_obj = RestConfiguration(protocol='http',
-                                             hostname=self.xivo_host,
-                                             port=result['rest_port'],
-                                             content_type='application/vnd.proformatique.provd+json')
-        self.rest_provd = WsUtils(provd_config_obj)
+            provd_config_obj = RestConfiguration(protocol='http',
+                                                 hostname=self.xivo_host,
+                                                 port=result['rest_port'],
+                                                 content_type='application/vnd.proformatique.provd+json')
+            self.rest_provd = WsUtils(provd_config_obj)
+        except OperationalError:
+            print 'PGSQL ERROR: could not connect to server'
 
     @property
     def execnet_gateway(self):
