@@ -83,6 +83,9 @@ def _setup_ws():
 
 
 def _setup_provd():
+    if not _webi_configured():
+        return
+
     query = 'SELECT * FROM "provisioning" WHERE id = 1;'
     result = postgres.exec_sql_request(query, database='xivo').fetchone()
 
