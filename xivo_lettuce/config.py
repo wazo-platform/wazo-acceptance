@@ -116,6 +116,9 @@ class XivoAcceptanceConfig(object):
         self.restapi_utils_1_1 = WsUtils(self.restapi_config_1_1)
 
     def _setup_provd(self):
+        if self.dao_xivo_engine is None:
+            return
+
         query = 'SELECT * FROM "provisioning" WHERE id = 1;'
         result = postgres.exec_sql_request(query, database='xivo').fetchone()
 
