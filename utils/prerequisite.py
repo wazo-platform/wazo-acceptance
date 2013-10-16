@@ -21,6 +21,7 @@ import socket
 from lettuce import world
 
 from xivo_acceptance.helpers import context_helper, trunksip_helper
+from xivo_dao.helpers import db_manager
 from xivo_lettuce.terrain import initialize, deinitialize
 from xivo_lettuce.common import open_url
 
@@ -90,6 +91,7 @@ def _allow_remote_access_to_pgsql():
 
     command = ['service', 'postgresql', 'restart']
     world.ssh_client_xivo.check_call(command)
+    db_manager.reinit()
 
 
 def _add_line_to_remote_file(line_text, file_name):
