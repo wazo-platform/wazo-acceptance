@@ -12,6 +12,7 @@ from xivo_dao.helpers import db_manager
 from xivo_lettuce.ssh import SSHClient
 from xivo_lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_lettuce import postgres
+from provd.rest.client.client import new_provisioning_client
 
 
 _CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -26,6 +27,7 @@ class XivoAcceptanceConfig(object):
         self.dao_asterisk_engine = None
         self.dao_xivo_engine = None
         self.rest_provd = None
+        self.provd_client = None
         self.ws_utils = None
         self.restapi_utils_1_0 = None
         self.restapi_utils_1_1 = None
@@ -116,17 +118,22 @@ class XivoAcceptanceConfig(object):
         self.restapi_utils_1_1 = WsUtils(self.restapi_config_1_1)
 
     def _setup_provd(self):
+        provd_rest_port = 8666
         try:
             query = 'SELECT * FROM "provisioning" WHERE id = 1;'
             result = postgres.exec_sql_request(query, database='xivo').fetchone()
-
-            provd_config_obj = RestConfiguration(protocol='http',
-                                                 hostname=self.xivo_host,
-                                                 port=result['rest_port'],
-                                                 content_type='application/vnd.proformatique.provd+json')
-            self.rest_provd = WsUtils(provd_config_obj)
+            provd_rest_port = result['rest_port']
         except OperationalError:
-            print 'PGSQL ERROR: could not connect to server'
+            pass
+
+        provd_config_obj = RestConfiguration(protocol='http',
+                                             hostname=self.xivo_host,
+                                             port=provd_rest_port,
+                                             content_type='application/vnd.proformatique.provd+json')
+        self.rest_provd = WsUtils(provd_config_obj)
+
+        provd_url = "http://%s:%s/provd" % (self.xivo_host, provd_rest_port)
+        self.provd_client = new_provisioning_client(provd_url)
 
     @property
     def execnet_gateway(self):

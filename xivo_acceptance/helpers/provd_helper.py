@@ -16,15 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
-from provd.rest.client.client import new_provisioning_client
 
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
-
-
-def _provd_client():
-    provd_url = "http://%s:%s/provd" % (world.config.xivo_host, world.provd_rest_port)
-    provd_client = new_provisioning_client(provd_url)
-    return provd_client
 
 
 def device_config_has_properties(device_id, properties):
@@ -117,12 +110,12 @@ def get_provd_config(device_id):
 
 
 def get_config(config_id):
-    config = _provd_client().config_manager().get(config_id)
+    config = world.provd_client.config_manager().get(config_id)
     return config
 
 
 def get_device(device_id):
-    device = _provd_client().device_manager().get(device_id)
+    device = world.provd_client.device_manager().get(device_id)
     return device
 
 

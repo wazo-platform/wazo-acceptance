@@ -81,6 +81,7 @@ def _setup_ws():
 
 def _setup_provd():
     world.rest_provd = world.config.rest_provd
+    world.provd_client = world.config.provd_client
 
 
 def _setup_browser():
