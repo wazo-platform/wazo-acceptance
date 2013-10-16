@@ -90,10 +90,6 @@ Feature: Directory
           | name              | type | URI                        |
           | phonebook-unicode | File | /tmp/phonebook-unicode.csv |
         Given the directory definition "phonebookunicode" does not exist
-        Given the display filter "Display" exists with the following fields:
-          | Field title | Field type | Default value | Display format               |
-          | Nom         |            |               | {db-firstname} {db-lastname} |
-          | Numéro      | phone      |               | {db-phone}                   |
         When I add the following CTI directory definition:
           | name             | URI                               | delimiter | direct match   | reverse match |
           | phonebookunicode | file:///tmp/phonebook-unicode.csv | ;         | nom,prenom,tel | tel           |
