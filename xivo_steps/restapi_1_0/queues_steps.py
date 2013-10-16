@@ -18,8 +18,15 @@
 
 from lettuce import step
 from xivo_acceptance.helpers.restapi_v1_0.rest_queues import RestQueues
+from xivo_acceptance.helpers.restapi_v1_0.rest_campaign import RestCampaign
 
 restqueues = RestQueues()
+rest_campaign = RestCampaign()
+
+
+@step(u'Given there is a queue named "([^"]*)"')
+def given_there_is_a_queue_named_group1(step, queue_name):
+    assert rest_campaign.queue_create_if_not_exists(queue_name), "Can't add queue"
 
 
 @step(u'When I create a queue "([^"]*)"')
