@@ -64,6 +64,12 @@ def when_i_send_a_request_for_the_voicemail_with_number_group1_using_its_id(step
     world.response = voicemail_ws.get_voicemail(voicemail_id)
 
 
+@step(u'When I delete voicemail with number "([^"]*)" via RESTAPI')
+def when_i_delete_voicemail_with_number_group1_via_restapi(step, number):
+    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number)
+    world.response = voicemail_ws.delete_voicemail(voicemail_id)
+
+
 @step(u'Then the voicemail has the following parameters:')
 def then_the_voicemail_has_the_following_parameters(step):
     expected_voicemail = _extract_voicemail_info(step.hashes[0])
@@ -131,3 +137,11 @@ def then_i_dot_not_have_the_following_voicemails_in_the_list(step):
     not_expected_voicemails = [_extract_voicemail_info(v) for v in step.hashes]
 
     assert_does_not_have_any_dicts(all_voicemails, not_expected_voicemails)
+
+
+@step(u'Then voicemail with number "([^"]*)" no longer exists')
+def then_voicemail_with_number_group1_no_longer_exists(step, number):
+    response = voicemail_ws.voicemail_list({'search': number})
+    voicemails = response.data['items']
+
+    assert_that(voicemails, is_not(has_item(has_entry('number', number))))

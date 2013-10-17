@@ -61,6 +61,10 @@ def _new_group_destination(group_name):
 
 
 def delete_incalls_with_did(incall_did):
-    incalls = world.ws.incalls.search_by_number(incall_did)
+    incalls = find_incalls_with_did(incall_did)
     for incall in incalls:
         world.ws.incalls.delete(incall.id)
+
+
+def find_incalls_with_did(incall_did):
+    return world.ws.incalls.search_by_number(incall_did)

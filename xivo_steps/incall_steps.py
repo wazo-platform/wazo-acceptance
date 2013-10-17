@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
+from hamcrest import *
 
 from xivo_acceptance.action.webi import incall as incall_action_webi
 from xivo_acceptance.helpers import incall_helper
@@ -51,3 +52,16 @@ def when_i_create_incall_with_did(step, incall_did, context):
 @step(u'When incall "([^"]*)" is removed')
 def when_incall_is_removed(step, incall_did):
     incall_action_webi.remove_incall_with_did(incall_did)
+
+
+@step(u'Then incall "([^"]*)" is associated to nothing')
+def then_incall_group1_is_associated_to_nothing(step, did):
+    incall = _find_incall_with_did(did)
+    assert_that(incall.destination, equal_to('None'))
+    assert_that(incall.identity, equal_to('-'))
+
+
+def _find_incall_with_did(did):
+    incalls = incall_helper.find_incalls_with_did(did)
+    assert_that(incalls, has_length(1), "more that one incall with DID %s found" % did)
+    return incalls[0]
