@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to
+from hamcrest import all_of, assert_that, equal_to, has_property, has_item
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import call_logs as call_logs_action_webi
@@ -58,6 +58,25 @@ def when_i_generate_call_logs_using_the_last_unprocessed_1_cel_entries(step, cel
 def when_i_generate_call_logs_twice_in_parallel(step):
     command = ['xivo-call-logs', '&', 'xivo-call-logs']
     world.command_output = sysutils.output_command(command)
+
+
+@step(u'When I ask for the list of CEL via WebService:')
+def when_i_ask_for_the_list_of_cel_via_webservice(step):
+    list_infos = step.hashes[0]
+    start_date = list_infos['start date']
+    end_date = list_infos['end date']
+    world.response = world.ws.cels.search_by_date(start_date, end_date)
+
+
+@step(u'Then I get a list with the following CEL:')
+def then_i_get_a_list_with_the_following_cel(step):
+    for cel in step.hashes:
+        assert_that(world.response, has_item(_is_cel(cel)))
+
+
+def _is_cel(cel):
+    matchers = [has_property(key, value) for (key, value) in cel.iteritems()]
+    return all_of(*matchers)
 
 
 @step(u'Then I see that call log generation is already running')
