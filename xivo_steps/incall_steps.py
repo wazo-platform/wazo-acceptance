@@ -57,8 +57,7 @@ def when_incall_is_removed(step, incall_did):
 @step(u'Then incall "([^"]*)" is associated to nothing')
 def then_incall_group1_is_associated_to_nothing(step, did):
     incall = _find_incall_with_did(did)
-    assert_that(incall.destination, equal_to('None'))
-    assert_that(incall.identity, equal_to('-'))
+    assert_that(incall.destination, none())
 
 
 def _find_incall_with_did(did):
