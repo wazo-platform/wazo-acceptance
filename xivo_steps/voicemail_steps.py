@@ -21,6 +21,7 @@ from lettuce import step, world
 from xivo_acceptance.helpers import voicemail_helper
 from xivo_acceptance.action.restapi import voicemail_action_restapi
 from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order, assert_does_not_have_any_dicts
+from xivo_lettuce import func
 
 
 @step(u'Given there is no voicemail with number "([^"]*)" and context "([^"]*)"')
@@ -56,9 +57,10 @@ def when_i_create_an_empty_voicemail(step):
     world.response = voicemail_action_restapi.create_voicemail({})
 
 
-@step(u'When I delete voicemail with number "([^"]*)" via RESTAPI')
-def when_i_delete_voicemail_with_number_group1_via_restapi(step, number):
-    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number)
+@step(u'When I delete voicemail "([^"]*)" via RESTAPI')
+def when_i_delete_voicemail_with_number_group1_via_restapi(step, extension):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
     world.response = voicemail_action_restapi.delete_voicemail(voicemail_id)
 
 
