@@ -144,5 +144,5 @@ def then_i_should_have_group1_minutes_login_in_the_last_hour_on_agent_group2_on_
     day = datetime(now.year, now.month, now.day)
     stat_action_webi.open_agent_stat_page_on_day(agent_number, day, config_name)
 
-    hour = datetime(now.year, now.month, now.day, now.hour - 1, 0, 0, 0)
-    stat_action_webi.check_agent_login_time(login_time, hour)
+    beginning_of_hour = datetime(now.year, now.month, now.day, now.hour, 0, 0, 0) - timedelta(hours=1)
+    stat_action_webi.check_agent_login_time(login_time, beginning_of_hour)
