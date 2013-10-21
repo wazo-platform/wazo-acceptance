@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from hamcrest import assert_that, equal_to
 from lettuce import step, world
 from xivo_dao import user_dao, voicemail_dao, \
     extensions_dao, queue_member_dao, \
@@ -80,7 +81,8 @@ def when_i_create_a_user_group1_with_description_group2(step, fullname, descript
 
 @step(u'Then I receive a response with status "([^"]*)"')
 def then_i_get_a_response_with_status_group1(step, status):
-    assert world.result.status == int(status), world.result.data
+    status = int(status)
+    assert_that(world.result.status, equal_to(status), unicode(world.result.data))
 
 
 @step(u'Then the user "([^"]*)" is actually created with ctiprofileid "([^"]*)" and description "([^"]*)')
