@@ -57,6 +57,14 @@ def when_i_create_an_empty_voicemail(step):
     world.response = voicemail_action_restapi.create_voicemail({})
 
 
+@step(u'When I edit voicemail "([^"]*)" via RESTAPI:')
+def when_i_edit_voicemail_via_restapi(step, extension):
+    parameters = _extract_voicemail_info_to_restapi(step.hashes[0])
+    number, context = func.extract_number_and_context_from_extension(extension)
+    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
+    world.response = voicemail_action_restapi.edit_voicemail(voicemail_id, parameters)
+
+
 @step(u'When I delete voicemail "([^"]*)" via RESTAPI')
 def when_i_delete_voicemail_with_number_group1_via_restapi(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
