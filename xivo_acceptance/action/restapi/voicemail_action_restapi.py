@@ -28,5 +28,9 @@ def voicemail_list(parameters={}):
     return world.restapi_utils_1_1.rest_get('%s' % VOICEMAIL_URL, params=parameters)
 
 
+def create_voicemail(parameters):
+    return world.restapi_utils_1_1.rest_post('%s' % VOICEMAIL_URL, parameters)
+
+
 def delete_voicemail(voicemail_id):
     return world.restapi_utils_1_1.rest_delete('%s/%s' % (VOICEMAIL_URL, voicemail_id))

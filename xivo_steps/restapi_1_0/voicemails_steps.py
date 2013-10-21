@@ -77,7 +77,7 @@ def when_i_update_a_voicemail_with_a_non_existing_id(step):
     world.result = rest_voicemail.update_voicemail_by_id(generated_id, {'fullname': 'test 2'})
 
 
-@step(u'Given there is no voicemail with number "([^"]*)"')
+@step(u'Given there is no voicemail with number "([^"]*)"$')
 def given_there_is_no_voicemail_with_number_group1(step, number):
     voicemailid = voicemail_dao.id_from_mailbox(number, "default")
     if(voicemailid is not None):
