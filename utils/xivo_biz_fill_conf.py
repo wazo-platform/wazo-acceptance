@@ -45,7 +45,7 @@ class Prerequisite(object):
         prerequisite._create_webservices_access()
         prerequisite._create_pgpass_on_remote_host()
         prerequisite._allow_remote_access_to_pgsql()
-        prerequisite._xivo_service_restart()
+        prerequisite._xivo_service_restart_all()
 
         self._check_configuration_dahdi()
         self._configuration_dahdi()
