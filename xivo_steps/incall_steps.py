@@ -24,8 +24,8 @@ from xivo_lettuce import form, common
 
 
 @step(u'Given there is no incall "([^"]*)"$')
-def given_there_is_no_incall(step, search):
-    common.remove_element_if_exist('incall', search)
+def given_there_is_no_incall(step, did):
+    incall_helper.delete_incalls_with_did(did)
 
 
 @step(u'Given there is an incall "([^"]*)" in context "([^"]*)" to the "([^"]*)" "([^"]*)"$')
