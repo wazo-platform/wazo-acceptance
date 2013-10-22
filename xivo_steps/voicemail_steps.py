@@ -46,15 +46,24 @@ def when_i_request_voicemail_with_id_group1(step, voicemail_id):
     world.response = voicemail_action_restapi.get_voicemail(voicemail_id)
 
 
-@step(u'When I send a request for the voicemail with number "([^"]*)", using its id')
-def when_i_send_a_request_for_the_voicemail_with_number_group1_using_its_id(step, number):
-    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number)
+@step(u'When I send a request for the voicemail "([^"]*)", using its id')
+def when_i_send_a_request_for_the_voicemail_with_number_group1_using_its_id(step, extension):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
     world.response = voicemail_action_restapi.get_voicemail(voicemail_id)
 
 
 @step(u'When I create an empty voicemail via RESTAPI:')
 def when_i_create_an_empty_voicemail(step):
     world.response = voicemail_action_restapi.create_voicemail({})
+
+
+@step(u'When I edit voicemail "([^"]*)" via RESTAPI:')
+def when_i_edit_voicemail_via_restapi(step, extension):
+    parameters = _extract_voicemail_info_to_restapi(step.hashes[0])
+    number, context = func.extract_number_and_context_from_extension(extension)
+    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
+    world.response = voicemail_action_restapi.edit_voicemail(voicemail_id, parameters)
 
 
 @step(u'When I delete voicemail "([^"]*)" via RESTAPI')
@@ -67,7 +76,8 @@ def when_i_delete_voicemail_with_number_group1_via_restapi(step, extension):
 @step(u'When I create the following voicemails via RESTAPI:')
 def when_i_create_voicemails_with_the_following_parameters(step):
     for row in step.hashes:
-        world.response = voicemail_action_restapi.create_voicemail(row)
+        voicemail = _extract_voicemail_info_to_restapi(row)
+        world.response = voicemail_action_restapi.create_voicemail(voicemail)
 
 
 @step(u'When I request the list of voicemails via RESTAPI')
@@ -77,16 +87,15 @@ def when_i_request_the_list_of_voicemails(step):
 
 @step(u'When I request the list of voicemails with the following parameters via RESTAPI:')
 def when_i_request_the_list_of_voicemails_with_the_following_parameters(step):
-    parameters = step.hashes[0]
+    parameters = _extract_voicemail_info_to_restapi(step.hashes[0])
     world.response = voicemail_action_restapi.voicemail_list(parameters)
 
 
 @step(u'Then I have the following voicemails via RESTAPI:')
 def then_the_voicemail_has_the_following_parameters(step):
-    expected_voicemail = step.hashes[0]
-    voicemail = _extract_voicemail_info_from_restapi(world.response.data)
+    expected_voicemail = _extract_voicemail_info_to_restapi(step.hashes[0])
 
-    assert_that(voicemail, has_entries(expected_voicemail))
+    assert_that(world.response.data, has_entries(expected_voicemail))
 
 
 @step(u'Then I get a list containing the following voicemails via RESTAPI:')
@@ -150,7 +159,7 @@ def then_voicemail_with_number_group1_no_longer_exists(step, number):
 def _extract_voicemail_info_to_restapi(row):
     voicemail = dict(row)
 
-    if 'max_messages' in voicemail and voicemail['max_messages'] is not None:
+    if 'max_messages' in voicemail and voicemail['max_messages'] is not None and voicemail['max_messages'].isdigit():
         voicemail['max_messages'] = int(voicemail['max_messages'])
 
     for key in ['attach_audio', 'delete_messages', 'ask_password']:
