@@ -42,7 +42,7 @@ def then_the_search_results_are(step):
         assert common.find_line(expected) is not None
 
     for not_expected in not_expected_list:
-        assert common.find_line(expected) is None, 'element %s unexpectedly found' % not_expected
+        assert common.find_line(not_expected) is None, 'element %s unexpectedly found' % not_expected
 
 
 @step(u'Then I see no errors')
