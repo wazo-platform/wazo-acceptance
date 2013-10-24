@@ -18,27 +18,33 @@
 
 import os
 
-from lettuce.registry import world
+from lettuce import world
 
+from utils import prerequisite
 from xivo_acceptance.helpers import line_helper, context_helper, \
     trunkcustom_helper, user_helper
+from xivo_lettuce import terrain
 from xivo_lettuce.config import XivoAcceptanceConfig
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
-from utils import prerequisite
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
 
 def main():
+    print 'Initializing...'
     world.config = XivoAcceptanceConfig()
     world.config.xivo_host = world.config.xivo_biz_host
     world.config.setup()
-    Prerequisite()
+    terrain._setup_ssh_client()
+    terrain._setup_ws()
+    terrain._setup_provd()
+    terrain._setup_browser()
+    PrepareXivoBiz()
 
 
-class Prerequisite(object):
+class PrepareXivoBiz(object):
 
     def __init__(self):
         print 'Configuring prerequisites...'
