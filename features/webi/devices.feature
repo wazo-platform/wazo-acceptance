@@ -50,6 +50,17 @@ Feature: Devices
         Then the REST API received a request with infos:
           | method | path             |
           | DELETE | /1.1/devices/123 |
+        Then there is no device "00:00:00:00:aa:01"
+
+    Scenario: Delete a device associated to a line
+        Given I have the following devices:
+          | id |       ip | mac               |
+          | 20 | 10.0.0.1 | 00:00:00:fa:1c:01 |
+        Given there are users with infos:
+          | firstname | lastname | number | context | protocol |            device |
+          | Han       | Solo     |   1138 | default | sip      | 00:00:00:fa:1c:01 |
+        When I delete the device "20"
+        Then there is no device "00:00:00:fa:1c:01"
 
 #    Scenario: Synchronize
 #       Given there are no devices with id "123"

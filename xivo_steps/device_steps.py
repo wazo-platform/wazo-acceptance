@@ -90,6 +90,12 @@ def when_i_provision_my_device_with_my_line_id_group1(step, line_id, device_ip):
     device_helper.provision_device_using_webi(line.provisioning_extension, device_ip)
 
 
+@step(u'Then there is no device "([^"]*)"')
+def then_there_is_no_device(step, search):
+    query = {'search': search}
+    assert common.element_is_not_in_list('device', search, query)
+
+
 @step(u'Then the device "([^"]*)" has been provisioned with a configuration:')
 def then_the_device_has_been_provisioned_with_a_configuration(step, device_id):
     provd_helper.device_config_has_properties(device_id, step.hashes)
