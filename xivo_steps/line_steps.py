@@ -17,6 +17,7 @@
 
 import re
 
+from hamcrest import assert_that, has_entries
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
@@ -128,6 +129,18 @@ def when_i_remove_the_codec_group1_from_the_line_with_number_group2(step, codec,
     common.go_to_tab('Signalling')
     ListPane.from_id('codeclist').remove(codec)
     form.submit.submit_form()
+
+
+@step(u'Then I see a line with infos:')
+def then_i_see_a_line_with_infos(step):
+    expected_line = step.hashes[0]
+    if 'device' in expected_line:
+        expected_line['device'] = True if expected_line['device'] == 'True' else False
+    number = expected_line['number']
+    common.open_url('line', 'search', {'search': number})
+    actual_line = line_action_webi.get_line_list_entry(number)
+    assert_that(actual_line, has_entries(expected_line))
+    common.open_url('user', 'search', {'search': ''})
 
 
 @step(u'Then the line with number "([^"]*)" does not have the codec "([^"]*)"')

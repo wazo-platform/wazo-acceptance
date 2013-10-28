@@ -46,3 +46,18 @@ def get_value_from_ipbx_infos_tab(var_name):
         "//td[@class = 'td-right']"
         % var_name)
     return value_cell.text
+
+
+def get_line_list_entry(search_number):
+    line_tr = common.get_line(search_number)
+    device_img = line_tr.find_element_by_class_name('col_identity').find_elements_by_tag_name('img')[1]
+    device = 'phone-green' in device_img.get_attribute('src')
+    protocol = line_tr.find_element_by_class_name('col_protocol').text.lower()
+    user = line_tr.find_element_by_class_name('col_user').text
+    number = line_tr.find_element_by_class_name('col_number').text
+    return {
+        'device': device,
+        'protocol': protocol,
+        'user': user,
+        'number': number,
+    }
