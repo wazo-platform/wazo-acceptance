@@ -1,7 +1,5 @@
 Feature: Backup
 
-    Test X-65
-
     Scenario: Create backup file
         Given there is a backup file "test_big_file.tgz"
         When I download backup file "test_big_file.tgz"

@@ -14,3 +14,11 @@ Feature: Admin User
         Then I can access the SIP Protocol configuration
         Then I see no errors
         Then I cannot access the SCCP Protocol configuration
+
+    Scenario: Deny access to backup files
+        Given there is no admin_user "admin1"
+        Given a backup file with name "db.tgz"
+        When I create an admin user with login "admin1" and password "admin1"
+        When I logout from the web interface
+        When I login as admin1 with password admin1 in en
+        Then I cannot download the backup file "db.tgz"
