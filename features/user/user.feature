@@ -61,6 +61,9 @@ Feature: User
         Then I see a user with infos:
         | fullname  | number | protocol | context |
         | Bill Bush |   1632 | sip      | default |
+        Then I see a line with infos:
+        | device | number | protocol | user      |
+        | True   |   1632 | sip      | Bill Bush |
         Then I see devices with infos:
         | mac               | configured |
         | 00:de:ad:be:ef:00 | True       |
