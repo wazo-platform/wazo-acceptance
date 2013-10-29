@@ -15,30 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import errno
 import os
 from lettuce import world
 
-BACKUP_PATH = '/var/backups/xivo'
-MOH_PATH = '/usr/share/asterisk/moh/default'
-SOUND_REC_PATH = '/usr/share/asterisk/sounds/recordings'
-SOUND_REC_MEETME_PATH = '/var/lib/asterisk/sounds/meetme'
+
+def remove_in_download_dir(filename):
+    path = os.path.join(world.browser.DOWNLOAD_DIR, filename)
+    try:
+        os.remove(path)
+    except OSError as e:
+        if e.errno != errno.ENOENT:
+            raise
 
 
-def create_backup_file(filename):
-    _touch_remote_file(os.path.join(BACKUP_PATH, filename))
-
-
-def create_musiconhold_file(filename):
-    _touch_remote_file(os.path.join(MOH_PATH, filename))
-
-
-def create_recordings_file(filename):
-    _touch_remote_file(os.path.join(SOUND_REC_PATH, filename))
-
-
-def create_recordings_meetme_file(filename):
-    _touch_remote_file(os.path.join(SOUND_REC_MEETME_PATH, filename))
-
-
-def _touch_remote_file(abs_filename):
-    world.ssh_client_xivo.check_call(['touch', abs_filename])
+def isfile_in_download_dir(filename):
+    path = os.path.join(world.browser.DOWNLOAD_DIR, filename)
+    return os.path.isfile(path)

@@ -23,6 +23,7 @@ from lettuce import step, world
 from xivo_acceptance.action.webi import admin_user as admin_user_action_webi
 from xivo_lettuce import urls
 from xivo_lettuce import common
+from xivo_lettuce.file import remove_in_download_dir, isfile_in_download_dir
 
 
 def is_browser_on_module_page(module):
@@ -67,3 +68,14 @@ def then_i_cannot_access_the_sccp_protocol_configuration(step):
     common.open_url("sccpgeneralsettings")
     time.sleep(2)
     assert_that(is_browser_on_module_page("sccpgeneralsettings"), is_(False))
+
+
+@step(u'Then I cannot download the backup file "([^"]*)"')
+def then_i_cannot_access_the_backup_file(step, filename):
+    remove_in_download_dir(filename)
+
+    # download the backup file directly from the URL (see ticket #4458)
+    world.browser.get(common.build_url('/backup/%s' % filename))
+    time.sleep(2)
+
+    assert_that(isfile_in_download_dir(filename), is_(False))

@@ -144,16 +144,16 @@ def open_url(module, act=None, qry=None):
     else:
         raise Exception("Unknown module : %s" % module)
 
-    url = _build_url(world.config.webi_url, uri, qry)
+    url = build_url(uri, qry)
 
     world.browser.get(url)
 
 
-def _build_url(host, uri, query):
+def build_url(uri, query={}):
     if not uri.startswith('/'):
         uri = '/%s' % uri
 
-    url = '%s%s' % (host, uri)
+    url = '%s%s' % (world.config.webi_url, uri)
 
     qry_encode = urllib.urlencode(query)
     if qry_encode:

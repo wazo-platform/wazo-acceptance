@@ -32,6 +32,8 @@ from xivo_lettuce.exception import MissingTranslationException
 
 class XiVOBrowser(webdriver.Firefox):
 
+    DOWNLOAD_DIR = '/tmp'
+
     def __init__(self):
         profile = self._setup_browser_profile()
         webdriver.Firefox.__init__(self, firefox_profile=profile)
@@ -41,7 +43,7 @@ class XiVOBrowser(webdriver.Firefox):
 
         fp.set_preference("browser.download.folderList", 2)
         fp.set_preference("browser.download.manager.showWhenStarting", False)
-        fp.set_preference("browser.download.dir", "/tmp/")
+        fp.set_preference("browser.download.dir", self.DOWNLOAD_DIR + '/')
         fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download")
 
         return fp
