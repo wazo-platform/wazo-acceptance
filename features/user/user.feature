@@ -174,4 +174,4 @@ Feature: User
             | Abarai    | Renji    | SIP      | 1677   | default | dd:11:22:33:44:55 |
         Then I see a user with infos:
             | fullname     | protocol | number | context |
-            | Abarai Renji | SIP      | 1677   | default |
+            | Abarai Renji | sip      | 1677   | default |
