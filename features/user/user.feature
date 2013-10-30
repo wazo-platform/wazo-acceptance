@@ -70,6 +70,18 @@ Feature: User
         | mac               | configured |
         | 00:de:ad:be:ef:00 | False      |
 
+    Scenario: Create a user with a device that only has a MAC
+      Given I have the following devices:
+          | mac               |
+          | dd:11:22:33:44:55 |
+      Given there is no user "Abarai" "Renji"
+      When I create a user with infos:
+          | firstname | lastname | protocol | number | context | device            |
+          | Abarai    | Renji    | SIP      | 1677   | default | dd:11:22:33:44:55 |
+      Then I see a user with infos:
+          | fullname     | protocol | number | context |
+          | Abarai Renji | sip      | 1677   | default |
+
     Scenario: Find a user by line number
         Given there are users with infos:
         | firstname | lastname | number | context |
@@ -163,15 +175,3 @@ Feature: User
         When I remove line from user "Abraham" "Maharba" with errors
         Then I see errors
         When I remove line "1456" from lines then I see errors
-
-    Scenario: Create a user with a device that only has a MAC
-        Given I have the following devices:
-            | mac               |
-            | dd:11:22:33:44:55 |
-        Given there is no user "Abarai" "Renji"
-        When I create a user with infos:
-            | firstname | lastname | protocol | number | context | device            |
-            | Abarai    | Renji    | SIP      | 1677   | default | dd:11:22:33:44:55 |
-        Then I see a user with infos:
-            | fullname     | protocol | number | context |
-            | Abarai Renji | sip      | 1677   | default |
