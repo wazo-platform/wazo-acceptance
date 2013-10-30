@@ -18,7 +18,6 @@
 from hamcrest import assert_that, equal_to
 from lettuce import step
 from lettuce.registry import world
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import user as user_action_webi
