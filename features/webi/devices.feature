@@ -71,3 +71,32 @@ Feature: Devices
           | method | path                 |
           | GET    | /1.1/devices/123/autoprov    |
           | GET    | /1.1/devices/123/synchronize |
+
+    Scenario: Provision
+        Given there are no devices with id "222"
+        Given there are no devices with id "333"
+        Given there are no devices with id "444"
+        Given there are no devices with id "888"
+        Given I only have the following users:
+            | id | firstname | lastname  |
+            | 1  | Greg      | Sanderson |
+        Given I only have the following lines:
+            | id | context | protocol | username | secret | device_slot |
+            | 10 | default | sip      | toto     | tata   | 1           |
+        Given I only have the following extensions:
+            | id  | context | exten |
+            | 100 | default | 1000  |
+        Given I have the following devices:
+          | id  | ip             | mac               |
+          | 222 | 192.168.32.104 | 00:00:00:00:aa:02 |
+          | 333 | 192.168.32.10  | 00:00:00:00:cc:22 |
+          | 444 | 192.168.32.101 | 00:00:00:00:aa:05 |
+          | 888 | 192.168.32.1   | 00:00:00:00:bb:09 |
+        When I create the following links:
+            | user_id | line_id | extension_id |
+            | 1       | 10      | 100          |
+        Then I get a response with status "201"
+        When I provision my device with my line_id "10" and ip "192.168.32.1"
+        Then the device "888" has been provisioned with a configuration:
+            | display_name   | number | username | auth_username | password |
+            | Greg Sanderson | 1000   | toto     | toto          | tata     |
