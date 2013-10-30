@@ -148,6 +148,17 @@ def when_i_reorder_group1_group2_s_function_keys_such_that(step, firstname, last
     form.submit.submit_form()
 
 
+@step(u'When I add a new user')
+def when_i_add_a_new_user(step):
+    common.open_url('user', 'add')
+
+
+@step(u'When I add a new line')
+def when_i_add_a_new_line(step):
+    user_action_webi.open_line_tab()
+    user_action_webi.click_add_line_button()
+
+
 @step(u'When I create a user with infos:$')
 def when_i_create_a_user(step):
     common.open_url('user', 'add')
@@ -347,3 +358,8 @@ def then_user_has_enablexfer_enabled(step, fullname, enabled_string):
 def _edit_user(firstname, lastname):
     user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'edit', qry={'id': user_id})
+
+
+@step(u'Then the device "([^"]*)" appears in the dropdown list')
+def then_the_device_group1_appears_in_the_list(step, device):
+    user_action_webi.select_device(device)
