@@ -164,14 +164,6 @@ Feature: User
         Then I see errors
         When I remove line "1456" from lines then I see errors
 
-    Scenario: Add a user with a device that only has a MAC
-        Given I have the following devices:
-            | mac               |
-            | dd:11:22:33:44:55 |
-        When I add a new user
-        When I add a new line
-        Then the device "dd:11:22:33:44:55" appears in the dropdown list
-
     Scenario: Create a user with a device that only has a MAC
         Given I have the following devices:
             | mac               |
