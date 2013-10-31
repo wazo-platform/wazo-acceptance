@@ -18,8 +18,9 @@
 from hamcrest import *
 from lettuce import step, world
 
-from xivo_acceptance.helpers import voicemail_helper
+from xivo_acceptance.helpers import voicemail_helper, user_helper
 from xivo_acceptance.action.restapi import voicemail_action_restapi
+from xivo_acceptance.action.restapi import voicemail_link_action_restapi
 from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order, assert_does_not_have_any_dicts
 from xivo_lettuce import func
 
@@ -91,6 +92,15 @@ def when_i_request_the_list_of_voicemails_with_the_following_parameters(step):
     world.response = voicemail_action_restapi.voicemail_list(parameters)
 
 
+@step(u'When I link user "([^"]*)" with voicemail "([^"]*)" via RESTAPI')
+def when_i_link_user_group1_with_voicemail_group2_via_restapi(step, fullname, voicemail):
+    user = user_helper.find_user_by_name(fullname)
+    number, context = func.extract_number_and_context_from_extension(voicemail)
+    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
+
+    world.response = voicemail_link_action_restapi.link_voicemail(user.id, voicemail_id)
+
+
 @step(u'Then I have the following voicemails via RESTAPI:')
 def then_the_voicemail_has_the_following_parameters(step):
     expected_voicemail = _extract_voicemail_info_to_restapi(step.hashes[0])
@@ -154,6 +164,12 @@ def then_voicemail_with_number_group1_no_longer_exists(step, number):
     voicemails = response.data['items']
 
     assert_that(voicemails, is_not(has_item(has_entry('number', number))))
+
+
+@step(u'Then I get a response with a voicemail id')
+def then_i_get_a_response_with_a_voicemail_id(step):
+    assert_that(world.response.data,
+                has_key('voicemail_id', instance_of(int)))
 
 
 def _extract_voicemail_info_to_restapi(row):
