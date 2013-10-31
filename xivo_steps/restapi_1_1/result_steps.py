@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import re
+
 from lettuce import step, world
 from hamcrest import *
 
@@ -43,12 +45,35 @@ def then_i_get_an_error_message_group1(step, error_message):
     assert_that(world.response.data, has_item(error_message))
 
 
+@step(u'Then I get an error message matching "([^"]*)"')
+def then_i_get_an_error_message_matching_group1(step, regex):
+    messages = world.response.data
+    has_match = _check_for_regex_match(messages, regex)
+    assert_that(has_match, "regex '%s' did not match any message. Messages: %s" % (regex, messages))
+
+
+def _check_for_regex_match(messages, regex):
+    for message in messages:
+        if re.match(regex, message):
+            return True
+    return False
+
+
 @step(u'Then I get a header with a location for the "([^"]*)" resource')
 def then_i_get_a_header_with_a_location_for_the_group1_resource(step, resource):
     resource_id = world.response.data['id']
     expected_location = '/1.1/%s/%s' % (resource, resource_id)
 
     assert_that(world.response.headers, has_entry('location', ends_with(expected_location)))
+
+
+@step(u'Then I get a header with a location matching "([^"]*)"')
+def then_i_get_a_header_with_a_location_matching_group1(step, regex):
+    assert_that(world.response.headers, has_key('location'))
+    location = world.response.headers['location']
+
+    matches = re.match(regex, location) is not None
+    assert_that(matches, "regex '%s' did not match location header. Location: %s" % (regex, location))
 
 
 @step(u'Then I get a response with a link to the "([^"]*)" resource$')
