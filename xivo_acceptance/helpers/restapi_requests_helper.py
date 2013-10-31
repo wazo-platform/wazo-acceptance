@@ -30,7 +30,11 @@ DATA_PATTERN = r'(?:with data (.*))?'
 
 
 def last_requests_infos():
-    return [_extract_request_infos(log_line) for log_line in logs.find_line_in_xivo_restapi_log(delta=20)]
+    extracted = logs.find_line_in_xivo_restapi_log(delta=20)
+    print extracted
+    raw_list = [_extract_request_infos(log_line) for log_line in extracted]
+
+    return [log_line for log_line in raw_list if log_line is not None]
 
 
 def _extract_request_infos(request):
@@ -39,6 +43,10 @@ def _extract_request_infos(request):
 
     pat = re.compile(s_pat)
     m = re.match(pat, request)
+
+    if m is None:
+        return None
+
     date, pid, log_lvl, file_logger, method, url, data = m.groups()
 
     url_obj = urlparse(url)
