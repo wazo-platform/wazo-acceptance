@@ -119,24 +119,48 @@ def change_key_order(pairs):
 
 
 def user_form_add_line(linenumber, context='default', protocol='SIP', device=None):
+    open_line_tab()
+    click_add_line_button()
+    select_context(context)
+    type_line_number(linenumber)
+    select_protocol(protocol)
+    if device is not None:
+        select_device(device)
+    common.go_to_tab('General')
+
+
+def open_line_tab():
     common.go_to_tab('Lines')
+
+
+def click_add_line_button():
     add_button = world.browser.find_element_by_id('lnk-add-row')
     add_button.click()
+
+
+def select_context(context):
     input_context = world.browser.find_elements_by_id('linefeatures-context')[-2]
     input_context.send_keys(context)
+
+
+def type_line_number(linenumber):
     input_linenumber = world.browser.find_elements_by_id('linefeatures-number')[-2]
     input_linenumber.send_keys(linenumber)
+
+
+def select_protocol(protocol):
     input_protocol = Select(world.browser.find_elements_by_id('linefeatures-protocol')[-2])
     input_protocol.select_by_visible_text(protocol)
-    if device is not None:
-        input_device_1 = world.browser.find_element_by_xpath('//a[@class="select2-choice"]')
-        input_device_1.click()
-        input_device_2 = world.browser.find_element_by_xpath('//input[contains(@class, "select2-input")]')
-        input_device_2.send_keys(device)
-        input_device_3 = world.browser.find_element_by_xpath('//li[contains(@class, "select2-result")]',
-                                                             'No device %s found' % device)
-        input_device_3.click()
-    common.go_to_tab('General')
+
+
+def select_device(device):
+    input_device_1 = world.browser.find_element_by_xpath('//a[@class="select2-choice"]')
+    input_device_1.click()
+    input_device_2 = world.browser.find_element_by_xpath('//input[contains(@class, "select2-input")]')
+    input_device_2.send_keys(device)
+    input_device_3 = world.browser.find_element_by_xpath('//li[contains(@class, "select2-result")]',
+                                                         'No device %s found' % device)
+    input_device_3.click()
 
 
 def type_voicemail(voicemail_number):
