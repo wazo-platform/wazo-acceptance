@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce.registry import world
+from selenium.common.exceptions import NoSuchElementException
 from xivo_lettuce import common
 from xivo_lettuce import form
 from xivo_lettuce import ldap_utils
@@ -202,8 +203,17 @@ def _move_filter_to_right_pane(ldap_filter):
 def remove_all_filters_from_phonebook():
     common.open_url('phonebook_settings')
     common.go_to_tab('LDAP filters')
-    _move_all_filters_to_left_pane()
-    form.submit.submit_form()
+    if _ldap_filters_available():
+        _move_all_filters_to_left_pane()
+        form.submit.submit_form()
+
+
+def _ldap_filters_available():
+    try:
+        world.browser.find_element_by_id('it-ldapfilter')
+    except NoSuchElementException:
+        return False
+    return True
 
 
 def _move_all_filters_to_left_pane():
