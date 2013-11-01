@@ -69,6 +69,14 @@ def then_i_get_the_lines_with_the_following_parameters(step):
         ))
 
 
+@step(u'Then I do not get the user_links with the following parameters:')
+def then_i_do_not_get_the_lines_with_the_following_parameters(step):
+    for expected_data in step.hashes:
+        assert_that(world.response.data['items'], is_not(has_item(
+            has_entries(_extract_parameters(expected_data))
+        )))
+
+
 def _extract_parameters(user_line):
     if 'extension_id' in user_line:
         user_line['extension_id'] = int(user_line['extension_id'])
