@@ -17,7 +17,7 @@
 
 from datetime import datetime, timedelta
 from hamcrest import *
-from lettuce import step
+from lettuce import step, world
 
 from xivo_acceptance.action.webi import stat as stat_action_webi
 from xivo_acceptance.helpers import stat_helper, queuelog_helper
@@ -51,16 +51,14 @@ def given_i_have_the_following_queue_log_entries(step):
 @step(u'^Given I have the following queue_log entries in the last hour:$')
 def given_i_have_to_following_queue_log_entries_in_the_last_hour(step):
     one_hour_ago = datetime.now() - timedelta(hours=1)
-    last_hour = datetime(
-        one_hour_ago.year,
-        one_hour_ago.month,
-        one_hour_ago.day,
-        one_hour_ago.hour
-    )
+    world.beginning_of_last_hour = one_hour_ago.replace(minute=0, second=0, microsecond=0)
     for entry in step.hashes:
-        t = datetime.strptime(entry['time'], "%M:%S.%f")
-        offset = timedelta(minutes=t.minute, seconds=t.second, microseconds=t.microsecond)
-        entry['time'] = (last_hour + offset).strftime("%Y-%m-%d %H:%M:%S.%f")
+        entry_time = datetime.strptime(entry['time'], "%M:%S.%f")
+        last_hour_entry_time = entry_time.replace(year=one_hour_ago.year,
+                                                  month=one_hour_ago.month,
+                                                  day=one_hour_ago.day,
+                                                  hour=one_hour_ago.hour)
+        entry['time'] = last_hour_entry_time.strftime("%Y-%m-%d %H:%M:%S.%f")
 
     queuelog_helper.insert_entries(step.hashes)
 
@@ -140,9 +138,7 @@ def then_i_should_have_stats_on_agent_for_config(step, agent_number, day, config
 
 @step(u'Then I should have "([^"]*)" minutes login in the last hour on agent "([^"]*)" on configuration "([^"]*)":')
 def then_i_should_have_group1_minutes_login_in_the_last_hour_on_agent_group2_on_configuration_group3(step, login_time, agent_number, config_name):
-    now = datetime.now()
-    day = datetime(now.year, now.month, now.day)
-    stat_action_webi.open_agent_stat_page_on_day(agent_number, day, config_name)
+    day_of_last_hour = world.beginning_of_last_hour.replace(hour=0)
+    stat_action_webi.open_agent_stat_page_on_day(agent_number, day_of_last_hour, config_name)
 
-    beginning_of_hour = datetime(now.year, now.month, now.day, now.hour, 0, 0, 0) - timedelta(hours=1)
-    stat_action_webi.check_agent_login_time(login_time, beginning_of_hour)
+    stat_action_webi.check_agent_login_time(login_time, world.beginning_of_last_hour)
