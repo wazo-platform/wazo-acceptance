@@ -229,6 +229,6 @@ def _remove_devices_over(channel, max_devices):
     extra_devices = all_devices[max_devices:]
 
     for device in extra_devices:
-        device_manager.remove(device['id'])
         if 'config' in device:
             config_manager.remove(device['config'])
+        device_manager.remove(device['id'])
