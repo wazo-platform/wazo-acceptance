@@ -54,7 +54,7 @@ def then_i_get_an_error_message_matching_group1(step, regex):
 
 def _check_for_regex_match(messages, regex):
     for message in messages:
-        if re.match(regex, message):
+        if re.search(regex, message):
             return True
     return False
 
@@ -72,7 +72,7 @@ def then_i_get_a_header_with_a_location_matching_group1(step, regex):
     assert_that(world.response.headers, has_key('location'))
     location = world.response.headers['location']
 
-    matches = re.match(regex, location) is not None
+    matches = re.search(regex, location) is not None
     assert_that(matches, "regex '%s' did not match location header. Location: %s" % (regex, location))
 
 
