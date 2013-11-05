@@ -123,4 +123,4 @@ def then_the_user_with_id_group1_no_longer_exists(step, userid):
 
 @step(u'Then I get a response with a user id')
 def then_i_get_a_response_with_a_user_id(step):
-    assert_that(world.response.data, has_key('user_id', instance_of(int)))
+    assert_that(world.response.data, has_entry('user_id', instance_of(int)))

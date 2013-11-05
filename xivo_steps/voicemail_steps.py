@@ -176,7 +176,7 @@ def then_voicemail_with_number_group1_no_longer_exists(step, number):
 @step(u'Then I get a response with a voicemail id')
 def then_i_get_a_response_with_a_voicemail_id(step):
     assert_that(world.response.data,
-                has_key('voicemail_id', instance_of(int)))
+                has_entry('voicemail_id', instance_of(int)))
 
 
 @step(u'Then I get a response with a link to the voicemails resource')
