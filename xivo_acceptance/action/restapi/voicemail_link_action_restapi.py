@@ -26,3 +26,7 @@ def link_voicemail(user_id, voicemail_id):
         'voicemail_id': voicemail_id
     }
     return world.restapi_utils_1_1.rest_post(VOICEMAIL_LINK_URL % user_id, parameters)
+
+
+def link_voicemail_list(user_id):
+    return world.restapi_utils_1_1.rest_get(VOICEMAIL_LINK_URL % user_id)

@@ -54,6 +54,11 @@ def when_i_send_a_request_for_the_voicemail_with_number_group1_using_its_id(step
     world.response = voicemail_action_restapi.get_voicemail(voicemail_id)
 
 
+@step(u'^When I send a request for the voicemail link for user "([^"]*)" via RESTAPI$')
+def when_i_send_a_request_for_the_voicemail_link_for_user_via_restapi(step, user_id):
+    world.response = voicemail_link_action_restapi.link_voicemail_list(user_id)
+
+
 @step(u'When I create an empty voicemail via RESTAPI:')
 def when_i_create_an_empty_voicemail(step):
     world.response = voicemail_action_restapi.create_voicemail({})
