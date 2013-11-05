@@ -79,12 +79,18 @@ def then_i_get_a_header_with_a_location_matching_group1(step, regex):
 @step(u'Then I get a response with a link to the "([^"]*)" resource$')
 def then_i_get_a_response_with_a_link_to_an_extension_resource(step, resource):
     resource_id = world.response.data['id']
-    _assert_response_has_resource_link(resource, resource_id)
+    assert_response_has_resource_link(resource, resource_id)
 
 
 @step(u'Then I get a response with a link to the "([^"]*)" resource with id "([^"]*)"')
 def then_i_get_a_response_with_a_link_to_a_resource_with_id(step, resource, resource_id):
-    _assert_response_has_resource_link(resource, resource_id)
+    assert_response_has_resource_link(resource, resource_id)
+
+
+@step(u'Then I get a response with a link to the "([^"]*)" resource using the id "([^"]*)"')
+def then_i_get_a_response_with_a_link_to_a_resource_with_id_using_the_id(step, resource, resource_key):
+    resource_id = world.response.data[resource_key]
+    assert_response_has_resource_link(resource, resource_id)
 
 
 @step(u'Then I get a response with the following link resources:')
@@ -92,10 +98,10 @@ def then_i_get_a_response_with_the_following_link_resources(step):
     for resource_info in step.hashes:
         resource = resource_info['resource']
         resource_id = resource_info['id']
-        _assert_response_has_resource_link(resource, resource_id)
+        assert_response_has_resource_link(resource, resource_id)
 
 
-def _assert_response_has_resource_link(resource, resource_id):
+def assert_response_has_resource_link(resource, resource_id):
     host = world.config.xivo_host
     port = world.config.rest_port
 
