@@ -34,6 +34,11 @@ def given_there_are_the_following_users(step):
         user_helper.create_user(userinfo)
 
 
+@step(u'Given there are no users with id "([^"]*)"')
+def given_there_are_no_users_with_id_group1(step, user_id):
+    user_helper.delete_with_user_id(user_id)
+
+
 @step(u'When I ask for the list of users$')
 def when_i_ask_for_the_list_of_users(step):
     world.response = user_action_restapi.all_users()

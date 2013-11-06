@@ -54,11 +54,6 @@ def when_i_send_a_request_for_the_voicemail_with_number_group1_using_its_id(step
     world.response = voicemail_action_restapi.get_voicemail(voicemail_id)
 
 
-@step(u'^When I send a request for the voicemail link for user "([^"]*)" via RESTAPI$')
-def when_i_send_a_request_for_the_voicemail_link_for_user_via_restapi(step, user_id):
-    world.response = voicemail_link_action_restapi.link_voicemail_list(user_id)
-
-
 @step(u'When I create an empty voicemail via RESTAPI:')
 def when_i_create_an_empty_voicemail(step):
     world.response = voicemail_action_restapi.create_voicemail({})
@@ -110,6 +105,17 @@ def when_i_link_user_group1_with_voicemail_group2_via_restapi(step, fullname, vo
 def when_i_link_user_group1_with_voicemail_id_group2_via_restapi(step, fullname, voicemail_id):
     user = user_helper.find_user_by_name(fullname)
     world.response = voicemail_link_action_restapi.link_voicemail(user.id, voicemail_id)
+
+
+@step(u'When I request the voicemail associated to user "([^"]*)" "([^"]*)" via RESTAPI')
+def when_i_request_the_voicemail_associated_to_user_group1_group2_via_restapi(step, firstname, lastname):
+    user = user_helper.find_by_firstname_lastname(firstname, lastname)
+    world.response = voicemail_link_action_restapi.get_voicemail_link(user.id)
+
+
+@step(u'When I request the voicemail associated to user with id "([^"]*)" via RESTAPI')
+def when_i_request_the_voicemail_associated_to_user_with_id_group1_via_restapi(step, user_id):
+    world.response = voicemail_link_action_restapi.get_voicemail_link(int(user_id))
 
 
 @step(u'Then I have the following voicemails via RESTAPI:')
