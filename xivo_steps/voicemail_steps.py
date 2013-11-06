@@ -21,7 +21,6 @@ from lettuce import step, world
 from xivo_acceptance.helpers import voicemail_helper, user_helper
 from xivo_acceptance.action.restapi import voicemail_action_restapi
 from xivo_acceptance.action.restapi import voicemail_link_action_restapi
-from xivo_steps.restapi_1_1.result_steps import assert_response_has_resource_link
 from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order, assert_does_not_have_any_dicts
 from xivo_lettuce import func
 
@@ -53,6 +52,11 @@ def when_i_send_a_request_for_the_voicemail_with_number_group1_using_its_id(step
     number, context = func.extract_number_and_context_from_extension(extension)
     voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
     world.response = voicemail_action_restapi.get_voicemail(voicemail_id)
+
+
+@step(u'^When I send a request for the voicemail link for user "([^"]*)" via RESTAPI$')
+def when_i_send_a_request_for_the_voicemail_link_for_user_via_restapi(step, user_id):
+    world.response = voicemail_link_action_restapi.link_voicemail_list(user_id)
 
 
 @step(u'When I create an empty voicemail via RESTAPI:')
@@ -177,12 +181,6 @@ def then_voicemail_with_number_group1_no_longer_exists(step, number):
 def then_i_get_a_response_with_a_voicemail_id(step):
     assert_that(world.response.data,
                 has_entry('voicemail_id', instance_of(int)))
-
-
-@step(u'Then I get a response with a link to the voicemails resource')
-def then_i_get_a_response_with_a_link_to_the_voicemails_resource(step):
-    voicemail_id = world.response.data['voicemail_id']
-    assert_response_has_resource_link('voicemails', voicemail_id)
 
 
 def _extract_voicemail_info_to_restapi(row):

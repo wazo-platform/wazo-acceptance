@@ -241,6 +241,10 @@ def _delete_all(channel):
 
 def add_user(data_dict):
     user = User()
+
+    if 'id' in data_dict:
+        user.id = data_dict['id']
+
     user.firstname = data_dict['firstname']
 
     if 'lastname' in data_dict:
