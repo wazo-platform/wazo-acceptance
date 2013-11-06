@@ -34,6 +34,11 @@ def given_there_are_the_following_users(step):
         user_helper.create_user(userinfo)
 
 
+@step(u'Given there are no users with id "([^"]*)"')
+def given_there_are_no_users_with_id_group1(step, user_id):
+    user_helper.delete_with_user_id(user_id)
+
+
 @step(u'When I ask for the list of users$')
 def when_i_ask_for_the_list_of_users(step):
     world.response = user_action_restapi.all_users()
@@ -119,3 +124,8 @@ def then_the_created_user_has_the_following_parameters(step):
 def then_the_user_with_id_group1_no_longer_exists(step, userid):
     response = user_action_restapi.get_user(userid)
     assert_that(response.status, equal_to(404))
+
+
+@step(u'Then I get a response with a user id')
+def then_i_get_a_response_with_a_user_id(step):
+    assert_that(world.response.data, has_entry('user_id', instance_of(int)))
