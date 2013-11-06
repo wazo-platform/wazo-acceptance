@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from hamcrest import *
 from lettuce import step, world
 
@@ -138,7 +138,9 @@ def then_i_should_have_stats_on_agent_for_config(step, agent_number, day, config
 
 @step(u'Then I should have "([^"]*)" minutes login in the last hour on agent "([^"]*)" on configuration "([^"]*)":')
 def then_i_should_have_group1_minutes_login_in_the_last_hour_on_agent_group2_on_configuration_group3(step, login_time, agent_number, config_name):
-    day_of_last_hour = world.beginning_of_last_hour.replace(hour=0)
+    day_of_last_hour = date(world.beginning_of_last_hour.year,
+                            world.beginning_of_last_hour.month,
+                            world.beginning_of_last_hour.day)
     stat_action_webi.open_agent_stat_page_on_day(agent_number, day_of_last_hour, config_name)
 
     stat_action_webi.check_agent_login_time(login_time, world.beginning_of_last_hour)
