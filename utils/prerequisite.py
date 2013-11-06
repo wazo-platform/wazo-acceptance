@@ -82,8 +82,8 @@ def _create_pgpass_on_remote_host():
 
 
 def _allow_remote_access_to_pgsql():
-    hba_file = '/etc/postgresql/9.0/main/pg_hba.conf'
-    postgres_conf_file = '/etc/postgresql/9.0/main/postgresql.conf'
+    hba_file = '/etc/postgresql/9.1/main/pg_hba.conf'
+    postgres_conf_file = '/etc/postgresql/9.1/main/postgresql.conf'
 
     _add_line_to_remote_file('host all all 192.168.32.0/24 md5', hba_file)
     _add_line_to_remote_file('host all all 10.0.0.0/8 md5', hba_file)
