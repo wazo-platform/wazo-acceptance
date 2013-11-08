@@ -215,19 +215,7 @@ Feature: Call Log Generation
 
      Scenario: Running call log generation in parallel should fail
          Given there are no call logs
-         Given I have only the following CEL entries:
-            | eventtype    | eventtime           | cid_name      | cid_num | exten | context |     uniqueid |     linkedid | userfield |
-            | CHAN_START   | 2013-01-01 08:00:00 | Bob Marley    |    1002 | 1001  | default | 1375994780.1 | 1375994780.1 |           |
-            | APP_START    | 2013-01-01 08:00:01 | Bob Marley    |    1002 | s     | user    | 1375994780.1 | 1375994780.1 |           |
-            | CHAN_START   | 2013-01-01 08:00:02 | Alice Aglisse |    1001 | s     | default | 1375994780.2 | 1375994780.1 |           |
-            | ANSWER       | 2013-01-01 08:00:03 | Alice Aglisse |    1001 | s     | default | 1375994780.2 | 1375994780.1 |           |
-            | ANSWER       | 2013-01-01 08:00:04 | Bob Marley    |    1002 | s     | user    | 1375994780.1 | 1375994780.1 |           |
-            | BRIDGE_START | 2013-01-01 08:00:05 | Bob Marley    |    1002 | s     | user    | 1375994780.1 | 1375994780.1 |           |
-            | BRIDGE_END   | 2013-01-01 08:00:06 | Bob Marley    |    1002 | s     | user    | 1375994780.1 | 1375994780.1 |           |
-            | HANGUP       | 2013-01-01 08:00:07 | Alice Aglisse |    1001 |       | user    | 1375994780.2 | 1375994780.1 |           |
-            | CHAN_END     | 2013-01-01 08:00:08 | Alice Aglisse |    1001 |       | user    | 1375994780.2 | 1375994780.1 |           |
-            | HANGUP       | 2013-01-01 08:00:09 | Bob Marley    |    1002 | s     | user    | 1375994780.1 | 1375994780.1 |           |
-            | CHAN_END     | 2013-01-01 08:00:10 | Bob Marley    |    1002 | s     | user    | 1375994780.1 | 1375994780.1 |           |
+         Given there are a lot of unprocessed calls
          When I generate call logs twice in parallel
          Then I see that call log generation is already running
 

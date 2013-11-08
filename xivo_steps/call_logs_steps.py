@@ -20,7 +20,7 @@ from lettuce import step, world
 
 from xivo_acceptance.action.webi import call_logs as call_logs_action_webi
 from xivo_acceptance.helpers import call_logs_helper, cel_helper
-from xivo_lettuce import common, form, sysutils
+from xivo_lettuce import assets, common, form, sysutils
 
 
 @step(u'Given there are no call logs$')
@@ -32,6 +32,17 @@ def given_there_are_no_call_logs(step):
 def given_i_have_only_the_following_cel_entries(step):
     cel_helper.delete_all()
     cel_helper.insert_entries(step.hashes)
+
+
+@step(u'Given there are a lot of unprocessed calls')
+def given_there_are_a_lot_of_calls(step):
+    sql_file_name = 'cel-extract.sql'
+    server_dir = '/tmp'
+    assets.copy_asset_to_server(asset=sql_file_name, serverpath=server_dir)
+    remote_path = '%s/%s' % (server_dir, sql_file_name)
+
+    cel_insertion_command = ['sudo', '-u', 'postgres', 'psql', 'asterisk', '-c', '"\i %s"' % remote_path]
+    world.ssh_client_xivo.check_call(cel_insertion_command)
 
 
 @step(u'When I generate call logs$')
