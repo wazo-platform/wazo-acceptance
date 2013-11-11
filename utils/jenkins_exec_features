@@ -32,7 +32,7 @@ for repo in $REPOSITORIES ; do
         if [ $repo == 'xivo-provisioning' ]; then
             extra='/src'
         fi
-        PYTHONPATH_STR="${PYTHONPATH_STR}:/${REPO_DIR}/${repo}/${repo}${extra}"
+        PYTHONPATH_STR="${PYTHONPATH_STR}:${REPO_DIR}/${repo}/${repo}${extra}"
     fi
 done
 
