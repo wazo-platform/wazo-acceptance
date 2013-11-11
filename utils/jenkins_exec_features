@@ -26,7 +26,7 @@ for repo in $REPOSITORIES ; do
     clone_or_pull_repo $repo
 
     if [ $repo == 'xivo-acceptance' ]; then
-        PYTHONPATH_STR="${PYTHONPATH_STR}:/${REPO_DIR}/${repo}"
+        PYTHONPATH_STR="${PYTHONPATH_STR}:${REPO_DIR}/${repo}"
     else
         extra=''
         if [ $repo == 'xivo-provisioning' ]; then
@@ -39,12 +39,12 @@ done
 export PYTHONPATH=$PYTHONPATH_STR
 
 if [ $FEATURE_NAME == 'post_wizard' ]; then
-    python /${REPO_DIR}/xivo-acceptance/utils/prerequisite.py
+    python ${REPO_DIR}/xivo-acceptance/utils/prerequisite.py
 fi
 
-cd /${REPO_DIR}/xivo-acceptance
+cd ${REPO_DIR}/xivo-acceptance
 cp -r features/$FEATURE_NAME $WORKSPACE
 
 cd $WORKSPACE
 lettuce $FEATURE_NAME --with-xunit --verbosity=3 --xunit-file=xunit-tests.xml
-cp xunit-tests.xml /${REPO_DIR}/test_results/$JOB_NAME.xml
+cp xunit-tests.xml ${REPO_DIR}/test_results/$JOB_NAME.xml
