@@ -20,6 +20,7 @@ from lettuce import step, world
 
 from xivo_acceptance.action.restapi import device_action_restapi
 from xivo_acceptance.helpers import device_helper, provd_helper
+from xivo_lettuce import sysutils
 from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order
 
 
@@ -64,6 +65,13 @@ def given_i_only_have_n_devices(step, nb_devices):
     total_devices = provd_helper.total_devices()
     if total_devices < nb_devices:
         device_helper.create_dummy_devices(nb_devices - total_devices)
+
+
+@step(u'Given I set the HTTP_PROXY environment variables to "([^"]*)"')
+def given_i_set_the_http_proxy_environment_variables_to_group1(step, http_proxy):
+    # we must use /etc/init.d, not the service utility
+    command = ['export', 'HTTP_PROXY=%s' % http_proxy, ';', '/etc/init.d/xivo-restapi', 'restart']
+    sysutils.send_command(command, check=True)
 
 
 @step(u'When I create an empty device')
