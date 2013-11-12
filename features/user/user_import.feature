@@ -52,11 +52,11 @@ Feature: User Import
 
     Scenario: Import user with full infos from CSV file
         When I import a list of users with incall and voicemail - full:
-        | firstname | lastname | linenumber | context | voicemail | incall |
-        | Francis   | Lalannix | 1900       | default | 1900      | 1900   |
-        | Bob       | Marley   | 1901       | default | 1901      | 1901   |
+        | firstname | lastname | linenumber | linesecret | context | voicemail | incall |
+        | Francis   | Lalannix | 1900       | toto       | default | 1900      | 1900   |
+        | Bob       | Marley   | 1901       |            | default | 1901      | 1901   |
         Then user with name "Francis Lalannix" exists
-        Then line with number "1900@default" exists
+        Then line with number "1900@default" exists with password "toto"
         Then incall "1900" is displayed in the list
         Then voicemail "1900" is displayed in the list
         Then user with name "Bob Marley" exists

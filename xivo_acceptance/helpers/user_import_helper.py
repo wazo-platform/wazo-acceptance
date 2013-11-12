@@ -116,6 +116,7 @@ def insert_adv_user_full_infos(entries):
         user.line = UserLine()
         user.line.context = entry['context']
         user.line.number = entry['linenumber']
+        user.line.secret = entry.get('linesecret', '')
         user.voicemail = UserVoicemail()
         user.voicemail.name = '%s %s' % (entry['firstname'], entry['lastname'])
         user.voicemail.number = entry['voicemail']
