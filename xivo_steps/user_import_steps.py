@@ -41,13 +41,21 @@ def when_i_import_a_list_of_users(step):
     user_import_helper.insert_simple_user(step.hashes)
 
 
-@step(u'Then user with name "([^"]*)" exists')
+@step(u'Then user with name "([^"]*)" exists$')
 def then_user_with_name_exists(step, name):
     firstname, lastname = name.split(' ', 1)
     assert user_helper.is_user_with_name_exists(firstname, lastname)
 
 
-@step(u'Then line with number "([^"]*)" exists')
+@step(u'Then line with number "([^"]*)" exists$')
 def then_line_with_number_exists(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     assert line_helper.is_with_exten_context_exists(number, context)
+
+
+@step(u'Then line with number "([^"]*)" exists with password "([^"]*)"$')
+def then_line_with_number_exists_with_password(step, extension, password):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    line = line_helper.find_with_exten_context(number, context)
+    assert line
+    assert line.secret == password
