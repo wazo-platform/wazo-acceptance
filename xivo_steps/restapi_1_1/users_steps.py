@@ -71,6 +71,13 @@ def when_i_update_the_user_with_id_group1_using_the_following_parameters(step, u
     world.response = user_action_restapi.update_user(userid, userinfo)
 
 
+@step(u'When I update user "([^"]*)" "([^"]*)" with the following parameters:')
+def when_i_update_user_group1_group2_with_the_following_parameters(step, firstname, lastname):
+    user = user_helper.find_by_firstname_lastname(firstname, lastname)
+    userinfo = _get_user_info(step.hashes)
+    world.response = user_action_restapi.update_user(user.id, userinfo)
+
+
 @step(u'When I delete the user with id "([^"]*)"')
 def when_i_delete_the_user_with_id_group1(step, userid):
     world.response = user_action_restapi.delete_user(userid)
