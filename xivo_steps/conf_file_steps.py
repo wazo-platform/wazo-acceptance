@@ -45,3 +45,18 @@ def then_the_sccp_conf_file_should_contain_function_keys_sorted_by_key_number(st
     pattern = 'speeddial = %s-' % user_id
     users_speeddial = ifilter(lambda line: pattern in line, sccp_conf_content.split('\n'))
     assert_that(users_speeddial, contains(*expected_speeddials), 'Configured speeddials')
+
+
+@step(u'Then the "([^"]*)" file should contain peer "([^"]*)"')
+def then_the_conf_file_should_contain_peer(step, file_name, peer_name):
+    pattern = u'[%s]' % peer_name
+    file_content = asterisk_helper.get_confgen_file(file_name).decode('utf-8')
+    assert_that(file_content, contains_string(pattern))
+
+
+@step(u'Then the "([^"]*)" file should not contain peer "([^"]*)"')
+def then_the_conf_file_should_not_contain_peer(step, file_name, peer_name):
+    pattern = u'[%s]' % peer_name
+    file_content = asterisk_helper.get_confgen_file(file_name)
+    file_content = file_content.decode("utf-8")
+    assert_that(file_content, is_not(contains_string(pattern)))
