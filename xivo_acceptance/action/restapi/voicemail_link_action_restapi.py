@@ -30,3 +30,9 @@ def link_voicemail(user_id, voicemail_id):
 
 def get_voicemail_link(user_id):
     return world.restapi_utils_1_1.rest_get(VOICEMAIL_LINK_URL % user_id)
+
+
+def delete_voicemail_link(user_id):
+    return world.restapi_utils_1_1.rest_delete(VOICEMAIL_LINK_URL % user_id)
+
+

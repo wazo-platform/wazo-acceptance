@@ -117,6 +117,14 @@ def when_i_request_the_voicemail_associated_to_user_group1_group2_via_restapi(st
 def when_i_request_the_voicemail_associated_to_user_with_id_group1_via_restapi(step, user_id):
     world.response = voicemail_link_action_restapi.get_voicemail_link(int(user_id))
 
+@step(u'When I dissociate user "([^"]*)" "([^"]*)" from his voicemail via RESTAPI')
+def when_i_dissociate_user_group1_from_his_voicemail_via_restapi(step, firstname, lastname):
+    user = user_helper.find_by_firstname_lastname(firstname, lastname)
+    world.response = voicemail_link_action_restapi.delete_voicemail_link(int(user.id))
+
+@step(u'When I dissociate user with id "([^"]*)" from his voicemail via RESTAPI')
+def when_i_dissociate_user_with_id_group1_from_his_voicemail_via_restapi(step, user_id):
+    world.response = voicemail_link_action_restapi.delete_voicemail_link(int(user_id))
 
 @step(u'Then I have the following voicemails via RESTAPI:')
 def then_the_voicemail_has_the_following_parameters(step):
