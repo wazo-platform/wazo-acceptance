@@ -251,7 +251,10 @@ Feature: Directory
          | firstname | lastname   | number | context | cti_profile |
          | GreatLord | MacDonnell | 1043   | default | Client      |
         Given the LDAP server is configured and active
-        Given there is a user with common name "ACTIVE\Directory" on the ldap server
+        Given there are entries in the ldap server:
+            | first name | last name | phone |
+            | active     | directory | 990   |
+        Given there is a user with common name "ACTIVE\Directory" and password "superpass" on the ldap server
         Given there are the following ldap filters:
           | name            | server       | username                                             | password  | base dn                          | display name | phone number    |
           | openldap-aduser | openldap-dev | cn=ACTIVE\Directory,dc=lan-quebec,dc=avencall,dc=com | superpass | dc=lan-quebec,dc=avencall,dc=com | cn           | telephoneNumber |
@@ -260,8 +263,8 @@ Feature: Directory
         When I log in the XiVO Client as "greatlord", pass "macdonnell"
         When I search for "active" in the directory xlet
         Then the following results show up in the directory xlet:
-          | Nom               | Numéro |
-          | active\ directory |        |
+          | Nom              | Numéro |
+          | active directory | 990    |
         Then there are no errors in the CTI logs
 
     Scenario: Search for a contact in a LDAP server with invalid credentials
