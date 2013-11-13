@@ -17,6 +17,8 @@
 
 import ldap.modlist
 import time
+import hashlib
+import base64
 
 from xivo_lettuce.ssh import SSHClient
 from lettuce import world
@@ -55,6 +57,13 @@ def add_or_replace_entry(entry):
     add_entry(ldap_server, dn, entry)
 
     ldap_server.unbind_s()
+
+
+def generate_ldap_password(password):
+    hasher = hashlib.sha1()
+    hasher.update(password)
+    payload = base64.b64encode(hasher.digest())
+    return "{SHA}%s" % payload
 
 
 def connect_to_server():

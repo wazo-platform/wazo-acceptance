@@ -120,13 +120,13 @@ def given_there_are_no_ldap_filters_configured_in_the_phonebook(step):
     ldap_action_webi.remove_all_filters_from_phonebook()
 
 
-@step(u'Given there is a user with common name "([^"]*)" on the ldap server')
-def given_there_is_a_user_with_common_name_group1_on_the_ldap_server(step, common_name):
+@step(u'Given there is a user with common name "([^"]*)" and password "([^"]*)" on the ldap server')
+def given_there_is_a_user_with_common_name_group1_and_password_group2_on_the_ldap_server(step, common_name, password):
     entry = {
         'objectClass': ['top', 'inetOrgPerson'],
         'cn': common_name,
-        'givenName': 'active\\',
-        'sn': 'directory',
+        'sn': common_name,
+        'userPassword': ldap_utils.generate_ldap_password(password)
     }
 
     ldap_utils.add_or_replace_entry(entry)
