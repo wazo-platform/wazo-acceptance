@@ -32,7 +32,7 @@ def when_i_ask_for_the_line_sip_with_id_group1(step, lineid):
     world.response = line_sip_action_restapi.get(lineid)
 
 
-@step(u'When I create an empty SIP line')
+@step(u'When I create an empty SIP line$')
 def when_i_create_an_empty_line(step):
     world.response = line_sip_action_restapi.create_line_sip({})
 

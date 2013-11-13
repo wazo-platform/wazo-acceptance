@@ -27,14 +27,14 @@ def given_there_are_no_users(step):
     user_helper.delete_all()
 
 
-@step(u'Given I only have the following users:')
+@step(u'Given I only have the following users:$')
 def given_there_are_the_following_users(step):
     user_helper.delete_all()
     for userinfo in step.hashes:
         user_helper.create_user(userinfo)
 
 
-@step(u'Given there are no users with id "([^"]*)"')
+@step(u'Given there are no users with id "([^"]*)"$')
 def given_there_are_no_users_with_id_group1(step, user_id):
     user_helper.delete_with_user_id(user_id)
 
@@ -44,34 +44,34 @@ def when_i_ask_for_the_list_of_users(step):
     world.response = user_action_restapi.all_users()
 
 
-@step(u'When I ask for the user with id "([^"]*)"')
+@step(u'When I ask for the user with id "([^"]*)"$')
 def when_i_ask_for_the_user_with_id_group1(step, userid):
     world.response = user_action_restapi.get_user(userid)
 
 
-@step(u'When I search for the user "([^"]*)"')
+@step(u'When I search for the user "([^"]*)"$')
 def when_i_search_for_user_group1(step, search):
     world.response = user_action_restapi.user_search(search)
 
 
-@step(u'When I create an empty user')
+@step(u'When I create an empty user$')
 def when_i_create_an_empty_user(step):
     world.response = user_action_restapi.create_user({})
 
 
-@step(u'When I create users with the following parameters:')
+@step(u'When I create users with the following parameters:$')
 def when_i_create_users_with_the_following_parameters(step):
     for userinfo in step.hashes:
         world.response = user_action_restapi.create_user(userinfo)
 
 
-@step(u'When I update the user with id "([^"]*)" using the following parameters:')
+@step(u'When I update the user with id "([^"]*)" using the following parameters:$')
 def when_i_update_the_user_with_id_group1_using_the_following_parameters(step, userid):
     userinfo = _get_user_info(step.hashes)
     world.response = user_action_restapi.update_user(userid, userinfo)
 
 
-@step(u'When I delete the user with id "([^"]*)"')
+@step(u'When I delete the user with id "([^"]*)"$')
 def when_i_delete_the_user_with_id_group1(step, userid):
     world.response = user_action_restapi.delete_user(userid)
 

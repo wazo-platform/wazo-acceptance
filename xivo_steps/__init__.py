@@ -68,6 +68,7 @@ from trunk_iax_steps import *
 from trunk_sip_steps import *
 from user_import_steps import *
 from user_steps import *
+from user_line_steps import *
 from voicemail_steps import *
 from webi_login_steps import *
 from wizard_steps import *

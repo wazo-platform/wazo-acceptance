@@ -36,7 +36,7 @@ def given_i_have_no_link_with_the_following_parameters(step):
         world.response = user_link_action_restapi.delete(userlink['id'])
 
 
-@step(u'When I create an empty link')
+@step(u'When I create an empty link$')
 def when_i_create_an_empty_link(step):
     world.response = user_link_action_restapi.create_user_link({})
 

@@ -21,31 +21,31 @@ from lettuce import step, world
 from hamcrest import *
 
 
-@step(u'Then I get an empty list')
+@step(u'Then I get an empty list$')
 def then_i_get_an_empty_list(step):
     user_response = world.response.data
     assert_that(user_response, has_entry('total', 0))
     assert_that(user_response, has_entry('items', []))
 
 
-@step(u'Then I get a response with status "([^"]*)"')
+@step(u'Then I get a response with status "([^"]*)"$')
 def then_i_get_a_response_with_status_group1(step, status):
     status_code = int(status)
     error_msg = "response received: %s" % world.response.data
     assert_that(world.response.status, equal_to(status_code), error_msg)
 
 
-@step(u'Then I get a response with an id')
+@step(u'Then I get a response with an id$')
 def then_i_get_a_response_with_an_id(step):
     assert_that(world.response.data, has_entry('id', instance_of(int)))
 
 
-@step(u'Then I get an error message "([^"]*)"')
+@step(u'Then I get an error message "([^"]*)"$')
 def then_i_get_an_error_message_group1(step, error_message):
     assert_that(world.response.data, has_item(error_message))
 
 
-@step(u'Then I get an error message matching "([^"]*)"')
+@step(u'Then I get an error message matching "([^"]*)"$')
 def then_i_get_an_error_message_matching_group1(step, regex):
     messages = world.response.data
     has_match = _check_for_regex_match(messages, regex)
@@ -59,15 +59,18 @@ def _check_for_regex_match(messages, regex):
     return False
 
 
-@step(u'Then I get a header with a location for the "([^"]*)" resource')
+@step(u'Then I get a header with a location for the "([^"]*)" resource$')
 def then_i_get_a_header_with_a_location_for_the_group1_resource(step, resource):
+
+    print world.response.data
+
     resource_id = world.response.data['id']
     expected_location = '/1.1/%s/%s' % (resource, resource_id)
 
     assert_that(world.response.headers, has_entry('location', ends_with(expected_location)))
 
 
-@step(u'Then I get a header with a location matching "([^"]*)"')
+@step(u'Then I get a header with a location matching "([^"]*)"$')
 def then_i_get_a_header_with_a_location_matching_group1(step, regex):
     assert_that(world.response.headers, has_key('location'))
     location = world.response.headers['location']
@@ -82,12 +85,12 @@ def then_i_get_a_response_with_a_link_to_an_extension_resource(step, resource):
     assert_response_has_resource_link(resource, resource_id)
 
 
-@step(u'Then I get a response with a link to the "([^"]*)" resource with id "([^"]*)"')
+@step(u'Then I get a response with a link to the "([^"]*)" resource with id "([^"]*)"$')
 def then_i_get_a_response_with_a_link_to_a_resource_with_id(step, resource, resource_id):
     assert_response_has_resource_link(resource, resource_id)
 
 
-@step(u'Then I get a response with a link to the "([^"]*)" resource using the id "([^"]*)"')
+@step(u'Then I get a response with a link to the "([^"]*)" resource using the id "([^"]*)"$')
 def then_i_get_a_response_with_a_link_to_a_resource_with_id_using_the_id(step, resource, resource_key):
     resource_id = world.response.data[resource_key]
     assert_response_has_resource_link(resource, resource_id)

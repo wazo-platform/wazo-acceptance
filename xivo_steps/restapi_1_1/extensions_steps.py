@@ -55,7 +55,7 @@ def when_i_access_the_extension_with_id_group1(step, extension_id):
     world.response = extension_action_restapi.get_extension(extension_id)
 
 
-@step(u'When I create an empty extension')
+@step(u'When I create an empty extension$')
 def when_i_create_an_empty_extension(step):
     world.response = extension_action_restapi.create_extension({})
 
