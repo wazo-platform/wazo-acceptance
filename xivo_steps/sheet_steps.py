@@ -44,19 +44,26 @@ def given_i_have_a_sheet_model_named_group1_with_the_variables(step, sheet_name)
 
 
 def _add_sheet_variable(variable_name):
+    _add_sheet_field(title=variable_name, type='text', default_value='', display_value='{%s}' % variable_name)
+
+
+def _add_sheet_field(title, type, default_value, display_value):
     add_button = world.browser.find_element_by_id('add_variable')
     add_button.click()
     new_variable_line = world.browser.find_element_by_xpath(
         "//tbody[@id='screens']/tr[last()]"
     )
     new_variable_name_input = new_variable_line.find_element_by_xpath(".//input[@name='screencol1[]']")
-    new_variable_name_input.send_keys(variable_name)
+    new_variable_name_input.send_keys(title)
 
     new_variable_type_select = new_variable_line.find_element_by_xpath(".//select[@name='screencol2[]']")
-    Select(new_variable_type_select).select_by_visible_text("text")
+    Select(new_variable_type_select).select_by_visible_text(type)
+
+    new_variable_name_input = new_variable_line.find_element_by_xpath(".//input[@name='screencol3[]']")
+    new_variable_name_input.send_keys(default_value)
 
     new_variable_value_input = new_variable_line.find_element_by_xpath(".//input[@name='screencol4[]']")
-    new_variable_value_input.send_keys('{%s}' % variable_name)
+    new_variable_value_input.send_keys(display_value)
 
 
 @step(u'^Given I assign the sheet "([^"]*)" to the "(.+)" event$')
@@ -74,6 +81,20 @@ def given_i_assign_the_sheet_group1_to_the_agent_linked_event(step, sheet_name, 
     form.submit.submit_form()
 
 
+@step(u'Given I have a sheet model with custom UI:')
+def given_i_have_a_sheet_model_with_custom_ui(step):
+    sheet = step.hashes.pop()
+    common.remove_element_if_exist('sheet', sheet['name'])
+    common.open_url('sheet', 'add')
+
+    form.input.set_text_field_with_label('Name :', sheet['name'])
+    common.go_to_tab('Sheet')
+    form.set_text_field_with_id('it-sheetactions-qtui', sheet['path to ui'])
+    _add_sheet_field(title='', type='form', default_value='', display_value='qtui')
+
+    form.submit.submit_form()
+
+
 @step(u'Then I see a sheet with the following values:')
 def then_i_see_a_sheet_with_the_following_values(step):
     res = cti_helper.get_sheet_infos()
@@ -86,3 +107,11 @@ def then_i_see_a_sheet_with_the_following_values(step):
 def then_i_should_not_see_any_sheet(step):
     res = cti_helper.get_sheet_infos()
     assert_that(res, equal_to([]))
+
+
+@step(u'Then I see a custom sheet with the following values:')
+def then_i_see_a_custom_sheet_with_the_following_values(step):
+    res = cti_helper.get_text_widget_infos()
+    expected = step.hashes
+
+    assert_that(res, has_items(*expected))

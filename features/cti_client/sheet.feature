@@ -442,3 +442,26 @@ Feature: Sheet
         | db-phone     | 12345         |
         | db-mail      | asdf@asdf.com |
         | db-special   | asdf : ésdf  |
+
+    Scenario: Variable substitution in custom sheets
+        Given there are users with infos:
+         | firstname | lastname  | number | context | cti_profile | cti_login | cti_passwd |
+         | Donald    | MacRonald |   1624 | default | Client      | donald    | macronald  |
+        Given the asset file "test-variable.ui" is copied on the server into "/tmp"
+        Given I have a sheet model with custom UI:
+        | name          | path to ui                   |
+        | testvariable  | file:///tmp/test-variable.ui |
+        Given I assign the sheet "testvariable" to the "Dial" event
+        Given I start the XiVO Client
+        Given I log in the XiVO client as "donald", pass "macronald"
+        Given there are no calls running
+        Given I wait 5 seconds for the dialplan to be reloaded
+        Given I register extension "1624"
+        Given I wait call then I answer then I hang up after "5s"
+        When there is 1 calls to extension "1624@default" on trunk "to_default" and wait
+        When I wait 10 seconds for the call processing
+        Then I see a custom sheet with the following values:
+        | widget_name       | value            |
+        | testlabel         | 1624             |
+        | testlineedit      | to_default       |
+        | testplaintextedit | Donald MacRonald |
