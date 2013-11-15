@@ -111,7 +111,7 @@ def then_i_should_not_see_any_sheet(step):
 
 @step(u'Then I see a custom sheet with the following values:')
 def then_i_see_a_custom_sheet_with_the_following_values(step):
-    res = cti_helper.get_text_widget_infos()
+    res = cti_helper.get_infos_in_custom_sheet()
     expected = step.hashes
 
     assert_that(res, has_items(*expected))
