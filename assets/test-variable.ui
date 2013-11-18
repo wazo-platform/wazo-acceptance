@@ -24,7 +24,7 @@
    <item>
     <widget class="QLineEdit" name="testlineedit">
      <property name="text">
-      <string>{xivo-calleridpaptet}</string>
+      <string>{xivo-calleridnum}</string>
      </property>
     </widget>
    </item>
