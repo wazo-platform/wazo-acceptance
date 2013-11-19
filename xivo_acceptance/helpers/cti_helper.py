@@ -17,9 +17,10 @@
 
 import time
 
-from xivo_lettuce import common, sysutils, xivoclient
+from hamcrest import assert_that, equal_to
 from lettuce.registry import world
 from xivo_acceptance.helpers import user_helper
+from xivo_lettuce import common, sysutils, xivoclient
 
 
 def configure_client(conf_dict):
@@ -134,6 +135,12 @@ def get_sheet_infos():
         return _to_var_vals(xivoclient.exec_command('get_sheet_infos')['return_value']['content'])
     except KeyError:
         return []
+
+
+def get_infos_in_custom_sheet():
+    response = xivoclient.exec_command('get_infos_in_custom_sheet')
+    assert_that(response['test_result'], equal_to('passed'))
+    return [{u'widget_name': key, u'value': value} for key, value in response['return_value'].iteritems()]
 
 
 def get_queue_members_infos():

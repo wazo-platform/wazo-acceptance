@@ -63,7 +63,7 @@ def when_i_restart_the_cti_server(step):
     cti_helper.restart_server()
 
 
-@step(u'When I start the XiVO Client$')
+@step(u'I start the XiVO Client$')
 def i_start_the_xivo_client(step):
     start_xivoclient()
 
