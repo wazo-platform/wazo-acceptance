@@ -1,13 +1,11 @@
 Feature: Callgen
 
     Scenario: Call to inexistant extension
-        Given there are no calls running
         Given there are users with infos:
-         | firstname | lastname | number | context |
-         | User      | 100      |   1100 | default |
-        When I call extension "1190@default"
-        When I wait 5 seconds for the calls processing
-        Then I see rejected call to extension "1190@default" in asterisk log
+         | firstname | number | context | protocol |
+         | Alice     |   1100 | default | sip      |
+        When "Alice" calls "1190"
+        Then I see a rejected call to extension "1190@default" in asterisk log
 
     Scenario: Call to existant extension with answer
         Given there are no calls running
