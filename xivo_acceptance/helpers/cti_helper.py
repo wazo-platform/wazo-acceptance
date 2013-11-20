@@ -219,6 +219,11 @@ def add_sheet_field(title, display_type, default_value, display_value):
     map(_set, xrange(4), [title, display_type, default_value, display_value])
 
 
+def set_infos_in_custom_sheet(values_dict):
+    response = xivoclient.exec_command('set_infos_in_custom_sheet', values_dict)
+    assert_that(response['test_result'], equal_to('passed'))
+
+
 def get_queue_members_infos():
     return xivoclient.exec_command('get_queue_members_infos')
 
