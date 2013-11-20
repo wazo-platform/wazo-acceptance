@@ -20,7 +20,7 @@ from xivo_acceptance.helpers import dialpattern_helper, user_helper, \
 from xivo_dao.data_handler.extension import services as extension_services
 from xivo_dao.data_handler.exception import ElementDeletionError, \
     ElementNotExistsError
-from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 
 
 def find_extension_by_exten(exten):
@@ -66,31 +66,44 @@ def _delete_extension_with_exten_context(channel, exten, context):
 
 
 def delete_all():
-    hidden_extensions = extension_services.find_all(commented=True)
-    visible_extensions = extension_services.find_all()
+    all_extensions = remote_exec_with_result(_find_all_extensions)
 
-    extensions = [e for e in hidden_extensions + visible_extensions if e.context != 'xivo-features']
+    for extension in all_extensions:
+        extension_id, exten, extension_type, typeval = extension
 
-    for extension in extensions:
+        remote_exec(_delete_all_ule_association_by_extension_id, extension_id=extension_id)
+
         try:
-            if extension.type == 'user':
-                user_helper.delete_with_user_id(int(extension.typeval))
-            elif extension.type == 'queue':
-                queue_helper.delete_queues_with_number(extension.exten)
-            elif extension.type == 'group':
-                group_helper.delete_groups_with_number(extension.exten)
-            elif extension.type == 'incall':
-                incall_helper.delete_incalls_with_did(extension.exten)
-            elif extension.type == 'meetme':
-                meetme_helper.delete_meetme_with_confno(extension.exten)
-            elif extension.type == 'outcall':
-                dialpattern_helper.delete((extension.typeval))
+            if extension_type == 'user':
+                user_helper.delete_with_user_id(int(typeval))
+            elif extension_type == 'queue':
+                queue_helper.delete_queues_with_number(exten)
+            elif extension_type == 'group':
+                group_helper.delete_groups_with_number(exten)
+            elif extension_type == 'incall':
+                incall_helper.delete_incalls_with_did(exten)
+            elif extension_type == 'meetme':
+                meetme_helper.delete_meetme_with_confno(exten)
+            elif extension_type == 'outcall':
+                dialpattern_helper.delete((typeval))
+        except ElementDeletionError as e:
+            print "I tried deleting a type %s typeval %s but it didn't work." % (extension_type, typeval)
+            print e
 
-            remote_exec(_delete_all_ule_association_by_extension_id, extension_id=extension.id)
+        delete(extension_id)
 
-            delete(extension.id)
-        except ElementDeletionError:
-            pass
+
+def _find_all_extensions(channel):
+    from xivo_dao.alchemy.extension import Extension as ExtensionSchema
+    from xivo_dao.helpers.db_manager import AsteriskSession
+
+    extension_rows = (AsteriskSession
+                      .query(ExtensionSchema)
+                      .filter(ExtensionSchema.context != 'xivo-features')
+                      .all())
+
+    extensions = [(e.id, e.exten, e.type, e.typeval) for e in extension_rows]
+    channel.send(extensions)
 
 
 def _delete_all_ule_association_by_extension_id(channel, extension_id):
@@ -115,7 +128,5 @@ def _create_extensions(channel, extensions):
     from xivo_dao.data_handler.extension.model import Extension
 
     for extinfo in extensions:
-        extinfo.setdefault('type', 'user')
-        extinfo.setdefault('typeval', '0')
         extension = Extension(**extinfo)
         extension_services.create(extension)
