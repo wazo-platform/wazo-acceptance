@@ -72,8 +72,3 @@ def then_i_see_a_custom_sheet_with_the_following_values(step):
 @step(u'When I fill a custom sheet with the following values:')
 def when_i_fill_a_custom_sheet_with_the_following_values(step):
     cti_helper.set_infos_in_custom_sheet(step.hashes)
-
-
-@step(u'Then I see a message on bus with the following variables:')
-def then_i_see_a_message_on_bus_with_the_following_variables(step):
-    assert False, 'This step must be implemented'
