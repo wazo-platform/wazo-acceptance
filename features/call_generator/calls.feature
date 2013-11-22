@@ -2,8 +2,8 @@ Feature: Callgen
 
     Scenario: Call to inexistant extension
         Given there are users with infos:
-         | firstname | number | context | protocol |
-         | Alice     |   1100 | default | sip      |
+         | firstname | lastname | number | context | protocol |
+         | Alice     |          | 1100   | default | sip      |
         When "Alice" calls "1190"
         Then I see a rejected call to extension "1190@default" in asterisk log
 

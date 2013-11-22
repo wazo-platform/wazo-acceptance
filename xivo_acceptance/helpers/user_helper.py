@@ -18,7 +18,7 @@
 from lettuce import world
 from execnet.gateway_base import RemoteError
 
-from xivo_acceptance.helpers import voicemail_helper, group_helper, provd_helper
+from xivo_acceptance.helpers import voicemail_helper, group_helper, provd_helper, sip_phone
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
@@ -308,6 +308,14 @@ def add_user(data_dict):
     if not ret:
         return False
 
+    if 'protocol' in data_dict:
+        line = world.ws.lines.search_by_number(data_dict['line_number'])
+        if line:
+            name = user.firstname if 'lastname' not in data_dict else '%s %s' % (user.firstname, user.lastname)
+            sip_name = line[0].name
+            sip_passwd = line[0].secret
+            _register_sip_line(name, sip_name, sip_passwd)
+
     return int(ret)
 
 
@@ -407,3 +415,24 @@ def count_schedulepath(user_id):
 
 def _count_table_with_cond(table, cond_dict):
     return postgres.exec_count_request(table, **cond_dict)
+
+
+def _register_sip_line(sip_name, sip_passwd, name):
+    port = _get_available_sip_port()
+    phone = sip_phone.SipPhone(sip_name, sip_passwd, port)
+    phone.register()
+    world.sip_phones[name] = phone
+
+
+def _get_available_sip_port():
+    ports = xrange(5061, 5070)
+
+    if not hasattr(world, 'sip_phones'):
+        return ports[0]
+
+    used_ports = [p.port for p in world.sip_phones]
+    for port in ports:
+        if port not in used_ports:
+            return port
+
+    raise Exception('All sip ports are used')
