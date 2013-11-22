@@ -31,7 +31,6 @@ DATA_PATTERN = r'(?:with data (.*))?'
 
 def last_requests_infos():
     extracted = logs.find_line_in_xivo_restapi_log(delta=20)
-    print extracted
     raw_list = [_extract_request_infos(log_line) for log_line in extracted]
 
     return [log_line for log_line in raw_list if log_line is not None]
