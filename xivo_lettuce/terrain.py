@@ -49,6 +49,7 @@ def xivo_lettuce_after_each_step(step):
 
 @after.each_scenario
 def xivo_lettuce_after_each_scenario(scenario):
+    _clean_sip_phones()
     _logout_agents()
 
 
@@ -113,6 +114,15 @@ def _webi_configured():
 def _logout_agents():
     asterisk_helper.logoff_agents(world.logged_agents)
     world.logged_agents = []
+
+
+def _clean_sip_phones():
+    if not hasattr(world, 'sip_phones'):
+        return
+
+    names = world.sip_phones.keys()
+    for name in names:
+        del world.sip_phones[name]
 
 
 def _check_webi_login_root():

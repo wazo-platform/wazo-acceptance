@@ -18,12 +18,43 @@
 import time
 
 from lettuce import step
+from lettuce import world
 
 from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper
 from xivo_lettuce import common
 from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.logs import search_str_in_asterisk_log
+
+from linphonelib import ExtensionNotFoundException
+
+
+def _user_phone(name):
+    if not hasattr(world, 'sip_phones') or name not in world.sip_phones:
+        if hasattr(world, 'sip_phones'):
+            available = world.sip_phones.keys()
+        else:
+            available = []
+        raise Exception('%s does not have a registered phone: %s' % (name, available))
+
+    return world.sip_phones[name]
+
+
+@step(u'When "([^"]*)" calls "([^"]*)"$')
+def when_a_calls_exten(step, name, exten):
+    phone = _user_phone(name)
+    phone.call(exten)
+
+
+@step(u'Then "([^"]*)" last call shoud be "([^"]*)"')
+def then_user_last_call_shoud_be_call_status(step, name, status):
+    phone = _user_phone(name)
+    try:
+        phone.last_call_result()
+    except ExtensionNotFoundException:
+        pass
+    else:
+        raise AssertionError('%s was not raised' % status)
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')

@@ -5,7 +5,7 @@ Feature: Callgen
          | firstname | lastname | number | context | protocol |
          | Alice     |          | 1100   | default | sip      |
         When "Alice" calls "1190"
-        Then I see a rejected call to extension "1190@default" in asterisk log
+        Then "Alice" last call shoud be "Extension not found"
 
     Scenario: Call to existant extension with answer
         Given there are no calls running
