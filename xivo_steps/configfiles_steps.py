@@ -27,6 +27,20 @@ def given_no_config_file_1(step, config_file_name):
     common.remove_element_if_exist('configfiles', config_file_name)
 
 
+@step(u'Given there is a config file "([^"]*)"')
+def given_there_is_a_config_file_group1(step, config_file_name):
+    config_file_full_path = '/etc/asterisk/extensions_extra.d/%s' % config_file_name
+    sysutils.send_command(['touch', config_file_full_path])
+    sysutils.send_command(['echo', '[section]', '>', config_file_full_path])
+    sysutils.send_command(['chown', 'asterisk:www-data', config_file_full_path])
+    sysutils.send_command(['chmod', '660', config_file_full_path])
+
+
+@step(u'Given I watch the log files')
+def given_i_watch_the_log_files(step):
+    world.start_watching_log_time = logs.xivo_current_datetime()
+
+
 @step(u'When I create a configfiles "([^"]*)" with content "([^"]*)"')
 def when_i_create_configfiles_with_content(step, filename, content):
     common.open_url('configfiles', 'add')
@@ -53,20 +67,6 @@ def when_i_create_a_config_file_group1_and_reload_dialplan(step, file_name):
     actions.type_file_name(file_name)
     actions.type_reload_dialplan(True)
     form.submit.submit_form()
-
-
-@step(u'Given there is a config file "([^"]*)"')
-def given_there_is_a_config_file_group1(step, config_file_name):
-    config_file_full_path = '/etc/asterisk/extensions_extra.d/%s' % config_file_name
-    sysutils.send_command(['touch', config_file_full_path])
-    sysutils.send_command(['echo', '[section]', '>', config_file_full_path])
-    sysutils.send_command(['chown', 'asterisk:www-data', config_file_full_path])
-    sysutils.send_command(['chmod', '660', config_file_full_path])
-
-
-@step(u'Given I watch the log files')
-def given_i_watch_the_log_files(step):
-    world.start_watching_log_time = logs.xivo_current_datetime()
 
 
 @step(u'When I edit the config file "([^"]*)" without reloading dialplan')
