@@ -17,9 +17,10 @@
 
 import time
 
-from lettuce import step, world
-from xivo_lettuce import sysutils, logs
 from hamcrest import assert_that, equal_to
+from lettuce import step, world
+from xivo_acceptance.helpers import asterisk_helper
+from xivo_lettuce import sysutils, logs
 
 
 @step(u'Asterisk command "([^"]*)" return no error')
@@ -86,3 +87,9 @@ def then_i_should_have_the_same_number_of_open_file_descriptor(step):
 @step(u'Then I see in the log file service restarted by monit')
 def then_i_see_in_the_log_file_servce_restarted_by_monit(step):
     logs.search_str_in_daemon_log('start: /usr/bin/xivo-service')
+
+
+@step('Then the option "([^"]*)" is at "([^"]*)" in "([^"]*)"')
+def then_the_option_is_at_x_in_sccp_conf(step, option, expected_value, filename):
+    value = asterisk_helper.get_asterisk_conf(filename, option)
+    assert_that(value, equal_to(expected_value))
