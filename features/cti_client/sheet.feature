@@ -481,7 +481,9 @@ Feature: Sheet
         Given I wait 5 seconds for the dialplan to be reloaded
         Given I register extension "1624"
         Given I wait call then I answer then I hang up after "5s"
-        Given I listen on the bus
+        Given I listen on the bus for messages:
+        | exchange | routing_key      |
+        | xivo-cti | call_form_result |
         When there is 1 calls to extension "1624@default" on trunk "to_default" and wait
         When I wait 10 seconds for the call processing
         When I fill a custom sheet with the following values:
