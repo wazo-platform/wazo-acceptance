@@ -88,15 +88,19 @@ def find_line_in_xivo_restapi_log(delta=10):
 
 
 def _find_line_in_log_file(loginfo, delta=10):
-    command = ['tail', '-n', '30', loginfo.logfile]
-    result = sysutils.output_command(command)
-
-    min_datetime = _xivo_current_datetime() - timedelta(seconds=delta)
-    loglines = _get_lines_since_timestamp(result, min_datetime, loginfo)
+    min_datetime = xivo_current_datetime() - timedelta(seconds=delta)
+    loglines = get_lines_since_timestamp(min_datetime, loginfo)
     return loglines
 
 
-def _xivo_current_datetime():
+def _find_all_lines_in_log_file(loginfo):
+    command = ['tail', '-n', '30', loginfo.logfile]
+    result = sysutils.output_command(command)
+    lines = result.split("\n")
+    return lines
+
+
+def xivo_current_datetime():
     command = ['date', '+%s']
     output = sysutils.output_command(command).strip()
     return datetime.fromtimestamp(float(output))
@@ -111,17 +115,16 @@ def _search_str_in_log_file(expression, loginfo, delta=10):
     return False
 
 
-def _get_lines_since_timestamp(text, min_timestamp, loginfo):
-    lines = text.split("\n")
-    date_match = re.compile(loginfo.date_pattern, re.I)
+def get_lines_since_timestamp(min_timestamp, loginfo):
+    lines = _find_all_lines_in_log_file(loginfo)
+    date_re = re.compile(loginfo.date_pattern, re.I)
 
     res = []
     for line in lines:
-        try:
-            m = date_match.search(line)
-            datetext = m.group(1)
-        except (AttributeError, IndexError):
+        date_match = date_re.search(line)
+        if not date_match:
             continue
+        datetext = date_match.group(1)
         timestamp = datetime.strptime(datetext, loginfo.date_format)
         timestamp = _add_year_to_datetime(timestamp)
 

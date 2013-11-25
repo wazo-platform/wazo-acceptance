@@ -66,7 +66,7 @@ def given_there_is_a_config_file_group1(step, config_file_name):
 
 @step(u'Given I watch the log files')
 def given_i_watch_the_log_files(step):
-    world.start_watching_log_time = time.time()
+    world.start_watching_log_time = logs.xivo_current_datetime()
 
 
 @step(u'When I edit the config file "([^"]*)" without reloading dialplan')
@@ -122,5 +122,4 @@ def then_the_dialplan_has_been_reloaded(step):
 
 
 def _watched_log_lines():
-    log_watching_time = time.time() - world.start_watching_log_time
-    return logs.find_line_in_daemon_log(delta=log_watching_time)
+    return logs.get_lines_since_timestamp(world.start_watching_log_time, logs.DAEMON_LOG_INFO)
