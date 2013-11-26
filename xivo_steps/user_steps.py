@@ -101,7 +101,7 @@ def given_there_are_users_with_infos(step):
         if user_data.get('mobile_number'):
             user_ws_data['mobile_number'] = user_data['mobile_number']
 
-        user_id = user_helper.add_or_replace_user(user_ws_data)
+        user_id = user_helper.add_or_replace_user(user_ws_data, step.scenario)
 
         if user_data.get('agent_number'):
             agent_helper.delete_agents_with_number(user_data['agent_number'])

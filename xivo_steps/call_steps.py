@@ -29,26 +29,24 @@ from xivo_lettuce.logs import search_str_in_asterisk_log
 from linphonelib import ExtensionNotFoundException
 
 
-def _user_phone(name):
-    if not hasattr(world, 'sip_phones') or name not in world.sip_phones:
-        if hasattr(world, 'sip_phones'):
-            available = world.sip_phones.keys()
-        else:
-            available = []
+def _user_phone(scenario, name):
+    phones = getattr(world, 'sip_phones', {})
+    if scenario not in phones or name not in phones[scenario]:
+        available = phones.get(scenario, {}).keys()
         raise Exception('%s does not have a registered phone: %s' % (name, available))
 
-    return world.sip_phones[name]
+    return world.sip_phones[scenario][name]
 
 
 @step(u'When "([^"]*)" calls "([^"]*)"$')
 def when_a_calls_exten(step, name, exten):
-    phone = _user_phone(name)
+    phone = _user_phone(step.scenario, name)
     phone.call(exten)
 
 
 @step(u'Then "([^"]*)" last call shoud be "([^"]*)"')
 def then_user_last_call_shoud_be_call_status(step, name, status):
-    phone = _user_phone(name)
+    phone = _user_phone(step.scenario, name)
     try:
         phone.last_call_result()
     except ExtensionNotFoundException:

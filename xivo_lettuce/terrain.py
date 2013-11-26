@@ -120,9 +120,10 @@ def _clean_sip_phones():
     if not hasattr(world, 'sip_phones'):
         return
 
-    names = world.sip_phones.keys()
-    for name in names:
-        del world.sip_phones[name]
+    for scenario, name_phone_dict in world.sip_phones.iteritems():
+        names = name_phone_dict.keys()
+        for name in names:
+            del world.sip_phones[scenario][name]
 
 
 def _check_webi_login_root():

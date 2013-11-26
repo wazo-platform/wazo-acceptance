@@ -259,7 +259,7 @@ def _delete_all(channel):
 '''
 
 
-def add_user(data_dict):
+def add_user(data_dict, scenario=None):
     user = User()
 
     if 'id' in data_dict:
@@ -316,12 +316,12 @@ def add_user(data_dict):
             name = ('%s %s' % (user.firstname, user.lastname)).strip()
             sip_name = line[0].name
             sip_passwd = line[0].secret
-            _register_sip_line(name, sip_name, sip_passwd)
+            _register_sip_line(scenario, name, sip_name, sip_passwd)
 
     return int(ret)
 
 
-def add_or_replace_user(data_dict):
+def add_or_replace_user(data_dict, scenario=None):
     firstname = data_dict['firstname']
     lastname = data_dict.get('lastname', '')
     mailbox = data_dict.get('voicemail_number', None)
@@ -334,7 +334,7 @@ def add_or_replace_user(data_dict):
                                          context=context,
                                          mailbox=mailbox)
 
-    return add_user(data_dict)
+    return add_user(data_dict, scenario)
 
 
 def delete_users_with_profile(profile_name):
@@ -419,16 +419,18 @@ def _count_table_with_cond(table, cond_dict):
     return postgres.exec_count_request(table, **cond_dict)
 
 
-def _register_sip_line(name, sip_name, sip_passwd):
+def _register_sip_line(scenario, name, sip_name, sip_passwd):
     print 'Registering a sip line for %s', name
     # XXX find a way to wait for the sip reload
     if not hasattr(world, 'sip_phones'):
         world.sip_phones = {}
+    if scenario not in world.sip_phones:
+        world.sip_phones[scenario] = {}
 
     port = _get_available_sip_port()
     phone = sip_phone.SipPhone(sip_name, sip_passwd, world.config.xivo_host, port)
     phone.register()
-    world.sip_phones[name] = phone
+    world.sip_phones[scenario][name] = phone
 
 
 def _port_in_use(port):
@@ -440,7 +442,11 @@ def _port_in_use(port):
 
 
 def _port_is_available(port):
-    used_ports = [p.port for p in world.sip_phones]
+    used_ports = []
+    for name_phone in world.sip_phones.itervalues():
+        for phone in name_phone.itervalues():
+            used_ports.append(phone.port)
+
     return port not in used_ports and _port_in_use(port)
 
 
