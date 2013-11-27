@@ -1,6 +1,35 @@
 Feature: WEBI Queue Stats
 
 
+    Scenario: Statistics for calls distributed to two queues at the boundaries of a xivo-stat deletion limit
+        Given there is no entries in queue_log between "2013-11-08 08:00:00" and "2013-11-09 00:00:00"
+        Given there are queues with infos:
+            | name | number | context     |
+            | q01  | 5001   | statscenter |
+            | q02  | 5002   | statcenter  |
+        Given there is a statistic configuration "testq1" from "9:00" to "11:00" with queue "q01"
+        Given there is a statistic configuration "testq2" from "9:00" to "11:00" with queue "q02"
+        Given I have the following queue_log entries:
+            | time                       |            callid | queuename | agent      | event          | data1 |             data2 | data3 | data4 | data5 |
+            | 2013-11-08 09:53:09.948070 | 1383900788.167039 | q01       | NONE       | ENTERQUEUE     |       |        5555555555 |     1 |       |       |
+            | 2013-11-08 09:53:12.684547 | 1383900788.167039 | q01       | Agent/1240 | CONNECT        |     3 | 1383900789.167040 |     2 |       |       |
+            | 2013-11-08 10:02:30.219402 | 1383900788.167039 | q01       | Agent/1240 | COMPLETECALLER |     3 |               558 |     1 |       |       |
+            | 2013-11-08 10:02:30.569451 | 1383900788.167039 | q02       | NONE       | ENTERQUEUE     |       |        5555555555 |     1 |       |       |
+            | 2013-11-08 10:02:30.686291 | 1383900788.167039 | q02       | Agent/1255 | RINGNOANSWER   |     0 |                   |       |       |       |
+            | 2013-11-08 10:02:32.770339 | 1383900788.167039 | q02       | Agent/1246 | CONNECT        |     2 | 1383901350.167967 |     2 |       |       |
+            | 2013-11-08 10:04:19.485883 | 1383900788.167039 | q02       | Agent/1246 | COMPLETECALLER |     2 |               107 |     1 |       |       |
+	When I generate the statistics cache at "18:05"
+        Then I should have the following statististics on "q01" on "2013-11-08" on configuration "testq1":
+          |         | Received | Answered |
+          | 9h-10h  |        1 |        1 |
+          | 10h-11h |        0 |        0 |
+          | Total   |        1 |        1 |
+        Then I should have the following statististics on "q02" on "2013-11-08" on configuration "testq2":
+          |         | Received | Answered |
+          | 9h-10h  |        0 |        0 |
+          | 10h-11h |        1 |        1 |
+          | Total   |        1 |        1 |
+
     Scenario: Generate stats for received/abandoned calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there are queues with infos:
