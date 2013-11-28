@@ -15,21 +15,69 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce.registry import world
-
-
-def get_asterisk_conf(file_name, var_name):
-    command = ['xivo-confgen', 'asterisk/%s' % file_name, '|', 'grep', '-m', '1', var_name]
-    ret = world.ssh_client_xivo.out_call(command)
-    if ret:
-        val = ret.split('=')[1].strip()
-        return val
-    assert(False)
+from lettuce import world
+from StringIO import StringIO
 
 
 def get_confgen_file(file_name):
     command = ['xivo-confgen', 'asterisk/%s' % file_name]
     return world.ssh_client_xivo.out_call(command).decode('utf-8')
+
+
+def get_conf_option(filename, section, option_name):
+    options = get_conf_options(filename, section, [option_name])
+    for current_option_name, current_option_value in options:
+        if current_option_name == option_name:
+            return current_option_value
+    return None
+
+
+def get_conf_options(filename, section, option_names):
+    """Return a list of (option_name, option_value) tuple."""
+    command = ['xivo-confgen', 'asterisk/%s' % filename]
+    output = world.ssh_client_xivo.out_call(command)
+    fobj = StringIO(output.decode('utf-8'))
+
+    conf_helper = _AsteriskConfHelper(section, option_names)
+    conf_helper.parse(fobj)
+    return conf_helper.result
+
+
+class _AsteriskConfHelper(object):
+
+    def __init__(self, section, option_names):
+        self._section = section
+        self._option_names = list(option_names)
+        self.result = []
+
+    def parse(self, fobj):
+        fun = self._parse_not_in_section
+        while fun:
+            fun = fun(fobj)
+
+    def _parse_not_in_section(self, fobj):
+        match = u'[%s]' % self._section
+        for line in fobj:
+            if line.startswith(match):
+                return self._parse_in_section
+        return None
+
+    def _parse_in_section(self, fobj):
+        for line in fobj:
+            line = line.rstrip()
+            if not line:
+                continue
+            if line.startswith(u'['):
+                # start of a new section
+                break
+            option_name, option_value = line.split(u'=', 1)
+            option_name = option_name.rstrip()
+            if option_name not in self._option_names:
+                continue
+            option_value = option_value.lstrip()
+            self.result.append((option_name, option_value))
+        # supose there's only one section, so return None
+        return None
 
 
 def logoff_agents(agent_numbers):

@@ -25,7 +25,7 @@ class Checkbox(object):
         self.webelement = webelement
 
     def is_checked(self):
-        return self.webelement.get_attribute('checked') == 'true'
+        return self.webelement.is_selected()
 
     def set_checked(self, checkstate):
         if self.is_checked() != checkstate:

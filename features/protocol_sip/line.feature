@@ -17,7 +17,6 @@ Feature: Line
          | Caller ID              |
          | "André óíúéåäë" <1801> |
 
-    #Test X-325
     Scenario: Choose custom SIP codec
         When I add a SIP line with infos:
         | context | custom_codecs              |

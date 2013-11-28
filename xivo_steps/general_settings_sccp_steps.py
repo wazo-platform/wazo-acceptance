@@ -17,10 +17,11 @@
 
 from lettuce import step
 
-from xivo_acceptance.helpers import sccp_helper, asterisk_helper
+from xivo_acceptance.helpers import sccp_helper
 from xivo_lettuce import common, form
 from xivo_lettuce.form import submit
 from xivo_lettuce.form.checkbox import Checkbox
+from xivo_lettuce.widget.codec import CodecWidget
 
 
 @step(u'Given the SCCP directmedia is disabled')
@@ -73,7 +74,17 @@ def when_i_select_the_sccp_language_group1(step, language):
     form.submit.submit_form()
 
 
-@step('Then the option "([^"]*)" is at "([^"]*)" in sccp.conf')
-def then_the_option_is_at_x_in_sccp_conf(step, option, expected_value):
-    value = asterisk_helper.get_asterisk_conf("sccp.conf", option)
-    assert(value == expected_value)
+@step(u'When I customize SCCP codecs to:')
+def when_i_customize_sccp_codecs_to(step):
+    common.open_url('sccpgeneralsettings')
+    codec_widget = CodecWidget()
+    codec_widget.customize(item['codec'] for item in step.hashes)
+    submit.submit_form()
+
+
+@step(u'When I disable SCCP codecs customization')
+def when_i_disable_sccp_codecs_customization(step):
+    common.open_url('sccpgeneralsettings')
+    codec_widget = CodecWidget()
+    codec_widget.uncustomize()
+    submit.submit_form()

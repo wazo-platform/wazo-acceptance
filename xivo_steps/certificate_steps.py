@@ -17,6 +17,7 @@
 
 import datetime
 
+from hamcrest import assert_that, equal_to
 from lettuce import step, world
 
 from xivo_acceptance.helpers import asterisk_helper
@@ -107,11 +108,10 @@ def when_i_enable_the_following_options_for_the_sip_protocol(step):
 
 @step(u'Then SIP tls connections use the "([^"]*)" certificate for encryption')
 def then_sip_tls_connections_use_the_group1_certificate_for_encryption(step, certificate):
-    configfile = "sip.conf"
     certificate_path = "/var/lib/pf-xivo/certificates/%s.pem" % certificate
-    variable = "tlscertfile"
-    current_path = asterisk_helper.get_asterisk_conf(configfile, variable)
-    assert(current_path == certificate_path)
+    current_path = asterisk_helper.get_conf_option('sip.conf', 'general', 'tlscertfile')
+
+    assert_that(current_path, equal_to(certificate_path))
 
 
 @step(u'Then there are no warnings when reloading sip configuration')

@@ -17,7 +17,6 @@
 
 from lettuce import step
 
-from xivo_acceptance.helpers import asterisk_helper
 from xivo_lettuce import common, form
 from xivo_lettuce.form.checkbox import Checkbox
 
@@ -40,12 +39,6 @@ def when_i_disable_the_sip_encryption_option(step, label):
     option = _get_sip_option_from_label(label)
     option.uncheck()
     form.submit.submit_form()
-
-
-@step(u'^Then I should see "([^"]*)" to "([^"]*)" in "([^"]*)"$')
-def then_i_see_sip_encryption_in_file(step, var_name, expected_var_val, file):
-    var_val = asterisk_helper.get_asterisk_conf(file, var_name)
-    assert(expected_var_val == var_val)
 
 
 def _get_sip_option_from_label(label):
