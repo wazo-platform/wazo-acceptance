@@ -26,6 +26,7 @@ from xivo_acceptance.helpers import line_helper
 from xivo_lettuce import common, form
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.form.list_pane import ListPane
+from xivo_lettuce.widget.codec import CodecWidget
 
 
 @step(u'Given there are no custom lines with interface beginning with "([^"]*)"')
@@ -81,8 +82,8 @@ def _get_line_name():
 
 def _add_custom_codec(codec):
     common.go_to_tab('Signalling')
-    Checkbox.from_label("Customize codecs:").check()
-    ListPane.from_id('codeclist').add(codec)
+    codec_widget = CodecWidget()
+    codec_widget.add(codec)
 
 
 @step(u'When I add a custom line with infos:')
@@ -126,7 +127,8 @@ def when_i_remove_the_codec_group1_from_the_line_with_number_group2(step, codec,
     line_id = line_helper.find_line_id_with_exten_context(linenumber, 'default')
     common.open_url('line', 'edit', {'id': line_id})
     common.go_to_tab('Signalling')
-    ListPane.from_id('codeclist').remove(codec)
+    codec_widget = CodecWidget()
+    codec_widget.remove(codec)
     form.submit.submit_form()
 
 

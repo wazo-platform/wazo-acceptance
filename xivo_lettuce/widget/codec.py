@@ -37,4 +37,12 @@ class CodecWidget(object):
             self._pane.add(codec)
 
     def uncustomize(self):
+        self._pane.remove_all()
         self._checkbox.uncheck()
+
+    def add(self, codec):
+        self._checkbox.check()
+        self._pane.add(codec)
+
+    def remove(self, codec):
+        self._pane.remove(codec)
