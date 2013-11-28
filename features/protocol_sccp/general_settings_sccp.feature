@@ -19,3 +19,18 @@ Feature: SCCP General
         Given the SCCP language is "en_US"
         When I select the SCCP language "fr_FR"
         Then the option "language" is at "fr_FR" in "sccp.conf"
+
+    Scenario: Customize codecs
+        When I customize SCCP codecs to:
+        | codec               |
+        | G.711 A-law (Audio) |
+        | G.729A (Audio)      |
+        Then the "general" section of "sccp.conf" contains the options:
+        | name     | value      |
+        | disallow | all        |
+        | allow    | alaw,g729  |
+        When I disable SCCP codecs customization
+        Then the "general" section of "sccp.conf" does not contain the options:
+        | name     |
+        | disallow |
+        | allow    |

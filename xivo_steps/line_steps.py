@@ -19,7 +19,6 @@ import re
 
 from hamcrest import assert_that, has_entries
 from lettuce import step, world
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import line as line_action_webi

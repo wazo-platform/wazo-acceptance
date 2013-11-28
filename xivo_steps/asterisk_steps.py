@@ -17,7 +17,7 @@
 
 import time
 
-from hamcrest import assert_that, equal_to
+from hamcrest import assert_that, equal_to, contains
 from lettuce import step, world
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_lettuce import sysutils, logs
@@ -93,3 +93,22 @@ def then_i_see_in_the_log_file_servce_restarted_by_monit(step):
 def then_the_option_is_at_x_in_sccp_conf(step, option, expected_value, filename):
     value = asterisk_helper.get_asterisk_conf(filename, option)
     assert_that(value, equal_to(expected_value))
+
+
+@step(u'Then the "([^"]*)" section of "([^"]*)" contains the options:')
+def then_the_group1_section_of_group2_contains(step, section, filename):
+    option_names = [item['name'] for item in step.hashes]
+    expected_options = [(item['name'], item['value']) for item in step.hashes]
+
+    options = asterisk_helper.get_conf_options(filename, section, option_names)
+
+    assert_that(options, contains(*expected_options))
+
+
+@step(u'Then the "([^"]*)" section of "([^"]*)" does not contain the options:')
+def then_the_group1_section_of_group2_does_not_contain_the_options(step, section, filename):
+    option_names = [item['name'] for item in step.hashes]
+
+    options = asterisk_helper.get_conf_options(filename, section, option_names)
+
+    assert_that(options, equal_to([]))

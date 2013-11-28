@@ -21,6 +21,7 @@ from xivo_acceptance.helpers import sccp_helper
 from xivo_lettuce import common, form
 from xivo_lettuce.form import submit
 from xivo_lettuce.form.checkbox import Checkbox
+from xivo_lettuce.widget.codec import CodecWidget
 
 
 @step(u'Given the SCCP directmedia is disabled')
@@ -71,3 +72,19 @@ def when_i_select_the_sccp_language_group1(step, language):
     common.open_url('sccpgeneralsettings')
     form.select.set_select_field_with_id('it-sccpgeneralsettings-language', language)
     form.submit.submit_form()
+
+
+@step(u'When I customize SCCP codecs to:')
+def when_i_customize_sccp_codecs_to(step):
+    common.open_url('sccpgeneralsettings')
+    codec_widget = CodecWidget()
+    codec_widget.customize(item['codec'] for item in step.hashes)
+    submit.submit_form()
+
+
+@step(u'When I disable SCCP codecs customization')
+def when_i_disable_sccp_codecs_customization(step):
+    common.open_url('sccpgeneralsettings')
+    codec_widget = CodecWidget()
+    codec_widget.uncustomize()
+    submit.submit_form()
