@@ -74,7 +74,7 @@ def given_i_set_the_http_proxy_environment_variables_to_group1(step, http_proxy)
     sysutils.send_command(command, check=True)
 
 
-@step(u'When I create an empty device')
+@step(u'When I create an empty device$')
 def when_i_create_an_empty_device(step):
     world.response = device_action_restapi.create_device({})
 

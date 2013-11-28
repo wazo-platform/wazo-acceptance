@@ -217,21 +217,36 @@ def delete_all():
 
 def _delete_all(channel):
     from xivo_dao.data_handler.user import services as user_services
-    from xivo_dao.data_handler.user_line_extension import services as ule_services
+    from xivo_dao.data_handler.line import services as line_services
+    from xivo_dao.data_handler.extension import services as extension_services
+    from xivo_dao.data_handler.user_line_extension import dao as ule_dao
     from xivo_dao.data_handler.exception import ElementDeletionError
+    from xivo_dao.data_handler.exception import ElementNotExistsError
 
     for user in user_services.find_all():
 
-        ules = ule_services.find_all_by_user_id(user.id)
+        ules = ule_dao.find_all_by_user_id(user.id)
         for ule in ules:
             try:
-                ule_services.delete_everything(ule)
-            except ElementDeletionError:
+                ule_dao.delete(ule)
+            except (ElementDeletionError, ElementNotExistsError):
+                pass
+
+            try:
+                line = line_services.get(ule.line_id)
+                line_services.delete(line)
+            except (ElementDeletionError, ElementNotExistsError):
+                pass
+
+            try:
+                extension = extension_services.get(ule.extension_id)
+                extension_services.delete(extension)
+            except (ElementDeletionError, ElementNotExistsError):
                 pass
 
         try:
             user_services.delete(user)
-        except ElementDeletionError:
+        except (ElementDeletionError, ElementNotExistsError):
             pass
 
 '''
