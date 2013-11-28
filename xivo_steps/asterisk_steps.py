@@ -89,12 +89,6 @@ def then_i_see_in_the_log_file_servce_restarted_by_monit(step):
     logs.search_str_in_daemon_log('start: /usr/bin/xivo-service')
 
 
-@step('Then the option "([^"]*)" is at "([^"]*)" in "([^"]*)"')
-def then_the_option_is_at_x_in_sccp_conf(step, option, expected_value, filename):
-    value = asterisk_helper.get_asterisk_conf(filename, option)
-    assert_that(value, equal_to(expected_value))
-
-
 @step(u'Then the "([^"]*)" section of "([^"]*)" contains the options:')
 def then_the_group1_section_of_group2_contains(step, section, filename):
     option_names = [item['name'] for item in step.hashes]

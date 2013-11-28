@@ -18,21 +18,22 @@
 from lettuce import world
 from StringIO import StringIO
 
-def get_asterisk_conf(file_name, var_name):
-    command = ['xivo-confgen', 'asterisk/%s' % file_name, '|', 'grep', '-m', '1', var_name]
-    ret = world.ssh_client_xivo.out_call(command)
-    if ret:
-        val = ret.split('=')[1].strip()
-        return val
-    assert(False)
-
 
 def get_confgen_file(file_name):
     command = ['xivo-confgen', 'asterisk/%s' % file_name]
     return world.ssh_client_xivo.out_call(command).decode('utf-8')
 
 
+def get_conf_option(filename, section, option_name):
+    options = get_conf_options(filename, section, [option_name])
+    for current_option_name, current_option_value in options:
+        if current_option_name == option_name:
+            return current_option_value
+    return None
+
+
 def get_conf_options(filename, section, option_names):
+    """Return a list of (option_name, option_value) tuple."""
     command = ['xivo-confgen', 'asterisk/%s' % filename]
     output = world.ssh_client_xivo.out_call(command)
     fobj = StringIO(output.decode('utf-8'))
