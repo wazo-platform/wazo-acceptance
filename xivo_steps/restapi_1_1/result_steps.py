@@ -105,14 +105,32 @@ def then_i_get_a_response_with_the_following_link_resources(step):
 
 
 def assert_response_has_resource_link(resource, resource_id):
+    expected_url = _build_resource_url(resource, resource_id)
+    assert_that(world.response.data, _has_link_entry(resource, expected_url))
+
+
+def _build_resource_url(resource, resource_id):
     host = world.config.xivo_host
     port = world.config.rest_port
-
     expected_url = "https://%s:%s/1.1/%s/%s" % (host, port, resource, resource_id)
+    return expected_url
 
-    assert_that(world.response.data,
-                has_entry(u'links', has_item(
-                    has_entries({
-                        u'rel': resource,
-                        u'href': expected_url
-                    }))))
+
+def _has_link_entry(resource, url):
+    return has_entry(u'links', has_item(
+        has_entries({
+            u'rel': resource,
+            u'href': url})))
+
+
+@step(u'Then each item has a "([^"]*)" link using the id "([^"]*)"')
+def then_each_item_has_a_group1_link_using_the_id_group2(step, resource, resource_key):
+    items = world.response.data['items']
+    assert_that(items, is_not(has_length(0)))
+
+    for item in items:
+        assert_that(item, has_key(resource_key))
+
+        resource_id = item[resource_key]
+        expected_url = _build_resource_url(resource, resource_id)
+        assert_that(item, _has_link_entry(resource, expected_url))

@@ -40,6 +40,11 @@ def when_i_create_the_following_user_lines(step):
         world.response = user_line_action_restapi.create_user_line(user_line['user_id'], user_line)
 
 
+@step(u'When I request the lines associated to user id "([^"]*)" via RESTAPI')
+def when_i_request_the_lines_associated_to_user_id_group1_via_restapi(step, user_id):
+    world.response = user_line_action_restapi.get_user_line(user_id)
+
+
 @step(u'When I dissociate the following user_line via RESTAPI:')
 def when_i_dossociate_the_following_user_lines(step):
     for data in step.hashes:
