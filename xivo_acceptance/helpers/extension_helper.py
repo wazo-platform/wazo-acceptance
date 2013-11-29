@@ -27,6 +27,10 @@ def find_extension_by_exten(exten):
     return extension_services.find_by_exten(exten)
 
 
+def find_extension_by_exten_context(exten, context):
+    return extension_services.find_by_exten_context(exten, context)
+
+
 def get_by_exten_context(exten, context):
     try:
         extension = extension_services.get_by_exten_context(exten, context)

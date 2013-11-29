@@ -27,12 +27,37 @@ def given_i_have_no_extensions(step):
     extension_helper.delete_all()
 
 
+@step(u'Given I have no extension with id "([^"]*)"')
+def given_i_have_no_extension_with_id_group1(step, extension_id):
+    extension_helper.delete(int(extension_id))
+
+
 @step(u'Given I only have the following extensions:')
-def given_i_have_the_following_extensions(step):
+def given_i_only_have_the_following_extensions(step):
     extension_helper.delete_all()
     for exteninfo in step.hashes:
         extension = _extract_extension_parameters(exteninfo)
         extension_helper.create_extensions([extension])
+
+
+@step(u'Given I have the following extensions:')
+def given_i_have_the_following_extensions(step):
+    for exteninfo in step.hashes:
+        extension = _extract_extension_parameters(exteninfo)
+        _delete_extension(extension)
+        _create_extension(extension)
+
+
+def _delete_extension(extension):
+    if 'exten' in extension:
+        extension_helper.delete_extension_with_exten_context(extension['exten'],
+                                                             extension.get('context', 'default'))
+    if 'id' in extension:
+        extension_helper.delete(int(extension['id']))
+
+
+def _create_extension(extension):
+    extension_helper.create_extensions([extension])
 
 
 @step(u'When I access the list of extensions')
