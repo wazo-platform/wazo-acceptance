@@ -19,13 +19,13 @@ import re
 
 from hamcrest import assert_that, has_entries
 from lettuce import step, world
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import line_helper
 from xivo_lettuce import common, form
 from xivo_lettuce.form.checkbox import Checkbox
-from xivo_lettuce.form.list_pane import ListPane
 from xivo_lettuce.widget.codec import CodecWidget
 
 
@@ -62,6 +62,22 @@ def given_the_line_group1_has_the_codec_group2(step, linenumber, codec):
     _add_codec_to_line(codec, linenumber)
 
 
+@step(u'When I customize line "([^"]*)" codecs to:')
+def when_i_customize_line_codecs_to(step, number):
+    codecs = (entry['codec'] for entry in step.hashes)
+    _add_codec_list_to_line(codecs, number)
+
+
+@step(u'When I disable line codecs customization for line "([^"]*)"')
+def when_i_disable_line_codecs_customization_for_line(step, number):
+    line_id = line_helper.find_line_id_with_exten_context(number, 'default')
+    common.open_url('line', 'edit', {'id': line_id})
+    _open_codec_page()
+    Checkbox.from_label("Customize codecs:").uncheck()
+    form.submit.submit_form()
+
+
+
 @step(u'When I add a SIP line with infos:')
 def when_i_add_a_sip_line_with_infos(step):
     for line_infos in step.hashes:
@@ -81,7 +97,7 @@ def _get_line_name():
 
 
 def _add_custom_codec(codec):
-    common.go_to_tab('Signalling')
+    _open_codec_page()
     codec_widget = CodecWidget()
     codec_widget.add(codec)
 
@@ -96,7 +112,7 @@ def when_i_add_a_custom_line(step):
 
 
 @step(u'When I add the codec "([^"]*)" to the line with number "([^"]*)"')
-def when_i_add_the_custom_codec_group1_to_the_line_with_number_group2(step, codec, linenumber):
+def when_i_add_the_custom_codec_to_the_line_with_number(step, codec, linenumber):
     _add_codec_to_line(codec, linenumber)
 
 
@@ -104,7 +120,7 @@ def when_i_add_the_custom_codec_group1_to_the_line_with_number_group2(step, code
 def when_i_disable_custom_codecs_for_this_line(step):
     line_action_webi.search_line_number(world.id)
     common.edit_line(world.id)
-    common.go_to_tab('Signalling')
+    _open_codec_page()
     Checkbox.from_label("Customize codecs:").uncheck()
     form.submit.submit_form()
 
@@ -123,10 +139,10 @@ def when_i_edit_the_line_1(step, linenumber):
 
 
 @step(u'When I remove the codec "([^"]*)" from the line with number "([^"]*)"')
-def when_i_remove_the_codec_group1_from_the_line_with_number_group2(step, codec, linenumber):
+def when_i_remove_the_codec_from_the_line_with_number(step, codec, linenumber):
     line_id = line_helper.find_line_id_with_exten_context(linenumber, 'default')
     common.open_url('line', 'edit', {'id': line_id})
-    common.go_to_tab('Signalling')
+    _open_codec_page()
     codec_widget = CodecWidget()
     codec_widget.remove(codec)
     form.submit.submit_form()
@@ -221,8 +237,21 @@ def then_the_line_1_has_the_following_line_options(step, line_number):
                 raise Exception('%s is not a valid key' % key)
 
 
-def _add_codec_to_line(codec_name, line_exten):
-    line_id = line_helper.find_line_id_with_exten_context(line_exten, 'default')
+def _add_codec_to_line(codec, exten):
+    _add_codec_list_to_line([codec], exten)
+
+
+def _add_codec_list_to_line(codecs, exten):
+    line_id = line_helper.find_line_id_with_exten_context(exten, 'default')
     common.open_url('line', 'edit', {'id': line_id})
-    _add_custom_codec(codec_name)
+    for codec in codecs:
+        _add_custom_codec(codec)
     form.submit.submit_form()
+
+
+def _open_codec_page():
+    try:
+        common.go_to_tab('Signalling')
+    except NoSuchElementException:
+        # SCCP line has no Signalling tab
+        return
