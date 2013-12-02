@@ -40,10 +40,52 @@ def get_by_exten_context(exten, context):
 
 
 def delete(extension_id):
-    remote_exec(_delete, extension_id=extension_id)
+    _delete_extension(extension_id)
 
 
-def _delete(channel, extension_id):
+def delete_extension_with_exten_context(exten, context):
+    extension = find_extension_by_exten_context(exten, context)
+    if extension:
+        _delete_extension(extension.id)
+
+
+def delete_all():
+    extension_ids = remote_exec_with_result(_find_all_extension_ids)
+
+    for extension_id in extension_ids:
+        _delete_extension(extension_id)
+
+
+def _delete_extension(extension_id):
+    exten_info = remote_exec_with_result(_get_exten_info, extension_id=extension_id)
+    if not exten_info:
+        return
+
+    exten, extension_type, typeval = exten_info
+
+    remote_exec(_delete_extension_associations, extension_id=extension_id)
+
+    try:
+        if extension_type == 'user':
+            user_helper.delete_with_user_id(int(typeval))
+        elif extension_type == 'queue':
+            queue_helper.delete_queues_with_number(exten)
+        elif extension_type == 'group':
+            group_helper.delete_groups_with_number(exten)
+        elif extension_type == 'incall':
+            incall_helper.delete_incalls_with_did(exten)
+        elif extension_type == 'meetme':
+            meetme_helper.delete_meetme_with_confno(exten)
+        elif extension_type == 'outcall':
+            dialpattern_helper.delete((typeval))
+    except ElementDeletionError as e:
+        print "I tried deleting a type %s typeval %s but it didn't work." % (extension_type, typeval)
+        print e
+
+    remote_exec(_delete_on_server, extension_id=extension_id)
+
+
+def _delete_on_server(channel, extension_id):
     from xivo_dao.data_handler.extension import services as extension_services
 
     try:
@@ -54,72 +96,41 @@ def _delete(channel, extension_id):
     extension_services.delete(extension)
 
 
-def delete_extension_with_exten_context(exten, context):
-    remote_exec(_delete_extension_with_exten_context, exten=exten, context=context)
-
-
-def _delete_extension_with_exten_context(channel, exten, context):
-    from xivo_dao.data_handler.extension import services as extension_services
-
-    try:
-        extension = extension_services.get_by_exten_context(exten, context)
-    except LookupError:
-        return
-
-    extension_services.delete(extension)
-
-
-def delete_all():
-    all_extensions = remote_exec_with_result(_find_all_extensions)
-
-    for extension in all_extensions:
-        extension_id, exten, extension_type, typeval = extension
-
-        remote_exec(_delete_all_ule_association_by_extension_id, extension_id=extension_id)
-
-        try:
-            if extension_type == 'user':
-                user_helper.delete_with_user_id(int(typeval))
-            elif extension_type == 'queue':
-                queue_helper.delete_queues_with_number(exten)
-            elif extension_type == 'group':
-                group_helper.delete_groups_with_number(exten)
-            elif extension_type == 'incall':
-                incall_helper.delete_incalls_with_did(exten)
-            elif extension_type == 'meetme':
-                meetme_helper.delete_meetme_with_confno(exten)
-            elif extension_type == 'outcall':
-                dialpattern_helper.delete((typeval))
-        except ElementDeletionError as e:
-            print "I tried deleting a type %s typeval %s but it didn't work." % (extension_type, typeval)
-            print e
-
-        delete(extension_id)
-
-
-def _find_all_extensions(channel):
+def _find_all_extension_ids(channel):
     from xivo_dao.alchemy.extension import Extension as ExtensionSchema
     from xivo_dao.helpers.db_manager import AsteriskSession
 
-    extension_rows = (AsteriskSession
-                      .query(ExtensionSchema)
-                      .filter(ExtensionSchema.context != 'xivo-features')
-                      .all())
+    rows = (AsteriskSession
+            .query(ExtensionSchema.id)
+            .filter(ExtensionSchema.context != 'xivo-features')
+            .all())
 
-    extensions = [(e.id, e.exten, e.type, e.typeval) for e in extension_rows]
-    channel.send(extensions)
+    extension_ids = [e.id for e in rows]
+    channel.send(extension_ids)
 
 
-def _delete_all_ule_association_by_extension_id(channel, extension_id):
-    from xivo_dao.data_handler.user_line_extension import services as ule_services
-    from xivo_dao.data_handler.exception import ElementDeletionError
+def _get_exten_info(channel, extension_id):
+    from xivo_dao.alchemy.extension import Extension as ExtensionSchema
+    from xivo_dao.helpers.db_manager import AsteriskSession
 
-    ules = ule_services.find_all_by_extension_id(extension_id)
-    for ule in ules:
-        try:
-            ule_services.delete_everything(ule)
-        except ElementDeletionError:
-            pass
+    extension_row = (AsteriskSession
+                     .query(ExtensionSchema)
+                     .filter(ExtensionSchema.id == extension_id)
+                     .first())
+
+    if extension_row:
+        extension = (extension_row.exten, extension_row.type, extension_row.typeval)
+        channel.send(extension)
+    else:
+        channel.send(None)
+
+
+def _delete_extension_associations(channel, extension_id):
+    from xivo_dao.data_handler.line_extension import dao as line_extension_dao
+
+    line_extension = line_extension_dao.find_by_extension_id(extension_id)
+    if line_extension:
+        line_extension_dao.dissociate(line_extension)
 
 
 def create_extensions(extensions):
