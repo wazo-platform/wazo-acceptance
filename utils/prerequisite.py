@@ -39,6 +39,7 @@ def main():
         print 'Configuring PostgreSQL on XiVO'
         _create_pgpass_on_remote_host()
         _allow_remote_access_to_pgsql()
+        _allow_remote_access_to_bus()
 
         print 'Configuring Provd REST API on XiVO'
         _allow_provd_listen_on_all_interfaces()
@@ -92,6 +93,10 @@ def _allow_remote_access_to_pgsql():
     command = ['service', 'postgresql', 'restart']
     world.ssh_client_xivo.check_call(command)
     db_manager.reinit()
+
+
+def _allow_remote_access_to_bus():
+    assert False, 'This step must be implemented'
 
 
 def _add_line_to_remote_file(line_text, file_name):
