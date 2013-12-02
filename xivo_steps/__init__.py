@@ -17,13 +17,13 @@
 
 from xivo_lettuce import terrain
 
-from agent_steps import *
-from agent_list_steps import *
 from admin_user_steps import *
+from agent_list_steps import *
+from agent_steps import *
 from asterisk_steps import *
 from backup_steps import *
-from call_steps import *
 from call_logs_steps import *
+from call_steps import *
 from callfilter_steps import *
 from certificate_steps import *
 from common_webi_steps import *
@@ -56,9 +56,12 @@ from profile_steps import *
 from provd_plugins_steps import *
 from provd_proxy_steps import *
 from queue_steps import *
+from recording_campaigns_steps import *
+from restapi_1_0 import *
+from restapi_1_1 import *
 from restapi_steps import *
-from sheet_steps import *
 from schedule_steps import *
+from sheet_steps import *
 from skillrules_steps import *
 from statcenter_steps import *
 from supervisor_steps import *
@@ -68,14 +71,11 @@ from trunk_custom_steps import *
 from trunk_iax_steps import *
 from trunk_sip_steps import *
 from user_import_steps import *
-from user_steps import *
 from user_line_steps import *
+from user_steps import *
 from voicemail_steps import *
 from webi_login_steps import *
 from wizard_steps import *
+from xivo_agent_steps import *
 from xlet_identity_steps import *
 from xlet_queue_member_steps import *
-from xivo_agent_steps import *
-from recording_campaigns_steps import *
-from restapi_1_0 import *
-from restapi_1_1 import *
