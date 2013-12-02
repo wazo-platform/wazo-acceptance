@@ -19,10 +19,8 @@ from hamcrest import assert_that, equal_to
 from lettuce import step, world
 
 from xivo_acceptance.action.restapi import line_action_restapi
-from xivo_acceptance.action.restapi import line_extension_action_restapi as line_extension_action
 from xivo_acceptance.helpers import line_helper
 from xivo_acceptance.helpers import line_sip_helper
-from xivo_acceptance.helpers import extension_helper
 
 
 @step(u'Given I only have the following lines:')
@@ -77,25 +75,3 @@ def then_the_line_group1_no_longer_exists(step, line_id):
 def given_i_have_no_line_with_id_group1(step, line_id):
     line_id = int(line_id)
     line_helper.delete_line(line_id)
-
-
-@step(u'When I link extension "([^"]*)" with line id "([^"]*)"')
-def when_i_link_extension_group1_with_line_id_group2(step, extension, line_id):
-    exten, context = extension.split('@')
-    extension = extension_helper.find_extension_by_exten_context(exten, context)
-    world.response = line_extension_action.associate(line_id, extension.id)
-
-
-@step(u'When I link extension id "([^"]*)" with line id "([^"]*)"')
-def when_i_link_extension_id_group1_with_line_id_group2(step, extension_id, line_id):
-    world.response = line_extension_action.associate(line_id, extension_id)
-
-
-@step(u'When I send a request for the extension associated to line id "([^"]*)"')
-def when_i_send_a_request_for_the_extension_associated_to_line_id_group1(step, line_id):
-    world.response = line_extension_action.get(line_id)
-
-
-@step(u'When I dissociate the extension associated to line id "([^"]*)"')
-def when_i_dissociate_the_extension_associated_to_line_id_group1(step, line_id):
-    world.response = line_extension_action.dissociate(line_id)
