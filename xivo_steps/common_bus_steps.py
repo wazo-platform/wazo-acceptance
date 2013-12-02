@@ -29,10 +29,12 @@ def given_i_listen_on_the_bus_for_messages(step):
         try:
             exchange = entry['exchange']
             routing_key = entry['routing_key']
-            result = channel.queue_declare(queue=('test_%s' % routing_key']))
+            result = channel.queue_declare(queue=('test_%s' % routing_key))
             queue_name = result.method.queue
 
-            channel.queue_bind(exchange=exchange, queue=queue_name, routing_key=routing_key)
+            channel.queue_bind(exchange=exchange,
+                               queue=queue_name,
+                               routing_key=routing_key)
         finally:
             connection.close()
 
