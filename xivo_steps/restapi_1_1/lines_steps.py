@@ -84,8 +84,6 @@ def when_i_link_extension_group1_with_line_id_group2(step, extension, line_id):
     exten, context = extension.split('@')
     extension = extension_helper.find_extension_by_exten_context(exten, context)
     world.response = line_extension_action.associate(line_id, extension.id)
-    print "RESPONSE"
-    print world.response.data
 
 
 @step(u'When I link extension id "([^"]*)" with line id "([^"]*)"')
