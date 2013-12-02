@@ -26,3 +26,13 @@ def associate(line_id, extension_id):
     }
     url = LINES_URL % line_id
     return world.restapi_utils_1_1.rest_post(url, parameters)
+
+
+def get(line_id):
+    url = LINES_URL % line_id
+    return world.restapi_utils_1_1.rest_get(url)
+
+
+def dissociate(line_id):
+    url = LINES_URL % line_id
+    return world.restapi_utils_1_1.rest_delete(url)
