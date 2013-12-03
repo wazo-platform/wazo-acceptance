@@ -16,7 +16,7 @@ def main():
     try:
         response = urllib2.urlopen('%s/xivo-%s.json' % (TRAVIS_API_URL, args.package))
     except urllib2.HTTPError:
-        print 'Error: package %s not exist on trevis' % args.package
+        print 'Error: package %s does not exist on travis' % args.package
     else:
         infos_package = json.load(response)
 
