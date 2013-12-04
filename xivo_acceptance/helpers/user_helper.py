@@ -238,11 +238,12 @@ def _delete_all(channel):
             except (ElementDeletionError, ElementNotExistsError):
                 pass
 
-            try:
-                extension = extension_services.get(ule.extension_id)
-                extension_services.delete(extension)
-            except (ElementDeletionError, ElementNotExistsError):
-                pass
+            if ule.extension_id:
+                try:
+                    extension = extension_services.get(ule.extension_id)
+                    extension_services.delete(extension)
+                except (ElementDeletionError, ElementNotExistsError):
+                    pass
 
         try:
             user_services.delete(user)
