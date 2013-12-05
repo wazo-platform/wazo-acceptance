@@ -260,3 +260,24 @@ Feature: Call Log Generation
          Then I should have the following call logs:
             | date                | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
             | 2013-01-01 08:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     | sip/z77kvm           | sip/hg63xv                |
+
+    Scenario: Generation of a call where uniqueid must be sorted chronologically, not alphabetically
+        Given there are no call logs
+        Given I have only the following CEL entries:
+            | eventtype    | eventtime             | cid_name         | cid_num | exten | context | channame            | uniqueid      | linkedid     | userfield |
+            | CHAN_START   | 2013-12-04 14:20:58.0 | Neelix Talaxian  | 1066    | 1624  | default | SIP/2dvtpb-00000009 | 1386184858.9  | 1386184858.9 |           |
+            | APP_START    | 2013-12-04 14:20:58.1 | Neelix Talaxian  | 1066    | s     | user    | SIP/2dvtpb-00000009 | 1386184858.9  | 1386184858.9 |           |
+            | CHAN_START   | 2013-12-04 14:20:58.2 | Donald MacRonald | 1624    | s     | default | SIP/zsp7wv-0000000a | 1386184858.10 | 1386184858.9 |           |
+            | ANSWER       | 2013-12-04 14:21:05.3 | Donald MacRonald | 1624    | s     | default | SIP/zsp7wv-0000000a | 1386184858.10 | 1386184858.9 |           |
+            | ANSWER       | 2013-12-04 14:21:05.4 | Neelix Talaxian  | 1066    | s     | user    | SIP/2dvtpb-00000009 | 1386184858.9  | 1386184858.9 |           |
+            | BRIDGE_START | 2013-12-04 14:21:05.5 | Neelix Talaxian  | 1066    | s     | user    | SIP/2dvtpb-00000009 | 1386184858.9  | 1386184858.9 |           |
+            | BRIDGE_END   | 2013-12-04 14:21:06.6 | Neelix Talaxian  | 1066    | s     | user    | SIP/2dvtpb-00000009 | 1386184858.9  | 1386184858.9 |           |
+            | HANGUP       | 2013-12-04 14:21:06.7 | Donald MacRonald | 1624    |       | user    | SIP/zsp7wv-0000000a | 1386184858.10 | 1386184858.9 |           |
+            | CHAN_END     | 2013-12-04 14:21:06.8 | Donald MacRonald | 1624    |       | user    | SIP/zsp7wv-0000000a | 1386184858.10 | 1386184858.9 |           |
+            | HANGUP       | 2013-12-04 14:21:06.9 | Neelix Talaxian  | 1066    | s     | user    | SIP/2dvtpb-00000009 | 1386184858.9  | 1386184858.9 |           |
+            | CHAN_END     | 2013-12-04 14:21:07.1 | Neelix Talaxian  | 1066    | s     | user    | SIP/2dvtpb-00000009 | 1386184858.9  | 1386184858.9 |           |
+            | LINKEDID_END | 2013-12-04 14:21:07.2 | Neelix Talaxian  | 1066    | s     | user    | SIP/2dvtpb-00000009 | 1386184858.9  | 1386184858.9 |           |
+        When I generate call logs
+        Then I should have the following call logs:
+            | date                  | source_name     | source_exten | destination_exten | duration  | user_field | answered | source_line_identity | destination_line_identity |
+            | 2013-12-04 14:20:58.0 | Neelix Talaxian | 1066         | 1624              | 0:00:01.5 |            | True     | sip/2dvtpb           | sip/zsp7wv                |
