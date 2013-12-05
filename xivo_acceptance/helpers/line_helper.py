@@ -101,11 +101,12 @@ def _delete_all(channel):
             except (ElementDeletionError, ElementNotExistsError):
                 pass
 
-            try:
-                extension = extension_services.get(link.extension_id)
-                extension_services.delete(extension)
-            except (ElementDeletionError, ElementNotExistsError):
-                pass
+            if link.extension_id:
+                try:
+                    extension = extension_services.get(link.extension_id)
+                    extension_services.delete(extension)
+                except (ElementDeletionError, ElementNotExistsError):
+                    pass
 
         try:
             line_services.delete(line)
