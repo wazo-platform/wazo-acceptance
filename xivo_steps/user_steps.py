@@ -22,7 +22,7 @@ from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.webi import line as line_action_webi
-from xivo_acceptance.helpers import user_helper, agent_helper, group_helper
+from xivo_acceptance.helpers import user_helper, agent_helper, group_helper, sip_phone
 from xivo_lettuce import common, form
 
 
@@ -61,59 +61,90 @@ def given_there_are_users_with_infos(step):
         device
     """
     for user_data in step.hashes:
-        user_ws_data = {}
-        user_ws_data['firstname'] = user_data['firstname']
-        user_ws_data['lastname'] = user_data['lastname']
+        _add_user(user_data)
+        _register_and_track_phone(user_data, step.scenario)
 
-        if user_data.get('number') and user_data.get('context'):
-            user_ws_data['line_number'] = user_data['number']
-            user_ws_data['line_context'] = user_data['context']
-            if 'protocol' in user_data:
-                user_ws_data['protocol'] = user_data['protocol']
-            if 'device' in user_data:
-                user_ws_data['device'] = user_data['device']
 
-            if user_data.get('voicemail_name') and user_data.get('voicemail_number'):
-                user_ws_data['voicemail_name'] = user_data['voicemail_name']
-                user_ws_data['voicemail_number'] = user_data['voicemail_number']
+def _register_and_track_phone(user_data, scenario):
+    phone_available = user_data.get('protocol') == 'sip' and 'number' in user_data
+    if not phone_available:
+        return
 
-        if user_data.get('bsfilter'):
-            user_ws_data['bsfilter'] = user_data['bsfilter']
+    line_configs = world.ws.lines.search_by_number(user_data['number'])
+    if not line_configs:
+        return
 
-        if user_data.get('language'):
-            user_ws_data['language'] = user_data['language']
+    name = ('%s %s' % (user_data.get('firstname', ''),
+                       user_data.get('lastname', ''))).strip()
 
-        if 'voicemail_name' in user_data and 'language' not in user_data:
-            user_ws_data['language'] = 'en_US'
+    phone = sip_phone.register_line(line_configs[0], name)
+    if phone:
+        _add_registered_phone(phone, scenario, name)
 
-        if user_data.get('cti_profile'):
-            user_ws_data['enable_client'] = True
-            user_ws_data['client_profile'] = user_data['cti_profile']
-            if user_data.get('cti_login'):
-                user_ws_data['client_username'] = user_data['cti_login']
-            else:
-                user_ws_data['client_username'] = user_ws_data['firstname'].lower()
-            if user_data.get('cti_passwd'):
-                user_ws_data['client_password'] = user_data['cti_passwd']
-            else:
-                user_ws_data['client_password'] = user_ws_data['lastname'].lower()
 
-        if user_data.get('mobile_number'):
-            user_ws_data['mobile_number'] = user_data['mobile_number']
+def _add_registered_phone(phone, scenario, name):
+    if not hasattr(world, 'sip_phones'):
+        world.sip_phones = {scenario: {name: phone}}
+    elif scenario not in world.sip_phones:
+        world.sip_phones[scenario] = {name: phone}
+    else:
+        world.sip_phones[scenario][name] = phone
 
-        user_id = user_helper.add_or_replace_user(user_ws_data, step.scenario)
 
-        if user_data.get('agent_number'):
-            agent_helper.delete_agents_with_number(user_data['agent_number'])
-            agent_data = {'firstname': user_data['firstname'],
-                          'lastname': user_data['lastname'],
-                          'number': user_data['agent_number'],
-                          'context': user_data.get('context', 'default'),
-                          'users': [int(user_id)]}
-            agent_helper.add_agent(agent_data)
+def _add_user(user_data):
+    user_ws_data = {}
+    user_ws_data['firstname'] = user_data['firstname']
+    user_ws_data['lastname'] = user_data['lastname']
 
-        if user_data.get('group_name'):
-            group_helper.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
+    if user_data.get('number') and user_data.get('context'):
+        user_ws_data['line_number'] = user_data['number']
+        user_ws_data['line_context'] = user_data['context']
+        if 'protocol' in user_data:
+            user_ws_data['protocol'] = user_data['protocol']
+        if 'device' in user_data:
+            user_ws_data['device'] = user_data['device']
+
+        if user_data.get('voicemail_name') and user_data.get('voicemail_number'):
+            user_ws_data['voicemail_name'] = user_data['voicemail_name']
+            user_ws_data['voicemail_number'] = user_data['voicemail_number']
+
+    if user_data.get('bsfilter'):
+        user_ws_data['bsfilter'] = user_data['bsfilter']
+
+    if user_data.get('language'):
+        user_ws_data['language'] = user_data['language']
+
+    if 'voicemail_name' in user_data and 'language' not in user_data:
+        user_ws_data['language'] = 'en_US'
+
+    if user_data.get('cti_profile'):
+        user_ws_data['enable_client'] = True
+        user_ws_data['client_profile'] = user_data['cti_profile']
+        if user_data.get('cti_login'):
+            user_ws_data['client_username'] = user_data['cti_login']
+        else:
+            user_ws_data['client_username'] = user_ws_data['firstname'].lower()
+        if user_data.get('cti_passwd'):
+            user_ws_data['client_password'] = user_data['cti_passwd']
+        else:
+            user_ws_data['client_password'] = user_ws_data['lastname'].lower()
+
+    if user_data.get('mobile_number'):
+        user_ws_data['mobile_number'] = user_data['mobile_number']
+
+    user_id = user_helper.add_or_replace_user(user_ws_data)
+
+    if user_data.get('agent_number'):
+        agent_helper.delete_agents_with_number(user_data['agent_number'])
+        agent_data = {'firstname': user_data['firstname'],
+                      'lastname': user_data['lastname'],
+                      'number': user_data['agent_number'],
+                      'context': user_data.get('context', 'default'),
+                      'users': [int(user_id)]}
+        agent_helper.add_agent(agent_data)
+
+    if user_data.get('group_name'):
+        group_helper.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
 
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')

@@ -15,12 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import subprocess
-
 from lettuce import world
 from execnet.gateway_base import RemoteError
 
-from xivo_acceptance.helpers import voicemail_helper, group_helper, provd_helper, sip_phone
+from xivo_acceptance.helpers import voicemail_helper, group_helper, provd_helper
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
@@ -259,7 +257,7 @@ def _delete_all(channel):
 '''
 
 
-def add_user(data_dict, scenario=None):
+def add_user(data_dict):
     user = User()
 
     if 'id' in data_dict:
@@ -310,18 +308,10 @@ def add_user(data_dict, scenario=None):
     if not ret:
         return False
 
-    if 'protocol' in data_dict:
-        line = world.ws.lines.search_by_number(data_dict['line_number'])
-        if line:
-            name = ('%s %s' % (user.firstname, user.lastname)).strip()
-            sip_name = line[0].name
-            sip_passwd = line[0].secret
-            _register_sip_line(scenario, name, sip_name, sip_passwd)
-
     return int(ret)
 
 
-def add_or_replace_user(data_dict, scenario=None):
+def add_or_replace_user(data_dict):
     firstname = data_dict['firstname']
     lastname = data_dict.get('lastname', '')
     mailbox = data_dict.get('voicemail_number', None)
@@ -334,7 +324,7 @@ def add_or_replace_user(data_dict, scenario=None):
                                          context=context,
                                          mailbox=mailbox)
 
-    return add_user(data_dict, scenario)
+    return add_user(data_dict)
 
 
 def delete_users_with_profile(profile_name):
@@ -417,45 +407,3 @@ def count_schedulepath(user_id):
 
 def _count_table_with_cond(table, cond_dict):
     return postgres.exec_count_request(table, **cond_dict)
-
-
-def _register_sip_line(scenario, name, sip_name, sip_passwd):
-    print 'Registering a sip line for %s', name
-    # XXX find a way to wait for the sip reload
-    if not hasattr(world, 'sip_phones'):
-        world.sip_phones = {}
-    if scenario not in world.sip_phones:
-        world.sip_phones[scenario] = {}
-
-    port = _get_available_sip_port()
-    phone = sip_phone.SipPhone(sip_name, sip_passwd, world.config.xivo_host, port)
-    phone.register()
-    world.sip_phones[scenario][name] = phone
-
-
-def _port_in_use(port):
-    try:
-        subprocess.check_call(['lsof', '-i', ':%s' % port])
-        return False
-    except subprocess.CalledProcessError:
-        return True
-
-
-def _port_is_available(port):
-    used_ports = []
-    for name_phone in world.sip_phones.itervalues():
-        for phone in name_phone.itervalues():
-            used_ports.append(phone.port)
-
-    return port not in used_ports and _port_in_use(port)
-
-
-def _get_available_sip_port():
-    # XXX add a configuration option
-    ports = xrange(5061, 5070)
-
-    for port in ports:
-        if _port_is_available(port):
-            return port
-
-    raise Exception('All sip ports are used')
