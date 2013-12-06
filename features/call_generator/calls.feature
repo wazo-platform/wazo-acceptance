@@ -5,7 +5,7 @@ Feature: Callgen
          | firstname | lastname | number | context | protocol |
          | Alice     |          | 1100   | default | sip      |
         When "Alice" calls "1190"
-        Then "Alice" last call shoud be "Extension not found"
+        Then "Alice" last call should be "Extension not found"
 
     Scenario: Call to existant extension with answer
         Given there are users with infos:

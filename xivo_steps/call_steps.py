@@ -61,7 +61,7 @@ def when_a_and_b_talk_for_n_seconds(step, _a, _b, n):
     time.sleep(float(n))
 
 
-@step(u'Then "([^"]*)" last call shoud be "([^"]*)"')
+@step(u'Then "([^"]*)" last call should be "([^"]*)"')
 def then_user_last_call_shoud_be_call_status(step, name, status):
     phone = _user_phone(step.scenario, name)
     try:
