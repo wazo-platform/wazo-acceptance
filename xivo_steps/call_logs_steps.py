@@ -45,12 +45,6 @@ def given_there_are_a_lot_of_calls(step):
     world.ssh_client_xivo.check_call(cel_insertion_command)
 
 
-@step(u'When I generate call logs$')
-def when_i_generate_call_logs(step):
-    command = ['xivo-call-logs']
-    sysutils.send_command(command)
-
-
 @step(u'When I request call logs in the webi with dates:')
 def when_i_request_call_logs_in_the_webi_with_dates(step):
     common.open_url('cel')
@@ -103,6 +97,9 @@ def then_i_should_have_the_following_call_logs(step):
 
 @step(u'Then I have the last call log matching:')
 def then_i_have_the_last_call_log_matching(step):
+    command = ['xivo-call-logs']
+    sysutils.send_command(command)
+
     entry = step.hashes[0]
     assert call_logs_helper.matches_last_call_log(entry), "The last call_log entry did not match : %s" % entry
 

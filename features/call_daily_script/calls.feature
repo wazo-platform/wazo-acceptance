@@ -11,7 +11,6 @@ Feature: Call daily-script
         Given I wait call then I answer and wait
         Given there is 1 calls to extension "1101@default" then I hang up after "3s"
         Given I wait 8 seconds for the calls processing
-        When I generate call logs
         Then I have the last call log matching:
             | destination_exten | duration | user_field | answered |
             | 1101              | 0:00:03  |            | True     |
