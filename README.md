@@ -4,7 +4,7 @@ XiVO acceptance README
 Requirements
 ------------
 
-pip install lettuce selenium pyvirtualdisplay pyhamcrest python-ldap execnet==1.0.9
+pip install -r requirements.txt
 apt-get install libsasl2-dev xvfb xserver-xephyr
 
 
