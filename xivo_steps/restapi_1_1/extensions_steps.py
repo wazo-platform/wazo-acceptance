@@ -32,6 +32,14 @@ def given_i_have_no_extension_with_id_group1(step, extension_id):
     extension_helper.delete(int(extension_id))
 
 
+@step(u'Given I have no extension with exten "([^"]*)"')
+def given_i_have_no_extension_with_exten_group1(step, pattern):
+    exten, context = pattern.split('@')
+    extension = extension_helper.find_extension_by_exten_context(exten, context)
+    if extension:
+        extension_helper.delete(extension.id)
+
+
 @step(u'Given I only have the following extensions:')
 def given_i_only_have_the_following_extensions(step):
     extension_helper.delete_all()
