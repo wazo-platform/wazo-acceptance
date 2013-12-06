@@ -44,6 +44,23 @@ def when_a_calls_exten(step, name, exten):
     phone.call(exten)
 
 
+@step(u'When "([^"]*)" answers')
+def when_a_answers(step, name):
+    phone = _user_phone(step.scenario, name)
+    phone.answer()
+
+
+@step(u'When "([^"]*)" hangs up')
+def when_a_hangs_up(step, name):
+    phone = _user_phone(step.scenario, name)
+    phone.hangup()
+
+
+@step(u'When "([^"]*)" and "([^"]*)" talk for "([^"]*)" seconds')
+def when_a_and_b_talk_for_n_seconds(step, _a, _b, n):
+    time.sleep(float(n))
+
+
 @step(u'Then "([^"]*)" last call shoud be "([^"]*)"')
 def then_user_last_call_shoud_be_call_status(step, name, status):
     phone = _user_phone(step.scenario, name)

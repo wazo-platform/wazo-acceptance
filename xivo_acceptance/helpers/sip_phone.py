@@ -15,6 +15,13 @@ class SipPhone(object):
     def __init__(self, sip_name, sip_passwd, hostname, local_port):
         self._session = Session(sip_name, sip_passwd, hostname, local_port)
         self._call_result = None
+        self.port = local_port
+
+    def answer(self):
+        try:
+            self._session.answer()
+        except LinphoneException:
+            print 'Failed to answer the call'
 
     def call(self, exten):
         try:
@@ -24,6 +31,9 @@ class SipPhone(object):
             self._call_result = e
         except LinphoneException:
             print 'Not the good exception'
+
+    def hangup(self):
+        self._session.hangup()
 
     def register(self):
         self._session.register()

@@ -8,20 +8,17 @@ Feature: Callgen
         Then "Alice" last call shoud be "Extension not found"
 
     Scenario: Call to existant extension with answer
-        Given there are no calls running
         Given there are users with infos:
-         | firstname | lastname | number | context |
-         | User      | 100      |   1100 | default |
-         | User      | 101      |   1101 | default |
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1101"
-        Given I wait call then I answer and wait
-        Given there is 1 calls to extension "1101@default" then I hang up after "3s"
-        Given I wait 5 seconds for the calls processing
-        When I generate call logs
+         | firstname | lastname | number | context | protocol |
+         | Alice     |          |   1100 | default | sip      |
+         | Bob       |          |   1101 | default | sip      |
+        When "Alice" calls "1101"
+        When "Bob" answers
+        When "Alice" and "Bob" talk for "3" seconds
+        When "Bob" hangs up
         Then I have the last call log matching:
-            | destination_exten | duration | user_field | answered |
-            | 1101              | 0:00:03  |            | True     |
+         | destination_exten | duration | user_field | answered |
+         | 1101              | 0:00:03  |            | True     |
 
     Scenario: Call with extension call recording activated
         Given there are no calls running
