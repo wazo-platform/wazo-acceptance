@@ -1,0 +1,15 @@
+EasyProcess==0.1.6
+PyHamcrest==1.8.0
+PyVirtualDisplay==0.1.2
+SQLAlchemy==0.8.3
+argparse==1.2.1
+execnet==1.1
+fuzzywuzzy==0.2
+lettuce==0.2.19
+pika==0.9.13
+psycopg2==2.5.1
+python-ldap==2.4.13
+requests==2.1.0
+selenium==2.38.1
+sure==1.2.3
+wsgiref==0.1.2
