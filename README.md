@@ -6,7 +6,7 @@ Requirements
 
 ```
 pip install -r requirements.txt
-apt-get install libsasl2-dev xvfb xserver-xephyr
+apt-get install libsasl2-dev xvfb xserver-xephyr linphone-nogtk
 ```
 
 .. important::
