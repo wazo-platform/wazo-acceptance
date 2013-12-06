@@ -3,7 +3,7 @@ PyHamcrest==1.8.0
 PyVirtualDisplay==0.1.2
 SQLAlchemy==0.8.3
 argparse==1.2.1
-execnet==1.1
+execnet==1.0.9
 fuzzywuzzy==0.2
 lettuce==0.2.19
 pika==0.9.13
