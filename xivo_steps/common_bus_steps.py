@@ -18,11 +18,13 @@
 import pika
 
 from lettuce import step
+from lettuce.registry import world
 
 
 @step(u'Given I listen on the bus for messages:')
 def given_i_listen_on_the_bus_for_messages(step):
-    connection = pika.BlockingConnection(pika.ConnectionParameters())
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+        host=world.config.xivo_host))
     channel = connection.channel()
 
     for entry in step.hashes:
