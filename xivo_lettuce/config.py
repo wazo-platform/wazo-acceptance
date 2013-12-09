@@ -77,6 +77,8 @@ class XivoAcceptanceConfig(object):
         self.kvm_shutdown_timeout = int(self._config.get('kvm_infos', 'shutdown_timeout'))
         self.kvm_boot_timeout = int(self._config.get('kvm_infos', 'boot_timeout'))
 
+        self.linphone_port_range = self._config.get('linphone', 'port_range')
+
     def setup(self):
         self._setup_dao()
         self._setup_ssh_client()

@@ -46,42 +46,45 @@ class SipPhone(object):
             raise self._call_result
 
 
+class _AvailableSipPortFinder(object):
+
+    def __init__(self):
+        port_range = world.config.linphone_port_range
+        start, _, end = port_range.partition(',')
+        self._ports = xrange(int(start), int(end))
+
+    def get_available_port(self):
+        for port in self._ports:
+            if self._port_is_available(port):
+                return port
+
+        raise Exception('All sip ports are used')
+
+    def _used_ports(self):
+        for name_phone in getattr(world, 'sip_phones', {}).itervalues():
+            for phone in name_phone.itervalues():
+                yield phone.port
+
+    def _port_is_available(self, port):
+        return port not in self._used_ports() and self._port_in_use(port)
+
+    def _port_in_use(self, port):
+        try:
+            subprocess.check_call(['lsof', '-i', ':%s' % port])
+            return False
+        except subprocess.CalledProcessError:
+            return True
+
+
 def register_line(line_config, name):
-    return _register_sip_line(name, line_config.name, line_config.secret)
+    if line_config.protocol == 'sip':
+        return _register_sip_line(name, line_config.name, line_config.secret)
+    else:
+        return
 
 
 def _register_sip_line(name, sip_name, sip_passwd):
-    # XXX find a way to wait for the sip reload
-    port = _get_available_sip_port()
+    port = _AvailableSipPortFinder().get_available_port()
     phone = SipPhone(sip_name, sip_passwd, world.config.xivo_host, port)
     phone.register()
     return phone
-
-
-def _port_in_use(port):
-    try:
-        subprocess.check_call(['lsof', '-i', ':%s' % port])
-        return False
-    except subprocess.CalledProcessError:
-        return True
-
-
-def _used_ports():
-    for name_phone in getattr(world, 'sip_phones', {}).itervalues():
-        for phone in name_phone.itervalues():
-            yield phone.port
-
-
-def _port_is_available(port):
-    return port not in _used_ports() and _port_in_use(port)
-
-
-def _get_available_sip_port():
-    # XXX add a configuration option
-    ports = xrange(5061, 5070)
-
-    for port in ports:
-        if _port_is_available(port):
-            return port
-
-    raise Exception('All sip ports are used')
