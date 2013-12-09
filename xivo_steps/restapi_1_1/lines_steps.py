@@ -40,6 +40,10 @@ def given_i_have_the_following_lines(step):
 def _delete_line(lineinfo):
     if 'id' in lineinfo:
         line_helper.delete_line(int(lineinfo['id']))
+    if 'username' in lineinfo:
+        lines = line_helper.find_with_name(lineinfo['username'])
+        for line in lines:
+            line_helper.delete_line(line.id)
 
 
 def _create_line(lineinfo):
