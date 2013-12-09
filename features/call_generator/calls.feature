@@ -16,6 +16,7 @@ Feature: Callgen
         When "Bob" answers
         When "Alice" and "Bob" talk for "3" seconds
         When "Bob" hangs up
+        When I generate call logs
         Then I have the last call log matching:
          | destination_exten | duration | user_field | answered |
          | 1101              | 0:00:03  |            | True     |
