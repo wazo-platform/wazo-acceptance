@@ -24,7 +24,7 @@ from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
 from xivo_lettuce import postgres
 from xivo_lettuce.exception import NoSuchProfileException
-from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 from xivo_ws import User, UserLine, UserVoicemail
 from xivo_ws.exception import WebServiceRequestError
 
@@ -214,43 +214,42 @@ def _delete_user_line_extension_with_number_context(channel, exten, context):
 
 
 def delete_all():
-    remote_exec(_delete_all)
+    user_ids = remote_exec_with_result(_all_user_ids)
+    for user_id in user_ids:
+        delete_user(user_id)
 
 
-def _delete_all(channel):
+def _all_user_ids(channel):
     from xivo_dao.data_handler.user import services as user_services
-    from xivo_dao.data_handler.line import services as line_services
-    from xivo_dao.data_handler.extension import services as extension_services
-    from xivo_dao.data_handler.user_line_extension import dao as ule_dao
+
+    user_ids = [u.id for u in user_services.find_all()]
+    channel.send(user_ids)
+
+
+def delete_user(user_id):
+    remote_exec(_delete_user, user_id=user_id)
+
+
+def _delete_user(channel, user_id):
+    from xivo_dao.data_handler.user import services as user_services
+    from xivo_dao.data_handler.user_line import services as user_line_services
+    from xivo_dao.data_handler.line_extension import services as line_extension_services
     from xivo_dao.data_handler.exception import ElementDeletionError
     from xivo_dao.data_handler.exception import ElementNotExistsError
 
-    for user in user_services.find_all():
+    user_lines = user_line_services.find_all_by_user_id(user_id)
+    for user_line in user_lines:
+        line_extension = line_extension_services.find_by_line_id(user_line.line_id)
+        if line_extension:
+            line_extension_services.dissociate(line_extension)
+        user_line_services.dissociate(user_line)
 
-        ules = ule_dao.find_all_by_user_id(user.id)
-        for ule in ules:
-            try:
-                ule_dao.delete(ule)
-            except (ElementDeletionError, ElementNotExistsError):
-                pass
+    try:
+        user = user_services.get(user_id)
+        user_services.delete(user)
+    except (ElementDeletionError, ElementNotExistsError):
+        pass
 
-            try:
-                line = line_services.get(ule.line_id)
-                line_services.delete(line)
-            except (ElementDeletionError, ElementNotExistsError):
-                pass
-
-            if ule.extension_id:
-                try:
-                    extension = extension_services.get(ule.extension_id)
-                    extension_services.delete(extension)
-                except (ElementDeletionError, ElementNotExistsError):
-                    pass
-
-        try:
-            user_services.delete(user)
-        except (ElementDeletionError, ElementNotExistsError):
-            pass
 
 '''
     #TODO refactor to use dao
