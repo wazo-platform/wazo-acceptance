@@ -43,4 +43,19 @@ def given_i_listen_on_the_bus_for_messages(step):
 
 @step(u'Then I see a message on bus with the following variables:')
 def then_i_see_a_message_on_bus_with_the_following_variables(step):
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+        host=world.config.xivo_host))
+    channel = connection.channel()
+    queue_name = 'test_call_form_result'
+
+    try:
+        def callback(ch, method, props, body):
+            print 'received:', body
+
+        channel.basic_consume(callback, queue=queue_name, no_ack=True)
+
+        channel.start_consuming()
+    finally:
+        connection.close()
+
     assert False, 'This step must be implemented'
