@@ -43,6 +43,12 @@ def given_there_is_a_configuration_with_queue_and_agent(step, config_name, start
     stat_helper.add_configuration_with_queue_and_agent(config_name, start, end, queue_name, agent_number)
 
 
+@step(u'^Given there is a statistic configuration "(\S+)" from "([0-9:]+)" to "([0-9:]+)" with the following parameters:')
+def given_there_is_a_configuration_with_the_following_parameters(step, config_name, start, end):
+    entry = step.hashes[0]
+    stat_helper.add_configuration_with_queue_and_agents(config_name, start, end, entry['queues'], entry['agents'])
+
+
 @step(u'^Given I have the following queue_log entries:$')
 def given_i_have_the_following_queue_log_entries(step):
     queuelog_helper.insert_entries(step.hashes)
@@ -66,6 +72,16 @@ def given_i_have_to_following_queue_log_entries_in_the_last_hour(step):
 @step(u'^Given I clear and generate the statistics cache$')
 def given_i_clear_and_generate_the_statistics_cache(step):
     stat_action_webi.regenerate_cache()
+
+
+@step(u'^Given I clear the statistics cache$')
+def given_i_clear_the_statistics_cache(step):
+    stat_action_webi.clean_cache()
+
+
+@step(u'^Given I generate the statistics cache from start time "([^"]*)"$')
+def given_i_generate_the_statistics_cache_from_start_time(step, start_time):
+    stat_action_webi.generate_cache(start_time)
 
 
 @step(u'^Given I clear and generate the statistics cache twice$')

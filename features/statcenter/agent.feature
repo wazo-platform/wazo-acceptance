@@ -255,3 +255,42 @@ Feature: WEBI Agent Stats
           | 10h-11h |        0 | 00:00:00 |
           | 11h-12h |        0 | 00:00:00 |
           | Total   |        1 | 00:00:15 |
+
+
+    Scenario: Generate stats for answered calls tranfered by an agent to an another queue
+        Given there is no entries in queue_log between "2013-11-08 08:00:00" and "2013-11-08 11:59:59"
+        Given I clear the statistics cache
+        Given there are queues with infos:
+            | name | number | context     |
+            | q12  | 5012   | statscenter |
+            | q13  | 5013   | statscenter |
+        Given there is a agent "Agent" "12" with extension "12@statscenter"
+        Given there is a agent "Agent" "13" with extension "13@statscenter"
+        Given there is a statistic configuration "test_agent_transfer_to_queue" from "8:00" to "12:00" with the following parameters:
+            | queues  | agents |
+            | q12,q13 | 12,13  |
+        Given I have the following queue_log entries:
+            |               time         |      callid       | queuename |   agent  |     event      | data1 |       data2       | data3 | data4 | data5 |
+            | 2013-11-08 09:53:09.948070 | 1383900788.167039 | q12       | NONE     | ENTERQUEUE     |       | ##########        | 1     |       |       |
+            | 2013-11-08 09:53:12.684547 | 1383900788.167039 | q12       | Agent/12 | CONNECT        | 3     | 1383900789.167040 | 2     |       |       |
+            | 2013-11-08 10:02:30.219402 | 1383900788.167039 | q12       | Agent/12 | COMPLETECALLER | 3     | 558               | 1     |       |       |
+            | 2013-11-08 10:02:30.569451 | 1383900788.167039 | q13       | NONE     | ENTERQUEUE     |       | ##########        | 1     |       |       |
+            | 2013-11-08 10:02:32.770339 | 1383900788.167039 | q13       | Agent/13 | CONNECT        | 2     | 1383901350.167967 | 2     |       |       |
+            | 2013-11-08 10:04:19.485883 | 1383900788.167039 | q13       | Agent/13 | COMPLETECALLER | 2     | 107               | 1     |       |       |
+        Given I generate the statistics cache from start time "2013-11-08T10:00:00"
+
+        Then I should have the following statististics on agent "12" on "2013-11-08" on configuration "test_agent_transfer_to_queue":
+            |         | Answered |
+            | 8h-9h   |        0 |
+            | 9h-10h  |        1 |
+            | 10h-11h |        0 |
+            | 11h-12h |        0 |
+            | Total   |        1 |
+
+        Then I should have the following statististics on agent "13" on "2013-11-08" on configuration "test_agent_transfer_to_queue":
+            |         | Answered |
+            | 8h-9h   |        0 |
+            | 9h-10h  |        0 |
+            | 10h-11h |        1 |
+            | 11h-12h |        0 |
+            | Total   |        1 |
