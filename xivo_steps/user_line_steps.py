@@ -34,6 +34,15 @@ def given_line_group1_is_linked_with_user_group2_group3(step, line_id, firstname
     line_id = int(line_id)
     user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
     world.response = user_line_action_restapi.create_user_line(user_id, {'line_id': line_id})
+    assert_that(world.response.status, equal_to(201), unicode(world.response.data))
+
+
+@step(u'Given line "([^"]*)" is linked with user id "([^"]*)"')
+def given_line_group1_is_linked_with_user_id_group2(step, line_id, user_id):
+    line_id = int(line_id)
+    user_id = int(user_id)
+    world.response = user_line_action_restapi.create_user_line(user_id, {'line_id': line_id})
+    assert_that(world.response.status, equal_to(201), unicode(world.response.data))
 
 
 @step(u'When I create an empty user_line')
