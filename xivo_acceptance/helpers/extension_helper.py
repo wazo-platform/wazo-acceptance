@@ -16,7 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_acceptance.helpers import dialpattern_helper, user_helper, \
-    group_helper, incall_helper, meetme_helper, queue_helper
+    group_helper, incall_helper, meetme_helper, queue_helper, line_helper
+
 from xivo_dao.data_handler.extension import services as extension_services
 from xivo_dao.data_handler.exception import ElementDeletionError, \
     ElementNotExistsError
@@ -77,11 +78,31 @@ def _delete_extension(extension_id):
 
     exten, extension_type, typeval = exten_info
 
-    remote_exec(_delete_extension_associations, extension_id=extension_id)
+    _delete_extension_associations(extension_id)
+    _delete_extension_type(exten, extension_type, typeval)
+    remote_exec(_delete_using_service, extension_id=extension_id)
 
+
+def _delete_extension_associations(extension_id):
+    line_id = remote_exec_with_result(_find_associated_line_id, extension_id=extension_id)
+    if line_id:
+        line_helper.delete_line_associations(line_id)
+
+
+def _find_associated_line_id(channel, extension_id):
+    from xivo_dao.data_handler.line_extension import services as line_extension_services
+
+    line_extension = line_extension_services.find_by_extension_id(extension_id)
+    if line_extension:
+        channel.send(line_extension.line_id)
+    else:
+        channel.send(None)
+
+
+def _delete_extension_type(exten, extension_type, typeval):
     try:
         if extension_type == 'user':
-            user_helper.delete_with_user_id(int(typeval))
+            user_helper.delete_user(int(typeval))
         elif extension_type == 'queue':
             queue_helper.delete_queues_with_number(exten)
         elif extension_type == 'group':
@@ -96,10 +117,8 @@ def _delete_extension(extension_id):
         print "I tried deleting a type %s typeval %s but it didn't work." % (extension_type, typeval)
         print e
 
-    remote_exec(_delete_on_server, extension_id=extension_id)
 
-
-def _delete_on_server(channel, extension_id):
+def _delete_using_service(channel, extension_id):
     from xivo_dao.data_handler.extension import services as extension_services
 
     try:
@@ -137,11 +156,3 @@ def _get_exten_info(channel, extension_id):
         channel.send(extension)
     else:
         channel.send(None)
-
-
-def _delete_extension_associations(channel, extension_id):
-    from xivo_dao.data_handler.line_extension import dao as line_extension_dao
-
-    line_extension = line_extension_dao.find_by_extension_id(extension_id)
-    if line_extension:
-        line_extension_dao.dissociate(line_extension)

@@ -113,6 +113,26 @@ def _delete_line(channel, line_id):
         pass
 
 
+def delete_line_associations(line_id):
+    remote_exec(_delete_line_associations, line_id=line_id)
+
+
+def _delete_line_associations(channel, line_id):
+    from xivo_dao.data_handler.line_extension import services as line_extension_services
+    from xivo_dao.data_handler.user_line import services as user_line_services
+
+    line_extension = line_extension_services.find_by_line_id(line_id)
+    if line_extension:
+        line_extension_services.dissociate(line_extension)
+
+    user_lines = user_line_services.find_all_by_line_id(line_id)
+    secondary_associations = [ul for ul in user_lines if not ul.main_user]
+    main_associations = [ul for ul in user_lines if ul.main_user]
+
+    for user_line in secondary_associations + main_associations:
+        user_line_services.dissociate(user_line)
+
+
 def create(parameters):
     remote_exec(_create, parameters=parameters)
 
