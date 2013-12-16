@@ -17,7 +17,7 @@
 
 from lettuce import step
 
-from xivo_acceptance.helpers import user_helper
+from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 
 
 @step(u'Given there is a call center supervisor "([^"]*)" "([^"]*)"')
@@ -30,4 +30,4 @@ def given_there_is_a_call_center_supervisor_firstname_lastname(step, firstname, 
         'client_password': lastname.lower(),
         'enable_client': True,
     }
-    user_helper.add_or_replace_user(user_data)
+    ule_helper.add_or_replace_user(user_data)

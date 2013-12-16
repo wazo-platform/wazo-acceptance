@@ -22,7 +22,8 @@ from lettuce import world
 
 from utils import prerequisite
 from xivo_acceptance.helpers import line_helper, context_helper, \
-    trunkcustom_helper, user_helper
+    trunkcustom_helper
+from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import terrain
 from xivo_lettuce.config import XivoAcceptanceConfig
 from xivo_ws.objects.incall import Incall
@@ -87,19 +88,19 @@ class PrepareXivoBiz(object):
             'client_profile': 'Client'
         }
         user1_data = {
-             'lastname': '1',
-             'line_number': '101',
-             'client_username': 'user1'
+            'lastname': '1',
+            'line_number': '101',
+            'client_username': 'user1'
         }
         user1_data.update(user_data_tpl)
-        self._user1_id = user_helper.add_or_replace_user(user1_data)
+        self._user1_id = ule_helper.add_or_replace_user(user1_data)
         user2_data = {
-             'lastname': '2',
-             'line_number': '102',
-             'client_username': 'user2'
+            'lastname': '2',
+            'line_number': '102',
+            'client_username': 'user2'
         }
         user2_data.update(user_data_tpl)
-        self._user2_id = user_helper.add_or_replace_user(user2_data)
+        self._user2_id = ule_helper.add_or_replace_user(user2_data)
 
         self._line1 = line_helper.find_with_exten_context('101', 'default')
         self._line2 = line_helper.find_with_exten_context('102', 'default')

@@ -20,8 +20,9 @@ import time
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import queue as queue_action_webi
-from xivo_acceptance.helpers import user_helper, agent_helper, queue_helper, \
-    schedule_helper
+from xivo_acceptance.helpers import agent_helper, queue_helper, \
+    schedule_helper, user_helper
+from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common
 from xivo_lettuce import form
 
@@ -77,7 +78,7 @@ def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(st
             'line_number': agent_data['number'],
             'line_context': agent_data['context'],
         }
-        user_id = user_helper.add_or_replace_user(user_data)
+        user_id = ule_helper.add_or_replace_user(user_data)
         agent_data['users'] = [user_id]
         agent_id = agent_helper.add_or_replace_agent(agent_data)
         agent_ids.append(agent_id)

@@ -18,12 +18,11 @@
 from lettuce import world
 from execnet.gateway_base import RemoteError
 
-from xivo_acceptance.helpers import voicemail_helper, group_helper, provd_helper
+from xivo_acceptance.helpers import group_helper, provd_helper
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
 from xivo_lettuce import postgres
-from xivo_lettuce.exception import NoSuchProfileException
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 from xivo_ws import User, UserLine, UserVoicemail
 from xivo_ws.exception import WebServiceRequestError
@@ -103,15 +102,6 @@ def _delete_all_user_with_firstname_lastname(channel, firstname, lastname):
             user_services.delete(user)
 
 
-def delete_user_line_extension_voicemail(firstname, lastname, context=None, exten=None, mailbox=None):
-    if exten and context:
-        delete_user_line_extension_with_exten_context(exten, context)
-    if mailbox and context:
-        voicemail_helper.delete_voicemail_with_number_context(mailbox, context)
-    delete_user_line_extension_with_firstname_lastname(firstname, lastname)
-    delete_all_user_with_firstname_lastname(firstname, lastname)
-
-
 def delete_with_user_id(user_id):
     try:
         remote_exec(_delete_with_user_id, user_id=user_id)
@@ -142,75 +132,6 @@ def _delete_user_with_firstname_lastname(channel, firstname, lastname):
 
     if user:
         user_services.delete(user)
-
-
-def delete_user_line_extension_with_firstname_lastname(firstname, lastname):
-    try:
-        remote_exec(_delete_user_line_extension_with_firstname_lastname, firstname=firstname, lastname=lastname)
-    except RemoteError:
-        pass
-
-
-def _delete_user_line_extension_with_firstname_lastname(channel, firstname, lastname):
-    from xivo_dao.data_handler.user import services as user_services
-    from xivo_dao.data_handler.user_line_extension import services as ule_services
-
-    fullname = '%s %s' % (firstname, lastname)
-    users = user_services.find_all_by_fullname(fullname)
-
-    for user in users:
-        ules = ule_services.find_all_by_user_id(user.id)
-        if ules:
-            for ule in ules:
-                ule_services.delete_everything(ule)
-        else:
-            user_services.delete(user)
-
-
-def delete_user_line_extension_with_user_id(user_id):
-    try:
-        remote_exec(_delete_user_line_extension_with_user_id, user_id=user_id)
-    except RemoteError:
-        pass
-
-
-def _delete_user_line_extension_with_user_id(channel, user_id):
-    from xivo_dao.data_handler.user import services as user_services
-    from xivo_dao.data_handler.user_line_extension import services as ule_services
-
-    ules = ule_services.find_all_by_user_id(user_id)
-
-    if ules:
-        for ule in ules:
-            ule_services.delete_everything(ule)
-    else:
-        user = user_services.get(user_id)
-        user_services.delete(user)
-
-
-def delete_user_line_extension_with_exten_context(exten, context):
-    try:
-        remote_exec(_delete_user_line_extension_with_number_context, exten=exten, context=context)
-    except RemoteError:
-        pass
-
-
-def _delete_user_line_extension_with_number_context(channel, exten, context):
-    from xivo_dao.data_handler.extension import services as extension_services
-    from xivo_dao.data_handler.user_line_extension import services as ule_services
-
-    try:
-        extension = extension_services.get_by_exten_context(exten, context)
-    except LookupError:
-        return
-
-    ules = ule_services.find_all_by_extension_id(extension.id)
-
-    if ules:
-        for ule in ules:
-            ule_services.delete_everything(ule)
-    else:
-        extension_services.delete(extension)
 
 
 def delete_all():
@@ -308,37 +229,6 @@ def add_user(data_dict):
         return False
 
     return int(ret)
-
-
-def add_or_replace_user(data_dict):
-    firstname = data_dict['firstname']
-    lastname = data_dict.get('lastname', '')
-    mailbox = data_dict.get('voicemail_number', None)
-    exten = data_dict.get('line_number', None)
-    context = data_dict.get('line_context', None)
-
-    delete_user_line_extension_voicemail(firstname,
-                                         lastname,
-                                         exten=exten,
-                                         context=context,
-                                         mailbox=mailbox)
-
-    return add_user(data_dict)
-
-
-def delete_users_with_profile(profile_name):
-    users = world.ws.users.list()
-    profiles = [profile for profile in world.ws.cti_profiles.list() if profile.name == profile_name]
-
-    if not profiles:
-        raise NoSuchProfileException('The CTI profile %s does not exist.' % profile_name)
-
-    profile_id = profiles[0].id
-    for user in users:
-        if user.client_profile_id == profile_id:
-            if user.voicemail:
-                voicemail_helper.delete_voicemail_with_user_id(user.id)
-            delete_user_line_extension_with_user_id(user.id)
 
 
 def user_id_is_in_group_name(group_name, user_id):
