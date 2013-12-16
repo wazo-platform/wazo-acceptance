@@ -15,22 +15,39 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
+from hamcrest import assert_that, equal_to
 from lettuce import step, world
 
 from xivo_acceptance.action.restapi import line_action_restapi
-from xivo_acceptance.helpers import line_helper, line_sip_helper
+from xivo_acceptance.helpers import line_helper
+from xivo_acceptance.helpers import line_sip_helper
 
 
 @step(u'Given I only have the following lines:')
 def given_i_created_the_following_lines(step):
     line_helper.delete_all()
     for lineinfo in step.hashes:
-        protocol = lineinfo['protocol'].lower()
-        if protocol == 'sip':
-            line_sip_helper.create_line_sip(lineinfo)
-        else:
-            line_helper.create(lineinfo)
+        _create_line(lineinfo)
+
+
+@step(u'Given I have the following lines:')
+def given_i_have_the_following_lines(step):
+    for lineinfo in step.hashes:
+        _delete_line(lineinfo)
+        _create_line(lineinfo)
+
+
+def _delete_line(lineinfo):
+    if 'id' in lineinfo:
+        line_helper.delete_line(int(lineinfo['id']))
+
+
+def _create_line(lineinfo):
+    protocol = lineinfo['protocol'].lower()
+    if protocol == 'sip':
+        line_sip_helper.create_line_sip(lineinfo)
+    else:
+        line_helper.create(lineinfo)
 
 
 @step(u'Given I have no lines')
@@ -52,3 +69,9 @@ def when_i_ask_for_the_list_of_user_links_with_line_id(step, line_id):
 def then_the_line_group1_no_longer_exists(step, line_id):
     response = line_action_restapi.get(line_id)
     assert_that(response.status, equal_to(404))
+
+
+@step(u'Given I have no line with id "([^"]*)"')
+def given_i_have_no_line_with_id_group1(step, line_id):
+    line_id = int(line_id)
+    line_helper.delete_line(line_id)

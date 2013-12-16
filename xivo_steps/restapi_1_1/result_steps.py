@@ -61,9 +61,6 @@ def _check_for_regex_match(messages, regex):
 
 @step(u'Then I get a header with a location for the "([^"]*)" resource$')
 def then_i_get_a_header_with_a_location_for_the_group1_resource(step, resource):
-
-    print world.response.data
-
     resource_id = world.response.data['id']
     expected_location = '/1.1/%s/%s' % (resource, resource_id)
 

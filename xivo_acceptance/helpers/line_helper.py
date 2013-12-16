@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_lettuce import func
-from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 from xivo_dao.data_handler.exception import ElementNotExistsError
 from xivo_dao.data_handler.line import services as line_services
 
@@ -75,43 +75,42 @@ def _delete_line_with_exten_context(channel, exten, context):
 
 
 def delete_all():
-    remote_exec(_delete_all)
+    line_ids = remote_exec_with_result(_all_line_ids)
+    for line_id in line_ids:
+        remote_exec(_delete_line, line_id=line_id)
 
 
-def _delete_all(channel):
-    from xivo_dao.data_handler.user import services as user_services
+def _all_line_ids(channel):
     from xivo_dao.data_handler.line import services as line_services
-    from xivo_dao.data_handler.extension import services as extension_services
-    from xivo_dao.data_handler.user_line_extension import dao as ule_dao
+    lines = line_services.find_all()
+    line_ids = [line.id for line in lines]
+    channel.send(line_ids)
+
+
+def delete_line(line_id):
+    remote_exec(_delete_line, line_id=line_id)
+
+
+def _delete_line(channel, line_id):
     from xivo_dao.data_handler.exception import ElementDeletionError
     from xivo_dao.data_handler.exception import ElementNotExistsError
+    from xivo_dao.data_handler.line import services as line_services
+    from xivo_dao.data_handler.line_extension import dao as line_extension_dao
+    from xivo_dao.data_handler.user_line import dao as user_line_dao
 
-    for line in line_services.find_all():
+    user_lines = user_line_dao.find_all_by_line_id(line_id)
+    for user_line in user_lines:
+        user_line_dao.dissociate(user_line)
 
-        links = ule_dao.find_all_by_line_id(line.id)
-        for link in links:
-            try:
-                ule_dao.delete(link)
-            except (ElementDeletionError, ElementNotExistsError):
-                pass
+    line_extension = line_extension_dao.find_by_line_id(line_id)
+    if line_extension:
+        line_extension_dao.dissociate(line_extension)
 
-            try:
-                user = user_services.get(link.user_id)
-                user_services.delete(user)
-            except (ElementDeletionError, ElementNotExistsError):
-                pass
-
-            if link.extension_id:
-                try:
-                    extension = extension_services.get(link.extension_id)
-                    extension_services.delete(extension)
-                except (ElementDeletionError, ElementNotExistsError):
-                    pass
-
-        try:
-            line_services.delete(line)
-        except (ElementDeletionError, ElementNotExistsError):
-            pass
+    try:
+        line = line_services.get(line_id)
+        line_services.delete(line)
+    except (ElementDeletionError, ElementNotExistsError):
+        pass
 
 
 def create(parameters):
