@@ -32,6 +32,33 @@ def find_extension_by_exten_context(exten, context):
     return extension_services.find_by_exten_context(exten, context)
 
 
+def find_extension_id_for_line(line_id):
+    return remote_exec_with_result(_find_extension_id_for_line, line_id=line_id)
+
+
+def _find_extension_id_for_line(channel, line_id):
+    from xivo_dao.data_handler.line_extension import services as line_extension_services
+    line_extension = line_extension_services.find_by_line_id(line_id)
+    if line_extension:
+        channel.send(line_extension.extension_id)
+    else:
+        channel.send(None)
+
+
+def find_line_id_for_extension(extension_id):
+    return remote_exec_with_result(_find_line_id_for_extension, extension_id=extension_id)
+
+
+def _find_line_id_for_extension(channel, extension_id):
+    from xivo_dao.data_handler.line_extension import services as line_extension_services
+
+    line_extension = line_extension_services.find_by_extension_id(extension_id)
+    if line_extension:
+        channel.send(line_extension.line_id)
+    else:
+        channel.send(None)
+
+
 def get_by_exten_context(exten, context):
     try:
         extension = extension_services.get_by_exten_context(exten, context)
@@ -84,19 +111,9 @@ def _delete_extension(extension_id):
 
 
 def _delete_extension_associations(extension_id):
-    line_id = remote_exec_with_result(_find_associated_line_id, extension_id=extension_id)
+    line_id = find_line_id_for_extension(extension_id)
     if line_id:
         line_helper.delete_line_associations(line_id)
-
-
-def _find_associated_line_id(channel, extension_id):
-    from xivo_dao.data_handler.line_extension import services as line_extension_services
-
-    line_extension = line_extension_services.find_by_extension_id(extension_id)
-    if line_extension:
-        channel.send(line_extension.line_id)
-    else:
-        channel.send(None)
 
 
 def _delete_extension_type(exten, extension_type, typeval):
