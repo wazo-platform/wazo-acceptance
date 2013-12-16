@@ -24,8 +24,11 @@ from xivo_dao.data_handler.line import dao as line_newdao
 from xivo_dao.data_handler.line.model import LineSIP
 from xivo_dao.data_handler.extension import dao as extension_newdao
 from xivo_dao.data_handler.extension.model import Extension
-from xivo_dao.data_handler.user_line_extension import dao as user_line_extension_newdao
-from xivo_dao.data_handler.user_line_extension.model import UserLineExtension
+from xivo_dao.data_handler.user_line import dao as user_line_dao
+from xivo_dao.data_handler.user_line.model import UserLine
+from xivo_dao.data_handler.line_extension import dao as line_extension_dao
+from xivo_dao.data_handler.line_extension.model import LineExtension
+
 from restapi_config import RestAPIConfig
 from lettuce.registry import world
 
@@ -131,15 +134,13 @@ class RestUsers():
         exten.typeval = user.id
         exten = extension_newdao.create(exten)
 
-        user_line_extension = UserLineExtension()
-        user_line_extension.user_id = user.id
-        user_line_extension.line_id = line.id
-        user_line_extension.extension_id = exten.id
-        user_line_extension.main_user = True
-        user_line_extension.main_line = True
-        user_line_extension_newdao.create(user_line_extension)
+        user_line = UserLine(user_id=user.id, line_id=line.id)
+        user_line_dao.associate(user_line)
 
-        return user.id, line.id, user_line_extension.id
+        line_extension = LineExtension(line_id=line.id, extension_id=exten.id)
+        line_extension_dao.associate(line_extension)
+
+        return user.id, line.id, exten.id
 
     def delete_user(self, userid, delete_voicemail=False):
         url = RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/" + str(userid)
@@ -155,8 +156,14 @@ class RestUsers():
             return True
 
     def _delete_extension(self, extension):
-        links = user_line_extension_newdao.find_all_by_extension_id(extension.id)
-        for link in links:
-            user_line_extension_newdao.delete(link)
+        line_extension = line_extension_dao.find_by_extension_id(extension.id)
+        if line_extension:
+            line_extension_dao.dissociate(line_extension)
+            self._delete_user_lines(line_extension.line_id)
 
         extension_newdao.delete(extension)
+
+    def _delete_user_lines(self, line_id):
+        user_lines = user_line_dao.find_all_by_line_id(line_id)
+        for user_line in user_lines:
+            user_line_dao.dissociate(user_line)

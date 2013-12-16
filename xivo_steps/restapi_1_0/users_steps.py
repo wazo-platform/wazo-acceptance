@@ -29,7 +29,8 @@ from xivo_dao.alchemy.schedule import Schedule
 from xivo_dao.alchemy.userfeatures import UserFeatures
 from xivo_dao.data_handler.extension import dao as extension_dao
 from xivo_dao.data_handler.line import dao as line_dao
-from xivo_dao.data_handler.user_line_extension import dao as user_line_extension_dao
+from xivo_dao.data_handler.user_line import dao as new_user_line_dao
+from xivo_dao.data_handler.line_extension import dao as new_line_extension_dao
 from xivo_acceptance.helpers.restapi_v1_0.rest_users import RestUsers
 
 rest_users = RestUsers()
@@ -160,7 +161,7 @@ def when_i_update_a_user_with_a_non_existing_id_with_the_last_name_group1(step, 
 
 @step(u'Given there is a user "([^"]*)" with a line "([^"]*)"$')
 def given_there_is_a_user_group1_with_a_line_group2(step, fullname, linenumber):
-    world.userid, world.lineid, world.user_line_extension_id = rest_users.create_user_with_sip_line(fullname, linenumber)
+    world.userid, world.lineid, world.extensionid = rest_users.create_user_with_sip_line(fullname, linenumber)
 
 
 @step(u'Then I have a user "([^"]*)" with a line "([^"]*)"')
@@ -178,13 +179,22 @@ def then_i_have_a_user_group1_with_a_line_group2(step, fullname, linenumber):
 
 @step(u'Then I delete this line')
 def then_i_delete_this_line(step):
-    user_line_extension = user_line_extension_dao.get(world.user_line_extension_id)
-    extension = extension_dao.get(user_line_extension.extension_id)
+    line_extension = new_line_extension_dao.find_by_line_id(world.lineid)
+    if line_extension:
+        new_line_extension_dao.dissociate(line_extension)
+        _dissociate_user_lines(line_extension.line_id)
+
+    extension = extension_dao.get(world.extensionid)
     line = line_dao.get(world.lineid)
 
-    user_line_extension_dao.delete(user_line_extension)
     extension_dao.delete(extension)
     line_dao.delete(line)
+
+
+def _dissociate_user_lines(line_id):
+    user_lines = new_user_line_dao.find_all_by_line_id(line_id)
+    for user_line in user_lines:
+        new_user_line_dao.dissociate(user_line)
 
 
 @step(u'Then I have a single user "([^"]*)" with a line "([^"]*)"')
