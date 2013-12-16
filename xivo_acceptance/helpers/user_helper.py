@@ -18,7 +18,7 @@
 from lettuce import world
 from execnet.gateway_base import RemoteError
 
-from xivo_acceptance.helpers import group_helper, provd_helper
+from xivo_acceptance.helpers import group_helper, provd_helper, line_helper
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
@@ -162,28 +162,22 @@ def _all_user_ids(channel):
 
 
 def delete_user(user_id):
-    remote_exec(_delete_user, user_id=user_id)
+    if get_by_user_id(user_id):
+        _delete_line_associations(user_id)
+        remote_exec(_delete_using_user_service, user_id=user_id)
 
 
-def _delete_user(channel, user_id):
+def _delete_line_associations(user_id):
+    line_id = find_line_id_for_user(user_id)
+    if line_id:
+        line_helper.delete_line_associations(line_id)
+
+
+def _delete_using_user_service(channel, user_id):
     from xivo_dao.data_handler.user import services as user_services
-    from xivo_dao.data_handler.user_line import services as user_line_services
-    from xivo_dao.data_handler.line_extension import services as line_extension_services
-    from xivo_dao.data_handler.exception import ElementDeletionError
-    from xivo_dao.data_handler.exception import ElementNotExistsError
 
-    user_lines = user_line_services.find_all_by_user_id(user_id)
-    for user_line in user_lines:
-        line_extension = line_extension_services.find_by_line_id(user_line.line_id)
-        if line_extension:
-            line_extension_services.dissociate(line_extension)
-        user_line_services.dissociate(user_line)
-
-    try:
-        user = user_services.get(user_id)
-        user_services.delete(user)
-    except (ElementDeletionError, ElementNotExistsError):
-        pass
+    user = user_services.get(user_id)
+    user_services.delete(user)
 
 
 '''
