@@ -68,7 +68,7 @@ class RestUsers():
         if(firstname is not None):
             data['firstname'] = firstname
         return world.restapi_utils_1_0.rest_put(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/%d" % userid,
-                                      data)
+                                                data)
 
     def create_user_with_field(self, fullname, fieldname, fieldvalue):
         (firstname, lastname) = self.decompose_fullname(fullname)
@@ -81,7 +81,7 @@ class RestUsers():
         data = {}
         data[field] = value
         return world.restapi_utils_1_0.rest_put(RestAPIConfig.XIVO_USERS_SERVICE_PATH + "/%d" % userid,
-                                      data)
+                                                data)
 
     def voicemail_from_user(self, userid):
         voicemailid = user_dao.get(userid).voicemailid
