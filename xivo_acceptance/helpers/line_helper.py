@@ -118,8 +118,13 @@ def delete_line_associations(line_id):
 
 
 def _delete_line_associations(channel, line_id):
+    from xivo_dao.data_handler.line import services as line_services
     from xivo_dao.data_handler.line_extension import services as line_extension_services
     from xivo_dao.data_handler.user_line import services as user_line_services
+
+    line = line_services.get(line_id)
+    line.device = None
+    line_services.edit(line)
 
     line_extension = line_extension_services.find_by_line_id(line_id)
     if line_extension:
