@@ -39,6 +39,20 @@ def get_by_exten_context(exten, context):
     return extension
 
 
+def create_extensions(extensions):
+    extensions = [dict(e) for e in extensions]
+    remote_exec(_create_extensions, extensions=extensions)
+
+
+def _create_extensions(channel, extensions):
+    from xivo_dao.data_handler.extension import services as extension_services
+    from xivo_dao.data_handler.extension.model import Extension
+
+    for extinfo in extensions:
+        extension = Extension(**extinfo)
+        extension_services.create(extension)
+
+
 def delete(extension_id):
     _delete_extension(extension_id)
 
@@ -131,17 +145,3 @@ def _delete_extension_associations(channel, extension_id):
     line_extension = line_extension_dao.find_by_extension_id(extension_id)
     if line_extension:
         line_extension_dao.dissociate(line_extension)
-
-
-def create_extensions(extensions):
-    extensions = [dict(e) for e in extensions]
-    remote_exec(_create_extensions, extensions=extensions)
-
-
-def _create_extensions(channel, extensions):
-    from xivo_dao.data_handler.extension import services as extension_services
-    from xivo_dao.data_handler.extension.model import Extension
-
-    for extinfo in extensions:
-        extension = Extension(**extinfo)
-        extension_services.create(extension)
