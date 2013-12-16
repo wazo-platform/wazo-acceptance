@@ -65,6 +65,20 @@ def find_user_by_name(name):
     return user_dao.find_user(firstname, lastname)
 
 
+def find_line_id_for_user(user_id):
+    return remote_exec_with_result(_find_line_id_for_user, user_id=user_id)
+
+
+def _find_line_id_for_user(channel, user_id):
+    from xivo_dao.data_handler.user_line import services as user_line_services
+    user_lines = user_line_services.find_all_by_user_id(user_id)
+
+    if len(user_lines) > 0:
+        channel.send(user_lines[0].line_id)
+    else:
+        channel.send(None)
+
+
 def is_user_with_name_exists(firstname, lastname):
     user = user_services.find_by_firstname_lastname(firstname, lastname)
     if user is None:
