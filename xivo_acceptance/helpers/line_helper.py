@@ -59,6 +59,18 @@ def find_line_id_with_exten_context(exten, context):
     return line.id
 
 
+def find_sccp_lines_with_exten_context(exten, context):
+    return remote_exec_with_result(_find_sccp_lines_with_exten_context, exten=exten, context=context)
+
+
+def _find_sccp_lines_with_exten_context(channel, exten, context):
+    from xivo_dao.data_handler.line import services as line_services
+
+    lines = line_services.find_all_by_protocol('sccp')
+    sccp_line_ids = [line.id for line in lines if line.name == exten and line.context == context]
+    channel.send(sccp_line_ids)
+
+
 def line_exists(line_id):
     return remote_exec_with_result(_line_exists, line_id=line_id)
 
