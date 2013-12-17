@@ -25,7 +25,7 @@ from xivo_lettuce import sysutils
 
 @step(u'Then cti configuration file correctly generated')
 def then_cti_configuration_file_correctly_generated(step):
-    CTI_INI_FILE = '/etc/pf-xivo/xivo-web-interface/cti.ini'
+    CTI_INI_FILE = '/etc/xivo/xivo-web-interface/cti.ini'
     CTI_INI_CONTENT_RESULT = """\
 [general]
 datastorage = "postgresql://xivo:proformatique@localhost/xivo?charset=utf8"
