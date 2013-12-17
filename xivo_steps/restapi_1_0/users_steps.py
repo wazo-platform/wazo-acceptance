@@ -91,10 +91,12 @@ def then_the_user_group1_is_actually_created(step, fullname, ctiprofileid, descr
     userid = rest_users.id_from_fullname(fullname)
     request_result = rest_users.get_user(userid).data
     (firstname, lastname) = rest_users.decompose_fullname(fullname)
-    assert request_result['firstname'] == firstname
-    assert request_result['lastname'] == lastname
-    assert request_result['ctiprofileid'] == int(ctiprofileid), "received: " + str(request_result['ctiprofileid']) + " expected: " + ctiprofileid
-    assert request_result['description'] == description
+
+    error_msg = "expected '%%s', got '%%s'. response: %s" % unicode(request_result)
+    assert request_result['firstname'] == firstname, error_msg % (firstname, request_result['firstname'])
+    assert request_result['lastname'] == lastname, error_msg % (lastname, request_result['lastname'])
+    assert request_result['ctiprofileid'] == int(ctiprofileid), error_msg % (ctiprofileid, request_result['ctiprofileid'])
+    assert request_result['description'] == description, error_msg % (description, request_result['description'])
 
 
 @step(u'When I update the user "([^"]*)" with a last name "([^"]*)"')
