@@ -123,20 +123,10 @@ def then_max_open_file_descriptors_are_equals_to_8192(step):
 
 @step(u'Then sources.list point on right mirrors')
 def then_sourceslist_point_on_right_mirrors(step):
-    # md5 of source uris pointing on http.debian.net
-    expected_squeeze_md5 = '6c01e6432075b0ab60ff9b1f5ebce40d'
-    expected_wheezy_md5 = 'ad74283ab8a4a4f035fc49f11f335fa6'
-
-    command = ['lsb_release', '-c', '|', 'awk \'{print $2}\'']
-    release = sysutils.output_command(command)
-    release = release.rstrip()
+    # md5 of source uris pointing on ftp.ca.debian.org
+    expected_md5 = '56069d1daa08434dd83aac1d7d94212c'
 
     content = sysutils.get_content_file('/etc/apt/sources.list')
     content_md5 = hashlib.md5(content).hexdigest()
 
-    if release == 'squeeze':
-        assert_that(content_md5, equal_to(expected_squeeze_md5))
-    elif release == 'wheezy':
-        assert_that(content_md5, equal_to(expected_wheezy_md5))
-    else:
-        assert False, 'Unknown release name: %s' % release
+    assert_that(content_md5, equal_to(expected_md5))
