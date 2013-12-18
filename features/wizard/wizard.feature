@@ -14,7 +14,7 @@ Feature: Wizard
         When I accept the terms of the licence
         When I click next
         Then I should be on the mainconfig page
-        When I fill hostname skaro-daily, domain lan-quebec.avencall.com, password superpass in the configuration page
+        When I fill hostname xivo-daily, domain lan-quebec.avencall.com, password superpass in the configuration page
         When I click next
         Then I should be on the entitycontext page
         When I fill entity xivo_entity, start 100, end 199
