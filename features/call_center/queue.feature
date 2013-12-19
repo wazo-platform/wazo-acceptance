@@ -19,7 +19,7 @@ Feature: Queues
         Then I see no errors
         When I edit the queue "green"
         Then I see no errors
-        When I edit the queue "green" and set ring strategy at "Ring All"
+        When I edit the queue "green" and set ring strategy at "Ring all"
         Then I see no errors
         When I edit the queue "green" and set ring strategy at "Linear" with errors
         Then I see errors
