@@ -29,6 +29,24 @@ from xivo_lettuce.logs import search_str_in_asterisk_log
 from linphonelib import ExtensionNotFoundException
 
 
+@step(u'When a call is started:')
+def when_a_call_is_started(step):
+
+    def _call(caller, callee, hangup, dial, talk_time=0, ring_time=0):
+        caller_phone = world.phone_register.get_user_phone(step.scenario, caller)
+        callee_phone = world.phone_register.get_user_phone(step.scenario, callee)
+        first_to_hangup = caller_phone if hangup == 'caller' else callee_phone
+
+        caller_phone.call(dial)
+        time.sleep(int(ring_time))
+        callee_phone.answer()
+        time.sleep(int(talk_time))
+        first_to_hangup.hangup()
+
+    for call_info in step.hashes:
+        _call(**call_info)
+
+
 @step(u'When "([^"]*)" calls "([^"]*)"$')
 def when_a_calls_exten(step, name, exten):
     phone = world.phone_register.get_user_phone(step.scenario, name)

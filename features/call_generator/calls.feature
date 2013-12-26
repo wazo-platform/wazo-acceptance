@@ -12,10 +12,9 @@ Feature: Callgen
          | firstname | lastname | number | context | protocol |
          | Alice     |          |   1100 | default | sip      |
          | Bob       |          |   1101 | default | sip      |
-        When "Alice" calls "1101"
-        When "Bob" answers
-        When "Alice" and "Bob" talk for "3" seconds
-        When "Bob" hangs up
+        When a call is started:
+         | caller | dial | callee | talk_time | hangup |
+         | Alice  | 1101 | Bob    | 3         | callee |
         When I generate call logs
         Then I have the last call log matching:
          | destination_exten | duration | user_field | answered |
