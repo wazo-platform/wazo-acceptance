@@ -79,8 +79,6 @@ class _AvailableSipPortFinder(object):
 def register_line(line_config, name):
     if line_config.protocol == 'sip':
         return _register_sip_line(name, line_config.name, line_config.secret)
-    else:
-        return
 
 
 def _register_sip_line(name, sip_name, sip_passwd):
