@@ -79,16 +79,7 @@ def _register_and_track_phone(user_data, scenario):
 
     phone = sip_phone.register_line(line_configs[0], name)
     if phone:
-        _add_registered_phone(phone, scenario, name)
-
-
-def _add_registered_phone(phone, scenario, name):
-    if not hasattr(world, 'sip_phones'):
-        world.sip_phones = {scenario: {name: phone}}
-    elif scenario not in world.sip_phones:
-        world.sip_phones[scenario] = {name: phone}
-    else:
-        world.sip_phones[scenario][name] = phone
+        world.phone_register.add_registered_phone(phone, scenario, name)
 
 
 def _add_user(user_data):
