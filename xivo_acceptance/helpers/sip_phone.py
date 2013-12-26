@@ -66,14 +66,14 @@ class _AvailableSipPortFinder(object):
                 yield phone.port
 
     def _port_is_available(self, port):
-        return port not in self._used_ports() and self._port_in_use(port)
+        return port not in self._used_ports() and not self._port_in_use(port)
 
     def _port_in_use(self, port):
         try:
             subprocess.check_call(['lsof', '-i', ':%s' % port])
-            return False
-        except subprocess.CalledProcessError:
             return True
+        except subprocess.CalledProcessError:
+            return False
 
 
 def register_line(line_config, name):
