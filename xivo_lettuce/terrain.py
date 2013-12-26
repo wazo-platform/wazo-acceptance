@@ -49,7 +49,7 @@ def xivo_lettuce_after_each_step(step):
 
 @after.each_scenario
 def xivo_lettuce_after_each_scenario(scenario):
-    _clean_sip_phones()
+    _clean_sip_phones(scenario)
     _logout_agents()
 
 
@@ -116,14 +116,12 @@ def _logout_agents():
     world.logged_agents = []
 
 
-def _clean_sip_phones():
+def _clean_sip_phones(scenario):
     if not hasattr(world, 'sip_phones'):
         return
 
-    for scenario, name_phone_dict in world.sip_phones.iteritems():
-        names = name_phone_dict.keys()
-        for name in names:
-            del world.sip_phones[scenario][name]
+    for name in world.sip_phones[scenario].keys():
+        del world.sip_phones[scenario][name]
 
 
 def _check_webi_login_root():
