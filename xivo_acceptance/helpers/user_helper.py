@@ -209,6 +209,8 @@ def _delete_user_line_extension_with_number_context(channel, exten, context):
     if ules:
         for ule in ules:
             ule_services.delete_everything(ule)
+    else:
+        extension_services.delete(extension)
 
 
 def delete_all():
