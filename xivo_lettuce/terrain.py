@@ -102,7 +102,7 @@ def _setup_browser():
 
 def _webi_configured():
     try:
-        command = ['test', '-e', '/var/lib/pf-xivo/configured']
+        command = ['test', '-e', '/var/lib/xivo/configured']
         world.ssh_client_xivo.check_call(command)
     except Exception:
         return False

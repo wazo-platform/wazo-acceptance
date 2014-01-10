@@ -21,7 +21,7 @@ from xivo_lettuce import common
 
 @step(u'Given there is XiVO not configured')
 def given_there_is_xivo_not_configured(step):
-    cmd = ['rm', '-f', '/var/lib/pf-xivo/configured']
+    cmd = ['rm', '-f', '/var/lib/xivo/configured']
     world.ssh_client_xivo.check_call(cmd)
 
 
