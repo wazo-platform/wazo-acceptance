@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2014 Avencall
+# Copyright (C) 2012-2014 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,14 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from context_steps import *
-from devices_steps import *
-from extensions_steps import *
-from lines_sip_steps import *
-from lines_steps import *
-from result_steps import *
-from user_link_steps import *
-from users_steps import *
-from call_logs_steps import *
-from cti_profiles_steps import *
+from lettuce.registry import world
 
+CTI_PROFILES_URL = 'cti_profiles'
+
+
+def all_profiles():
+    return world.restapi_utils_1_1.rest_get(CTI_PROFILES_URL)
