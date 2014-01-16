@@ -37,7 +37,8 @@ def given_there_is_no_cti_profile_with_id_group1(step, profileid):
 
 @step(u'Given the following users, CTI profiles are linked:$')
 def given_the_following_users_cti_profiles_are_linked(step):
-    assert False, 'This step must be implemented'
+    for user_profile in step.hashes:
+        _create_association(user_profile)
 
 @step(u'When I acces the list of CTI profiles$')
 def when_i_acces_the_list_of_cti_profiles(step):
@@ -48,12 +49,16 @@ def when_i_ask_for_the_cti_profile_with_id_group1(step, profileid):
     world.response = cti_profile_action_restapi.get_cti_profile(profileid)
 
 @step(u'When I send request for the CTI profile associated to the user id "([^"]*)"')
-def when_i_send_request_for_the_cti_profile_associated_to_the_user_id_group1(step, group1):
-    assert False, 'This step must be implemented'
+def when_i_send_request_for_the_cti_profile_associated_to_the_user_id_group1(step, userid):
+    world.response = cti_profile_action_restapi.get_cti_profile_for_user(userid)
 
 @step(u'When I associate CTI profile "([^"]*)" with user "([^"]*)"$')
 def when_i_associate_cti_profile_group1_with_user_group2(step, cti_profile_id, user_id):
     world.response = cti_profile_action_restapi.associate_profile_to_user(int(cti_profile_id), int(user_id))
+
+@step(u'When I dissociate the user "([^"]*)" from its CTI profile$')
+def when_i_dissociate_the_user_group1_from_its_cti_profile(step, userid):
+    world.response = cti_profile_action_restapi.dissociate_profile_from_user(userid)
 
 @step(u'Then I get a list containing the following CTI profiles:$')
 def then_i_get_a_list_containing_the_following_cti_profiles(step):
@@ -87,3 +92,8 @@ def _perform_casts(hashes):
         if 'id' in value:
             value['id'] = int(value['id'])
     return values
+
+def _create_association(user_profile):
+    userid = user_profile['user_id']
+    profileid = user_profile['cti_profile_id']
+    cti_profile_action_restapi.associate_profile_to_user(int(profileid), int(userid))

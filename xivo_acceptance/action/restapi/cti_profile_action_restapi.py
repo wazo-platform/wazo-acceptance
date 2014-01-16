@@ -30,3 +30,9 @@ def get_cti_profile(profileid):
 
 def associate_profile_to_user(cti_profile_id, user_id):
     return world.restapi_utils_1_1.rest_post('%s/%s/cti_profile' % (USERS_URL, user_id), {'cti_profile_id': cti_profile_id})
+
+def get_cti_profile_for_user(userid):
+    return world.restapi_utils_1_1.rest_get('%s/%s/cti_profile' % (USERS_URL, userid))
+
+def dissociate_profile_from_user(userid):
+    return world.restapi_utils_1_1.rest_delete('%s/%s/cti_profile' % (USERS_URL, userid))
