@@ -35,3 +35,20 @@ def _create_profile(channel, profileinfo):
     session.execute('DELETE FROM cti_profile WHERE id = :profile_id', {'profile_id': int(profile.id)})
     session.add(profile)
     session.commit()
+
+def delete_profile_if_needed(profile_id):
+    remote_exec(_delete_profile_if_needed, profile_id=profile_id)
+
+def _delete_profile_if_needed(channel, profile_id):
+    from xivo_dao.helpers.db_manager import AsteriskSession
+    from xivo_dao.alchemy.cti_profile import CtiProfile
+    from xivo_dao.alchemy.ctipresences import CtiPresences
+    from xivo_dao.alchemy.ctiphonehints import CtiPhoneHints
+    from xivo_dao.alchemy.ctiphonehintsgroup import CtiPhoneHintsGroup
+
+    session = AsteriskSession()
+    session.begin()
+    result = session.query(CtiProfile).filter(CtiProfile.id == profile_id).first()
+    if result is not None:
+        session.delete(result)
+    session.commit()
