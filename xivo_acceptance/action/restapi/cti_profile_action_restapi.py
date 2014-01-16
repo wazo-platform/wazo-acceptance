@@ -22,3 +22,9 @@ CTI_PROFILES_URL = 'cti_profiles'
 
 def all_profiles():
     return world.restapi_utils_1_1.rest_get(CTI_PROFILES_URL)
+
+
+def get_cti_profile(profileid):
+    return world.restapi_utils_1_1.rest_get('%s/%s' % (CTI_PROFILES_URL, profileid))
+
+

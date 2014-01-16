@@ -48,6 +48,16 @@ def then_i_get_a_list_containing_the_following_cti_profiles(step):
         assert_that(corresponding, not_none())
         assert_that(corresponding, has_entries(expected_profile))
 
+@step(u'When I ask for the CTI profile with id "([^"]*)"$')
+def when_i_ask_for_the_cti_profile_with_id_group1(step, profileid):
+    world.response = cti_profile_action_restapi.get_cti_profile(profileid)
+
+@step(u'Then I get a CTI profile with the following parameters:$')
+def then_i_get_a_cti_profile_with_the_following_parameters(step):
+    profile_response = world.response.data
+    expected_profile = _perform_casts(step.hashes)[0]
+    assert_that(profile_response, has_entries(expected_profile))
+
 def _get_by_id(profiles, profileid):
     for profile in profiles:
         if profile['id'] == profileid:
