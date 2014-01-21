@@ -22,11 +22,6 @@ from xivo_acceptance.action.restapi import extension_action_restapi
 from xivo_acceptance.helpers import extension_helper
 
 
-@step(u'Given I have no extensions')
-def given_i_have_no_extensions(step):
-    extension_helper.delete_all()
-
-
 @step(u'Given I have no extension with id "([^"]*)"')
 def given_i_have_no_extension_with_id_group1(step, extension_id):
     extension_helper.delete(int(extension_id))
@@ -38,14 +33,6 @@ def given_i_have_no_extension_with_exten_group1(step, pattern):
     extension = extension_helper.find_extension_by_exten_context(exten, context)
     if extension:
         extension_helper.delete(extension.id)
-
-
-@step(u'Given I only have the following extensions:')
-def given_i_only_have_the_following_extensions(step):
-    extension_helper.delete_all()
-    for exteninfo in step.hashes:
-        extension = _extract_extension_parameters(exteninfo)
-        extension_helper.create_extensions([extension])
 
 
 @step(u'Given I have the following extensions:')

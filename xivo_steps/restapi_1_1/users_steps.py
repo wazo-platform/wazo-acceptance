@@ -22,18 +22,6 @@ from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.action.restapi import user_action_restapi
 
 
-@step(u'Given I have no users')
-def given_there_are_no_users(step):
-    user_helper.delete_all()
-
-
-@step(u'Given I only have the following users:$')
-def given_there_are_the_following_users(step):
-    user_helper.delete_all()
-    for userinfo in step.hashes:
-        _create_user(userinfo)
-
-
 @step(u'Given I have the following users:')
 def given_i_have_the_following_users(step):
     for userinfo in step.hashes:

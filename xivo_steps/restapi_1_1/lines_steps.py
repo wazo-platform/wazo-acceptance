@@ -23,13 +23,6 @@ from xivo_acceptance.helpers import line_helper
 from xivo_acceptance.helpers import line_sip_helper
 
 
-@step(u'Given I only have the following lines:')
-def given_i_created_the_following_lines(step):
-    line_helper.delete_all()
-    for lineinfo in step.hashes:
-        _create_line(lineinfo)
-
-
 @step(u'Given I have the following lines:')
 def given_i_have_the_following_lines(step):
     for lineinfo in step.hashes:
@@ -58,11 +51,6 @@ def _create_line(lineinfo):
         line_sip_helper.create_line_sip(lineinfo)
     else:
         line_helper.create(lineinfo)
-
-
-@step(u'Given I have no lines')
-def given_there_are_no_lines(step):
-    line_helper.delete_all()
 
 
 @step(u'When I ask for the list of lines$')
