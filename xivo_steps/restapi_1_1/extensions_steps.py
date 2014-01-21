@@ -60,11 +60,6 @@ def when_i_access_the_list_of_extensions(step):
     world.response = extension_action_restapi.all_extensions()
 
 
-@step(u'When I ask for the extension with id "([^"]*)"')
-def when_i_ask_for_the_extension_with_id_group1(step, extension_id):
-    world.response = extension_action_restapi.get_extension(extension_id)
-
-
 @step(u'When I access the extension with id "([^"]*)"')
 def when_i_access_the_extension_with_id_group1(step, extension_id):
     world.response = extension_action_restapi.get_extension(extension_id)
@@ -90,12 +85,6 @@ def when_i_update_the_extension_with_id_group1_using_the_following_parameters(st
 @step(u'When I delete extension "([^"]*)"')
 def when_i_delete_extension_group1(step, extension_id):
     world.response = extension_action_restapi.delete_extension(extension_id)
-
-
-@step(u'Then I get a list with only the default extensions')
-def then_i_get_a_list_with_only_the_default_extensions(step):
-    extensions = _filter_out_default_extensions()
-    assert_that(extensions, has_length(0))
 
 
 @step(u'Then I get a list containing the following extensions:')
