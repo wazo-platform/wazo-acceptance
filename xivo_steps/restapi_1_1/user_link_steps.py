@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from hamcrest import *
+from xivo_lettuce.xivo_hamcrest import assert_response_valid
 from lettuce import step, world
 
 from xivo_acceptance.action.restapi import user_link_action_restapi
@@ -26,7 +27,7 @@ def given_the_following_users_lines_extensions_are_linked(step):
     for link_info in step.hashes:
         userlink = _extract_parameters(link_info)
         response = user_link_action_restapi.create_user_link(userlink)
-        assert_that(response.status, equal_to(201))
+        assert_response_valid(response)
 
 
 @step(u'Given I have no link with the following parameters:')
