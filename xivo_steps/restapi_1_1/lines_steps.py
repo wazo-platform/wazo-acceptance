@@ -76,11 +76,6 @@ def when_i_ask_for_line_with_id_group1(step, line_id):
     world.response = line_action_restapi.get(line_id)
 
 
-@step(u'When I ask for the list of user_links with line_id "([^"]*)"$')
-def when_i_ask_for_the_list_of_user_links_with_line_id(step, line_id):
-    world.response = line_action_restapi.all_user_links_by_line_id(line_id)
-
-
 @step(u'Then the line "([^"]*)" no longer exists')
 def then_the_line_group1_no_longer_exists(step, line_id):
     response = line_action_restapi.get(line_id)
