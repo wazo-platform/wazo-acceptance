@@ -4,6 +4,7 @@ import os
 import argparse
 import xml.etree.ElementTree as ET
 from StringIO import StringIO
+from collections import namedtuple
 from docutils.core import publish_string
 
 
@@ -22,10 +23,31 @@ The tests listed here were all passing at the moment of the release.
 
 """
 
+Step = namedtuple("Step", ('feature', 'scenario', 'step'))
+
+
+class Features(object):
+    def __init__(self):
+        self.steps = []
+
+    def add_step(self, feature, scenario, step):
+        self.steps.append(Step(feature, scenario, step))
+
+    def names(self):
+        return sorted(set(step.feature for step in self.steps))
+
+    def scenarios(self, feature):
+        result = {}
+        scenarios = set(step.scenario for step in self.steps if step.feature == feature)
+        for scenario in scenarios:
+            result[scenario] = (step.step for step in self.steps if step.feature == feature and step.scenario == scenario)
+
+        return result
+
 
 def get_features(path):
     dirs = os.listdir(path)
-    export = {}
+    features = Features()
     for file in dirs:
         if file.endswith('xml'):
             xml_file_path = os.path.join(path, file)
@@ -36,32 +58,36 @@ def get_features(path):
                 feature_name, scenario_title = child.attrib['classname'].split(':', 1)
                 feature_name = feature_name.strip()
                 scenario_title = scenario_title.strip()
-                if feature_name not in export:
-                    export[feature_name] = []
-                if scenario_title not in export[feature_name]:
-                    export[feature_name].append(scenario_title)
-    return export
+                step_name = child.attrib['name']
+                features.add_step(feature_name, scenario_title, step_name)
+    return features
 
 
-def format_features(export):
+def format_features(features):
     fobj = StringIO()
     fobj.write(TEXT_HEADER)
 
-    for feature_name in sorted(export.keys()):
-        scenario_title_list = export[feature_name]
-        _format_feature(fobj, feature_name, scenario_title_list)
+    for feature_name in features.features():
+        scenarios = features.scenarios(feature_name)
+         fobj.write(_format_feature(feature_name, scenarios)
 
     result = fobj.getvalue()
     fobj.close()
     return result
 
 
-def _format_feature(fobj, feature_name, scenarios):
-    formatted_scenarios = ['* %s' % scenario for scenario in scenarios]
+def _format_feature(feature_name, scenarios):
+    formatted_scenarios = [_format_scenario(scenario, steps) for scenario, steps in scenarios.iteritems()]
     feature_info = {'feature_name': feature_name,
                     'title_decoration': '=' * len(feature_name),
                     'scenarios': '\n'.join(formatted_scenarios)}
-    fobj.write('\n\n%(feature_name)s\n%(title_decoration)s\n\n%(scenarios)s\n' % feature_info)
+    return '\n\n%(feature_name)s\n%(title_decoration)s\n\n%(scenarios)s\n' % feature_info
+
+
+def _format_scenario(scenario, steps):
+    result = '* %s\n\n' % scenario
+    result += '\n'.join('  * %s' % step for step in steps)
+    return result
 
 
 def write_output_file(formatted_text, output_file):
