@@ -38,6 +38,7 @@ def when_i_stop_asterisk(step):
 @step(u'When I restart Asterisk')
 def when_i_restart_asterisk(step):
     sysutils.restart_service('asterisk')
+    sysutils.restart_service('xivo-ctid')
 
 
 @step(u'When I wait for the service "([^"]*)" to stop')
