@@ -67,9 +67,9 @@ def format_features(features):
     fobj = StringIO()
     fobj.write(TEXT_HEADER)
 
-    for feature_name in features.features():
+    for feature_name in features.names():
         scenarios = features.scenarios(feature_name)
-         fobj.write(_format_feature(feature_name, scenarios)
+        fobj.write(_format_feature(feature_name, scenarios))
 
     result = fobj.getvalue()
     fobj.close()
