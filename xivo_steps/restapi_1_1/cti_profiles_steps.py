@@ -31,34 +31,42 @@ def given_i_have_the_following_cti_profiles(step):
     for profile in step.hashes:
         cti_profile_helper.create_profile(profile)
 
+
 @step(u'Given there is no CTI profile with id "([^"]*)"$')
 def given_there_is_no_cti_profile_with_id_group1(step, profileid):
     cti_profile_helper.delete_profile_if_needed(profileid)
+
 
 @step(u'Given the following users, CTI profiles are linked:$')
 def given_the_following_users_cti_profiles_are_linked(step):
     for user_profile in step.hashes:
         _create_association(user_profile)
 
+
 @step(u'When I acces the list of CTI profiles$')
 def when_i_acces_the_list_of_cti_profiles(step):
     world.response = cti_profile_action_restapi.all_profiles()
+
 
 @step(u'When I ask for the CTI profile with id "([^"]*)"$')
 def when_i_ask_for_the_cti_profile_with_id_group1(step, profileid):
     world.response = cti_profile_action_restapi.get_cti_profile(profileid)
 
+
 @step(u'When I send request for the CTI profile associated to the user id "([^"]*)"')
 def when_i_send_request_for_the_cti_profile_associated_to_the_user_id_group1(step, userid):
     world.response = cti_profile_action_restapi.get_cti_profile_for_user(userid)
+
 
 @step(u'When I associate CTI profile "([^"]*)" with user "([^"]*)"$')
 def when_i_associate_cti_profile_group1_with_user_group2(step, cti_profile_id, user_id):
     world.response = cti_profile_action_restapi.associate_profile_to_user(int(cti_profile_id), int(user_id))
 
+
 @step(u'When I dissociate the user "([^"]*)" from its CTI profile$')
 def when_i_dissociate_the_user_group1_from_its_cti_profile(step, userid):
     world.response = cti_profile_action_restapi.dissociate_profile_from_user(userid)
+
 
 @step(u'Then I get a list containing the following CTI profiles:$')
 def then_i_get_a_list_containing_the_following_cti_profiles(step):
@@ -73,6 +81,7 @@ def then_i_get_a_list_containing_the_following_cti_profiles(step):
         assert_that(corresponding, not_none())
         assert_that(corresponding, has_entries(expected_profile))
 
+
 @step(u'Then I get a CTI profile with the following parameters:$')
 def then_i_get_a_cti_profile_with_the_following_parameters(step):
     profile_response = world.response.data
@@ -86,12 +95,14 @@ def _get_by_id(profiles, profileid):
             return profile
     return None
 
+
 def _perform_casts(hashes):
     values = hashes
     for value in values:
         if 'id' in value:
             value['id'] = int(value['id'])
     return values
+
 
 def _create_association(user_profile):
     userid = user_profile['user_id']
