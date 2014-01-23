@@ -22,6 +22,9 @@ from lettuce.registry import world
 from xivo_acceptance.helpers import user_helper
 from xivo_lettuce import common, sysutils, xivoclient
 
+SORT_ASCENDING = 0
+SORT_DESCENDING = 1
+
 
 def configure_client(conf_dict):
     """This function send a message to cticlient to configure it.
@@ -80,6 +83,12 @@ def set_search_for_remote_directory(search):
 
 def exec_double_click_on_number_for_name(name):
     res = xivoclient.exec_command('exec_double_click_on_number_for_name', name)
+    time.sleep(world.config.xc_login_timeout)
+    return res
+
+
+def sort_list_for_remote_directory(column, order=SORT_ASCENDING):
+    res = xivoclient.exec_command('sort_list_for_remote_directory', column, order)
     time.sleep(world.config.xc_login_timeout)
     return res
 

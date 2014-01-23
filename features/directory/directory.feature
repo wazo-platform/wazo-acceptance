@@ -177,6 +177,66 @@ Feature: Remote Directory in CTI Client
           | Nom            | Numéro |
           | Lord Sanderson | 1042   |
 
+    Scenario: Search for a contact when list is sorted
+        Given there are users with infos:
+            | firstname | lastname  | number | context | cti_profile |
+            | Lord      | Sanderson | 1002   | default |             |
+            | Greg      | Sanderson | 1012   | default | Client      |
+            | Fodé      | Sanderson | 1022   | default |             |
+        Given the directory definition "internal" is included in the default directory
+        When I start the XiVO Client
+        When I log in the XiVO Client as "greg", pass "sanderson"
+        When I search for "san" in the directory xlet
+        When I sort results by column "Nom" in ascending order
+        Then the following sorted results show up in the directory xlet:
+          | Nom            | Numéro |
+          | Fodé Sanderson | 1022   |
+          | Greg Sanderson | 1012   |
+          | Lord Sanderson | 1002   |
+        When I search for "der" in the directory xlet
+        Then the following sorted results show up in the directory xlet:
+          | Nom            | Numéro |
+          | Fodé Sanderson | 1022   |
+          | Greg Sanderson | 1012   |
+          | Lord Sanderson | 1002   |
+
+    Scenario: Closing or disconnecting the client preserves sorting order when searching
+        Given there are users with infos:
+            | firstname | lastname  | number | context | cti_profile |
+            | Fodé      | Sanderson | 1421   | default |             |
+            | Greg      | Sanderson | 1411   | default | Client      |
+            | Lord      | Sanderson | 1401   | default |             |
+        Given the directory definition "internal" is included in the default directory
+
+        When I start the XiVO Client
+        When I log in the XiVO Client as "greg", pass "sanderson"
+        When I search for "sanderson" in the directory xlet
+        When I sort results by column "Numéro" in ascending order
+        Then the following sorted results show up in the directory xlet:
+          | Nom            | Numéro |
+          | Lord Sanderson | 1401   |
+          | Greg Sanderson | 1411   |
+          | Fodé Sanderson | 1421   |
+
+        When I log out of the XiVO Client
+        When I log in the XiVO Client as "greg", pass "sanderson"
+        When I search for "sanderson" in the directory xlet
+        Then the following sorted results show up in the directory xlet:
+          | Nom            | Numéro |
+          | Lord Sanderson | 1401   |
+          | Greg Sanderson | 1411   |
+          | Fodé Sanderson | 1421   |
+
+        When I stop the XiVO Client
+        When I start the XiVO Client
+        When I log in the XiVO Client as "greg", pass "sanderson"
+        When I search for "sanderson" in the directory xlet
+        Then the following sorted results show up in the directory xlet:
+          | Nom            | Numéro |
+          | Lord Sanderson | 1401   |
+          | Greg Sanderson | 1411   |
+          | Fodé Sanderson | 1421   |
+
     Scenario: Call a contact in the directory
         Given there are no calls running
         Given there are users with infos:
