@@ -17,8 +17,10 @@
 
 from xivo_lettuce.remote_py_cmd import remote_exec
 
+
 def create_profile(profile):
     remote_exec(_create_profile, profileinfo=profile)
+
 
 def _create_profile(channel, profileinfo):
     from xivo_dao.helpers.db_manager import AsteriskSession
@@ -28,16 +30,16 @@ def _create_profile(channel, profileinfo):
     from xivo_dao.alchemy.ctiphonehintsgroup import CtiPhoneHintsGroup
 
     profile = CtiProfile(**profileinfo)
-#     if(profile.presence_id is None):
-#         profile.presence_id = 1
     session = AsteriskSession()
     session.begin()
     session.execute('DELETE FROM cti_profile WHERE id = :profile_id', {'profile_id': int(profile.id)})
     session.add(profile)
     session.commit()
 
+
 def delete_profile_if_needed(profile_id):
     remote_exec(_delete_profile_if_needed, profile_id=profile_id)
+
 
 def _delete_profile_if_needed(channel, profile_id):
     from xivo_dao.helpers.db_manager import AsteriskSession
@@ -45,10 +47,13 @@ def _delete_profile_if_needed(channel, profile_id):
     from xivo_dao.alchemy.ctipresences import CtiPresences
     from xivo_dao.alchemy.ctiphonehints import CtiPhoneHints
     from xivo_dao.alchemy.ctiphonehintsgroup import CtiPhoneHintsGroup
+    from xivo_dao.alchemy.userfeatures import UserFeatures
 
     session = AsteriskSession()
     session.begin()
     result = session.query(CtiProfile).filter(CtiProfile.id == profile_id).first()
     if result is not None:
+        (session.query(UserFeatures).filter(UserFeatures.cti_profile_id == profile_id)
+                                    .update({'cti_profile_id': None}))
         session.delete(result)
     session.commit()
