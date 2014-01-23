@@ -71,6 +71,18 @@ def when_i_dissociate_the_user_group1_group2_from_its_cti_profile(step, firstnam
     world.response = cti_profile_action_restapi.dissociate_profile_from_user(user_id)
 
 
+@step(u'When I activate the CTI client for user "([^"]*)" "([^"]*)"$')
+def when_i_activate_the_cti_client_for_user_group1_group2(step, firstname, lastname):
+    user_helper.enable_cti_client(firstname, lastname)
+
+
+@step(u'When I associate CTI profile with name "([^"]*)" with user "([^"]*)" "([^"]*)"')
+def when_i_associate_cti_profile_with_name_group1_with_user_group2_group3(step, cti_profile_name, firstname, lastname):
+    cti_profile_id = cti_profile_helper.get_id_with_name(cti_profile_name)
+    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    world.response = cti_profile_action_restapi.associate_profile_to_user(cti_profile_id, int(user_id))
+
+
 @step(u'Then I get a list containing the following CTI profiles:$')
 def then_i_get_a_list_containing_the_following_cti_profiles(step):
     profile_response = world.response.data

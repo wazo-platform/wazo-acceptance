@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_dao.data_handler.cti_profile import dao as cti_profile_dao
 
 
 def create_profile(profile):
@@ -32,6 +33,7 @@ def _create_profile(channel, profileinfo):
     profile = CtiProfile(**profileinfo)
     session = AsteriskSession()
     session.begin()
+    session.execute('UPDATE userfeatures SET cti_profile_id = null WHERE cti_profile_id = :profile_id', {'profile_id': int(profile.id)})
     session.execute('DELETE FROM cti_profile WHERE id = :profile_id', {'profile_id': int(profile.id)})
     session.add(profile)
     session.commit()
@@ -57,3 +59,9 @@ def _delete_profile_if_needed(channel, profile_id):
                                     .update({'cti_profile_id': None}))
         session.delete(result)
     session.commit()
+
+
+def get_id_with_name(cti_profile_name):
+    return cti_profile_dao.get_id_by_name(cti_profile_name)
+
+
