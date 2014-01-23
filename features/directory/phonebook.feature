@@ -1,5 +1,28 @@
 Feature: Phonebook
 
+    Scenario: Search for a contact in the phonebook
+        Given "John Doe" is not in the phonebook
+        Given the directory definition "internal" is included in the default directory
+        When I add the following entries to the phonebook:
+          | first name | last name | phone |
+          | John       | Doe       | 1234  |
+        When I search for "John"
+        Then "John Doe" appears in the list
+
+    Scenario: Import phonebook entries from a CSV file
+        Given there are users with infos:
+         | firstname | lastname  | number | context | cti_profile |
+         | Lord      | Sanderson | 1042   | default | Client      |
+        Given the directory definition "xivodir" is included in the default directory
+        Given "Marty McFly" is not in the phonebook
+        When I import the CSV file "phonebook-x268.csv" into the phonebook
+        When I start the XiVO Client
+        When I log in the XiVO Client as "lord", pass "sanderson"
+        When I search for "marty" in the directory xlet
+        Then the following results show up in the directory xlet:
+          | Nom         | Numéro |
+          | Marty McFly | 1981   |
+
     Scenario: Phonebook is sorted by display name
         Given the phonebook is accessible by any hosts
         Given there are no LDAP filters configured in the phonebook
