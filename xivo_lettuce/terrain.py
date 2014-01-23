@@ -24,6 +24,7 @@ from xivobrowser import XiVOBrowser
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_lettuce.config import XivoAcceptanceConfig
 from xivo_lettuce import common
+from xivo_lettuce.phone_register import PhoneRegister
 
 
 @before.all
@@ -49,6 +50,7 @@ def xivo_lettuce_after_each_step(step):
 
 @after.each_scenario
 def xivo_lettuce_after_each_scenario(scenario):
+    world.phone_register.clear_scenario(scenario)
     _logout_agents()
 
 
@@ -60,6 +62,7 @@ def xivo_lettuce_after_all(total):
 def initialize():
     world.config = XivoAcceptanceConfig()
     world.config.setup()
+    world.phone_register = PhoneRegister()
     _setup_ssh_client()
     _setup_ws()
     _setup_provd()

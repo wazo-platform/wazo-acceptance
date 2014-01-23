@@ -18,12 +18,67 @@
 import time
 
 from lettuce import step
+from lettuce import world
 
 from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper
 from xivo_lettuce import common
 from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.logs import search_str_in_asterisk_log
+
+from linphonelib import ExtensionNotFoundException
+
+
+@step(u'When a call is started:')
+def when_a_call_is_started(step):
+
+    def _call(caller, callee, hangup, dial, talk_time=0, ring_time=0):
+        caller_phone = world.phone_register.get_user_phone(step.scenario, caller)
+        callee_phone = world.phone_register.get_user_phone(step.scenario, callee)
+        first_to_hangup = caller_phone if hangup == 'caller' else callee_phone
+
+        caller_phone.call(dial)
+        time.sleep(int(ring_time))
+        callee_phone.answer()
+        time.sleep(int(talk_time))
+        first_to_hangup.hangup()
+
+    for call_info in step.hashes:
+        _call(**call_info)
+
+
+@step(u'When "([^"]*)" calls "([^"]*)"$')
+def when_a_calls_exten(step, name, exten):
+    phone = world.phone_register.get_user_phone(step.scenario, name)
+    phone.call(exten)
+
+
+@step(u'When "([^"]*)" answers')
+def when_a_answers(step, name):
+    phone = world.register.get_user_phone(step.scenario, name)
+    phone.answer()
+
+
+@step(u'When "([^"]*)" hangs up')
+def when_a_hangs_up(step, name):
+    phone = world.register.get_user_phone(step.scenario, name)
+    phone.hangup()
+
+
+@step(u'When "([^"]*)" and "([^"]*)" talk for "([^"]*)" seconds')
+def when_a_and_b_talk_for_n_seconds(step, _a, _b, n):
+    time.sleep(float(n))
+
+
+@step(u'Then "([^"]*)" last call should be "([^"]*)"')
+def then_user_last_call_shoud_be_call_status(step, name, status):
+    phone = world.phone_register.get_user_phone(step.scenario, name)
+    try:
+        phone.last_call_result()
+    except ExtensionNotFoundException:
+        pass
+    else:
+        raise AssertionError('%s was not raised' % status)
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
