@@ -15,7 +15,11 @@ class CallResult(object):
 class SipPhone(object):
 
     def __init__(self, sip_name, sip_passwd, hostname, local_port):
-        self._session = Session(sip_name, sip_passwd, hostname, local_port, sys.stdout)
+        if world.config.linphone_debug:
+            logfile = sys.stdout
+        else:
+            logfile = None
+        self._session = Session(sip_name, sip_passwd, hostname, local_port, logfile)
         self._call_result = None
         self.port = local_port
 

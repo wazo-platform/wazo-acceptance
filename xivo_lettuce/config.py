@@ -78,6 +78,7 @@ class XivoAcceptanceConfig(object):
         self.kvm_boot_timeout = int(self._config.get('kvm_infos', 'boot_timeout'))
 
         self.linphone_port_range = self._config.get('linphone', 'port_range')
+        self.linphone_debug = self._config.getboolean('linphone', 'debug')
 
     def setup(self):
         self._setup_dao()
