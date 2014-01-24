@@ -63,5 +63,3 @@ def _delete_profile_if_needed(channel, profile_id):
 
 def get_id_with_name(cti_profile_name):
     return cti_profile_dao.get_id_by_name(cti_profile_name)
-
-
