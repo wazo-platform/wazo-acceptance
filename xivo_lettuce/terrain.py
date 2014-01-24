@@ -41,6 +41,7 @@ def xivo_lettuce_before_each_scenario(scenario):
     world.lineid = None
     if world.config.browser_enable and _webi_configured():
         _check_webi_login_root()
+    scenario.phone_register = PhoneRegister()
 
 
 @after.each_step
@@ -50,7 +51,7 @@ def xivo_lettuce_after_each_step(step):
 
 @after.each_scenario
 def xivo_lettuce_after_each_scenario(scenario):
-    world.phone_register.clear_scenario(scenario)
+    scenario.phone_register.clear()
     _logout_agents()
 
 
@@ -62,7 +63,6 @@ def xivo_lettuce_after_all(total):
 def initialize():
     world.config = XivoAcceptanceConfig()
     world.config.setup()
-    world.phone_register = PhoneRegister()
     _setup_ssh_client()
     _setup_ws()
     _setup_provd()

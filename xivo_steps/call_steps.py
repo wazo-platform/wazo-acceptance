@@ -33,8 +33,8 @@ from linphonelib import ExtensionNotFoundException
 def when_a_call_is_started(step):
 
     def _call(caller, callee, hangup, dial, talk_time=0, ring_time=0):
-        caller_phone = world.phone_register.get_user_phone(step.scenario, caller)
-        callee_phone = world.phone_register.get_user_phone(step.scenario, callee)
+        caller_phone = step.scenario.phone_register.get_user_phone(caller)
+        callee_phone = step.scenario.phone_register.get_user_phone(callee)
         first_to_hangup = caller_phone if hangup == 'caller' else callee_phone
 
         caller_phone.call(dial)
@@ -49,19 +49,19 @@ def when_a_call_is_started(step):
 
 @step(u'When "([^"]*)" calls "([^"]*)"$')
 def when_a_calls_exten(step, name, exten):
-    phone = world.phone_register.get_user_phone(step.scenario, name)
+    phone = step.scenario.phone_register.get_user_phone(name)
     phone.call(exten)
 
 
 @step(u'When "([^"]*)" answers')
 def when_a_answers(step, name):
-    phone = world.register.get_user_phone(step.scenario, name)
+    phone = world.register.get_user_phone(name)
     phone.answer()
 
 
 @step(u'When "([^"]*)" hangs up')
 def when_a_hangs_up(step, name):
-    phone = world.register.get_user_phone(step.scenario, name)
+    phone = world.register.get_user_phone(name)
     phone.hangup()
 
 
@@ -72,7 +72,7 @@ def when_a_and_b_talk_for_n_seconds(step, _a, _b, n):
 
 @step(u'Then "([^"]*)" last call should be "([^"]*)"')
 def then_user_last_call_shoud_be_call_status(step, name, status):
-    phone = world.phone_register.get_user_phone(step.scenario, name)
+    phone = step.scenario.phone_register.get_user_phone(name)
     try:
         phone.last_call_result()
     except ExtensionNotFoundException:

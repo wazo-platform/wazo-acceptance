@@ -62,10 +62,10 @@ def given_there_are_users_with_infos(step):
     """
     for user_data in step.hashes:
         _add_user(user_data)
-        _register_and_track_phone(user_data, step.scenario)
+        _register_and_track_phone(step.scenario, user_data)
 
 
-def _register_and_track_phone(user_data, scenario):
+def _register_and_track_phone(scenario, user_data):
     phone_available = user_data.get('protocol') == 'sip' and 'number' in user_data
     if not phone_available:
         return
@@ -79,7 +79,7 @@ def _register_and_track_phone(user_data, scenario):
 
     phone = sip_phone.register_line(line_configs[0], name)
     if phone:
-        world.phone_register.add_registered_phone(phone, scenario, name)
+        scenario.phone_register.add_registered_phone(phone, name)
 
 
 def _add_user(user_data):

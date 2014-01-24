@@ -21,20 +21,12 @@ class PhoneRegister(object):
     def __init__(self):
         self._sip_phones = {}
 
-    def add_registered_phone(self, phone, scenario, name):
-        if scenario not in self._sip_phones:
-            self._sip_phones[scenario] = {name: phone}
-        else:
-            self._sip_phones[scenario][name] = phone
+    def add_registered_phone(self, phone, name):
+        self._sip_phones[name] = phone
 
-    def clear_scenario(self, scenario):
-        if scenario not in self._sip_phones:
-            return
+    def clear(self):
+        for name in self._sip_phones.keys():
+            del self._sip_phones[name]
 
-        to_remove = self._sip_phones[scenario].keys()
-        for name in to_remove:
-            del self._sip_phones[scenario][name]
-        del self._sip_phones[scenario]
-
-    def get_user_phone(self, scenario, name):
-        return self._sip_phones.get(scenario, {}).get(name)
+    def get_user_phone(self, name):
+        return self._sip_phones.get(name)
