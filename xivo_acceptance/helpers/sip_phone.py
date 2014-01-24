@@ -1,4 +1,6 @@
 import subprocess
+import sys
+import time
 
 from lettuce import world
 from linphonelib import Session
@@ -13,15 +15,22 @@ class CallResult(object):
 class SipPhone(object):
 
     def __init__(self, sip_name, sip_passwd, hostname, local_port):
-        self._session = Session(sip_name, sip_passwd, hostname, local_port)
+        self._session = Session(sip_name, sip_passwd, hostname, local_port, sys.stdout)
         self._call_result = None
         self.port = local_port
 
-    def answer(self):
-        try:
-            self._session.answer()
-        except LinphoneException:
-            print 'Failed to answer the call'
+    def answer(self, timeout=2):
+        start = time.time()
+        exception = None
+        while time.time() - start < timeout:
+            try:
+                self._session.answer()
+            except LinphoneException as e:
+                exception = e
+            else:
+                return
+        if e:
+            raise e
 
     def call(self, exten):
         try:
