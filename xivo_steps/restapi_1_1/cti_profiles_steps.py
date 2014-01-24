@@ -119,8 +119,8 @@ def _perform_casts(hashes):
     return values
 
 
-def _create_association(user_profile):
-    [firstname, lastname] = user_profile['user_fullname'].split(' ')
+def _create_association(association_infos):
+    firstname, lastname = association_infos['firstname'], association_infos['lastname']
     userid = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
-    profileid = user_profile['cti_profile_id']
+    profileid = association_infos['cti_profile_id']
     cti_profile_action_restapi.associate_profile_to_user(int(profileid), int(userid))
