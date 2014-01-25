@@ -7,7 +7,6 @@ PYTHONPATH_STR=''
 FEATURE_NAME=$(echo $JOB_NAME | sed 's/acceptance_//g')
 
 export PYTHONIOENCODING=UTF-8
-export XC_PATH=/tmp/cticlient_bin
 
 function clone_or_pull_repo() {
     repo="$1"
