@@ -23,7 +23,7 @@ from lettuce.registry import world
 
 from xivo_acceptance.action.restapi import cti_profile_action_restapi
 from xivo_acceptance.helpers import cti_profile_helper, user_helper
-from hamcrest.core.core.isnone import not_none
+from hamcrest.core.core.isnone import not_none, none
 
 
 @step(u'Given I have the following CTI profiles:$')
@@ -59,18 +59,6 @@ def when_i_associate_cti_profile_group1_with_user_group2_group3(step, cti_profil
     world.response = cti_profile_action_restapi.associate_profile_to_user(int(cti_profile_id), int(user_id))
 
 
-@step(u'When I send request for the CTI profile associated to the user "([^"]*)" "([^"]*)"$')
-def when_i_send_request_for_the_cti_profile_associated_to_the_user_group1_group2(step, firstname, lastname):
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
-    world.response = cti_profile_action_restapi.get_cti_profile_for_user(user_id)
-
-
-@step(u'When I dissociate the user "([^"]*)" "([^"]*)" from its CTI profile$')
-def when_i_dissociate_the_user_group1_group2_from_its_cti_profile(step, firstname, lastname):
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
-    world.response = cti_profile_action_restapi.dissociate_profile_from_user(user_id)
-
-
 @step(u'When I activate the CTI client for user "([^"]*)" "([^"]*)"$')
 def when_i_activate_the_cti_client_for_user_group1_group2(step, firstname, lastname):
     user_helper.enable_cti_client(firstname, lastname)
@@ -81,6 +69,18 @@ def when_i_associate_cti_profile_with_name_group1_with_user_group2_group3(step, 
     cti_profile_id = cti_profile_helper.get_id_with_name(cti_profile_name)
     user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
     world.response = cti_profile_action_restapi.associate_profile_to_user(cti_profile_id, int(user_id))
+
+
+@step(u'When I send request for the CTI configuration of the user "([^"]*)" "([^"]*)"$')
+def when_i_send_request_for_the_cti_configuration_of_the_user_group1_group2(step, firstname, lastname):
+    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    world.response = cti_profile_action_restapi.get_cti_profile_for_user(user_id)
+
+
+@step(u'When I enable the CTI client for the user "([^"]*)" "([^"]*)"')
+def when_i_enable_the_cti_client_for_the_user_group1_group2(step, firstname, lastname):
+    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    world.response = cti_profile_action_restapi.enable_cti_for_user(int(user_id))
 
 
 @step(u'Then I get a list containing the following CTI profiles:$')
@@ -95,6 +95,12 @@ def then_i_get_a_list_containing_the_following_cti_profiles(step):
         corresponding = _get_by_id(profiles, int(expected_profile['id']))
         assert_that(corresponding, not_none())
         assert_that(corresponding, has_entries(expected_profile))
+
+
+@step(u'Then I get a response with a null CTI profile')
+def then_i_get_a_response_with_a_null_cti_profile(step):
+    profile_response = world.response.data
+    assert_that(profile_response['cti_profile_id'], none())
 
 
 @step(u'Then I get a CTI profile with the following parameters:$')
