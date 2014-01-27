@@ -17,10 +17,12 @@
 
 import time
 
+from hamcrest import assert_that
+from hamcrest import has_items
 from lettuce import step
 from lettuce import world
 
-from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper
+from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper, cti_helper
 from xivo_lettuce import common
 from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
@@ -45,6 +47,18 @@ def when_a_call_is_started(step):
 
     for call_info in step.hashes:
         _call(**call_info)
+
+
+@step(u'Then I should see the following caller id:')
+def then_i_should_see_the_following_caller_id(step):
+    caller_id_info = step.hashes[0]
+    expected = [
+        {'Variable': 'xivo-calledidname',
+         'Value': caller_id_info['Name']},
+        {'Variable': 'xivo-calleridnum',
+         'Value': caller_id_info['Number']},
+    ]
+    assert_that(cti_helper.get_sheet_infos(), has_items(*expected))
 
 
 @step(u'When "([^"]*)" calls "([^"]*)"$')
