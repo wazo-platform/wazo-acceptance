@@ -72,6 +72,20 @@ def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the
     cti_helper.restart_server()
 
 
+@step(u"Given there's an LDAP server configured for reverse lookup with entries:")
+def given_there_s_an_ldap_server_configured_for_reverse(step):
+    ldap_filter = 'openldap-dev'
+    given_the_ldap_server_is_configured_for_ssl_connections(step)
+    for directory_entry in step.hashes:
+        ldap_action_webi.add_or_replace_entry(directory_entry)
+    _configure_display_filter()
+    _configure_ldap_directory(ldap_filter)
+    _add_directory_to_direct_directories()
+    given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the_ldap_filter('openldap-dev')
+    directory_action_webi.set_reverse_directories([ldap_filter])
+    cti_helper.restart_server()
+
+
 @step(u'Given the LDAP server is configured for SSL connections')
 def given_the_ldap_server_is_configured_for_ssl_connections(step):
     _copy_ca_certificate()
