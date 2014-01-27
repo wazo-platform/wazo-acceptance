@@ -26,6 +26,14 @@ from xivo_lettuce import assets, common, func
 from xivo_lettuce.form import submit
 
 
+@step(u'Given a reverse lookup test configuration')
+def given_a_reverse_lookup_test_configuration(step):
+    model_name = 'test'
+    cti_helper.add_call_form_model(model_name, ['xivo-calleridnum',
+                                                'xivo-calleridname'])
+    cti_helper.set_call_form_model_on_event(model_name, 'Link')
+
+
 @step(u'Given the following directory configurations exist:')
 def given_the_following_directories_exist(step):
     for directory in step.hashes:
