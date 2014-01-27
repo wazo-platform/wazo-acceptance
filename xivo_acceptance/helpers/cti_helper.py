@@ -27,6 +27,15 @@ SORT_ASCENDING = 0
 SORT_DESCENDING = 1
 
 
+EVENT_ELEMENT_MAP = {
+    'Dial': 'it-dial',
+    'Link': 'it-link',
+    'Unlink': 'it-unlink',
+    'Incoming DID': 'it-incomingdid',
+    'Hangup': 'it-hangup',
+}
+
+
 def configure_client(conf_dict):
     """This function send a message to cticlient to configure it.
 
@@ -151,6 +160,20 @@ def get_infos_in_custom_sheet():
     response = xivoclient.exec_command('get_infos_in_custom_sheet')
     assert_that(response['test_result'], equal_to('passed'))
     return [{u'widget_name': key, u'value': value} for key, value in response['return_value'].iteritems()]
+
+
+def set_call_form_model_on_event(call_form_name, event):
+    common.open_url('sheetevent')
+
+    for name, element in EVENT_ELEMENT_MAP.iteritems():
+        select_box = world.browser.find_element_by_id(element)
+
+        if name == event:
+            Select(select_box).select_by_visible_text(call_form_name)
+        else:
+            Select(select_box).select_by_index(0)
+
+    form.submit.submit_form()
 
 
 def add_call_form_model(call_form_name, variables):

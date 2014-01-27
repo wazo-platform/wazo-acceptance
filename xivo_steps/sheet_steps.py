@@ -16,20 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from hamcrest import assert_that, equal_to, has_items
-from lettuce import step, world
-from selenium.webdriver.support.select import Select
+from lettuce import step
 from xivo_lettuce import common
 from xivo_lettuce import form
 from xivo_acceptance.helpers import cti_helper
-
-
-EVENT_ELEMENT_MAP = {
-    'Dial': 'it-dial',
-    'Link': 'it-link',
-    'Unlink': 'it-unlink',
-    'Incoming DID': 'it-incomingdid',
-    'Hangup': 'it-hangup',
-}
 
 
 @step(u'Given I have a sheet model named "([^"]*)" with the variables:')
@@ -39,18 +29,8 @@ def given_i_have_a_sheet_model_named_group1_with_the_variables(step, call_form_n
 
 
 @step(u'^Given I assign the sheet "([^"]*)" to the "(.+)" event$')
-def given_i_assign_the_sheet_group1_to_the_agent_linked_event(step, sheet_name, event_name):
-    common.open_url('sheetevent')
-
-    for name, element in EVENT_ELEMENT_MAP.iteritems():
-        select_box = world.browser.find_element_by_id(element)
-
-        if name == event_name:
-            Select(select_box).select_by_visible_text(sheet_name)
-        else:
-            Select(select_box).select_by_index(0)
-
-    form.submit.submit_form()
+def given_i_assign_model_to_event(step, call_form_name, event):
+    cti_helper.set_call_form_model_on_event(call_form_name, event)
 
 
 @step(u'Given I have a sheet model with custom UI:')
