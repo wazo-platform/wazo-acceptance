@@ -18,7 +18,9 @@
 from lettuce import step
 
 from xivo_acceptance.action.webi import ldap as ldap_action_webi
+from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_lettuce import assets, common, sysutils, ldap_utils
+from xivo_acceptance.helpers import cti_helper
 
 
 def _check_ldap_is_up():
@@ -54,6 +56,20 @@ def i_create_an_ldap_filter_with_name_and_server(step, name, server):
         server=server,
         base_dn='dc=lan-quebec,dc=avencall,dc=com'
     )
+
+
+@step(u'Given there are entries in the ldap server:')
+def given_there_are_entries_in_the_ldap_server(step):
+    for directory_entry in step.hashes:
+        ldap_action_webi.add_or_replace_entry(directory_entry)
+
+
+@step(u'Given the CTI directory definition is configured for LDAP searches using the ldap filter "([^"]*)"')
+def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the_ldap_filter(step, ldap_filter):
+    _configure_display_filter()
+    _configure_ldap_directory(ldap_filter)
+    _add_directory_to_direct_directories()
+    cti_helper.restart_server()
 
 
 @step(u'Given the LDAP server is configured for SSL connections')
@@ -146,3 +162,30 @@ def when_the_ldap_service_is_stopped(step):
 @step(u'When I shut down the LDAP server')
 def when_i_shut_down_the_ldap_server(step):
     ldap_utils.shutdown_ldap_server()
+
+
+def _configure_display_filter():
+    field_list = [
+        (u'Nom', u'', u'{db-firstname} {db-lastname}'),
+        (u'Numéro', u'', u'{db-phone}')
+    ]
+    directory_action_webi.add_or_replace_display("Display", field_list)
+
+
+def _configure_ldap_directory(ldap_filter):
+    directory_action_webi.add_or_replace_directory(
+        name='ldapdirectory',
+        uri='ldapfilter://%s' % ldap_filter,
+        direct_match='sn,givenName,telephoneNumber',
+        fields={'firstname': 'givenName',
+                'lastname': 'sn',
+                'phone': 'telephoneNumber'},
+    )
+
+
+def _add_directory_to_direct_directories(directories=['ldapdirectory']):
+    directory_action_webi.assign_filter_and_directories_to_context(
+        'default',
+        'Display',
+        directories
+    )

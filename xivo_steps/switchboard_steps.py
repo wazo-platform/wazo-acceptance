@@ -161,12 +161,6 @@ def given_the_display_filter_group1_exists_with_the_following_fields(step, filte
     directory_action_webi.add_or_replace_display(filter_name, field_list)
 
 
-@step(u'Given there are entries in the ldap server:')
-def given_there_are_entries_in_the_ldap_server(step):
-    for directory_entry in step.hashes:
-        ldap_action_webi.add_or_replace_entry(directory_entry)
-
-
 @step(u'Given the user "([^"]*)" is configured for switchboard use')
 def given_the_user_group1_is_configured_for_switchboard_use(step, user):
     user_action_webi.switchboard_config_for_user(user)

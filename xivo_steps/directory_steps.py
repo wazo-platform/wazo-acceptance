@@ -50,23 +50,6 @@ def given_the_csv_file_is_copied_on_the_server_into_group2(step, csvfile, server
     assets.copy_asset_to_server(csvfile, serverpath)
 
 
-@step(u'Given the CTI directory definition is configured for LDAP searches using the ldap filter "([^"]*)"')
-def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the_ldap_filter(step, ldap_filter):
-    _configure_display_filter()
-    _configure_ldap_directory(ldap_filter)
-    _add_directory_to_direct_directories()
-    cti_helper.restart_server()
-
-
-@step(u'Given the CTI server searches both the internal directory and the LDAP filter "([^"]*)"')
-def given_the_cti_server_searches_both_the_internal_directory_and_the_ldap_filter_group1(step, ldap_filter):
-    _configure_display_filter()
-    _configure_ldap_directory(ldap_filter)
-    _configure_internal_directory()
-    _add_directory_to_direct_directories(['ldapdirectory', 'internal'])
-    cti_helper.restart_server()
-
-
 @step(u'Given the internal directory exists')
 def given_the_internal_directory_exists(step):
     _configure_internal_directory()
@@ -208,25 +191,6 @@ def then_the_following_sorted_results_show_up_in_the_directory_xlet(step):
     assert_that(assert_res, equal_to(True))
 
 
-def _configure_display_filter():
-    field_list = [
-        (u'Nom', u'', u'{db-firstname} {db-lastname}'),
-        (u'Numéro', u'', u'{db-phone}')
-    ]
-    directory_action_webi.add_or_replace_display("Display", field_list)
-
-
-def _configure_ldap_directory(ldap_filter):
-    directory_action_webi.add_or_replace_directory(
-        name='ldapdirectory',
-        uri='ldapfilter://%s' % ldap_filter,
-        direct_match='sn,givenName,telephoneNumber',
-        fields={'firstname': 'givenName',
-                'lastname': 'sn',
-                'phone': 'telephoneNumber'},
-    )
-
-
 def _configure_internal_directory():
     directory_action_webi.add_or_replace_directory(
         name='internal',
@@ -235,12 +199,4 @@ def _configure_internal_directory():
         fields={'firstname': 'userfeatures.firstname',
                 'lastname': 'userfeatures.lastname',
                 'phone': 'extensions.exten'}
-    )
-
-
-def _add_directory_to_direct_directories(directories=['ldapdirectory']):
-    directory_action_webi.assign_filter_and_directories_to_context(
-        'default',
-        'Display',
-        directories
     )
