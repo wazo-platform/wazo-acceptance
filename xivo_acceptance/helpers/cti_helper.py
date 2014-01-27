@@ -189,7 +189,7 @@ def add_call_form_model(call_form_name, variables):
 def _add_sheet_variable(variable_name):
     var_config = {
         'title': variable_name,
-        'type': 'text',
+        'display_type': 'text',
         'default_value': '',
         'display_value': variable_name,
     }
