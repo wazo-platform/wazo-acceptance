@@ -81,6 +81,27 @@ def then_user_last_call_shoud_be_call_status(step, name, status):
         raise AssertionError('%s was not raised' % status)
 
 
+@step(u'When a call from "([^"]*)" is received for "([^"]*"')
+def when_a_call_from_number_to_is_received(step, number, name):
+    vars = {
+        'name': name,
+        'number': number,
+        'login': name.split(' ', 1)[0].lower(),
+        'password': name.split(' ', 1)[1].lower(),
+    }
+    step.given('Given there is an incall "%(number)s" in context "from-extern" to the "User" "%(name)s"' % vars)
+    step.given('Given there is a SIP trunk "%(number)" in context "from-extern"' % vars)
+    step.when('When I start the XiVO Client')
+    step.when('When I enable screen pop-up')
+    step.when('When I log in the XiVO Client as "%(login)s", pass "%(password)s"' % vars)
+    step.given('Given there are no calls running')
+    step.given('Given I wait 5 seconds for the dialplan to be reloaded')
+    step.given('Given I register extension "%(number)s"' % vars)
+    step.given('Given I wait call then I answer then I hang up after "3s"')
+    step.when('When there is 1 calls to extension "%(number)s@from-extern" on trunk "%(number)s" and wait' % vars)
+    step.given('Given I wait 10 seconds for the call processing')
+
+
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
 def given_there_is_group1_activated_in_extensions_page(step, option_label):
     common.open_url('extenfeatures')
