@@ -59,6 +59,32 @@ def find_line_id_with_exten_context(exten, context):
     return line.id
 
 
+def find_sccp_lines_with_exten_context(exten, context):
+    return remote_exec_with_result(_find_sccp_lines_with_exten_context, exten=exten, context=context)
+
+
+def _find_sccp_lines_with_exten_context(channel, exten, context):
+    from xivo_dao.data_handler.line import services as line_services
+
+    lines = line_services.find_all_by_protocol('sccp')
+    sccp_line_ids = [line.id for line in lines if line.name == exten and line.context == context]
+    channel.send(sccp_line_ids)
+
+
+def line_exists(line_id):
+    return remote_exec_with_result(_line_exists, line_id=line_id)
+
+
+def _line_exists(channel, line_id):
+    from xivo_dao.data_handler.line import services as line_services
+
+    try:
+        line_services.get(line_id)
+        channel.send(True)
+    except LookupError:
+        channel.send(False)
+
+
 def delete_line_with_exten_context(exten, context):
     remote_exec(_delete_line_with_exten_context, exten=exten, context=context)
 
@@ -88,6 +114,7 @@ def _all_line_ids(channel):
 
 
 def delete_line(line_id):
+    delete_line_associations(line_id)
     remote_exec(_delete_line, line_id=line_id)
 
 
@@ -95,22 +122,38 @@ def _delete_line(channel, line_id):
     from xivo_dao.data_handler.exception import ElementDeletionError
     from xivo_dao.data_handler.exception import ElementNotExistsError
     from xivo_dao.data_handler.line import services as line_services
-    from xivo_dao.data_handler.line_extension import dao as line_extension_dao
-    from xivo_dao.data_handler.user_line import dao as user_line_dao
-
-    user_lines = user_line_dao.find_all_by_line_id(line_id)
-    for user_line in user_lines:
-        user_line_dao.dissociate(user_line)
-
-    line_extension = line_extension_dao.find_by_line_id(line_id)
-    if line_extension:
-        line_extension_dao.dissociate(line_extension)
 
     try:
         line = line_services.get(line_id)
         line_services.delete(line)
     except (ElementDeletionError, ElementNotExistsError):
         pass
+
+
+def delete_line_associations(line_id):
+    if line_exists(line_id):
+        remote_exec(_delete_line_associations, line_id=line_id)
+
+
+def _delete_line_associations(channel, line_id):
+    from xivo_dao.data_handler.line import services as line_services
+    from xivo_dao.data_handler.line_extension import services as line_extension_services
+    from xivo_dao.data_handler.user_line import services as user_line_services
+
+    line = line_services.get(line_id)
+    line.device = None
+    line_services.edit(line)
+
+    line_extension = line_extension_services.find_by_line_id(line_id)
+    if line_extension:
+        line_extension_services.dissociate(line_extension)
+
+    user_lines = user_line_services.find_all_by_line_id(line_id)
+    secondary_associations = [ul for ul in user_lines if not ul.main_user]
+    main_associations = [ul for ul in user_lines if ul.main_user]
+
+    for user_line in secondary_associations + main_associations:
+        user_line_services.dissociate(user_line)
 
 
 def create(parameters):

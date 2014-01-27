@@ -22,16 +22,25 @@ from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.action.restapi import user_action_restapi
 
 
-@step(u'Given I have no users')
-def given_there_are_no_users(step):
-    user_helper.delete_all()
-
-
-@step(u'Given I only have the following users:$')
-def given_there_are_the_following_users(step):
-    user_helper.delete_all()
+@step(u'Given I have the following users:')
+def given_i_have_the_following_users(step):
     for userinfo in step.hashes:
-        user_helper.create_user(userinfo)
+        _delete_user(userinfo)
+        _create_user(userinfo)
+
+
+def _delete_user(userinfo):
+    if 'id' in userinfo:
+        user_helper.delete_user(int(userinfo['id']))
+
+    if 'firstname' in userinfo and 'lastname' in userinfo:
+        user = user_helper.find_by_firstname_lastname(userinfo['firstname'], userinfo['lastname'])
+        if user:
+            user_helper.delete_user(user.id)
+
+
+def _create_user(userinfo):
+    user_helper.create_user(userinfo)
 
 
 @step(u'Given there are no users with id "([^"]*)"$')
@@ -83,12 +92,7 @@ def when_i_delete_the_user_with_id_group1(step, userid):
     world.response = user_action_restapi.delete_user(userid)
 
 
-@step(u'When I get the lines associated to user "([^"]*)"')
-def when_i_get_the_lines_associated_to_a_user(step, userid):
-    world.response = user_action_restapi.get_lines_associated_to_a_user(userid)
-
-
-@step(u'Then I get a list with the following users:')
+@step(u'Then I get a list containing the following users:')
 def then_i_get_a_list_with_the_following_users(step):
     user_response = world.response.data
     expected_users = step.hashes
@@ -96,8 +100,8 @@ def then_i_get_a_list_with_the_following_users(step):
     assert_that(user_response, has_key('items'))
     users = user_response['items']
 
-    for expected_user, user in zip(expected_users, users):
-        assert_that(user, has_entries(expected_user))
+    for expected_user in expected_users:
+        assert_that(users, has_item(has_entries(expected_user)))
 
 
 @step(u'Then I get a user with the following parameters:')

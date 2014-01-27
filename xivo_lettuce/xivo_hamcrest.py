@@ -40,3 +40,9 @@ def _expected_needles(needles):
 def assert_does_not_have_any_dicts(haystack, needles):
     for needle in needles:
         h.assert_that(haystack, h.is_not(h.has_item(h.has_entries(needle))))
+
+
+def assert_response_valid(response):
+    msg = "URL: %s, Response received: %s" % (response.url, unicode(response.data))
+    h.assert_that(response.status, h.greater_than_or_equal_to(200), msg)
+    h.assert_that(response.status, h.less_than(400), msg)

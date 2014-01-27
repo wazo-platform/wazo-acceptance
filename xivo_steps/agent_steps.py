@@ -20,7 +20,8 @@ from hamcrest import assert_that, equal_to
 from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
-from xivo_acceptance.helpers import agent_helper, user_helper
+from xivo_acceptance.helpers import agent_helper
+from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common, form, func
 
 
@@ -45,7 +46,7 @@ def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastna
         'line_number': number,
         'line_context': context
     }
-    user_id = user_helper.add_or_replace_user(user_data)
+    user_id = ule_helper.add_or_replace_user(user_data)
     agent_data = {
         'firstname': firstname,
         'lastname': lastname,

@@ -23,6 +23,7 @@ from selenium.webdriver.support.select import Select
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import user_helper, agent_helper, group_helper, sip_phone
+from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common, form
 
 
@@ -123,7 +124,7 @@ def _add_user(user_data):
     if user_data.get('mobile_number'):
         user_ws_data['mobile_number'] = user_data['mobile_number']
 
-    user_id = user_helper.add_or_replace_user(user_ws_data)
+    user_id = ule_helper.add_or_replace_user(user_ws_data)
 
     if user_data.get('agent_number'):
         agent_helper.delete_agents_with_number(user_data['agent_number'])
@@ -140,7 +141,7 @@ def _add_user(user_data):
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
 def given_there_is_a_no_user_1_2(step, firstname, lastname):
-    user_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
+    ule_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
 
 
 @step(u'Given user "([^"]*)" "([^"]*)" has the following function keys:')
@@ -188,7 +189,7 @@ def when_i_create_a_user(step):
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"$')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
     user_id = user_helper.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
-    user_helper.delete_user_line_extension_with_firstname_lastname(dest_firstname, dest_lastname)
+    ule_helper.delete_user_line_extension_with_firstname_lastname(dest_firstname, dest_lastname)
     common.open_url('user', 'edit', {'id': user_id})
     user_action_webi.type_user_names(dest_firstname, dest_lastname)
     form.submit.submit_form()
@@ -220,7 +221,7 @@ def when_i_delete_agent_number_1(step, agent_number):
 
 @step(u'When I add a user "([^"]*)" "([^"]*)" with a function key with type Customized and extension "([^"]*)"$')
 def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastname, extension):
-    user_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
+    ule_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'add')
     user_action_webi.type_user_names(firstname, lastname)
     user_action_webi.type_func_key('Customized', extension)

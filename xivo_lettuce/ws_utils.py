@@ -106,12 +106,13 @@ class WsUtils(object):
         except:
             pass
 
-        return RestResponse(status_code, headers, body)
+        return RestResponse(response.url, status_code, headers, body)
 
 
 class RestResponse(object):
 
-    def __init__(self, status, headers, data):
+    def __init__(self, url, status, headers, data):
+        self.url = url
         self.status = status
         self.headers = headers
         self.data = data

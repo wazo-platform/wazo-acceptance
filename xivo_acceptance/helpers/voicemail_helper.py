@@ -23,47 +23,32 @@ def delete_voicemail_with_id(voicemail_id):
 
 
 def _delete_voicemail_with_id(channel, voicemail_id):
-    from xivo_dao.data_handler.voicemail import services
+    from xivo_dao.data_handler.voicemail import services as voicemail_services
+    from xivo_dao.data_handler.user_voicemail import services as user_voicemail_services
     from xivo_dao.data_handler.exception import ElementNotExistsError
 
     try:
-        voicemail = services.get(voicemail_id)
-        services.delete(voicemail)
+        user_voicemail = user_voicemail_services.find_by_voicemail_id(voicemail_id)
+        if user_voicemail:
+            user_voicemail_services.dissociate(user_voicemail)
+
+        voicemail = voicemail_services.get(voicemail_id)
+        voicemail_services.delete(voicemail)
+
     except ElementNotExistsError:
         pass
 
 
 def delete_voicemail_with_number_context(number, context):
-    remote_exec(_delete_voicemail_with_number_context, number=number, context=context)
-
-
-def _delete_voicemail_with_number_context(channel, number, context):
-    from xivo_dao.data_handler.voicemail import services as voicemail_services
-
-    try:
-        voicemail = voicemail_services.get_by_number_context(number, context)
-    except LookupError:
-        return
-
-    voicemail_services.delete(voicemail)
+    voicemail_id = find_voicemail_id_with_number(number, context)
+    if voicemail_id:
+        delete_voicemail_with_id(voicemail_id)
 
 
 def delete_voicemail_with_user_id(user_id):
-    remote_exec(_delete_voicemail_with_user_id, user_id=user_id)
-
-
-def _delete_voicemail_with_user_id(channel, user_id):
-    from xivo_dao.data_handler.voicemail import services as voicemail_services
-    from xivo_dao import user_dao
-
-    try:
-        user = user_dao.get(user_id)
-    except LookupError:
-        return
-
-    voicemail = voicemail_services.get(user.voicemailid)
-
-    voicemail_services.delete(voicemail)
+    voicemail_id = find_voicemail_id_with_user(user_id)
+    if voicemail_id:
+        delete_voicemail_with_id(voicemail_id)
 
 
 def add_or_replace_voicemail(parameters):
@@ -145,4 +130,18 @@ def _find_voicemail_id_with_number(channel, number, context):
         voicemail = services.get_by_number_context(number, context)
         channel.send(voicemail.id)
     except ElementNotExistsError:
+        channel.send(None)
+
+
+def find_voicemail_id_with_user(user_id):
+    return remote_exec_with_result(_find_voicemail_id_with_user, user_id=user_id)
+
+
+def _find_voicemail_id_with_user(channel, user_id):
+    from xivo_dao import user_dao
+
+    try:
+        user = user_dao.get(user_id)
+        channel.send(user.voicemailid)
+    except LookupError:
         channel.send(None)

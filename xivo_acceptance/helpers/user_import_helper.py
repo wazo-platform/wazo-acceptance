@@ -17,7 +17,8 @@
 
 from lettuce import world
 
-from xivo_acceptance.helpers import user_helper, incall_helper
+from xivo_acceptance.helpers import incall_helper
+from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_ws.objects.user import User, UserLine, UserVoicemail, UserIncall
 
 
@@ -27,11 +28,11 @@ def insert_simple_user(entries):
         mailbox = entry.get('linenumber', None)
         exten = entry.get('linenumber', None)
         context = entry.get('context', None)
-        user_helper.delete_user_line_extension_voicemail(entry['firstname'],
-                                                              entry['lastname'],
-                                                              exten=exten,
-                                                              context=context,
-                                                              mailbox=mailbox)
+        ule_helper.delete_user_line_extension_voicemail(entry['firstname'],
+                                                        entry['lastname'],
+                                                        exten=exten,
+                                                        context=context,
+                                                        mailbox=mailbox)
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']
@@ -51,11 +52,11 @@ def insert_adv_user_with_mevo(entries):
         mailbox = entry.get('linenumber', None)
         exten = entry.get('linenumber', None)
         context = entry.get('context', None)
-        user_helper.delete_user_line_extension_voicemail(entry['firstname'],
-                                                              entry['lastname'],
-                                                              exten=exten,
-                                                              context=context,
-                                                              mailbox=mailbox)
+        ule_helper.delete_user_line_extension_voicemail(entry['firstname'],
+                                                        entry['lastname'],
+                                                        exten=exten,
+                                                        context=context,
+                                                        mailbox=mailbox)
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']
@@ -77,11 +78,11 @@ def insert_adv_user_with_incall(entries):
         mailbox = entry.get('linenumber', None)
         exten = entry.get('linenumber', None)
         context = entry.get('context', None)
-        user_helper.delete_user_line_extension_voicemail(entry['firstname'],
-                                                              entry['lastname'],
-                                                              exten=exten,
-                                                              context=context,
-                                                              mailbox=mailbox)
+        ule_helper.delete_user_line_extension_voicemail(entry['firstname'],
+                                                        entry['lastname'],
+                                                        exten=exten,
+                                                        context=context,
+                                                        mailbox=mailbox)
         incall_helper.delete_incalls_with_did(entry['incall'])
         user = User()
         user.firstname = entry['firstname']
@@ -103,11 +104,11 @@ def insert_adv_user_full_infos(entries):
         mailbox = entry.get('linenumber', None)
         exten = entry.get('linenumber', None)
         context = entry.get('context', None)
-        user_helper.delete_user_line_extension_voicemail(entry['firstname'],
-                                                              entry['lastname'],
-                                                              exten=exten,
-                                                              context=context,
-                                                              mailbox=mailbox)
+        ule_helper.delete_user_line_extension_voicemail(entry['firstname'],
+                                                        entry['lastname'],
+                                                        exten=exten,
+                                                        context=context,
+                                                        mailbox=mailbox)
         incall_helper.delete_incalls_with_did(entry['incall'])
         user = User()
         user.firstname = entry['firstname']

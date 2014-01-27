@@ -88,13 +88,13 @@ Feature: Devices
         Given there are no devices with id "6241621649541"
         Given there are no devices with id "9546216549495"
         Given there are no devices with id "1495162494654"
-        Given I only have the following users:
+        Given I have the following users:
             |     id | firstname | lastname  |
             | 984346 | Greg      | Sanderson |
-        Given I only have the following lines:
+        Given I have the following lines:
             |     id | context | protocol | username | secret | device_slot |
             | 654134 | default | sip      | toto     | tata   |           1 |
-        Given I only have the following extensions:
+        Given I have the following extensions:
             |     id | context | exten |
             | 135477 | default |  1000 |
         Given I have the following devices:
@@ -103,10 +103,8 @@ Feature: Devices
           | 6241621649541 |  192.168.32.10 | 00:00:00:00:cc:22 |
           | 9546216549495 | 192.168.32.101 | 00:00:00:00:aa:05 |
           | 1495162494654 |   192.168.32.1 | 00:00:00:00:bb:09 |
-        When I create the following links:
-            | user_id | line_id | extension_id |
-            |  984346 |  654134 |       135477 |
-        Then I get a response with status "201"
+        Given line "654134" is linked with extension "1000@default"
+        Given line "654134" is linked with user id "984346"
         When I provision my device with my line_id "654134" and ip "192.168.32.1"
         Then the device "1495162494654" has been provisioned with a configuration:
             | display_name   | number | username | auth_username | password |

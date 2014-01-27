@@ -22,22 +22,17 @@ from xivo_acceptance.action.restapi import extension_action_restapi
 from xivo_acceptance.helpers import extension_helper
 
 
-@step(u'Given I have no extensions')
-def given_i_have_no_extensions(step):
-    extension_helper.delete_all()
-
-
 @step(u'Given I have no extension with id "([^"]*)"')
 def given_i_have_no_extension_with_id_group1(step, extension_id):
     extension_helper.delete(int(extension_id))
 
 
-@step(u'Given I only have the following extensions:')
-def given_i_only_have_the_following_extensions(step):
-    extension_helper.delete_all()
-    for exteninfo in step.hashes:
-        extension = _extract_extension_parameters(exteninfo)
-        extension_helper.create_extensions([extension])
+@step(u'Given I have no extension with exten "([^"]*)"')
+def given_i_have_no_extension_with_exten_group1(step, pattern):
+    exten, context = pattern.split('@')
+    extension = extension_helper.find_extension_by_exten_context(exten, context)
+    if extension:
+        extension_helper.delete(extension.id)
 
 
 @step(u'Given I have the following extensions:')
@@ -65,16 +60,6 @@ def when_i_access_the_list_of_extensions(step):
     world.response = extension_action_restapi.all_extensions()
 
 
-@step(u'When I ask for the extension with id "([^"]*)"')
-def when_i_ask_for_the_extension_with_id_group1(step, extension_id):
-    world.response = extension_action_restapi.get_extension(extension_id)
-
-
-@step(u'When I ask for the list of user_links with extension_id "([^"]*)"$')
-def when_i_ask_for_the_list_of_user_links_with_line_id(step, extension_id):
-    world.response = extension_action_restapi.all_user_links_by_extension_id(extension_id)
-
-
 @step(u'When I access the extension with id "([^"]*)"')
 def when_i_access_the_extension_with_id_group1(step, extension_id):
     world.response = extension_action_restapi.get_extension(extension_id)
@@ -100,12 +85,6 @@ def when_i_update_the_extension_with_id_group1_using_the_following_parameters(st
 @step(u'When I delete extension "([^"]*)"')
 def when_i_delete_extension_group1(step, extension_id):
     world.response = extension_action_restapi.delete_extension(extension_id)
-
-
-@step(u'Then I get a list with only the default extensions')
-def then_i_get_a_list_with_only_the_default_extensions(step):
-    extensions = _filter_out_default_extensions()
-    assert_that(extensions, has_length(0))
 
 
 @step(u'Then I get a list containing the following extensions:')

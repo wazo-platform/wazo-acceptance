@@ -93,14 +93,6 @@ def then_i_get_a_response_with_a_link_to_a_resource_with_id_using_the_id(step, r
     assert_response_has_resource_link(resource, resource_id)
 
 
-@step(u'Then I get a response with the following link resources:')
-def then_i_get_a_response_with_the_following_link_resources(step):
-    for resource_info in step.hashes:
-        resource = resource_info['resource']
-        resource_id = resource_info['id']
-        assert_response_has_resource_link(resource, resource_id)
-
-
 def assert_response_has_resource_link(resource, resource_id):
     expected_url = _build_resource_url(resource, resource_id)
     assert_that(world.response.data, _has_link_entry(resource, expected_url))

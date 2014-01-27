@@ -19,6 +19,7 @@ from lettuce import step
 
 from xivo_acceptance.action.webi import group as group_action_webi
 from xivo_acceptance.helpers import user_helper, group_helper
+from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common, form, func
 
 
@@ -74,7 +75,7 @@ def given_there_is_a_group_with_n_users(step, group_size):
     group_name = 'random'
     group_members = []
     for i in range(int(group_size)):
-        user_id = user_helper.add_or_replace_user(
+        user_id = ule_helper.add_or_replace_user(
             {'firstname': 'random',
              'lastname': str(i),
              'line_number': str(1100 + i),
