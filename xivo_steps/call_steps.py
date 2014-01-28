@@ -95,7 +95,7 @@ def then_user_last_call_shoud_be_call_status(step, name, status):
         raise AssertionError('%s was not raised' % status)
 
 
-@step(u'When a call from "([^"]*)" is received for "([^"]*"')
+@step(u'When a call from "([^"]*)" is received for "([^"]*)"')
 def when_a_call_from_number_to_is_received(step, number, name):
     vars = {
         'name': name,
