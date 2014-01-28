@@ -81,8 +81,7 @@ def given_there_s_an_ldap_server_configured_for_reverse(step):
     _configure_display_filter()
     _configure_ldap_directory(ldap_filter)
     _add_directory_to_direct_directories()
-    given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the_ldap_filter('openldap-dev')
-    directory_action_webi.set_reverse_directories([ldap_filter])
+    directory_action_webi.set_reverse_directories(['ldapdirectory'])
     cti_helper.restart_server()
 
 
