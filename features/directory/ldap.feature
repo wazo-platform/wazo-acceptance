@@ -19,7 +19,7 @@ Feature: LDAP
         Given there's an LDAP server configured for reverse lookup with entries:
          | first name | last name |      phone |
          | Peter      | Pan       | 5551236666 |
-        When I receive a call from "5551236666"
+        When a call from "5551236666" is received on did "1767" for "Sam Well"
         Then I should see the following caller id:
-         | Name      |     Number |
-         | Peter Pan | 5551236666 |
+         | Name  |     Number |
+         | Peter | 5551236666 |
