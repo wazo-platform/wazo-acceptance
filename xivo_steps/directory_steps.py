@@ -196,6 +196,7 @@ def _configure_internal_directory():
         name='internal',
         uri='internal',
         direct_match='userfeatures.firstname,userfeatures.lastname',
+        reverse_match='',
         fields={'firstname': 'userfeatures.firstname',
                 'lastname': 'userfeatures.lastname',
                 'phone': 'extensions.exten'}

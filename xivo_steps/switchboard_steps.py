@@ -42,6 +42,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
         'openldap',
         'ldapfilter://openldap-dev',
         'cn,telephoneNumber,st,o',
+        '',
         {'name': 'cn',
          'number': 'telephoneNumber',
          'location': 'st',
@@ -79,6 +80,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
         'openldap',
         'ldapfilter://openldap-dev',
         'cn,telephoneNumber,st',
+        '',
         {'name': 'cn',
          'number': 'telephoneNumber',
          'location': 'st'}
@@ -112,6 +114,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
         'openldap',
         'ldapfilter://openldap-dev',
         'cn,telephoneNumber',
+        '',
         {'name': 'cn',
          'number': 'telephoneNumber'}
     )
@@ -135,6 +138,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
         'xivodirswitchboard',
         'phonebook',
         'phonebook.firstname,phonebook.lastname,phonebook.displayname,phonebook.society,phonebooknumber.office.number',
+        '',
         {'name': 'phonebook.displayname',
          'number': 'phonebooknumber.office.number',
          'mobile': 'phonebooknumber.mobile.number'}

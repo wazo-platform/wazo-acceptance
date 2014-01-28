@@ -191,9 +191,13 @@ def _configure_ldap_directory(ldap_filter):
         name='ldapdirectory',
         uri='ldapfilter://%s' % ldap_filter,
         direct_match='sn,givenName,telephoneNumber',
-        fields={'firstname': 'givenName',
-                'lastname': 'sn',
-                'phone': 'telephoneNumber'},
+        reverse_match='telephoneNumber',
+        fields={
+            'firstname': 'givenName',
+            'lastname': 'sn',
+            'phone': 'telephoneNumber',
+            'reverse': 'givenName',
+        },
     )
 
 
