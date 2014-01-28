@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
-# Copyright (C) 2014 Avencall
+#
+# Copyright (C) 2013-2014 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,14 +14,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
+from lettuce.decorators import step
+from xivo_acceptance.action.restapi import configuration_action_restapi
+from lettuce.registry import world
+from hamcrest.library.collection.isdict_containing import has_entry
+from hamcrest.core import assert_that
 
-from context_steps import *
-from devices_steps import *
-from extensions_steps import *
-from lines_sip_steps import *
-from lines_steps import *
-from result_steps import *
-from users_steps import *
-from call_logs_steps import *
-from cti_profiles_steps import *
-from configuration_steps import *
+
+@step(u'When I ask for the live reload state')
+def when_i_ask_for_the_live_reload_state(step):
+    world.response = configuration_action_restapi.get_live_reload_state()
+
+
+@step(u'Then I get a response with live reload enabled')
+def then_i_get_a_response_with_live_reload_enabled(step):
+    content = world.response.data
+    assert_that(content, has_entry('enabled', True))
