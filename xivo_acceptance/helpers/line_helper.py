@@ -142,6 +142,7 @@ def _delete_line_associations(channel, line_id):
 
     line = line_services.get(line_id)
     line.device = None
+    line.device_slot = 1
     line_services.edit(line)
 
     line_extension = line_extension_services.find_by_line_id(line_id)
