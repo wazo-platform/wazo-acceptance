@@ -155,6 +155,11 @@ def when_i_search_for_1_in_the_directory_xlet(step, search):
     cti_helper.set_search_for_remote_directory(search)
 
 
+@step(u'When I sort results by column "([^"]*)" in ascending order')
+def when_i_sort_results_by_column_group1_in_ascending_order(step, column):
+    cti_helper.sort_list_for_remote_directory(column)
+
+
 @step(u'When I double-click on the phone number for "([^"]*)"')
 def when_i_double_click_on_the_phone_number_for_name(step, name):
     cti_helper.exec_double_click_on_number_for_name(name)
@@ -185,6 +190,13 @@ def then_the_following_results_does_not_show_up_in_the_directory_xlet(step):
 def then_the_following_results_show_up_in_the_directory_xlet(step):
     res = cti_helper.get_remote_directory_infos()
     assert_res = func.has_subsets_of_dicts(step.hashes, res['return_value']['content'])
+    assert_that(assert_res, equal_to(True))
+
+
+@step(u'Then the following sorted results show up in the directory xlet:')
+def then_the_following_sorted_results_show_up_in_the_directory_xlet(step):
+    res = cti_helper.get_remote_directory_infos()
+    assert_res = func.has_subsets_of_dicts_in_order(step.hashes, res['return_value']['content'])
     assert_that(assert_res, equal_to(True))
 
 

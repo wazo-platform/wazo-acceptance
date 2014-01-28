@@ -82,6 +82,19 @@ def _list_of_dict_to_list_of_set(dicts):
     return map(lambda d: set(d.iteritems()), dicts)
 
 
+def _all_ordered_superset_item(subsets, supersets):
+    needle = 0
+    for superset in supersets:
+        if _is_subset(subsets[needle], superset):
+            needle += 1
+    return needle == len(subsets)
+
+
 def has_subsets_of_dicts(expecteds, results):
     return _all_superset_item(_list_of_dict_to_list_of_set(expecteds),
                               _list_of_dict_to_list_of_set(results))
+
+
+def has_subsets_of_dicts_in_order(expected, results):
+    return _all_ordered_superset_item(_list_of_dict_to_list_of_set(expected),
+                                      _list_of_dict_to_list_of_set(results))
