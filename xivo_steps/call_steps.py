@@ -17,10 +17,12 @@
 
 import time
 
+from hamcrest import assert_that
+from hamcrest import has_items
 from lettuce import step
 from lettuce import world
 
-from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper
+from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper, cti_helper
 from xivo_lettuce import common
 from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
@@ -45,6 +47,18 @@ def when_a_call_is_started(step):
 
     for call_info in step.hashes:
         _call(**call_info)
+
+
+@step(u'Then I should see the following caller id:')
+def then_i_should_see_the_following_caller_id(step):
+    caller_id_info = step.hashes[0]
+    expected = [
+        {'Variable': '{xivo-calleridname}',
+         'Value': caller_id_info['Name']},
+        {'Variable': '{xivo-calleridnum}',
+         'Value': caller_id_info['Number']},
+    ]
+    assert_that(cti_helper.get_sheet_infos(), has_items(*expected))
 
 
 @step(u'When "([^"]*)" calls "([^"]*)"$')
@@ -79,6 +93,29 @@ def then_user_last_call_shoud_be_call_status(step, name, status):
         pass
     else:
         raise AssertionError('%s was not raised' % status)
+
+
+@step(u'When a call from "([^"]*)" is received on did "([^"]*)" for "([^"]*)"')
+def when_a_call_from_number_to_is_received(step, number, did, name):
+    firstname, lastname = name.split(' ', 1)
+    vars = {
+        'name': name,
+        'number': number,
+        'login': firstname.lower(),
+        'password': lastname.lower(),
+        'did': did,
+    }
+    step.given('Given there is an incall "%(did)s" in context "from-extern" to the "User" "%(name)s"' % vars)
+    step.given('Given there is a SIP trunk "%(number)s" in context "from-extern"' % vars)
+    step.when('When I start the XiVO Client')
+    step.when('When I enable screen pop-up')
+    step.when('When I log in the XiVO Client as "%(login)s", pass "%(password)s"' % vars)
+    step.given('Given there are no calls running')
+    step.given('Given I wait 5 seconds for the dialplan to be reloaded')
+    step.given('Given I register extension "%(did)s"' % vars)
+    step.given('Given I wait call then I answer then I hang up after "3s"')
+    step.when('When there is 1 calls to extension "%(did)s@from-extern" on trunk "%(number)s" and wait' % vars)
+    step.given('Given I wait 10 seconds for the call processing')
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')

@@ -42,6 +42,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
         'openldap',
         'ldapfilter://openldap-dev',
         'cn,telephoneNumber,st,o',
+        '',
         {'name': 'cn',
          'number': 'telephoneNumber',
          'location': 'st',
@@ -79,6 +80,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
         'openldap',
         'ldapfilter://openldap-dev',
         'cn,telephoneNumber,st',
+        '',
         {'name': 'cn',
          'number': 'telephoneNumber',
          'location': 'st'}
@@ -112,6 +114,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
         'openldap',
         'ldapfilter://openldap-dev',
         'cn,telephoneNumber',
+        '',
         {'name': 'cn',
          'number': 'telephoneNumber'}
     )
@@ -135,6 +138,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
         'xivodirswitchboard',
         'phonebook',
         'phonebook.firstname,phonebook.lastname,phonebook.displayname,phonebook.society,phonebooknumber.office.number',
+        '',
         {'name': 'phonebook.displayname',
          'number': 'phonebooknumber.office.number',
          'mobile': 'phonebooknumber.mobile.number'}
@@ -159,12 +163,6 @@ def given_the_display_filter_group1_exists_with_the_following_fields(step, filte
     for line in step.hashes:
         field_list.append((line['Field title'], line['Field type'], line['Display format']))
     directory_action_webi.add_or_replace_display(filter_name, field_list)
-
-
-@step(u'Given there are entries in the ldap server:')
-def given_there_are_entries_in_the_ldap_server(step):
-    for directory_entry in step.hashes:
-        ldap_action_webi.add_or_replace_entry(directory_entry)
 
 
 @step(u'Given the user "([^"]*)" is configured for switchboard use')

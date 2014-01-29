@@ -47,9 +47,9 @@ def add_directory_definition(directory):
     )
 
 
-def add_or_replace_directory(name, uri, direct_match, fields):
+def add_or_replace_directory(name, uri, direct_match, reverse_match, fields):
     remove_directory(name)
-    _add_directory(name, uri, direct_match)
+    _add_directory(name, uri, direct_match, None, reverse_match)
     _add_directory_fields(fields)
     submit.submit_form()
 
