@@ -22,3 +22,11 @@ CONFIGURATION_URL = 'configuration'
 
 def get_live_reload_state():
     return world.restapi_utils_1_1.rest_get('/%s/live_reload' % CONFIGURATION_URL)
+
+
+def disable_live_reload():
+    return world.restapi_utils_1_1.rest_put('/%s/live_reload' % CONFIGURATION_URL, {'enabled': False})
+
+
+def enable_live_reload():
+    return world.restapi_utils_1_1.rest_put('/%s/live_reload' % CONFIGURATION_URL, {'enabled': True})
