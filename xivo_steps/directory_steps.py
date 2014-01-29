@@ -22,6 +22,7 @@ from lettuce import step
 
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.helpers import line_helper, callgen_helper, cti_helper
+from xivo_acceptance.helpers import directory_helper
 from xivo_lettuce import assets, common, func
 from xivo_lettuce.form import submit
 
@@ -52,12 +53,12 @@ def given_the_csv_file_is_copied_on_the_server_into_group2(step, csvfile, server
 
 @step(u'Given the internal directory exists')
 def given_the_internal_directory_exists(step):
-    _configure_internal_directory()
+    directory_helper.configure_internal_directory()
 
 
 @step(u'Given the internal phonebook is configured')
 def given_the_internal_phonebook_is_configured(step):
-    _configure_internal_directory()
+    directory_helper.configure_internal_directory()
 
     directory_action_webi.add_or_replace_display(
         'Display',
@@ -189,15 +190,3 @@ def then_the_following_sorted_results_show_up_in_the_directory_xlet(step):
     res = cti_helper.get_remote_directory_infos()
     assert_res = func.has_subsets_of_dicts_in_order(step.hashes, res['return_value']['content'])
     assert_that(assert_res, equal_to(True))
-
-
-def _configure_internal_directory():
-    directory_action_webi.add_or_replace_directory(
-        name='internal',
-        uri='internal',
-        direct_match='userfeatures.firstname,userfeatures.lastname',
-        reverse_match='',
-        fields={'firstname': 'userfeatures.firstname',
-                'lastname': 'userfeatures.lastname',
-                'phone': 'extensions.exten'}
-    )

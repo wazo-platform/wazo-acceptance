@@ -20,7 +20,7 @@ from lettuce import step
 from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_lettuce import assets, common, sysutils, ldap_utils
-from xivo_acceptance.helpers import cti_helper
+from xivo_acceptance.helpers import cti_helper, directory_helper
 
 
 def _check_ldap_is_up():
@@ -69,6 +69,15 @@ def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the
     _configure_display_filter()
     _configure_ldap_directory(ldap_filter)
     _add_directory_to_direct_directories()
+    cti_helper.restart_server()
+
+
+@step(u'Given the CTI server searches both the internal directory and the LDAP filter "([^"]*)"')
+def given_the_cti_server_searches_both_the_internal_directory_and_the_ldap_filter_group1(step, ldap_filter):
+    _configure_display_filter()
+    _configure_ldap_directory(ldap_filter)
+    directory_helper.configure_internal_directory()
+    _add_directory_to_direct_directories(['ldapdirectory', 'internal'])
     cti_helper.restart_server()
 
 
