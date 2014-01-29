@@ -28,6 +28,11 @@ def given_a_live_reload_configuration_is_enable(step):
     general_settings_xivo_action_webi.enable_live_reload()
 
 
+@step(u'Given a live reload configuration is disable')
+def given_a_live_reload_configuration_is_disable(step):
+    general_settings_xivo_action_webi.disable_live_reload()
+
+
 @step(u'When i edit extenfeatures page')
 def when_i_edit_extenfeatures_page(step):
     common.open_url('extenfeatures')
