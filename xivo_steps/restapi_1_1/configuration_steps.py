@@ -24,6 +24,16 @@ from hamcrest.library.collection.issequence_containing import has_item
 from hamcrest.library.text.stringcontains import contains_string
 
 
+@step(u'Given live reload is enabled')
+def given_live_reload_is_enabled(step):
+    configuration_action_restapi.enable_live_reload()
+
+
+@step(u'Given live reload is disabled')
+def given_live_reload_is_disabled(step):
+    configuration_action_restapi.disable_live_reload()
+
+
 @step(u'When I ask for the live reload state')
 def when_i_ask_for_the_live_reload_state(step):
     world.response = configuration_action_restapi.get_live_reload_state()
