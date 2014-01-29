@@ -191,7 +191,7 @@ def _add_sheet_variable(variable_name):
         'title': variable_name,
         'display_type': 'text',
         'default_value': '',
-        'display_value': variable_name,
+        'display_value': '{%s}' % variable_name,
     }
     _add_sheet_field(**var_config)
 

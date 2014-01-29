@@ -53,9 +53,9 @@ def when_a_call_is_started(step):
 def then_i_should_see_the_following_caller_id(step):
     caller_id_info = step.hashes[0]
     expected = [
-        {'Variable': '{xivo-calleridname}',
+        {'Variable': 'xivo-calleridname',
          'Value': caller_id_info['Name']},
-        {'Variable': '{xivo-calleridnum}',
+        {'Variable': 'xivo-calleridnum',
          'Value': caller_id_info['Number']},
     ]
     assert_that(cti_helper.get_sheet_infos(), has_items(*expected))
