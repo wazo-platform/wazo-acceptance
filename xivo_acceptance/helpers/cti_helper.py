@@ -193,10 +193,10 @@ def _add_sheet_variable(variable_name):
         'default_value': '',
         'display_value': '{%s}' % variable_name,
     }
-    _add_sheet_field(**var_config)
+    add_sheet_field(**var_config)
 
 
-def _add_sheet_field(title, display_type, default_value, display_value):
+def add_sheet_field(title, display_type, default_value, display_value):
     add_button = world.browser.find_element_by_id('add_variable')
     add_button.click()
     new_variable_line = world.browser.find_element_by_xpath(
