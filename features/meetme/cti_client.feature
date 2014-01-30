@@ -1,6 +1,7 @@
 Feature: Meetme
 
     Scenario: All conference rooms show up in CTI client
+        Given I have no extension with exten "1042@default"
         Given there are users with infos:
          | firstname | lastname  | number | context | cti_profile |
          | Lord      | Sanderson | 1042   | default | Client      |
@@ -19,6 +20,7 @@ Feature: Meetme
             | room3 | 4003   |
 
     Scenario: PIN Code for a conference room shows up in the CTI client
+        Given I have no extension with exten "1042@default"
         Given there are users with infos:
          | firstname | lastname  | number | context | cti_profile |
          | Lord      | Sanderson | 1042   | default | Client      |

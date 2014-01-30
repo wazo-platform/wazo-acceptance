@@ -27,6 +27,7 @@ Feature: User
 
     Scenario: Add user with SIP line and remove it
         Given there is no user "Bill" "Bush"
+        Given I have no extension with exten "1632@default"
         When I create a user with infos:
         | firstname | lastname | protocol | number | context |
         | Bill      | Bush     | SIP      |  1632  | default |
@@ -38,6 +39,7 @@ Feature: User
 
     Scenario: Add user with SCCP line and remove it
         Given there is no user "Bill" "Bush"
+        Given I have no extension with exten "1632@default"
         When I create a user with infos:
         | firstname | lastname | protocol | number | context |
         | Bill      | Bush     | SCCP     |  1632  | default |
@@ -50,6 +52,7 @@ Feature: User
     Scenario: Add user with SIP line and device and remove it
         Given the plugin "xivo-aastra-3.2.2-SP3" is installed
         Given there are no devices with mac "00:de:ad:be:ef:00"
+        Given I have no extension with exten "1632@default"
         Given I have the following devices:
         | mac               | plugin                | model | ip          | vendor |
         | 00:de:ad:be:ef:00 | xivo-aastra-3.2.2-SP3 | 6731i | 10.39.5.104 | Aastra |
@@ -78,6 +81,7 @@ Feature: User
           | mac               |
           | dd:11:22:33:44:55 |
       Given there is no user "Abarai" "Renji"
+      Given I have no extension with exten "1632@default"
       When I create a user with infos:
           | firstname | lastname | protocol | number | context | device            |
           | Abarai    | Renji    | SIP      | 1677   | default | dd:11:22:33:44:55 |
