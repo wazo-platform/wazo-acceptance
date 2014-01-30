@@ -42,7 +42,7 @@ def given_i_have_a_sheet_model_with_custom_ui(step):
     form.input.set_text_field_with_label('Name :', sheet['name'])
     common.go_to_tab('Sheet')
     form.set_text_field_with_id('it-sheetactions-qtui', sheet['path to ui'])
-    cti_helper.add_sheet_field(title='', type='form', default_value='', display_value='qtui')
+    cti_helper.add_sheet_field(title='', display_type='form', default_value='', display_value='qtui')
 
     form.submit.submit_form()
 
