@@ -81,7 +81,7 @@ Feature: User
           | mac               |
           | dd:11:22:33:44:55 |
       Given there is no user "Abarai" "Renji"
-      Given I have no extension with exten "1632@default"
+      Given I have no extension with exten "1677@default"
       When I create a user with infos:
           | firstname | lastname | protocol | number | context | device            |
           | Abarai    | Renji    | SIP      | 1677   | default | dd:11:22:33:44:55 |
