@@ -25,6 +25,7 @@ from xivo_acceptance.helpers import asterisk_helper
 from xivo_lettuce.config import XivoAcceptanceConfig
 from xivo_lettuce import common
 from xivo_lettuce.phone_register import PhoneRegister
+from selenium.common.exceptions import NoSuchElementException
 
 
 @before.all
@@ -39,9 +40,8 @@ def xivo_lettuce_before_each_scenario(scenario):
     world.userid = None
     world.number = None
     world.lineid = None
-    if world.config.browser_enable and _webi_configured():
-        _check_webi_login_root()
     scenario.phone_register = PhoneRegister()
+    _check_webi_login_root()
 
 
 @after.each_step
@@ -99,18 +99,18 @@ def _setup_browser():
     world.browser.set_window_size(width, height)
     world.timeout = world.config.browser_timeout
 
-    if _webi_configured():
-        common.webi_login_as_default()
 
-
-def _webi_configured():
-    try:
-        command = ['test', '-e', '/var/lib/xivo/configured']
-        world.ssh_client_xivo.check_call(command)
-    except Exception:
-        return False
-    else:
-        return True
+def _check_webi_login_root():
+    if world.config.browser_enable and world.config.xivo_configured:
+        try:
+            element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
+            username = element.text
+        except NoSuchElementException:
+            common.webi_login_as_default()
+        else:
+            if username != "root":
+                common.webi_logout()
+                common.webi_login_as_default()
 
 
 def _logout_agents():
@@ -118,22 +118,14 @@ def _logout_agents():
     world.logged_agents = []
 
 
-def _check_webi_login_root():
-    element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
-    username = element.text
-    if username != "root":
-        common.webi_logout()
-        common.webi_login_as_default()
-
-
 def deinitialize():
-    if world.config.browser_enable:
-        _teardown_browser()
+    _teardown_browser()
 
 
 def _teardown_browser():
-    world.browser.quit()
-    world.display.stop()
+    if world.config.browser_enable:
+        world.browser.quit()
+        world.display.stop()
 
 
 @world.absorb

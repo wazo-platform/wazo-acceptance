@@ -16,18 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
+from lettuce.registry import world
 
 from xivo_acceptance.action.webi import dhcpd as dhcpd_action_webi
 from xivo_acceptance.action.webi import commonconf as commonconf_action_webi
 from xivo_acceptance.helpers import monit_helper
 from xivo_lettuce import common, form, sysutils
-from xivo_lettuce.terrain import _webi_configured
 from xivo_lettuce.form.checkbox import Checkbox
 
 
 @step(u'When I wizard correctly executed')
 def when_i_wizard_correctly_executed(step):
-    assert _webi_configured()
+    assert world.config.xivo_configured
 
 
 @step(u'When I activate dhcpd server')

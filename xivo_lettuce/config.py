@@ -46,6 +46,7 @@ class XivoAcceptanceConfig(object):
         self.ws_utils = None
         self.restapi_utils_1_0 = None
         self.restapi_utils_1_1 = None
+        self.xivo_configured = None
 
         self.xivo_host = self._config.get('xivo', 'hostname')
         self.xivo_biz_host = self._config.get('xivo_biz', 'hostname')
@@ -85,6 +86,7 @@ class XivoAcceptanceConfig(object):
         self._setup_ssh_client()
         self._setup_ws()
         self._setup_provd()
+        self._setup_webi()
 
     def _read_config(self):
         config = ConfigParser.RawConfigParser()
@@ -100,6 +102,15 @@ class XivoAcceptanceConfig(object):
         with open(config_file) as fobj:
             config.readfp(fobj)
         return config
+
+    def _setup_webi(self):
+        try:
+            command = ['test', '-e', '/var/lib/xivo/configured']
+            self.ssh_client_xivo.check_call(command)
+        except Exception:
+            self.xivo_configured = False
+        else:
+            self.xivo_configured = True
 
     def _setup_dao(self):
         dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % self.xivo_host
