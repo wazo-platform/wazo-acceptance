@@ -1,18 +1,21 @@
 Feature: Queues
 
     Scenario: Add queue named with non-ASCII characters
+        Given I have no extension with exten "3000@default"
         When I create the following queues:
             | name     | display name | number | context |
             | epicerie | Épicerie     | 3000   | default |
         Then queue "Épicerie" is displayed in the list
 
     Scenario: Cannot add queue named general
+        Given I have no extension with exten "3001@default"
         When I create the following invalid queues:
             | name    | display name | number | context |
             | general | general      | 3001   | default |
         Then I see errors
 
     Scenario: Queue strategy ring linear
+        Given I have no extension with exten "3500@default"
         When I create the following queues:
             | name  | display name | number | context | ring strategy |
             | green | Green        | 3500   | default | Linear        |
