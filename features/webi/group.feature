@@ -1,6 +1,7 @@
 Feature: Group
 
     Scenario: Add a group with name and number and remove it
+        Given I have no extension with exten "2000@default"
         Given there is no group "2000"
         Given the group named "administrative" does not exist
         When I create a group "Administrative" with number "2000"
