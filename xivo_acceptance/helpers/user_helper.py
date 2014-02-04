@@ -18,7 +18,7 @@
 from lettuce import world
 from execnet.gateway_base import RemoteError
 
-from xivo_acceptance.helpers import group_helper, provd_helper, line_helper
+from xivo_acceptance.helpers import group_helper, provd_helper, line_helper, voicemail_helper
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
@@ -164,6 +164,7 @@ def _all_user_ids(channel):
 def delete_user(user_id):
     if get_by_user_id(user_id):
         _delete_line_associations(user_id)
+        _delete_voicemail_associations(user_id)
         remote_exec(_delete_using_user_service, user_id=user_id)
 
 
@@ -171,6 +172,10 @@ def _delete_line_associations(user_id):
     line_id = find_line_id_for_user(user_id)
     if line_id:
         line_helper.delete_line_associations(line_id)
+
+
+def _delete_voicemail_associations(user_id):
+    voicemail_helper.delete_voicemail_with_user_id(user_id)
 
 
 def _delete_using_user_service(channel, user_id):
