@@ -92,6 +92,13 @@ def when_i_delete_the_user_with_id_group1(step, userid):
     world.response = user_action_restapi.delete_user(userid)
 
 
+@step(u'When I delete the user with name "([^"]*)" "([^"]*)"')
+def when_i_delete_the_user_with_name_group1_group2(step, firstname, lastname):
+    user = user_helper.find_by_firstname_lastname(firstname, lastname)
+    assert_that(user, is_not(none()))
+    world.response = user_action_restapi.delete_user(user.id)
+
+
 @step(u'Then I get a list containing the following users:')
 def then_i_get_a_list_with_the_following_users(step):
     user_response = world.response.data
