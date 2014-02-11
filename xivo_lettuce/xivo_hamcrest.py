@@ -46,3 +46,7 @@ def assert_response_valid(response):
     msg = "URL: %s, Response received: %s" % (response.url, unicode(response.data))
     h.assert_that(response.status, h.greater_than_or_equal_to(200), msg)
     h.assert_that(response.status, h.less_than(400), msg)
+
+
+def not_empty():
+    return h.is_not(h.has_length(0))
