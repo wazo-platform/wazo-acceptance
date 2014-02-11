@@ -48,7 +48,7 @@ def find_by_firstname_lastname(firstname, lastname):
     return user_services.find_by_firstname_lastname(firstname, lastname)
 
 
-def find_user_with_firstname_lastname(firstname, lastname):
+def get_by_firstname_lastname(firstname, lastname):
     user = find_by_firstname_lastname(firstname, lastname)
     if user is None:
         raise Exception('expecting user with name %r %r; not found' % (firstname, lastname))
@@ -56,7 +56,7 @@ def find_user_with_firstname_lastname(firstname, lastname):
 
 
 def find_user_id_with_firstname_lastname(firstname, lastname):
-    user = find_user_with_firstname_lastname(firstname, lastname)
+    user = get_by_firstname_lastname(firstname, lastname)
     return user.id
 
 
