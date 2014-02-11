@@ -58,3 +58,8 @@ def _find_destination_type_id(destination_type):
     result = exec_sql_request(query, name=destination_type)
     row = result.fetchone()
     return row[0]
+
+
+def delete_func_keys_for_user(user_id):
+    query = 'DELETE FROM func_key_dest_user WHERE user_id = :user_id'
+    exec_sql_request(query, user_id=user_id)
