@@ -6,7 +6,7 @@ Feature: WEBI Queue Stats
         Given there are queues with infos:
             | name | number | context     |
             | q01  | 5001   | statscenter |
-            | q02  | 5002   | statcenter  |
+            | q02  | 5002   | statscenter |
         Given there is a statistic configuration "testq1" from "9:00" to "11:00" with queue "q01"
         Given there is a statistic configuration "testq2" from "9:00" to "11:00" with queue "q02"
         Given I have the following queue_log entries:
@@ -18,7 +18,7 @@ Feature: WEBI Queue Stats
             | 2013-11-08 10:02:30.686291 | 1383900788.167039 | q02       | Agent/1255 | RINGNOANSWER   |     0 |                   |       |       |       |
             | 2013-11-08 10:02:32.770339 | 1383900788.167039 | q02       | Agent/1246 | CONNECT        |     2 | 1383901350.167967 |     2 |       |       |
             | 2013-11-08 10:04:19.485883 | 1383900788.167039 | q02       | Agent/1246 | COMPLETECALLER |     2 |               107 |     1 |       |       |
-	When I generate the statistics cache at "18:05"
+        Given I clear and generate the statistics cache
         Then I should have the following statististics on "q01" on "2013-11-08" on configuration "testq1":
           |         | Received | Answered |
           | 9h-10h  |        1 |        1 |
