@@ -21,12 +21,12 @@ from sqlalchemy.sql import text
 
 def exec_sql_request(query, database='asterisk', **args):
     if database == 'asterisk':
-        enguine = world.config.dao_asterisk_engine
+        engine = world.config.dao_asterisk_engine
     elif database == 'xivo':
-        enguine = world.config.dao_xivo_engine
+        engine = world.config.dao_xivo_engine
     else:
         raise 'Invalid database: %s' % database
-    return enguine.execute(text(query), args)
+    return engine.execute(text(query), args)
 
 
 def exec_count_request(table, **cond_dict):
