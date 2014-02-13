@@ -24,7 +24,8 @@ def get_voicemail(voicemail_id):
     return world.restapi_utils_1_1.rest_get('/%s/%s' % (VOICEMAIL_URL, voicemail_id))
 
 
-def voicemail_list(parameters={}):
+def voicemail_list(parameters=None):
+    parameters = parameters or {}
     return world.restapi_utils_1_1.rest_get('%s' % VOICEMAIL_URL, params=parameters)
 
 

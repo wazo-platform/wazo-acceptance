@@ -37,7 +37,8 @@ def get_device(device_id):
     return world.restapi_utils_1_1.rest_get("%s/%s" % (DEVICES_URL, device_id))
 
 
-def device_list(parameters={}):
+def device_list(parameters=None):
+    parameters = parameters or {}
     return world.restapi_utils_1_1.rest_get(DEVICES_URL, params=parameters)
 
 
