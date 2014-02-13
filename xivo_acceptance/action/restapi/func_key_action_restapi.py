@@ -20,5 +20,7 @@ from lettuce import world
 FUNC_KEY_URL = 'func_keys'
 
 
-def func_key_list(parameters={}):
+def func_key_list(parameters=None):
+    if parameters is None:
+        parameters = {}
     return world.restapi_utils_1_1.rest_get('%s' % FUNC_KEY_URL, params=parameters)
