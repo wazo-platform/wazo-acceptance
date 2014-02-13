@@ -238,22 +238,21 @@ Feature: Remote Directory in CTI Client
           | Fodé Sanderson | 1421   |
 
     Scenario: Call a contact in the directory
-        Given there are no calls running
         Given there are users with infos:
-          | firstname | lastname   | number | context | cti_profile |
-          | Lord      | Sanderson  | 1042   | default | Client      |
-          | GreatLord | MacDonnell | 1043   | default | Client      |
+          | firstname | lastname   | number | context | protocol | cti_profile |
+          | Lord      | Sanderson  |   1042 | default | sip      | Client      |
+          | GreatLord | MacDonnell |   1043 | default | sip      | Client      |
         Given the internal phonebook is configured
-        Given extension 1042 will answer a call and wait
-        Given extension 1043 will answer a call, wait 5 seconds and hangup
         When I include "internal" in the default directory
         When I restart the CTI server
         When I start the XiVO Client
         When I log in the Xivo Client as "lord", pass "sanderson"
         When I search for "greatlord" in the directory xlet
         When I double-click on the phone number for "GreatLord MacDonnell"
-        When I wait 10 seconds
-        When I generate call logs
+        When "Lord Sanderson" answers
+        When "GreatLord MacDonnell" answers
+        When "Lord Sanderson" and "GreatLord MacDonnell" talk for "5" seconds
+        When "GreatLord MacDonnell" hangs up
         Then I have the last call log matching:
             | source_name    | source_exten | duration | answered |
-            | Lord Sanderson | 1042         | 0:00:00  | True     |
+            | Lord Sanderson | 1042         | 0:00:05  | True     |

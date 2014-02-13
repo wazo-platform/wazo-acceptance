@@ -33,7 +33,7 @@ def _format_condition(key, value):
     if value == 'NULL':
         return '%s IS NULL' % key
     elif key == 'duration':
-        return '%s BETWEEN :%s AND :%s + interval \'1 second\'' % (key, key, key)
+        return '%s BETWEEN :%s AND :%s + interval \'2 second\'' % (key, key, key)
     elif key == 'last' and value is True:
         return 'id IN (SELECT id FROM call_log ORDER BY date DESC LIMIT 1)'
     else:

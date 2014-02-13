@@ -69,13 +69,13 @@ def when_a_calls_exten(step, name, exten):
 
 @step(u'When "([^"]*)" answers')
 def when_a_answers(step, name):
-    phone = world.register.get_user_phone(name)
+    phone = step.scenario.phone_register.get_user_phone(name)
     phone.answer()
 
 
 @step(u'When "([^"]*)" hangs up')
 def when_a_hangs_up(step, name):
-    phone = world.register.get_user_phone(name)
+    phone = step.scenario.phone_register.get_user_phone(name)
     phone.hangup()
 
 
