@@ -15,11 +15,31 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
-from lettuce import step
+from hamcrest import assert_that, equal_to, has_item
+from lettuce import step, world
 
 from xivo_acceptance.action.webi import user as user_action_webi
+from xivo_acceptance.action.restapi import func_key_action_restapi
+from xivo_acceptance.helpers import user_helper, func_key_helper
 from xivo_lettuce import common
+from xivo_lettuce.xivo_hamcrest import not_empty
+
+
+@step(u'Given I have a speeddial func key for user "([^"]*)" "([^"]*)"')
+def given_i_have_a_speeddial_func_key_for_user_group1_group2(step, firstname, lastname):
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+    func_key_helper.create_speeddial_for_user(user)
+
+
+@step(u'When I request the list of func keys via RESTAPI')
+def when_i_request_the_list_of_func_keys_via_restapi(step):
+    world.response = func_key_action_restapi.func_key_list()
+
+
+@step(u'When I request the list of func keys with the following parameters via RESTAPI:')
+def when_i_request_the_list_of_func_keys_with_the_following_parameters_via_restapi(step):
+    parameters = step.hashes[0]
+    world.response = func_key_action_restapi.func_key_list(parameters)
 
 
 @step(u'Then the user "([^"]*)" has the following func keys:')
@@ -72,3 +92,23 @@ def _extract_destination_value(key_type, line):
         value = key_destination_field.get_attribute('value')
 
     return value
+
+
+@step(u'Then the list contains a speeddial func key for user "([^"]*)" "([^"]*)"')
+def then_the_list_contains_a_speeddial_func_key_for_user_group1(step, firstname, lastname):
+    fullname = "%s %s" % (firstname, lastname)
+    user_func_keys = _filter_user_func_keys(world.response)
+    user_names = [_find_user_name_for_func_key(func_key) for func_key in user_func_keys]
+    assert_that(user_names, has_item(fullname), "no func key configured for user %s was found" % fullname)
+
+
+def _filter_user_func_keys(response):
+    items = response.data['items']
+    assert_that(items, not_empty())
+
+    return [func_key for func_key in items if func_key['type'] == 'speeddial' and func_key['destination'] == 'user']
+
+
+def _find_user_name_for_func_key(func_key):
+    user = user_helper.get_by_user_id(func_key['destination_id'])
+    return "%s %s" % (user.firstname, user.lastname)

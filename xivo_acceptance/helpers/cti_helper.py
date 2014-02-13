@@ -258,7 +258,7 @@ def log_in_the_xivo_client():
 
 
 def log_user_in_client(firstname, lastname):
-    user = user_helper.find_user_with_firstname_lastname(firstname, lastname)
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
     conf_dict = {
         'main_server_address': common.get_host_address(),
         'main_server_port': 5003,
