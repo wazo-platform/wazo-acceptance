@@ -104,7 +104,9 @@ def then_i_should_have_the_following_call_logs(step):
 @step(u'Then I have the last call log matching:')
 def then_i_have_the_last_call_log_matching(step):
     entry = step.hashes[0]
-    assert call_logs_helper.matches_last_call_log(entry), "The last call_log entry did not match : %s" % entry
+    common.wait_until(call_logs_helper.matches_last_call_log, entry,
+                      tries=2,
+                      message="The last call_log entry did not match : %s" % entry)
 
 
 @step(u'Then I should not have the following call logs:')
