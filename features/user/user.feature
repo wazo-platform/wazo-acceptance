@@ -30,7 +30,7 @@ Feature: User
         Given I have no extension with exten "1632@default"
         When I create a user with infos:
         | firstname | lastname | protocol | number | context |
-        | Bill      | Bush     | SIP      |  1632  | default |
+        | Bill      | Bush     | SIP      |  1632  | Default |
         Then I see a user with infos:
         | fullname  | number | protocol | context |
         | Bill Bush |   1632 | sip      | default |
@@ -42,7 +42,7 @@ Feature: User
         Given I have no extension with exten "1632@default"
         When I create a user with infos:
         | firstname | lastname | protocol | number | context |
-        | Bill      | Bush     | SCCP     |  1632  | default |
+        | Bill      | Bush     | SCCP     |  1632  | Default |
         Then I see a user with infos:
         | fullname  | number | provisioning_code | protocol | context |
         | Bill Bush |   1632 |                 0 | sccp     | default |
@@ -60,7 +60,7 @@ Feature: User
         Given there is no user "Bill" "Bush"
         When I create a user with infos:
         | firstname | lastname | protocol | number | context | device            |
-        | Bill      | Bush     | SIP      |   1632 | default | 00:de:ad:be:ef:00 |
+        | Bill      | Bush     | SIP      |   1632 | Default | 00:de:ad:be:ef:00 |
         Then I see a user with infos:
         | fullname  | number | protocol | context |
         | Bill Bush |   1632 | sip      | default |
@@ -84,7 +84,7 @@ Feature: User
       Given I have no extension with exten "1677@default"
       When I create a user with infos:
           | firstname | lastname | protocol | number | context | device            |
-          | Abarai    | Renji    | SIP      | 1677   | default | dd:11:22:33:44:55 |
+          | Abarai    | Renji    | SIP      | 1677   | Default | dd:11:22:33:44:55 |
       Then I see a user with infos:
           | fullname     | protocol | number | context |
           | Abarai Renji | sip      | 1677   | default |
