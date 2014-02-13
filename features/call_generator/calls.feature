@@ -15,7 +15,6 @@ Feature: Callgen
         When a call is started:
          | caller | dial | callee | talk_time | hangup |
          | Alice  | 1101 | Bob    | 3         | callee |
-        When I generate call logs
         Then I have the last call log matching:
          | destination_exten | duration | user_field | answered |
          | 1101              | 0:00:03  |            | True     |

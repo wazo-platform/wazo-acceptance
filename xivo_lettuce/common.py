@@ -324,3 +324,19 @@ def get_host_address():
     host = host.rstrip('/')
     host = host.partition('//')[2]
     return host
+
+
+def wait_until(function, *args, **kwargs):
+    message = kwargs.pop('message', None)
+    tries = kwargs.pop('tries', 1)
+    return_value = False
+
+    while tries > 0 and not return_value:
+        return_value = function(*args, **kwargs)
+        tries -= 1
+        time.sleep(1)
+
+    if not return_value:
+        raise Exception(message)
+
+    return return_value
