@@ -105,7 +105,7 @@ def then_i_should_have_the_following_call_logs(step):
 def then_i_have_the_last_call_log_matching(step):
     entry = step.hashes[0]
     common.wait_until(call_logs_helper.matches_last_call_log, entry,
-                      tries=2,
+                      tries=5,
                       message="The last call_log entry did not match : %s" % entry)
 
 
