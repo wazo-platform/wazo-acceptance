@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# -*- coding: utf-8 -*-
+
+# Copyright (C) 2013-2014 Avencall
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+# Checks if XiVO is correctly installed on remote XIVO_HOST
+# Usage : $0 XIVO_HOST
+# Exit status is 0 if XiVO is properly installed on remote XIVO_HOST, 1 otherwise
+
+xivo_is_installed="$(ssh $1 /usr/bin/dpkg-query -W '-f=\${Status}\\n' xivo)"
+
+if ! [ "$xivo_is_installed" = "install ok installed" ] ; then
+        # xivo not installed
+        exit 1
+fi
+
+is_error="$(ssh $1 apt-get install -fs -qq)"
+
+if [ -n "$is_error" ] ; then
+        # errors with installed packages
+        exit 1
+fi
+
+exit 0
