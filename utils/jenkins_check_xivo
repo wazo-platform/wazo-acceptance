@@ -23,7 +23,8 @@
 xivo_host="$1"
 
 function xivo_is_installed () {
-    [ $(ssh $xivo_host /usr/bin/dpkg-query -W '-f=\${Status}\\n' xivo) = "install ok installed" ]
+    xivo_install_status="$(ssh $xivo_host /usr/bin/dpkg-query -W '-f=\${Status}\\n' xivo 2> /dev/null)"
+    [ "$xivo_install_status" = "install ok installed" ]
 }
 
 function packaging_errors () {
