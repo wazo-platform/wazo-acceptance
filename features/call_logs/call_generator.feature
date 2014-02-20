@@ -9,8 +9,8 @@ Feature: Call Log Generation
             | CHAN_START   | 2013-01-01 08:46:20.156385 | Alice Aglisse |    1001 | s     | default | SIP/hg63xv-00000013 | 1375994780.2 | 1375994780.1 |           |
             | ANSWER       | 2013-01-01 08:46:23.005457 | Alice Aglisse |    1001 | s     | default | SIP/hg63xv-00000013 | 1375994780.2 | 1375994780.1 |           |
             | ANSWER       | 2013-01-01 08:46:23.005613 | Bob Marley    |    1002 | s     | user    | SIP/z77kvm-00000028 | 1375994780.1 | 1375994780.1 |           |
-            | BRIDGE_START | 2013-01-01 08:46:23.005632 | Bob Marley    |    1002 | s     | user    | SIP/z77kvm-00000028 | 1375994780.1 | 1375994780.1 |           |
-            | BRIDGE_END   | 2013-01-01 08:46:26.848705 | Bob Marley    |    1002 | s     | user    | SIP/z77kvm-00000028 | 1375994780.1 | 1375994780.1 |           |
+            | BRIDGE_START | 2013-01-01 08:46:24.000000 | Bob Marley    |    1002 | s     | user    | SIP/z77kvm-00000028 | 1375994780.1 | 1375994780.1 |           |
+            | BRIDGE_END   | 2013-01-01 08:46:26.000000 | Bob Marley    |    1002 | s     | user    | SIP/z77kvm-00000028 | 1375994780.1 | 1375994780.1 |           |
             | HANGUP       | 2013-01-01 08:46:26.849811 | Alice Aglisse |    1001 |       | user    | SIP/hg63xv-00000013 | 1375994780.2 | 1375994780.1 |           |
             | CHAN_END     | 2013-01-01 08:46:26.84983  | Alice Aglisse |    1001 |       | user    | SIP/hg63xv-00000013 | 1375994780.2 | 1375994780.1 |           |
             | HANGUP       | 2013-01-01 08:46:26.860098 | Bob Marley    |    1002 | s     | user    | SIP/z77kvm-00000028 | 1375994780.1 | 1375994780.1 |           |
@@ -18,8 +18,8 @@ Feature: Call Log Generation
             | LINKEDID_END | 2013-01-01 08:46:26.860254 | Bob Marley    |    1002 | s     | user    | SIP/z77kvm-00000028 | 1375994780.1 | 1375994780.1 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                       | source_name | source_exten | destination_exten |       duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 08:46:20.118025 | Bob Marley  |         1002 |              1001 | 0:00:03.854485 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | date                       | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
+            | 2013-01-01 08:46:20.118025 | Bob Marley  |         1002 |              1001 |  0:00:02 |            | True     | sip/z77kvm           | sip/hg63xv                |
 
     Scenario: Generation of non-answered internal call
         Given there are no call logs
@@ -57,7 +57,7 @@ Feature: Call Log Generation
         When I generate call logs
         Then I should have the following call logs:
             | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 11:02:38.0 |   612345678 |    612345678 |              1002 | 0:00:03.0 |            | True     | sip/trunk            | sip/hg63xv                |
+            | 2013-01-01 11:02:38.0 |   612345678 |    612345678 |              1002 | 0:00:02.8 |            | True     | sip/trunk            | sip/hg63xv                |
 
     Scenario: Generation of answered outgoing call
         Given there are no call logs
@@ -90,8 +90,8 @@ Feature: Call Log Generation
         When I generate call logs
         Then I should have the following call logs:
             | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 11:03:47.0 | Bob Marley  |         1002 |        4185550155 | 0:00:03.0 |            | True     | sip/z77kvm           | sip/trunk                 |
-            | 2013-01-01 11:20:08.0 | Bob Marley  |         1002 |        4185550155 | 0:00:03.0 | Père Noël  | True     | sip/z77kvm           | sip/trunk                 |
+            | 2013-01-01 11:03:47.0 | Bob Marley  |         1002 |        4185550155 | 0:00:02.8 |            | True     | sip/z77kvm           | sip/trunk                 |
+            | 2013-01-01 11:20:08.0 | Bob Marley  |         1002 |        4185550155 | 0:00:02.8 | Père Noël  | True     | sip/z77kvm           | sip/trunk                 |
 
     Scenario: Generation of originate call
         Given there are no call logs
@@ -112,7 +112,7 @@ Feature: Call Log Generation
         When I generate call logs
         Then I should have the following call logs:
             | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 15:47:39.0 | Bob Marley  |         1002 |              1001 | 0:00:02.1 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | 2013-01-01 15:47:39.0 | Bob Marley  |         1002 |              1001 | 0:00:01.9 |            | True     | sip/z77kvm           | sip/hg63xv                |
 
     Scenario: Generation of unanswered originate call
         Given there are no call logs
@@ -193,11 +193,11 @@ Feature: Call Log Generation
         When I generate call logs using the last 12 unprocessed CEL entries
         Then I should have the following call logs:
             | date                | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 10:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | 2013-01-01 10:00:00 | Bob Marley  |         1002 |              1001 |  0:00:01 |            | True     | sip/z77kvm           | sip/hg63xv                |
         Then I should not have the following call logs:
             | date                | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 08:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     | sip/z77kvm           | sip/hg63xv                |
-            | 2013-01-01 09:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | 2013-01-01 08:00:00 | Bob Marley  |         1002 |              1001 |  0:00:01 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | 2013-01-01 09:00:00 | Bob Marley  |         1002 |              1001 |  0:00:01 |            | True     | sip/z77kvm           | sip/hg63xv                |
 
      Scenario: Generation for a specified latest CEL count with processed calls
          Given there are no call logs
@@ -243,11 +243,11 @@ Feature: Call Log Generation
         When I generate call logs using the last 12 unprocessed CEL entries
         Then I should have the following call logs:
             | date                | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 09:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     | sip/z77kvm           | sip/hg63xv                |
-            | 2013-01-01 10:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | 2013-01-01 09:00:00 | Bob Marley  |         1002 |              1001 |  0:00:01 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | 2013-01-01 10:00:00 | Bob Marley  |         1002 |              1001 |  0:00:01 |            | True     | sip/z77kvm           | sip/hg63xv                |
         Then I should not have the following call logs:
             | date                | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 08:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | 2013-01-01 08:00:00 | Bob Marley  |         1002 |              1001 |  0:00:01 |            | True     | sip/z77kvm           | sip/hg63xv                |
 
      Scenario: Running call log generation in parallel should fail
          Given there are no call logs
@@ -273,7 +273,7 @@ Feature: Call Log Generation
          When I generate call logs using the last 1 unprocessed CEL entries
          Then I should have the following call logs:
             | date                | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 08:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | 2013-01-01 08:00:00 | Bob Marley  |         1002 |              1001 |  0:00:01 |            | True     | sip/z77kvm           | sip/hg63xv                |
 
      Scenario: Generation of partially processed calls
         Given there are only the following call logs:
@@ -295,7 +295,7 @@ Feature: Call Log Generation
          When I generate call logs using the last 20 unprocessed CEL entries
          Then I should have the following call logs:
             | date                | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 08:00:00 | Bob Marley  |         1002 |              1001 |  0:00:05 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | 2013-01-01 08:00:00 | Bob Marley  |         1002 |              1001 |  0:00:01 |            | True     | sip/z77kvm           | sip/hg63xv                |
 
     Scenario: Generation of a call where uniqueid must be sorted chronologically, not alphabetically
         Given there are no call logs
@@ -315,5 +315,5 @@ Feature: Call Log Generation
             | LINKEDID_END | 2013-12-04 14:21:07.2 | Neelix Talaxian  | 1066    | s     | user    | SIP/2dvtpb-00000009 | 1386184858.9  | 1386184858.9 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                  | source_name     | source_exten | destination_exten | duration  | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-12-04 14:20:58.0 | Neelix Talaxian | 1066         | 1624              | 0:00:01.5 |            | True     | sip/2dvtpb           | sip/zsp7wv                |
+            | date                  | source_name     | source_exten | destination_exten |  duration | user_field | answered | source_line_identity | destination_line_identity |
+            | 2013-12-04 14:20:58.0 | Neelix Talaxian |         1066 |              1624 | 0:00:01.1 |            | True     | sip/2dvtpb           | sip/zsp7wv                |
