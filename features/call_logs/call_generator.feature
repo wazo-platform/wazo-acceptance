@@ -114,6 +114,24 @@ Feature: Call Log Generation
             | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered | source_line_identity | destination_line_identity |
             | 2013-01-01 15:47:39.0 | Bob Marley  |         1002 |              1001 | 0:00:02.1 |            | True     | sip/z77kvm           | sip/hg63xv                |
 
+    Scenario: Generation of unanswered originate call
+        Given there are no call logs
+        Given I have only the following CEL entries:
+            | eventtype    | eventtime                  | cid_name | cid_num | exten | context | channame            |     uniqueid |     linkedid | userfield |
+            | CHAN_START   | 2014-02-20 08:53:12.914145 | Carlos   |    1003 | s     | pcmdev  | SIP/d49t0y-00000001 | 1392904392.1 | 1392904392.1 |           |
+            | ANSWER       | 2014-02-20 08:53:13.394103 | 1002     |    1002 |       | pcmdev  | SIP/d49t0y-00000001 | 1392904392.1 | 1392904392.1 |           |
+            | APP_START    | 2014-02-20 08:53:13.510263 | Carlos   |    1003 | s     | user    | SIP/d49t0y-00000001 | 1392904392.1 | 1392904392.1 |           |
+            | CHAN_START   | 2014-02-20 08:53:13.510397 | Bõb      |    1002 | s     | pcmdev  | SCCP/1002-00000000  | 1392904393.2 | 1392904392.1 |           |
+            | HANGUP       | 2014-02-20 08:53:20.196726 | Bõb      |    1002 | s     | pcmdev  | SCCP/1002-00000000  | 1392904393.2 | 1392904392.1 |           |
+            | CHAN_END     | 2014-02-20 08:53:20.1975   | Bõb      |    1002 | s     | pcmdev  | SCCP/1002-00000000  | 1392904393.2 | 1392904392.1 |           |
+            | HANGUP       | 2014-02-20 08:53:20.197711 | Carlos   |    1003 | s     | user    | SIP/d49t0y-00000001 | 1392904392.1 | 1392904392.1 |           |
+            | CHAN_END     | 2014-02-20 08:53:20.19851  | Carlos   |    1003 | s     | user    | SIP/d49t0y-00000001 | 1392904392.1 | 1392904392.1 |           |
+            | LINKEDID_END | 2014-02-20 08:53:20.198528 | Carlos   |    1003 | s     | user    | SIP/d49t0y-00000001 | 1392904392.1 | 1392904392.1 |           |
+        When I generate call logs
+        Then I should have the following call logs:
+            | date                       | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
+            | 2014-02-20 08:53:12.914145 | Carlos      |         1003 |              1002 |        0 |            | False    | sip/d49t0y           | sccp/1002                 |
+
      Scenario: Generation for a specified latest CEL count with no processed calls
          Given there are no call logs
          Given I have only the following CEL entries:
