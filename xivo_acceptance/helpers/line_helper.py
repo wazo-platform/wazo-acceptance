@@ -141,7 +141,7 @@ def _delete_line_associations(channel, line_id):
     from xivo_dao.data_handler.user_line import services as user_line_services
 
     line = line_services.get(line_id)
-    line.device = None
+    line.device_id = None
     line.device_slot = 1
     line_services.edit(line)
 
