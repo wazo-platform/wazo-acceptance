@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# Copyright (C) 2013-2014 Avencall
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+
+# Wait until XiVO is running on remote XIVO_HOST, checking each INTERVAL seconds, until TIMEOUT seconds
+# Usage : $0 XIVO_HOST TIMEOUT INTERVAL
+# Exit status is 0 if XiVO is running on remote XIVO_HOST before TIMEOUT, 1 otherwise
+
+
+xivo_host="$1"
+timeout_secs="$2"
+loop_secs="$3"
+
+spent_secs=0
+while [ $spent_secs -lt $timeout_secs ] ; do
+    if [ "$(nmap -p80 $xivo_host -oG - | grep 80/open)" ]; then
+        sleep 10  # apt is probably not yet finished, and we might need it afterwards, so wait for apt to finish
+        exit 0
+    fi
+    sleep $loop_secs
+    spent_secs=$((spent_secs + loop_secs))
+done
+exit 1
