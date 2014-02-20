@@ -132,6 +132,24 @@ Feature: Call Log Generation
             | date                       | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
             | 2014-02-20 08:53:12.914145 | Carlos      |         1003 |              1002 |        0 |            | False    | sip/d49t0y           | sccp/1002                 |
 
+    Scenario: Generation of originates hung up by the switchboard
+        Given there are no call logs
+        Given I have only the following CEL entries:
+            | eventtype    | eventtime                  | cid_name | cid_num | exten                | context | channame            |     uniqueid |     linkedid | userfield |
+            | CHAN_START   | 2014-02-20 09:28:46.683014 | Carlos   |    1003 | s                    | pcmdev  | SIP/d49t0y-00000003 | 1392906526.4 | 1392906526.4 |           |
+            | ANSWER       | 2014-02-20 09:28:47.183651 | 1002     |    1002 |                      | pcmdev  | SIP/d49t0y-00000003 | 1392906526.4 | 1392906526.4 |           |
+            | APP_START    | 2014-02-20 09:28:47.288346 | Carlos   |    1003 | s                    | user    | SIP/d49t0y-00000003 | 1392906526.4 | 1392906526.4 |           |
+            | CHAN_START   | 2014-02-20 09:28:47.288466 | Bõb      |    1002 | s                    | pcmdev  | SCCP/1002-00000001  | 1392906527.5 | 1392906526.4 |           |
+            | HANGUP       | 2014-02-20 09:29:00.306587 | Bõb      |    1002 | s                    | pcmdev  | SCCP/1002-00000001  | 1392906527.5 | 1392906526.4 |           |
+            | CHAN_END     | 2014-02-20 09:29:00.307651 | Bõb      |    1002 | s                    | pcmdev  | SCCP/1002-00000001  | 1392906527.5 | 1392906526.4 |           |
+            | HANGUP       | 2014-02-20 09:29:00.308165 | Carlos   |    1003 | endcall:hangupsilent | forward | SIP/d49t0y-00000003 | 1392906526.4 | 1392906526.4 |           |
+            | CHAN_END     | 2014-02-20 09:29:00.309786 | Carlos   |    1003 | endcall:hangupsilent | forward | SIP/d49t0y-00000003 | 1392906526.4 | 1392906526.4 |           |
+            | LINKEDID_END | 2014-02-20 09:29:00.309806 | Carlos   |    1003 | endcall:hangupsilent | forward | SIP/d49t0y-00000003 | 1392906526.4 | 1392906526.4 |           |
+        When I generate call logs
+        Then I should have the following call logs:
+            | date                       | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
+            | 2014-02-20 09:28:46.683014 | Carlos      |         1003 |              1002 |        0 |            | False    | sip/d49t0y           | sccp/1002                 |
+
      Scenario: Generation for a specified latest CEL count with no processed calls
          Given there are no call logs
          Given I have only the following CEL entries:
