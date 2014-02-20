@@ -112,7 +112,7 @@ Feature: Call Log Generation
         When I generate call logs
         Then I should have the following call logs:
             | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2013-01-01 15:47:39.0 | Bob Marley  |         1002 |              1001 | 0:00:04.3 |            | True     | sip/z77kvm           | sip/hg63xv                |
+            | 2013-01-01 15:47:39.0 | Bob Marley  |         1002 |              1001 | 0:00:02.1 |            | True     | sip/z77kvm           | sip/hg63xv                |
 
      Scenario: Generation for a specified latest CEL count with no processed calls
          Given there are no call logs
