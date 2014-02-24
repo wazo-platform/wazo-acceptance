@@ -18,9 +18,9 @@
 from xivo_lettuce.postgres import exec_sql_request
 
 
-def create_speeddial_for_user(user):
+def create_speeddial_with_user_destination(user):
     func_key_id = _create_func_key('speeddial', 'user')
-    _associate_user_func_key(func_key_id, user.id)
+    _associate_with_user_destination(func_key_id, user.id)
 
 
 def _create_func_key(func_key_type, destination):
@@ -36,7 +36,7 @@ def _create_func_key(func_key_type, destination):
     return row[0]
 
 
-def _associate_user_func_key(func_key_id, user_id):
+def _associate_with_user_destination(func_key_id, user_id):
     destination_type_id = _find_destination_type_id('user')
 
     query = 'INSERT INTO func_key_dest_user(func_key_id, user_id, destination_type_id) VALUES (:func_key_id, :user_id, :destination_type_id)'

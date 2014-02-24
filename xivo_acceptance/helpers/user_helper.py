@@ -180,7 +180,7 @@ def _delete_voicemail_associations(user_id):
 
 
 def _delete_func_key_associations(user_id):
-    func_key_helper.delete_func_keys_for_user(user_id)
+    func_key_helper.delete_func_keys_with_user_destination(user_id)
 
 
 def _delete_using_user_service(channel, user_id):

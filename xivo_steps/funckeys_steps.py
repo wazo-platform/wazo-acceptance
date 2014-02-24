@@ -28,7 +28,7 @@ from xivo_lettuce.xivo_hamcrest import not_empty
 @step(u'Given I have a speeddial func key for user "([^"]*)" "([^"]*)"')
 def given_i_have_a_speeddial_func_key_for_user_group1_group2(step, firstname, lastname):
     user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    func_key_helper.create_speeddial_for_user(user)
+    func_key_helper.create_speeddial_with_user_destination(user)
 
 
 @step(u'When I request the list of func keys via RESTAPI')
