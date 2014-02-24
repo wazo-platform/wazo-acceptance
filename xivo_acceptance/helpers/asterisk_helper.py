@@ -70,14 +70,21 @@ class _AsteriskConfHelper(object):
             if line.startswith(u'['):
                 # start of a new section
                 break
-            option_name, option_value = line.split(u'=', 1)
-            option_name = option_name.rstrip()
+            option_name, option_value = self._extract_option_value_of_line(line)
             if option_name not in self._option_names:
                 continue
-            option_value = option_value.lstrip()
             self.result.append((option_name, option_value))
         # supose there's only one section, so return None
         return None
+
+    def _extract_option_value_of_line(self, line):
+        try:
+            option_name, option_value = line.split(u'=>', 1)
+        except ValueError:
+            option_name, option_value = line.split(u'=', 1)
+        option_name = option_name.rstrip()
+        option_value = option_value.lstrip()
+        return option_name, option_value
 
 
 def logoff_agents(agent_numbers):
