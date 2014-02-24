@@ -22,8 +22,13 @@ FUNC_KEY_URL = 'func_keys'
 
 def func_key_list(parameters=None):
     parameters = parameters or {}
-    return world.restapi_utils_1_1.rest_get('%s' % FUNC_KEY_URL, params=parameters)
+    return world.restapi_utils_1_1.rest_get(FUNC_KEY_URL, params=parameters)
 
 
 def get_func_key(func_key_id):
     return world.restapi_utils_1_1.rest_get('%s/%s' % (FUNC_KEY_URL, func_key_id))
+
+
+def create_func_key(parameters=None):
+    parameters = parameters or {}
+    return world.restapi_utils_1_1.rest_post(FUNC_KEY_URL, parameters)
