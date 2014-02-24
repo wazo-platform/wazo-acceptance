@@ -166,7 +166,10 @@ def delete_user(user_id):
         _delete_line_associations(user_id)
         _delete_voicemail_associations(user_id)
         _delete_func_key_associations(user_id)
+
+        template_id = func_key_helper.find_template_for_user(user_id)
         remote_exec(_delete_using_user_service, user_id=user_id)
+        func_key_helper.delete_template_and_func_keys(template_id)
 
 
 def _delete_line_associations(user_id):

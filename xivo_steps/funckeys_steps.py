@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to, has_item
+from hamcrest import assert_that, equal_to, has_item, has_entry, has_length
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import user as user_action_webi
@@ -25,10 +25,29 @@ from xivo_lettuce import common
 from xivo_lettuce.xivo_hamcrest import not_empty
 
 
+@step(u'Given there is no func key with id "([^"]*)"')
+def given_there_is_no_func_key_with_id_group1(step, func_key_id):
+    func_key_helper.delete_func_key(func_key_id)
+
+
 @step(u'Given I have a speeddial func key for user "([^"]*)" "([^"]*)"')
 def given_i_have_a_speeddial_func_key_for_user_group1_group2(step, firstname, lastname):
     user = user_helper.get_by_firstname_lastname(firstname, lastname)
     func_key_helper.create_speeddial_with_user_destination(user)
+
+
+@step(u'When I request the func key with id "([^"]*)" via RESTAPI')
+def when_i_request_the_func_key_with_id_group1_via_restapi(step, func_key_id):
+    world.response = func_key_action_restapi.get_func_key(func_key_id)
+
+
+@step(u'When I request the funckey with a destination for user "([^"]*)" "([^"]*)"')
+def when_i_request_the_funckey_with_a_destination_for_user_group1_group2(step, firstname, lastname):
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+    func_key_ids = func_key_helper.find_func_keys_with_user_destination(user.id)
+    assert_that(func_key_ids, has_length(1), "More than one func key with the same destination")
+
+    world.response = func_key_action_restapi.get_func_key(func_key_ids[0])
 
 
 @step(u'When I request the list of func keys via RESTAPI')
@@ -112,3 +131,15 @@ def _filter_user_func_keys(response):
 def _find_user_name_for_func_key(func_key):
     user = user_helper.get_by_user_id(func_key['destination_id'])
     return "%s %s" % (user.firstname, user.lastname)
+
+
+@step(u'Then I get a func key of type "([^"]*)"')
+def then_i_get_a_func_key_of_type_group1(step, func_key_type):
+    assert_that(world.response.data, has_entry('type', func_key_type))
+
+
+@step(u'Then I get a func key with a destination id for user "([^"]*)" "([^"]*)"')
+def then_i_get_a_func_key_with_a_destination_id_for_user_group1_group2(step, firstname, lastname):
+    destination_id = world.response.data['destination_id']
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+    assert_that(user.id, equal_to(destination_id))
