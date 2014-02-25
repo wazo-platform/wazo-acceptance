@@ -49,7 +49,6 @@ class XivoAcceptanceConfig(object):
         self.xivo_configured = None
 
         self.xivo_host = self._config.get('xivo', 'hostname')
-        self.xivo_biz_host = self._config.get('xivo_biz', 'hostname')
 
         self.ssh_login = self._config.get('ssh_infos', 'login')
 
