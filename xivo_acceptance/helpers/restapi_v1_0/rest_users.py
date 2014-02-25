@@ -28,6 +28,7 @@ from xivo_dao.data_handler.user_line import dao as user_line_dao
 from xivo_dao.data_handler.user_line.model import UserLine
 from xivo_dao.data_handler.line_extension import dao as line_extension_dao
 from xivo_dao.data_handler.line_extension.model import LineExtension
+from xivo_dao.data_handler.func_key_template import dao as func_key_template_dao
 
 from restapi_config import RestAPIConfig
 from lettuce.registry import world
@@ -114,6 +115,7 @@ class RestUsers():
             self.delete_user(existing_user.id, delete_voicemail=True)
 
         user = User(firstname=firstname, lastname=lastname)
+        user.private_template_id = func_key_template_dao.create_private_template()
         user = user_newdao.create(user)
 
         existing_extension = extension_newdao.find_by_exten_context(number, context)
