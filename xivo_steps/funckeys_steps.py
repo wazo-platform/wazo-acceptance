@@ -159,6 +159,6 @@ def then_i_get_a_func_key_with_a_destination_id_for_user_group1_group2(step, fir
 def then_i_have_the_following_func_keys_via_restapi(step):
     expected_func_key = step.hashes[0]
 
-    func_key = world.response.data['items']
+    func_key = world.response.data
 
     assert_that(func_key, has_entries(expected_func_key))
