@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to, has_item, has_entry, has_length
+from hamcrest import assert_that, equal_to, has_item, has_entry, has_length, has_entries
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import user as user_action_webi
@@ -59,6 +59,16 @@ def when_i_request_the_list_of_func_keys_via_restapi(step):
 def when_i_request_the_list_of_func_keys_with_the_following_parameters_via_restapi(step):
     parameters = step.hashes[0]
     world.response = func_key_action_restapi.func_key_list(parameters)
+
+
+@step(u'When I create an empty func key via RESTAPI:')
+def when_i_create_an_empty_func_key_via_restapi(step):
+    world.response = func_key_action_restapi.create_func_key({})
+
+
+@step(u'When I create the following func keys via RESTAPI:')
+def when_i_create_the_following_func_keys_via_restapi(step):
+    world.response = func_key_action_restapi.create_func_key(step.hashes[0])
 
 
 @step(u'Then the user "([^"]*)" has the following func keys:')
@@ -143,3 +153,12 @@ def then_i_get_a_func_key_with_a_destination_id_for_user_group1_group2(step, fir
     destination_id = world.response.data['destination_id']
     user = user_helper.get_by_firstname_lastname(firstname, lastname)
     assert_that(user.id, equal_to(destination_id))
+
+
+@step(u'Then I have the following func key via RESTAPI:')
+def then_i_have_the_following_func_keys_via_restapi(step):
+    expected_func_key = step.hashes[0]
+
+    func_key = world.response.data
+
+    assert_that(func_key, has_entries(expected_func_key))
