@@ -140,7 +140,7 @@ def click_add_line_button():
 
 def select_context(context):
     input_context = world.browser.find_elements_by_id('linefeatures-context')[-2]
-    input_context.send_keys(context)
+    Select(input_context).select_by_value(context.lower())
 
 
 def type_line_number(linenumber):
