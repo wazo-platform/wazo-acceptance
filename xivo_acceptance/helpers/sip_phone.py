@@ -33,8 +33,8 @@ class SipPhone(object):
                 exception = e
             else:
                 return
-        if e:
-            raise e
+        if exception:
+            raise exception
 
     def call(self, exten):
         try:
