@@ -71,9 +71,9 @@ def given_i_check_the_number_of_file_descriptor_for_asterisk(step):
     world.asterisk_fd_count = fd_count
 
 
-@step(u'When I reload the module chan_sccp.so')
-def when_i_reload_the_module_chan_sccp_so(step):
-    ast_cmd = 'module reload chan_sccp.so'
+@step(u'When I reload the module "([^"]*)"')
+def when_i_reload_the_module(step, module):
+    ast_cmd = 'module reload %s' % module
     command = ['asterisk', '-rx', '"%s"' % ast_cmd]
     assert sysutils.send_command(command)
     time.sleep(3)

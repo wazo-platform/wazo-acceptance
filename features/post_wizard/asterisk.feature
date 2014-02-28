@@ -16,5 +16,5 @@ Feature: Asterisk
 
     Scenario: Reloading module chan_sccp does not leak a file descriptor
         Given I check the number of file descriptor for asterisk
-        When I reload the module chan_sccp.so
+        When I reload the module "chan_sccp.so"
         Then I should have the same number of open file descriptor
