@@ -30,8 +30,10 @@ from xivo_lettuce import postgres
 from provd.rest.client.client import new_provisioning_client
 
 
-_CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                            '../config/config.ini'))
+_CONFIG_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../config'))
+_CONFIG_DIRD = os.path.join(_CONFIG_DIR, 'conf.d')
+_CONFIG_FILE_DEFAULT = os.path.join(_CONFIG_DIR, 'default.ini')
+_CONFIG_FILE_EXTRA_DEFAULT = os.path.join(_CONFIG_DIRD, 'default')
 
 
 class XivoAcceptanceConfig(object):
@@ -89,17 +91,21 @@ class XivoAcceptanceConfig(object):
 
     def _read_config(self):
         config = ConfigParser.RawConfigParser()
+
+        with open(_CONFIG_FILE_DEFAULT) as fobj:
+            config.readfp(fobj)
+
+        config_file_extra = _CONFIG_FILE_EXTRA_DEFAULT
+
         config_environ = os.getenv('LETTUCE_CONFIG')
         if config_environ and os.path.exists(config_environ):
-            config_file = config_environ
-        else:
-            local_config = '%s.local' % _CONFIG_FILE
-            if os.path.exists(local_config):
-                config_file = local_config
-            else:
-                config_file = _CONFIG_FILE
-        with open(config_file) as fobj:
+            config_file_extra = config_environ
+        elif os.path.exists('%s.local' % _CONFIG_FILE_EXTRA_DEFAULT):
+            config_file_extra = '%s.local' % _CONFIG_FILE_EXTRA_DEFAULT
+
+        with open(config_file_extra) as fobj:
             config.readfp(fobj)
+
         return config
 
     def _setup_webi(self):
