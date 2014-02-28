@@ -14,6 +14,31 @@ Feature: Devices
           | present           | not present       |
           | 00:00:00:00:aa:01 | 00:00:00:00:bb:02 |
 
+    Scenario: Search devices by number
+        Given there are no devices with id "9845946546546"
+        Given there are no devices with id "6241621649541"
+        Given I have the following users:
+            |     id | firstname | lastname |
+            | 984346 | Richard   | Stallman |
+        Given I have the following lines:
+            |     id | context | protocol | username | secret | device_slot |
+            | 654134 | default | sip      | toto     | tata   |           1 |
+        Given I have the following extensions:
+            |     id | context | exten |
+            | 135477 | default |  1000 |
+        Given I have the following devices:
+          |            id |             ip | mac               |
+          | 9845946546546 | 192.168.32.104 | 00:00:00:00:aa:02 |
+          | 6241621649541 |  192.168.32.10 | 00:00:00:00:cc:22 |
+        Given line "654134" is linked with extension "1000@default"
+        Given line "654134" is linked with user id "984346"
+        When I provision my device with my line_id "654134" and ip "192.168.32.104"
+        When I search device by number "1000"
+        Then the search results are:
+          | present           | not present       |
+          | 00:00:00:00:aa:02 | 00:00:00:00:cc:22 |
+
+
     Scenario: List
         When I request devices in the webi
         Then the REST API received a request with infos:

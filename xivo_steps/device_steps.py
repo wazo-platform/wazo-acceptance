@@ -49,6 +49,11 @@ def when_i_search_device(step, search):
     device_action_webi.search_device(search)
 
 
+@step(u'When I search device by number "([^"]*)"')
+def when_i_search_device_by_number(step, number):
+    device_action_webi.search_device(number, by_number=True)
+
+
 @step(u'When I create the device with infos:')
 def when_i_create_the_device_with_infos(step):
     common.open_url('device', 'add')
