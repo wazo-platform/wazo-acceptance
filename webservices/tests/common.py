@@ -16,29 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import xivo_ws
-import ConfigParser
-import os
 
-_CONFIG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                            '../../config/config.ini'))
+from xivo_lettuce.config import XivoAcceptanceConfig
 
 
-def _open_config_file():
-    local_config = '%s.local' % _CONFIG_FILE
-    try:
-        return open(local_config)
-    except IOError:
-        return open(_CONFIG_FILE)
+config = XivoAcceptanceConfig()
 
-
-config = ConfigParser.RawConfigParser()
-with _open_config_file() as fobj:
-    config.readfp(fobj)
-hostname = config.get('xivo', 'hostname')
-username = config.get('webservices_infos', 'login')
-password = config.get('webservices_infos', 'password')
-
-xivo_server_ws = xivo_ws.XivoServer(hostname, username, password)
+xivo_server_ws = xivo_ws.XivoServer(config.xivo_host,
+                                    config.rest_username,
+                                    config.rest_passwd)
 
 
 def delete_with_id(obj, id_to_delete):
