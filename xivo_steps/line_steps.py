@@ -77,7 +77,6 @@ def when_i_disable_line_codecs_customization_for_line(step, number):
     form.submit.submit_form()
 
 
-
 @step(u'When I add a SIP line with infos:')
 def when_i_add_a_sip_line_with_infos(step):
     for line_infos in step.hashes:
