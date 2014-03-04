@@ -21,6 +21,7 @@ from hamcrest import assert_that, has_entries
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import line_helper
@@ -60,6 +61,33 @@ def given_i_set_the_following_options_in_line_1(step, line_number):
 @step(u'Given the line "([^"]*)" has the codec "([^"]*)"')
 def given_the_line_group1_has_the_codec_group2(step, linenumber, codec):
     _add_codec_to_line(codec, linenumber)
+
+
+@step(u'Given the line "(\d+)@(\w+)" is disabled')
+def given_the_line_group1_is_disabled(step, extension, context):
+    common.open_url('line')
+    _search_for_line(extension, context)
+    _click_checkbox_for_line(extension)
+    _disable_selected_lines()
+
+
+def _search_for_line(extension, context):
+    form.input.edit_text_field_with_id('it-toolbar-search', extension)
+    form.select.set_select_field_with_id('it-toolbar-context', context)
+
+
+def _click_checkbox_for_line(extension):
+    line_element = common.get_line(extension)
+    checkbox = line_element.find_element_by_css_selector(".it-checkbox")
+    checkbox.click()
+
+
+def _disable_selected_lines():
+    menu_button = world.browser.find_element_by_id("toolbar-bt-advanced")
+    ActionChains(world.browser).move_to_element(menu_button).perform()
+
+    disable_button = world.browser.find_element_by_id("toolbar-advanced-menu-disable")
+    ActionChains(world.browser).click(disable_button).perform()
 
 
 @step(u'When I customize line "([^"]*)" codecs to:')
