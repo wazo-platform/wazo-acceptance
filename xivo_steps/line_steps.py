@@ -69,6 +69,7 @@ def given_the_line_group1_is_disabled(step, extension, context):
     _search_for_line(extension, context)
     _click_checkbox_for_line(extension)
     _disable_selected_lines()
+    step.given('Given I wait 3 seconds for the dialplan to be reloaded')
 
 
 def _search_for_line(extension, context):
