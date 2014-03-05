@@ -160,6 +160,14 @@ def when_i_disable_multiple_instances(step):
     cti_helper.configure_client(conf_dict)
 
 
+@step(u'When I set the switchboard queues')
+def when_i_set_the_switchboard_queues(step):
+    queues = step.hashes[0]
+    conf_dict = {'switchboard_incalls_queue': queues['incalls'],
+                 'switchboard_on_hold_queue': queues['on hold']}
+    cti_helper.configure_client(conf_dict)
+
+
 @step(u'When I update configuration as "([^"]*)" to "([^"]*)"')
 def when_i_update_configuration_as_group1_to_group2(step, conf_key, conf_value):
     conf_dict = {conf_key: conf_value}

@@ -152,9 +152,12 @@ Feature: Switchboard
          | Bob       | B        |             |           |            |   1633 | default | sip      |              |
          | Charlie   | C        |             |           |            |   1634 | default | sip      |              |
         Given there is a switchboard configured as:
-         | incalls queue name | hold calls queue name | incalls queue number | incalls queue context | hold calls queue number | hold calls queue context | agents       |
-         | __switchboard      | __switchboard_hold    |                 3009 | default               |                    3010 | default                  | 1631@default |
+         | incalls queue name | hold calls queue name   | incalls queue number | incalls queue context | hold calls queue number | hold calls queue context | agents       |
+         | __switchboard-test | __switchboard_hold-test |                 3009 | default               |                    3010 | default                  | 1631@default |
         When I start the XiVO Client
+        When I set the switchboard queues:
+         | incalls            | on hold                 |
+         | __switchboard-test | __switchboard_hold-test |
         When I log in the XiVO Client as "switch", pass "board", logged agent
         When "Alice A" calls "3009"
         When "Bob B" calls "3009"
