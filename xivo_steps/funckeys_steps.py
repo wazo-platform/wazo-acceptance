@@ -61,16 +61,6 @@ def when_i_request_the_list_of_func_keys_with_the_following_parameters_via_resta
     world.response = func_key_action_restapi.func_key_list(parameters)
 
 
-@step(u'When I create an empty func key via RESTAPI:')
-def when_i_create_an_empty_func_key_via_restapi(step):
-    world.response = func_key_action_restapi.create_func_key({})
-
-
-@step(u'When I create the following func keys via RESTAPI:')
-def when_i_create_the_following_func_keys_via_restapi(step):
-    world.response = func_key_action_restapi.create_func_key(step.hashes[0])
-
-
 @step(u'Then the user "([^"]*)" has the following func keys:')
 def then_the_user_group1_has_the_following_func_keys(step, user):
     common.open_url('user', 'search', {'search': user})
