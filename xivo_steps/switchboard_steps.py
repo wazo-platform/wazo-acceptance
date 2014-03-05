@@ -195,13 +195,10 @@ def when_i_search_a_transfer_destination_1(step, search):
     cti_helper.set_search_for_directory(search)
 
 
-@step(u'When the switchboard "([^"]*)" answers the call from "([^"]*)" number "([^"]*)"')
-def when_the_switchboard_1_answers_the_call_from_2_number_3(step, switchboard, cid_name, cid_num):
+@step(u'When the switchboard "([^"]*)" selects the incoming call from "([^"]*)" number "([^"]*)"')
+def when_the_switchboard_1_selects_the_incoming_call_from_2_number_3(step, switchboard, cid_name, cid_num):
     common.wait_until(_switchboard_has_incoming_call, cid_name, cid_num, tries=10)
     cti_helper.switchboard_answer_incoming_call(cid_name, cid_num)
-    phone = step.scenario.phone_register.get_user_phone(switchboard)
-    common.wait_until(phone.is_ringing, tries=10)
-    phone.answer()
 
 
 @step(u'Then the switchboard is talking to "([^"]*)" number "([^"]*)"')
