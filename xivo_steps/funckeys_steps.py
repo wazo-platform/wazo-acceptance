@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to, has_item, has_entry, has_length, has_entries
+from hamcrest import assert_that, equal_to, has_item, has_entry, has_length, has_entries, is_not
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import user as user_action_webi
@@ -110,9 +110,21 @@ def _extract_destination_value(key_type, line):
 @step(u'Then the list contains a speeddial func key for user "([^"]*)" "([^"]*)"')
 def then_the_list_contains_a_speeddial_func_key_for_user_group1(step, firstname, lastname):
     fullname = "%s %s" % (firstname, lastname)
+    user_names = _func_keys_to_user_fullname(world.response)
+    assert_that(user_names, has_item(fullname), "no func key configured for user %s was found" % fullname)
+
+
+@step(u'Then the list does not contain a speeddial func key for user "([^"]*)" "([^"]*)"')
+def then_the_list_does_not_contain_a_speeddial_func_key_for_user_group1_group2(step, firstname, lastname):
+    fullname = "%s %s" % (firstname, lastname)
+    user_names = _func_keys_to_user_fullname(world.response)
+    assert_that(user_names, is_not(has_item(fullname)), "func key for user '%s' found" % fullname)
+
+
+def _func_keys_to_user_fullname(response):
     user_func_keys = _filter_user_func_keys(world.response)
     user_names = [_find_user_name_for_func_key(func_key) for func_key in user_func_keys]
-    assert_that(user_names, has_item(fullname), "no func key configured for user %s was found" % fullname)
+    return user_names
 
 
 def _filter_user_func_keys(response):
