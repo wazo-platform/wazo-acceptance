@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
 import re
 
 from hamcrest import assert_that, has_entries
@@ -69,7 +70,7 @@ def given_the_line_group1_is_disabled(step, extension, context):
     _search_for_line(extension, context)
     _click_checkbox_for_line(extension)
     _disable_selected_lines()
-    step.given('Given I wait 3 seconds for the dialplan to be reloaded')
+    time.sleep(world.timeout)  # wait for dialplan to finish reloading
 
 
 def _search_for_line(extension, context):
