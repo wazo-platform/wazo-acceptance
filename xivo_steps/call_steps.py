@@ -83,15 +83,15 @@ def when_a_and_b_talk_for_n_seconds(step, _a, _b, n):
     time.sleep(float(n))
 
 
-@step(u'Then "([^"]*)" last call should be "([^"]*)"')
-def then_user_last_call_shoud_be_call_status(step, name, status):
+@step(u'Then "([^"]*)" last dialed extension was not found')
+def then_user_last_dialed_extension_was_not_found(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)
     try:
         phone.last_call_result()
     except ExtensionNotFoundException:
         pass
     else:
-        raise AssertionError('%s was not raised' % status)
+        raise AssertionError('ExtensionNotFound was not raised')
 
 
 @step(u'When a call from "([^"]*)" is received on did "([^"]*)" for "([^"]*)"')
