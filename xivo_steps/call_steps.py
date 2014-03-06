@@ -20,7 +20,6 @@ import time
 from hamcrest import assert_that
 from hamcrest import has_items
 from lettuce import step
-from lettuce import world
 
 from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper, cti_helper
 from xivo_lettuce import common
@@ -84,15 +83,15 @@ def when_a_and_b_talk_for_n_seconds(step, _a, _b, n):
     time.sleep(float(n))
 
 
-@step(u'Then "([^"]*)" last call should be "([^"]*)"')
-def then_user_last_call_shoud_be_call_status(step, name, status):
+@step(u'Then "([^"]*)" last dialed extension was not found')
+def then_user_last_dialed_extension_was_not_found(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)
     try:
         phone.last_call_result()
     except ExtensionNotFoundException:
         pass
     else:
-        raise AssertionError('%s was not raised' % status)
+        raise AssertionError('ExtensionNotFound was not raised')
 
 
 @step(u'When a call from "([^"]*)" is received on did "([^"]*)" for "([^"]*)"')
@@ -161,9 +160,9 @@ def there_is_n_calls_to_extension_and_wait(step, count, extension):
 @step(u'When there is ([0-9]+) calls to extension "([^"]+)" on trunk "([^"]+)" and wait$')
 def given_there_is_n_calls_to_extension_on_trunk_and_wait(step, count, extension, trunk_name):
     callgen_helper.execute_n_calls_then_wait(count,
-                                           extension,
-                                           username=trunk_name,
-                                           password=trunk_name)
+                                             extension,
+                                             username=trunk_name,
+                                             password=trunk_name)
 
 
 @step(u'When I call extension "([^"]+)"$')
@@ -207,9 +206,9 @@ def given_i_wait_n_seconds(step, count):
 @step(u'When I call extension "([^"]*)" from trunk "([^"]*)"')
 def when_i_call_extension_from_trunk(step, extension, trunk_name):
     callgen_helper.execute_n_calls_then_wait(1,
-                                           extension,
-                                           username=trunk_name,
-                                           password=trunk_name)
+                                             extension,
+                                             username=trunk_name,
+                                             password=trunk_name)
 
 
 @step(u'Then I see no recording file of this call in monitoring audio files page')

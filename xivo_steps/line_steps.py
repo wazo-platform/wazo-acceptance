@@ -15,12 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
 import re
 
 from hamcrest import assert_that, has_entries
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import line_helper
@@ -62,6 +64,34 @@ def given_the_line_group1_has_the_codec_group2(step, linenumber, codec):
     _add_codec_to_line(codec, linenumber)
 
 
+@step(u'Given the line "(\d+)@(\w+)" is disabled')
+def given_the_line_group1_is_disabled(step, extension, context):
+    common.open_url('line')
+    _search_for_line(extension, context)
+    _click_checkbox_for_line(extension)
+    _disable_selected_lines()
+    time.sleep(world.timeout)  # wait for dialplan to finish reloading
+
+
+def _search_for_line(extension, context):
+    form.input.edit_text_field_with_id('it-toolbar-search', extension)
+    form.select.set_select_field_with_id('it-toolbar-context', context)
+
+
+def _click_checkbox_for_line(extension):
+    line_element = common.get_line(extension)
+    checkbox = line_element.find_element_by_css_selector(".it-checkbox")
+    checkbox.click()
+
+
+def _disable_selected_lines():
+    menu_button = world.browser.find_element_by_id("toolbar-bt-advanced")
+    ActionChains(world.browser).move_to_element(menu_button).perform()
+
+    disable_button = world.browser.find_element_by_id("toolbar-advanced-menu-disable")
+    ActionChains(world.browser).click(disable_button).perform()
+
+
 @step(u'When I customize line "([^"]*)" codecs to:')
 def when_i_customize_line_codecs_to(step, number):
     codecs = (entry['codec'] for entry in step.hashes)
@@ -75,7 +105,6 @@ def when_i_disable_line_codecs_customization_for_line(step, number):
     _open_codec_page()
     Checkbox.from_label("Customize codecs:").uncheck()
     form.submit.submit_form()
-
 
 
 @step(u'When I add a SIP line with infos:')

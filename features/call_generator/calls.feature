@@ -5,7 +5,7 @@ Feature: Callgen
          | firstname | lastname | number | context | protocol |
          | Alice     |          | 1100   | default | sip      |
         When "Alice" calls "1190"
-        Then "Alice" last call should be "Extension not found"
+        Then "Alice" last dialed extension was not found
 
     Scenario: Call to existant extension with answer
         Given there are users with infos:
@@ -42,3 +42,12 @@ Feature: Callgen
         Then I have the last call log matching:
          | destination_exten | duration | user_field | answered |
          | 1101              | 0:00:03  |            | True     |
+
+    Scenario: Call to line that is disabled
+        Given there are users with infos:
+            | firstname | lastname | number | context | protocol |
+            | Bountrabi | Sylla    | 1102   | default | sip      |
+            | Papa      | Sylla    | 1103   | default | sip      |
+        Given the line "1103@default" is disabled
+        When "Bountrabi Sylla" calls "1103"
+        Then "Bountrabi Sylla" last dialed extension was not found
