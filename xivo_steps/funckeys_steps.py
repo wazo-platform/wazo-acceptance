@@ -30,12 +30,6 @@ def given_there_is_no_func_key_with_id_group1(step, func_key_id):
     func_key_helper.delete_func_key(func_key_id)
 
 
-@step(u'Given I have a speeddial func key for user "([^"]*)" "([^"]*)"')
-def given_i_have_a_speeddial_func_key_for_user_group1_group2(step, firstname, lastname):
-    user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    func_key_helper.create_speeddial_with_user_destination(user)
-
-
 @step(u'When I request the func key with id "([^"]*)" via RESTAPI')
 def when_i_request_the_func_key_with_id_group1_via_restapi(step, func_key_id):
     world.response = func_key_action_restapi.get_func_key(func_key_id)
@@ -59,16 +53,6 @@ def when_i_request_the_list_of_func_keys_via_restapi(step):
 def when_i_request_the_list_of_func_keys_with_the_following_parameters_via_restapi(step):
     parameters = step.hashes[0]
     world.response = func_key_action_restapi.func_key_list(parameters)
-
-
-@step(u'When I create an empty func key via RESTAPI:')
-def when_i_create_an_empty_func_key_via_restapi(step):
-    world.response = func_key_action_restapi.create_func_key({})
-
-
-@step(u'When I create the following func keys via RESTAPI:')
-def when_i_create_the_following_func_keys_via_restapi(step):
-    world.response = func_key_action_restapi.create_func_key(step.hashes[0])
 
 
 @step(u'Then the user "([^"]*)" has the following func keys:')

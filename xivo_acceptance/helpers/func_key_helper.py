@@ -18,48 +18,6 @@
 from xivo_lettuce.postgres import exec_sql_request
 
 
-def create_speeddial_with_user_destination(user):
-    func_key_id = _create_func_key('speeddial', 'user')
-    _associate_with_user_destination(func_key_id, user.id)
-
-
-def _create_func_key(func_key_type, destination):
-    type_id = _find_type_id(func_key_type)
-    destination_type_id = _find_destination_type_id(destination)
-    query = 'INSERT INTO func_key(type_id, destination_type_id) VALUES (:type_id, :destination_type_id) RETURNING id'
-
-    result = exec_sql_request(query,
-                              type_id=type_id,
-                              destination_type_id=destination_type_id)
-
-    row = result.fetchone()
-    return row[0]
-
-
-def _associate_with_user_destination(func_key_id, user_id):
-    destination_type_id = _find_destination_type_id('user')
-
-    query = 'INSERT INTO func_key_dest_user(func_key_id, user_id, destination_type_id) VALUES (:func_key_id, :user_id, :destination_type_id)'
-    exec_sql_request(query,
-                     func_key_id=func_key_id,
-                     user_id=user_id,
-                     destination_type_id=destination_type_id)
-
-
-def _find_type_id(type_name):
-    query = 'SELECT id FROM func_key_type WHERE name = :name'
-    result = exec_sql_request(query, name=type_name)
-    row = result.fetchone()
-    return row[0]
-
-
-def _find_destination_type_id(destination_type):
-    query = 'SELECT id FROM func_key_destination_type WHERE name = :name'
-    result = exec_sql_request(query, name=destination_type)
-    row = result.fetchone()
-    return row[0]
-
-
 def delete_func_key(func_key_id):
     _delete_destination_associations(func_key_id)
     _delete_mapping_associations(func_key_id)
