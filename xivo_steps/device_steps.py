@@ -32,16 +32,16 @@ def when_i_request_devices_in_the_webi(step):
 
 @step(u'When I synchronize the device with mac "([^"]*)" from webi')
 def when_i_synchronize_the_device_group1_from_webi(step, mac):
-    common.open_url('device', 'search', {'search': '%s' % mac})
+    device_action_webi.search_device(mac)
     common.click_on_line_with_alert('Synchronize', mac)
-    common.open_url('device', 'search', {'search': ''})
+    device_action_webi.search_device('')
 
 
 @step(u'When I reset to autoprov the device with mac "([^"]*)" from webi')
 def when_i_reset_to_autoprov_the_device_from_webi(step, mac):
-    common.open_url('device', 'search', {'search': '%s' % mac})
+    device_action_webi.search_device(mac)
     common.click_on_line_with_alert('Reset to autoprov mode', mac)
-    common.open_url('device', 'search', {'search': ''})
+    device_action_webi.search_device('')
 
 
 @step(u'^When I search device "([^"]*)"$')

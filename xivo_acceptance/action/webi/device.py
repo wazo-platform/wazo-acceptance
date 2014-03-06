@@ -29,13 +29,9 @@ def delete_device(info):
 
 
 def search_device(search, by_number=False):
-    common.open_url('device')
-    if by_number:
-        select_search_type = world.browser.find_element_by_xpath(
-            '''//select[@id="it-toolbar-column"]//option[@value="number"]'''
-        ).click()
-    form.input.edit_text_field_with_id('it-toolbar-search', search)
-    form.submit.submit_form('it-toolbar-subsearch')
+    query = {'search': '%s' % search,
+             'search_column': 'number' if by_number else ''}
+    common.open_url('device', 'search', query)
 
 
 def get_device_list_entry(mac_address):
