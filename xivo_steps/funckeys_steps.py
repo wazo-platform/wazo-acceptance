@@ -111,14 +111,18 @@ def _extract_destination_value(key_type, line):
 def then_the_list_contains_a_speeddial_func_key_for_user_group1(step, firstname, lastname):
     fullname = "%s %s" % (firstname, lastname)
     user_names = _func_keys_to_user_fullname(world.response)
-    assert_that(user_names, has_item(fullname), "no func key configured for user %s was found" % fullname)
+    assert_that(user_names,
+                has_item(fullname),
+                ("no func key configured for user %s was found" % fullname).encode('utf8'))
 
 
 @step(u'Then the list does not contain a speeddial func key for user "([^"]*)" "([^"]*)"')
 def then_the_list_does_not_contain_a_speeddial_func_key_for_user_group1_group2(step, firstname, lastname):
     fullname = "%s %s" % (firstname, lastname)
     user_names = _func_keys_to_user_fullname(world.response)
-    assert_that(user_names, is_not(has_item(fullname)), "func key for user '%s' found" % fullname)
+    assert_that(user_names,
+                is_not(has_item(fullname)),
+                ("func key for user '%s' found" % fullname).encode('utf8'))
 
 
 def _func_keys_to_user_fullname(response):
