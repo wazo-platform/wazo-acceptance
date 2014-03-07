@@ -6,6 +6,7 @@ from lettuce import world
 from linphonelib import Session
 from linphonelib import ExtensionNotFoundException
 from linphonelib import LinphoneException
+from linphonelib.commands import HookStatus
 
 
 class CallResult(object):
@@ -57,6 +58,9 @@ class SipPhone(object):
     def last_call_result(self):
         if self._call_result:
             raise self._call_result
+
+    def is_ringing(self):
+        return self._session.hook_status() == HookStatus.RINGING
 
 
 class _AvailableSipPortFinder(object):

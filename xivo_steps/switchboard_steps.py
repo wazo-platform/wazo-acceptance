@@ -15,15 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
+from hamcrest import assert_that, equal_to
 from lettuce import step
 
 from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.webi import queue as queue_action_webi
-from xivo_acceptance.helpers import context_helper, cti_helper
-from xivo_lettuce import func
+from xivo_acceptance.helpers import context_helper, cti_helper, incall_helper
+from xivo_lettuce import func, common
 
 
 @step(u'Given the switchboard is configured for ldap lookup with location and department$')
@@ -184,10 +184,28 @@ def given_there_is_a_switchboard_configured_as(step):
             config['hold calls queue number'],
             config['hold calls queue context'])
 
+        incall_helper.add_or_replace_incall(number=config['incalls queue number'],
+                                            context='from-extern',
+                                            dst_type='queue',
+                                            dst_name=config['incalls queue name'])
+
 
 @step(u'When I search a transfer destination "([^"]*)"')
 def when_i_search_a_transfer_destination_1(step, search):
     cti_helper.set_search_for_directory(search)
+
+
+@step(u'When the switchboard "([^"]*)" selects the incoming call from "([^"]*)" number "([^"]*)"')
+def when_the_switchboard_1_selects_the_incoming_call_from_2_number_3(step, switchboard, cid_name, cid_num):
+    common.wait_until(_switchboard_has_incoming_call, cid_name, cid_num, tries=10)
+    cti_helper.switchboard_answer_incoming_call(cid_name, cid_num)
+
+
+@step(u'Then the switchboard is talking to "([^"]*)" number "([^"]*)"')
+def then_the_switchboard_is_talking_to_1_number_2(step, cid_name, cid_num):
+    common.wait_until(_switchboard_has_current_call, tries=10)
+    current_call = cti_helper.get_switchboard_current_call_infos()
+    assert_that(current_call['caller_id'], equal_to("%s <%s>" % (cid_name, cid_num)))
 
 
 @step(u'Then I see transfer destinations:')
@@ -201,3 +219,15 @@ def then_i_see_transfer_destinations(step):
 def then_i_see_no_transfer_destinations(step):
     res = cti_helper.get_switchboard_infos()
     assert_that(res['return_value']['content'], equal_to([]))
+
+
+def _switchboard_has_incoming_call(cid_name, cid_num):
+    incomings = cti_helper.get_switchboard_incoming_calls_infos()['incoming_calls']
+    return [incoming for incoming in incomings
+            if incoming['cid_name'] == cid_name
+            and incoming['cid_num'] == cid_num]
+
+
+def _switchboard_has_current_call():
+    current_call = cti_helper.get_switchboard_current_call_infos()
+    return current_call['caller_id'] != ""

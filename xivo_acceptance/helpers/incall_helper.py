@@ -32,6 +32,11 @@ def add_incall(number, context, dst_type, dst_name, caller_id=None):
     world.ws.incalls.add(incall)
 
 
+def add_or_replace_incall(number, context, dst_type, dst_name, caller_id=None):
+    delete_incalls_with_did(number, context)
+    add_incall(number, context, dst_type, dst_name, caller_id)
+
+
 def _new_destination(dst_type, dst_name):
     dst_type = dst_type.lower()
     if dst_type == 'user':
@@ -68,11 +73,12 @@ def _new_voicemail_destination(number_context):
     return VoicemailDestination(voicemail_id)
 
 
-def delete_incalls_with_did(incall_did):
-    incalls = find_incalls_with_did(incall_did)
+def delete_incalls_with_did(incall_did, context='from-extern'):
+    incalls = find_incalls_with_did(incall_did, context)
     for incall in incalls:
         world.ws.incalls.delete(incall.id)
 
 
-def find_incalls_with_did(incall_did):
-    return world.ws.incalls.search_by_number(incall_did)
+def find_incalls_with_did(incall_did, context='from-extern'):
+    return [incall for incall in world.ws.incalls.search_by_number(incall_did)
+            if incall.context == context]
