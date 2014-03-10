@@ -28,6 +28,12 @@ def given_there_is_no_group(step, search):
     common.remove_element_if_exist('group', search)
 
 
+@step(u'Given there is a group "([^"]*)" with extension "(\d+)@(\w+)"')
+def given_there_is_a_group_with_extension(step, name, number, context):
+    group_helper.delete_groups_with_number(number)
+    group_helper.add_group(name, number, context)
+
+
 @step(u'Given there is a group "([^"]*)" with extension "([^"]*)" and users:')
 def given_there_is_a_group_with_extension_and_users(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
