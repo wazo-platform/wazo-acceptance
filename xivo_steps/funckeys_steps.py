@@ -20,9 +20,8 @@ from lettuce import step, world
 
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.restapi import func_key_action_restapi
-from xivo_acceptance.helpers import user_helper, func_key_helper
+from xivo_acceptance.helpers import user_helper, func_key_helper, group_helper
 from xivo_lettuce import common
-from xivo_lettuce.xivo_hamcrest import not_empty
 
 
 @step(u'Given there is no func key with id "([^"]*)"')
@@ -107,40 +106,48 @@ def _extract_destination_value(key_type, line):
     return value
 
 
-@step(u'Then the list contains a speeddial func key for user "([^"]*)" "([^"]*)"')
-def then_the_list_contains_a_speeddial_func_key_for_user_group1(step, firstname, lastname):
-    fullname = "%s %s" % (firstname, lastname)
-    user_names = _func_keys_to_user_fullname(world.response)
-    assert_that(user_names,
-                has_item(fullname),
-                ("no func key configured for user %s was found" % fullname).encode('utf8'))
+@step(u'Then the list contains the following func keys:')
+def then_the_list_contains_the_following_func_keys(step):
+    func_keys = _map_func_keys_with_destination_name(world.response.data['items'])
+    for func_key in step.hashes:
+        assert_that(func_keys, has_item(has_entries(func_key)))
 
 
-@step(u'Then the list does not contain a speeddial func key for user "([^"]*)" "([^"]*)"')
-def then_the_list_does_not_contain_a_speeddial_func_key_for_user_group1_group2(step, firstname, lastname):
-    fullname = "%s %s" % (firstname, lastname)
-    user_names = _func_keys_to_user_fullname(world.response)
-    assert_that(user_names,
-                is_not(has_item(fullname)),
-                ("func key for user '%s' found" % fullname).encode('utf8'))
+@step(u'Then the list does not contain the following func keys:')
+def then_the_list_does_not_contain_the_following_func_keys(step):
+    func_keys = _map_func_keys_with_destination_name(world.response.data['items'])
+    for func_key in step.hashes:
+        assert_that(func_keys, is_not(has_item(has_entries(func_key))))
 
 
-def _func_keys_to_user_fullname(response):
-    user_func_keys = _filter_user_func_keys(world.response)
-    user_names = [_find_user_name_for_func_key(func_key) for func_key in user_func_keys]
-    return user_names
+def _map_func_keys_with_destination_name(func_keys):
+    converted = []
+    for func_key in func_keys:
+        converted.append({
+            'type': func_key['type'],
+            'destination': func_key['destination'],
+            'destination name': _find_destination_name(func_key)})
+
+    return converted
 
 
-def _filter_user_func_keys(response):
-    items = response.data['items']
-    assert_that(items, not_empty())
+def _find_destination_name(func_key):
+    destination = func_key['destination']
 
-    return [func_key for func_key in items if func_key['type'] == 'speeddial' and func_key['destination'] == 'user']
+    if destination == 'user':
+        return _find_user_name_for_func_key(func_key)
+    elif destination == 'group':
+        return _find_group_name_for_func_key(func_key)
 
 
 def _find_user_name_for_func_key(func_key):
     user = user_helper.get_by_user_id(func_key['destination_id'])
     return "%s %s" % (user.firstname, user.lastname)
+
+
+def _find_group_name_for_func_key(func_key):
+    group = group_helper.get_group(func_key['destination_id'])
+    return group.name
 
 
 @step(u'Then I get a func key of type "([^"]*)"')
