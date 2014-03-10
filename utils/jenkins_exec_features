@@ -2,7 +2,7 @@
 
 REPO_DIR='/data'
 GIT_ROOT="git://github.com/xivo-pbx"
-REPOSITORIES="xivo-bus xivo-dao xivo-acceptance xivo-lib-python xivo-dird xivo-restapi xivo-provisioning"
+REPOSITORIES="pylinphonelib xivo-bus xivo-dao xivo-acceptance xivo-lib-python xivo-dird xivo-restapi xivo-provisioning"
 PYTHONPATH_STR=''
 FEATURE_NAME=$(echo $JOB_NAME | sed 's/acceptance_//g')
 
