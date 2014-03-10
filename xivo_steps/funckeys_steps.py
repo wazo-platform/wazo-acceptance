@@ -21,6 +21,7 @@ from lettuce import step, world
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.restapi import func_key_action_restapi
 from xivo_acceptance.helpers import user_helper, func_key_helper, group_helper
+from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order
 from xivo_lettuce import common
 
 
@@ -118,6 +119,13 @@ def then_the_list_does_not_contain_the_following_func_keys(step):
     func_keys = _map_func_keys_with_destination_name(world.response.data['items'])
     for func_key in step.hashes:
         assert_that(func_keys, is_not(has_item(has_entries(func_key))))
+
+
+@step(u'Then the list contains the following func keys in the right order:')
+def then_the_list_contains_the_following_func_keys_in_the_right_order(step):
+    func_keys = _map_func_keys_with_destination_name(world.response.data['items'])
+    expected_func_keys = [f for f in step.hashes]
+    assert_has_dicts_in_order(func_keys, expected_func_keys)
 
 
 def _map_func_keys_with_destination_name(func_keys):
