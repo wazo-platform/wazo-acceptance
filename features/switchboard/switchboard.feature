@@ -162,6 +162,7 @@ Feature: Switchboard
         When "Alice A" calls "3009"
         When "Bob B" calls "3009"
         When "Charlie C" calls "3009"
+        When I wait 3 seconds for the call processing
         When the switchboard "Switch Board" selects the incoming call from "Bob B" number "1633"
         When "Switch Board" answers
         Then the switchboard is talking to "Bob B" number "1633"
