@@ -263,7 +263,8 @@ def log_user_in_client(firstname, lastname):
         'main_server_address': common.get_host_address(),
         'main_server_port': 5003,
         'login': user.username,
-        'password': user.password
+        'password': user.password,
+        'agent_option': 'no',
     }
     configure_client(conf_dict)
     return log_in_the_xivo_client()
