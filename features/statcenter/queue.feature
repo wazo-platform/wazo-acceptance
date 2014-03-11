@@ -166,3 +166,45 @@ Feature: WEBI Queue Stats
           | 10h-11h |         0 |         0 |
           | 11h-12h |         0 |         0 |
           | Total   |         5 |         5 |
+
+
+    Scenario: Generate stats for answered rate with calls on closed queue
+        Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
+        Given there are queues with infos:
+            | name | number | context     |
+            | q01  | 5001   | statscenter |
+        Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
+        Given I have the following queue_log entries:
+          | time                       | callid        | queuename | agent | event         | data1 | data2         | data3 | data4 | data5 |
+          | 2012-07-01 11:02:29.141759 | 1394463745.0  | q01       | NONE  | ENTERQUEUE    |       | 1003          | 1     |       |       |
+          | 2012-07-01 11:02:51.940581 | MANAGER       | q01       | NONE  | ADDMEMBER     |       |               |       |       |       |
+          | 2012-07-01 11:03:00.781150 | 1394463745.0  | q01       | NONE  | CONNECT       | 32    | 1394463774.2  | 6     |       |       |
+          | 2012-07-01 11:03:02.973847 | 1394463745.0  | q01       | NONE  | COMPLETEAGENT | 32    | 2             | 1     |       |       |
+          | 2012-07-01 11:03:05.774385 | 1394463784.6  | q01       | NONE  | ENTERQUEUE    |       | 1003          | 1     |       |       |
+          | 2012-07-01 11:03:06.651541 | 1394463784.6  | q01       | NONE  | CONNECT       | 1     | 1394463785.7  | 0     |       |       |
+          | 2012-07-01 11:03:08.573800 | 1394463784.6  | q01       | NONE  | COMPLETEAGENT | 1     | 2             | 1     |       |       |
+          | 2012-07-01 11:03:17.222916 | 1394463795.10 | q01       | NONE  | ENTERQUEUE    |       | 1003          | 1     |       |       |
+          | 2012-07-01 11:03:18.517792 | 1394463795.10 | q01       | NONE  | ABANDON       | 1     | 1             | 1     |       |       |
+          | 2012-07-01 11:03:20.875825 | 1394463799.14 | q01       | NONE  | ENTERQUEUE    |       | 1003          | 1     |       |       |
+          | 2012-07-01 11:03:21.528519 | 1394463799.14 | q01       | NONE  | ABANDON       | 1     | 1             | 1     |       |       |
+          | 2012-07-01 11:34:11.154600 | 1394465650.18 | q01       | NONE  | CLOSED        |       |               |       |       |       |
+          | 2012-07-01 11:39:16.945240 | 1394465954.19 | q01       | NONE  | ENTERQUEUE    |       | 1003          | 1     |       |       |
+          | 2012-07-01 11:39:18.917060 | 1394465954.19 | q01       | NONE  | CONNECT       | 2     | 1394465957.20 | 1     |       |       |
+          | 2012-07-01 11:39:20.227727 | 1394465954.19 | q01       | NONE  | COMPLETEAGENT | 3     | 1             | 1     |       |       |
+          | 2012-07-01 11:42:52.852573 | 1394466171.23 | q01       | NONE  | ENTERQUEUE    |       | 1003          | 1     |       |       |
+          | 2012-07-01 11:42:54.248786 | 1394466171.23 | q01       | NONE  | CONNECT       | 2     | 1394466172.24 | 1     |       |       |
+          | 2012-07-01 11:42:55.780864 | 1394466171.23 | q01       | NONE  | COMPLETEAGENT | 2     | 1             | 1     |       |       |
+          | 2012-07-01 11:42:58.788076 | 1394466177.27 | q01       | NONE  | ENTERQUEUE    |       | 1003          | 1     |       |       |
+          | 2012-07-01 11:42:59.754986 | 1394466177.27 | q01       | NONE  | ABANDON       | 1     | 1             | 1     |       |       |
+          | 2012-07-01 11:43:02.353859 | 1394466181.31 | q01       | NONE  | ENTERQUEUE    |       | 1003          | 1     |       |       |
+          | 2012-07-01 11:43:17.360803 | 1394466181.31 | q01       | NONE  | RINGNOANSWER  | 15000 |               |       |       |       |
+          | 2012-07-01 11:43:37.575660 | 1394466181.31 | q01       | NONE  | RINGNOANSWER  | 15000 |               |       |       |       |
+          | 2012-07-01 11:43:40.247292 | 1394466181.31 | q01       | NONE  | ABANDON       | 1     | 1             | 38    |       |       |
+        Given I clear and generate the statistics cache
+        Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+          |         | Received | Answered | Closed | Answered rate |
+          | 8h-9h   | 0        | 0        | 0      |               |
+          | 9h-10h  | 0        | 0        | 0      |               |
+          | 10h-11h | 0        | 0        | 0      |               |
+          | 11h-12h | 9        | 4        | 1      | 50 %          |
+          | Total   | 9        | 4        | 1      | 50 %          |
