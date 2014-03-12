@@ -1,3 +1,2 @@
-
 [xivo]
-hostname = daily-xivo-pxe.lan-quebec.avencall.com
+hostname = 10.37.0.254

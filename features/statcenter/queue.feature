@@ -208,3 +208,21 @@ Feature: WEBI Queue Stats
           | 10h-11h | 0        | 0        | 0      |               |
           | 11h-12h | 9        | 4        | 1      | 50 %          |
           | Total   | 9        | 4        | 1      | 50 %          |
+
+    Scenario: Answered rate when all calls are closed should be empty
+        Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
+        Given there are queues with infos:
+            | name | number | context     |
+            | q01  | 5001   | statscenter |
+        Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
+        Given I have the following queue_log entries:
+          | time                       | callid        | queuename | agent | event         | data1 | data2         | data3 | data4 | data5 |
+          | 2012-07-01 11:34:11.154600 | 1394465650.18 | q01       | NONE  | CLOSED        |       |               |       |       |       |
+        Given I clear and generate the statistics cache
+        Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+          |         | Received | Answered | Closed | Answered rate |
+          | 8h-9h   |        0 |        0 |      0 |               |
+          | 9h-10h  |        0 |        0 |      0 |               |
+          | 10h-11h |        0 |        0 |      0 |               |
+          | 11h-12h |        1 |        0 |      1 |               |
+          | Total   |        1 |        0 |      1 |               |
