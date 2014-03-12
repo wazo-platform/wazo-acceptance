@@ -41,3 +41,8 @@ def type_context(context):
 
 def remove_group_with_name(group_name):
     common.remove_element_if_exist('group', group_name)
+    common.wait_until(group_is_no_longer_in_list, group_name, tries=5)
+
+
+def group_is_no_longer_in_list(group_name):
+    return common.find_line(group_name) is None

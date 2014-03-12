@@ -21,6 +21,19 @@ from lettuce import step, world
 from hamcrest import *
 
 
+@step(u'When I memorize the first entry in the list')
+def when_i_memorize_the_first_entry_in_the_list(step):
+    world.list_entry = world.response.data['items'][0]
+
+
+@step(u'Then the memorized entry is not in the list')
+def then_the_memorized_entry_is_not_in_the_list(step):
+    assert_that(world.response.data, has_key('items'), "did not receive any list from RESTAPI")
+
+    items = world.response.data['items']
+    assert_that(items, is_not(has_item(world.list_entry)))
+
+
 @step(u'Then I get an empty list$')
 def then_i_get_an_empty_list(step):
     user_response = world.response.data

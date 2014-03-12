@@ -67,5 +67,9 @@ def get_group_with_name(name):
     return world.ws.groups.view(group.id)
 
 
+def get_group(group_id):
+    return world.ws.groups.view(group_id)
+
+
 def _search_groups_with_name(name):
     return world.ws.groups.search_by_name(name)
