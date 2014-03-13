@@ -36,7 +36,7 @@ _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 def main():
     print 'Initializing...'
     world.config = XivoAcceptanceConfig()
-    world.config.xivo_host = 'xivo-2-biz.lan-quebec.avencall.com'
+    world.config.xivo_host = 'xivo-1-corp'
     world.config.setup()
     terrain._setup_ssh_client()
     terrain._setup_ws()
