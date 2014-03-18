@@ -52,6 +52,21 @@ def given_the_group_named_1_does_not_exist(step, name):
     group_helper.delete_groups_with_name(name)
 
 
+@step(u'Given there is a group with "(\d+)" users')
+def given_there_is_a_group_with_n_users(step, group_size):
+    group_name = 'random'
+    group_members = []
+    for i in range(int(group_size)):
+        user_id = ule_helper.add_or_replace_user(
+            {'firstname': 'random',
+             'lastname': str(i),
+             'line_number': str(1100 + i),
+             'line_context': 'default'})
+        group_members.append(user_id)
+
+    group_helper.add_or_replace_group(group_name, user_ids=group_members)
+
+
 @step(u'When I create a group "([^"]*)" with number "([^"]*)"$')
 def when_i_create_group_with_number(step, group_name, group_number):
     common.open_url('group', 'add')
@@ -74,21 +89,6 @@ def when_i_remove_the_group_1(step, group_name):
 @step(u'Then I see a group "([^"]*)" with no users')
 def then_I_see_a_group_1_with_no_users(step, group_name):
     common.element_in_list_matches_field('group', group_name, 'nbqmember', 0)
-
-
-@step(u'Given there is a group with "(\d+)" users')
-def given_there_is_a_group_with_n_users(step, group_size):
-    group_name = 'random'
-    group_members = []
-    for i in range(int(group_size)):
-        user_id = ule_helper.add_or_replace_user(
-            {'firstname': 'random',
-             'lastname': str(i),
-             'line_number': str(1100 + i),
-             'line_context': 'default'})
-        group_members.append(user_id)
-
-    group_helper.add_or_replace_group(group_name, user_ids=group_members)
 
 
 def _type_group_name_number_context(name, number, context='default'):
