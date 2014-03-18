@@ -94,6 +94,12 @@ def then_user_last_dialed_extension_was_not_found(step, name):
         raise AssertionError('ExtensionNotFound was not raised')
 
 
+@step(u'Then "([^"]*)" is ringing')
+def then_user_is_ringing(step, user):
+    phone = step.scenario.phone_register.get_user_phone(user)
+    assert_that(phone.is_ringing())
+
+
 @step(u'When a call from "([^"]*)" is received on did "([^"]*)" for "([^"]*)"')
 def when_a_call_from_number_to_is_received(step, number, did, name):
     firstname, lastname = name.split(' ', 1)

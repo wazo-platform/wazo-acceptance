@@ -28,6 +28,29 @@ def given_there_is_no_group(step, search):
     common.remove_element_if_exist('group', search)
 
 
+@step(u'Given there are groups:')
+def given_there_are_groups(step):
+    for group in step.hashes:
+        group_helper.delete_groups_with_number(group['exten'])
+        group_helper.add_group(
+            group['name'],
+            group['exten'],
+            group['context']
+        )
+        common.open_url('group', 'list', {'search': group['name']})
+        common.edit_line(group['name'])
+        if 'ring seconds' in group:
+            form.select.set_select_field_with_label('Ring time', '%s seconds' % group['ring seconds'])
+        if 'noanswer' in group:
+            common.go_to_tab('No answer')
+            forward_dest_type, forward_dest_name = group['noanswer'].split(':', 1)
+            if forward_dest_type == 'group':
+                form.select.set_select_field_with_id('it-dialaction-noanswer-actiontype', 'Group')
+                form.select.set_select_field_with_id_containing('it-dialaction-noanswer-group-actionarg1', forward_dest_name)
+        form.submit.submit_form()
+        common.open_url('group', 'list', {'search': ''})
+
+
 @step(u'Given there is a group "([^"]*)" with extension "(\d+)@(\w+)"$')
 def given_there_is_a_group_with_extension(step, name, number, context):
     group_helper.delete_groups_with_number(number)
