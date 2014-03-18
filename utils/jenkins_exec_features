@@ -24,15 +24,7 @@ for repo in $REPOSITORIES ; do
     echo "processing $repo ..."
     clone_or_pull_repo $repo
 
-    if [ $repo == 'xivo-acceptance' -o $repo == 'pylinphonelib' ]; then
-        PYTHONPATH_STR="${PYTHONPATH_STR}:${REPO_DIR}/${repo}"
-    else
-        extra=''
-        if [ $repo == 'xivo-provisioning' ]; then
-            extra='/src'
-        fi
-        PYTHONPATH_STR="${PYTHONPATH_STR}:${REPO_DIR}/${repo}/${repo}${extra}"
-    fi
+    PYTHONPATH_STR="${PYTHONPATH_STR}:${REPO_DIR}/${repo}"
 done
 
 export PYTHONPATH=$PYTHONPATH_STR
