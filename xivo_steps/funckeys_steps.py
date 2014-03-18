@@ -20,7 +20,10 @@ from lettuce import step, world
 
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.restapi import func_key_action_restapi
-from xivo_acceptance.helpers import user_helper, func_key_helper, group_helper
+from xivo_acceptance.helpers import func_key_helper
+from xivo_acceptance.helpers import user_helper
+from xivo_acceptance.helpers import group_helper
+from xivo_acceptance.helpers import queue_helper
 from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order
 from xivo_lettuce import common
 
@@ -146,6 +149,8 @@ def _find_destination_name(func_key):
         return _find_user_name_for_func_key(func_key)
     elif destination == 'group':
         return _find_group_name_for_func_key(func_key)
+    elif destination == 'queue':
+        return _find_queue_name_for_func_key(func_key)
 
 
 def _find_user_name_for_func_key(func_key):
@@ -156,6 +161,11 @@ def _find_user_name_for_func_key(func_key):
 def _find_group_name_for_func_key(func_key):
     group = group_helper.get_group(func_key['destination_id'])
     return group.name
+
+
+def _find_queue_name_for_func_key(func_key):
+    queue = queue_helper.find_queue_with_id(func_key['destination_id'])
+    return queue.name
 
 
 @step(u'Then I get a func key of type "([^"]*)"')
