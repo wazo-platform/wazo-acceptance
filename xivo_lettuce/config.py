@@ -99,7 +99,7 @@ class XivoAcceptanceConfig(object):
 
         config_environ = os.getenv('LETTUCE_CONFIG')
         if config_environ and os.path.exists(config_environ):
-            config_file_extra = config_environ
+            config_file_extra = os.path.join(_CONFIG_DIRD, config_environ)
         elif os.path.exists('%s.local' % _CONFIG_FILE_EXTRA_DEFAULT):
             config_file_extra = '%s.local' % _CONFIG_FILE_EXTRA_DEFAULT
 
