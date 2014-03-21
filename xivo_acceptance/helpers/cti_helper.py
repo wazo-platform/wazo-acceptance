@@ -280,6 +280,11 @@ def switchboard_answer_incoming_call(cid_name, cid_num):
     assert_that(response['test_result'], equal_to('passed'))
 
 
+def switchboard_hang_up():
+    response = xivoclient.exec_command('switchboard_hang_up')
+    assert_that(response['test_result'], equal_to('passed'))
+
+
 def get_switchboard_current_call_infos():
     response = xivoclient.exec_command('get_switchboard_current_call_infos')
     assert_that(response['test_result'], equal_to('passed'))
@@ -290,3 +295,8 @@ def get_switchboard_incoming_calls_infos():
     response = xivoclient.exec_command('get_switchboard_incoming_calls_infos')
     assert_that(response['test_result'], equal_to('passed'))
     return response['return_value']
+
+
+def dial(extension):
+    response = xivoclient.exec_command('dial', extension)
+    assert_that(response['test_result'], equal_to('passed'))

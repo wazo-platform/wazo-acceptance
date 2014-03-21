@@ -62,6 +62,9 @@ class SipPhone(object):
     def is_ringing(self):
         return self._session.hook_status() == HookStatus.RINGING
 
+    def is_hungup(self):
+        return self._session.hook_status() == HookStatus.OFFHOOK
+
 
 class _AvailableSipPortFinder(object):
 
