@@ -84,6 +84,10 @@ def find_queue_id_with_name(name):
     return queue.id
 
 
+def find_queue_with_id(queue_id):
+    return world.ws.queues.view(queue_id)
+
+
 def _find_queue_with_name(name):
     queues = _search_queues_with_name(name)
     if len(queues) != 1:

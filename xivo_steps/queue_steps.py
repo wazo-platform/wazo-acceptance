@@ -93,6 +93,11 @@ def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(st
     queue_helper.add_or_replace_queue(queue_data)
 
 
+@step(u'Given there is no queue with number "([^"]*)"')
+def given_there_is_no_queue_with_number(step, queue_number):
+    queue_helper.delete_queues_with_number(queue_number)
+
+
 @step(u'When I create the following queues:')
 def when_i_create_the_following_queues(step):
     for queue in step.hashes:
@@ -166,9 +171,12 @@ def when_i_remove_the_agent_with_extension_group1_from_the_queue_group2(step, ex
 
 @step(u'When I delete the queue with number "([^"]*)"')
 def when_i_delete_the_queue_with_number_group1(step, queue_number):
-    common.open_url('queue', 'list')
-    common.remove_line(queue_number)
-    time.sleep(3)
+    common.remove_element_if_exist('queue', queue_number)
+    common.wait_until(queue_is_no_longer_in_list, queue_number, tries=5)
+
+
+def queue_is_no_longer_in_list(queue_number):
+    return common.find_line(queue_number) is None
 
 
 @step(u'Then the agent "([^"]*)" is a member of the queue "([^"]*)" in asterisk')
