@@ -108,6 +108,11 @@ def when_i_log_in_and_log_out_of_the_xivo_client_as_group1_pass_group2_10_times(
         step.when('I log out of the XiVO Client')
 
 
+@step(u'When I dial "([^"]*)" with the XiVO Client')
+def when_i_dial_1_with_the_xivo_client(step, extension):
+    cti_helper.dial(extension)
+
+
 @step(u'Then I have "([^"]*)" instances of the client')
 def then_i_have_x_instances_of_the_client(step, nb_instances):
     assert_that(cti_helper.get_nb_instances(), equal_to(int(nb_instances)))

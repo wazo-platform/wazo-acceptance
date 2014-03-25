@@ -201,6 +201,19 @@ def when_the_switchboard_1_selects_the_incoming_call_from_2_number_3(step, switc
     cti_helper.switchboard_answer_incoming_call(cid_name, cid_num)
 
 
+@step(u'When the switchboard "([^"]*)" hangs up')
+def when_the_switchboard_group1_hangs_up(step, switchboard):
+    cti_helper.switchboard_hang_up()
+
+
+@step(u'Then the switchboard "([^"]*)" is not talking to anyone')
+def then_the_switchboard_1_is_not_talking_to_anyone(step, switchboard):
+    current_call = cti_helper.get_switchboard_current_call_infos()
+    assert_that(current_call['caller_id'], equal_to(""))
+    phone = step.scenario.phone_register.get_user_phone(switchboard)
+    phone.is_hungup()
+
+
 @step(u'Then the switchboard is talking to "([^"]*)" number "([^"]*)"')
 def then_the_switchboard_is_talking_to_1_number_2(step, cid_name, cid_num):
     common.wait_until(_switchboard_has_current_call, tries=10)

@@ -100,6 +100,12 @@ def then_user_is_ringing(step, user):
     assert_that(phone.is_ringing())
 
 
+@step(u'Then "([^"]*)" is hungup')
+def then_group1_is_hungup(step, user):
+    phone = step.scenario.phone_register.get_user_phone(user)
+    assert_that(phone.is_hungup())
+
+
 @step(u'When a call from "([^"]*)" is received on did "([^"]*)" for "([^"]*)"')
 def when_a_call_from_number_to_is_received(step, number, did, name):
     firstname, lastname = name.split(' ', 1)
