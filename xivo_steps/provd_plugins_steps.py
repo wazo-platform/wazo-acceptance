@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
+from hamcrest import assert_that, contains_string
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import provd_general as provdg_action_webi
@@ -26,13 +26,13 @@ from xivo_lettuce import sysutils
 @step(u'Given a update plugins provd with good url')
 def given_a_update_plugins_provd(step):
     provdp_action_webi.update_plugin_list('http://provd.xivo.fr/plugins/1/stable/',
-                              check_confirmation=False)
+                                          check_confirmation=False)
 
 
 @step(u'Given a update plugins provd with bad url')
 def given_a_update_plugins_provd_with_bad_url(step):
     provdp_action_webi.update_plugin_list('http://provd.xivo.fr/plugins/1/lol/',
-                              check_confirmation=False)
+                                          check_confirmation=False)
 
 
 @step(u'Given the plugin "([^"]*)" is not installed')
