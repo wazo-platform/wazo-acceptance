@@ -16,7 +16,7 @@ wsgiref
 pexpect
 git+git://github.com/xivo-pbx/pylinphonelib.git@master
 git+git://github.com/xivo-pbx/xivo-ws.git
-svn+https://github.com/xivo-pbx/xivo-dao/trunk/xivo-dao
--e svn+https://github.com/xivo-pbx/xivo-provisioning/trunk/xivo-provisioning#egg=provd
--e svn+https://github.com/xivo-pbx/xivo-bus/trunk/xivo-bus#egg=xivo-bus
-svn+https://github.com/xivo-pbx/xivo-lib-python/trunk/xivo-lib-python
+git+https://github.com/xivo-pbx/xivo-dao.git
+git+https://github.com/xivo-pbx/xivo-provisioning.git
+git+https://github.com/xivo-pbx/xivo-bus.git
+git+https://github.com/xivo-pbx/xivo-lib-python.git
