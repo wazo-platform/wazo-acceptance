@@ -50,12 +50,12 @@ Feature: User
         Then user "Bill Bush" is not displayed in the list
 
     Scenario: Add user with SIP line and device and remove it
-        Given the plugin "xivo-aastra-3.2.2-SP3" is installed
+        Given the plugin "xivo-aastra-3.3.1-SP2" is installed
         Given there are no devices with mac "00:de:ad:be:ef:00"
         Given I have no extension with exten "1632@default"
         Given I have the following devices:
         | mac               | plugin                | model | ip          | vendor |
-        | 00:de:ad:be:ef:00 | xivo-aastra-3.2.2-SP3 | 6731i | 10.39.5.104 | Aastra |
+        | 00:de:ad:be:ef:00 | xivo-aastra-3.3.1-SP2 | 6731i | 10.39.5.104 | Aastra |
         When I search device ""
         Given there is no user "Bill" "Bush"
         When I create a user with infos:
