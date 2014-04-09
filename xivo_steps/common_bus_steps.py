@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import json
 import pika
 
 from lettuce import step
@@ -49,14 +50,15 @@ def then_i_see_a_message_on_bus_with_the_following_variables(step):
     channel = connection.channel()
     queue_name = 'test_call_form_result'
 
-    try:
-        def callback(ch, method, props, body):
-            print 'received:', body
+    def callback(ch, method, props, body):
+        unmarshaled_body = json.loads(body)
+        data = unmarshaled_body['data']['variables']
 
-        channel.basic_consume(callback, queue=queue_name, no_ack=True)
+        for expected_widget in step.hashes:
+            widget_name = expected_widget['widget_name']
+            widget_value = expected_widget['value']
+            assert(unicode(data[widget_name]) == widget_value)
 
-        channel.start_consuming()
-    finally:
-        connection.close()
-
-    assert False, 'This step must be implemented'
+    channel.basic_consume(callback, queue=queue_name, no_ack=True)
+    connection.process_data_events()
+    connection.close()
