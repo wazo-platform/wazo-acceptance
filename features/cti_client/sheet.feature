@@ -469,7 +469,7 @@ Feature: Sheet
     Scenario: Bus notification after custom sheets sent
         Given there are users with infos:
          | firstname | lastname  | number | context | cti_profile | cti_login | cti_passwd |
-         | Donald    | MacRonald |   1624 | default | Client      | donald    | macronald  |
+         | Donald    | MacRonald |   1624 | default | Agent       | donald    | macronald  |
         Given the asset file "test-sheet-to-bus.ui" is copied on the server into "/tmp"
         Given I have a sheet model with custom UI:
         | name          | path to ui                   |
@@ -502,16 +502,15 @@ Feature: Sheet
         | calendar          | 2013-12-13                    |
         Then I see a message on bus with the following variables:
         | widget_name       | value                           |
-        | checkBox          | false                           |
+        | checkBox          | False                           |
         | combobox          | combobox_value2                 |
         | dateTimeEdit      | 2013-12-13T13:13:13             |
         | text              | Thirteen                        |
-        | doubleSpinBox     | 13,13                           |
+        | doubleSpinBox     | 13.13                           |
         | spinBox           | 13                              |
-        | label_13          | Some invariable text in a label |
-        | radiobutton_left  | false                           |
+        | radiobutton_left  | False                           |
         | dateEdit          | 2013-12-13T00:00:00             |
-        | radiobutton_right | true                            |
+        | radiobutton_right | True                            |
         | timeEdit          | 2000-01-01T13:13:13             |
         | plainTextEdit     | Text in a text in a text area   |
         | calendar          | 2013-12-13                      |
