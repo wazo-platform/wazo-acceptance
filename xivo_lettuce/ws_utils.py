@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from hamcrest import assert_that, has_key
 import requests
 import json
 
@@ -116,6 +117,21 @@ class RestResponse(object):
         self.status = status
         self.headers = headers
         self.data = data
+
+    def items(self):
+        self.check_status()
+        assert_that(self.data, has_key('items'))
+        return self.data['items']
+
+    def status_ok(self):
+        return self.status in (200, 201, 204)
+
+    def resource(self):
+        self.check_status()
+        return self.data
+
+    def check_status(self):
+        assert_that(self.status_ok(), self.data)
 
 
 class RestConfiguration(object):
