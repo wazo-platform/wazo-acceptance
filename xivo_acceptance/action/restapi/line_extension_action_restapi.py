@@ -18,6 +18,7 @@
 from lettuce.registry import world
 
 LINES_URL = 'lines/%s/extension'
+EXTENSIONS_URL = 'extensions/%s/line'
 
 
 def associate(line_id, extension_id):
@@ -30,6 +31,11 @@ def associate(line_id, extension_id):
 
 def get(line_id):
     url = LINES_URL % line_id
+    return world.restapi_utils_1_1.rest_get(url)
+
+
+def get_from_extension(extension_id):
+    url = EXTENSIONS_URL % extension_id
     return world.restapi_utils_1_1.rest_get(url)
 
 

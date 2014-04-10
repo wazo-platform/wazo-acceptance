@@ -28,6 +28,17 @@ def given_line_group1_is_linked_with_extension_group2(step, line_id, extension):
     assert_that(world.response.status, equal_to(201), unicode(world.response.data))
 
 
+@step(u'When I send a request for the line associated to a fake extension')
+def when_i_send_a_request_for_the_line_associated_to_a_fake_extension(step):
+    world.response = line_extension_action.get_from_extension(999999999)
+
+
+@step(u'When I send a request for the line associated to extension with exten "(\d+)@([\w-]+)"')
+def when_i_send_a_request_for_the_line_associated_to_extension_with_exten_group1(step, exten, context):
+    extension = extension_helper.get_by_exten_context(exten, context)
+    world.response = line_extension_action.get_from_extension(extension.id)
+
+
 @step(u'When I link extension "([^"]*)" with line id "([^"]*)"')
 def when_i_link_extension_group1_with_line_id_group2(step, extension, line_id):
     _link_line_and_extension(line_id, extension)
