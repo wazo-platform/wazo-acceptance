@@ -30,7 +30,6 @@ from selenium.common.exceptions import NoSuchElementException
 
 @before.all
 def xivo_lettuce_before_all():
-    print 'Configuring...'
     initialize()
 
 

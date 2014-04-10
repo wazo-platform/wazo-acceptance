@@ -30,16 +30,16 @@ from xivo_lettuce import postgres
 from provd.rest.client.client import new_provisioning_client
 
 
-_CONFIG_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../config'))
-_CONFIG_DIRD = os.path.join(_CONFIG_DIR, 'conf.d')
-_CONFIG_FILE_DEFAULT = os.path.join(_CONFIG_DIR, 'default.ini')
-_CONFIG_FILE_EXTRA_DEFAULT = os.path.join(_CONFIG_DIRD, 'default')
+_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+_CONFIG_DIR = os.path.join(_ROOT_DIR, 'config')
+_ASSETS_DIR = os.path.join(_ROOT_DIR, 'assets')
 
 
 class XivoAcceptanceConfig(object):
 
     def __init__(self):
         self._config = self._read_config()
+        print 'Configuring...'
 
         self.dao_asterisk_engine = None
         self.dao_xivo_engine = None
@@ -89,19 +89,30 @@ class XivoAcceptanceConfig(object):
         self._setup_provd()
         self._setup_webi()
 
+    def _find_first_existing_path(self, *args):
+        for path in args:
+            if path and os.path.exists(path):
+                return path
+        raise Exception('Directories do not exist: %s' % ' '.join(args))
+
     def _read_config(self):
+        self.config_dir = self._find_first_existing_path(_CONFIG_DIR, '/etc/xivo-acceptance')
+        self.asset_dir = self._find_first_existing_path(_ASSETS_DIR, '/usr/share/xivo-acceptance/assets')
+
+        print 'Using configuration dir %s' % self.config_dir
+
+        config_dird = os.path.join(self.config_dir, 'conf.d')
+        config_file_default = os.path.join(self.config_dir, 'default.ini')
+        config_file_extra_default = os.path.join(config_dird, 'default')
+
         config = ConfigParser.RawConfigParser()
 
-        with open(_CONFIG_FILE_DEFAULT) as fobj:
+        with open(config_file_default) as fobj:
             config.readfp(fobj)
 
-        config_file_extra = _CONFIG_FILE_EXTRA_DEFAULT
-
-        config_environ = os.getenv('LETTUCE_CONFIG')
-        if config_environ and os.path.exists(os.path.join(_CONFIG_DIRD, config_environ)):
-            config_file_extra = os.path.join(_CONFIG_DIRD, config_environ)
-        elif os.path.exists('%s.local' % _CONFIG_FILE_EXTRA_DEFAULT):
-            config_file_extra = '%s.local' % _CONFIG_FILE_EXTRA_DEFAULT
+        config_file_extra = self._find_first_existing_path(config_file_extra_default,
+                                                           os.getenv('LETTUCE_CONFIG'),
+                                                           '%s.local' % config_file_extra_default)
 
         with open(config_file_extra) as fobj:
             config.readfp(fobj)
