@@ -5,7 +5,6 @@ SQLAlchemy
 argparse
 execnet
 fuzzywuzzy
-lettuce
 pika
 psycopg2
 python-ldap
