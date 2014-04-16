@@ -110,9 +110,9 @@ class XivoAcceptanceConfig(object):
         with open(config_file_default) as fobj:
             config.readfp(fobj)
 
-        config_file_extra = self._find_first_existing_path(config_file_extra_default,
-                                                           os.getenv('LETTUCE_CONFIG'),
-                                                           '%s.local' % config_file_extra_default)
+        config_file_extra = self._find_first_existing_path(os.getenv('LETTUCE_CONFIG'),
+                                                           '%s.local' % config_file_extra_default,
+                                                           config_file_extra_default)
 
         with open(config_file_extra) as fobj:
             config.readfp(fobj)
