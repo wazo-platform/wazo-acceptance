@@ -114,6 +114,8 @@ class XivoAcceptanceConfig(object):
                                                            '%s.local' % config_file_extra_default,
                                                            config_file_extra_default)
 
+        print 'Using extra configuration file %s' % config_file_extra
+
         with open(config_file_extra) as fobj:
             config.readfp(fobj)
 
