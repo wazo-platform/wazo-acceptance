@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import os
 import ConfigParser
+import os
+import sys
 import xivo_ws
 
 from sqlalchemy.exc import OperationalError
@@ -33,6 +34,8 @@ from provd.rest.client.client import new_provisioning_client
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 _CONFIG_DIR = os.path.join(_ROOT_DIR, 'config')
 _ASSETS_DIR = os.path.join(_ROOT_DIR, 'assets')
+_GLOBAL_CONFIG_DIR = os.path.join(sys.prefix, 'etc', 'xivo-acceptance')
+_GLOBAL_ASSETS_DIR = os.path.join(sys.prefix, 'share', 'xivo-acceptance', 'assets')
 
 
 class XivoAcceptanceConfig(object):
@@ -96,8 +99,8 @@ class XivoAcceptanceConfig(object):
         raise Exception('Directories do not exist: %s' % ' '.join(args))
 
     def _read_config(self):
-        self.config_dir = self._find_first_existing_path(_CONFIG_DIR, '/etc/xivo-acceptance')
-        self.asset_dir = self._find_first_existing_path(_ASSETS_DIR, '/usr/share/xivo-acceptance/assets')
+        self.config_dir = self._find_first_existing_path(_CONFIG_DIR, _GLOBAL_CONFIG_DIR)
+        self.asset_dir = self._find_first_existing_path(_ASSETS_DIR, _GLOBAL_ASSETS_DIR)
 
         print 'Using configuration dir %s' % self.config_dir
 
