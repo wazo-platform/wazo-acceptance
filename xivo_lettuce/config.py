@@ -106,15 +106,19 @@ class XivoAcceptanceConfig(object):
 
         config_dird = os.path.join(self.config_dir, 'conf.d')
         config_file_default = os.path.join(self.config_dir, 'default.ini')
-        config_file_extra_default = os.path.join(config_dird, 'default')
 
         config = ConfigParser.RawConfigParser()
 
         with open(config_file_default) as fobj:
             config.readfp(fobj)
 
-        config_file_extra = self._find_first_existing_path(os.getenv('LETTUCE_CONFIG'),
-                                                           '%s.local' % config_file_extra_default,
+        config_file_extra_absolute = os.getenv('LETTUCE_CONFIG', 'invalid_file_name')
+        config_file_extra_in_dird = os.path.join(config_dird, os.getenv('LETTUCE_CONFIG', 'invalid_file_name'))
+        config_file_extra_default = os.path.join(config_dird, 'default')
+        config_file_extra_local = '%s.local' % config_file_extra_default
+        config_file_extra = self._find_first_existing_path(config_file_extra_absolute,
+                                                           config_file_extra_in_dird,
+                                                           config_file_extra_local,
                                                            config_file_extra_default)
 
         print 'Using extra configuration file %s' % config_file_extra
