@@ -25,7 +25,7 @@ from xivo_acceptance.helpers import extension_helper
 @step(u'Given line "([^"]*)" is linked with extension "([^"]*)"')
 def given_line_group1_is_linked_with_extension_group2(step, line_id, extension):
     _link_line_and_extension(line_id, extension)
-    assert_that(world.response.status, equal_to(201), world.response.data)
+    assert_that(world.response.status, equal_to(201), unicode(world.response.data))
 
 
 @step(u'When I link extension "([^"]*)" with line id "([^"]*)"')
