@@ -230,8 +230,7 @@ def then_i_see_transfer_destinations(step):
 
 @step(u'Then I see no transfer destinations')
 def then_i_see_no_transfer_destinations(step):
-    res = cti_helper.get_switchboard_infos()
-    assert_that(res['return_value']['content'], equal_to([]))
+    common.wait_until(_switchboard_has_no_transfer_destination, tries=3)
 
 
 def _switchboard_has_incoming_call(cid_name, cid_num):
@@ -244,3 +243,8 @@ def _switchboard_has_incoming_call(cid_name, cid_num):
 def _switchboard_has_current_call():
     current_call = cti_helper.get_switchboard_current_call_infos()
     return current_call['caller_id'] != ""
+
+
+def _switchboard_has_no_transfer_destination():
+    res = cti_helper.get_switchboard_infos()
+    return res['return_value']['content'] == []
