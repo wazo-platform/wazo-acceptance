@@ -33,12 +33,13 @@ Feature: Switchboard search
         When I remove the mobile number of user "Felix" "Shrödinger"
         Then I see no transfer destinations
 
-    Scenario: Delete user while searching  mobile number transfer destination
+    Scenario: Delete user while searching mobile number transfer destination
         Given there are users with infos:
          | firstname | lastname | mobile_number | cti_profile | cti_login | cti_passwd |
-         | Germaine  | Tremblay |          1234 | Switchboard | germaine  | tremblay   |
+         | Alphonse  | Tremblay |               | Switchboard | alphonse  | tremblay   |
+         | Germaine  | Tremblay |          1234 |             |           |            |
         When I start the XiVO Client
-        When I log in the XiVO Client as "germaine", pass "tremblay"
+        When I log in the XiVO Client as "alphonse", pass "tremblay"
         When I search a transfer destination "germaine tremblay"
         Then I see transfer destinations:
          | Name              | Number |
