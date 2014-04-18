@@ -81,8 +81,9 @@ def when_i_create_an_empty_device(step):
 
 @step(u'When I create the following devices:')
 def when_i_create_the_following_devices(step):
-    for device_info in step.hashes:
-        world.response = device_action_restapi.create_device(device_info)
+    for device in step.hashes:
+        _update_device_from_step_hash(device)
+        world.response = device_action_restapi.create_device(device)
 
 
 @step(u'When I create a device using the device template id "([^"]*)"')
@@ -163,6 +164,7 @@ def then_i_get_a_response_with_a_device_id(step):
 def then_the_device_has_the_following_parameters(step):
     device_response = world.response.data
     expected_device = step.hashes[0]
+    _update_device_from_step_hash(expected_device)
 
     assert_that(device_response, has_entries(expected_device))
 
@@ -208,3 +210,8 @@ def then_i_get_a_list_with_n_of_n_devices(step, nb_list, nb_total):
 def then_i_get_a_list_with_n_devices(step, nb_list):
     nb_list = int(nb_list)
     assert_that(world.response.data, has_entry('items', has_length(nb_list)))
+
+
+def _update_device_from_step_hash(device):
+    if 'options' in device:
+        device['options'] = eval(device['options'])
