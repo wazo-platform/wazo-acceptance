@@ -19,7 +19,7 @@ from hamcrest import *
 from lettuce import step, world
 
 from xivo_acceptance.action.restapi import user_line_action_restapi
-from xivo_acceptance.helpers import user_helper
+from xivo_acceptance.helpers import user_helper, line_sip_helper
 
 
 @step(u'Given I have no user_line with the following parameters:')
@@ -42,6 +42,14 @@ def given_line_group1_is_linked_with_user_id_group2(step, line_id, user_id):
     line_id = int(line_id)
     user_id = int(user_id)
     world.response = user_line_action_restapi.create_user_line(user_id, {'line_id': line_id})
+    assert_that(world.response.status, equal_to(201), unicode(world.response.data))
+
+
+@step(u'Given SIP line "([^"]*)" is associated to user "([^"]*)" "([^"]*)"')
+def given_sip_line_group1_is_associated_to_user_group2_group3(step, sip_username, firstname, lastname):
+    line = line_sip_helper.find_by_username(sip_username)
+    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    world.response = user_line_action_restapi.create_user_line(user_id, {'line_id': line['id']})
     assert_that(world.response.status, equal_to(201), unicode(world.response.data))
 
 
