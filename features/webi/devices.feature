@@ -38,7 +38,6 @@ Feature: Devices
           | present           | not present       |
           | 00:00:00:00:aa:02 | 00:00:00:00:cc:22 |
 
-
     Scenario: List
         When I request devices in the webi
         Then the REST API received a request with infos:
@@ -63,8 +62,8 @@ Feature: Devices
           | description    |
           | toto           |
         Then the REST API received a request with infos:
-          | method | path                         | data                                                                                                       |
-          | PUT    | /1.1/devices/564635464951957 | {"ip":"192.168.32.197","mac":"00:00:00:00:aa:01","template_id":"defaultconfigdevice","description":"toto"} |
+          | method | path                         | data                                                                                                                                       |
+          | PUT    | /1.1/devices/564635464951957 | {"ip":"192.168.32.197","mac":"00:00:00:00:aa:01","template_id":"defaultconfigdevice","description":"toto","options":{"switchboard":false}} |
 
     Scenario: Delete
         Given there are no devices with id "542135468456498"
