@@ -22,10 +22,12 @@ from xivo_acceptance.action.webi import provd_general as provdg_action_webi
 from xivo_acceptance.action.webi import provd_plugins as provdp_action_webi
 from xivo_lettuce import sysutils
 
+STABLE_URL = 'http://provd.xivo.fr/plugins/1/stable/'
+
 
 @step(u'Given a update plugins provd with good url')
 def given_a_update_plugins_provd(step):
-    provdp_action_webi.update_plugin_list('http://provd.xivo.fr/plugins/1/stable/',
+    provdp_action_webi.update_plugin_list(STABLE_URL,
                                           check_confirmation=False)
 
 
@@ -47,8 +49,14 @@ def given_there_s_no_plugins_group1_installed(step, plugin):
 
 @step(u'Given the plugin "([^"]*)" is installed')
 def given_the_plugin_group1_is_installed(step, plugin):
-    provdp_action_webi.update_plugin_list('http://provd.xivo.fr/plugins/1/stable/')
+    provdp_action_webi.update_plugin_list(STABLE_URL)
     provdp_action_webi.install_plugin(plugin)
+
+
+@step(u'Given the latest plugin "([^"]*)" is installed')
+def given_the_latest_plugin_group1_is_installed(step, plugin):
+    provdp_action_webi.update_plugin_list(STABLE_URL)
+    provdp_action_webi.install_latest_plugin(plugin)
 
 
 @step(u'Given the provisioning plugin cache has been cleared')
@@ -58,7 +66,7 @@ def given_the_provisioning_plugin_cache_has_been_cleared(step):
 
 @step(u'Given the plugin list has been updated')
 def given_the_plugin_list_has_been_updated(step):
-    provdp_action_webi.update_plugin_list('http://provd.xivo.fr/plugins/1/stable/')
+    provdp_action_webi.update_plugin_list(STABLE_URL)
 
 
 @step(u'When I install the plugin "([^"]*)"')
@@ -84,7 +92,7 @@ def then_plugins_list_successfully_updated(step):
 @step(u'Then plugins list has a error during update')
 def then_plugins_list_has_error_during_update(step):
     assert provdp_action_webi.plugins_error_during_update()
-    provdg_action_webi.update_plugin_server_url('http://provd.xivo.fr/plugins/1/stable/')
+    provdg_action_webi.update_plugin_server_url(STABLE_URL)
 
 
 @step(u'Then the firmware is successfully installed')

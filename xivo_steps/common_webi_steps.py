@@ -60,3 +60,8 @@ def then_i_see_no_errors(step):
 @step(u'Then I see errors')
 def then_i_see_errors(step):
     form.submit.assert_form_errors()
+
+
+@step(u'When I submit the form')
+def when_i_submit_the_form(step):
+    form.submit.submit_form()

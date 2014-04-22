@@ -73,7 +73,7 @@ def when_i_create_the_device_with_infos(step):
 
 @step(u'When I edit the device "([^"]*)" with infos:')
 def when_i_edit_the_device_with_infos(step, device_id):
-    common.open_url('device', 'edit', qry={'id': '%s' % device_id})
+    common.open_url('device', 'edit', qry={'id': device_id})
     device_infos = step.hashes[0]
     if 'plugin' in device_infos:
         device_action_webi.type_input('plugin', device_infos['plugin'])
@@ -93,6 +93,21 @@ def when_i_delete_device(step, device_id):
 def when_i_provision_my_device_with_my_line_id_group1(step, line_id, device_ip):
     line = line_dao.get(line_id)
     device_helper.provision_device_using_webi(line.provisioning_extension, device_ip)
+
+
+@step(u'When I open the edit page of the device "([^"]*)"')
+def when_i_open_the_edit_page_of_the_device_group1(step, device_id):
+    common.open_url('device', 'edit', qry={'id': device_id})
+
+
+@step(u'When I select a plugin "([^"]*)"')
+def when_i_select_a_plugin_group1(step, plugin_name):
+    device_action_webi.select_plugin(plugin_name)
+
+
+@step(u'When I check the switchboard checkbox')
+def when_i_check_the_switchboard_checkbox(step):
+    device_action_webi.check_switchboard()
 
 
 @step(u'Then there is no device "([^"]*)"')
@@ -157,3 +172,14 @@ def then_i_see_in_the_log_file_device_deleted(step, device_id):
 def _assert_all_lines_in_log(actual_log, expected_lines):
     for expected_line in expected_lines:
         assert_that(actual_log, has_item(contains_string(expected_line)))
+
+
+@step(u'Then the web interfaces shows a device with:')
+def then_the_web_interfaces_shows_a_device_with(step):
+    device_infos = step.hashes[0]
+    if 'switchboard_enabled' in device_infos:
+        expected = eval(device_infos['switchboard_enabled'])
+        assert_that(device_action_webi.is_switchboard_enabled(), is_(expected))
+    if 'switchboard_checked' in device_infos:
+        expected = eval(device_infos['switchboard_checked'])
+        assert_that(device_action_webi.is_switchboard_checked(), is_(expected))
