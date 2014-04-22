@@ -23,7 +23,7 @@ from lettuce import world
 from xivo_acceptance.helpers import context_helper, trunksip_helper
 from xivo_dao.helpers import db_manager
 from xivo_lettuce.terrain import initialize, deinitialize
-from xivo_lettuce import common
+from xivo_lettuce import assets, common
 
 
 _WEBSERVICES_SQL_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'webservices.sql'))
@@ -96,7 +96,13 @@ def _allow_remote_access_to_pgsql():
 
 
 def _allow_remote_access_to_bus():
-    assert False, 'This step must be implemented'
+    assert False, 'This step must be implemented or replaced by <allow_remote_access_to_rabbitmq>'
+
+
+def _allow_remote_access_to_rabbitmq():
+    path = assets.full_path('rabbitmq.config')
+    print path
+    #world.ssh_client_xivo.send_files(path)
 
 
 def _add_line_to_remote_file(line_text, file_name):
