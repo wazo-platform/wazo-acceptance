@@ -46,8 +46,8 @@ def given_the_plugin_group1_is_installed(step, plugin):
     provdp_action_webi.install_plugin(plugin)
 
 
-@step(u'Given the provisionning plugin cache has been cleared')
-def given_the_provisionning_plugin_cache_has_been_cleared(step):
+@step(u'Given the provisioning plugin cache has been cleared')
+def given_the_provisioning_plugin_cache_has_been_cleared(step):
     sysutils.send_command(['rm', '-f', '/var/cache/xivo-provd/*'])
 
 

@@ -39,8 +39,8 @@ def when_i_configure_the_following_proxies(step):
         provdg_action_webi.configure_proxies(config)
 
 
-@step(u'When I reload the provisionning general settings page')
-def when_i_reload_the_provisionning_general_settings_page(step):
+@step(u'When I reload the provisioning general settings page')
+def when_i_reload_the_provisioning_general_settings_page(step):
     common.open_url('provd_general')
 
 
