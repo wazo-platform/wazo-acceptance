@@ -40,6 +40,11 @@ def given_the_plugin_group1_is_not_installed(step, plugin):
     provdp_action_webi.uninstall_plugin(plugin)
 
 
+@step(u'Given there\'s no plugins "([^"]*)" installed')
+def given_there_s_no_plugins_group1_installed(step, plugin):
+    provdp_action_webi.uninstall_plugins(plugin)
+
+
 @step(u'Given the plugin "([^"]*)" is installed')
 def given_the_plugin_group1_is_installed(step, plugin):
     provdp_action_webi.update_plugin_list('http://provd.xivo.fr/plugins/1/stable/')
@@ -59,6 +64,11 @@ def given_the_plugin_list_has_been_updated(step):
 @step(u'When I install the plugin "([^"]*)"')
 def when_i_install_the_plugin_group1(step, plugin):
     provdp_action_webi.install_plugin(plugin)
+
+
+@step(u'When I install the latest plugin "([^"]*)"')
+def when_i_install_the_latest_plugin_group1(step, plugin):
+    provdp_action_webi.install_latest_plugin(plugin)
 
 
 @step(u'When I install the "([^"]*)" firmware')
