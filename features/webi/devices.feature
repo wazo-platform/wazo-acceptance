@@ -38,7 +38,6 @@ Feature: Devices
           | present           | not present       |
           | 00:00:00:00:aa:02 | 00:00:00:00:cc:22 |
 
-
     Scenario: List
         When I request devices in the webi
         Then the REST API received a request with infos:
@@ -63,8 +62,31 @@ Feature: Devices
           | description    |
           | toto           |
         Then the REST API received a request with infos:
-          | method | path                         | data                                                                                                       |
-          | PUT    | /1.1/devices/564635464951957 | {"ip":"192.168.32.197","mac":"00:00:00:00:aa:01","template_id":"defaultconfigdevice","description":"toto"} |
+          | method | path                         | data                                                                                                                                       |
+          | PUT    | /1.1/devices/564635464951957 | {"ip":"192.168.32.197","mac":"00:00:00:00:aa:01","template_id":"defaultconfigdevice","description":"toto","options":{"switchboard":false}} |
+
+    Scenario: Edit the switchboard option
+        Given the plugin "null" is installed
+        Given there's no plugins "xivo-aastra" installed
+        Given the latest plugin "xivo-aastra" is installed
+        Given there are no devices with id "564635464951957"
+        Given I have the following devices:
+          |              id |             ip | mac               | vendor | model | plugin |
+          | 564635464951957 | 192.168.32.197 | 00:00:00:00:aa:01 | Aastra | 6757i | zero   |
+        When I open the edit page of the device "564635464951957"
+        Then the web interfaces shows a device with:
+          | switchboard_enabled | switchboard_checked |
+          | False               | False               |
+        When I select a plugin "xivo-aastra"
+        Then the web interfaces shows a device with:
+          | switchboard_enabled | switchboard_checked |
+          | True                | False               |
+        When I check the switchboard checkbox
+        When I submit the form
+        When I open the edit page of the device "564635464951957"
+        Then the web interfaces shows a device with:
+          | switchboard_enabled | switchboard_checked |
+          | True                | True                |
 
     Scenario: Delete
         Given there are no devices with id "542135468456498"

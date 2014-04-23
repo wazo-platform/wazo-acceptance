@@ -200,11 +200,23 @@ def get_line(line_substring):
         "//table[@id='table-main-listing']//tr[contains(.,'%s')]" % line_substring)
 
 
+def get_lines(line_substring):
+    return world.browser.find_elements_by_xpath(
+        "//table[@id='table-main-listing']//tr[contains(.,'%s')]" % line_substring)
+
+
 def find_line(line_substring):
     try:
         return get_line(line_substring)
     except NoSuchElementException:
         return None
+
+
+def find_lines(line_substring):
+    try:
+        return get_lines(line_substring)
+    except NoSuchElementException:
+        return []
 
 
 def find_line_and_fetch_col(line_substring, class_name):
