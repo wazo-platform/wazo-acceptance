@@ -72,7 +72,7 @@ Feature: Devices
         Given there are no devices with id "564635464951957"
         Given I have the following devices:
           |              id |             ip | mac               | vendor | model | plugin |
-          | 564635464951957 | 192.168.32.197 | 00:00:00:00:aa:01 | Aastra | 6757i | zero   |
+          | 564635464951957 | 192.168.32.197 | 00:00:00:00:aa:01 | Aastra | 6757i | null |
         When I open the edit page of the device "564635464951957"
         Then the web interfaces shows a device with:
           | switchboard_enabled | switchboard_checked |
