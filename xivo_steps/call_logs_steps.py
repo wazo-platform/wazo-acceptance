@@ -41,7 +41,7 @@ def given_there_are_a_lot_of_calls(step):
     assets.copy_asset_to_server(asset=sql_file_name, serverpath=server_dir)
     remote_path = '%s/%s' % (server_dir, sql_file_name)
 
-    cel_insertion_command = ['sudo', '-u', 'postgres', 'psql', 'asterisk', '-c', '"\i %s"' % remote_path]
+    cel_insertion_command = ['sudo', '-u', 'postgres', 'psql', 'asterisk', '-f', remote_path]
     world.ssh_client_xivo.check_call(cel_insertion_command)
 
 
