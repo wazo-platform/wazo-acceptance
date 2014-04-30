@@ -95,8 +95,6 @@ def _create_user(channel, userinfo):
     from xivo_dao.data_handler.user.model import User
 
     user = User(**userinfo)
-    if not user.description:
-        user.description = ''
     user_services.create(user)
 
 
