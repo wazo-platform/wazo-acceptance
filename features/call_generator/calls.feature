@@ -51,3 +51,17 @@ Feature: Callgen
         Given the line "1103@default" is disabled
         When "Bountrabi Sylla" calls "1103"
         Then "Bountrabi Sylla" last dialed extension was not found
+
+    Scenario: No answer destination with disabled forward exten on no answer
+        Given the "Enable forwarding on no-answer" extension is "disabled"
+        Given there are users with infos:
+        | firstname | lastname | number | context | protocol |
+        | James     | Bond     |   1101 | default | sip      |
+        | Tiffany   | Case     |   1102 | default | sip      |
+        | Pussy     | Galore   |   1103 | default | sip      |
+        Given "James Bond" has a "5 seconds" ringing time
+        Given "James Bond" has a dialaction on "No answer" to "User" "Pussy Galore"
+        When "Tiffany Case" calls "1101"
+        Then "James Bond" is ringing
+        When I wait 9 seconds
+        Then "Pussy Galore" is ringing
