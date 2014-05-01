@@ -382,6 +382,15 @@ def given_user_has_a_dialaction(step, fullname, event, dialaction, destination):
     form.submit.submit_form()
 
 
+@step(u'Given "([^"]*)" has a "([^"]*)" ringing time')
+def given_user_has_a_n_ringing_time(step, fullname, delay_string):
+    _edit_user(*fullname.split(' ', 1))
+
+    _select('it-userfeatures-ringseconds', delay_string)
+
+    form.submit.submit_form()
+
+
 def _select(id_, text):
     Select(world.browser.find_element_by_id(id_)).select_by_visible_text(text)
 
