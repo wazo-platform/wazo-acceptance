@@ -61,6 +61,7 @@ from restapi_1_0 import *
 from restapi_1_1 import *
 from restapi_steps import *
 from schedule_steps import *
+from service_extensions import *
 from sheet_steps import *
 from skillrules_steps import *
 from statcenter_steps import *
