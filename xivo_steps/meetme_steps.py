@@ -22,8 +22,8 @@ from xivo_acceptance.action.webi import meetme as meetme_action_webi
 from xivo_acceptance.helpers import meetme_helper, cti_helper
 
 
-@step(u'Given there is no conf with number "([^"]*)"')
-def given_there_is_no_conf_with_number(step, conf_number):
+@step(u'Given there is no conference with number "([^"]*)"')
+def given_there_is_no_conference_with_number(step, conf_number):
     meetme_helper.delete_meetme_with_confno(conf_number)
 
 

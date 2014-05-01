@@ -152,7 +152,7 @@ def _find_destination_name(func_key):
         return _find_group_name_for_func_key(func_key)
     elif destination == 'queue':
         return _find_queue_name_for_func_key(func_key)
-    elif destination == 'conf':
+    elif destination == 'conference':
         return _find_meetme_name_for_func_key(func_key)
 
 

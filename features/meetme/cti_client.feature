@@ -5,9 +5,9 @@ Feature: Meetme
         Given there are users with infos:
          | firstname | lastname  | number | context | cti_profile |
          | Lord      | Sanderson | 1042   | default | Client      |
-        Given there is no conf with number "4001"
-        Given there is no conf with number "4002"
-        Given there is no conf with number "4003"
+        Given there is no conference with number "4001"
+        Given there is no conference with number "4002"
+        Given there is no conference with number "4003"
         When I add the following conference rooms:
             | name  | number |
             | room1 | 4001   |
@@ -26,8 +26,8 @@ Feature: Meetme
         Given there are users with infos:
          | firstname | lastname  | number | context | cti_profile |
          | Lord      | Sanderson | 1042   | default | Client      |
-        Given there is no conf with number "4001"
-        Given there is no conf with number "4002"
+        Given there is no conference with number "4001"
+        Given there is no conference with number "4002"
         When I add the following conference rooms:
             | name  | number |
             | room1 | 4001   |
