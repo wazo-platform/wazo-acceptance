@@ -65,3 +65,16 @@ Feature: Callgen
         Then "James Bond" is ringing
         When I wait 9 seconds
         Then "Pussy Galore" is ringing
+
+    Scenario: Busy destination with disabled forward exten on busy
+        Given the "Enable forwarding on busy" extension is "disabled"
+        Given there are users with infos:
+        | firstname | lastname | number | context | protocol |
+        | James     | Bond     |   1101 | default | sip      |
+        | Honey     | Ryder    |   1102 | default | sip      |
+        | Sylvia    | Trench   |   1103 | default | sip      |
+        Given "James Bond" has a dialaction on "Busy" to "User" "Sylvia Trench"
+        When "Honey Ryder" calls "1101"
+        When "James Bond" hangs up
+        When I wait 2 seconds
+        Then "Sylvia Trench" is ringing

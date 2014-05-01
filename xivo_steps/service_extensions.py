@@ -23,6 +23,7 @@ from xivo_lettuce.form.checkbox import Checkbox
 
 _exten_url_map = {
     'Enable forwarding on no-answer': 'forward_extension',
+    'Enable forwarding on busy': 'forward_extension',
 }
 
 

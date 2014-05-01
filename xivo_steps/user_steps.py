@@ -371,13 +371,21 @@ def given_user_has_a_dialaction(step, fullname, event, dialaction, destination):
     _edit_user(*fullname.split(' ', 1))
     common.go_to_tab('No answer')
 
-    if event != 'No answer':
+    if event == 'No answer':
+        action_type = 'noanswer'
+    elif event == 'Busy':
+        action_type = 'busy'
+    else:
         raise NotImplementedError('%s dialaction is not implemented' % event)
+
     if dialaction != 'User':
         raise NotImplementedError('%s dialaction destination is not implemented' % destination)
 
-    _select('it-dialaction-noanswer-actiontype', dialaction)
-    _select('it-dialaction-noanswer-user-actionarg1', destination)
+    action_type_id = 'it-dialaction-%s-actiontype' % action_type
+    action_destination_id = 'it-dialaction-%s-user-actionarg1' % action_type
+
+    _select(action_type_id, dialaction)
+    _select(action_destination_id, destination)
 
     form.submit.submit_form()
 
