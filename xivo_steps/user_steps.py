@@ -366,6 +366,26 @@ def then_user_has_enablexfer_enabled(step, fullname, enabled_string):
     assert_that(result, equal_to(expected), 'Enable transfer for %s' % fullname)
 
 
+@step(u'Given "([^"]*)" has a dialaction on "([^"]*)" to "([^"]*)" "([^"]*)"')
+def given_user_has_a_dialaction(step, fullname, event, dialaction, destination):
+    _edit_user(*fullname.split(' ', 1))
+    common.go_to_tab('No answer')
+
+    if event != 'No answer':
+        raise NotImplementedError('%s dialaction is not implemented' % event)
+    if dialaction != 'User':
+        raise NotImplementedError('%s dialaction destination is not implemented' % destination)
+
+    _select('it-dialaction-noanswer-actiontype', dialaction)
+    _select('it-dialaction-noanswer-user-actionarg1', destination)
+
+    form.submit.submit_form()
+
+
+def _select(id_, text):
+    Select(world.browser.find_element_by_id(id_)).select_by_visible_text(text)
+
+
 def _edit_user(firstname, lastname):
     user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'edit', qry={'id': user_id})
