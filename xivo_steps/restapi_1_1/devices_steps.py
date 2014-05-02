@@ -19,7 +19,7 @@ from hamcrest import *
 from lettuce import step, world
 
 from xivo_acceptance.action.restapi import device_action_restapi
-from xivo_acceptance.helpers import device_helper, provd_helper
+from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
 from xivo_lettuce import sysutils
 from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order
 
@@ -77,7 +77,7 @@ def given_i_set_the_http_proxy_environment_variables_to_group1(step, http_proxy)
 @step(u'Given device with ip "([^"]*)" is provisionned with SIP line "([^"]*)"')
 def given_device_with_mac_group1_is_provisionned_with_sip_line_group2(step, device_ip, sip_username):
     line = line_sip_helper.get_by_username(sip_username)
-    device_helper.provision_device_using_webi(line.provisioning_extension, device_ip)
+    device_helper.provision_device_using_webi(line['provisioning_extension'], device_ip)
 
 
 @step(u'When I create an empty device$')
