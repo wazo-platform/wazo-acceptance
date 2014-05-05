@@ -19,7 +19,7 @@ from xivo_acceptance.helpers import meetme_helper
 from xivo_lettuce import common, form
 
 
-def create_meetme(meetme):
+def add_or_replace_meetme(meetme):
     meetme_helper.delete_meetme_with_confno(meetme['number'])
     common.open_url('meetme', 'add')
     fill_form(meetme)
