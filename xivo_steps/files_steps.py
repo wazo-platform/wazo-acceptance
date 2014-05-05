@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import re
-import hashlib
 
 from hamcrest import *
 from lettuce import step
@@ -121,12 +120,12 @@ def then_max_open_file_descriptors_are_equals_to_8192(step):
         assert_that(int(limit), equal_to(8192))
 
 
-@step(u'Then sources.list point on right mirrors')
-def then_sourceslist_point_on_right_mirrors(step):
-    # md5 of source uris pointing on ftp.ca.debian.org
-    expected_md5 = '56069d1daa08434dd83aac1d7d94212c'
+@step(u'Then sources.list points on the mirror "([^"]*)"')
+def then_sources_list_points_on_the_mirror(step, mirror):
+    mirror_line = "deb %s wheezy main" % mirror
+    source_line = "deb-src %s wheezy main" % mirror
 
-    content = sysutils.get_content_file('/etc/apt/sources.list')
-    content_md5 = hashlib.md5(content).hexdigest()
+    file_contents = sysutils.get_content_file('/etc/apt/sources.list').strip()
+    lines = [l.strip() for l in file_contents.splitlines() if l.strip()]
 
-    assert_that(content_md5, equal_to(expected_md5))
+    assert_that(lines, has_items(mirror_line, source_line))

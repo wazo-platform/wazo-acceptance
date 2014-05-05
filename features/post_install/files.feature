@@ -19,4 +19,4 @@ Feature: PostInstall Files
         Then max open file descriptors are equals to 8192
 
     Scenario: Debian sources list points on right mirrors
-        Then sources.list point on right mirrors
+        Then sources.list points on the mirror "http://http.debian.net/debian/"
