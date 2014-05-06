@@ -400,7 +400,7 @@ def given_user_has_a_n_ringing_time(step, fullname, delay_string):
 
 
 def _select(id_, text):
-    Select(world.browser.find_element_by_id(id_)).select_by_visible_text(text)
+    form.select.set_select_field_with_id(id_, text)
 
 
 def _edit_user(firstname, lastname):
