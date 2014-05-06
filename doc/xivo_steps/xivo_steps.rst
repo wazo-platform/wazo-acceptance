@@ -344,15 +344,6 @@ xivo_steps
    :show-inheritance:
 
 
-:mod:`recording_campaigns_steps`
---------------------------------
-
-.. automodule:: xivo_steps.recording_campaigns_steps
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
 :mod:`schedule_steps`
 ---------------------
 
