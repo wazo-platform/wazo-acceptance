@@ -40,10 +40,6 @@ def xivo_lettuce_before_all():
 
 @before.each_scenario
 def xivo_lettuce_before_each_scenario(scenario):
-    world.voicemailid = None
-    world.userid = None
-    world.number = None
-    world.lineid = None
     scenario.phone_register = PhoneRegister()
     _check_webi_login_root()
 
