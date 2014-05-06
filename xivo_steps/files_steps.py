@@ -120,12 +120,18 @@ def then_max_open_file_descriptors_are_equals_to_8192(step):
         assert_that(int(limit), equal_to(8192))
 
 
-@step(u'Then sources.list points on the mirror "([^"]*)"')
-def then_sources_list_points_on_the_mirror(step, mirror):
-    mirror_line = "deb %s wheezy main" % mirror
-    source_line = "deb-src %s wheezy main" % mirror
+@step(u'Then the mirror list contains a line matching "([^"]*)"')
+def then_the_mirror_list_contains_a_line_matching_group1(step, regex):
+    match = _match_on_mirror_list(regex)
+    assert_that(match, is_not(none()))
 
-    file_contents = sysutils.get_content_file('/etc/apt/sources.list').strip()
-    lines = [l.strip() for l in file_contents.splitlines() if l.strip()]
 
-    assert_that(lines, has_items(mirror_line, source_line))
+@step(u'Then the mirror list does not contain a line matching "([^"]*)"')
+def then_the_mirror_list_does_not_contain_a_line_matching_group1(step, regex):
+    match = _match_on_mirror_list(regex)
+    assert_that(match, none())
+
+
+def _match_on_mirror_list(regex):
+    output = sysutils.output_command(['apt-cache', 'policy'])
+    return re.search(regex, output)
