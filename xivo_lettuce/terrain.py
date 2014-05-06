@@ -60,6 +60,7 @@ def xivo_lettuce_after_all(total):
 
 
 def initialize():
+    print 'Initializing automatic tests ...'
     world.config = XivoAcceptanceConfig()
     world.config.setup()
     _setup_ssh_client()
