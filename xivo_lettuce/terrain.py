@@ -23,6 +23,7 @@ from xivobrowser import XiVOBrowser
 
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_lettuce.config import XivoAcceptanceConfig
+from xivo_lettuce.debug import logcall
 from xivo_lettuce import common
 from xivo_lettuce.phone_register import PhoneRegister
 from selenium.common.exceptions import NoSuchElementException
@@ -59,6 +60,7 @@ def xivo_lettuce_after_all(total):
     deinitialize()
 
 
+@logcall
 def initialize():
     print 'Initializing automatic tests ...'
     world.config = XivoAcceptanceConfig()
@@ -71,22 +73,26 @@ def initialize():
     world.dummy_ip_address = '10.99.99.99'
 
 
+@logcall
 def _setup_ssh_client():
     world.ssh_client_xivo = world.config.ssh_client_xivo
     world.ssh_client_callgen = world.config.ssh_client_callgen
 
 
+@logcall
 def _setup_ws():
     world.ws = world.config.ws_utils
     world.restapi_utils_1_0 = world.config.restapi_utils_1_0
     world.restapi_utils_1_1 = world.config.restapi_utils_1_1
 
 
+@logcall
 def _setup_provd():
     world.rest_provd = world.config.rest_provd
     world.provd_client = world.config.provd_client
 
 
+@logcall
 def _setup_browser():
     if not world.config.browser_enable:
         return
@@ -95,11 +101,12 @@ def _setup_browser():
     browser_size = width, height = tuple(world.config.browser_resolution.split('x', 1))
     world.display = Display(visible=world.config.browser_visible, size=browser_size)
     world.display.start()
-    world.browser = XiVOBrowser()
+    world.browser = XiVOBrowser(world.config.browser_debug)
     world.browser.set_window_size(width, height)
     world.timeout = world.config.browser_timeout
 
 
+@logcall
 def _check_webi_login_root():
     if world.config.browser_enable and world.config.xivo_configured:
         try:
@@ -113,21 +120,25 @@ def _check_webi_login_root():
                 common.webi_login_as_default()
 
 
+@logcall
 def _logout_agents():
     asterisk_helper.logoff_agents(world.logged_agents)
     world.logged_agents = []
 
 
+@logcall
 def deinitialize():
     _teardown_browser()
 
 
+@logcall
 def _teardown_browser():
     if world.config.browser_enable:
         world.browser.quit()
         world.display.stop()
 
 
+@logcall
 @world.absorb
 def dump_current_page(filename='lettuce.html'):
     """Use this if you want to debug your test

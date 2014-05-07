@@ -34,7 +34,8 @@ class XiVOBrowser(webdriver.Firefox):
 
     DOWNLOAD_DIR = '/tmp'
 
-    def __init__(self):
+    def __init__(self, debug=False):
+        self._debug = debug
         profile = self._setup_browser_profile()
         webdriver.Firefox.__init__(self, firefox_profile=profile)
 
@@ -45,6 +46,9 @@ class XiVOBrowser(webdriver.Firefox):
         fp.set_preference("browser.download.manager.showWhenStarting", False)
         fp.set_preference("browser.download.dir", self.DOWNLOAD_DIR + '/')
         fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download")
+
+        if self._debug:
+            fp.set_preference("webdriver.log.file", "/tmp/firefox_console")
 
         return fp
 

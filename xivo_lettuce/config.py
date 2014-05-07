@@ -28,6 +28,7 @@ from xivo_dao.helpers import db_manager
 from xivo_lettuce.ssh import SSHClient
 from xivo_lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_lettuce import postgres
+from xivo_lettuce import debug
 from provd.rest.client.client import new_provisioning_client
 
 
@@ -83,9 +84,13 @@ class XivoAcceptanceConfig(object):
         self.kvm_boot_timeout = int(self._config.get('kvm_infos', 'boot_timeout'))
 
         self.linphone_port_range = self._config.get('linphone', 'port_range')
-        self.linphone_debug = self._config.getboolean('linphone', 'debug')
+
+        self.function_debug = self._config.getboolean('debug', 'function_calls')
+        self.linphone_debug = self._config.getboolean('debug', 'linphone')
+        self.browser_debug = self._config.getboolean('debug', 'selenium')
 
     def setup(self):
+        self._setup_logging()
         self._setup_dao()
         self._setup_ssh_client()
         self._setup_ws()
@@ -127,6 +132,13 @@ class XivoAcceptanceConfig(object):
             config.readfp(fobj)
 
         return config
+
+    def _setup_logging(self):
+        config = {
+            'functions': self.function_debug,
+            'selenium': self.browser_debug
+        }
+        debug.configure_logging(config)
 
     def _setup_webi(self):
         try:
