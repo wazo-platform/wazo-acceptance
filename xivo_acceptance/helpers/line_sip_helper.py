@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from hamcrest import assert_that, equal_to, is_not, none
+
+from xivo_acceptance.action.restapi import line_sip_action_restapi as line_sip_action
 from xivo_lettuce.remote_py_cmd import remote_exec
 
 
@@ -28,3 +31,21 @@ def _create_line_sip(channel, parameters):
 
     line = LineSIP(**parameters)
     line_services.create(line)
+
+
+def find_by_username(username):
+    all_lines = _all_lines()
+    found = [line for line in all_lines if line['username'] == username]
+    return found[0] if found else None
+
+
+def _all_lines():
+    response = line_sip_action.all_lines()
+    assert_that(response.status, equal_to(200), str(response.data))
+    return response.data['items']
+
+
+def get_by_username(username):
+    line = find_by_username(username)
+    assert_that(line, is_not(none()), "line with username '%s' does not exist" % username)
+    return line

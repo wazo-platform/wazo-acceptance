@@ -136,3 +136,15 @@ def then_each_item_has_a_group1_link_using_the_id_group2(step, resource, resourc
         resource_id = item[resource_key]
         expected_url = _build_resource_url(resource, resource_id)
         assert_that(item, _has_link_entry(resource, expected_url))
+
+
+@step(u'Then I get a list with (\d+) of (\d+) items')
+def then_i_get_a_list_with_1_of_1_items(step, expected_items, expected_total):
+    expected_items = int(expected_items)
+    expected_total = int(expected_total)
+
+    nb_items = len(world.response.data['items'])
+    total = world.response.data['total']
+
+    assert_that(nb_items, equal_to(expected_items))
+    assert_that(total, equal_to(expected_total))
