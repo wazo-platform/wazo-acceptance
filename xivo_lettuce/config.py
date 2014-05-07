@@ -19,6 +19,7 @@ import ConfigParser
 import os
 import sys
 import xivo_ws
+import logging
 
 from sqlalchemy.exc import OperationalError
 from execnet.multi import makegateway
@@ -29,6 +30,8 @@ from xivo_lettuce.ssh import SSHClient
 from xivo_lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_lettuce import postgres
 from provd.rest.client.client import new_provisioning_client
+
+logger = logging.getLogger('acceptance')
 
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -79,7 +82,7 @@ class XivoAcceptanceConfig(object):
 
     def __init__(self, raw_config):
         self._config = raw_config
-        print 'Configuring...'
+        logger.info("Configuring xivo-acceptance...")
 
         self.asset_dir = _find_first_existing_path(_ASSETS_DIR, _GLOBAL_ASSETS_DIR)
 
@@ -150,7 +153,7 @@ class XivoAcceptanceConfig(object):
             self.dao_asterisk_engine = db_manager._asterisk_engine
             self.dao_xivo_engine = db_manager._xivo_engine
         except OperationalError:
-            print 'PGSQL ERROR: could not connect to server'
+            logging.exception('PGSQL ERROR: could not connect to server')
 
     def _setup_ssh_client(self):
         self.ssh_client_xivo = SSHClient(self.xivo_host, self.ssh_login)

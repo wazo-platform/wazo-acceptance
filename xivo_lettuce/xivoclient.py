@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import logging
+
 import os
 import subprocess
 import socket
@@ -23,8 +25,10 @@ import time
 import errno
 import uuid
 
-from pprint import pprint
+import pprint
 from lettuce import before, after, world
+
+logger = logging.getLogger('acceptance')
 
 
 class XivoClient(object):
@@ -53,17 +57,13 @@ class XivoClient(object):
         return self.listen_socket()
 
     def stop(self):
-        if self.debug:
-            print '-------------------- STOP CLIENT ---------------------'
-            print
+        logger.debug('-------------------- STOP CLIENT ---------------------')
         self.process.terminate()
         self.process = None
         self.socket.close()
         self.socket = None
         try:
-            if self.debug:
-                print '-------------------- REMOVE SOCKET %s ---------------------' % self.socket_path
-                print
+            logger.debug('-------------------- REMOVE SOCKET %s ---------------------', self.socket_path)
             os.remove(self.socket_path)
         except OSError:
             pass
@@ -75,9 +75,7 @@ class XivoClient(object):
         self.stop()
 
     def launch(self):
-        if self.debug:
-            print '-------------------- LAUNCHING CLIENT ---------------------'
-            print
+        logger.debug('-------------------- LAUNCHING CLIENT ---------------------')
         try:
             args = ['./xivoclient']
             args.extend(self.arguments)
@@ -92,9 +90,7 @@ class XivoClient(object):
                 raise
 
     def listen_socket(self):
-        if self.debug:
-            print '-------------------- LISTENNING SOCKET: %s ---------------------' % self.socket_path
-            print
+        logger.debug('-------------------- LISTENNING SOCKET: %s ---------------------', self.socket_path)
         self.socket = socket.socket(socket.AF_UNIX)
         try:
             self.socket.connect(self.socket_path)
@@ -102,8 +98,7 @@ class XivoClient(object):
             if error_number == errno.ENOENT:
                 msg = 'XiVO Client multiples instance is disabled or'
                 msg += ' XiVO Client must be built for functional testing'
-                print msg
-                print
+                logger.info(msg)
                 return False
             else:
                 raise Exception(message)
@@ -126,31 +121,25 @@ class XivoClient(object):
         return response_decoded
 
     def _send_command(self, formatted_command):
-        if self.debug:
-            print '-------------------- MSG SENT ---------------------'
-            pprint(formatted_command)
-            print '-------------------- END MSG ----------------------'
-            print
+        logger.debug('-------------------- MSG SENT ---------------------')
+        logger.debug(pprint.pformat(formatted_command))
+        logger.debug('-------------------- END MSG ----------------------')
         self.socket.send('%s\n' % formatted_command)
 
     def _receive_command(self):
         socket_buffer = self.socket.makefile()
         response_raw = str(socket_buffer.readline())
         socket_buffer.close()
-        if self.debug:
-            print '------------------ RAW RESPONSE -------------------'
-            pprint(response_raw)
-            print '------------------ END RESPONSE -------------------'
-            print
+        logger.debug('------------------ RAW RESPONSE -------------------')
+        logger.debug(pprint.pformat((response_raw)))
+        logger.debug('------------------ END RESPONSE -------------------')
         return response_raw
 
     def _decode_response(self, response_raw):
         response_dict = json.loads(response_raw)
-        if self.debug:
-            print '---------------- DECODED RESPONSE -----------------'
-            pprint(response_dict)
-            print '------------------ END RESPONSE -------------------'
-            print
+        logger.debug('---------------- DECODED RESPONSE -----------------')
+        logger.debug(pprint.pformat(response_dict))
+        logger.debug('------------------ END RESPONSE -------------------')
         return response_dict
 
 
