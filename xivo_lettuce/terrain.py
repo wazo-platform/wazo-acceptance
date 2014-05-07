@@ -17,16 +17,20 @@
 
 import sys
 import tempfile
+import logging
 
 from lettuce import before, after, world
 from xivobrowser import XiVOBrowser
 
 from xivo_acceptance.helpers import asterisk_helper
-from xivo_lettuce.config import XivoAcceptanceConfig
-from xivo_lettuce.debug import logcall
+from xivo_lettuce.config import XivoAcceptanceConfig, read_config
+from xivo_lettuce import debug
 from xivo_lettuce import common
 from xivo_lettuce.phone_register import PhoneRegister
 from selenium.common.exceptions import NoSuchElementException
+
+
+logger = logging.getLogger('acceptance')
 
 
 @before.all
@@ -60,11 +64,15 @@ def xivo_lettuce_after_all(total):
     deinitialize()
 
 
-@logcall
 def initialize():
-    print 'Initializing automatic tests ...'
-    world.config = XivoAcceptanceConfig()
+    raw_config = read_config()
+    debug.setup_logging(raw_config)
+
+    logger.info("Initializing acceptance tests...")
+
+    world.config = XivoAcceptanceConfig(raw_config)
     world.config.setup()
+
     _setup_ssh_client()
     _setup_ws()
     _setup_provd()
@@ -73,26 +81,26 @@ def initialize():
     world.dummy_ip_address = '10.99.99.99'
 
 
-@logcall
+@debug.logcall
 def _setup_ssh_client():
     world.ssh_client_xivo = world.config.ssh_client_xivo
     world.ssh_client_callgen = world.config.ssh_client_callgen
 
 
-@logcall
+@debug.logcall
 def _setup_ws():
     world.ws = world.config.ws_utils
     world.restapi_utils_1_0 = world.config.restapi_utils_1_0
     world.restapi_utils_1_1 = world.config.restapi_utils_1_1
 
 
-@logcall
+@debug.logcall
 def _setup_provd():
     world.rest_provd = world.config.rest_provd
     world.provd_client = world.config.provd_client
 
 
-@logcall
+@debug.logcall
 def _setup_browser():
     if not world.config.browser_enable:
         return
@@ -106,7 +114,7 @@ def _setup_browser():
     world.timeout = world.config.browser_timeout
 
 
-@logcall
+@debug.logcall
 def _check_webi_login_root():
     if world.config.browser_enable and world.config.xivo_configured:
         try:
@@ -120,25 +128,25 @@ def _check_webi_login_root():
                 common.webi_login_as_default()
 
 
-@logcall
+@debug.logcall
 def _logout_agents():
     asterisk_helper.logoff_agents(world.logged_agents)
     world.logged_agents = []
 
 
-@logcall
+@debug.logcall
 def deinitialize():
     _teardown_browser()
 
 
-@logcall
+@debug.logcall
 def _teardown_browser():
     if world.config.browser_enable:
         world.browser.quit()
         world.display.stop()
 
 
-@logcall
+@debug.logcall
 @world.absorb
 def dump_current_page(filename='lettuce.html'):
     """Use this if you want to debug your test

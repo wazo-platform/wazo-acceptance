@@ -28,7 +28,6 @@ from xivo_dao.helpers import db_manager
 from xivo_lettuce.ssh import SSHClient
 from xivo_lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_lettuce import postgres
-from xivo_lettuce import debug
 from provd.rest.client.client import new_provisioning_client
 
 
@@ -39,11 +38,50 @@ _GLOBAL_CONFIG_DIR = os.path.join(sys.prefix, 'etc', 'xivo-acceptance')
 _GLOBAL_ASSETS_DIR = os.path.join(sys.prefix, 'share', 'xivo-acceptance', 'assets')
 
 
+def read_config():
+    config_dir = _find_first_existing_path(_CONFIG_DIR, _GLOBAL_CONFIG_DIR)
+
+    print 'Using configuration dir %s' % config_dir
+
+    config_dird = os.path.join(config_dir, 'conf.d')
+    config_file_default = os.path.join(config_dir, 'default.ini')
+
+    config = ConfigParser.RawConfigParser()
+
+    with open(config_file_default) as fobj:
+        config.readfp(fobj)
+
+    config_file_extra_absolute = os.getenv('LETTUCE_CONFIG', 'invalid_file_name')
+    config_file_extra_in_dird = os.path.join(config_dird, os.getenv('LETTUCE_CONFIG', 'invalid_file_name'))
+    config_file_extra_default = os.path.join(config_dird, 'default')
+    config_file_extra_local = '%s.local' % config_file_extra_default
+    config_file_extra = _find_first_existing_path(config_file_extra_absolute,
+                                                  config_file_extra_in_dird,
+                                                  config_file_extra_local,
+                                                  config_file_extra_default)
+
+    print 'Using extra configuration file %s' % config_file_extra
+
+    with open(config_file_extra) as fobj:
+        config.readfp(fobj)
+
+    return config
+
+
+def _find_first_existing_path(*args):
+    for path in args:
+        if path and os.path.exists(path):
+            return path
+    raise Exception('Directories do not exist: %s' % ' '.join(args))
+
+
 class XivoAcceptanceConfig(object):
 
-    def __init__(self):
-        self._config = self._read_config()
+    def __init__(self, raw_config):
+        self._config = raw_config
         print 'Configuring...'
+
+        self.asset_dir = _find_first_existing_path(_ASSETS_DIR, _GLOBAL_ASSETS_DIR)
 
         self.dao_asterisk_engine = None
         self.dao_xivo_engine = None
@@ -85,60 +123,15 @@ class XivoAcceptanceConfig(object):
 
         self.linphone_port_range = self._config.get('linphone', 'port_range')
 
-        self.function_debug = self._config.getboolean('debug', 'function_calls')
         self.linphone_debug = self._config.getboolean('debug', 'linphone')
         self.browser_debug = self._config.getboolean('debug', 'selenium')
 
     def setup(self):
-        self._setup_logging()
         self._setup_dao()
         self._setup_ssh_client()
         self._setup_ws()
         self._setup_provd()
         self._setup_webi()
-
-    def _find_first_existing_path(self, *args):
-        for path in args:
-            if path and os.path.exists(path):
-                return path
-        raise Exception('Directories do not exist: %s' % ' '.join(args))
-
-    def _read_config(self):
-        self.config_dir = self._find_first_existing_path(_CONFIG_DIR, _GLOBAL_CONFIG_DIR)
-        self.asset_dir = self._find_first_existing_path(_ASSETS_DIR, _GLOBAL_ASSETS_DIR)
-
-        print 'Using configuration dir %s' % self.config_dir
-
-        config_dird = os.path.join(self.config_dir, 'conf.d')
-        config_file_default = os.path.join(self.config_dir, 'default.ini')
-
-        config = ConfigParser.RawConfigParser()
-
-        with open(config_file_default) as fobj:
-            config.readfp(fobj)
-
-        config_file_extra_absolute = os.getenv('LETTUCE_CONFIG', 'invalid_file_name')
-        config_file_extra_in_dird = os.path.join(config_dird, os.getenv('LETTUCE_CONFIG', 'invalid_file_name'))
-        config_file_extra_default = os.path.join(config_dird, 'default')
-        config_file_extra_local = '%s.local' % config_file_extra_default
-        config_file_extra = self._find_first_existing_path(config_file_extra_absolute,
-                                                           config_file_extra_in_dird,
-                                                           config_file_extra_local,
-                                                           config_file_extra_default)
-
-        print 'Using extra configuration file %s' % config_file_extra
-
-        with open(config_file_extra) as fobj:
-            config.readfp(fobj)
-
-        return config
-
-    def _setup_logging(self):
-        config = {
-            'functions': self.function_debug,
-            'selenium': self.browser_debug
-        }
-        debug.configure_logging(config)
 
     def _setup_webi(self):
         try:
