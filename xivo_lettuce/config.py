@@ -171,11 +171,11 @@ class XivoAcceptanceConfig(object):
         self.restapi_utils_1_1 = WsUtils(self.restapi_config_1_1)
 
     def _setup_provd(self):
-        provd_rest_port = 8666
+        provd_rest_port = 8667
         try:
             query = 'SELECT * FROM "provisioning" WHERE id = 1;'
             result = postgres.exec_sql_request(query, database='xivo').fetchone()
-            provd_rest_port = result['rest_port']
+            provd_rest_port = result['http_port']
         except OperationalError:
             pass
 
