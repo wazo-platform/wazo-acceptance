@@ -22,15 +22,26 @@ from xivo_acceptance.action.webi import meetme as meetme_action_webi
 from xivo_acceptance.helpers import meetme_helper, cti_helper
 
 
-@step(u'Given there are no conference rooms')
-def given_there_are_no_conference_rooms(step):
-    meetme_helper.delete_all_meetmes()
+@step(u'Given there is no conference with number "([^"]*)"')
+def given_there_is_no_conference_with_number(step, conf_number):
+    meetme_helper.delete_meetme_with_confno(conf_number)
+
+
+@step(u'Given there are the following conference rooms:')
+def given_there_are_the_following_conference_rooms(step):
+    for meetme in step.hashes:
+        meetme_action_webi.add_or_replace_meetme(meetme)
+
+
+@step(u'When I delete the conference room with number "([^"]*)"')
+def when_i_delete_the_conference_room_with_number_group1(step, conf_number):
+    meetme_helper.delete_meetme_with_confno(conf_number)
 
 
 @step(u'When I add the following conference rooms:')
 def when_i_add_the_following_conference_rooms(step):
     for meetme in step.hashes:
-        meetme_action_webi.create_meetme(meetme)
+        meetme_action_webi.add_or_replace_meetme(meetme)
 
 
 @step(u'When I update the following conference rooms:')

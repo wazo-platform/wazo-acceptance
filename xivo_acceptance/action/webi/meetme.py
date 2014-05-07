@@ -19,7 +19,7 @@ from xivo_acceptance.helpers import meetme_helper
 from xivo_lettuce import common, form
 
 
-def create_meetme(meetme):
+def add_or_replace_meetme(meetme):
     meetme_helper.delete_meetme_with_confno(meetme['number'])
     common.open_url('meetme', 'add')
     fill_form(meetme)
@@ -38,7 +38,7 @@ def fill_form(meetme):
     form.input.set_text_field_with_id('it-meetmefeatures-confno', meetme['number'])
 
     if 'context' in meetme:
-        form.select.set_select_field_with_id('it-meetmefeatures-maxusers', meetme['context'])
+        form.select.set_select_field_with_id_containing('it-meetmefeatures-context', meetme['context'])
 
     if 'max users' in meetme:
         form.input.set_text_field_with_id('it-meetmefeatures-maxusers', meetme['max users'])
