@@ -17,14 +17,17 @@
 
 import xivo_ws
 
-from xivo_lettuce.config import XivoAcceptanceConfig
+from xivo_lettuce import config
 
 
-config = XivoAcceptanceConfig()
+raw_config = config.read_config()
+xivo_host = raw_config.get('xivo', 'hostname')
+xivo_ws_username = raw_config.get('webservices_infos', 'login')
+xivo_ws_password = raw_config.get('webservices_infos', 'password')
 
-xivo_server_ws = xivo_ws.XivoServer(config.xivo_host,
-                                    config.rest_username,
-                                    config.rest_passwd)
+xivo_server_ws = xivo_ws.XivoServer(xivo_host,
+                                    xivo_ws_username,
+                                    xivo_ws_password)
 
 
 def delete_with_id(obj, id_to_delete):
