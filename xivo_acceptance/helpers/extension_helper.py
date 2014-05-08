@@ -148,9 +148,9 @@ def _delete_using_service(channel, extension_id):
 
 def _find_all_extension_ids(channel):
     from xivo_dao.alchemy.extension import Extension as ExtensionSchema
-    from xivo_dao.helpers.db_manager import AsteriskSession
+    from xivo_dao.helpers.db_manager import daosession
 
-    rows = (AsteriskSession
+    rows = (daosession
             .query(ExtensionSchema.id)
             .filter(ExtensionSchema.context != 'xivo-features')
             .all())
@@ -161,9 +161,9 @@ def _find_all_extension_ids(channel):
 
 def _get_exten_info(channel, extension_id):
     from xivo_dao.alchemy.extension import Extension as ExtensionSchema
-    from xivo_dao.helpers.db_manager import AsteriskSession
+    from xivo_dao.helpers.db_manager import daosession
 
-    extension_row = (AsteriskSession
+    extension_row = (daosession
                      .query(ExtensionSchema)
                      .filter(ExtensionSchema.id == extension_id)
                      .first())
