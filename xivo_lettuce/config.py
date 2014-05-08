@@ -147,7 +147,6 @@ class XivoAcceptanceConfig(object):
 
     def _setup_dao(self):
         dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % self.xivo_host
-        dao_config.XIVO_DB_URI = 'postgresql://xivo:proformatique@%s/xivo' % self.xivo_host
         db_manager.reinit()
         try:
             self.dao_asterisk_engine = db_manager._asterisk_engine
