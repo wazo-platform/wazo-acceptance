@@ -69,7 +69,7 @@ def create_voicemail(parameters):
 
 def _create_voicemail(channel, parameters):
     from xivo_dao.alchemy.voicemail import Voicemail as VoicemailSchema
-    from xivo_dao.helpers.db_manager import daosession
+    from xivo_dao.helpers.db_manager import DaoSession
 
     voicemail = VoicemailSchema()
 
@@ -101,9 +101,9 @@ def _create_voicemail(channel, parameters):
     if 'ask_password' in parameters:
         voicemail.skipcheckpass = int(parameters['ask_password'])
 
-    daosession.begin()
-    daosession.add(voicemail)
-    daosession.commit()
+    DaoSession.begin()
+    DaoSession.add(voicemail)
+    DaoSession.commit()
 
 
 def total_voicemails():
@@ -112,9 +112,9 @@ def total_voicemails():
 
 def _total_voicemails(channel):
     from xivo_dao.alchemy.voicemail import Voicemail as VoicemailSchema
-    from xivo_dao.helpers.db_manager import daosession
+    from xivo_dao.helpers.db_manager import DaoSession
 
-    count = daosession.query(VoicemailSchema).count()
+    count = DaoSession.query(VoicemailSchema).count()
     channel.send(count)
 
 
