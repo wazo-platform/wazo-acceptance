@@ -1,6 +1,6 @@
 
 
-\connect xivo;
+\connect asterisk;
 
 BEGIN;
 
