@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import os
+import sys
 
 from lettuce import world
 
@@ -25,7 +26,7 @@ from xivo_acceptance.helpers import line_helper, context_helper, \
     trunkcustom_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import terrain
-from xivo_lettuce.config import XivoAcceptanceConfig
+from xivo_lettuce.config import XivoAcceptanceConfig, read_config
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
@@ -33,10 +34,17 @@ from xivo_ws.destination import UserDestination
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
 
-def main():
+def main(args):
+    if not args:
+        print 'Usage: %s xivo_host' % sys.argv[0]
+        sys.exit()
+
+    xivo_host = args[0]
+
     print 'Initializing...'
-    world.config = XivoAcceptanceConfig()
-    world.config.xivo_host = 'xivo-1-corp'
+    raw_config = read_config()
+    raw_config.set('xivo', 'hostname', xivo_host)
+    world.config = XivoAcceptanceConfig(raw_config)
     world.config.setup()
     terrain._setup_ssh_client()
     terrain._setup_ws()
@@ -176,4 +184,4 @@ class PrepareXivoBiz(object):
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])
