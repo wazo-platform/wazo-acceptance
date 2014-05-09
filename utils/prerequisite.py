@@ -106,7 +106,7 @@ def _xivo_service_restart_all():
 
 def _allow_provd_listen_on_all_interfaces():
     query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
-    world.config.dao_xivo_engine.execute(query)
+    world.config.dao_engine.execute(query)
     common.open_url('commonconf')
 
 

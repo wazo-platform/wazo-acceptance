@@ -19,13 +19,8 @@ from lettuce import world
 from sqlalchemy.sql import text
 
 
-def exec_sql_request(query, database='asterisk', **args):
-    if database == 'asterisk':
-        engine = world.config.dao_asterisk_engine
-    elif database == 'xivo':
-        engine = world.config.dao_xivo_engine
-    else:
-        raise 'Invalid database: %s' % database
+def exec_sql_request(query, **args):
+    engine = world.config.dao_engine
     return engine.execute(text(query), args)
 
 
@@ -38,6 +33,6 @@ def exec_count_request(table, **cond_dict):
             cond.append('%s = %s' % (key, value))
         pg_command = '%s%s' % (pg_command, ' AND '.join(cond))
 
-    result = world.config.dao_asterisk_engine.execute(pg_command)
+    result = world.config.dao_engine.execute(pg_command)
     row = result.fetchone()
     return int(row[0])

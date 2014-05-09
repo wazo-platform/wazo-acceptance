@@ -86,8 +86,7 @@ class XivoAcceptanceConfig(object):
 
         self.asset_dir = _find_first_existing_path(_ASSETS_DIR, _GLOBAL_ASSETS_DIR)
 
-        self.dao_asterisk_engine = None
-        self.dao_xivo_engine = None
+        self.dao_engine = None
         self.rest_provd = None
         self.provd_client = None
         self.ws_utils = None
@@ -149,8 +148,7 @@ class XivoAcceptanceConfig(object):
         dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % self.xivo_host
         db_manager.reinit()
         try:
-            self.dao_asterisk_engine = db_manager._dao_engine
-            self.dao_xivo_engine = db_manager._dao_engine
+            self.dao_engine = db_manager._dao_engine
         except OperationalError:
             logging.exception('PGSQL ERROR: could not connect to server')
 
@@ -182,7 +180,7 @@ class XivoAcceptanceConfig(object):
         provd_rest_port = 8667
         try:
             query = 'SELECT * FROM "provisioning" WHERE id = 1;'
-            result = postgres.exec_sql_request(query, database='xivo').fetchone()
+            result = postgres.exec_sql_request(query).fetchone()
             provd_rest_port = result['http_port']
         except OperationalError:
             pass
