@@ -28,7 +28,7 @@ def then_cti_configuration_file_correctly_generated(step):
     CTI_INI_FILE = '/etc/xivo/web-interface/cti.ini'
     CTI_INI_CONTENT_RESULT = """\
 [general]
-datastorage = "postgresql://xivo:proformatique@localhost/xivo?charset=utf8"
+datastorage = "postgresql://asterisk:proformatique@localhost/asterisk?charset=utf8"
 
 [queuelogger]
 datastorage = "postgresql://asterisk:proformatique@localhost/asterisk?charset=utf8"
