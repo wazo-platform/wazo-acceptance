@@ -15,13 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import time
-
 from hamcrest import assert_that, equal_to
 from lettuce import step
 
 from xivo_acceptance.action.webi import directory as directory_action_webi
-from xivo_acceptance.helpers import line_helper, callgen_helper, cti_helper
+from xivo_acceptance.helpers import cti_helper
 from xivo_acceptance.helpers import directory_helper
 from xivo_lettuce import assets, common, func
 from xivo_lettuce.form import submit
