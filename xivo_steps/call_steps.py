@@ -193,6 +193,24 @@ def given_there_is_n_calls_to_extension_then_i_hangup_after_n_seconds(step, coun
     callgen_helper.execute_n_calls_then_hangup(count, extension, duration=call_duration_ms)
 
 
+@step(u'Given extension (\d+) will answer a call and wait')
+def given_extension_will_answer_a_call_and_wait(step, extension):
+    line = line_helper.find_with_extension(extension)
+    callgen_helper.execute_sip_register(line.name, line.secret)
+    time.sleep(1)
+    callgen_helper.execute_answer_then_wait()
+    time.sleep(1)
+
+
+@step(u'Given extension (\d+) will answer a call, wait (\d+) seconds and hangup')
+def given_extension_will_answer_a_call_wait_seconds_and_hangup(step, extension, seconds):
+    line = line_helper.find_with_extension(extension)
+    callgen_helper.execute_sip_register(line.name, line.secret)
+    time.sleep(1)
+    callgen_helper.execute_answer_then_hangup()
+    time.sleep(1)
+
+
 @step(u'Given I wait call then I answer and wait')
 def given_i_wait_call_then_i_answer_then_i_answer_and_wait(step):
     callgen_helper.execute_answer_then_wait()
