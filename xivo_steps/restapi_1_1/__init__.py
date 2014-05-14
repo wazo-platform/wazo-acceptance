@@ -25,3 +25,4 @@ from users_steps import *
 from call_logs_steps import *
 from cti_profiles_steps import *
 from configuration_steps import *
+from resource_steps import *
