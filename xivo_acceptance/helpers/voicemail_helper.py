@@ -52,11 +52,11 @@ def delete_voicemail_with_user_id(user_id):
 
 
 def add_or_replace_voicemail(parameters):
-    _delete_voicemail(parameters)
+    delete_similar_voicemails(parameters)
     create_voicemail(parameters)
 
 
-def _delete_voicemail(parameters):
+def delete_similar_voicemails(parameters):
     if 'number' in parameters:
         number = parameters['number']
         context = parameters.get('context', 'default')
