@@ -25,22 +25,7 @@ from xivo_acceptance.action.restapi import user_action_restapi
 @step(u'Given I have the following users:')
 def given_i_have_the_following_users(step):
     for userinfo in step.hashes:
-        _delete_user(userinfo)
-        _create_user(userinfo)
-
-
-def _delete_user(userinfo):
-    if 'id' in userinfo:
-        user_helper.delete_user(int(userinfo['id']))
-
-    if 'firstname' in userinfo and 'lastname' in userinfo:
-        user = user_helper.find_by_firstname_lastname(userinfo['firstname'], userinfo['lastname'])
-        if user:
-            user_helper.delete_user(user.id)
-
-
-def _create_user(userinfo):
-    user_helper.create_user(userinfo)
+        user_helper.add_or_replace_user(userinfo)
 
 
 @step(u'Given there are no users with id "([^"]*)"$')

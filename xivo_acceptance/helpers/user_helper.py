@@ -28,6 +28,11 @@ from xivo_ws import User, UserLine, UserVoicemail
 from xivo_ws.exception import WebServiceRequestError
 
 
+def add_or_replace_user(userinfo):
+    delete_similar_users(userinfo)
+    create_user(userinfo)
+
+
 def get_by_user_id(user_id):
     try:
         user = user_services.get(user_id)
@@ -96,6 +101,16 @@ def _create_user(channel, userinfo):
 
     user = User(**userinfo)
     user_services.create(user)
+
+
+def delete_similar_users(userinfo):
+    if 'id' in userinfo:
+        delete_user(int(userinfo['id']))
+
+    if 'firstname' in userinfo and 'lastname' in userinfo:
+        user = find_by_firstname_lastname(userinfo['firstname'], userinfo['lastname'])
+        if user:
+            delete_user(user.id)
 
 
 def delete_all_user_with_firstname_lastname(firstname, lastname):
