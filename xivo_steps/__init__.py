@@ -30,12 +30,14 @@ from common_webi_steps import *
 from common_xivoclient_steps import *
 from conf_file_steps import *
 from configfiles_steps import *
+from context_steps import *
 from cti_client_configuration_steps import *
 from cti_server_steps import *
 from device_steps import *
 from dhcpd_steps import *
 from directed_pickup_steps import *
 from directory_steps import *
+from entity_steps import *
 from files_steps import *
 from funckeys_steps import *
 from general_settings_iax_steps import *

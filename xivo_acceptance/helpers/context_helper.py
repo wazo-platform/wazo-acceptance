@@ -24,51 +24,51 @@ from xivo_lettuce.remote_py_cmd import remote_exec
 from xivo_ws import Context, ContextRange, WebServiceRequestError
 
 
-def update_contextnumbers_user(name, numberbeg, numberend):
+def update_contextnumbers_user(name, numberbeg, numberend, entity_name='xivo_entity'):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        add_context(name, name, 'internal', contextnumbers_user=contextnumbers)
+        add_context(name, name, 'internal', contextnumbers_user=contextnumbers, entity_name=entity_name)
     else:
         context.users.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_group(name, numberbeg, numberend):
+def update_contextnumbers_group(name, numberbeg, numberend, entity_name='xivo_entity'):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        add_context(name, name, 'internal', contextnumbers_group=contextnumbers)
+        add_context(name, name, 'internal', contextnumbers_group=contextnumbers, entity_name=entity_name)
     else:
         context.groups.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_queue(name, numberbeg, numberend):
+def update_contextnumbers_queue(name, numberbeg, numberend, entity_name='xivo_entity'):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        add_context(name, name, 'internal', contextnumbers_queue=contextnumbers)
+        add_context(name, name, 'internal', contextnumbers_queue=contextnumbers, entity_name=entity_name)
     else:
         context.queues.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_meetme(name, numberbeg, numberend):
+def update_contextnumbers_meetme(name, numberbeg, numberend, entity_name='xivo_entity'):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        add_context(name, name, 'internal', contextnumbers_meetme=contextnumbers)
+        add_context(name, name, 'internal', contextnumbers_meetme=contextnumbers, entity_name=entity_name)
     else:
         context.conf_rooms.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_incall(name, numberbeg, numberend, didlength):
+def update_contextnumbers_incall(name, numberbeg, numberend, didlength, entity_name='xivo_entity'):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend), did_length=didlength)
     if not context:
-        add_context(name, name, 'incall', contextnumbers_incall=contextnumbers)
+        add_context(name, name, 'incall', contextnumbers_incall=contextnumbers, entity_name=entity_name)
     else:
         context.incalls.append(contextnumbers)
         world.ws.contexts.edit(context)
@@ -82,13 +82,14 @@ def add_context(name,
                 contextnumbers_group='',
                 contextnumbers_meetme='',
                 contextnumbers_queue='',
-                contextnumbers_incall=''):
+                contextnumbers_incall='',
+                entity_name='xivo_entity'):
 
     context = Context()
     context.name = name
     context.display_name = display_name
     context.type = context_type
-    context.entity = 'xivo_entity'
+    context.entity = entity_name
 
     if context_include:
         context.context_include = [context_include]

@@ -18,7 +18,8 @@
 from lettuce import world
 from execnet.gateway_base import RemoteError
 
-from xivo_acceptance.helpers import group_helper, provd_helper, line_helper, voicemail_helper, func_key_helper
+from xivo_acceptance.helpers import group_helper, provd_helper, line_helper, voicemail_helper, func_key_helper, \
+    entity_helper
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
@@ -237,6 +238,11 @@ def add_user(data_dict):
         user.client_profile = data_dict['client_profile']
     if 'bsfilter' in data_dict:
         user.bsfilter = data_dict['bsfilter']
+
+    if 'entity_name' in data_dict:
+        entity = entity_helper.get_entity_with_name(data_dict['entity_name'])
+        if entity:
+            user.entity_id = entity.id
 
     if 'line_number' in data_dict and 'line_context' in data_dict:
         user.line = UserLine()

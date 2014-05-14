@@ -44,6 +44,7 @@ def given_there_are_users_with_infos(step):
         | firstname | lastname | number | context | ... |
 
     Columns are:
+        entity_name
         firstname
         lastname
         number
@@ -87,6 +88,9 @@ def _add_user(user_data):
     user_ws_data = {}
     user_ws_data['firstname'] = user_data['firstname']
     user_ws_data['lastname'] = user_data['lastname']
+
+    if user_data.get('entity_name'):
+        user_ws_data['entity_name'] = user_data['entity_name']
 
     if user_data.get('number') and user_data.get('context'):
         user_ws_data['line_number'] = user_data['number']
