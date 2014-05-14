@@ -18,7 +18,7 @@
 import re
 
 from lettuce import step, world
-from hamcrest import *
+from hamcrest import assert_that, equal_to, has_item, has_entry, is_not, has_key, instance_of, ends_with, has_entries, has_length
 
 
 @step(u'When I memorize the first entry in the list')
@@ -44,8 +44,7 @@ def then_i_get_an_empty_list(step):
 @step(u'Then I get a response with status "([^"]*)"$')
 def then_i_get_a_response_with_status_group1(step, status):
     status_code = int(status)
-    error_msg = "response received: %s" % world.response.data
-    assert_that(world.response.status, equal_to(status_code), error_msg)
+    world.response.check_status(status_code)
 
 
 @step(u'Then I get a response with an id$')
@@ -60,16 +59,7 @@ def then_i_get_an_error_message_group1(step, error_message):
 
 @step(u'Then I get an error message matching "([^"]*)"$')
 def then_i_get_an_error_message_matching_group1(step, regex):
-    messages = world.response.data
-    has_match = _check_for_regex_match(messages, regex)
-    assert_that(has_match, "regex '%s' did not match any message. Messages: %s" % (regex, messages))
-
-
-def _check_for_regex_match(messages, regex):
-    for message in messages:
-        if re.search(regex, message):
-            return True
-    return False
+    world.response.check_regex(regex)
 
 
 @step(u'Then I get a header with a location for the "([^"]*)" resource$')

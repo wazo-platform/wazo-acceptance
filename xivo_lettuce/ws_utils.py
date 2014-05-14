@@ -15,9 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, has_key
+from hamcrest import assert_that, has_key, equal_to
 import requests
 import json
+import re
 
 DEFAULT_CONTENT_TYPE = 'application/json'
 
@@ -102,21 +103,23 @@ class WsUtils(object):
         body = response.text
         headers = response.headers
 
-        try:
-            body = json.loads(body)
-        except:
-            pass
-
         return RestResponse(response.url, status_code, headers, body)
 
 
 class RestResponse(object):
 
-    def __init__(self, url, status, headers, data):
+    def __init__(self, url, status, headers, raw_data):
         self.url = url
         self.status = status
         self.headers = headers
-        self.data = data
+        self.raw_data = raw_data
+
+    @property
+    def data(self):
+        try:
+            return json.loads(self.raw_data)
+        except:
+            return self.raw_data
 
     def items(self):
         self.check_status()
@@ -130,8 +133,17 @@ class RestResponse(object):
         self.check_status()
         return self.data
 
-    def check_status(self):
-        assert_that(self.status_ok(), self.data)
+    def check_status(self, code=None):
+        msg = "Status code was '%d'. Response: %s" % (self.status, self.raw_data)
+        if code:
+            assert_that(self.status, equal_to(code), msg)
+        else:
+            assert_that(self.status_ok(), msg)
+
+    def check_regex(self, regex):
+        matches = re.search(self.raw_data, regex)
+        msg = "Regex '%s' did not match. Response: %s" % (regex, self.raw_data)
+        assert_that(matches, msg)
 
 
 class RestConfiguration(object):
