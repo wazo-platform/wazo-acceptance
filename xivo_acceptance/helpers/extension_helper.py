@@ -67,6 +67,11 @@ def get_by_exten_context(exten, context):
     return extension
 
 
+def add_or_replace_extension(extension):
+    delete_similar_extensions(extension)
+    create_extensions([extension])
+
+
 def create_extensions(extensions):
     extensions = [dict(e) for e in extensions]
     remote_exec(_create_extensions, extensions=extensions)
@@ -79,6 +84,14 @@ def _create_extensions(channel, extensions):
     for extinfo in extensions:
         extension = Extension(**extinfo)
         extension_services.create(extension)
+
+
+def delete_similar_extensions(extension):
+    if 'exten' in extension:
+        delete_extension_with_exten_context(extension['exten'],
+                                            extension.get('context', 'default'))
+    if 'id' in extension:
+        delete(int(extension['id']))
 
 
 def delete(extension_id):

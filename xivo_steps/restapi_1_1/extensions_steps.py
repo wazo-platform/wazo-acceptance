@@ -39,20 +39,7 @@ def given_i_have_no_extension_with_exten_group1(step, pattern):
 def given_i_have_the_following_extensions(step):
     for exteninfo in step.hashes:
         extension = _extract_extension_parameters(exteninfo)
-        _delete_extension(extension)
-        _create_extension(extension)
-
-
-def _delete_extension(extension):
-    if 'exten' in extension:
-        extension_helper.delete_extension_with_exten_context(extension['exten'],
-                                                             extension.get('context', 'default'))
-    if 'id' in extension:
-        extension_helper.delete(int(extension['id']))
-
-
-def _create_extension(extension):
-    extension_helper.create_extensions([extension])
+        extension_helper.add_or_replace_extension(extension)
 
 
 @step(u'When I access the list of extensions')
