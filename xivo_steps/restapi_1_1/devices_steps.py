@@ -44,11 +44,7 @@ def given_there_are_the_following_devices(step):
 @step(u'Given I have the following devices:')
 def given_i_have_the_following_devices(step):
     for deviceinfo in step.hashes:
-        if 'mac' in deviceinfo:
-            provd_helper.delete_device_with_mac(deviceinfo['mac'])
-        if 'ip' in deviceinfo:
-            provd_helper.delete_device_with_ip(deviceinfo['ip'])
-        provd_helper.create_device(deviceinfo)
+        device_helper.add_or_replace_device(deviceinfo)
 
 
 @step(u'Given there exists the following device templates:')

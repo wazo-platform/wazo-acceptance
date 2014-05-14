@@ -21,6 +21,7 @@ import requests
 from lettuce.registry import world
 
 from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_acceptance.helpers import provd_helper
 
 AUTOPROV_URL = 'https://%s/xivo/configuration/json.php/restricted/provisioning/autoprov?act=configure'
 HEADERS = {'Content-Type': 'application/json'}
@@ -50,3 +51,19 @@ def _create_dummy_devices(channel, nb_devices):
 
     for i in range(nb_devices):
         device_services.create(Device())
+
+
+def add_or_replace_device(device):
+    delete_similar_devices(device)
+    create_device(device)
+
+
+def delete_similar_devices(device):
+    if 'mac' in device:
+        provd_helper.delete_device_with_mac(device['mac'])
+    if 'ip' in device:
+        provd_helper.delete_device_with_ip(device['ip'])
+
+
+def create_device(device):
+    provd_helper.create_device(device)
