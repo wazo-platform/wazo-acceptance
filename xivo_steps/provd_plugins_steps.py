@@ -37,11 +37,6 @@ def given_a_update_plugins_provd_with_bad_url(step):
                                           check_confirmation=False)
 
 
-@step(u'Given the plugin "([^"]*)" is not installed')
-def given_the_plugin_group1_is_not_installed(step, plugin):
-    provdp_action_webi.uninstall_plugin(plugin)
-
-
 @step(u'Given there\'s no plugins "([^"]*)" installed')
 def given_there_s_no_plugins_group1_installed(step, plugin):
     provdp_action_webi.uninstall_plugins(plugin)
@@ -67,11 +62,6 @@ def given_the_provisioning_plugin_cache_has_been_cleared(step):
 @step(u'Given the plugin list has been updated')
 def given_the_plugin_list_has_been_updated(step):
     provdp_action_webi.update_plugin_list(STABLE_URL)
-
-
-@step(u'When I install the plugin "([^"]*)"')
-def when_i_install_the_plugin_group1(step, plugin):
-    provdp_action_webi.install_plugin(plugin)
 
 
 @step(u'When I install the latest plugin "([^"]*)"')
