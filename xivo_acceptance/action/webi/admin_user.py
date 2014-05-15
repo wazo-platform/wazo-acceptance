@@ -37,6 +37,7 @@ SECTION_MAP = {
     'Users': 'users',
     'Contexts': 'context',
     'Entities': 'entity',
+    'Lines': 'lines',
 }
 
 

@@ -266,6 +266,20 @@ def then_the_line_1_has_the_following_line_options(step, line_number):
                 raise Exception('%s is not a valid key' % key)
 
 
+@step(u'Then I see the line "([^"]*)" exists$')
+def then_i_see_the_element_exists(step, name):
+    common.open_url('line')
+    line = common.find_line(name)
+    assert line is not None, 'Line: %s does not exist' % name
+
+
+@step(u'Then I see the line "([^"]*)" not exists$')
+def then_i_see_the_element_not_exists(step, name):
+    common.open_url('line')
+    line = common.find_line(name)
+    assert line is None, 'Line: %s exist' % name
+
+
 def _add_codec_to_line(codec, exten):
     _add_codec_list_to_line([codec], exten)
 
