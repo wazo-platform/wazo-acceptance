@@ -38,6 +38,7 @@ SECTION_MAP = {
     'Contexts': 'context',
     'Entities': 'entity',
     'Lines': 'lines',
+    'Groups': 'groups',
 }
 
 

@@ -31,10 +31,16 @@ def given_there_is_no_element(step, search):
 @step(u'^Given there are contexts with infos:$')
 def given_there_are_contexts_with_infos(step):
     for context_data in step.hashes:
-        context_helper.update_contextnumbers_user(context_data['name'],
-                                                  context_data['range_start'],
-                                                  context_data['range_end'],
-                                                  entity_name=context_data['entity_name'])
+        if context_data['type'] == 'user':
+            context_helper.update_contextnumbers_user(context_data['name'],
+                                                      context_data['range_start'],
+                                                      context_data['range_end'],
+                                                      entity_name=context_data['entity_name'])
+        elif context_data['type'] == 'group':
+            context_helper.update_contextnumbers_group(context_data['name'],
+                                                       context_data['range_start'],
+                                                       context_data['range_end'],
+                                                       entity_name=context_data['entity_name'])
 
 
 @step(u'Then I see the context "([^"]*)" exists$')
