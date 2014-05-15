@@ -29,11 +29,6 @@ def given_the_sccp_directmedia_is_disabled(step):
     sccp_helper.disable_directmedia()
 
 
-@step(u'Given the SCCP directmedia is enabled')
-def given_the_sccp_directmedia_is_enabled(step):
-    sccp_helper.enable_directmedia()
-
-
 @step(u'Given the SCCP dial timeout is at "(\d+)" seconds')
 def given_the_sccp_dial_timeout_is_at_1_seconds(step, timeout):
     sccp_helper.set_dialtimeout(timeout)
