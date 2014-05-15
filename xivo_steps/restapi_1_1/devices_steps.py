@@ -21,7 +21,6 @@ from lettuce import step, world
 from xivo_acceptance.action.restapi import device_action_restapi
 from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
 from xivo_lettuce import sysutils
-from xivo_lettuce.xivo_hamcrest import assert_has_dicts_in_order
 
 
 @step(u'Given there are no devices with mac "([^"]*)"')
@@ -51,16 +50,6 @@ def given_i_have_the_following_devices(step):
 def given_there_exists_the_following_device_template(step):
     for template in step.hashes:
         provd_helper.add_or_replace_device_template(template)
-
-
-@step(u'Given I only have (\d+) devices')
-def given_i_only_have_n_devices(step, nb_devices):
-    nb_devices = int(nb_devices)
-    provd_helper.remove_devices_over(nb_devices)
-
-    total_devices = provd_helper.total_devices()
-    if total_devices < nb_devices:
-        device_helper.create_dummy_devices(nb_devices - total_devices)
 
 
 @step(u'Given I set the HTTP_PROXY environment variables to "([^"]*)"')
@@ -127,12 +116,6 @@ def when_i_access_the_list_of_devices(step):
     world.response = device_action_restapi.device_list()
 
 
-@step(u'When I request a list of devices with the following query parameters:')
-def when_i_request_a_list_of_devices_with_the_following_query_parameters(step):
-    parameters = step.hashes[0]
-    world.response = device_action_restapi.device_list(parameters)
-
-
 @step(u'When I reset the device "([^"]*)" to autoprov from restapi')
 def when_i_reset_the_device_to_autoprov_from_restapi(step, device_id):
     world.response = device_action_restapi.reset_to_autoprov(device_id)
@@ -190,28 +173,6 @@ def then_the_list_contains_the_same_number_of_devices_as_on_the_provisioning_ser
     device_list = world.response.data['items']
 
     assert_that(device_list, has_length(total_provd))
-
-
-@step(u'Then I get a list of devices in the following order:')
-def then_i_get_a_list_of_devices_in_the_following_order(step):
-    all_devices = world.response.data['items']
-    expected_devices = [d for d in step.hashes]
-    assert_has_dicts_in_order(all_devices, expected_devices)
-
-
-@step(u'Then I get a list with (\d+) of (\d+) devices')
-def then_i_get_a_list_with_n_of_n_devices(step, nb_list, nb_total):
-    nb_list = int(nb_list)
-    nb_total = int(nb_total)
-    assert_that(world.response.data, all_of(
-        has_entry('total', equal_to(nb_total)),
-        has_entry('items', has_length(nb_list))))
-
-
-@step(u'Then I get a list with (\d+) devices')
-def then_i_get_a_list_with_n_devices(step, nb_list):
-    nb_list = int(nb_list)
-    assert_that(world.response.data, has_entry('items', has_length(nb_list)))
 
 
 def _update_device_from_step_hash(device):
