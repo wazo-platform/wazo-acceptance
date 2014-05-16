@@ -153,3 +153,27 @@ Feature: Entity Filter
 
         Then I see the incall "4234" exists
         Then I see the incall "4321" not exists
+
+    Scenario: Agent
+        Given there are entities with infos:
+          | name           | display_name  |
+          | entity_filter  | entity_filter |
+        
+        Given there are contexts with infos:
+          | type | name | range_start | range_end | entity_name   | didlength |
+          | user | foo  | 1000        | 4999      | entity_filter |           |
+        
+        Given there is a agent "entity_filter" "" with extension "1111@foo"
+        Given there is a agent "agent02" "" with extension "2222@default"
+        
+        Given there is no admin_user "admin1"
+        When I create an admin user with login "admin1" and password "admin1" and entity_name "entity_filter"
+        When I assign the following rights to the admin user "admin1":
+          | module      | category | section | active |
+          | Call Center | Settings | Agents  | yes    |
+          
+        When I logout from the web interface
+        When I login as admin1 with password admin1 in en
+
+        Then agent "entity_filter" is displayed in the list of "default" agent group
+        Then agent "agent02" is not displayed in the list of "default" agent group

@@ -50,6 +50,9 @@ Feature: Entity Filter
         Given there is no incall "4321" in context "from-extern"
         When I create an incall with DID "4321" in context "Incalls (from-extern)"
         
+        Given there is a agent "entity_filter" "" with extension "1111@foo"
+        Given there is a agent "agent02" "" with extension "2222@default"
+        
         When I logout from the web interface
         When I login as admin1 with password admin1 in en
         
@@ -75,3 +78,6 @@ Feature: Entity Filter
 
         Then I see the incall "4234" exists
         Then I see the incall "4321" not exists
+
+        Then agent "entity_filter" is displayed in the list of "default" agent group
+        Then agent "agent02" is not displayed in the list of "default" agent group

@@ -22,9 +22,11 @@ from xivo_lettuce import common, form
 MODULE_MAP = {
     'Configuration': 'xivo-configuration',
     'IPBX': 'service-ipbx',
+    'Call Center': 'service-callcenter',
 }
 
 CATEGORY_MAP = {
+    'Settings': 'settings',
     'Management': 'manage',
     'Call Management': 'call_management',
     'General settings': 'general_settings',
@@ -43,6 +45,7 @@ SECTION_MAP = {
     'Voicemails': 'voicemail',
     'Meetme': 'meetme',
     'Incall': 'incall',
+    'Agents': 'agents',
 }
 
 
