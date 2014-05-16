@@ -39,6 +39,7 @@ SECTION_MAP = {
     'Entities': 'entity',
     'Lines': 'lines',
     'Groups': 'groups',
+    'Voicemails': 'voicemail',
 }
 
 

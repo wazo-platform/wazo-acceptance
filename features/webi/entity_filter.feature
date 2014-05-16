@@ -79,3 +79,25 @@ Feature: Entity Filter
 
         Then I see the group "entity_filter" exists
         Then I see the group "groupeeeeeeee" not exists
+
+    Scenario: Voicemail
+        Given there are entities with infos:
+          | name           | display_name  |
+          | entity_filter  | entity_filter |
+        
+        Given I have the following voicemails:
+          | name          | number | context |
+          | entity_filter |  1234  | foo     |
+          | vm003         |  4321  | default |
+        
+        Given there is no admin_user "admin1"
+        When I create an admin user with login "admin1" and password "admin1" and entity_name "entity_filter"
+        When I assign the following rights to the admin user "admin1":
+          | module | category      | section    | active |
+          | IPBX   | IPBX settings | Voicemails | yes    |
+          
+        When I logout from the web interface
+        When I login as admin1 with password admin1 in en
+
+        Then I see the voicemail "entity_filter" exists
+        Then I see the voicemail "groupeeeeeeee" not exists
