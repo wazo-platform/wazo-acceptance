@@ -15,13 +15,15 @@ Feature: Entity Filter
           | IPBX   | IPBX settings      | Groups     | yes    |
           | IPBX   | IPBX settings      | Voicemails | yes    |
           | IPBX   | IPBX settings      | Meetme     | yes    |
+          | IPBX   | Call Management    | Incall     | yes    |
         
         Given there are contexts with infos:
-          | type   | name | range_start | range_end | entity_name   |
-          | user   | foo  | 1000        | 1101      | entity_filter |
-          | user   | bar  | 1000        | 1101      | default       |
-          | group  | foo  | 2000        | 2999      | entity_filter |
-          | meetme | foo  | 4000        | 4999      | entity_filter |
+          | type   | name    | range_start | range_end | entity_name   | didlength |
+          | user   | foo     | 1000        | 1101      | entity_filter |           |
+          | user   | bar     | 1000        | 1101      | default       |           |
+          | group  | foo     | 2000        | 2999      | entity_filter |           |
+          | meetme | foo     | 4000        | 4999      | entity_filter |           |
+          | incall | alberta | 1000        | 4999      | entity_filter | 4         |
         
         Given there are users with infos:
           | firstname      | lastname | number | context | entity_name   |
@@ -42,6 +44,11 @@ Feature: Entity Filter
           | name          | number | context |
           | entity_filter |  4234  | foo     |
           | mm001         |  4321  | default |
+        
+        Given there is no incall "4234" in context "alberta"
+        When I create an incall with DID "4234" in context "alberta (alberta)"
+        Given there is no incall "4321" in context "from-extern"
+        When I create an incall with DID "4321" in context "Incalls (from-extern)"
         
         When I logout from the web interface
         When I login as admin1 with password admin1 in en
@@ -65,4 +72,6 @@ Feature: Entity Filter
 
         Then I see the conference room "entity_filter" exists
         Then I see the conference room "mm001" not exists
-        
+
+        Then I see the incall "4234" exists
+        Then I see the incall "4321" not exists

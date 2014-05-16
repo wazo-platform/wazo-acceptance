@@ -26,6 +26,7 @@ MODULE_MAP = {
 
 CATEGORY_MAP = {
     'Management': 'manage',
+    'Call Management': 'call_management',
     'General settings': 'general_settings',
     'IPBX settings': 'pbx_settings',
     'IPBX configuration': 'system_management',
@@ -41,6 +42,7 @@ SECTION_MAP = {
     'Groups': 'groups',
     'Voicemails': 'voicemail',
     'Meetme': 'meetme',
+    'Incall': 'incall',
 }
 
 

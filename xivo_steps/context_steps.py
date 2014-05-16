@@ -46,6 +46,12 @@ def given_there_are_contexts_with_infos(step):
                                                         context_data['range_start'],
                                                         context_data['range_end'],
                                                         entity_name=context_data['entity_name'])
+        elif context_data['type'] == 'incall':
+            context_helper.update_contextnumbers_incall(context_data['name'],
+                                                        context_data['range_start'],
+                                                        context_data['range_end'],
+                                                        entity_name=context_data['entity_name'],
+                                                        didlength=context_data['didlength'])
 
 
 @step(u'Then I see the context "([^"]*)" exists$')

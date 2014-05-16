@@ -127,3 +127,29 @@ Feature: Entity Filter
 
         Then I see the conference room "entity_filter" exists
         Then I see the conference room "mm001" not exists
+
+    Scenario: Incall
+        Given there are entities with infos:
+          | name           | display_name  |
+          | entity_filter  | entity_filter |
+        
+        Given there are contexts with infos:
+          | type   | name    | range_start | range_end | entity_name   | didlength |
+          | incall | alberta | 1000        | 4999      | entity_filter | 4         |
+        
+        Given there is no incall "4234" in context "alberta"
+        When I create an incall with DID "4234" in context "alberta (alberta)"
+        Given there is no incall "4321" in context "from-extern"
+        When I create an incall with DID "4321" in context "Incalls (from-extern)"
+        
+        Given there is no admin_user "admin1"
+        When I create an admin user with login "admin1" and password "admin1" and entity_name "entity_filter"
+        When I assign the following rights to the admin user "admin1":
+          | module | category        | section | active |
+          | IPBX   | Call Management | Incall  | yes    |
+          
+        When I logout from the web interface
+        When I login as admin1 with password admin1 in en
+
+        Then I see the incall "4234" exists
+        Then I see the incall "4321" not exists

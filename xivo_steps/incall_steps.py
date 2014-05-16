@@ -28,6 +28,11 @@ def given_there_is_no_incall(step, did):
     incall_helper.delete_incalls_with_did(did)
 
 
+@step(u'Given there is no incall "([^"]*)" in context "([^"]*)"$')
+def given_there_is_no_incall_in_context(step, did, context):
+    incall_helper.delete_incalls_with_did(did, context)
+
+
 @step(u'Given there is an incall "([^"]*)" in context "([^"]*)" to the "([^"]*)" "([^"]*)"$')
 def given_there_is_an_incall_group1_in_context_group2_to(step, did, context, dst_type, dst_name):
     incall_helper.delete_incalls_with_did(did)
@@ -58,6 +63,20 @@ def when_incall_is_removed(step, incall_did):
 def then_incall_group1_is_associated_to_nothing(step, did):
     incall = _find_incall_with_did(did)
     assert_that(incall.destination, none())
+
+
+@step(u'Then I see the incall "([^"]*)" exists$')
+def then_i_see_the_element_exists(step, name):
+    common.open_url('incall')
+    line = common.find_line(name)
+    assert line is not None, 'incall: %s does not exist' % name
+
+
+@step(u'Then I see the incall "([^"]*)" not exists$')
+def then_i_see_the_element_not_exists(step, name):
+    common.open_url('incall')
+    line = common.find_line(name)
+    assert line is None, 'incall: %s exist' % name
 
 
 def _find_incall_with_did(did):
