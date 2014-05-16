@@ -100,4 +100,30 @@ Feature: Entity Filter
         When I login as admin1 with password admin1 in en
 
         Then I see the voicemail "entity_filter" exists
-        Then I see the voicemail "groupeeeeeeee" not exists
+        Then I see the voicemail "vm003" not exists
+
+    Scenario: Conference Room
+        Given there are entities with infos:
+          | name           | display_name  |
+          | entity_filter  | entity_filter |
+        
+        Given there are contexts with infos:
+          | type   | name | range_start | range_end | entity_name   |
+          | meetme | foo  | 4000        | 4999      | entity_filter |
+        
+        Given there are the following conference rooms:
+          | name          | number | context |
+          | entity_filter |  4234  | foo     |
+          | mm001         |  4321  | default |
+        
+        Given there is no admin_user "admin1"
+        When I create an admin user with login "admin1" and password "admin1" and entity_name "entity_filter"
+        When I assign the following rights to the admin user "admin1":
+          | module | category      | section | active |
+          | IPBX   | IPBX settings | Meetme  | yes    |
+          
+        When I logout from the web interface
+        When I login as admin1 with password admin1 in en
+
+        Then I see the conference room "entity_filter" exists
+        Then I see the conference room "mm001" not exists

@@ -40,6 +40,7 @@ SECTION_MAP = {
     'Lines': 'lines',
     'Groups': 'groups',
     'Voicemails': 'voicemail',
+    'Meetme': 'meetme',
 }
 
 
