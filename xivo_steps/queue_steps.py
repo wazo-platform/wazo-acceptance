@@ -194,3 +194,17 @@ def then_the_agent_group1_is_not_a_member_of_the_queue_group2_in_asterisk(step, 
 @step(u'Then the queue "([^"]*)" does not exist in asterisk')
 def then_the_queue_group1_does_not_exist_in_asterisk(step, queue_name):
     assert not queue_helper.does_queue_exist_in_asterisk(queue_name)
+
+
+@step(u'Then I see the queue "([^"]*)" exists$')
+def then_i_see_the_element_exists(step, name):
+    common.open_url('queue')
+    line = common.find_line(name)
+    assert line is not None, 'queue: %s does not exist' % name
+
+
+@step(u'Then I see the queue "([^"]*)" not exists$')
+def then_i_see_the_element_not_exists(step, name):
+    common.open_url('queue')
+    line = common.find_line(name)
+    assert line is None, 'queue: %s exist' % name

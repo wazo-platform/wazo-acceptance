@@ -46,6 +46,7 @@ SECTION_MAP = {
     'Meetme': 'meetme',
     'Incall': 'incall',
     'Agents': 'agents',
+    'Queues': 'queues',
 }
 
 

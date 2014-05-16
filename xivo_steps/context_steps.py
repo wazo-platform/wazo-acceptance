@@ -44,14 +44,18 @@ def given_there_are_contexts_with_infos(step):
         elif context_data['type'] == 'meetme':
             context_helper.update_contextnumbers_meetme(context_data['name'],
                                                         context_data['range_start'],
-                                                        context_data['range_end'],
-                                                        entity_name=context_data['entity_name'])
+                                                        context_data['range_end'])
         elif context_data['type'] == 'incall':
             context_helper.update_contextnumbers_incall(context_data['name'],
                                                         context_data['range_start'],
                                                         context_data['range_end'],
                                                         entity_name=context_data['entity_name'],
                                                         didlength=context_data['didlength'])
+        elif context_data['type'] == 'queue':
+            context_helper.update_contextnumbers_queue(context_data['name'],
+                                                       context_data['range_start'],
+                                                       context_data['range_end'],
+                                                       entity_name=context_data['entity_name'])
 
 
 @step(u'Then I see the context "([^"]*)" exists$')
