@@ -96,4 +96,5 @@ URLS = {
     'admin_user': '/xivo/configuration/index.php/manage/user',
     'schedule': '/service/ipbx/index.php/call_management/schedule',
     'forward_extension': '/service/ipbx/index.php/pbx_services/extenfeatures/#forward',
+    'entity': '/xivo/configuration/index.php/manage/entity',
 }

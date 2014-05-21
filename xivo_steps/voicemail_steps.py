@@ -21,7 +21,7 @@ from lettuce import step, world
 from xivo_acceptance.helpers import voicemail_helper, user_helper
 from xivo_acceptance.action.restapi import voicemail_action_restapi
 from xivo_acceptance.action.restapi import voicemail_link_action_restapi
-from xivo_lettuce import func
+from xivo_lettuce import func, common
 
 
 @step(u'Given there is no voicemail with number "([^"]*)" and context "([^"]*)"')
@@ -160,6 +160,20 @@ def then_voicemail_with_number_group1_no_longer_exists(step, number):
 def then_i_get_a_response_with_a_voicemail_id(step):
     assert_that(world.response.data,
                 has_entry('voicemail_id', instance_of(int)))
+
+
+@step(u'Then I see the voicemail "([^"]*)" exists$')
+def then_i_see_the_element_exists(step, name):
+    common.open_url('voicemail')
+    line = common.find_line(name)
+    assert line is not None, 'voicemail: %s does not exist' % name
+
+
+@step(u'Then I see the voicemail "([^"]*)" not exists$')
+def then_i_see_the_element_not_exists(step, name):
+    common.open_url('voicemail')
+    line = common.find_line(name)
+    assert line is None, 'voicemail: %s exist' % name
 
 
 def _extract_voicemail_info_to_restapi(row):

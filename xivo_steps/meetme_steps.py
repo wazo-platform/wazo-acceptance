@@ -20,6 +20,7 @@ from lettuce import step
 
 from xivo_acceptance.action.webi import meetme as meetme_action_webi
 from xivo_acceptance.helpers import meetme_helper, cti_helper
+from xivo_lettuce import common
 
 
 @step(u'Given there is no conference with number "([^"]*)"')
@@ -55,3 +56,17 @@ def then_the_following_conference_rooms_appear_in_the_list(step):
     res = cti_helper.get_conference_room_infos()
     for src_dict, expected_dict in zip(res['return_value']['content'], step.hashes):
         assert_that(src_dict, has_entries(expected_dict))
+
+
+@step(u'Then I see the conference room "([^"]*)" exists$')
+def then_i_see_the_element_exists(step, name):
+    common.open_url('meetme')
+    line = common.find_line(name)
+    assert line is not None, 'conference room: %s does not exist' % name
+
+
+@step(u'Then I see the conference room "([^"]*)" not exists$')
+def then_i_see_the_element_not_exists(step, name):
+    common.open_url('meetme')
+    line = common.find_line(name)
+    assert line is None, 'conference room: %s exist' % name

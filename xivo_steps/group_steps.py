@@ -114,6 +114,20 @@ def then_I_see_a_group_1_with_no_users(step, group_name):
     common.element_in_list_matches_field('group', group_name, 'nbqmember', 0)
 
 
+@step(u'Then I see the group "([^"]*)" exists$')
+def then_i_see_the_element_exists(step, name):
+    common.open_url('group')
+    line = common.find_line(name)
+    assert line is not None, 'group: %s does not exist' % name
+
+
+@step(u'Then I see the group "([^"]*)" not exists$')
+def then_i_see_the_element_not_exists(step, name):
+    common.open_url('group')
+    line = common.find_line(name)
+    assert line is None, 'group: %s exist' % name
+
+
 def _type_group_name_number_context(name, number, context='default'):
     group_action_webi.type_group_name(name)
     group_action_webi.type_group_number(number)

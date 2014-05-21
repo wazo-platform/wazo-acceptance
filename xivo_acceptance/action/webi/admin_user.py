@@ -22,23 +22,39 @@ from xivo_lettuce import common, form
 MODULE_MAP = {
     'Configuration': 'xivo-configuration',
     'IPBX': 'service-ipbx',
+    'Call Center': 'service-callcenter',
 }
 
 CATEGORY_MAP = {
+    'Settings': 'settings',
     'Management': 'manage',
+    'Call Management': 'call_management',
     'General settings': 'general_settings',
+    'IPBX settings': 'pbx_settings',
+    'IPBX configuration': 'system_management',
 }
 
 SECTION_MAP = {
     'SIP Protocol': 'sip',
     'Directories': 'directories',
+    'Users': 'users',
+    'Contexts': 'context',
+    'Entities': 'entity',
+    'Lines': 'lines',
+    'Groups': 'groups',
+    'Voicemails': 'voicemail',
+    'Meetme': 'meetme',
+    'Incall': 'incall',
+    'Agents': 'agents',
+    'Queues': 'queues',
 }
 
 
-def create_admin_user(username, password):
+def create_admin_user(username, password, entity='xivo_entity'):
     common.open_url('admin_user', 'add')
     form.input.set_text_field_with_label("login", username)
     form.input.set_text_field_with_label("password", password)
+    form.select.set_select_field_with_label("Entity", entity)
     form.submit.submit_form()
 
 

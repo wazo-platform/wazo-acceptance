@@ -36,7 +36,12 @@ def given_there_is_no_element(step, search):
     common.remove_element_if_exist('admin_user', search)
 
 
-@step(u'When I create an admin user with login "([^"]*)" and password "([^"]*)"')
+@step(u'When I create an admin user with login "([^"]*)" and password "([^"]*)" and entity_name "([^"]*)"')
+def when_i_create_an_admin_user_with_login_and_passwordand_entity_name(step, login, password, entity_name):
+    admin_user_action_webi.create_admin_user(login, password, entity_name)
+
+
+@step(u'When I create an admin user with login "([^"]*)" and password "([^"]*)"$')
 def when_i_create_an_admin_user_with_login_and_password(step, login, password):
     admin_user_action_webi.create_admin_user(login, password)
 
