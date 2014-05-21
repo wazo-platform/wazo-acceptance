@@ -1,6 +1,6 @@
 Feature: Entity Filter
 
-    Scenario: Context / User / Line / Group / Voicemail / Conference Room
+    Scenario: Context / User / Line / Group / Voicemail / Conference Room / Incall / Queue
         Given there are entities with infos:
           | name           | display_name  |
           | entity_filter  | entity_filter |
@@ -8,20 +8,23 @@ Feature: Entity Filter
         Given there is no admin_user "admin1"
         When I create an admin user with login "admin1" and password "admin1" and entity_name "entity_filter"
         When I assign the following rights to the admin user "admin1":
-          | module | category           | section  |   active |
-          | IPBX   | IPBX configuration | Contexts   | yes    |
-          | IPBX   | IPBX settings      | Users      | yes    |
-          | IPBX   | IPBX settings      | Lines      | yes    |
-          | IPBX   | IPBX settings      | Groups     | yes    |
-          | IPBX   | IPBX settings      | Voicemails | yes    |
-          | IPBX   | IPBX settings      | Meetme     | yes    |
-          | IPBX   | Call Management    | Incall     | yes    |
+          | module      | category           | section  |   active |
+          | IPBX        | IPBX configuration | Contexts   | yes    |
+          | IPBX        | IPBX settings      | Users      | yes    |
+          | IPBX        | IPBX settings      | Lines      | yes    |
+          | IPBX        | IPBX settings      | Groups     | yes    |
+          | IPBX        | IPBX settings      | Voicemails | yes    |
+          | IPBX        | IPBX settings      | Meetme     | yes    |
+          | IPBX        | Call Management    | Incall     | yes    |
+          | Call Center | Settings           | Queues     | yes    |
+
         
         Given there are contexts with infos:
           | type   | name    | range_start | range_end | entity_name   | didlength |
           | user   | foo     | 1000        | 1101      | entity_filter |           |
           | user   | bar     | 1000        | 1101      | default       |           |
           | group  | foo     | 2000        | 2999      | entity_filter |           |
+          | queue  | foo     | 3000        | 3999      | entity_filter |           |
           | meetme | foo     | 4000        | 4999      | entity_filter |           |
           | incall | alberta | 1000        | 4999      | entity_filter | 4         |
         
@@ -50,6 +53,11 @@ Feature: Entity Filter
         Given there is no incall "4321" in context "from-extern"
         When I create an incall with DID "4321" in context "Incalls (from-extern)"
         
+        Given there are queues with infos:
+          | name           | display name   | number | context |
+          | qentity_filter | qentity_filter | 3000   | foo     |
+          | q01            | q01            | 3001   | default |
+        
         When I logout from the web interface
         When I login as admin1 with password admin1 in en
         
@@ -75,3 +83,7 @@ Feature: Entity Filter
 
         Then I see the incall "4234" exists
         Then I see the incall "4321" not exists
+       
+        Then I see the queue "qentity_filter" exists
+        Then I see the queue "q01" not exists
+        
