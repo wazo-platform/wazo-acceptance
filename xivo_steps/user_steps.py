@@ -72,7 +72,9 @@ def _register_and_track_phone(scenario, user_data):
     if not phone_available:
         return
 
-    line_configs = world.ws.lines.search_by_number(user_data['number'])
+    number = user_data['number']
+    context = user_data.get('context', 'default')
+    line_configs = world.ws.lines.search_by_number_context(number, context)
     if not line_configs:
         return
 
