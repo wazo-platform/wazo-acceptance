@@ -6,7 +6,7 @@ Requirements
 
 ```
 pip install -r requirements.txt
-apt-get install libsasl2-dev xvfb xserver-xephyr linphone-nogtk python-dev postgresql-server-dev-9.1 libldap2-dev
+apt-get install libsasl2-dev xvfb xserver-xephyr linphone-nogtk python-dev postgresql-server-dev-9.1 libldap2-dev lsof
 ```
 
 .. important::
