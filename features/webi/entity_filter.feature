@@ -1,6 +1,6 @@
 Feature: Entity Filter
 
-    Scenario: Context / User / Line / Group / Voicemail / Conference Room / Incall / Queue
+    Scenario: Context / User / Line / Group / Voicemail / Conference Room / Incall / Queue / Agent
         Given there are entities with infos:
           | name           | display_name  |
           | entity_filter  | entity_filter |
@@ -17,7 +17,7 @@ Feature: Entity Filter
           | IPBX        | IPBX settings      | Meetme     | yes    |
           | IPBX        | Call Management    | Incall     | yes    |
           | Call Center | Settings           | Queues     | yes    |
-
+          | Call Center | Settings           | Agents     | yes    |
         
         Given there are contexts with infos:
           | type   | name    | range_start | range_end | entity_name   | didlength |
@@ -53,6 +53,9 @@ Feature: Entity Filter
         Given there is no incall "4321" in context "from-extern"
         When I create an incall with DID "4321" in context "Incalls (from-extern)"
         
+        Given there is a agent "entity_filter" "" with extension "1111@foo"
+        Given there is a agent "agent02" "" with extension "2222@default"
+        
         Given there are queues with infos:
           | name           | display name   | number | context |
           | qentity_filter | qentity_filter | 3000   | foo     |
@@ -83,6 +86,9 @@ Feature: Entity Filter
 
         Then I see the incall "4234" exists
         Then I see the incall "4321" not exists
+        
+        Then agent "entity_filter" is displayed in the list of "default" agent group
+        Then agent "agent02" is not displayed in the list of "default" agent group
        
         Then I see the queue "qentity_filter" exists
         Then I see the queue "q01" not exists
