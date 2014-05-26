@@ -23,7 +23,7 @@ from lettuce import world
 from xivo_acceptance.helpers import context_helper, trunksip_helper
 from xivo_dao.helpers import db_manager
 from xivo_lettuce.terrain import initialize, deinitialize
-from xivo_lettuce import assets, common
+from xivo_lettuce import common
 
 
 _WEBSERVICES_SQL_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'webservices.sql'))
@@ -39,7 +39,9 @@ def main():
         print 'Configuring PostgreSQL on XiVO'
         _create_pgpass_on_remote_host()
         _allow_remote_access_to_pgsql()
-        _allow_remote_access_to_bus()
+
+        print 'Configuring RabbitMQ on XiVO'
+        _allow_remote_access_to_rabbitmq()
 
         print 'Configuring Provd REST API on XiVO'
         _allow_provd_listen_on_all_interfaces()
@@ -95,18 +97,18 @@ def _allow_remote_access_to_pgsql():
     db_manager.reinit()
 
 
-def _allow_remote_access_to_bus():
-    assert False, 'This step must be implemented or replaced by <allow_remote_access_to_rabbitmq>'
-
-
 def _allow_remote_access_to_rabbitmq():
-    path = assets.full_path('rabbitmq.config')
-    print path
-    #world.ssh_client_xivo.send_files(path)
+    line_to_remove = "tcp_listeners"
+    _remove_line_from_remote_file(line_to_remove, '/etc/rabbitmq/rabbitmq.config')
 
 
 def _add_line_to_remote_file(line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
+    world.ssh_client_xivo.check_call(command)
+
+
+def _remove_line_from_remote_file(line_text, file_name):
+    command = ['sed', '-i', '-e', '/%s/d' % line_text, file_name]
     world.ssh_client_xivo.check_call(command)
 
 
