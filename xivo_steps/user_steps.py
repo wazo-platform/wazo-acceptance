@@ -22,7 +22,7 @@ from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.webi import line as line_action_webi
-from xivo_acceptance.helpers import user_helper, agent_helper, group_helper, sip_phone
+from xivo_acceptance.helpers import user_helper, agent_helper, group_helper, sip_config, sip_phone
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common, form
 
@@ -81,8 +81,8 @@ def _register_and_track_phone(scenario, user_data):
     name = ('%s %s' % (user_data.get('firstname', ''),
                        user_data.get('lastname', ''))).strip()
 
-    sip_config = sip_phone.create_config(world.config, scenario.phone_register, line_configs[0])
-    phone = sip_phone.register_line(sip_config)
+    phone_config = sip_config.create_config(world.config, scenario.phone_register, line_configs[0])
+    phone = sip_phone.register_line(phone_config)
     if phone:
         scenario.phone_register.add_registered_phone(phone, name)
 
