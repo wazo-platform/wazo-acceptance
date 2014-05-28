@@ -123,7 +123,8 @@ class XivoAcceptanceConfig(object):
         self.kvm_shutdown_timeout = int(self._config.get('kvm_infos', 'shutdown_timeout'))
         self.kvm_boot_timeout = int(self._config.get('kvm_infos', 'boot_timeout'))
 
-        self.linphone_port_range = self._config.get('linphone', 'port_range')
+        self.linphone_sip_port_range = self._config.get('linphone', 'sip_port_range')
+        self.linphone_rtp_port_range = self._config.get('linphone', 'rtp_port_range')
 
         self.linphone_debug = self._config.getboolean('debug', 'linphone')
         self.browser_debug = self._config.getboolean('debug', 'selenium')

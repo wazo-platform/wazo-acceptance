@@ -30,3 +30,6 @@ class PhoneRegister(object):
 
     def get_user_phone(self, name):
         return self._sip_phones.get(name)
+
+    def phones(self):
+        return self._sip_phones

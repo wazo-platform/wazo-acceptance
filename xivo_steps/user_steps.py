@@ -81,7 +81,8 @@ def _register_and_track_phone(scenario, user_data):
     name = ('%s %s' % (user_data.get('firstname', ''),
                        user_data.get('lastname', ''))).strip()
 
-    phone = sip_phone.register_line(line_configs[0], name)
+    sip_config = sip_phone.create_config(world.config, scenario.phone_register, line_configs[0])
+    phone = sip_phone.register_line(sip_config)
     if phone:
         scenario.phone_register.add_registered_phone(phone, name)
 
