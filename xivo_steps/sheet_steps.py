@@ -16,10 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from hamcrest import assert_that, equal_to, has_items
-from lettuce import step
-from xivo_lettuce import common
-from xivo_lettuce import form
+from lettuce import step, world
+from selenium.webdriver.support.select import Select
 from xivo_acceptance.helpers import cti_helper
+from xivo_lettuce import common, form
 
 
 @step(u'Given I have a sheet model named "([^"]*)" with the variables:')
@@ -67,3 +67,8 @@ def then_i_see_a_custom_sheet_with_the_following_values(step):
     expected = step.hashes
 
     assert_that(res, has_items(*expected))
+
+
+@step(u'When I fill a custom sheet with the following values:')
+def when_i_fill_a_custom_sheet_with_the_following_values(step):
+    cti_helper.set_infos_in_custom_sheet(step.hashes)

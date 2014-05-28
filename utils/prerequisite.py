@@ -40,6 +40,9 @@ def main():
         _create_pgpass_on_remote_host()
         _allow_remote_access_to_pgsql()
 
+        print 'Configuring RabbitMQ on XiVO'
+        _allow_remote_access_to_rabbitmq()
+
         print 'Configuring Provd REST API on XiVO'
         _allow_provd_listen_on_all_interfaces()
 
@@ -94,8 +97,18 @@ def _allow_remote_access_to_pgsql():
     db_manager.reinit()
 
 
+def _allow_remote_access_to_rabbitmq():
+    line_to_remove = "tcp_listeners"
+    _remove_line_from_remote_file(line_to_remove, '/etc/rabbitmq/rabbitmq.config')
+
+
 def _add_line_to_remote_file(line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
+    world.ssh_client_xivo.check_call(command)
+
+
+def _remove_line_from_remote_file(line_text, file_name):
+    command = ['sed', '-i', '-e', '/%s/d' % line_text, file_name]
     world.ssh_client_xivo.check_call(command)
 
 

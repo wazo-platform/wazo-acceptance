@@ -465,3 +465,52 @@ Feature: Sheet
         | testlabel         | 1624             |
         | testlineedit      | to_default       |
         | testplaintextedit | Donald MacRonald |
+
+    Scenario: Bus notification after custom sheets sent
+        Given there are users with infos:
+         | firstname | lastname  | number | context | cti_profile | cti_login | cti_passwd |
+         | Donald    | MacRonald |   1624 | default | Agent       | donald    | macronald  |
+        Given the asset file "test-sheet-to-bus.ui" is copied on the server into "/tmp"
+        Given I have a sheet model with custom UI:
+        | name          | path to ui                   |
+        | testsheetbus  | file:///tmp/test-sheet-to-bus.ui |
+        Given I assign the sheet "testsheetbus" to the "Dial" event
+        Given I start the XiVO Client
+        Given I log in the XiVO client as "donald", pass "macronald"
+        Given there are no calls running
+        Given I wait 5 seconds for the dialplan to be reloaded
+        Given I register extension "1624"
+        Given I wait call then I answer then I hang up after "5s"
+        Given I listen on the bus for messages:
+        | exchange | routing_key      |
+        | xivo-cti | call_form_result |
+        When there is 1 calls to extension "1624@default" on trunk "to_default" and wait
+        When I wait 10 seconds for the call processing
+        When I fill a custom sheet with the following values:
+        | widget_name       | value                         |
+        | checkBox          | false                         |
+        | combobox          | combobox_value2               |
+        | dateTimeEdit      | 2013-12-13 13:13:13           |
+        | text              | Thirteen                      |
+        | doubleSpinBox     | 13.13                         |
+        | spinBox           | 13                            |
+        | radiobutton_left  | false                         |
+        | dateEdit          | 2013-12-13                    |
+        | radiobutton_right | true                          |
+        | timeEdit          | 13:13:13                      |
+        | plainTextEdit     | Text in a text in a text area |
+        | calendar          | 2013-12-13                    |
+        Then I see a message on bus with the following variables:
+        | widget_name       | value                           |
+        | checkBox          | False                           |
+        | combobox          | combobox_value2                 |
+        | dateTimeEdit      | 2013-12-13T13:13:13             |
+        | text              | Thirteen                        |
+        | doubleSpinBox     | 13.13                           |
+        | spinBox           | 13                              |
+        | radiobutton_left  | False                           |
+        | dateEdit          | 2013-12-13T00:00:00             |
+        | radiobutton_right | True                            |
+        | timeEdit          | 2000-01-01T13:13:13             |
+        | plainTextEdit     | Text in a text in a text area   |
+        | calendar          | 2013-12-13                      |
