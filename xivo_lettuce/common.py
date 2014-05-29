@@ -162,7 +162,7 @@ def build_url(uri, query={}):
     return url
 
 
-def get_line(line_substring):
+def get_line(search, column=None):
     """Return the tr webelement of a line in a list.
 
     Used for executing operations, like clicking on a button or extracting
@@ -170,8 +170,9 @@ def get_line(line_substring):
 
     Arguments:
 
-        - line_substring -- Search for a line that contains the text
-          `line_substring`
+        - search -- Search for a line that contains the text `search`
+        - column -- Optional: The label of the column containing the text `search`.
+          The matching becomes exact.
 
     Given the following html::
 
@@ -196,8 +197,19 @@ def get_line(line_substring):
         >>>
         >>> #do stuff with `line`
     """
-    return world.browser.find_element_by_xpath(
-        "//table[@id='table-main-listing']//tr[contains(.,'%s')]" % line_substring)
+    if column:
+        xpath = ('//table[@id="table-main-listing"]' +
+                 '//tr[@class="sb-top"]' +
+                 '/th[text()="{column}"]/preceding-sibling::th').format(column=column)
+        column_position = len(world.browser.find_elements_by_xpath(xpath)) + 1
+        td_filter = 'td[position()={position} and @title="{text}"]'.format(position=column_position, text=search)
+        xpath = ('//table[@id="table-main-listing"]' +
+                 '//tr[contains(@class,"sb-content") and {td_filter}]').format(td_filter=td_filter)
+        tr_element_containing_the_cell = world.browser.find_element_by_xpath(xpath)
+        return tr_element_containing_the_cell
+    else:
+        xpath = "//table[@id='table-main-listing']//tr[contains(.,'{text}')]".format(text=search)
+        return world.browser.find_element_by_xpath(xpath)
 
 
 def get_lines(line_substring):
@@ -205,9 +217,9 @@ def get_lines(line_substring):
         "//table[@id='table-main-listing']//tr[contains(.,'%s')]" % line_substring)
 
 
-def find_line(line_substring):
+def find_line(line_substring, column=None):
     try:
-        return get_line(line_substring)
+        return get_line(line_substring, column)
     except NoSuchElementException:
         return None
 
@@ -257,28 +269,28 @@ def find_line_and_fetch_col(line_substring, class_name):
         ".//*[@id='table-main-listing']/tbody/tr[contains(.,'%s')]/td[@class='%s']" % (line_substring, class_name))
 
 
-def remove_element_if_exist(module, search):
+def remove_element_if_exist(module, search, column=None):
     open_url(module, 'list')
     try:
-        remove_line(search)
+        remove_line(search, column)
     except (NoSuchElementException, ElementNotVisibleException):
         pass
 
 
-def remove_all_elements(module, search):
+def remove_all_elements(module, search, column=None):
     open_url(module, 'list')
-    remove_all_elements_from_current_page(search)
+    remove_all_elements_from_current_page(search, column)
 
 
-def remove_all_elements_from_current_page(search):
+def remove_all_elements_from_current_page(search, column=None):
     try:
         while True:
-            remove_line(search)
+            remove_line(search, column)
     except (NoSuchElementException, ElementNotVisibleException):
         pass
 
 
-def remove_line(line_substring):
+def remove_line(line_substring, column=None):
     """Remove a line in a list by clicking on the delete button.
 
     Arguments:
@@ -286,18 +298,18 @@ def remove_line(line_substring):
         - line_substring -- Search for the line that contains the text
           `line_substring`
     """
-    click_on_line_with_alert('Delete', line_substring)
+    click_on_line_with_alert('Delete', line_substring, column)
 
 
-def click_on_line_with_alert(act, line_substring):
-    table_line = get_line(line_substring)
+def click_on_line_with_alert(act, line_substring, column=None):
+    table_line = get_line(line_substring, column)
     delete_button = table_line.find_element_by_xpath(".//a[@title='%s']" % act)
     delete_button.click()
     alert = world.browser.switch_to_alert()
     alert.accept()
 
 
-def edit_line(line_substring):
+def edit_line(line_substring, column=None):
     """Edit an element in a list by clicking on the edit button
 
     Arguments:
@@ -305,7 +317,7 @@ def edit_line(line_substring):
         - line_substring -- Search for the line that contains the text
           `line_substring`
     """
-    table_line = get_line(line_substring)
+    table_line = get_line(line_substring, column)
     edit_button = table_line.find_element_by_xpath(".//a[@title='Edit']")
     edit_button.click()
 

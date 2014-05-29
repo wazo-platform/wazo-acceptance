@@ -177,7 +177,7 @@ def set_call_form_model_on_event(call_form_name, event):
 
 
 def add_call_form_model(call_form_name, variables):
-    common.remove_element_if_exist('sheet', call_form_name)
+    common.remove_element_if_exist('sheet', call_form_name, column='Model')
     common.open_url('sheet', 'add')
     form.input.set_text_field_with_label('Name :', call_form_name)
     common.go_to_tab('Sheet')
