@@ -17,9 +17,17 @@ def packages_in(package):
     return [p for p, _, _ in os.walk(package) if is_package(p)]
 
 
+def files_in(directory):
+    for dir, _, files in os.walk(directory):
+        for file in files:
+            yield '{dir}/{file}'.format(dir=dir, file=file)
+
 packages = (packages_in('xivo_acceptance') +
             packages_in('xivo_lettuce') +
             packages_in('xivo_steps'))
+
+confd = list(files_in('config/conf.d'))
+assets = list(files_in('assets'))
 
 setup(
     name='xivo-acceptance',
@@ -31,19 +39,6 @@ setup(
     license='GPLv3',
     packages=packages,
     data_files=[('etc/xivo-acceptance', ['config/default.ini']),
-                ('etc/xivo-acceptance/conf.d', ['config/conf.d/default',
-                                                'config/conf.d/daily-xivo-pxe',
-                                                'config/conf.d/daily-xivo-script',
-                                                'config/conf.d/daily-xivo-upgraded',
-                                                'config/conf.d/daily-xivo-vanilla']),
-                ('share/xivo-acceptance/assets', ['assets/ca-certificates.crt',
-                                                  'assets/cel-extract.sql',
-                                                  'assets/core_dump',
-                                                  'assets/core_dump.c',
-                                                  'assets/phonebook-dbvars.csv',
-                                                  'assets/phonebook-unicode.csv',
-                                                  'assets/phonebook-x254.csv',
-                                                  'assets/phonebook-x268.csv',
-                                                  'assets/test-variable.ui',
-                                                  'assets/xivo-backup-manager'])],
+                ('etc/xivo-acceptance/conf.d', confd),
+                ('share/xivo-acceptance/assets', assets)],
 )
