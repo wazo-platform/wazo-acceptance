@@ -64,11 +64,17 @@ class SipPhone(object):
         if self._call_result:
             raise self._call_result
 
+    def is_talking(self):
+        return self._session.hook_status() == HookStatus.ANSWERED
+
     def is_ringing(self):
         return self._session.hook_status() == HookStatus.RINGING
 
     def is_hungup(self):
         return self._session.hook_status() == HookStatus.OFFHOOK
+
+    def remote_caller_id(self):
+        return self._session.remote_caller_id()
 
 
 def register_line(sip_config):

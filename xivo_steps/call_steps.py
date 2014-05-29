@@ -19,6 +19,7 @@ import time
 
 from hamcrest import assert_that
 from hamcrest import has_items
+from hamcrest import equal_to
 from lettuce import step
 
 from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper, cti_helper
@@ -104,6 +105,18 @@ def then_user_is_ringing(step, user):
 def then_group1_is_hungup(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
     assert_that(phone.is_hungup())
+
+
+@step(u'Then "([^"]*)" is talking')
+def then_group1_is_talking(step, user):
+    phone = step.scenario.phone_register.get_user_phone(user)
+    assert_that(phone.is_talking())
+
+
+@step(u'Then "([^"]*)" sees callerid "([^"]*)"$')
+def then_i_see_called_from_callerid(step, user, callerid):
+    phone = step.scenario.phone_register.get_user_phone(user)
+    assert_that(phone.remote_caller_id(), equal_to(callerid))
 
 
 @step(u'When a call from "([^"]*)" is received on did "([^"]*)" for "([^"]*)"')
