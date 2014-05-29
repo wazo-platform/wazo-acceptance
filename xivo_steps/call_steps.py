@@ -113,6 +113,12 @@ def then_group1_is_talking(step, user):
     assert_that(phone.is_talking())
 
 
+@step(u'Then "([^"]*)" hears a ringback tone')
+def then_user_hears_a_ringback_tone(step, user):
+    phone = step.scenario.phone_register.get_user_phone(user)
+    assert_that(phone.is_ringback_tone())
+
+
 @step(u'Then "([^"]*)" sees callerid "([^"]*)"$')
 def then_i_see_called_from_callerid(step, user, callerid):
     phone = step.scenario.phone_register.get_user_phone(user)
