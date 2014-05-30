@@ -1,5 +1,11 @@
 Feature: Entity Filter
 
+	Scenario: test
+        Given there are entities with infos:
+          | name           | display_name  |
+          | entity_filter  | entity_filter |
+
+    Scenario: Context / User / Line / Group / Voicemail / Conference Room / Incall / Queue / Agent
         Given there are entities with infos:
           | name           | display_name  |
           | entity_filter  | entity_filter |
@@ -16,6 +22,7 @@ Feature: Entity Filter
           | IPBX        | IPBX settings      | Meetme     | yes    |
           | IPBX        | Call Management    | Incall     | yes    |
           | IPBX        | Call Management    | Callfilter | yes    |
+          | IPBX        | Call Management    | Pickup     | yes    |
           | Call Center | Settings           | Queues     | yes    |
           | Call Center | Settings           | Agents     | yes    |
         
@@ -69,6 +76,13 @@ Feature: Entity Filter
          | name          | boss   | secretary   | entity        |
          | entity_filter | boss 1 | secretary 1 | entity_filter |
          | no_filter     | boss 2 | secretary 2 |               |
+          
+        Given there is no pickup "entity_filter"
+        Given there is no pickup "no_filter"
+        Given there are pickups:
+          | name          | entity        |
+          | entity_filter | entity_filter |
+          | no_filter     |               |
         
         When I logout from the web interface
         When I login as admin1 with password admin1 in en
@@ -104,4 +118,7 @@ Feature: Entity Filter
         
         Then callfilter "entity_filter" is displayed in the list
         Then callfilter "no_filter" is not displayed in the list
+        
+        Then pickup "entity_filter" is displayed in the list
+        Then pickup "no_filter" is not displayed in the list
         
