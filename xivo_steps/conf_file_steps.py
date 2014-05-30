@@ -20,21 +20,6 @@ from itertools import ifilter
 from lettuce.decorators import step
 
 from xivo_acceptance.helpers import user_helper, asterisk_helper
-from xivo_lettuce import sysutils
-
-
-@step(u'Then cti configuration file correctly generated')
-def then_cti_configuration_file_correctly_generated(step):
-    CTI_INI_FILE = '/etc/xivo/web-interface/cti.ini'
-    CTI_INI_CONTENT_RESULT = """\
-[general]
-datastorage = "postgresql://asterisk:proformatique@localhost/asterisk?charset=utf8"
-
-[queuelogger]
-datastorage = "postgresql://asterisk:proformatique@localhost/asterisk?charset=utf8"
-"""
-    cti_ini_content = sysutils.get_content_file(CTI_INI_FILE)
-    assert cti_ini_content == CTI_INI_CONTENT_RESULT
 
 
 @step(u'Then the sccp.conf file should contain "([^"]*)" function keys for "([^"]*)" "([^"]*)" sorted by key number')
