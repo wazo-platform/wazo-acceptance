@@ -22,6 +22,11 @@ from xivo_lettuce.form import submit
 from xivo_lettuce.form.list_pane import ListPane
 
 
+def type_callfilter_entity(name):
+    input_name = Select(world.browser.find_element_by_id('it-callfilter-entity_id', 'Callfilter form not loaded'))
+    input_name.select_by_visible_text(name)
+
+
 def type_callfilter_name(name):
     input_name = world.browser.find_element_by_id('it-callfilter-name', 'Callfilter form not loaded')
     input_name.send_keys(name)
@@ -37,9 +42,11 @@ def add_secretary(secretary):
     pane.add_contains(secretary)
 
 
-def add_boss_secretary_filter(callfilter_name, boss, secretary):
+def add_boss_secretary_filter(**data):
     common.open_url('callfilter', 'add')
-    type_callfilter_name(callfilter_name)
-    type_callfilter_boss(boss)
-    add_secretary(secretary)
+    if 'entity' in data and data['entity']:
+        type_callfilter_entity(data['entity'])
+    type_callfilter_name(data['name'])
+    type_callfilter_boss(data['boss'])
+    add_secretary(data['secretary'])
     submit.submit_form()
