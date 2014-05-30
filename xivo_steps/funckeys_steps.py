@@ -20,6 +20,7 @@ from lettuce import step, world
 
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.restapi import func_key_action_restapi
+from xivo_acceptance.helpers import extension_helper
 from xivo_acceptance.helpers import func_key_helper
 from xivo_acceptance.helpers import group_helper
 from xivo_acceptance.helpers import meetme_helper
@@ -132,6 +133,15 @@ def then_the_list_contains_the_following_func_keys_in_the_right_order(step):
     assert_has_dicts_in_order(func_keys, expected_func_keys)
 
 
+@step(u'Then the list only contains "([^"]*)" func keys destination "([^"]*)"')
+def then_the_list_only_contains_func_keys_destination_service(step, expected_count, destination_type):
+    count = 0
+    for func_key in world.response.data['items']:
+        if func_key['destination'] == destination_type:
+            count += 1
+    assert_that(count, equal_to(expected_count))
+
+
 def _map_func_keys_with_destination_name(func_keys):
     converted = []
     for func_key in func_keys:
@@ -154,6 +164,8 @@ def _find_destination_name(func_key):
         return _find_queue_name_for_func_key(func_key)
     elif destination == 'conference':
         return _find_meetme_name_for_func_key(func_key)
+    elif destination == 'service':
+        return _find_extension_name_for_func_key(func_key)
 
 
 def _find_user_name_for_func_key(func_key):
@@ -174,6 +186,11 @@ def _find_queue_name_for_func_key(func_key):
 def _find_meetme_name_for_func_key(func_key):
     meetme = meetme_helper.find_meetme_with_id(func_key['destination_id'])
     return meetme.name
+
+
+def _find_extension_name_for_func_key(func_key):
+    extension = extension_helper.get_extension(func_key['destination_id'])
+    return extension.typeval
 
 
 @step(u'Then I get a func key of type "([^"]*)"')

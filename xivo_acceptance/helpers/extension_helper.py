@@ -24,6 +24,10 @@ from xivo_dao.data_handler.exception import ElementDeletionError, \
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 
 
+def get_extension(extension_id):
+    return extension_services.get(extension_id)
+
+
 def find_extension_by_exten(exten):
     return extension_services.find_by_exten(exten)
 
