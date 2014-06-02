@@ -22,7 +22,8 @@ from hamcrest import has_items
 from hamcrest import equal_to
 from lettuce import step
 
-from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper, cti_helper
+from xivo_acceptance.helpers import line_helper, callgen_helper, agent_helper, cti_helper, \
+    asterisk_helper
 from xivo_lettuce import common
 from xivo_lettuce import form, func
 from xivo_lettuce.form.checkbox import Checkbox
@@ -59,6 +60,13 @@ def then_i_should_see_the_following_caller_id(step):
          'Value': caller_id_info['Number']},
     ]
     assert_that(cti_helper.get_sheet_infos(), has_items(*expected))
+
+
+@step(u'When chan_test calls "([^"]*)"$')
+def when_chan_Test_calls(step, extension):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    cmd = 'test new %s %s' % (number, context)
+    asterisk_helper.send_to_asterisk_cli(cmd)
 
 
 @step(u'When "([^"]*)" calls "([^"]*)"$')
