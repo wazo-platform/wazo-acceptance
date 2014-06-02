@@ -169,14 +169,22 @@ def when_i_remove_the_agent_with_extension_group1_from_the_queue_group2(step, ex
     form.submit.submit_form()
 
 
-@step(u'When I delete the queue with number "([^"]*)"')
-def when_i_delete_the_queue_with_number_group1(step, queue_number):
-    common.remove_element_if_exist('queue', queue_number)
-    common.wait_until(queue_is_no_longer_in_list, queue_number, tries=5)
+@step(u'When I delete the queue with extension "([^"]*)@([^"]*)"')
+def when_i_delete_the_queue_with_number_group1(step, exten, context):
+    queues = queues_with_exten(exten, context)
+    assert queues, "No queue with extension {exten}@{context}".format(exten=exten, context=context)
+    queue_id = queues[0].id
+    common.open_url('queue', 'delete', {'id': queue_id})
+    common.wait_until(queue_is_no_longer_in_list, exten, context, tries=5)
 
 
-def queue_is_no_longer_in_list(queue_number):
-    return common.find_line(queue_number) is None
+def queue_is_no_longer_in_list(exten, context):
+    queues = queues_with_exten(exten, context)
+    return len(queues) == 0
+
+
+def queues_with_exten(exten, context):
+    return [queue for queue in world.ws.queues.search(exten) if queue.number == exten and queue.context == context]
 
 
 @step(u'Then the agent "([^"]*)" is a member of the queue "([^"]*)" in asterisk')
