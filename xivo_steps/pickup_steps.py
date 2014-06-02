@@ -17,9 +17,22 @@
 
 from lettuce import step, world
 
+from xivo_acceptance.action.webi import pickup as pickup_action_webi
 from xivo_acceptance.helpers import line_helper, callgen_helper
+from xivo_lettuce import common
 
 _PICKUP_PREFIX = '*8'
+
+
+@step(u'Given there is no pickup "([^"]*)"$')
+def given_there_is_no_pickup(step, search):
+    common.remove_element_if_exist('pickup', search)
+
+
+@step(u'Given there are pickups:$')
+def given_there_are_pickup(step):
+    for data in step.hashes:
+        pickup_action_webi.add_pickup(**data)
 
 
 @step('I wait call then I do not answer')

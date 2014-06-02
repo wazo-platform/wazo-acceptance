@@ -61,6 +61,7 @@ URLS = {
     'general_iax': '/service/ipbx/index.php/general_settings/iax',
     'general_sip': '/service/ipbx/index.php/general_settings/sip',
     'incall': '/service/ipbx/index.php/call_management/incall',
+    'pickup': '/service/ipbx/index.php/call_management/pickup',
     'outcall': '/service/ipbx/index.php/call_management/outcall',
     'cel': '/service/ipbx/index.php/call_management/cel',
     'callfilter': '/service/ipbx/index.php/call_management/callfilter',

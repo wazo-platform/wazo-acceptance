@@ -15,7 +15,9 @@ Feature: Callfilter
          | firstname | lastname | number | context | bsfilter  |
          | Sylvain   | Boily    | 1405   | default | boss      |
          | Angelique | Dedelot  | 1410   | default | secretary |
-        Given there is a callfilter "bigboss" with boss "Sylvain Boily" and secretary "Angelique Dedelot"
+        Given there are callfilters:
+         | name    | boss          | secretary         |
+         | bigboss | Sylvain Boily | Angelique Dedelot |
         Given user "Sylvain" "Boily" has the following function keys:
          | Key | Type                       | Destination                 | Label | Supervision |
          | 1   | Customized                 | 1000                        | 1000  | Disabled    |

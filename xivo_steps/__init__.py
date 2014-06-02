@@ -36,7 +36,6 @@ from cti_client_configuration_steps import *
 from cti_server_steps import *
 from device_steps import *
 from dhcpd_steps import *
-from directed_pickup_steps import *
 from directory_steps import *
 from entity_steps import *
 from files_steps import *
@@ -56,6 +55,7 @@ from meetme_steps import *
 from outcall_steps import *
 from parking_steps import *
 from phonebook_steps import *
+from pickup_steps import *
 from profile_steps import *
 from provd_plugins_steps import *
 from provd_proxy_steps import *

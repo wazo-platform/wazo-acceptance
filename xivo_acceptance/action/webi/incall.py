@@ -35,7 +35,7 @@ def type_incall_did(incall_did):
 
 def type_incall_context(incall_context):
     input_context = Select(world.browser.find_element_by_id('it-incall-context'))
-    input_context.select_by_visible_text(incall_context)
+    input_context.select_by_value(incall_context)
 
 
 def type_incall_destination(destination_type, destination_name):
