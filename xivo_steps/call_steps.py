@@ -63,9 +63,22 @@ def then_i_should_see_the_following_caller_id(step):
 
 
 @step(u'When chan_test calls "([^"]*)"$')
-def when_chan_Test_calls(step, extension):
+def when_chan_test_calls(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     cmd = 'test new %s %s' % (number, context)
+    asterisk_helper.send_to_asterisk_cli(cmd)
+
+
+@step(u'When chan_test calls "([^"]*)" with id "([^"]*)"$')
+def when_chan_test_calls_with_id(step, extension, channelid):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    cmd = 'test newid %s %s %s' % (channelid, number, context)
+    asterisk_helper.send_to_asterisk_cli(cmd)
+
+
+@step(u'When chan_test hangs up "([^"]*)"$')
+def when_chan_test_hangs_up(step, channelid):
+    cmd = 'channel request hangup Test/%s' % channelid
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 
