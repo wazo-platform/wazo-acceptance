@@ -139,7 +139,7 @@ def then_the_list_only_contains_func_keys_destination_service(step, expected_cou
     for func_key in world.response.data['items']:
         if func_key['destination'] == destination_type:
             count += 1
-    assert_that(count, equal_to(expected_count))
+    assert_that(count, equal_to(int(expected_count)))
 
 
 def _map_func_keys_with_destination_name(func_keys):
