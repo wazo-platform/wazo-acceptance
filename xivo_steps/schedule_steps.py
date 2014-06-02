@@ -26,6 +26,12 @@ def given_i_have_a_schedule_group1_in_group2_with_the_following_schedules(step, 
     schedule_helper.add_schedule(name, timezone, step.hashes)
 
 
+@step(u'Given there are schedules:')
+def given_there_are_schedules(step):
+    for data in step.hashes:
+        schedule_helper.add_or_replace_schedule(data)
+
+
 @step(u'When I delete the "([^"]*)" "([^"]*)" schedule from "([^"]*)"')
 def when_i_delete_the_group1_group2_schedule(step, order, status, name):
     if order != 'Second':

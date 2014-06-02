@@ -45,6 +45,7 @@ SECTION_MAP = {
     'Voicemails': 'voicemail',
     'Meetme': 'meetme',
     'Incall': 'incall',
+    'Schedule': 'schedule',
     'Callfilter': 'callfilter',
     'Pickup': 'pickup',
     'Agents': 'agents',

@@ -4,6 +4,10 @@ Feature: Entity Filter
         Given there are entities with infos:
           | name           | display_name  |
           | entity_filter  | entity_filter |
+        Given there are schedules:
+          | name          | entity        |
+          | entity_filter | entity_filter |
+          | no_filter     |               |
 
     Scenario: Context / User / Line / Group / Voicemail / Conference Room / Incall / Queue / Agent
         Given there are entities with infos:
@@ -23,6 +27,7 @@ Feature: Entity Filter
           | IPBX        | Call Management    | Incall     | yes    |
           | IPBX        | Call Management    | Callfilter | yes    |
           | IPBX        | Call Management    | Pickup     | yes    |
+          | IPBX        | Call Management    | Schedule   | yes    |
           | Call Center | Settings           | Queues     | yes    |
           | Call Center | Settings           | Agents     | yes    |
         
@@ -76,10 +81,15 @@ Feature: Entity Filter
          | name          | boss   | secretary   | entity        |
          | entity_filter | boss 1 | secretary 1 | entity_filter |
          | no_filter     | boss 2 | secretary 2 |               |
-          
+        
         Given there is no pickup "entity_filter"
         Given there is no pickup "no_filter"
         Given there are pickups:
+          | name          | entity        |
+          | entity_filter | entity_filter |
+          | no_filter     |               |
+        
+        Given there are schedules:
           | name          | entity        |
           | entity_filter | entity_filter |
           | no_filter     |               |
@@ -121,4 +131,7 @@ Feature: Entity Filter
         
         Then pickup "entity_filter" is displayed in the list
         Then pickup "no_filter" is not displayed in the list
+        
+        Then schedule "entity_filter" is displayed in the list
+        Then schedule "no_filter" is not displayed in the list
         

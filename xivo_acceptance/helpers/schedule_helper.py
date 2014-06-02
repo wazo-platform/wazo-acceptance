@@ -19,11 +19,27 @@ from hamcrest import *
 from lettuce import world
 
 from xivo_ws import Schedule
+from xivo_acceptance.helpers import entity_helper
 
 
 def add_schedule(name, timezone, times):
     delete_schedules_with_name(name)
     schedule = _create_schedule(name, timezone, times)
+    world.ws.schedules.add(schedule)
+
+
+def add_or_replace_schedule(data):
+    delete_schedules_with_name(data['name'])
+    entity = entity_helper.get_entity_with_name(data['entity'])
+    if entity:
+        entity_id = entity.id
+    else:
+        entity_id = 1
+    schedule = Schedule(
+        entity_id=entity_id,
+        name=data['name'],
+        timezone=data.get('timezone', 'America/Montreal'),
+    )
     world.ws.schedules.add(schedule)
 
 
