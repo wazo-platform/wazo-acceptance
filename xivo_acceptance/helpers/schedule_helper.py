@@ -34,7 +34,7 @@ def add_or_replace_schedule(data):
     if entity:
         entity_id = entity.id
     else:
-        entity_id = 1
+        entity_id = entity_helper.oldest_entity_id()
     schedule = Schedule(
         entity_id=entity_id,
         name=data['name'],

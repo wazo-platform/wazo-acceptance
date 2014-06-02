@@ -36,3 +36,10 @@ def get_entity_with_name(name):
     if result:
         return result
     return None
+
+
+def oldest_entity_id():
+    """The closest we have to the "default" entity"""
+    query = 'SELECT id FROM "entity" ORDER BY "id"'
+    result = postgres.exec_sql_request(query).fetchone()
+    return result.id
