@@ -149,4 +149,23 @@ Feature: Stats generation
         When "User 008" answers
         When chan_test hangs up "5008-1"
         Then I should see 1 "COMPLETECALLER" event in queue "q08" in the queue log
+
+    Scenario: 11 Generation of event COMPLETEAGENT
+        Given there is no agents logged
+        Given there is no "COMPLETEAGENT" entry in queue "q09"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number | protocol |
+         | User      | 009      |   1009 | statscenter | 009          | sip      |
+        Given there are queues with infos:
+            | name | number | context     | agents_number |
+            | q09  | 5009   | statscenter | 009           |
+        When "User 009" calls "*31009"
+        Given I wait 2 seconds for the calls processing
+        When chan_test calls "5009@statscenter" with id "5009-1"
+        Given I wait 1 seconds for the calls processing
+        When "User 009" answers
+        Given I wait 1 seconds for the calls processing
+        When "User 009" hangs up
+        When chan_test hangs up "5009-1"
+        Then i should see 1 "COMPLETEAGENT" event in queue "q09" in the queue log
         
