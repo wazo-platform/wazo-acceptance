@@ -187,4 +187,19 @@ Feature: Stats generation
         When chan_test hangs up "5010-1"
         When chan_test hangs up "5010-2"
         Then i should see 2 "LEAVEEMPTY" event in queue "q10" in the queue log
+
+    Scenario: 13 Generation of event CLOSED
+        Given there is no "CLOSED" entry in queue "q11"
+        Given I have a schedule "always_closed" in "America/Montreal" with the following schedules:
+            | Status | Months | Days of month | Days of week | Start hour | End hour |
+            | Opened |    1-1 |           1-1 |          1-1 |      00:00 |    00:01 |
+        Given there are queues with infos:
+            | name | number | context     | schedule_name |
+            | q11  | 5011   | statscenter | always_closed |
+        When chan_test calls "5011@statscenter" with id "5011-1"
+        When chan_test calls "5011@statscenter" with id "5011-2"
+        Given I wait 2 seconds for the calls processing
+        When chan_test hangs up "5011-1"
+        When chan_test hangs up "5011-2"
+        Then i should see 2 "CLOSED" event in queue "q11" in the queue log
         

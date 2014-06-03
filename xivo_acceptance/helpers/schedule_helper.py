@@ -52,6 +52,7 @@ def assert_schedule_exists(name, timezone, times):
 
 def _create_schedule(name, timezone, times):
     schedule = Schedule(
+        entity_id=entity_helper.oldest_entity_id(),
         name=name,
         timezone=timezone,
     )
