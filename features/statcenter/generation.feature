@@ -132,4 +132,21 @@ Feature: Stats generation
         When "User 007" calls "*32007"
         Given I wait 2 seconds for the calls processing
         Then I should see 1 "AGENTCALLBACKLOGOFF" event for agent "007" in the queue log
+
+    Scenario: 10 Generation of event COMPLETECALLER
+        Given there is no agents logged
+        Given there is no "COMPLETECALLER" entry in queue "q08"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number | protocol |
+         | User      | 008      |   1008 | statscenter | 008          | sip      |
+        Given there are queues with infos:
+            | name | number | context     | agents_number |
+            | q08  | 5008   | statscenter | 008           |
+        When "User 008" calls "*31008"
+        Given I wait 2 seconds for the calls processing
+        When chan_test calls "5008@statscenter" with id "5008-1"
+        Given I wait 2 seconds for the calls processing
+        When "User 008" answers
+        When chan_test hangs up "5008-1"
+        Then I should see 1 "COMPLETECALLER" event in queue "q08" in the queue log
         
