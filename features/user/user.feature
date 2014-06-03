@@ -32,8 +32,8 @@ Feature: User
         | firstname | lastname | protocol | number | context |
         | Bill      | Bush     | SIP      |  1632  | Default |
         Then I see a user with infos:
-        | fullname  | number | protocol | context |
-        | Bill Bush |   1632 | sip      | default |
+        | fullname  | number | protocol |
+        | Bill Bush |   1632 | sip      |
         When I remove user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
@@ -44,8 +44,8 @@ Feature: User
         | firstname | lastname | protocol | number | context |
         | Bill      | Bush     | SCCP     |  1632  | Default |
         Then I see a user with infos:
-        | fullname  | number | provisioning_code | protocol | context |
-        | Bill Bush |   1632 |                 0 | sccp     | default |
+        | fullname  | number | provisioning_code | protocol |
+        | Bill Bush |   1632 |                 0 | sccp     |
         When I remove user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
@@ -62,8 +62,8 @@ Feature: User
         | firstname | lastname | protocol | number | context | device            |
         | Bill      | Bush     | SIP      |   1632 | Default | 00:de:ad:be:ef:00 |
         Then I see a user with infos:
-        | fullname  | number | protocol | context |
-        | Bill Bush |   1632 | sip      | default |
+        | fullname  | number | protocol |
+        | Bill Bush |   1632 | sip      |
         Then I see a line with infos:
         | device | number | protocol | user      |
         | True   |   1632 | sip      | Bill Bush |
@@ -86,8 +86,8 @@ Feature: User
           | firstname | lastname | protocol | number | context | device            |
           | Abarai    | Renji    | SIP      | 1677   | Default | dd:11:22:33:44:55 |
       Then I see a user with infos:
-          | fullname     | protocol | number | context |
-          | Abarai Renji | sip      | 1677   | default |
+          | fullname     | protocol | number |
+          | Abarai Renji | sip      | 1677   |
 
     Scenario: Find a user by line number
         Given there are users with infos:
