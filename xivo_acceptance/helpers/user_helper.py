@@ -243,6 +243,8 @@ def add_user(data_dict):
         entity = entity_helper.get_entity_with_name(data_dict['entity_name'])
         if entity:
             user.entity_id = entity.id
+    else:
+        user.entity_id = entity_helper.oldest_entity_id()
 
     if 'line_number' in data_dict and 'line_context' in data_dict:
         user.line = UserLine()
