@@ -202,4 +202,27 @@ Feature: Stats generation
         When chan_test hangs up "5011-1"
         When chan_test hangs up "5011-2"
         Then i should see 2 "CLOSED" event in queue "q11" in the queue log
+
+    Scenario: 14 Generation of event EXITWITHTIMEOUT
+        Given there is no agents logged
+        Given there is no "EXITWITHTIMEOUT" entry in queue "q12"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number | protocol |
+         | User      | 012      |   1012 | statscenter | 012          | sip      |
+        Given there are queues with infos:
+            | name | number | context     | ringing_time | agents_number |
+            | q12  | 5012   | statscenter | 30           | 012           |
+        When "User 012" calls "*31012"
+        Given I wait 2 seconds for the calls processing
+        When chan_test calls "5012@statscenter" with id "5012-1"
+        When chan_test calls "5012@statscenter" with id "5012-2"
+        Given I wait 35 seconds for the calls processing
+        Then i should see 2 "EXITWITHTIMEOUT" event in queue "q12" in the queue log
+        When chan_test hangs up "5012-1"
+        When chan_test hangs up "5012-2"
+
+    Scenario: 15 Generate corrupt stats with EXITWITHTIMEOUT event
+        Given there are a corrupt entry in queue_log
+        When execute xivo-stat
+        Then I don't should not have an error
         
