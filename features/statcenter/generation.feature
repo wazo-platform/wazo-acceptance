@@ -79,6 +79,21 @@ Feature: Stats generation
         When chan_test hangs up "5005-1"
         When chan_test hangs up "5005-2"
         When chan_test hangs up "5005-3"
-        Given I wait 2 seconds for the calls processing
+        Given I wait 1 seconds for the calls processing
         Then i should see 3 "ENTERQUEUE" event in queue "q05" in the queue log
+
+    Scenario: 06 Generation of event JOINEMPTY
+        Given there is no "JOINEMPTY" entry in queue "q06"
+        Given there are queues with infos:
+          | name | number | context     | joinempty   |
+          | q06  | 5006   | statscenter | unavailable |
+        When chan_test calls "5006@statscenter" with id "5006-1"
+        When chan_test calls "5006@statscenter" with id "5006-2"
+        When chan_test calls "5006@statscenter" with id "5006-3"
+        Given I wait 2 seconds for the calls processing
+        When chan_test hangs up "5005-1"
+        When chan_test hangs up "5005-2"
+        When chan_test hangs up "5005-3"
+        Given I wait 1 seconds for the calls processing
+        Then i should see 3 "JOINEMPTY" event in queue "q06" in the queue log
         
