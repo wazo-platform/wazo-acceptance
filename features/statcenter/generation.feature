@@ -168,4 +168,23 @@ Feature: Stats generation
         When "User 009" hangs up
         When chan_test hangs up "5009-1"
         Then i should see 1 "COMPLETEAGENT" event in queue "q09" in the queue log
+
+    Scenario: 12 Generation of event LEAVEEMPTY
+        Given there is no agents logged
+        Given there is no "LEAVEEMPTY" entry in queue "q10"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number | protocol |
+         | User      | 010      |   1010 | statscenter | 010          | sip      |
+        Given there are queues with infos:
+            | name | number | context     | leavewhenempty     | agents_number |
+            | q10  | 5010   | statscenter | unavailable,paused | 010           |
+        When "User 010" calls "*31010"
+        Given I wait 2 seconds for the calls processing
+        When chan_test calls "5010@statscenter" with id "5010-1"
+        When chan_test calls "5010@statscenter" with id "5010-2"
+        When "User 010" calls "*32010"
+        Given I wait 2 seconds for the calls processing
+        When chan_test hangs up "5010-1"
+        When chan_test hangs up "5010-2"
+        Then i should see 2 "LEAVEEMPTY" event in queue "q10" in the queue log
         
