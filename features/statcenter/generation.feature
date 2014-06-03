@@ -96,4 +96,40 @@ Feature: Stats generation
         When chan_test hangs up "5005-3"
         Given I wait 1 seconds for the calls processing
         Then i should see 3 "JOINEMPTY" event in queue "q06" in the queue log
+
+    Scenario: 07 Generation of event AGENTCALLBACKLOGIN
+        Given there is no agents logged
+        Given there is no "AGENTCALLBACKLOGIN" entry for agent "007"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number | protocol |
+         | User      | 007      |   1007 | statscenter | 007          | sip      |
+        When "User 007" calls "*31007"
+        Given I wait 2 seconds for the calls processing
+        Then I should see 1 "AGENTCALLBACKLOGIN" event for agent "007" in the queue log
+
+    Scenario: 08 Login twice using AGENTCALLBACKLOGIN
+        Given there is no agents logged
+        Given there is no "AGENTCALLBACKLOGIN" entry for agent "007"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number | protocol |
+         | User      | 007      |   1007 | statscenter | 007          | sip      |
+        When "User 007" calls "*31007"
+        Given I wait 2 seconds for the calls processing
+        When "User 007" calls "*31007"
+        Given I wait 2 seconds for the calls processing
+        Then I should see 1 "AGENTCALLBACKLOGIN" event for agent "007" in the queue log
+
+    Scenario: 09 Logoff when not logged in
+        Given there is no agents logged
+        Given there is no "AGENTCALLBACKLOGOFF" entry for agent "007"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number | protocol |
+         | User      | 007      |   1007 | statscenter | 007          | sip      |
+        When "User 007" calls "*31007"
+        Given I wait 2 seconds for the calls processing
+        When "User 007" calls "*32007"
+        Given I wait 2 seconds for the calls processing
+        When "User 007" calls "*32007"
+        Given I wait 2 seconds for the calls processing
+        Then I should see 1 "AGENTCALLBACKLOGOFF" event for agent "007" in the queue log
         
