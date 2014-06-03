@@ -239,4 +239,23 @@ Feature: Stats generation
         When I unpause agent "013"
         Then I should see 1 "PAUSEALL" event for agent "013" in the queue log
         Then I should see 1 "UNPAUSEALL" event for agent "013" in the queue log
+
+    Scenario: 17 Generation of event WRAPUPSTART
+        Given there is no agents logged
+        Given there is no "WRAPUPSTART" entry for agent "014"
+        Given there are users with infos:
+         | firstname | lastname | number | context     | agent_number | protocol |
+         | User      | 014      |   1014 | statscenter | 014          | sip      |
+        Given there are queues with infos:
+            | name | number | context     | agents_number | wrapuptime |
+            | q14  | 5014   | statscenter | 014           | 15         |
+        When "User 014" calls "*31014"
+        Given I wait 2 seconds for the calls processing
+        When chan_test calls "5014@statscenter" with id "5014-1"
+        Given I wait 1 seconds for the calls processing
+        When "User 014" answers
+        Given I wait 1 seconds for the calls processing
+        When "User 014" hangs up
+        When chan_test hangs up "5014-1"
+        Then i should see 1 "WRAPUPSTART" event for agent "014" in the queue log
         
