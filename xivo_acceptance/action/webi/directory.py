@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
+from selenium.common.exceptions import NoSuchElementException
+
 from lettuce import world
 from xivo_lettuce.form import submit, input, select
 from xivo_lettuce import common
@@ -105,7 +108,15 @@ def add_field(fieldname, value):
     add_btn.click()
 
     xpath = "//div[@class='sb-list']/table[position()=1]/tbody/tr[last()]/td[position()=%s]/input"
-    fieldname_input = b.find_element_by_xpath(xpath % 1)
+    timenow = time.time()
+    try:
+        fieldname_input = b.find_element_by_xpath(xpath % 1)
+    except NoSuchElementException:
+        # This is only for debugging purpose of a non-reproductible problem.
+        print('waited: {timewait:.3f} secs'.format(timewait=(time.time() - timenow)))
+        tr_list = b.find_element_by_xpath("//div[@class='sb-list']/table[position()=1]/tbody/tr")
+        print('found tr: {tr_list}'.format(tr_list=tr_list))
+        raise
     fieldname_input.send_keys(fieldname)
 
     value_input = b.find_element_by_xpath(xpath % 2)
