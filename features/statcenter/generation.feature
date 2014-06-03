@@ -1,4 +1,4 @@
-Feature: Stat
+Feature: Stats generation
 
     Scenario: 01 Generation of event FULL
         Given there is no "FULL" entry in queue "q01"
@@ -65,4 +65,20 @@ Feature: Stat
         When "User 004" calls "*32004"
         When chan_test hangs up "5004-1"
         Then I should see 1 "RINGNOANSWER" event in queue "q04" in the queue log
+
+    Scenario: 05 Generation of event ENTERQUEUE
+        Given there is no "ENTERQUEUE" entry in queue "q05"
+        Given there is a agent "Agent" "005" with extension "005@statscenter"
+        Given there are queues with infos:
+          | name | number | context     | agents_number |
+          | q05  | 5005   | statscenter | 005           |
+        When chan_test calls "5005@statscenter" with id "5005-1"
+        When chan_test calls "5005@statscenter" with id "5005-2"
+        When chan_test calls "5005@statscenter" with id "5005-3"
+        Given I wait 2 seconds for the calls processing
+        When chan_test hangs up "5005-1"
+        When chan_test hangs up "5005-2"
+        When chan_test hangs up "5005-3"
+        Given I wait 2 seconds for the calls processing
+        Then i should see 3 "ENTERQUEUE" event in queue "q05" in the queue log
         
