@@ -21,8 +21,9 @@ from lettuce.registry import world
 EXTENSIONS_URL = 'extensions'
 
 
-def all_extensions():
-    return world.restapi_utils_1_1.rest_get(EXTENSIONS_URL)
+def all_extensions(parameters=None):
+    parameters = parameters or {}
+    return world.restapi_utils_1_1.rest_get(EXTENSIONS_URL, params=parameters)
 
 
 def get_extension(extension_id):
