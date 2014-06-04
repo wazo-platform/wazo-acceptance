@@ -141,7 +141,7 @@ class RestResponse(object):
             assert_that(self.status_ok(), msg)
 
     def check_regex(self, regex):
-        matches = re.search(self.raw_data, regex)
+        matches = re.search(regex, self.raw_data)
         msg = "Regex '%s' did not match. Response: %s" % (regex, self.raw_data)
         assert_that(matches, msg)
 
