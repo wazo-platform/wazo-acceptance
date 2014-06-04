@@ -22,10 +22,7 @@ from xivo_dao.data_handler.extension import services as extension_services
 from xivo_dao.data_handler.exception import ElementDeletionError, \
     ElementNotExistsError
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
-
-
-def get_extension(extension_id):
-    return extension_services.get(extension_id)
+from xivo_lettuce.postgres import exec_sql_request
 
 
 def find_extension_by_exten(exten):
@@ -190,3 +187,9 @@ def _get_exten_info(channel, extension_id):
         channel.send(extension)
     else:
         channel.send(None)
+
+
+def get_extension_typeval(extension_id):
+    query = "SELECT typeval FROM extensions WHERE id = :extension_id"
+    cursor = exec_sql_request(query, extension_id=extension_id)
+    return cursor.scalar()

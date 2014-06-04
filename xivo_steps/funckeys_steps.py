@@ -187,8 +187,7 @@ def _find_meetme_name_for_func_key(func_key):
 
 
 def _find_extension_name_for_func_key(func_key):
-    extension = extension_helper.get_extension(func_key['destination_id'])
-    return extension.typeval
+    return extension_helper.get_extension_typeval(func_key['destination_id'])
 
 
 @step(u'Then I get a func key of type "([^"]*)"')
