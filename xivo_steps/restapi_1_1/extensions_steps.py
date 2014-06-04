@@ -42,9 +42,15 @@ def given_i_have_the_following_extensions(step):
         extension_helper.add_or_replace_extension(extension)
 
 
-@step(u'When I access the list of extensions')
+@step(u'When I access the list of extensions$')
 def when_i_access_the_list_of_extensions(step):
     world.response = extension_action_restapi.all_extensions()
+
+
+@step(u'When I access the list of extensions using the following parameters:')
+def when_i_access_the_list_of_extensions_using_the_following_parameters(step):
+    parameters = {h['name']: h['value'] for h in step.hashes}
+    world.response = extension_action_restapi.all_extensions(parameters)
 
 
 @step(u'When I access the extension with id "([^"]*)"')
@@ -81,6 +87,15 @@ def then_i_get_a_list_containing_the_following_extensions(step):
 
     entries = [has_entries(e) for e in expected_extensions]
     assert_that(extensions, has_items(*entries))
+
+
+@step(u'Then I get a list that does not contain the following extensions:')
+def then_i_get_a_list_that_does_not_contain_the_following_extensions(step):
+    expected_extensions = step.hashes
+    extensions = _filter_out_default_extensions()
+
+    entries = [has_entries(e) for e in expected_extensions]
+    assert_that(extensions, is_not(has_items(*entries)))
 
 
 @step(u'Then I have an extension with the following parameters:')
