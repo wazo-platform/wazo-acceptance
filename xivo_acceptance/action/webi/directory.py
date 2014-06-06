@@ -87,6 +87,7 @@ def _type_display_name(name):
 
 
 def _add_directory_fields(fields):
+    time.sleep(world.timeout)  # wait for javascript to load
     for field_name, value in fields.iteritems():
         add_field(field_name, value)
 
@@ -108,15 +109,7 @@ def add_field(fieldname, value):
     add_btn.click()
 
     xpath = "//div[@class='sb-list']/table[position()=1]/tbody/tr[last()]/td[position()=%s]/input"
-    timenow = time.time()
-    try:
-        fieldname_input = b.find_element_by_xpath(xpath % 1)
-    except NoSuchElementException:
-        # This is only for debugging purpose of a non-reproductible problem.
-        print('waited: {timewait:.3f} secs'.format(timewait=(time.time() - timenow)))
-        tr_list = b.find_element_by_xpath("//div[@class='sb-list']/table[position()=1]/tbody/tr")
-        print('found tr: {tr_list}'.format(tr_list=tr_list))
-        raise
+    fieldname_input = b.find_element_by_xpath(xpath % 1)
     fieldname_input.send_keys(fieldname)
 
     value_input = b.find_element_by_xpath(xpath % 2)
