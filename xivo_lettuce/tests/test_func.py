@@ -109,3 +109,27 @@ class TestFunc(unittest.TestCase):
         result.reverse()
 
         self.assertTrue(func.has_subsets_of_dicts(expected, result))
+
+    def test_has_subsets_of_dicts_in_order_empty_expected(self):
+        expected = []
+        results = [{'k': '1'}]
+
+        self.assertTrue(func.has_subsets_of_dicts_in_order(expected, results))
+
+    def test_has_subsets_of_dicts_in_order_empty_results(self):
+        expected = [{'k': '1'}]
+        results = []
+
+        self.assertFalse(func.has_subsets_of_dicts_in_order(expected, results))
+
+    def test_has_subsets_of_dicts_in_order_true_on_first_elem(self):
+        expected = [{'k': '1'}]
+        results = [{'k': '1'}, {'k': '2'}]
+
+        self.assertTrue(func.has_subsets_of_dicts_in_order(expected, results))
+
+    def test_has_subsets_of_dicts_in_order_true_on_last_elem(self):
+        expected = [{'k': '2'}]
+        results = [{'k': '1'}, {'k': '2'}]
+
+        self.assertTrue(func.has_subsets_of_dicts_in_order(expected, results))

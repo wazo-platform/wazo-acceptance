@@ -85,6 +85,8 @@ def _list_of_dict_to_list_of_set(dicts):
 def _all_ordered_superset_item(subsets, supersets):
     needle = 0
     for superset in supersets:
+	if needle == len(subsets):
+	    return True
         if _is_subset(subsets[needle], superset):
             needle += 1
     return needle == len(subsets)
