@@ -31,11 +31,14 @@ def regenerate_cache():
     world.ssh_client_xivo.check_call(['xivo-stat', 'fill_db'])
 
 
-def generate_cache(start_time=None):
-    if start_time is not None:
-        ret = world.ssh_client_xivo.check_call(['xivo-stat', 'fill_db', '--start=%s' % start_time])
-    else:
-        ret = world.ssh_client_xivo.check_call(['xivo-stat', 'fill_db'])
+def generate_cache(start_time=None, end_time=None):
+    command = ['xivo-stat', 'fill_db']
+    if start_time:
+        command.append('--start=%s' % start_time)
+    if end_time:
+        command.append('--end=%s' % end_time)
+
+    ret = world.ssh_client_xivo.check_call(command)
     assert_that(ret, equal_to(0), 'xivo-stall fill_db return value')
 
 

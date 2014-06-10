@@ -120,6 +120,33 @@ Feature: WEBI Agent Stats
           | 11h-12h | 00:00:00 |
           | Total   | 00:11:35 |
 
+    Scenario: Login before the hour logout at the hour
+        Given there is no entries in queue_log between "2012-01-02 00:07:00" and "2012-01-02 00:09:00"
+        Given there is a agent "Agent" "5" with extension "5@statscenter"
+        Given there is a statistic configuration "test_logout_time" from "08:00" to "09:00" with agent "5"
+        Given I have the following queue_log entries:
+          | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
+          | 2012-01-02 00:08:00.000000 | login_time_1 | NONE      | Agent/5 | AGENTCALLBACKLOGOFF | 1003@default       | 300   | CommandLogoff |       |       |
+          | 2012-01-02 00:08:00.000000 | login_time_2 | NONE      | Agent/5 | AGENTLOGOFF         | SIP/aaaaa-00000001 | 30    | CommandLogoff |       |       |
+        Given I generate the statistics cache from start time "2012-01-02T08:00:00" to end time "2012-01-02T09:00:00"
+        Then I should have the following statististics on agent "5" on "2012-01-02" on configuration "test_logout_time":
+          |         |    Login |
+          | 8h-9h   | 00:00:00 |
+          | Total   | 00:00:00 |
+
+    Scenario: Login and logoff after the hour
+        Given there is no entries in queue_log between "2012-01-02 00:07:00" and "2012-01-02 00:10:00"
+        Given there is a agent "Agent" "5" with extension "5@statscenter"
+        Given there is a statistic configuration "test_logout_time" from "08:00" to "09:00" with agent "5"
+        Given I have the following queue_log entries:
+        | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
+        | 2012-01-02 00:10:00.000000 | login_time_1 | NONE      | Agent/5 | AGENTCALLBACKLOGOFF | 1003@default       | 300   | CommandLogoff |       |       |
+        | 2012-01-01 00:10:00.000000 | login_time_2 | NONE      | Agent/5 | AGENTLOGOFF         | SIP/aaaaa-00000001 | 30    | CommandLogoff |       |       |
+        Given I clear and generate the statistics cache
+        Then I should have the following statististics on agent "5" on "2012-01-02" on configuration "test_logout_time":
+          |         |    Login |
+          | 8h-9h   | 00:00:00 |
+          | Total   | 00:00:00 |
 
     Scenario: Login before the day logout after the day
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-03 23:59:59"

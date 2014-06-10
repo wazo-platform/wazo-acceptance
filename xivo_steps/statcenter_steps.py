@@ -84,6 +84,11 @@ def given_i_generate_the_statistics_cache_from_start_time(step, start_time):
     stat_action_webi.generate_cache(start_time)
 
 
+@step(u'Given I generate the statistics cache from start time "([^"]*)" to end time "([^"]*)"')
+def given_i_generate_the_statistics_cache_from_start_time_group1_to_end_time_group2(step, start_time, end_time):
+    stat_action_webi.generate_cache(start_time, end_time)
+
+
 @step(u'^Given I clear and generate the statistics cache twice$')
 def given_i_clear_and_generate_the_statistics_cache_twice(step):
     stat_action_webi.regenerate_cache()
