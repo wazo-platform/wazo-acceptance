@@ -226,3 +226,19 @@ Feature: WEBI Queue Stats
           | 10h-11h |        0 |        0 |      0 |               |
           | 11h-12h |        1 |        0 |      1 |               |
           | Total   |        1 |        0 |      1 |               |
+
+    Scenario: Generate stats for partial answered call logs
+        Given there is no entries in queue_log between "2012-07-01 11:00:00" and "2012-07-01 12:00:00"
+        Given there are queues with infos:
+            | name | number | context     |
+            | q01  | 5001   | statscenter |
+        Given there is a statistic configuration "test" from "11:00" to "12:00" with queue "q01"
+        Given I have the following queue_log entries:
+          | time                       | callid        | queuename | agent      | event           | data1 | data2         | data3 | data4 | data5 |
+          | 2012-07-01 11:01:00.935905 | 1402587143.24 | q00       | NONE       | ENTERQUEUE      |       | 1002          | 1     |       |       |
+          | 2012-07-01 11:05:00.769756 | 1402587143.24 | q01       | Agent/1001 | COMPLETEAGENT   | 12    | 6             | 1     |       |       |
+      Given I clear and generate the statistics cache
+      Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+          |         | Received | Answered | Closed | Answered rate |
+          | 11h-12h | 1        | 1        | 0      | 100 %         |
+          | Total   | 1        | 1        | 0      | 100 %         |
