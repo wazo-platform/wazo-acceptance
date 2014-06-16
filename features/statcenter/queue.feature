@@ -19,12 +19,12 @@ Feature: WEBI Queue Stats
             | 2013-11-08 10:02:32.770339 | 1383900788.167039 | q02       | Agent/1246 | CONNECT        |     2 | 1383901350.167967 |     2 |       |       |
             | 2013-11-08 10:04:19.485883 | 1383900788.167039 | q02       | Agent/1246 | COMPLETECALLER |     2 |               107 |     1 |       |       |
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on "q01" on "2013-11-08" on configuration "testq1":
+        Then I should have the following statistics on "q01" on "2013-11-08" on configuration "testq1":
           |         | Received | Answered |
           | 9h-10h  |        1 |        1 |
           | 10h-11h |        0 |        0 |
           | Total   |        1 |        1 |
-        Then I should have the following statististics on "q02" on "2013-11-08" on configuration "testq2":
+        Then I should have the following statistics on "q02" on "2013-11-08" on configuration "testq2":
           |         | Received | Answered |
           | 9h-10h  |        0 |        0 |
           | 10h-11h |        1 |        1 |
@@ -51,7 +51,7 @@ Feature: WEBI Queue Stats
           | 2012-07-01 09:59:59.999999 | received_5 | q01       | NONE  | ENTERQUEUE |       |       |       |       |       |
           | 2012-07-01 10:59:59.999999 | received_5 | q01       | NONE  | ABANDON    | 1     | 4     | 2     |       |       |
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+        Then I should have the following statistics on "q01" on "2012-07-01" on configuration "test":
           |         | Received  | Abandoned | AWT      | Answered rate | QoS   |
           | 8h-9h   |         3 |         3 | 00:00:03 |           0 % |       |
           | 9h-10h  |         2 |         2 | 00:00:03 |           0 % |       |
@@ -87,7 +87,7 @@ Feature: WEBI Queue Stats
           | 2012-07-01 08:00:02.999999 | received_5 | q01       | Agent/001 | CONNECT        | 3     |       |       |       |       |
           | 2012-07-01 08:00:05.999999 | received_5 | q01       | Agent/001 | COMPLETECALLER | 3     | 7     | 1     |       |       |
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+        Then I should have the following statistics on "q01" on "2012-07-01" on configuration "test":
           |         | Received  | Answered  | AWT      | Answered rate | QoS   |
           | 8h-9h   |         3 |         3 | 00:00:03 |         100 % | 100 % |
           | 9h-10h  |         2 |         2 | 00:00:03 |         100 % | 100 % |
@@ -111,7 +111,7 @@ Feature: WEBI Queue Stats
           | 2012-07-01 09:00:00.000000 | received_4 | q01       | NONE  | JOINEMPTY  |       |       |       |       |       |
           | 2012-07-01 09:59:59.999999 | received_5 | q01       | NONE  | JOINEMPTY  |       |       |       |       |       |
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+        Then I should have the following statistics on "q01" on "2012-07-01" on configuration "test":
           |         | Received  | Blocking  |
           | 8h-9h   |         3 |         3 |
           | 9h-10h  |         2 |         2 |
@@ -135,7 +135,7 @@ Feature: WEBI Queue Stats
           | 2012-07-01 09:00:00.000000 | received_4 | q01       | NONE  | CLOSED  |       |       |       |       |       |
           | 2012-07-01 09:59:59.999999 | received_5 | q01       | NONE  | CLOSED  |       |       |       |       |       |
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+        Then I should have the following statistics on "q01" on "2012-07-01" on configuration "test":
           |         | Received  | Closed  |
           | 8h-9h   |         3 |       3 |
           | 9h-10h  |         2 |       2 |
@@ -159,7 +159,7 @@ Feature: WEBI Queue Stats
           | 2012-07-01 09:59:59.999999 | saturated_5 | q01       | NONE  | DIVERT_HOLDTIME |       |       |       |       |       |
           | 2012-07-01 08:00:00.000001 | saturated_6 | q01       | NONE  | DIVERT_HOLDTIME |       |       |       |       |       |
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+        Then I should have the following statistics on "q01" on "2012-07-01" on configuration "test":
           |         | Received  | Saturated |
           | 8h-9h   |         3 |         3 |
           | 9h-10h  |         2 |         2 |
@@ -201,7 +201,7 @@ Feature: WEBI Queue Stats
           | 2012-07-01 11:43:37.575660 | 1394466181.31 | q01       | NONE  | RINGNOANSWER  | 15000 |               |       |       |       |
           | 2012-07-01 11:43:40.247292 | 1394466181.31 | q01       | NONE  | ABANDON       | 1     | 1             | 38    |       |       |
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+        Then I should have the following statistics on "q01" on "2012-07-01" on configuration "test":
           |         | Received | Answered | Closed | Answered rate |
           | 8h-9h   | 0        | 0        | 0      |               |
           | 9h-10h  | 0        | 0        | 0      |               |
@@ -219,7 +219,7 @@ Feature: WEBI Queue Stats
           | time                       | callid        | queuename | agent | event         | data1 | data2         | data3 | data4 | data5 |
           | 2012-07-01 11:34:11.154600 | 1394465650.18 | q01       | NONE  | CLOSED        |       |               |       |       |       |
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+        Then I should have the following statistics on "q01" on "2012-07-01" on configuration "test":
           |         | Received | Answered | Closed | Answered rate |
           | 8h-9h   |        0 |        0 |      0 |               |
           | 9h-10h  |        0 |        0 |      0 |               |

@@ -145,13 +145,13 @@ def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, e
     assert_that(count, equal_to(int(expected_count)), 'Number of %s for agent %s' % (event, agent_number))
 
 
-@step(u'^Then I should have the following statististics on "(.+)" on "(.+)" on configuration "(\S+)":$')
+@step(u'^Then I should have the following statistics on "(.+)" on "(.+)" on configuration "(\S+)":$')
 def then_i_should_have_stats_for_config(step, queue_name, day, config_name):
     stat_action_webi.open_queue_stat_page_on_day(queue_name, day, config_name)
     stat_action_webi.check_queue_statistic(step.hashes)
 
 
-@step(u'^Then I should have the following statististics on agent "(.+)" on "(.+)" on configuration "(\S+)":$')
+@step(u'^Then I should have the following statistics on agent "(.+)" on "(.+)" on configuration "(\S+)":$')
 def then_i_should_have_stats_on_agent_for_config(step, agent_number, day, config_name):
     stat_action_webi.open_agent_stat_page_on_day(agent_number, day, config_name)
     stat_action_webi.check_agent_statistic(step.hashes)

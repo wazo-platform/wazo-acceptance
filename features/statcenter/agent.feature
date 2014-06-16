@@ -20,7 +20,7 @@ Feature: WEBI Agent Stats
           | 2012-07-01 08:54:17.039559 | answered_3  | q01       | NONE      | ENTERQUEUE          |       | 1201           | 1     |       |       |
 
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "1" on "2012-07-01" on configuration "test":
+        Then I should have the following statistics on agent "1" on "2012-07-01" on configuration "test":
           |         | Answered |
           | 8h-9h   |        1 |
           | 9h-10h  |        1 |
@@ -49,7 +49,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 09:03:10.777777 | talk_time_3 | q02       | Agent/2  | TRANSFER       | 4     | 0            | 0     | 22    |       |
 
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "2" on "2012-01-01" on configuration "test_talktime":
+        Then I should have the following statistics on agent "2" on "2012-01-01" on configuration "test_talktime":
           |         | Answered | Conversation |
           | 8h-9h   |        0 |     00:00:00 |
           | 9h-10h  |        3 |     00:00:39 |
@@ -69,7 +69,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 09:25:11.555555 | login_time_3 | NONE      | Agent/3 | UNPAUSEALL          |                  |       |               |       |       |
 
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "3" on "2012-01-01" on configuration "test_login_time_1":
+        Then I should have the following statistics on agent "3" on "2012-01-01" on configuration "test_login_time_1":
           |         | Login    |
           | 8h-9h   | 00:00:00 |
           | 9h-10h  | 00:15:00 |
@@ -91,7 +91,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 09:50:00.000000 | login_time_4 | NONE      | Agent/4 | AGENTCALLBACKLOGIN  | 1003@default       |       |               |       |       |
 
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "4" on "2012-01-01" on configuration "test_login_time_2":
+        Then I should have the following statistics on agent "4" on "2012-01-01" on configuration "test_login_time_2":
           |         |    Login |
           | 8h-9h   | 00:00:00 |
           | 9h-10h  | 00:10:36 |
@@ -112,7 +112,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 09:02:30.000000 | login_time_3 | NONE      | Agent/5 | AGENTLOGOFF         | SIP/aaaaa-00000001 |    30 | CommandLogoff |       |       |
 
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "5" on "2012-01-01" on configuration "test_login_time_3":
+        Then I should have the following statistics on agent "5" on "2012-01-01" on configuration "test_login_time_3":
           |         |    Login |
           | 8h-9h   | 00:09:59 |
           | 9h-10h  | 00:01:36 |
@@ -129,7 +129,7 @@ Feature: WEBI Agent Stats
           | 2012-01-02 08:00:00.000000 | login_time_1 | NONE      | Agent/5 | AGENTCALLBACKLOGOFF | 1003@default       | 300   | CommandLogoff |       |       |
           | 2012-01-02 08:00:00.000000 | login_time_2 | NONE      | Agent/5 | AGENTLOGOFF         | SIP/aaaaa-00000001 | 30    | CommandLogoff |       |       |
         Given I generate the statistics cache from start time "2012-01-02T08:00:00" to end time "2012-01-02T09:00:00"
-        Then I should have the following statististics on agent "5" on "2012-01-02" on configuration "test_logout_time":
+        Then I should have the following statistics on agent "5" on "2012-01-02" on configuration "test_logout_time":
           |         |    Login |
           | 8h-9h   | 00:00:00 |
           | Total   | 00:00:00 |
@@ -143,7 +143,7 @@ Feature: WEBI Agent Stats
         | 2012-01-02 10:00:00.000000 | login_time_1 | NONE      | Agent/5 | AGENTCALLBACKLOGOFF | 1003@default       | 300   | CommandLogoff |       |       |
         | 2012-01-02 10:00:00.000000 | login_time_2 | NONE      | Agent/5 | AGENTLOGOFF         | SIP/aaaaa-00000001 | 30    | CommandLogoff |       |       |
         Given I generate the statistics cache from start time "2012-01-02T08:00:00" to end time "2012-01-02T09:00:00"
-        Then I should have the following statististics on agent "5" on "2012-01-02" on configuration "test_logout_time":
+        Then I should have the following statistics on agent "5" on "2012-01-02" on configuration "test_logout_time":
           |         |    Login |
           | 8h-9h   | 00:00:00 |
           | Total   | 00:00:00 |
@@ -157,7 +157,7 @@ Feature: WEBI Agent Stats
           | 2012-01-02 09:50:00.999999 | login_time_1 | NONE      | Agent/5 | AGENTCALLBACKLOGIN  | 1003@default       |        |               |       |       |
           | 2012-01-02 09:51:00.000000 | login_time_3 | NONE      | Agent/5 | AGENTLOGIN          | SIP/aaaaa-00000001 |        |               |       |       |
         Given I generate the statistics cache from start time "2012-01-02T08:00:00" to end time "2012-01-02T09:00:00"
-        Then I should have the following statististics on agent "5" on "2012-01-02" on configuration "test_logout_time":
+        Then I should have the following statistics on agent "5" on "2012-01-02" on configuration "test_logout_time":
           |         |    Login |
           | 8h-9h   | 00:00:00 |
           | Total   | 00:00:00 |
@@ -175,7 +175,7 @@ Feature: WEBI Agent Stats
           | 2012-01-02 09:30:00.000000 | login_time_1 | NONE      | Agent/5 | AGENTCALLBACKLOGIN  | 1003@default       |       |               |       |       |
           | 2012-01-02 09:40:00.000000 | login_time_3 | NONE      | Agent/5 | AGENTLOGIN          | SIP/aaaaa-00000001 |       |               |       |       |
         Given I generate the statistics cache from start time "2012-01-02T08:00:00" to end time "2012-01-02T09:00:00"
-        Then I should have the following statististics on agent "5" on "2012-01-02" on configuration "test_logout_time":
+        Then I should have the following statistics on agent "5" on "2012-01-02" on configuration "test_logout_time":
           |         |    Login |
           | 8h-9h   | 00:10:00 |
           | Total   | 00:10:00 |
@@ -192,7 +192,7 @@ Feature: WEBI Agent Stats
           | 2012-01-03 09:02:30.000000 | login_time_3 | NONE      | Agent/6 | AGENTLOGOFF         | SIP/aaaaa-00000001 |     30 | CommandLogoff |       |       |
 
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "6" on "2012-01-02" on configuration "test_login_time_4":
+        Then I should have the following statistics on agent "6" on "2012-01-02" on configuration "test_login_time_4":
           |         |    Login |
           | 8h-9h   | 01:00:00 |
           | 9h-10h  | 01:00:00 |
@@ -227,7 +227,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 10:02:30.000000 | login_time_3 | NONE      | Agent/9 | AGENTLOGOFF         | SIP/aaaaa-00000001 |  1050 | CommandLogoff |       |       |
 
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "9" on "2012-01-01" on configuration "test_login_time_9":
+        Then I should have the following statistics on agent "9" on "2012-01-01" on configuration "test_login_time_9":
           |         |    Login |
           | 8h-9h   | 00:00:00 |
           | 9h-10h  | 00:20:05 |
@@ -256,7 +256,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 08:41:09.000000 | NONE   | NONE      | Agent/10 | UNPAUSEALL |       |       |       |       |       |
 
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "10" on "2012-01-01" on configuration "test_pause_time_1":
+        Then I should have the following statistics on agent "10" on "2012-01-01" on configuration "test_pause_time_1":
           |         | Pause    |
           | 8h-9h   | 00:08:38 |
           | 9h-10h  | 00:18:50 |
@@ -284,7 +284,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 08:41:09.000000 | NONE   | NONE      | Agent/10 | UNPAUSEALL |       |       |       |       |       |
 
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "10" on "2012-01-01" on configuration "test_pause_time_2":
+        Then I should have the following statistics on agent "10" on "2012-01-01" on configuration "test_pause_time_2":
           |         | Pause    |
           | 8h-9h   | 00:08:38 |
           | 9h-10h  | 00:18:50 |
@@ -307,7 +307,7 @@ Feature: WEBI Agent Stats
           | 2012-01-01 09:43:05.121034 | wrapup_time_1 | q11       | Agent/11 | CONNECT       | 18    | 1351078982.15 | 2     |       |       |
           | 2012-01-01 09:42:47.009661 | wrapup_time_1 | q11       | NONE     | ENTERQUEUE    |       | 1003          | 1     |       |       |
         Given I clear and generate the statistics cache
-        Then I should have the following statististics on agent "11" on "2012-01-01" on configuration "test_wrapup_time":
+        Then I should have the following statistics on agent "11" on "2012-01-01" on configuration "test_wrapup_time":
           |         | Answered | Wrapup   |
           | 8h-9h   |        0 | 00:00:00 |
           | 9h-10h  |        1 | 00:00:15 |
@@ -338,7 +338,7 @@ Feature: WEBI Agent Stats
             | 2013-11-08 10:04:19.485883 | 1383900788.167039 | q13       | Agent/13 | COMPLETECALLER | 2     | 107               | 1     |       |       |
         Given I generate the statistics cache from start time "2013-11-08T10:00:00"
 
-        Then I should have the following statististics on agent "12" on "2013-11-08" on configuration "test_agent_transfer_to_queue":
+        Then I should have the following statistics on agent "12" on "2013-11-08" on configuration "test_agent_transfer_to_queue":
             |         | Answered |
             | 8h-9h   |        0 |
             | 9h-10h  |        1 |
@@ -346,7 +346,7 @@ Feature: WEBI Agent Stats
             | 11h-12h |        0 |
             | Total   |        1 |
 
-        Then I should have the following statististics on agent "13" on "2013-11-08" on configuration "test_agent_transfer_to_queue":
+        Then I should have the following statistics on agent "13" on "2013-11-08" on configuration "test_agent_transfer_to_queue":
             |         | Answered |
             | 8h-9h   |        0 |
             | 9h-10h  |        0 |
