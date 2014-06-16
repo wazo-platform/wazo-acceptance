@@ -238,7 +238,7 @@ Feature: WEBI Queue Stats
           | 2012-07-01 11:01:00.935905 | 1402587143.24 | q00       | NONE       | ENTERQUEUE      |       | 1002          | 1     |       |       |
           | 2012-07-01 11:05:00.769756 | 1402587143.24 | q01       | Agent/1001 | COMPLETEAGENT   | 12    | 6             | 1     |       |       |
       Given I clear and generate the statistics cache
-      Then I should have the following statististics on "q01" on "2012-07-01" on configuration "test":
+      Then I should have the following statistics on "q01" on "2012-07-01" on configuration "test":
           |         | Received | Answered | Closed | Answered rate |
           | 11h-12h | 1        | 1        | 0      | 100 %         |
           | Total   | 1        | 1        | 0      | 100 %         |
