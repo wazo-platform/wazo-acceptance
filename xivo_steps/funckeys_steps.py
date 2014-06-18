@@ -133,13 +133,6 @@ def then_the_list_contains_the_following_func_keys_in_the_right_order(step):
     assert_has_dicts_in_order(func_keys, expected_func_keys)
 
 
-@step(u'Then the list only contains "(\d+)" func keys destination "([^"]*)"')
-def then_the_list_only_contains_func_keys_destination_service(step, expected_count, destination_type):
-    items = world.response.data['items']
-    count = len([f for f in items if f['destination'] == destination_type])
-    assert_that(count, equal_to(int(expected_count)))
-
-
 def _map_func_keys_with_destination_name(func_keys):
     converted = []
     for func_key in func_keys:
