@@ -58,5 +58,5 @@ def when_i_enable_the_live_reload(step):
 @step(u'Then the CTI is notified for a configuration change')
 def then_the_cti_is_notified_for_a_configuration_change(step):
     expression = "xivo[cticonfig,update]"
-    log_lines = logs.find_line_in_daemon_log()
+    log_lines = logs.find_line_in_xivo_sysconfd_log()
     assert_that(log_lines, has_item(contains_string(expression)))
