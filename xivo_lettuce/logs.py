@@ -25,6 +25,7 @@ DAEMON_LOGFILE = '/var/log/daemon.log'
 ASTERISK_LOGFILE = '/var/log/asterisk/messages'
 XIVO_AGENT_LOGFILE = '/var/log/xivo-agentd.log'
 XIVO_CTI_LOGFILE = '/var/log/xivo-ctid.log'
+XIVO_PROVD_LOGFILE = '/var/log/xivo-provd.log'
 XIVO_RESTAPI_LOGFILE = '/var/log/xivo-restapid.log'
 XIVO_SYSCONFD_LOGFILE = '/var/log/xivo-sysconfd.log'
 
@@ -55,6 +56,10 @@ XIVO_CTI_LOG_INFO = LogfileInfo(logfile=XIVO_CTI_LOGFILE,
                                 date_format=PYTHON_DATE_FORMAT,
                                 date_pattern=PYTHON_DATE_PATTERN)
 
+XIVO_PROVD_LOG_INFO = LogfileInfo(logfile=XIVO_PROVD_LOGFILE,
+                                  date_format=PYTHON_DATE_FORMAT,
+                                  date_pattern=PYTHON_DATE_PATTERN)
+
 XIVO_RESTAPI_LOG_INFO = LogfileInfo(logfile=XIVO_RESTAPI_LOGFILE,
                                     date_format=RESTAPI_DATE_FORMAT,
                                     date_pattern=RESTAPI_DATE_PATTERN)
@@ -78,6 +83,10 @@ def search_str_in_xivo_agent_log(expression, delta=10):
 
 def search_str_in_xivo_cti_log(expression, delta=10):
     return _search_str_in_log_file(expression, XIVO_CTI_LOG_INFO, delta)
+
+
+def find_line_in_xivo_provd_log(delta=10):
+    return _find_line_in_log_file(XIVO_PROVD_LOG_INFO, delta)
 
 
 def search_str_in_xivo_restapi_log(expression, delta=10):

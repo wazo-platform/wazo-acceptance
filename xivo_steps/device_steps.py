@@ -135,7 +135,7 @@ def then_i_see_devices_with_infos(step):
 @step(u'Then I see in the log file device "([^"]*)" synchronized')
 def then_i_see_in_the_log_file_device_synchronized(step, device_id):
     expected_log_lines = ['Synchronizing device %s' % device_id]
-    actual_log_lines = logs.find_line_in_daemon_log()
+    actual_log_lines = logs.find_line_in_xivo_provd_log()
     _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
 
 
@@ -145,7 +145,7 @@ def then_i_see_in_the_log_file_device_group1_autoprovisioned(step, device_id):
                           '/provd/cfg_mgr/autocreate',
                           'Updating device',
                           '/provd/dev_mgr/devices/%s' % device_id]
-    actual_log_lines = logs.find_line_in_daemon_log()
+    actual_log_lines = logs.find_line_in_xivo_provd_log()
     _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
 
 
@@ -165,7 +165,7 @@ def then_i_see_in_the_log_file_device_deleted(step, device_id):
                           '/provd/dev_mgr/devices/%s' % device_id,
                           'Deleting config %s' % device_id,
                           '/provd/cfg_mgr/configs/%s' % device_id]
-    actual_log_lines = logs.find_line_in_daemon_log()
+    actual_log_lines = logs.find_line_in_xivo_provd_log()
     _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
 
 
