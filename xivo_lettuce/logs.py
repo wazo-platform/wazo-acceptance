@@ -26,6 +26,7 @@ ASTERISK_LOGFILE = '/var/log/asterisk/messages'
 XIVO_AGENT_LOGFILE = '/var/log/xivo-agentd.log'
 XIVO_CTI_LOGFILE = '/var/log/xivo-ctid.log'
 XIVO_RESTAPI_LOGFILE = '/var/log/xivo-restapid.log'
+XIVO_SYSCONFD_LOGFILE = '/var/log/xivo-sysconfd.log'
 
 DAEMON_DATE_FORMAT = "%b %d %H:%M:%S"
 DAEMON_DATE_PATTERN = "([\w]{3} [\d ]{2} [\d]{2}:[\d]{2}:[\d]{2})"
@@ -58,6 +59,10 @@ XIVO_RESTAPI_LOG_INFO = LogfileInfo(logfile=XIVO_RESTAPI_LOGFILE,
                                     date_format=RESTAPI_DATE_FORMAT,
                                     date_pattern=RESTAPI_DATE_PATTERN)
 
+XIVO_SYSCONFD_LOG_INFO = LogfileInfo(logfile=XIVO_SYSCONFD_LOGFILE,
+                                     date_format=PYTHON_DATE_FORMAT,
+                                     date_pattern=PYTHON_DATE_PATTERN)
+
 
 def search_str_in_daemon_log(expression, delta=10):
     return _search_str_in_log_file(expression, DAEMON_LOG_INFO, delta)
@@ -77,6 +82,10 @@ def search_str_in_xivo_cti_log(expression, delta=10):
 
 def search_str_in_xivo_restapi_log(expression, delta=10):
     return _search_str_in_log_file(expression, XIVO_RESTAPI_LOG_INFO, delta)
+
+
+def find_line_in_xivo_sysconfd_log(delta=10):
+    return _find_line_in_log_file(XIVO_SYSCONFD_LOG_INFO, delta)
 
 
 def find_line_in_daemon_log(delta=10):
