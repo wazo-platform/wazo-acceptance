@@ -38,6 +38,7 @@ setup(
     url='https://github.com/xivo-pbx/xivo-acceptance',
     license='GPLv3',
     packages=packages,
+    scripts=['utils/prerequisite.py'],
     data_files=[('etc/xivo-acceptance', ['config/default.ini']),
                 ('etc/xivo-acceptance/conf.d', confd),
                 ('share/xivo-acceptance/assets', assets)],
