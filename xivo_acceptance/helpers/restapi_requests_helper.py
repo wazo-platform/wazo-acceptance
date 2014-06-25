@@ -21,7 +21,7 @@ from urlparse import urlparse
 from xivo_lettuce import logs
 
 DATE_PATTERN = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d+)\s*'
-PID_PATTERN = r'xivo-restapid\[([0-9]+)\]\s*'
+PID_PATTERN = r'\[([0-9]+)\]\s*'
 LOG_LVL_PATTERN = r'\(([A-Z]+)\)\s*'
 FILE_LOGGER_PATTERN = r'\(([a-z\._]+)\):\s*'
 HTTP_METHOD_PATTERN = r'([A-Z]+)\s*'
@@ -37,7 +37,15 @@ def last_requests_infos():
 
 
 def _extract_request_infos(request):
-    s_pat_list = [DATE_PATTERN, PID_PATTERN, LOG_LVL_PATTERN, FILE_LOGGER_PATTERN, HTTP_METHOD_PATTERN, URL_PATTERN, DATA_PATTERN]
+    s_pat_list = [
+        DATE_PATTERN,
+        PID_PATTERN,
+        LOG_LVL_PATTERN,
+        FILE_LOGGER_PATTERN,
+        HTTP_METHOD_PATTERN,
+        URL_PATTERN,
+        DATA_PATTERN
+    ]
     s_pat = r'^%s' % ''.join(s_pat_list)
 
     pat = re.compile(s_pat)
