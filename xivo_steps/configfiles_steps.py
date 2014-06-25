@@ -124,4 +124,4 @@ def then_the_dialplan_has_been_reloaded(step):
 
 
 def _watched_log_lines():
-    return logs.get_lines_since_timestamp(world.start_watching_log_time, logs.DAEMON_LOG_INFO)
+    return logs.get_lines_since_timestamp(world.start_watching_log_time, logs.XIVO_SYSCONFD_LOG_INFO)
