@@ -132,10 +132,10 @@ Feature: Queues
         Given there is no "ENTERQUEUE" entry in queue "queue7"
 
         When chan_test calls "3107@from-extern" with id "3107-1"
-        When "John Doe" answers
+        When "Cookie Monster" answers
         When I wait 1 seconds for the calls processing
-        When "John Doe" hangs up
-        When chan_test hangs up "3102-1"
+        When "Cookie Monster" hangs up
+        When chan_test hangs up "3107-1"
         When I wait 1 seconds for the calls processing
 
         Then I should see 1 "ENTERQUEUE" event in queue "queue7" in the queue log
