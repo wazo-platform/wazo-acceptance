@@ -83,8 +83,8 @@ Feature: Remote Directory in CTI Client
 
     Scenario: Reverse lookup in a directory definition from UTF-8 CSV file
         Given there are users with infos:
-         | firstname | lastname   | number | context | cti_profile |
-         | GreatLord | MacDonnell | 1043   | default | Client      |
+         | firstname | lastname   | number | context | cti_profile | protocol |
+         | GreatLord | MacDonnell | 1043   | default | Client      | sip      |
         Given the CSV file "phonebook-unicode.csv" is copied on the server into "/tmp"
         Given the following directory configurations exist:
           | name              | type | URI                        |
@@ -115,11 +115,7 @@ Feature: Remote Directory in CTI Client
         When I enable screen pop-up
         When I log in the XiVO Client as "greatlord", pass "macdonnell"
 
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1043"
-        Given I wait call then I answer then I hang up after "3s"
-        When there is 1 calls to extension "1043@from-extern" on trunk "12345" and wait
+        When chan_test calls "1043@from-extern" with id "1043-1" and calleridname "DÉSPROGES" and calleridnum "12345"
 
         Given I wait 10 seconds for the call processing
 

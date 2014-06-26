@@ -76,6 +76,13 @@ def when_chan_test_calls_with_id(step, extension, channelid):
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 
+@step(u'When chan_test calls "([^"]*)" with id "([^"]*)" and calleridname "([^"]*)" and calleridnum "([^"]*)"$')
+def when_chan_test_calls_with_id_calleridname_calleridnum(step, extension, channelid, calleridname, calleridnum):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    cmd = 'test newid %s %s %s %s %s' % (channelid, number, context, calleridnum, calleridname)
+    asterisk_helper.send_to_asterisk_cli(cmd)
+
+
 @step(u'When chan_test hangs up "([^"]*)"$')
 def when_chan_test_hangs_up(step, channelid):
     cmd = 'channel request hangup Test/%s' % channelid

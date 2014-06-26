@@ -150,6 +150,7 @@ Feature: Queues
             | name   | display name | number | context | agents_number |
             | queue8 | Queue 8      | 3108   | default | 1108          |
         When I log agent "1108"
+        When I wait 1 seconds for the calls processing
         Then the agent "1108" is a member of the queue "queue8" in asterisk
         When I remove the agent with extension "1108@default" from the queue "queue8"
         Then the agent "1108" is not a member of the queue "queue8" in asterisk

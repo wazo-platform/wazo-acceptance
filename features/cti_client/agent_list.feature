@@ -2,8 +2,8 @@ Feature: Agent list xlet
 
     Scenario: Status since indicator changes when an agent logs in
         Given there are users with infos:
-         | firstname | lastname | number | agent_number | context | cti_profile | cti_login | cti_passwd |
-         | Jim       | Kirk     | 1110   | 1110         | default | Supervisor  | jim       | kirk       |
+         | firstname | lastname | number | agent_number | context | cti_profile | cti_login | cti_passwd | protocol |
+         | Jim       | Kirk     | 1110   | 1110         | default | Supervisor  | jim       | kirk       | sip      |
         Given there are queues with infos:
          | name       | display name | number | context | agents_number |
          | enterprise | Enterprise   | 3110   | default | 1110          |
@@ -17,8 +17,8 @@ Feature: Agent list xlet
 
     Scenario: Status since indicator changes when an agent receives a call from a queue
         Given there are users with infos:
-         | firstname | lastname | number | agent_number | context | cti_profile | cti_login | cti_passwd |
-         | Jim       | Kirk     | 1110   | 1110         | default | Supervisor  | jim       | kirk       |
+         | firstname | lastname | number | agent_number | context | cti_profile | cti_login | cti_passwd | protocol |
+         | Jim       | Kirk     | 1110   | 1110         | default | Supervisor  | jim       | kirk       | sip      |
         Given there are queues with infos:
          | name       | display name | number | context | agents_number |
          | enterprise | Enterprise   | 3110   | default | 1110          |
@@ -36,9 +36,9 @@ Feature: Agent list xlet
 
     Scenario: Status since indicator changes when an agent receives an internal call
         Given there are users with infos:
-         | firstname | lastname | number | agent_number | context | cti_profile | cti_login | cti_passwd |
-         | Jim       | Kirk     | 1110   | 1110         | default | Supervisor  | jim       | kirk       |
-         | Spock     | Vulcan   | 1111   |              | default |             |           |            |
+         | firstname | lastname | number | agent_number | context | cti_profile | cti_login | cti_passwd | protocol |
+         | Jim       | Kirk     | 1110   | 1110         | default | Supervisor  | jim       | kirk       | sip      |
+         | Spock     | Vulcan   | 1111   |              | default |             |           |            | sip      |
         Given there are queues with infos:
          | name       | display name | number | context | agents_number |
          | enterprise | Enterprise   | 3110   | default | 1110          |
