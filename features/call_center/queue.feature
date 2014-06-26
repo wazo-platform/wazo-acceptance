@@ -29,8 +29,8 @@ Feature: Queues
 
     Scenario: Add an unlogged agent to a new queue
         Given there are users with infos:
-         | firstname | lastname | number | context | agent_number |
-         | Bob       | Smith    |   1101 | default | 1101         |
+         | firstname | lastname | number | context | agent_number | protocol |
+         | Bob       | Smith    |   1101 | default | 1101         | sip      |
         When I create the following queues:
             | name   | display name | number | context | agents       |
             | queue1 | Queue 1      | 3101   | default | 1101@default |
@@ -38,8 +38,8 @@ Feature: Queues
 
     Scenario: Add a logged agent to a new queue
         Given there are users with infos:
-         | firstname | lastname | number | context | agent_number |
-         | John      | Doe      |   1102 | default | 1102         |
+         | firstname | lastname | number | context | agent_number | protocol |
+         | John      | Doe      |   1102 | default | 1102         | sip      |
         When I log agent "1102"
         When I create the following queues:
             | name   | display name | number | context | agents       |
@@ -74,8 +74,8 @@ Feature: Queues
 
     Scenario: Delete a queue with logged agents
         Given there are users with infos:
-         | firstname | lastname | number | context | agent_number |
-         | Wayne     | Brady    |   1103 | default | 1103         |
+         | firstname | lastname | number | context | agent_number | protocol |
+         | Wayne     | Brady    |   1103 | default | 1103         | sip      |
         Given there are queues with infos:
             | name   | display name | number | context | agents_number |
             | queue3 | Queue 3      | 3103   | default | 1103          |
@@ -86,8 +86,8 @@ Feature: Queues
 
     Scenario: Add an unlogged agent to an existing queue
         Given there are users with infos:
-         | firstname | lastname | number | context | agent_number |
-         | Brad      | Pitt     |   1104 | default | 1104         |
+         | firstname | lastname | number | context | agent_number | protocol |
+         | Brad      | Pitt     |   1104 | default | 1104         | sip      |
         Given there are queues with infos:
             | name   | display name | number | context |
             | queue4 | Queue 4      | 3104   | default |
@@ -96,8 +96,8 @@ Feature: Queues
 
     Scenario: Remove an unlogged agent from an existing queue
         Given there are users with infos:
-         | firstname | lastname   | number | context | agent_number |
-         | Alice     | Wonderland |   1105 | default | 1105         |
+         | firstname | lastname   | number | context | agent_number | protocol |
+         | Alice     | Wonderland |   1105 | default | 1105         | sip      |
         Given there are queues with infos:
             | name   | display name | number | context | agents_number |
             | queue5 | Queue 5      | 3105   | default | 1105          |
@@ -106,8 +106,8 @@ Feature: Queues
 
     Scenario: Add a logged agent to an existing queue
         Given there are users with infos:
-         | firstname | lastname   | number | context | agent_number |
-         | Cookie    | Monster    |   1107 | default | 1107         |
+         | firstname | lastname   | number | context | agent_number | protocol |
+         | Cookie    | Monster    |   1107 | default | 1107         | sip      |
         Given there are queues with infos:
             | name   | display name | number | context |
             | queue7 | Queue 7      | 3107   | default |
@@ -118,23 +118,25 @@ Feature: Queues
 
     Scenario: Add a logged agent to an existing queue and answer a call
         Given there are users with infos:
-         | firstname | lastname   | number | context | agent_number |
-         | Cookie    | Monster    |   1107 | default | 1107         |
+         | firstname | lastname   | number | context | agent_number | protocol |
+         | Cookie    | Monster    |   1107 | default | 1107         | sip      |
         Given there are queues with infos:
             | name   | display name | number | context |
             | queue7 | Queue 7      | 3107   | default |
         When I log agent "1107"
         When I add the agent with extension "1107@default" to the queue "queue7"
 
-        Given there is an incall "3107" in context "from-extern" to the "Queue" "queue7" with caller id name "Lord Greg" number "1234"
-        Given there are no calls running
+        Given there is an incall "3107" in context "from-extern" to the "Queue" "queue7"
         Given there is no "CONNECT" entry in queue "queue7"
         Given there is no "COMPLETEAGENT" entry in queue "queue7"
         Given there is no "ENTERQUEUE" entry in queue "queue7"
 
-        Given I wait call then I answer then I hang up after "3s"
-        When there is 1 calls to extension "3107@from-extern" on trunk "to_incall" and wait
-        When I wait 10 seconds for the calls processing
+        When chan_test calls "3107@from-extern" with id "3107-1"
+        When "John Doe" answers
+        When I wait 1 seconds for the calls processing
+        When "John Doe" hangs up
+        When chan_test hangs up "3102-1"
+        When I wait 1 seconds for the calls processing
 
         Then I should see 1 "ENTERQUEUE" event in queue "queue7" in the queue log
         Then I should see 1 "CONNECT" event in queue "queue7" in the queue log
@@ -142,8 +144,8 @@ Feature: Queues
 
     Scenario: Remove a logged agent from an existing queue
         Given there are users with infos:
-         | firstname | lastname   | number | context | agent_number |
-         | Bugs      | Bunny      |   1108 | default | 1108         |
+         | firstname | lastname   | number | context | agent_number | protocol |
+         | Bugs      | Bunny      |   1108 | default | 1108         | sip      |
         Given there are queues with infos:
             | name   | display name | number | context | agents_number |
             | queue8 | Queue 8      | 3108   | default | 1108          |
