@@ -55,7 +55,7 @@ def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastna
         'users': [user_id]
     }
     agent_helper.add_or_replace_agent(agent_data)
-    when_i_log_agent_1(number)
+    when_i_log_agent_1(step, number)
 
 
 @step(u'Given there is no agents logged')
