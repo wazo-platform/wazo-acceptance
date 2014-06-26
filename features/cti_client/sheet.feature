@@ -24,15 +24,14 @@ Feature: Sheet
         When I enable screen pop-up
         When I log in the XiVO Client as "cedric", pass "abunar", unlogged agent
 
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1153"
         Given I log agent "1153" on extension "1153@default"
-        Given I wait 5 seconds for the calls processing
-        Given I wait call then I answer then I hang up after "3s"
-        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
+        When I wait 3 seconds for the calls processing
+        When chan_test calls "3001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Cedric Abunar" answers
+        When I wait 1 seconds for the calls processing
+        When "Cedric Abunar" hangs up
 
-        Given I wait 10 seconds for the calls processing
         Then I see a sheet with the following values:
         | Variable          | Value           |
         | xivo-calleridnum  | 1234            |
@@ -56,14 +55,11 @@ Feature: Sheet
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
-
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1007"
-        Given I wait call then I answer then I hang up after "3s"
-        When there is 1 calls to extension "1007@from-extern" on trunk "to_incall" and wait
-
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "1007@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
 
         Then I see a sheet with the following values:
         | Variable          | Value        |
@@ -88,14 +84,11 @@ Feature: Sheet
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
-
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1007"
-        Given I wait call then I answer then I hang up after "3s"
-        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
-
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "3001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
 
         Then I see a sheet with the following values:
         | Variable          | Value |
@@ -120,14 +113,11 @@ Feature: Sheet
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
-
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1007"
-        Given I wait call then I answer then I hang up after "3s"
-        When there is 1 calls to extension "2006@from-extern" on trunk "to_incall" and wait
-
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "2006@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
 
         Then I see a sheet with the following values:
         | Variable          | Value |
@@ -153,14 +143,11 @@ Feature: Sheet
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
-
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1007"
-        Given I wait call then I answer then I hang up after "3s"
-        When there is 1 calls to extension "2006@from-extern" on trunk "to_incall" and wait
-
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "2006@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
 
         Then I see a sheet with the following values:
         | Variable          | Value |
@@ -169,13 +156,11 @@ Feature: Sheet
 
         When I log out of the XiVO Client
         When I log in the XiVO client as "gnu", pass "linux"
-
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I wait call then I answer then I hang up after "3s"
-        When there is 1 calls to extension "2006@from-extern" on trunk "to_incall" and wait
-
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "2006@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
 
         Then I should not see any sheet
 
@@ -195,31 +180,29 @@ Feature: Sheet
         Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
 
         When I restart the CTI server
-
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1117"
-        Given I wait call then I answer then I hang up after "5s"
-        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "3001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
+        
         Then I see a sheet with the following values:
         | Variable          | Value |
         | xivo-calledidname | frere |
         | xivo-calledidnum  | 3001  |
 
         When I stop the XiVO client
-
         When I start the XiVO Client
         When I log in the XiVO client as "peter", pass "jenkins"
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1117"
-        Given I wait call then I answer then I hang up after "5s"
-        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "3001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
+        
         Then I should not see any sheet
 
     Scenario: Sheet distribution of link event to a Group
@@ -243,12 +226,12 @@ Feature: Sheet
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1117"
-        Given I wait call then I answer then I hang up after "5s"
-        When there is 1 calls to extension "2001@from-extern" on trunk "to_incall" and wait
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "2001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
+        
         Then I see a sheet with the following values:
         | Variable          | Value   |
         | xivo-calledidname | groupie |
@@ -258,12 +241,11 @@ Feature: Sheet
 
         When I start the XiVO Client
         When I log in the XiVO client as "peter", pass "jenkins"
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1117"
-        Given I wait call then I answer then I hang up after "5s"
-        When there is 1 calls to extension "2001@from-extern" on trunk "to_incall" and wait
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "2001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
         Then I should not see any sheet
 
     Scenario: Sheet distribution of dial event to a Queue
@@ -282,31 +264,28 @@ Feature: Sheet
         Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
 
         When I restart the CTI server
-
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1117"
-        Given I wait call then I answer then I hang up after "5s"
-        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "3001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
+        
         Then I see a sheet with the following values:
         | Variable          | Value |
         | xivo-calledidname | frere |
         | xivo-calledidnum  | 3001  |
 
         When I stop the XiVO client
-
         When I start the XiVO Client
         When I log in the XiVO client as "peter", pass "jenkins"
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1117"
-        Given I wait call then I answer then I hang up after "5s"
-        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "3001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
         Then I should not see any sheet
 
     Scenario: Sheet distribution of link event to a Queue agent answers
@@ -326,13 +305,13 @@ Feature: Sheet
 
         When I start the XiVO Client
         When I log in the XiVO client as "alice", pass "gopher", unlogged agent
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "1119" on extension "1119@default"
-        Given I register extension "1119"
-        Given I wait call then I answer then I hang up after "5s"
-        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "3001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
+        
         Then I see a sheet with the following values:
         | Variable          | Value |
         | xivo-calledidname | frere |
@@ -355,13 +334,13 @@ Feature: Sheet
 
         When I start the XiVO Client
         When I log in the XiVO client as "peter", pass "jenkins", logged agent
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
         Given I log agent "1119" on extension "1119@default"
-        Given I register extension "1119"
-        Given I wait call then I answer then I hang up after "5s"
-        When there is 1 calls to extension "3001@from-extern" on trunk "to_incall" and wait
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "3001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
+        
         Then I should not see any sheet
 
     Scenario: Sheet distribution of dial event to a User
@@ -375,16 +354,15 @@ Feature: Sheet
         Given there is an incall "1117" in context "from-extern" to the "User" "Alice Gopher" with caller id name "Tux" number "5555555555"
 
         When I restart the CTI server
-
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1117"
-        Given I wait call then I answer then I hang up after "5s"
-        When there is 1 calls to extension "1117@from-extern" on trunk "to_incall" and wait
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "1117@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" answers
+        When I wait 1 seconds for the calls processing
+        When "Alice Gopher" hangs up
+        
         Then I see a sheet with the following values:
         | Variable         |      Value |
         | xivo-calleridnum | 5555555555 |
@@ -423,17 +401,15 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Link" event
         Given there is an incall "1043" in context "from-extern" to the "User" "GreatLord MacDonnell"
         Given there is a SIP trunk "12345" in context "from-extern"
+        
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO Client as "greatlord", pass "macdonnell"
-
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1043"
-        Given I wait call then I answer then I hang up after "3s"
-        When there is 1 calls to extension "1043@from-extern" on trunk "12345" and wait
-
-        Given I wait 10 seconds for the call processing
+        When chan_test calls "1043@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "GreatLord MacDonnell" answers
+        When I wait 1 seconds for the calls processing
+        When "GreatLord MacDonnell" hangs up
 
         Then I see a sheet with the following values:
         | Variable     | Value         |
@@ -454,12 +430,13 @@ Feature: Sheet
         Given I assign the sheet "testvariable" to the "Dial" event
         Given I start the XiVO Client
         Given I log in the XiVO client as "donald", pass "macronald"
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1624"
-        Given I wait call then I answer then I hang up after "5s"
-        When there is 1 calls to extension "1624@default" on trunk "to_default" and wait
-        When I wait 10 seconds for the call processing
+        
+        When chan_test calls "1624@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Donald MacRonald" answers
+        When I wait 1 seconds for the calls processing
+        When "Donald MacRonald" hangs up
+        
         Then I see a custom sheet with the following values:
         | widget_name       | value            |
         | testlabel         | 1624             |
@@ -477,15 +454,16 @@ Feature: Sheet
         Given I assign the sheet "testsheetbus" to the "Dial" event
         Given I start the XiVO Client
         Given I log in the XiVO client as "donald", pass "macronald"
-        Given there are no calls running
-        Given I wait 5 seconds for the dialplan to be reloaded
-        Given I register extension "1624"
-        Given I wait call then I answer then I hang up after "5s"
         Given I listen on the bus for messages:
         | exchange | routing_key      |
         | xivo-cti | call_form_result |
-        When there is 1 calls to extension "1624@default" on trunk "to_default" and wait
-        When I wait 10 seconds for the call processing
+
+        When chan_test calls "1624@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Donald MacRonald" answers
+        When I wait 1 seconds for the calls processing
+        When "Donald MacRonald" hangs up
+        
         When I fill a custom sheet with the following values:
         | widget_name       | value                         |
         | checkBox          | false                         |
