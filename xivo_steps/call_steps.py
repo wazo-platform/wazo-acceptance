@@ -189,16 +189,6 @@ def i_register_extension(step, extension):
     callgen_helper.execute_sip_register(line.name, line.secret)
 
 
-@step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
-def given_i_log_the_phone(step, agent_number, extension):
-    agent_helper.log_agent(agent_number, extension)
-
-
-@step(u'Given I logout agent "([^"]*)" on extension "([^"]*)"')
-def given_i_logout_the_phone(step, agent_number, extension):
-    agent_helper.unlog_agent(agent_number, extension)
-
-
 @step(u'Given there are no calls running')
 def given_there_are_no_calls_running(step):
     callgen_helper.killall_process_sipp()

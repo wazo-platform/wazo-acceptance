@@ -20,7 +20,7 @@ import time
 from lettuce import world
 from xivo_ws import Agent
 
-from xivo_acceptance.helpers import line_helper, callgen_helper
+from xivo_acceptance.helpers import line_helper, callgen_helper, asterisk_helper
 from xivo_lettuce import sysutils
 
 
@@ -75,30 +75,6 @@ def _find_agent_with_number(number):
 
 def _search_agents_with_number(number):
     return world.ws.agents.search_by_number(number)
-
-
-def log_agent_on_user(agent_number):
-    line = _get_line_from_agent(agent_number)
-    log_agent(agent_number, line.number)
-
-
-def unlog_agent_from_user(agent_number):
-    line = _get_line_from_agent(agent_number)
-    unlog_agent(agent_number, line.number)
-
-
-def log_agent(agent_number, extension):
-    line = line_helper.find_with_extension(extension)
-    callgen_helper.execute_sip_register(line.name, line.secret)
-    callgen_helper.execute_n_calls_then_wait(1, '*31%s' % agent_number, username=line.name, password=line.secret)
-    world.logged_agents.append(agent_number)
-    time.sleep(5)
-
-
-def unlog_agent(agent_number, extension):
-    line = line_helper.find_with_extension(extension)
-    callgen_helper.execute_n_calls_then_wait(1, '*32%s' % agent_number, username=line.name, password=line.secret)
-    time.sleep(5)
 
 
 def is_agent_logged_in(agent_number):

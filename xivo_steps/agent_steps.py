@@ -20,7 +20,7 @@ from hamcrest import assert_that, equal_to
 from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
-from xivo_acceptance.helpers import agent_helper
+from xivo_acceptance.helpers import agent_helper, user_helper, line_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common, form, func
 
@@ -55,7 +55,7 @@ def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastna
         'users': [user_id]
     }
     agent_helper.add_or_replace_agent(agent_data)
-    agent_helper.log_agent_on_user(number)
+    when_i_log_agent_1(number)
 
 
 @step(u'Given there is no agents logged')
@@ -63,14 +63,36 @@ def given_there_is_no_agents_logged(step):
     agent_helper.unlog_all_agents()
 
 
+@step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
+def given_i_log_the_phone(step, agent_number, extension):
+    line = line_helper.find_with_extension(extension)
+    user = user_helper.get_by_exten_context(line.number, line.context)
+    phone = step.scenario.phone_register.get_user_phone(user.fullname)
+    phone.call('*31%s' % agent_number)
+
+
+@step(u'Given I logout agent "([^"]*)" on extension "([^"]*)"')
+def given_i_logout_the_phone(step, agent_number, extension):
+    line = line_helper.find_with_extension(extension)
+    user = user_helper.get_by_exten_context(line.number, line.context)
+    phone = step.scenario.phone_register.get_user_phone(user.fullname)
+    phone.call('*32%s' % agent_number)
+
+
 @step(u'When I log agent "([^"]*)"')
 def when_i_log_agent_1(step, agent_number):
-    agent_helper.log_agent_on_user(agent_number)
+    line = agent_helper._get_line_from_agent(agent_number)
+    user = user_helper.get_by_exten_context(line.number, line.context)
+    phone = step.scenario.phone_register.get_user_phone(user.fullname)
+    phone.call('*31%s' % agent_number)
 
 
 @step(u'When I unlog agent "([^"]*)"')
 def when_i_unlog_agent_group1(step, agent_number):
-    agent_helper.unlog_agent_from_user(agent_number)
+    line = agent_helper._get_line_from_agent(agent_number)
+    user = user_helper.get_by_exten_context(line.number, line.context)
+    phone = step.scenario.phone_register.get_user_phone(user.fullname)
+    phone.call('*32%s' % agent_number)
 
 
 @step(u'When I pause agent "([^"]*)"')

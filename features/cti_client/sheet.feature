@@ -11,8 +11,8 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Link" event
 
         Given there are users with infos:
-         | firstname | lastname | number | context | agent_number | cti_profile |
-         | Cedric    | Abunar   | 1153   | default | 1153         | Client      |
+         | firstname | lastname | number | context | agent_number | cti_profile | protocol |
+         | Cedric    | Abunar   | 1153   | default | 1153         | Client      | sip      |
 
         Given there are queues with infos:
             | name  | number | context | agents_number |
@@ -48,8 +48,8 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Link" event
 
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Alice     | Gopher   | 1007   | default | Client      |
+         | firstname | lastname | number | context | cti_profile | protocol |
+         | Alice     | Gopher   | 1007   | default | Client      | sip      |
 
         Given there is an incall "1007" in context "from-extern" to the "User" "Alice Gopher" with caller id name "Tux" number "5555555555"
 
@@ -78,8 +78,8 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Link" event
 
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Alice     | Gopher   | 1007   | default | Client      |
+         | firstname | lastname | number | context | cti_profile | protocol |
+         | Alice     | Gopher   | 1007   | default | Client      | sip      |
         Given there are queues with infos:
             | name  | number | context | users_number |
             | frere | 3001   | default | 1007         |
@@ -110,8 +110,8 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Link" event
 
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Alice     | Gopher   | 1007   | default | Client      |
+         | firstname | lastname | number | context | cti_profile | protocol |
+         | Alice     | Gopher   | 1007   | default | Client      | sip      |
         Given there is a group "main" with extension "2006@default" and users:
           | firstname | lastname |
           | Alice     | Gopher   |
@@ -142,9 +142,9 @@ Feature: Sheet
         Given I assign the sheet "testsheet" to the "Dial" event
 
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Alice     | Gopher   | 1007   | default | Client      |
-         | Gnu       | Linux    | 1006   | default | Client      |
+         | firstname | lastname | number | context | cti_profile | protocol |
+         | Alice     | Gopher   | 1007   | default | Client      | sip      |
+         | Gnu       | Linux    | 1006   | default | Client      | sip      |
         Given there is a group "main" with extension "2006@default" and users:
           | firstname | lastname |
           | Alice     | Gopher   |
@@ -186,9 +186,9 @@ Feature: Sheet
         | xivo-calledidnum  |
         Given I assign the sheet "testsheet" to the "Link" event
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Alice     | Gopher   |   1117 | default | Client      |
-         | Peter     | Jenkins  |   1118 | default | Client      |
+         | firstname | lastname | number | context | cti_profile | protocol |
+         | Alice     | Gopher   |   1117 | default | Client      | sip      |
+         | Peter     | Jenkins  |   1118 | default | Client      | sip      |
         Given there are queues with infos:
          | name  | number | context | users_number |
          | frere |   3001 | default | 1117,1118    |
@@ -229,9 +229,9 @@ Feature: Sheet
         | xivo-calledidnum  |
         Given I assign the sheet "testsheet" to the "Link" event
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Alice     | Gopher   |   1117 | default | Client      |
-         | Peter     | Jenkins  |   1118 | default | Client      |
+         | firstname | lastname | number | context | cti_profile | protocol |
+         | Alice     | Gopher   |   1117 | default | Client      | sip      |
+         | Peter     | Jenkins  |   1118 | default | Client      | sip      |
         Given there is a group "groupie" with extension "2001@default" and users:
           | firstname | lastname |
           | Alice     | Gopher   |
@@ -273,9 +273,9 @@ Feature: Sheet
         | xivo-calledidnum  |
         Given I assign the sheet "testsheet" to the "Dial" event
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Alice     | Gopher   |   1117 | default | Client      |
-         | Peter     | Jenkins  |   1118 | default | Client      |
+         | firstname | lastname | number | context | cti_profile | protocol |
+         | Alice     | Gopher   |   1117 | default | Client      | sip      |
+         | Peter     | Jenkins  |   1118 | default | Client      | sip      |
         Given there are queues with infos:
          | name  | number | context | users_number |
          | frere |   3001 | default |         1117 |
@@ -316,9 +316,9 @@ Feature: Sheet
         | xivo-calledidnum  |
         Given I assign the sheet "testsheet" to the "Link" event
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile | agent_number |
-         | Alice     | Gopher   |   1119 | default | Client      |         1119 |
-         | Peter     | Jenkins  |   1120 | default | Client      |         1120 |
+         | firstname | lastname | number | context | cti_profile | agent_number | protocol |
+         | Alice     | Gopher   |   1119 | default | Client      |         1119 | sip      |
+         | Peter     | Jenkins  |   1120 | default | Client      |         1120 | sip      |
         Given there are queues with infos:
          | name  | number | context | agents_number |
          | frere |   3001 | default |    1119, 1120 |
@@ -345,9 +345,9 @@ Feature: Sheet
         | xivo-calledidnum  |
         Given I assign the sheet "testsheet" to the "Link" event
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile | agent_number |
-         | Alice     | Gopher   |   1119 | default | Client      |         1119 |
-         | Peter     | Jenkins  |   1120 | default | Client      |         1120 |
+         | firstname | lastname | number | context | cti_profile | agent_number | protocol |
+         | Alice     | Gopher   |   1119 | default | Client      |         1119 | sip      |
+         | Peter     | Jenkins  |   1120 | default | Client      |         1120 | sip      |
         Given there are queues with infos:
          | name  | number | context | agents_number |
          | frere |   3001 | default |    1119, 1120 |
@@ -370,8 +370,8 @@ Feature: Sheet
         | xivo-calleridnum |
         Given I assign the sheet "testsheet" to the "Dial" event
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Alice     | Gopher   |   1117 | default | Client      |
+         | firstname | lastname | number | context | cti_profile | protocol |
+         | Alice     | Gopher   |   1117 | default | Client      | sip      |
         Given there is an incall "1117" in context "from-extern" to the "User" "Alice Gopher" with caller id name "Tux" number "5555555555"
 
         When I restart the CTI server
@@ -391,8 +391,8 @@ Feature: Sheet
 
     Scenario: db-variables on reverse lookup in a directory definition
         Given there are users with infos:
-         | firstname | lastname   | number | context | cti_profile |
-         | GreatLord | MacDonnell | 1043   | default | Client      |
+         | firstname | lastname   | number | context | cti_profile | protocol |
+         | GreatLord | MacDonnell | 1043   | default | Client      | sip      |
         Given the CSV file "phonebook-dbvars.csv" is copied on the server into "/tmp"
         Given the following directory configurations exist:
           | name              | type | URI                       |
@@ -445,8 +445,8 @@ Feature: Sheet
 
     Scenario: Variable substitution in custom sheets
         Given there are users with infos:
-         | firstname | lastname  | number | context | cti_profile | cti_login | cti_passwd |
-         | Donald    | MacRonald |   1624 | default | Client      | donald    | macronald  |
+         | firstname | lastname  | number | context | cti_profile | cti_login | cti_passwd | protocol |
+         | Donald    | MacRonald |   1624 | default | Client      | donald    | macronald  | sip      |
         Given the asset file "test-variable.ui" is copied on the server into "/tmp"
         Given I have a sheet model with custom UI:
         | name          | path to ui                   |
@@ -468,8 +468,8 @@ Feature: Sheet
 
     Scenario: Bus notification after custom sheets sent
         Given there are users with infos:
-         | firstname | lastname  | number | context | cti_profile | cti_login | cti_passwd |
-         | Donald    | MacRonald |   1624 | default | Agent       | donald    | macronald  |
+         | firstname | lastname  | number | context | cti_profile | cti_login | cti_passwd | protocol |
+         | Donald    | MacRonald |   1624 | default | Agent       | donald    | macronald  | sip      |
         Given the asset file "test-sheet-to-bus.ui" is copied on the server into "/tmp"
         Given I have a sheet model with custom UI:
         | name          | path to ui                   |
