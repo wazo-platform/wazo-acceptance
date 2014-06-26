@@ -11,8 +11,10 @@ Feature: Agent list xlet
         When I log in the XiVO Client as "jim", pass "kirk"
         Then the agent list xlet shows agent "1110" as unlogged
         When I log agent "1110"
+        When I wait 3 seconds for the calls processing
         Then the agent list xlet shows agent "1110" as not in use
         When I unlog agent "1110"
+        When I wait 3 seconds for the calls processing
         Then the agent list xlet shows agent "1110" as unlogged
 
     Scenario: Status since indicator changes when an agent receives a call from a queue
@@ -23,15 +25,25 @@ Feature: Agent list xlet
          | name       | display name | number | context | agents_number |
          | enterprise | Enterprise   | 3110   | default | 1110          |
         Given there is an incall "3110" in context "from-extern" to the "Queue" "enterprise"
-        Given there are no calls running
         When I start the XiVO Client
         When I log in the XiVO Client as "jim", pass "kirk"
         When I log agent "1110"
+        When I wait 3 seconds for the calls processing
+        When chan_test calls "3110@from-extern" with id "3110-1"
+        When I wait 1 seconds for the calls processing
+        When "Jim Kirk" answers
+        When I wait 1 seconds for the calls processing
+        When "Jim Kirk" hangs up
+        When chan_test hangs up "3110-1"
         Given the agent "1110" will answer a call and hangup after 10 seconds
-        When I call extension "3110@from-extern" from trunk "to_incall"
-        When I wait 5 seconds
+        When chan_test calls "3110@from-extern" with id "3110-1"
+        When I wait 1 seconds for the calls processing
+        When "Jim Kirk" answers
+        When I wait 1 seconds for the calls processing
         Then the agent list xlet shows agent "1110" as in use
-        When I wait 10 seconds
+        When "Jim Kirk" hangs up
+        When chan_test hangs up "3110-1"
+        When I wait 1 seconds for the calls processing
         Then the agent list xlet shows agent "1110" as not in use
 
     Scenario: Status since indicator changes when an agent receives an internal call
@@ -42,13 +54,15 @@ Feature: Agent list xlet
         Given there are queues with infos:
          | name       | display name | number | context | agents_number |
          | enterprise | Enterprise   | 3110   | default | 1110          |
-        Given there are no calls running
         When I start the XiVO Client
         When I log in the XiVO Client as "jim", pass "kirk"
         When I log agent "1110"
-        Given the agent "1110" will answer a call and hangup after 10 seconds
-        When I call extension "1110@default"
-        When I wait 5 seconds
+        When I wait 3 seconds for the calls processing
+        When chan_test calls "1110@default"
+        When I wait 1 seconds for the calls processing
+        When "Jim Kirk" answers
+        When I wait 1 seconds for the calls processing
         Then the agent list xlet shows agent "1110" as on incoming non-ACD call
-        When I wait 10 seconds
+        When "Jim Kirk" hangs up
+        When I wait 1 seconds for the calls processing
         Then the agent list xlet shows agent "1110" as not in use

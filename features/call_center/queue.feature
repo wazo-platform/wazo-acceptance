@@ -80,6 +80,7 @@ Feature: Queues
             | name   | display name | number | context | agents_number |
             | queue3 | Queue 3      | 3103   | default | 1103          |
         When I log agent "1103"
+        When I wait 3 seconds for the calls processing
         Then the agent "1103" is a member of the queue "queue3" in asterisk
         When I delete the queue with extension "3103@default"
         Then the queue "queue3" does not exist in asterisk
