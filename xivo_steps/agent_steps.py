@@ -23,6 +23,7 @@ from xivo_acceptance.action.webi import agent as agent_action_webi
 from xivo_acceptance.helpers import agent_helper, user_helper, line_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common, form, func
+import time
 
 
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
@@ -69,6 +70,7 @@ def given_i_log_the_phone(step, agent_number, extension):
     user = user_helper.get_by_exten_context(line.number, line.context)
     phone = step.scenario.phone_register.get_user_phone(user.fullname)
     phone.call('*31%s' % agent_number)
+    time.sleep(3)
 
 
 @step(u'Given I logout agent "([^"]*)" on extension "([^"]*)"')
@@ -77,6 +79,7 @@ def given_i_logout_the_phone(step, agent_number, extension):
     user = user_helper.get_by_exten_context(line.number, line.context)
     phone = step.scenario.phone_register.get_user_phone(user.fullname)
     phone.call('*32%s' % agent_number)
+    time.sleep(3)
 
 
 @step(u'When I log agent "([^"]*)"')
@@ -85,6 +88,7 @@ def when_i_log_agent_1(step, agent_number):
     user = user_helper.get_by_exten_context(line.number, line.context)
     phone = step.scenario.phone_register.get_user_phone(user.fullname)
     phone.call('*31%s' % agent_number)
+    time.sleep(3)
 
 
 @step(u'When I unlog agent "([^"]*)"')
@@ -93,6 +97,7 @@ def when_i_unlog_agent_group1(step, agent_number):
     user = user_helper.get_by_exten_context(line.number, line.context)
     phone = step.scenario.phone_register.get_user_phone(user.fullname)
     phone.call('*32%s' % agent_number)
+    time.sleep(3)
 
 
 @step(u'When I pause agent "([^"]*)"')

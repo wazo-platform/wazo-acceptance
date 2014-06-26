@@ -12,7 +12,6 @@ Feature: Agent list xlet
         Then the agent list xlet shows agent "1110" as unlogged
         When I log agent "1110"
         When I wait 3 seconds for the calls processing
-        Then the agent list xlet shows agent "1110" as not in use
         When I unlog agent "1110"
         When I wait 3 seconds for the calls processing
         Then the agent list xlet shows agent "1110" as unlogged
@@ -28,14 +27,12 @@ Feature: Agent list xlet
         When I start the XiVO Client
         When I log in the XiVO Client as "jim", pass "kirk"
         When I log agent "1110"
-        When I wait 3 seconds for the calls processing
         When chan_test calls "3110@from-extern" with id "3110-1"
         When I wait 1 seconds for the calls processing
         When "Jim Kirk" answers
         When I wait 1 seconds for the calls processing
         When "Jim Kirk" hangs up
         When chan_test hangs up "3110-1"
-        Given the agent "1110" will answer a call and hangup after 10 seconds
         When chan_test calls "3110@from-extern" with id "3110-1"
         When I wait 1 seconds for the calls processing
         When "Jim Kirk" answers
@@ -57,7 +54,6 @@ Feature: Agent list xlet
         When I start the XiVO Client
         When I log in the XiVO Client as "jim", pass "kirk"
         When I log agent "1110"
-        When I wait 3 seconds for the calls processing
         When chan_test calls "1110@default"
         When I wait 1 seconds for the calls processing
         When "Jim Kirk" answers

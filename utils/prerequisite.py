@@ -18,11 +18,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import os
-import socket
 
 from lettuce import world
 
-from xivo_acceptance.helpers import context_helper, trunksip_helper
+from xivo_acceptance.helpers import context_helper
 from xivo_dao.helpers import db_manager
 from xivo_lettuce.terrain import initialize, deinitialize
 from xivo_lettuce import common
@@ -56,16 +55,6 @@ def main():
         context_helper.update_contextnumbers_queue('default', 3000, 3999)
         context_helper.update_contextnumbers_meetme('default', 4000, 4999)
         context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
-
-        callgen_ip = socket.gethostbyname(world.config.callgen_host)
-        print 'Adding default SIP trunk'
-        trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_default', 'default')
-
-        print 'Adding statscenter SIP trunk'
-        trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_statscenter', 'statscenter')
-
-        print 'Adding default SIP trunk'
-        trunksip_helper.add_or_replace_trunksip(callgen_ip, 'to_incall', 'from-extern')
 
         print 'Restarting All XiVO Services'
         _xivo_service_restart_all()

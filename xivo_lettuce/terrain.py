@@ -80,7 +80,6 @@ def initialize():
 @debug.logcall
 def _setup_ssh_client():
     world.ssh_client_xivo = world.config.ssh_client_xivo
-    world.ssh_client_callgen = world.config.ssh_client_callgen
 
 
 @debug.logcall

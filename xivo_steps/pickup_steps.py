@@ -18,7 +18,6 @@
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import pickup as pickup_action_webi
-from xivo_acceptance.helpers import line_helper, callgen_helper
 from xivo_lettuce import common
 
 _PICKUP_PREFIX = '*8'
@@ -33,26 +32,6 @@ def given_there_is_no_pickup(step, search):
 def given_there_are_pickup(step):
     for data in step.hashes:
         pickup_action_webi.add_pickup(**data)
-
-
-@step('I wait call then I do not answer')
-def i_wait_call_then_i_do_not_answer(step):
-    ring_time_ms = 600 * 1000
-    callgen_helper.execute_answer_then_wait(ring_time_ms)
-
-
-@step(u'line "([^"]+)" calls number "(\d+)" then wait')
-def line_calls_extension_then_wait(step, extension, number):
-    calling_line = line_helper.find_with_extension(extension)
-    callgen_helper.execute_n_calls_then_wait(1, number, calling_line.name, calling_line.secret)
-
-
-@step(u'line "([^"]+)" pick up call at number "(\d+)"')
-def line_pick_up_call_at_number(step, extension, number):
-    calling_line = line_helper.find_with_extension(extension)
-    pickup_number = _PICKUP_PREFIX + number
-    returncode = callgen_helper.execute_pickup_call(pickup_number, calling_line.name, calling_line.secret)
-    world.pickup_success = (returncode == 0)
 
 
 @step(u'Then the directed pickup is successful')

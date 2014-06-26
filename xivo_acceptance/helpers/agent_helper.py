@@ -15,12 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import time
-
 from lettuce import world
 from xivo_ws import Agent
 
-from xivo_acceptance.helpers import line_helper, callgen_helper, asterisk_helper
+from xivo_acceptance.helpers import line_helper
 from xivo_lettuce import sysutils
 
 

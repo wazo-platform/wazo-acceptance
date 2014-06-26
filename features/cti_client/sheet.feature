@@ -25,7 +25,6 @@ Feature: Sheet
         When I log in the XiVO Client as "cedric", pass "abunar", unlogged agent
 
         Given I log agent "1153" on extension "1153@default"
-        When I wait 3 seconds for the calls processing
         When chan_test calls "3001@from-extern"
         When I wait 1 seconds for the calls processing
         When "Cedric Abunar" answers

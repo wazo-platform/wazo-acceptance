@@ -107,9 +107,6 @@ class XivoAcceptanceConfig(object):
         self.webi_login = self._config.get('login_infos', 'login')
         self.webi_password = self._config.get('login_infos', 'password')
 
-        self.callgen_host = self._config.get('callgen', 'hostname')
-        self.callgen_login = self._config.get('callgen', 'login')
-
         self.rest_username = self._config.get('webservices_infos', 'login')
         self.rest_passwd = self._config.get('webservices_infos', 'password')
         self.rest_protocol = self._config.get('restapi', 'protocol')
@@ -155,7 +152,6 @@ class XivoAcceptanceConfig(object):
 
     def _setup_ssh_client(self):
         self.ssh_client_xivo = SSHClient(self.xivo_host, self.ssh_login)
-        self.ssh_client_callgen = SSHClient(self.callgen_host, self.callgen_login)
 
     def _setup_ws(self):
         rest_config_dict = {
