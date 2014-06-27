@@ -47,6 +47,9 @@ def main():
         print 'Configuring Provd REST API on XiVO'
         _allow_provd_listen_on_all_interfaces()
 
+        print 'Installing packages'
+        _install_packages(['tcpflow'])
+
         print 'Adding context'
         context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
         context_helper.update_contextnumbers_user('statscenter', 1000, 1100)
@@ -112,6 +115,12 @@ def _allow_provd_listen_on_all_interfaces():
     query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
     world.config.dao_engine.execute(query)
     common.open_url('commonconf')
+
+
+def _install_packages(packages):
+    command = ['apt-get', 'update', '&&', 'apt-get', 'install', '-y']
+    command.extend(packages)
+    world.ssh_client_xivo.check_call(command)
 
 
 if __name__ == '__main__':

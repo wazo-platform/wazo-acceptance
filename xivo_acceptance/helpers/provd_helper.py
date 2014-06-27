@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import urllib2
 from lettuce import world
 
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
@@ -232,3 +233,13 @@ def _remove_devices_over(channel, max_devices):
         if 'config' in device:
             config_manager.remove(device['config'])
         device_manager.remove(device['id'])
+
+
+def request_http(path, user_agent):
+    url = 'http://%s:8667/%s' % (world.config.xivo_host, path)
+    request = urllib2.Request(url, headers={'User-Agent': user_agent})
+    fobj = urllib2.urlopen(request)
+    try:
+        fobj.read()
+    finally:
+        fobj.close()

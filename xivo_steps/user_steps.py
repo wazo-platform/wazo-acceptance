@@ -279,6 +279,20 @@ def when_i_remove_the_mobile_number_of_user_group1_group2(step, firstname, lastn
     form.submit.submit_form()
 
 
+@step(u'When I modify the device of user "([^"]*)" "([^"]*)" to "([^"]*)"')
+def when_i_modify_the_device_of_user_group1_group2_to_group3(step, firstname, lastname, device):
+    _edit_user(firstname, lastname)
+    user_action_webi.type_device(device)
+    form.submit.submit_form()
+
+
+@step(u'When I remove the device of user "([^"]*)" "([^"]*)"')
+def when_i_remove_the_device_of_user_group1_group2(step, firstname, lastname):
+    _edit_user(firstname, lastname)
+    user_action_webi.type_device('')
+    form.submit.submit_form()
+
+
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"$')
 def then_user_is_in_group(step, firstname, lastname, group_name):
     user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)

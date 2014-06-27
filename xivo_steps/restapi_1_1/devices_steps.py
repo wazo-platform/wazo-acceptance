@@ -19,6 +19,7 @@ from hamcrest import *
 from lettuce import step, world
 
 from xivo_acceptance.action.restapi import device_action_restapi
+from xivo_acceptance.action.webi import provd_plugins
 from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
 from xivo_lettuce import sysutils
 
@@ -43,6 +44,10 @@ def given_there_are_the_following_devices(step):
 @step(u'Given I have the following devices:')
 def given_i_have_the_following_devices(step):
     for deviceinfo in step.hashes:
+        if 'latest plugin of' in deviceinfo:
+            deviceinfo = dict(deviceinfo)
+            deviceinfo['plugin'] = provd_plugins.get_latest_plugin_name(deviceinfo['latest plugin of'])
+            del deviceinfo['latest plugin of']
         device_helper.add_or_replace_device(deviceinfo)
 
 

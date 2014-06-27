@@ -17,10 +17,29 @@
 
 import time
 
-from hamcrest import assert_that, equal_to, contains
+from hamcrest import assert_that, equal_to, contains, has_items
 from lettuce import step, world
-from xivo_acceptance.helpers import asterisk_helper
-from xivo_lettuce import sysutils, logs
+from xivo_acceptance.helpers import asterisk_helper, line_helper
+from xivo_lettuce import asterisk, sysutils, logs
+
+
+@step(u'Given the AMI is monitored')
+def given_the_ami_is_monitored(step):
+    asterisk.start_ami_monitoring()
+
+
+@step(u'Then I see in the AMI that the line "([^"]*)" has been synchronized')
+def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, extension):
+    time.sleep(1)
+    line = line_helper.find_with_extension(extension)
+    line_name = line.name
+    lines = [
+        'Action: SIPnotify',
+        'Channel: %s' % line_name,
+        'Variable: Event=check-sync',
+    ]
+    ami_lines = asterisk.fetch_ami_lines()
+    assert_that(ami_lines, has_items(*lines))
 
 
 @step(u'Asterisk command "([^"]*)" return no error')

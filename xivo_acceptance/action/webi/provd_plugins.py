@@ -17,7 +17,7 @@
 
 import time
 
-from lettuce.registry import world
+from lettuce import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 
 from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
@@ -98,9 +98,19 @@ def install_plugin(plugin_name):
     _install_plugin(plugin_line)
 
 
-def install_latest_plugin(plugin_name):
+def get_latest_plugin_name(plugin_prefix):
+    _, plugin_name = _get_latest_plugin_line_and_name(plugin_prefix)
+    return plugin_name
+
+
+def install_latest_plugin(plugin_prefix):
+    plugin_line, _ = _get_latest_plugin_line_and_name(plugin_prefix)
+    _install_plugin(plugin_line)
+
+
+def _get_latest_plugin_line_and_name(plugin_prefix):
     common.open_url('provd_plugin')
-    plugin_lines = common.find_lines(plugin_name)
+    plugin_lines = common.find_lines(plugin_prefix)
 
     chosen = None
     chosen_name = ''
@@ -111,10 +121,12 @@ def install_latest_plugin(plugin_name):
             continue
         if candidate_name > chosen_name:
             chosen = candidate
+            chosen_name = candidate_name
 
     if not chosen:
-        raise AssertionError('no plugin with name %s' % plugin_name)
-    _install_plugin(chosen)
+        raise AssertionError('no plugin with name %s' % plugin_prefix)
+
+    return chosen, chosen_name
 
 
 def _install_plugin(plugin_line):

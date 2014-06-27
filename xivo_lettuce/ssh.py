@@ -54,6 +54,12 @@ class SSHClient(object):
     def out_err_call(self, remote_command):
         return self._exec_ssh_command_with_return_stdout_stderr(remote_command)
 
+    def new_process(self, remote_command, *args, **kwargs):
+        kwargs.setdefault('close_fds', True)
+        command = self._format_ssh_command(remote_command)
+
+        return subprocess.Popen(command, *args, **kwargs)
+
     def _exec_ssh_command(self, remote_command):
         command = self._format_ssh_command(remote_command)
 
