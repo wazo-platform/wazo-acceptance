@@ -14,12 +14,14 @@ Feature: LDAP
     Scenario: Reverse lookup with LDAP
         Given a reverse lookup test configuration
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Sam       | Well     |   1767 | default | Client      |
+         | firstname | lastname | number | context | cti_profile | protocol |
+         | Sam       | Well     |   1767 | default | Client      | sip      |
         Given there's an LDAP server configured for reverse lookup with entries:
          | first name | last name |      phone |
          | Peter      | Pan       | 5551236666 |
-        When a call from "5551236666" is received on did "1767" for "Sam Well"
+        When chan_test calls "1767@from-extern" with id "1767-1" and calleridname "Peter Pan" and calleridnum "5551236666"
+        When I wait 1 seconds for the call processing
+        When chan_test hangs up "1767-1"
         Then I should see the following caller id:
          | Name  |     Number |
          | Peter | 5551236666 |

@@ -152,24 +152,6 @@ def then_i_see_called_from_callerid(step, user, callerid):
     assert_that(phone.remote_caller_id(), equal_to(callerid))
 
 
-@step(u'When a call from "([^"]*)" is received on did "([^"]*)" for "([^"]*)"')
-def when_a_call_from_number_to_is_received(step, number, did, name):
-    firstname, lastname = name.split(' ', 1)
-    vars = {
-        'name': name,
-        'number': number,
-        'login': firstname.lower(),
-        'password': lastname.lower(),
-        'did': did,
-    }
-    step.given('Given there is an incall "%(did)s" in context "from-extern" to the "User" "%(name)s"' % vars)
-    step.given('Given there is a SIP trunk "%(number)s" in context "from-extern"' % vars)
-    step.when('When I start the XiVO Client')
-    step.when('When I enable screen pop-up')
-    step.when('When I log in the XiVO Client as "%(login)s", pass "%(password)s"' % vars)
-    step.given('When chan_test calls "%(did)@from-extern"' % vars)
-
-
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
 def given_there_is_group1_activated_in_extensions_page(step, option_label):
     common.open_url('extenfeatures')
