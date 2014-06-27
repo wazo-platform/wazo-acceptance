@@ -13,7 +13,7 @@ Feature: Queue Member xlet
         Given there is a queue "SuperQueue" with number "3006" in "default" and unlogged members:
          | firstname | lastname | number | context | protocol |
          | Cédric    | Abunar   |   1202 | default | sip      |
-         | Sébastien | Duthil   |   1203 | default | sip      !
+         | Sébastien | Duthil   |   1203 | default | sip      |
         Given there is a logged agent "Pascal" "Cadotte Michaud" with number "1204" in "default"
         When I start the XiVO Client
         When I enable the hide unlogged agents option
