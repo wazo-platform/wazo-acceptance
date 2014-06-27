@@ -399,7 +399,6 @@ Feature: Sheet
         | db-special   |
         Given I assign the sheet "testsheet" to the "Link" event
         Given there is an incall "1043" in context "from-extern" to the "User" "GreatLord MacDonnell"
-        Given there is a SIP trunk "12345" in context "from-extern"
         
         When I start the XiVO Client
         When I enable screen pop-up
@@ -430,7 +429,7 @@ Feature: Sheet
         Given I start the XiVO Client
         Given I log in the XiVO client as "donald", pass "macronald"
         
-        When chan_test calls "1624@from-extern"
+        When chan_test calls "1624@default"
         When I wait 1 seconds for the calls processing
         When "Donald MacRonald" answers
         When I wait 1 seconds for the calls processing
@@ -457,7 +456,7 @@ Feature: Sheet
         | exchange | routing_key      |
         | xivo-cti | call_form_result |
 
-        When chan_test calls "1624@from-extern"
+        When chan_test calls "1624@default"
         When I wait 1 seconds for the calls processing
         When "Donald MacRonald" answers
         When I wait 1 seconds for the calls processing

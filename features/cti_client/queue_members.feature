@@ -11,9 +11,9 @@ Feature: Queue Member xlet
     Scenario: Enable and Disable Hide Unlogged Agents
         Given there is a call center supervisor "Etienne" "Lessard"
         Given there is a queue "SuperQueue" with number "3006" in "default" and unlogged members:
-         | firstname | lastname | number | context |
-         | Cédric    | Abunar   |   1202 | default |
-         | Sébastien | Duthil   |   1203 | default |
+         | firstname | lastname | number | context | protocol |
+         | Cédric    | Abunar   |   1202 | default | sip      |
+         | Sébastien | Duthil   |   1203 | default | sip      !
         Given there is a logged agent "Pascal" "Cadotte Michaud" with number "1204" in "default"
         When I start the XiVO Client
         When I enable the hide unlogged agents option
