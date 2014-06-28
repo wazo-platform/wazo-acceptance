@@ -429,7 +429,7 @@ Feature: Sheet
         Given I start the XiVO Client
         Given I log in the XiVO client as "donald", pass "macronald"
         
-        When chan_test calls "1624@default"
+        When chan_test calls "1624@default" with id "1624-1" and calleridname "Donald MacRonald" and calleridnum "to_default"
         When I wait 1 seconds for the calls processing
         When "Donald MacRonald" answers
         When I wait 1 seconds for the calls processing
