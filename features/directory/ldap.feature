@@ -22,6 +22,7 @@ Feature: LDAP
         When chan_test calls "1767@from-extern" with id "1767-1" and calleridname "Peter Pan" and calleridnum "5551236666"
         When I wait 1 seconds for the call processing
         When chan_test hangs up "1767-1"
+        When I wait 2 seconds for the data processing
         Then I should see the following caller id:
          | Name  |     Number |
          | Peter | 5551236666 |

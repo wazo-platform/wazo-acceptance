@@ -115,7 +115,7 @@ Feature: Remote Directory in CTI Client
         When I log in the XiVO Client as "greatlord", pass "macdonnell"
 
         When chan_test calls "1043@from-extern" with id "1043-1" and calleridname "DÉSPROGES" and calleridnum "12345"
-        When I wait 1 seconds for the call processing
+        When I wait 3 seconds for the call processing
         When chan_test hangs up "1043-1"
 
         Then I see a sheet with the following values:
