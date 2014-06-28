@@ -63,31 +63,10 @@ def given_there_are_users_with_infos(step):
         device
     """
     for user_data in step.hashes:
-        _add_user(user_data)
-        _register_and_track_phone(step.scenario, user_data)
+        _add_user(user_data, step=step)
 
 
-def _register_and_track_phone(scenario, user_data):
-    phone_available = user_data.get('protocol') == 'sip' and 'number' in user_data
-    if not phone_available:
-        return
-
-    number = user_data['number']
-    context = user_data.get('context', 'default')
-    line_configs = world.ws.lines.search_by_number_context(number, context)
-    if not line_configs:
-        return
-
-    name = ('%s %s' % (user_data.get('firstname', ''),
-                       user_data.get('lastname', ''))).strip()
-
-    phone_config = sip_config.create_config(world.config, scenario.phone_register, line_configs[0])
-    phone = sip_phone.register_line(phone_config)
-    if phone:
-        scenario.phone_register.add_registered_phone(phone, name)
-
-
-def _add_user(user_data):
+def _add_user(user_data, step=step):
     user_ws_data = {}
     user_ws_data['firstname'] = user_data['firstname']
     user_ws_data['lastname'] = user_data['lastname']
@@ -131,7 +110,7 @@ def _add_user(user_data):
     if user_data.get('mobile_number'):
         user_ws_data['mobile_number'] = user_data['mobile_number']
 
-    user_id = ule_helper.add_or_replace_user(user_ws_data)
+    user_id = ule_helper.add_or_replace_user(user_ws_data, step=step)
 
     if user_data.get('agent_number'):
         agent_helper.delete_agents_with_number(user_data['agent_number'])

@@ -19,7 +19,7 @@ from lettuce import world
 from execnet.gateway_base import RemoteError
 
 from xivo_acceptance.helpers import group_helper, provd_helper, line_helper, voicemail_helper, func_key_helper, \
-    entity_helper
+    entity_helper, sip_config, sip_phone
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import ElementNotExistsError
@@ -214,7 +214,7 @@ def _delete_using_user_service(channel, user_id):
 '''
 
 
-def add_user(data_dict):
+def add_user(data_dict, step=None):
     user = User()
 
     if 'id' in data_dict:
@@ -272,7 +272,30 @@ def add_user(data_dict):
     if not ret:
         return False
 
+    if step is not None:
+        _register_and_track_phone(step.scenario, data_dict)
+
     return int(ret)
+
+
+def _register_and_track_phone(scenario, user_data):
+    phone_available = user_data.get('protocol') == 'sip' and 'number' in user_data
+    if not phone_available:
+        return
+
+    number = user_data['number']
+    context = user_data.get('context', 'default')
+    line_configs = world.ws.lines.search_by_number_context(number, context)
+    if not line_configs:
+        return
+
+    name = ('%s %s' % (user_data.get('firstname', ''),
+                       user_data.get('lastname', ''))).strip()
+
+    phone_config = sip_config.create_config(world.config, scenario.phone_register, line_configs[0])
+    phone = sip_phone.register_line(phone_config)
+    if phone:
+        scenario.phone_register.add_registered_phone(phone, name)
 
 
 def user_id_is_in_group_name(group_name, user_id):

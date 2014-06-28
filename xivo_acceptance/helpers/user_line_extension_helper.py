@@ -59,7 +59,7 @@ def delete_user_line_extension_with_user_id(user_id):
     user_helper.delete_user(user.id)
 
 
-def add_or_replace_user(data_dict):
+def add_or_replace_user(data_dict, step=None):
     firstname = data_dict['firstname']
     lastname = data_dict.get('lastname', '')
     mailbox = data_dict.get('voicemail_number', None)
@@ -72,7 +72,7 @@ def add_or_replace_user(data_dict):
                                          context=context,
                                          mailbox=mailbox)
 
-    return user_helper.add_user(data_dict)
+    return user_helper.add_user(data_dict, step=step)
 
 
 def delete_users_with_profile(profile_name):
