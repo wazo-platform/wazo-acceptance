@@ -66,7 +66,7 @@ def given_there_are_users_with_infos(step):
         _add_user(user_data, step=step)
 
 
-def _add_user(user_data, step=step):
+def _add_user(user_data, step=None):
     user_ws_data = {}
     user_ws_data['firstname'] = user_data['firstname']
     user_ws_data['lastname'] = user_data['lastname']
