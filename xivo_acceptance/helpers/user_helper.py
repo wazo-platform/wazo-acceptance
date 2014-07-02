@@ -279,11 +279,11 @@ def add_user(data_dict, step=None):
 
 
 def _register_and_track_phone(scenario, user_data):
-    phone_available = user_data.get('protocol') == 'sip' and 'number' in user_data
+    phone_available = user_data.get('protocol') == 'sip' and 'line_number' in user_data
     if not phone_available:
         return
 
-    number = user_data['number']
+    number = user_data['line_number']
     context = user_data.get('context', 'default')
     line_configs = world.ws.lines.search_by_number_context(number, context)
     if not line_configs:
