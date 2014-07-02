@@ -183,3 +183,18 @@ def then_the_web_interfaces_shows_a_device_with(step):
     if 'switchboard_checked' in device_infos:
         expected = eval(device_infos['switchboard_checked'])
         assert_that(device_action_webi.is_switchboard_checked(), is_(expected))
+
+
+@step(u'Given the provisioning server has received the following HTTP requests:')
+def given_the_provisioning_server_has_received_the_following_http_requests(step):
+    _provisioning_server_http_requests(step)
+
+
+@step(u'When the provisioning server receives the following HTTP requests:')
+def when_the_provisioning_server_receives_the_following_http_requests(step):
+    _provisioning_server_http_requests(step)
+
+
+def _provisioning_server_http_requests(step):
+    for request_data in step.hashes:
+        provd_helper.request_http(request_data['path'], request_data['user-agent'])

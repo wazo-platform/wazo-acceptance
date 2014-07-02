@@ -15,8 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from hamcrest import assert_that, has_items
 from lettuce import world
 from StringIO import StringIO
+from xivo_lettuce import asterisk
 
 
 def get_confgen_file(file_name):

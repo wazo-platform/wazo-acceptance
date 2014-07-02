@@ -153,6 +153,11 @@ def select_protocol(protocol):
     input_protocol.select_by_visible_text(protocol)
 
 
+def type_device(device):
+    open_line_tab()
+    select_device(device)
+
+
 def select_device(device):
     input_device_1 = world.browser.find_element_by_xpath('//a[@class="select2-choice"]')
     input_device_1.click()

@@ -24,6 +24,7 @@ from xivobrowser import XiVOBrowser
 
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_lettuce.config import XivoAcceptanceConfig, read_config
+from xivo_lettuce import asterisk
 from xivo_lettuce import debug
 from xivo_lettuce import common
 from xivo_lettuce.phone_register import PhoneRegister
@@ -51,6 +52,7 @@ def xivo_lettuce_after_each_step(step):
 
 @after.each_scenario
 def xivo_lettuce_after_each_scenario(scenario):
+    asterisk.stop_ami_monitoring()
     scenario.phone_register.clear()
     _logout_agents()
 

@@ -72,7 +72,7 @@ Feature: Devices
         Given there are no devices with id "564635464951957"
         Given I have the following devices:
           |              id |             ip | mac               | vendor | model | plugin |
-          | 564635464951957 | 192.168.32.197 | 00:00:00:00:aa:01 | Aastra | 6757i | null |
+          | 564635464951957 | 192.168.32.197 | 00:00:00:00:aa:01 | Aastra | 6757i | null   |
         When I open the edit page of the device "564635464951957"
         Then the web interfaces shows a device with:
           | switchboard_enabled | switchboard_checked |
@@ -108,16 +108,6 @@ Feature: Devices
           | Han       | Solo     |   1138 | default | sip      | 00:00:00:fa:1c:01 |
         When I delete the device "1654324689546246"
         Then there is no device "00:00:00:fa:1c:01"
-
-#    Scenario: Synchronize
-#       Given there are no devices with id "123"
-#        Given I have the following devices:
-#          | id  | ip             | mac               |
-#          | 123 | 192.168.32.197 | 00:00:00:00:aa:01 |
-#        When I synchronize the device with mac "00:00:00:00:aa:01" from webi
-#        Then the REST API received a request with infos:
-#          | method | path                 |
-#          | GET    | /1.1/devices/123/synchronize |
 
     Scenario: Autoprov
         Given there are no devices with id "62144354987621"
