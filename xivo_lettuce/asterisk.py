@@ -117,13 +117,13 @@ class _AMIMonitor(object):
                 for fd, mode in ready:
                     if mode & select.POLLIN:
                         if fd == p.stdout.fileno():
-                                data = os.read(fd, 2048)
-                                if not data:
-                                    ok = False
-                                    print_returncode = True
-                                else:
-                                    with self._lock:
-                                        self._data += data
+                            data = os.read(fd, 2048)
+                            if not data:
+                                ok = False
+                                print_returncode = True
+                            else:
+                                with self._lock:
+                                    self._data += data
                         elif fd == self._pipe.read_fd:
                             if mode & select.POLLIN:
                                 self._pipe.read(16)
