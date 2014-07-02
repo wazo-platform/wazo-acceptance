@@ -81,11 +81,8 @@ class _AMIMonitor(object):
             self._thread = threading.Thread(target=self._run, name='AMI monitor', args=(p,))
             self._thread.start()
         except Exception:
-            try:
-                raise
-            finally:
-                p.terminate()
-                p.wait()
+	    p.terminate()
+	    p.wait()
 
     def stop(self):
         if not self._thread:
