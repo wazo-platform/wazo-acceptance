@@ -3,8 +3,8 @@ Feature: Synchronize
     Scenario: Synchronize device with previous state
         Given the latest plugin "xivo-aastra" is installed
         Given I have the following devices:
-          |               id | mac               | latest plugin of |
-          | 1654324689540246 | 00:11:22:33:44:01 | xivo-aastra      |
+          | mac               | latest plugin of |
+          | 00:11:22:33:44:01 | xivo-aastra      |
         Given there are users with infos:
           | firstname | lastname | number | context | protocol |            device |
           | User      | 01       |   1001 | default | sip      | 00:11:22:33:44:01 |
@@ -33,9 +33,9 @@ Feature: Synchronize
     Scenario: Synchronize two devices behind NAT
         Given the latest plugin "xivo-aastra" is installed
         Given I have the following devices:
-          |               id | mac               | latest plugin of |
-          | 1654324689540246 | 00:11:22:33:44:01 | xivo-aastra      |
-          | 1654324689540247 | 00:11:22:33:44:02 | xivo-aastra      |
+          | mac               | latest plugin of |
+          | 00:11:22:33:44:01 | xivo-aastra      |
+          | 00:11:22:33:44:02 | xivo-aastra      |
         Given there are users with infos:
           | firstname | lastname | number | context | protocol |            device |
           | User      | 01       |   1001 | default | sip      | 00:11:22:33:44:01 |
