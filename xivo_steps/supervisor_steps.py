@@ -30,4 +30,4 @@ def given_there_is_a_call_center_supervisor_firstname_lastname(step, firstname, 
         'client_password': lastname.lower(),
         'enable_client': True,
     }
-    ule_helper.add_or_replace_user(user_data)
+    ule_helper.add_or_replace_user(user_data, step=step)

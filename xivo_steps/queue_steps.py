@@ -68,31 +68,6 @@ def convert_schedule_name(schedule_name):
     return schedule_id
 
 
-@step(u'Given there is a queue "([^"]*)" with number "([^"]*)" in "([^"]*)" and unlogged members:')
-def given_there_is_a_queue_queue_name_with_number_number_and_unlogged_members(step, queue_name, queue_number, queue_context):
-    agent_ids = []
-    for agent_data in step.hashes:
-        user_data = {
-            'firstname': agent_data['firstname'],
-            'lastname': agent_data['lastname'],
-            'line_number': agent_data['number'],
-            'line_context': agent_data['context'],
-        }
-        user_id = ule_helper.add_or_replace_user(user_data)
-        agent_data['users'] = [user_id]
-        agent_id = agent_helper.add_or_replace_agent(agent_data)
-        agent_ids.append(agent_id)
-
-    queue_data = {
-        'name': queue_name,
-        'number': queue_number,
-        'context': queue_context,
-        'agents': agent_ids,
-    }
-
-    queue_helper.add_or_replace_queue(queue_data)
-
-
 @step(u'Given there is no queue with number "([^"]*)"')
 def given_there_is_no_queue_with_number(step, queue_number):
     queue_helper.delete_queues_with_number(queue_number)

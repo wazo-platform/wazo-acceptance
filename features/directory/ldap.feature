@@ -19,10 +19,13 @@ Feature: LDAP
         Given there's an LDAP server configured for reverse lookup with entries:
          | first name | last name |      phone |
          | Peter      | Pan       | 5551236666 |
-        When chan_test calls "1767@from-extern" with id "1767-1" and calleridname "Peter Pan" and calleridnum "5551236666"
+        Given there is an incall "1767" in context "from-extern" to the "User" "Sam Well"
+        
+        When chan_test calls "1767@from-extern" with id "1767-1"
         When I wait 1 seconds for the call processing
         When chan_test hangs up "1767-1"
         When I wait 2 seconds for the data processing
+        
         Then I should see the following caller id:
          | Name  |     Number |
          | Peter | 5551236666 |

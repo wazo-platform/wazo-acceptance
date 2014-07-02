@@ -84,7 +84,7 @@ def given_there_is_a_group_with_n_users(step, group_size):
             {'firstname': 'random',
              'lastname': str(i),
              'line_number': str(1100 + i),
-             'line_context': 'default'})
+             'line_context': 'default'}, step=step)
         group_members.append(user_id)
 
     group_helper.add_or_replace_group(group_name, user_ids=group_members)

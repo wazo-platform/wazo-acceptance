@@ -39,26 +39,6 @@ def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, ext
     agent_helper.add_agent(agent_data)
 
 
-@step(u'Given there is a logged agent "([^"]*)" "([^"]*)" with number "([^"]*)" in "([^"]*)"$')
-def given_there_is_a_logged_agent_1_2_with_number_3_in_4(step, firstname, lastname, number, context):
-    user_data = {
-        'firstname': firstname,
-        'lastname': lastname,
-        'line_number': number,
-        'line_context': context
-    }
-    user_id = ule_helper.add_or_replace_user(user_data)
-    agent_data = {
-        'firstname': firstname,
-        'lastname': lastname,
-        'number': number,
-        'context': context,
-        'users': [user_id]
-    }
-    agent_helper.add_or_replace_agent(agent_data)
-    when_i_log_agent_1(step, number)
-
-
 @step(u'Given there is no agents logged')
 def given_there_is_no_agents_logged(step):
     agent_helper.unlog_all_agents()

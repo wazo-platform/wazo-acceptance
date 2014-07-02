@@ -25,7 +25,7 @@ from xivo_acceptance.action.restapi import user_action_restapi
 @step(u'Given I have the following users:')
 def given_i_have_the_following_users(step):
     for userinfo in step.hashes:
-        user_helper.add_or_replace_user(userinfo)
+        user_helper.add_or_replace_user(userinfo, step=step)
 
 
 @step(u'Given there are no users with id "([^"]*)"$')
