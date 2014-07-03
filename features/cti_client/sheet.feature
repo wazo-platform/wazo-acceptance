@@ -403,7 +403,7 @@ Feature: Sheet
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO Client as "greatlord", pass "macdonnell"
-        When chan_test calls "1043@from-extern"
+        When chan_test calls "1043@from-extern" with id "1043-1" and calleridname "12345" and calleridnum "12345"
         When I wait 1 seconds for the calls processing
         When "GreatLord MacDonnell" answers
         When I wait 1 seconds for the calls processing
