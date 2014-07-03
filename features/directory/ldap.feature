@@ -20,12 +20,11 @@ Feature: LDAP
          | first name | last name |      phone |
          | Peter      | Pan       | 5551236666 |
         Given there is an incall "1767" in context "from-extern" to the "User" "Sam Well"
-        
-        When chan_test calls "1767@from-extern" with id "1767-1"
-        When I wait 1 seconds for the call processing
-        When chan_test hangs up "1767-1"
-        When I wait 2 seconds for the data processing
-        
+        When I start the XiVO Client
+        When I enable screen pop-up
+        When I log in the XiVO Client as "sam", pass "well"
+        When chan_test calls "1767@from-extern" with id "1767-1" and calleridname "5551236666" and calleridnum "5551236666"
+        When "Sam Well" answers
         Then I should see the following caller id:
          | Name  |     Number |
          | Peter | 5551236666 |
