@@ -17,17 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import os
-
 from lettuce import world
 
 from xivo_acceptance.helpers import context_helper
 from xivo_dao.helpers import db_manager
-from xivo_lettuce.terrain import initialize, deinitialize
 from xivo_lettuce import common
-
-
-_WEBSERVICES_SQL_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'webservices.sql'))
+from xivo_lettuce.assets import copy_asset_to_server
+from xivo_lettuce.terrain import initialize, deinitialize
 
 
 def main():
@@ -66,7 +62,7 @@ def main():
 
 
 def _create_webservices_access():
-    world.ssh_client_xivo.send_files(_WEBSERVICES_SQL_FILE, '/tmp')
+    copy_asset_to_server('webservices.sql', '/tmp')
     cmd = ['sudo', '-u', 'postgres', 'psql', '-f', '/tmp/webservices.sql']
     world.ssh_client_xivo.check_call(cmd)
 
