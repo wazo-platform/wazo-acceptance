@@ -99,7 +99,7 @@ def _create_voicemail(channel, parameters):
         voicemail.deletevoicemail = int(parameters['delete_messages'])
 
     if 'ask_password' in parameters:
-        voicemail.skipcheckpass = int(parameters['ask_password'])
+        voicemail.skipcheckpass = int(not parameters['ask_password'])
 
     DaoSession.begin()
     DaoSession.add(voicemail)
