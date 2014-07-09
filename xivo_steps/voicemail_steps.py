@@ -85,7 +85,7 @@ def when_i_request_the_list_of_voicemails(step):
     world.response = voicemail_action_restapi.voicemail_list()
 
 
-@step(u'When I link user "([^"]*)" with voicemail "([^"]*)" via RESTAPI')
+@step(u'When I associate user "([^"]*)" with voicemail "([^"]*)" via RESTAPI')
 def when_i_link_user_group1_with_voicemail_group2_via_restapi(step, fullname, voicemail):
     user = user_helper.find_user_by_name(fullname)
     number, context = func.extract_number_and_context_from_extension(voicemail)
@@ -94,7 +94,7 @@ def when_i_link_user_group1_with_voicemail_group2_via_restapi(step, fullname, vo
     world.response = voicemail_link_action_restapi.link_voicemail(user.id, voicemail_id)
 
 
-@step(u'When I link user "([^"]*)" with voicemail id "([^"]*)" via RESTAPI')
+@step(u'When I associate user "([^"]*)" with voicemail id "([^"]*)" via RESTAPI')
 def when_i_link_user_group1_with_voicemail_id_group2_via_restapi(step, fullname, voicemail_id):
     user = user_helper.find_user_by_name(fullname)
     world.response = voicemail_link_action_restapi.link_voicemail(user.id, int(voicemail_id))
