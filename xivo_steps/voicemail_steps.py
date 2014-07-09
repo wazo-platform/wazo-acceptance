@@ -23,6 +23,8 @@ from xivo_acceptance.action.restapi import voicemail_action_restapi
 from xivo_acceptance.action.restapi import voicemail_link_action_restapi
 from xivo_lettuce import func, common
 
+FAKE_ID = 999999999
+
 
 @step(u'Given there is no voicemail with number "([^"]*)" and context "([^"]*)"')
 def given_there_is_no_voicemail_with_number_and_context(step, voicemail_number, context):
@@ -98,6 +100,14 @@ def when_i_link_user_group1_with_voicemail_group2_via_restapi(step, fullname, vo
 def when_i_link_user_group1_with_voicemail_id_group2_via_restapi(step, fullname, voicemail_id):
     user = user_helper.find_user_by_name(fullname)
     world.response = voicemail_link_action_restapi.link_voicemail(user.id, int(voicemail_id))
+
+
+@step(u'When I associate a fake user with with voicemail "([^"]*)" via RESTAPI')
+def when_i_associate_a_fake_user_with_with_voicemail_group1_via_restapi(step, voicemail):
+    number, context = func.extract_number_and_context_from_extension(voicemail)
+    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
+
+    world.response = voicemail_link_action_restapi.link_voicemail(FAKE_ID, voicemail_id)
 
 
 @step(u'When I request the voicemail associated to user "([^"]*)" "([^"]*)" via RESTAPI')
