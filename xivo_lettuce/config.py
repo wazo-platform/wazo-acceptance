@@ -90,7 +90,6 @@ class XivoAcceptanceConfig(object):
         self.rest_provd = None
         self.provd_client = None
         self.ws_utils = None
-        self.restapi_utils_1_0 = None
         self.restapi_utils_1_1 = None
         self.xivo_configured = None
 
@@ -161,8 +160,6 @@ class XivoAcceptanceConfig(object):
             'auth_username': self.rest_username,
             'auth_passwd': self.rest_passwd
         }
-        rest_config_dict.update({'api_version': '1.0'})
-        self.restapi_config_1_0 = RestConfiguration(**rest_config_dict)
 
         rest_config_dict.update({'api_version': '1.1'})
         self.restapi_config_1_1 = RestConfiguration(**rest_config_dict)
@@ -170,7 +167,6 @@ class XivoAcceptanceConfig(object):
         self.ws_utils = xivo_ws.XivoServer(self.xivo_host,
                                            self.rest_username,
                                            self.rest_passwd)
-        self.restapi_utils_1_0 = WsUtils(self.restapi_config_1_0)
         self.restapi_utils_1_1 = WsUtils(self.restapi_config_1_1)
 
     def _setup_provd(self):

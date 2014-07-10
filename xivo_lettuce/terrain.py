@@ -87,7 +87,6 @@ def _setup_ssh_client():
 @debug.logcall
 def _setup_ws():
     world.ws = world.config.ws_utils
-    world.restapi_utils_1_0 = world.config.restapi_utils_1_0
     world.restapi_utils_1_1 = world.config.restapi_utils_1_1
 
 
