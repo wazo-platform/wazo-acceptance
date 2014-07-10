@@ -31,10 +31,12 @@ class WsUtils(object):
     '''
 
     def __init__(self, rest_configuration_obj):
-        self.baseurl = self._prepare_baseurl(rest_configuration_obj)
-        self.auth = self._prepare_auth(rest_configuration_obj)
-        self.headers = self._prepare_headers(rest_configuration_obj)
-        self.session = requests.Session()
+        self.config = rest_configuration_obj
+        self.baseurl = self._prepare_baseurl(self.config)
+        self.recreate_session()
+
+    def recreate_session(self):
+        self.session = self._prepare_session(self.config)
 
     def _prepare_baseurl(self, rest_configuration_obj):
         protocol = rest_configuration_obj.protocol
@@ -49,53 +51,36 @@ class WsUtils(object):
 
         return baseurl
 
-    def _prepare_auth(self, rest_configuration_obj):
+    def _prepare_session(self, rest_configuration_obj):
+        session = requests.Session()
+        session.headers.update({'Content-Type': rest_configuration_obj.content_type})
+        session.verify = False
+
         username = rest_configuration_obj.auth_username
         password = rest_configuration_obj.auth_passwd
+        if username and password:
+            session.auth = requests.auth.HTTPDigestAuth(username, password)
 
-        if username is None and password is None:
-            return None
-
-        auth = requests.auth.HTTPDigestAuth(username, password)
-        return auth
-
-    def _prepare_headers(self, rest_configuration_obj):
-        headers = {}
-        headers.update({'Content-Type': rest_configuration_obj.content_type})
-        return headers
+        return session
 
     def rest_get(self, path, **kwargs):
-        request = self._prepare_request('GET', path, **kwargs)
-        return self._process_request(request)
+        return self._request('GET', path, **kwargs)
 
     def rest_post(self, path, payload, **kwargs):
         data = json.dumps(payload)
-        request = self._prepare_request('POST', path, data=data, **kwargs)
-        return self._process_request(request)
+        return self._request('POST', path, data=data, **kwargs)
 
     def rest_put(self, path, payload, **kwargs):
         data = json.dumps(payload)
-        request = self._prepare_request('PUT', path, data=data, **kwargs)
-        return self._process_request(request)
+        return self._request('PUT', path, data=data, **kwargs)
 
     def rest_delete(self, path, **kwargs):
-        request = self._prepare_request('DELETE', path, **kwargs)
-        return self._process_request(request)
+        return self._request('DELETE', path, **kwargs)
 
-    def _prepare_request(self, method, path, **kwargs):
-        if not path.startswith('/'):
-            path = '/%s' % path
-        url = "%s%s" % (self.baseurl, path)
-
-        return requests.Request(method=method,
-                                url=url,
-                                headers=self.headers,
-                                auth=self.auth,
-                                **kwargs)
-
-    def _process_request(self, request):
-        prep = request.prepare()
-        response = self.session.send(prep, verify=False, allow_redirects=False)
+    def _request(self, method, path, *args, **kwargs):
+        path = path.lstrip('/')
+        url = "%s/%s" % (self.baseurl, path)
+        response = self.session.request(method, url, *args, **kwargs)
         return self._process_response(response)
 
     def _process_response(self, response):
