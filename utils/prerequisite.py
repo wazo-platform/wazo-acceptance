@@ -17,11 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import subprocess
+
 from lettuce import world
 
 from xivo_acceptance.helpers import context_helper
 from xivo_dao.helpers import db_manager
-from xivo_lettuce import common
+from xivo_lettuce import common, assets
 from xivo_lettuce.assets import copy_asset_to_server
 from xivo_lettuce.terrain import initialize, deinitialize
 
@@ -45,6 +47,9 @@ def main():
 
         print 'Installing packages'
         _install_packages(['tcpflow'])
+
+        print 'Installing chan_test (module for asterisk)'
+        _install_chan_test()
 
         print 'Adding context'
         context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
@@ -117,6 +122,13 @@ def _install_packages(packages):
     command = ['apt-get', 'update', '&&', 'apt-get', 'install', '-y']
     command.extend(packages)
     world.ssh_client_xivo.check_call(command)
+
+
+def _install_chan_test():
+    asset_full_path = assets.full_path('chan_test.so')
+    remote_path = '/usr/lib/asterisk/modules/chan_test.so'
+    command = ['scp', asset_full_path, '%s:%s' % (world.config.xivo_host, remote_path)]
+    subprocess.call(command)
 
 
 if __name__ == '__main__':
