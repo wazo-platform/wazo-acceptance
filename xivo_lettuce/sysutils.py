@@ -118,6 +118,13 @@ def get_number_of_file_descriptor(service):
     return len(output_command(cmd).split('\n')) - 1
 
 
-def restart_service(service_name):
-    command = ['service', service_name, 'restart']
+def restart_service(service_name, env=None):
+    if env is None:
+        env = {}
+    variables = ['{}={}'.format(variable, value) for (variable, value) in env.iteritems()]
+    # we must use /etc/init.d, not the service utility, because service clears env variables
+    command = variables + ['/etc/init.d/{}'.format(service_name), 'restart']
     world.ssh_client_xivo.check_call(command)
+
+    if service_name == 'xivo-restapi':
+        world.config.restapi_utils_1_1.recreate_session()

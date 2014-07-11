@@ -59,10 +59,7 @@ def given_there_exists_the_following_device_template(step):
 
 @step(u'Given I set the HTTP_PROXY environment variables to "([^"]*)"')
 def given_i_set_the_http_proxy_environment_variables_to_group1(step, http_proxy):
-    # we must use /etc/init.d, not the service utility
-    command = ['export', 'HTTP_PROXY=%s' % http_proxy, ';', '/etc/init.d/xivo-restapi', 'restart']
-    sysutils.send_command(command, check=True)
-    world.config.restapi_utils_1_1.recreate_session()
+    sysutils.restart_service('xivo-restapi', env={'HTTP_PROXY': http_proxy})
 
 
 @step(u'Given device with ip "([^"]*)" is provisionned with SIP line "([^"]*)"')
