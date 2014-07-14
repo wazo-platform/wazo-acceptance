@@ -34,13 +34,6 @@ def given_there_are_no_devices_with_id_group1(step, device_id):
     provd_helper.delete_device(device_id)
 
 
-@step(u'Given I only have the following devices:')
-def given_there_are_the_following_devices(step):
-    provd_helper.delete_all()
-    for deviceinfo in step.hashes:
-        provd_helper.create_device(deviceinfo)
-
-
 @step(u'Given I have the following devices:')
 def given_i_have_the_following_devices(step):
     for deviceinfo in step.hashes:

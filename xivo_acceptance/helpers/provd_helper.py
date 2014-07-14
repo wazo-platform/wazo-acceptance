@@ -200,41 +200,6 @@ def _delete_device_with_ip(channel, ip):
         device_manager.remove(device['id'])
 
 
-def delete_all():
-    remote_exec(_delete_all)
-
-
-def _delete_all(channel):
-    from xivo_dao.helpers import provd_connector
-    config_manager = provd_connector.config_manager()
-    device_manager = provd_connector.device_manager()
-
-    for device in device_manager.find():
-        try:
-            config_manager.remove(device['id'])
-        except Exception:
-            pass
-        device_manager.remove(device['id'])
-
-
-def remove_devices_over(max_devices):
-    remote_exec(_remove_devices_over, max_devices=max_devices)
-
-
-def _remove_devices_over(channel, max_devices):
-    from xivo_dao.helpers import provd_connector
-    config_manager = provd_connector.config_manager()
-    device_manager = provd_connector.device_manager()
-
-    all_devices = device_manager.find()
-    extra_devices = all_devices[max_devices:]
-
-    for device in extra_devices:
-        if 'config' in device:
-            config_manager.remove(device['config'])
-        device_manager.remove(device['id'])
-
-
 def request_http(path, user_agent):
     url = 'http://%s:8667/%s' % (world.config.xivo_host, path)
     request = urllib2.Request(url, headers={'User-Agent': user_agent})
