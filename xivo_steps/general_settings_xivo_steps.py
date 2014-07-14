@@ -39,14 +39,14 @@ def when_i_enable_live_reload_configuration(step):
     general_settings_xivo_action_webi.disable_live_reload()
 
 
-@step(u'Then i see live reload request in daemon log file')
+@step(u'Then i see live reload request in sysconfd log file')
 def then_i_see_messages_in_sysconfd_log_file(step):
     expression = "'POST /exec_request_handlers HTTP/1.1' 200"
     log_lines = logs.find_line_in_xivo_sysconfd_log()
     assert_that(log_lines, has_item(contains_string(expression)))
 
 
-@step(u'Then i see no live reload request in daemon log file')
+@step(u'Then i see no live reload request in sysconfd log file')
 def then_i_see_no_messages_in_sysconfd_log_file(step):
     expression = "'POST /exec_request_handlers HTTP/1.1' 200"
     log_lines = logs.find_line_in_xivo_sysconfd_log()
