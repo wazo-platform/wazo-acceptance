@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
+from hamcrest import assert_that, has_entries, has_entry, has_item, has_length, instance_of
 from lettuce import step, world
 
 from xivo_acceptance.action.restapi import device_action_restapi
