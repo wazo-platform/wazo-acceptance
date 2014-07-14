@@ -1,6 +1,6 @@
 Feature: Entity Filter
 
-    Scenario: Context / User / Line / Group / Voicemail / Conference Room / Incall / Queue / Agent / Callfilter / Pickup group / Schedule
+    Scenario: Context / User / Line / Group / Voicemail / Conference Room / Incall / Queue / Agent / Callfilter / Pickup group / Schedule / Device
         Given there are entities with infos:
           | name           | display_name  |
           | entity_filter  | entity_filter |
@@ -11,6 +11,7 @@ Feature: Entity Filter
           | module      | category           | section  |   active |
           | IPBX        | IPBX configuration | Contexts   | yes    |
           | IPBX        | IPBX settings      | Users      | yes    |
+          | IPBX        | IPBX settings      | Devices    | yes    |
           | IPBX        | IPBX settings      | Lines      | yes    |
           | IPBX        | IPBX settings      | Groups     | yes    |
           | IPBX        | IPBX settings      | Voicemails | yes    |
@@ -31,14 +32,20 @@ Feature: Entity Filter
           | meetme | foo     | 4000        | 4999      | entity_filter |           |
           | incall | alberta | 1000        | 4999      | entity_filter | 4         |
 
+        Given I have the following devices:
+          | id               | ip             | mac               | plugin                | model | vendor |
+          | 1654324689546241 | 192.168.32.101 | 00:00:00:df:ef:01 | xivo-aastra-3.3.1-SP2 | 6757i | Aastra |
+          | 1654324689546242 | 192.168.32.102 | 00:00:00:df:ef:02 | xivo-aastra-3.3.1-SP2 | 6757i | Aastra |
+          | 1654324689546243 | 192.168.32.103 | 00:00:00:df:ef:03 | xivo-aastra-3.3.1-SP2 | 6757i | Aastra |
+
         Given there are users with infos:
-          | firstname      | lastname | number | context | entity_name   | bsfilter  |
-          | _entity_filter | default  |   1101 | default |               |           |
-          | _entity_filter | foo      |   1101 | foo     | entity_filter |           |
-          | boss           | 1        | 1405   | foo     | entity_filter | boss      |
-          | secretary      | 1        | 1410   | foo     | entity_filter | secretary |
-          | boss           | 2        | 1406   | default |               | boss      |
-          | secretary      | 2        | 1411   | default |               | secretary |
+          | firstname      | lastname | number | context | entity_name   | bsfilter  | device            |
+          | _entity_filter | default  |   1101 | default |               |           | 00:00:00:df:ef:01 |
+          | _entity_filter | foo      |   1101 | foo     | entity_filter |           | 00:00:00:df:ef:02 |
+          | boss           | 1        | 1405   | foo     | entity_filter | boss      |                   |
+          | secretary      | 1        | 1410   | foo     | entity_filter | secretary |                   |
+          | boss           | 2        | 1406   | default |               | boss      |                   |
+          | secretary      | 2        | 1411   | default |               | secretary |                   |
 
         Given there is a group "groupe" with extension "2222@default"
         Given there is a group "entity_filter" with extension "2555@foo"
@@ -125,3 +132,10 @@ Feature: Entity Filter
 
         Then schedule "entity_filter" is displayed in the list
         Then schedule "no_filter" is not displayed in the list
+
+        Then there is no device "00:00:00:df:ef:01"
+
+        Then I see devices with infos:
+        | mac               | configured |
+        | 00:00:00:df:ef:02 | True       |
+        | 00:00:00:df:ef:03 | False      |

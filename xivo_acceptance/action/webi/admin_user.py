@@ -40,6 +40,7 @@ SECTION_MAP = {
     'Users': 'users',
     'Contexts': 'context',
     'Entities': 'entity',
+    'Devices': 'devices',
     'Lines': 'lines',
     'Groups': 'groups',
     'Voicemails': 'voicemail',

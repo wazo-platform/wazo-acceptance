@@ -254,8 +254,8 @@ def add_user(data_dict, step=None):
             user.line.protocol = data_dict['protocol']
         if 'device' in data_dict:
             device = provd_helper.find_by_mac(data_dict['device'])
-            device_id = str(device['id'])
-            user.line.device_id = device_id
+            if device is not None:
+                user.line.device_id = str(device['id'])
 
     if 'voicemail_name' in data_dict and 'voicemail_number' in data_dict:
         user.voicemail = UserVoicemail()

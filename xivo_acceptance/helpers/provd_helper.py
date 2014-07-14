@@ -96,10 +96,10 @@ def _create_device(channel, deviceinfo):
     if 'template_id' in deviceinfo:
         del deviceinfo['template_id']
 
-    deviceinfo['config'] = config['id']
+    # deviceinfo['config'] = config['id']
 
     device_manager.add(deviceinfo)
-    config_manager.add(config)
+    # config_manager.add(config)
 
 
 def get_provd_config(device_id):
