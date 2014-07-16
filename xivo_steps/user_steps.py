@@ -23,7 +23,7 @@ from selenium.webdriver.support.select import Select
 from xivo_acceptance.action.restapi import user_action_restapi
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.webi import line as line_action_webi
-from xivo_acceptance.helpers import user_helper, agent_helper, group_helper, sip_config, sip_phone
+from xivo_acceptance.helpers import user_helper, agent_helper, group_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common, form
 
@@ -266,13 +266,13 @@ def when_i_create_a_user(step):
     common.open_url('user', 'add')
     user_properties = step.hashes[0]
     user_action_webi.type_user_names(user_properties['firstname'], user_properties.get('lastname', ''))
-    if 'number' in user_properties:
+    if 'number' in user_properties and 'context' in user_properties and 'protocol' in user_properties:
         user_action_webi.user_form_add_line(
-            entity_displayname=user_properties.get('entity_displayname', None),
             linenumber=user_properties['number'],
+            context=user_properties['context'],
             protocol=user_properties['protocol'],
             device=user_properties.get('device', None),
-            context=user_properties['context'],
+            entity_displayname=user_properties.get('entity_displayname', None),
         )
 
     form.submit.submit_form()
