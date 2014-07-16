@@ -10,7 +10,7 @@ Feature: SkillRules
     Scenario: Add a skill rule with one rule not equal
         Given the skill rule "taxidermy" does not exist
         When I create a skill rule "taxidermy" with rules:
-        | rule              |
+        | rule          |
         | taxidermy ! 0 |
         Then "taxidermy ! 0" is displayed in the list
 
