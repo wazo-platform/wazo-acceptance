@@ -118,8 +118,10 @@ def change_key_order(pairs):
         number_field.select_by_visible_text(new)
 
 
-def user_form_add_line(linenumber, context='default', protocol='SIP', device=None):
+def user_form_add_line(linenumber, context='default', protocol='SIP', device=None, entity_displayname=None):
     open_line_tab()
+    if entity_displayname is not None:
+        select_entity_with_displayname(entity_displayname)
     click_add_line_button()
     select_context(context)
     type_line_number(linenumber)
@@ -136,6 +138,11 @@ def open_line_tab():
 def click_add_line_button():
     add_button = world.browser.find_element_by_id('lnk-add-row')
     add_button.click()
+
+
+def select_entity_with_displayname(entity_displayname):
+    input_entity = world.browser.find_elements_by_id('it-userfeatures-entityid')[0]
+    Select(input_entity).select_by_visible_text(entity_displayname)
 
 
 def select_context(context):

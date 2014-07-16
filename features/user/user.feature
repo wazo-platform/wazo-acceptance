@@ -59,8 +59,8 @@ Feature: User
         When I search device ""
         Given there is no user "Bill" "Bush"
         When I create a user with infos:
-        | firstname | lastname | protocol | number | context | device            |
-        | Bill      | Bush     | SIP      |   1632 | Default | 00:de:ad:be:ef:00 |
+        | firstname | lastname | protocol | number | context | device            | entity_displayname |
+        | Bill      | Bush     | SIP      |   1632 | Default | 00:de:ad:be:ef:00 | xivo_entity        |
         Then I see a user with infos:
         | fullname  | number | protocol |
         | Bill Bush |   1632 | sip      |

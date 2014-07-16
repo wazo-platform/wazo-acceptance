@@ -75,7 +75,7 @@ def _add_or_replace_device_template(channel, properties):
 
 
 def create_device(deviceinfo):
-    remote_exec(_create_device, deviceinfo=deviceinfo)
+    return remote_exec(_create_device, deviceinfo=deviceinfo)
 
 
 def _create_device(channel, deviceinfo):
@@ -85,8 +85,13 @@ def _create_device(channel, deviceinfo):
     device_manager = provd_connector.device_manager()
     config_manager = provd_connector.config_manager()
 
+    if 'id' not in deviceinfo:
+        device_id = str(uuid.uuid4())
+    else:
+        device_id = deviceinfo['id']
+
     config = {
-        'id': deviceinfo.get('id', str(uuid.uuid4())),
+        'id': device_id,
         'deletable': True,
         'parent_ids': ['base', deviceinfo.get('template_id', 'defaultconfigdevice')],
         'configdevice': deviceinfo.get('template_id', 'defaultconfigdevice'),
@@ -96,10 +101,10 @@ def _create_device(channel, deviceinfo):
     if 'template_id' in deviceinfo:
         del deviceinfo['template_id']
 
-    deviceinfo['config'] = config['id']
-
     device_manager.add(deviceinfo)
     config_manager.add(config)
+
+    return id
 
 
 def get_provd_config(device_id):

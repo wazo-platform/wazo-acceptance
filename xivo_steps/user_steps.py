@@ -163,6 +163,7 @@ def when_i_create_a_user(step):
     user_action_webi.type_user_names(user_properties['firstname'], user_properties.get('lastname', ''))
     if 'number' in user_properties:
         user_action_webi.user_form_add_line(
+            entity_displayname=user_properties.get('entity_displayname', None),
             linenumber=user_properties['number'],
             protocol=user_properties['protocol'],
             device=user_properties.get('device', None),
