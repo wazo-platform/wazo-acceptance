@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import all_of, assert_that, equal_to, has_property, has_item
+from hamcrest import *
 from lettuce import step, world
 from StringIO import StringIO
 
