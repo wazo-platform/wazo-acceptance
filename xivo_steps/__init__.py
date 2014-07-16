@@ -31,13 +31,16 @@ from common_xivoclient_steps import *
 from common_bus_steps import *
 from conf_file_steps import *
 from configfiles_steps import *
+from configuration_steps import *
 from context_steps import *
 from cti_client_configuration_steps import *
+from cti_profiles_steps import *
 from cti_server_steps import *
 from device_steps import *
 from dhcpd_steps import *
 from directory_steps import *
 from entity_steps import *
+from extensions_steps import *
 from files_steps import *
 from funckeys_steps import *
 from general_settings_iax_steps import *
@@ -60,8 +63,9 @@ from profile_steps import *
 from provd_plugins_steps import *
 from provd_proxy_steps import *
 from queue_steps import *
-from restapi_1_1 import *
+from resource_steps import *
 from restapi_steps import *
+from result_steps import *
 from schedule_steps import *
 from service_extensions import *
 from sheet_steps import *

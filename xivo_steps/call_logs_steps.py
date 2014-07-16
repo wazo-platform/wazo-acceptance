@@ -17,7 +17,10 @@
 
 from hamcrest import all_of, assert_that, equal_to, has_property, has_item
 from lettuce import step, world
+from StringIO import StringIO
 
+from xivo.unicode_csv import UnicodeDictReader
+from xivo_acceptance.action.restapi import call_logs_action_restapi
 from xivo_acceptance.action.webi import call_logs as call_logs_action_webi
 from xivo_acceptance.helpers import call_logs_helper, cel_helper
 from xivo_lettuce import assets, common, form, sysutils
@@ -43,6 +46,24 @@ def given_there_are_a_lot_of_calls(step):
 
     cel_insertion_command = ['sudo', '-u', 'postgres', 'psql', 'asterisk', '-f', remote_path]
     world.ssh_client_xivo.check_call(cel_insertion_command)
+
+
+@step(u'Given there are only the following call logs:')
+def given_there_are_only_the_following_call_logs(step):
+    call_logs_helper.delete_all()
+    call_logs_helper.create_call_logs(step.hashes)
+
+
+@step(u'When I get the list of call logs$')
+def when_i_get_the_list_of_call_logs(step):
+    world.response = call_logs_action_restapi.call_logs_list()
+
+
+@step(u'When I get the list of call logs with arguments:')
+def when_i_get_the_list_of_call_logs_with_arguments(step):
+    args = step.hashes[0]
+    world.response = call_logs_action_restapi.call_logs_list_interval(args)
+    world.status = world.response.status
 
 
 @step(u'When I generate call logs$')
@@ -113,3 +134,19 @@ def then_i_have_the_last_call_log_matching(step):
 def then_i_should_not_have_the_following_call_logs(step):
     for entry in step.hashes:
         assert not call_logs_helper.has_call_log(entry), "Corresponding call_log entry was found : %s" % entry
+
+
+@step(u'Then I get the following call logs in CSV format:')
+def then_i_get_the_following_call_logs_in_csv_format(step):
+    assert_that(world.response.status, equal_to(200))
+    assert_that(world.response.headers['Content-Type'], equal_to('text/csv; charset=utf8'))
+
+    call_logs_response = world.response.data.encode('utf-8')
+    assert_that(call_logs_response, has_length(greater_than(0)))
+
+    reader = UnicodeDictReader(StringIO(call_logs_response))
+    row_matchers = [has_entries(expected_row) for expected_row in step.hashes]
+    csv_rows = [csv_row for csv_row in reader]
+    assert_that(csv_rows, has_length(len(step.hashes)))
+    for csv_row_dict in csv_rows:
+        assert_that(csv_row_dict, any_of(*row_matchers))

@@ -18,14 +18,26 @@
 
 from lettuce.decorators import step
 
-from xivo_lettuce import common
 from xivo_acceptance.helpers import context_helper
+from xivo_dao.data_handler.context.model import ContextType
+from xivo_lettuce import common
 from xivo_lettuce.common import open_url
 
 
 @step(u'Given there is no context "([^"]*)"$')
 def given_there_is_no_element(step, search):
     common.remove_element_if_exist('entity', search)
+
+
+@step(u'Given I have the following context:')
+def given_i_have_the_following_extensions(step):
+    for context_data in step.hashes:
+        context_helper.add_or_replace_context(context_data['name'],
+                                              context_data['name'],
+                                              ContextType.internal)
+        context_helper.update_contextnumbers_user(context_data['name'],
+                                                  context_data['numberbeg'],
+                                                  context_data['numberend'])
 
 
 @step(u'^Given there are contexts with infos:$')

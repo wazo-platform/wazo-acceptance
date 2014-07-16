@@ -18,14 +18,16 @@
 import time
 import re
 
-from hamcrest import assert_that, has_entries
+from hamcrest import *
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.action_chains import ActionChains
 
+from xivo_acceptance.action.restapi import line_action_restapi, \
+    line_sip_action_restapi
 from xivo_acceptance.action.webi import line as line_action_webi
-from xivo_acceptance.helpers import line_helper
+from xivo_acceptance.helpers import line_helper, line_sip_helper, context_helper
 from xivo_lettuce import common, form
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.widget.codec import CodecWidget
@@ -90,6 +92,68 @@ def _disable_selected_lines():
 
     disable_button = world.browser.find_element_by_id("toolbar-advanced-menu-disable")
     ActionChains(world.browser).click(disable_button).perform()
+
+
+@step(u'Given I have the following lines:')
+def given_i_have_the_following_lines(step):
+    for lineinfo in step.hashes:
+        _delete_line(lineinfo)
+        _create_line(lineinfo)
+
+
+@step(u'Given I have no line with id "([^"]*)"')
+def given_i_have_no_line_with_id_group1(step, line_id):
+    line_id = int(line_id)
+    line_helper.delete_line(line_id)
+
+
+def _delete_line(lineinfo):
+    if 'id' in lineinfo:
+        line_helper.delete_line(int(lineinfo['id']))
+    if 'username' in lineinfo:
+        lines = line_helper.find_with_name(lineinfo['username'])
+        for line in lines:
+            line_helper.delete_line(line.id)
+
+
+def _create_line(lineinfo):
+    protocol = lineinfo['protocol'].lower()
+    if protocol == 'sip':
+        line_sip_helper.create_line_sip(lineinfo)
+    else:
+        line_helper.create(lineinfo)
+
+
+@step(u'Given I have an internal context named "([^"]*)"')
+def given_i_have_an_internal_context_named_group1(step, context):
+    context_helper.create_context(context)
+
+
+@step(u'When I ask for the line_sip with id "([^"]*)"')
+def when_i_ask_for_the_line_sip_with_id_group1(step, lineid):
+    world.response = line_sip_action_restapi.get(lineid)
+
+
+@step(u'When I create an empty SIP line$')
+def when_i_create_an_empty_line(step):
+    world.response = line_sip_action_restapi.create_line_sip({})
+
+
+@step(u'When I create a line_sip with the following parameters:')
+def when_i_create_a_line_with_the_following_parameters(step):
+    parameters = _extract_line_parameters(step)
+    world.response = line_sip_action_restapi.create_line_sip(parameters)
+
+
+@step(u'When I update the line_sip with id "([^"]*)" using the following parameters:')
+def when_i_update_the_user_with_id_group1_using_the_following_parameters(step, lineid):
+    lineinfo = _extract_line_parameters(step)
+    world.response = line_sip_action_restapi.update(lineid, lineinfo)
+
+
+@step(u'When I delete line sip "([^"]*)"')
+def when_i_delete_line_group1(step, line_id):
+    world.response = line_sip_action_restapi.delete(line_id)
 
 
 @step(u'When I customize line "([^"]*)" codecs to:')
@@ -175,6 +239,17 @@ def when_i_remove_the_codec_from_the_line_with_number(step, codec, linenumber):
     codec_widget = CodecWidget()
     codec_widget.remove(codec)
     form.submit.submit_form()
+
+
+@step(u'When I ask for the list of lines$')
+def when_i_ask_for_the_list_of_lines(step):
+    world.response = line_action_restapi.all_lines()
+
+
+@step(u'When I ask for line with id "([^"]*)"')
+def when_i_ask_for_line_with_id_group1(step, line_id):
+    line_id = int(line_id)
+    world.response = line_action_restapi.get(line_id)
 
 
 @step(u'Then I see a line with infos:')
@@ -300,3 +375,72 @@ def _open_codec_page():
     except NoSuchElementException:
         # SCCP line has no Signalling tab
         return
+
+
+@step(u'Then the line "([^"]*)" no longer exists')
+def then_the_line__no_longer_exists(step, line_id):
+    response = line_action_restapi.get(line_id)
+    assert_that(response.status, equal_to(404))
+
+
+@step(u'Then the line sip "([^"]*)" no longer exists')
+def then_the_line_sip_no_longer_exists(step, line_id):
+    response = line_sip_action_restapi.get(line_id)
+    assert_that(response.status, equal_to(404))
+
+
+@step(u'Then I get a list containing the following lines:')
+def then_i_get_a_list_containing_the_following_lines(step):
+    line_response = world.response.data
+    expected_lines = step.hashes
+
+    assert_that(line_response, has_key('items'))
+    lines = line_response['items']
+
+    for expected_line in expected_lines:
+        expected_line = _convert_line_parameters(expected_line)
+        assert_that(lines, has_item(has_entries(expected_line)))
+
+
+def _convert_line_parameters(line):
+
+    if 'id' in line:
+        line['id'] = int(line['id'])
+
+    if 'device_slot' in line:
+        line['device_slot'] = int(line['device_slot'])
+
+    return line
+
+
+@step(u'Then I get a line with the following parameters:')
+def then_i_get_a_line_with_the_following_parameters(step):
+    expected_line = _convert_line_parameters(step.hashes[0])
+    line_response = world.response.data
+
+    assert_that(line_response, has_entries(expected_line))
+
+
+@step(u'Then I have a line_sip with the following parameters:')
+def then_i_have_an_line_sip_with_the_following_parameters(step):
+    parameters = _extract_line_parameters(step)
+    line = world.response.data
+
+    assert_that(line, has_entries(parameters))
+
+
+def _extract_line_parameters(step):
+    parameters = step.hashes[0]
+
+    if 'id' in parameters:
+        parameters['id'] = int(parameters['id'])
+
+    return parameters
+
+
+@step(u'Then I have a line_sip with the following attributes:')
+def then_i_have_an_line_sip_with_the_following_attributes(step):
+    line = world.response.data
+
+    for line_attribute in step.hashes:
+        assert_that(line.keys(), has_item(line_attribute['attribute']))
