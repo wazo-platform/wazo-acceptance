@@ -66,4 +66,4 @@ def delete_similar_devices(device):
 
 
 def create_device(device):
-    return provd_helper.create_device(device)
+    provd_helper.create_device(device)

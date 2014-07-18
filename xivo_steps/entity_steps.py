@@ -20,7 +20,6 @@ from lettuce.decorators import step
 
 from xivo_lettuce import common
 from xivo_acceptance.helpers import entity_helper
-from xivo_lettuce.common import open_url
 
 
 @step(u'Given there is no entity "([^"]*)"$')

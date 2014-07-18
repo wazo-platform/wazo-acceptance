@@ -75,7 +75,7 @@ def _add_or_replace_device_template(channel, properties):
 
 
 def create_device(deviceinfo):
-    return remote_exec(_create_device, deviceinfo=deviceinfo)
+    remote_exec(_create_device, deviceinfo=deviceinfo)
 
 
 def _create_device(channel, deviceinfo):
@@ -103,8 +103,6 @@ def _create_device(channel, deviceinfo):
 
     device_manager.add(deviceinfo)
     config_manager.add(config)
-
-    return id
 
 
 def get_provd_config(device_id):
