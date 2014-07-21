@@ -23,7 +23,7 @@ EXTENSIONS_URL = 'extensions/%s/line'
 
 def associate(line_id, extension_id):
     parameters = {
-        'extension_id': extension_id
+        'extension_id': int(extension_id)
     }
     url = LINES_URL % line_id
     return world.restapi_utils_1_1.rest_post(url, parameters)
