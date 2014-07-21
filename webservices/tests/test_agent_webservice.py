@@ -78,7 +78,6 @@ class TestAgentWebServices(unittest.TestCase):
         return {
                 "name": unicode(skill_name),
                 "description": "ws tests",
-                "printscreen": "tst",
                 "category_name": "test_skill_ws"
                 }
 
