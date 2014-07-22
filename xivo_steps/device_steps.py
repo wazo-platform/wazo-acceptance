@@ -338,6 +338,7 @@ def then_i_get_a_list_containing_the_following_devices(step):
     device_list = world.response.data['items']
 
     for device in step.hashes:
+        _update_device_from_step_hash(device)
         assert_that(device_list, has_item(has_entries(device)))
 
 
@@ -353,3 +354,5 @@ def then_the_list_contains_the_same_number_of_devices_as_on_the_provisioning_ser
 def _update_device_from_step_hash(device):
     if 'options' in device:
         device['options'] = eval(device['options'])
+    if 'template_id' in device and device['template_id'] == u'None':
+        device['template_id'] = None
