@@ -49,7 +49,7 @@ def then_i_get_a_response_status_matching_group1(step, status, regex):
     world.response.check_regex(regex)
 
 
-@step(u'When I POST at "([^"]*)":')
+@step(u'When I POST the following content at url "([^"]*)":')
 def when_i_post_at_group1(step, url):
     document = json.loads(step.multiline)
     world.response = world.restapi_utils_1_1.rest_post(url, document)
