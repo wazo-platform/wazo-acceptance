@@ -97,7 +97,7 @@ def when_i_link_user_group1_with_voicemail_group2_via_restapi(step, fullname, vo
 @step(u'When I link user "([^"]*)" with voicemail id "([^"]*)" via RESTAPI')
 def when_i_link_user_group1_with_voicemail_id_group2_via_restapi(step, fullname, voicemail_id):
     user = user_helper.find_user_by_name(fullname)
-    world.response = voicemail_link_action_restapi.link_voicemail(user.id, voicemail_id)
+    world.response = voicemail_link_action_restapi.link_voicemail(user.id, int(voicemail_id))
 
 
 @step(u'When I request the voicemail associated to user "([^"]*)" "([^"]*)" via RESTAPI')
