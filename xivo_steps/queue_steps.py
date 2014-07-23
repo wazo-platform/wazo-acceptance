@@ -202,3 +202,10 @@ def then_i_see_the_element_not_exists(step, name):
     common.open_url('queue')
     line = common.find_line(name)
     assert line is None, 'queue: %s exist' % name
+
+
+@step(u'Then the penalty is "([^"]*)" for queue "([^"]*)" and agent "([^"]*)"')
+def then_the_penalty_is_group1_for_queue_group2_and_agent_group3(step, penalty, queue_name, agent_number):
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
+    assert queue_helper.get_penalty_for_agent(queue_name, agent_id) == int(penalty)
+
