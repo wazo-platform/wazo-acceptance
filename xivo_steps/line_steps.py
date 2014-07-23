@@ -28,7 +28,7 @@ from xivo_acceptance.action.restapi import line_action_restapi, \
     line_sip_action_restapi
 from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import line_helper, line_sip_helper, context_helper
-from xivo_lettuce import common, form
+from xivo_lettuce import common, form, func
 from xivo_lettuce.form.checkbox import Checkbox
 from xivo_lettuce.widget.codec import CodecWidget
 
@@ -156,6 +156,11 @@ def when_i_delete_line_group1(step, line_id):
     world.response = line_sip_action_restapi.delete(line_id)
 
 
+@step(u'When I delete line sccp with "([^"]*)"@"([^"]*)"')
+def when_i_delete_line_sccp(step, exten, context):
+    world.response = line_helper.delete_line_with_exten_context(exten, context)
+
+
 @step(u'When I customize line "([^"]*)" codecs to:')
 def when_i_customize_line_codecs_to(step, number):
     codecs = (entry['codec'] for entry in step.hashes)
@@ -222,6 +227,14 @@ def when_i_disable_custom_codecs_for_this_line(step):
 def when_i_remove_this_line(step):
     common.open_url('line', 'search', {'search': world.id})
     common.remove_line(world.id)
+    common.open_url('line', 'search', {'search': ''})
+
+
+@step(u'When I remove line with extension "([^"]*)"')
+def when_i_remove_line_with_extension(step, extension):
+    number, context = func.extract_number_and_context_from_extension(extension)
+    common.open_url('line', 'search', {'search': number})
+    common.remove_line(number)
     common.open_url('line', 'search', {'search': ''})
 
 

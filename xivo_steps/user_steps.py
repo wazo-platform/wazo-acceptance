@@ -270,11 +270,26 @@ def when_i_create_a_user(step):
         user_action_webi.user_form_add_line(
             linenumber=user_properties['number'],
             context=user_properties['context'],
-            protocol=user_properties['protocol'],
+            protocol=user_properties['protocol'].upper(),
             device=user_properties.get('device', None),
             entity_displayname=user_properties.get('entity_displayname', None),
         )
+    form.submit.submit_form()
 
+
+@step(u'When I add a new line to user "([^"]*)" "([^"]*)" with infos:$')
+def when_i_add_a_new_line_to_a_user(step, firstname, lastname):
+    _edit_user(firstname, lastname)
+    user_properties = step.hashes[0]
+    common.go_to_tab('Lines')
+    user_action_webi.remove_line()
+    user_action_webi.user_form_add_line(
+        linenumber=user_properties['number'],
+        context=user_properties['context'],
+        protocol=user_properties['protocol'].upper(),
+        device=user_properties.get('device', None),
+        entity_displayname=user_properties.get('entity_displayname', None),
+    )
     form.submit.submit_form()
 
 
@@ -317,6 +332,13 @@ def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastnam
     common.open_url('user', 'add')
     user_action_webi.type_user_names(firstname, lastname)
     user_action_webi.type_func_key('Customized', extension)
+    form.submit.submit_form()
+
+
+@step(u'When I remove line from user "([^"]*)" "([^"]*)"$')
+def when_i_remove_line_from_user(step, firstname, lastname):
+    _edit_user(firstname, lastname)
+    user_action_webi.remove_line()
     form.submit.submit_form()
 
 
