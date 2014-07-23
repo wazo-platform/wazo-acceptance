@@ -83,8 +83,10 @@ def _allow_remote_access_to_pgsql():
     hba_file = '/etc/postgresql/9.1/main/pg_hba.conf'
     postgres_conf_file = '/etc/postgresql/9.1/main/postgresql.conf'
 
-    _add_line_to_remote_file('host all all 192.168.32.0/24 md5', hba_file)
-    _add_line_to_remote_file('host all all 10.0.0.0/8 md5', hba_file)
+    subnet_line = 'host all all {subnet} md5'
+    for subnet in world.config.subnets:
+        _add_line_to_remote_file(subnet_line.format(subnet=subnet), hba_file)
+
     _add_line_to_remote_file("listen_addresses = '*'", postgres_conf_file)
 
     command = ['service', 'postgresql', 'restart']

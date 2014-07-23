@@ -125,6 +125,8 @@ class XivoAcceptanceConfig(object):
         self.linphone_debug = self._config.getboolean('debug', 'linphone')
         self.browser_debug = self._config.getboolean('debug', 'selenium')
 
+        self.subnets = self._config.get('prerequisites', 'subnets').split(',')
+
     def setup(self):
         self._setup_dao()
         self._setup_ssh_client()
