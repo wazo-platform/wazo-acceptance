@@ -167,6 +167,10 @@ def set_penalty_for_agent(queue_name, agent_id, penalty):
 
 
 def delete_queue_with_id(queue_id):
+    try:
+        find_queue_with_id(queue_id)
+    except ValueError:
+        return
     world.ws.queues.delete(queue_id)
 
 
