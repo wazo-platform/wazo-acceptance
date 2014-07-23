@@ -165,3 +165,8 @@ def set_penalty_for_agent(queue_name, agent_id, penalty):
     query = 'UPDATE queuemember SET penalty = :penalty WHERE queue_name = :queue_name AND userid = :userid AND usertype = \'agent\''
     exec_sql_request(query, queue_name=queue_name, userid=agent_id, penalty=penalty)
 
+
+def delete_queue_with_id(queue_id):
+    world.ws.queues.delete(queue_id)
+
+

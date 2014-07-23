@@ -79,6 +79,11 @@ def given_the_agent_group1_has_the_penalty_group2_for_the_queue_group3(step, age
     queue_helper.set_penalty_for_agent(queue_name, agent_id, int(penalty))
 
 
+@step(u'Given there is no queue with id "([^"]*)"')
+def given_there_is_no_queue_with_id_group1(step, queue_id):
+    queue_helper.delete_queue_with_id(queue_id)
+
+
 @step(u'When I create the following queues:')
 def when_i_create_the_following_queues(step):
     for queue in step.hashes:
