@@ -435,6 +435,9 @@ def _extract_line_parameters(step):
     if 'id' in parameters:
         parameters['id'] = int(parameters['id'])
 
+    if parameters.get('device_slot'):
+        parameters['device_slot'] = int(parameters['device_slot'])
+
     return parameters
 
 

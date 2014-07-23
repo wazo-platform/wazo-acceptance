@@ -49,6 +49,14 @@ def then_i_get_a_response_status_matching_group1(step, status, regex):
     world.response.check_regex(regex)
 
 
+@step(u'When the client sends a POST request:$')
+def when_i_post_at_group1(step):
+    for line in step.hashes:
+        url = line['url']
+        document = json.loads(line['document'])
+        world.response = world.restapi_utils_1_1.rest_post(url, document)
+
+
 @step(u'Then I get a list containing the following items:')
 def then_i_get_a_list_containing_the_following_items(step):
     items = world.response.items()
