@@ -35,6 +35,18 @@ def when_i_request_the_queue_member_information_for_the_queue_with_id_group1_and
     world.response = queue_members_action_restapi.get_agent_queue_association(queue_id, agent_id)
 
 
+@step(u'When I edit the member information for the queue "([^"]*)" and the agent "([^"]*)" with the penalty "([^"]*)"')
+def when_i_edit_the_member_information_for_the_queue_1_and_the_agent_2_with_the_penalty_3(step, queue_name, agent_number, penalty):
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
+    world.response = queue_members_action_restapi.edit_agent_queue_association(queue_id, agent_id, int(penalty))
+
+
+@step(u'When I edit the member information for the queue with id "([^"]*)" and the agent with id "([^"]*)" with the penalty "([^"]*)"')
+def when_i_edit_the_member_information_for_the_queue_with_id_1_and_the_agent_with_id_2_with_the_penalty_3(step, queue_id, agent_id, penalty):
+    world.response = queue_members_action_restapi.edit_agent_queue_association(queue_id, agent_id, int(penalty))
+
+
 @step(u'Then I get a queue membership with the following parameters:')
 def then_i_get_a_queue_membership_with_the_following_parameters(step):
     queue_member = world.response.data

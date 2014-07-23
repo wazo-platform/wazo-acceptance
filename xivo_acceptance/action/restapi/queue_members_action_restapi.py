@@ -21,3 +21,7 @@ AGENT_QUEUE_MEMBERS_PATH = 'queues/%s/memberships/agents/%s'
 
 def get_agent_queue_association(queue_id, agent_id):
     return world.restapi_utils_1_1.rest_get(AGENT_QUEUE_MEMBERS_PATH % (queue_id, agent_id))
+
+
+def edit_agent_queue_association(queue_id, agent_id, penalty):
+    return world.restapi_utils_1_1.rest_put(AGENT_QUEUE_MEMBERS_PATH % (queue_id, agent_id), {'penalty': penalty})
