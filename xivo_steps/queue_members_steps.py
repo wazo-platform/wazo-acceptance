@@ -14,8 +14,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
+from hamcrest.core import assert_that
+from hamcrest.library.collection.isdict_containingentries import has_entries
 from lettuce.decorators import step
 from lettuce.registry import world
+
 from xivo_acceptance.action.restapi import queue_members_action_restapi
 from xivo_acceptance.helpers import queue_helper, agent_helper
 
@@ -25,3 +28,9 @@ def when_i_request_the_queue_member_information_for_the_queue_group1_and_the_age
     queue_id = queue_helper.find_queue_id_with_name(queue_name)
     agent_id = agent_helper.find_agent_id_with_number(agent_number)
     world.response = queue_members_action_restapi.get_agent_queue_association(queue_id, agent_id)
+
+
+@step(u'Then I get a queue membership with the following parameters:')
+def then_i_get_a_queue_membership_with_the_following_parameters(step):
+    queue_member = world.response.data
+    assert_that(queue_member, has_entries(step.hashes[0]))
