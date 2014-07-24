@@ -75,9 +75,15 @@ def when_i_update_the_extension_with_id_group1_using_the_following_parameters(st
     world.response = extension_action_restapi.update(extensionid, extensioninfo)
 
 
-@step(u'When I delete extension "([^"]*)"')
-def when_i_delete_extension_group1(step, extension_id):
+@step(u'When I delete extension with id "([^"]*)"')
+def when_i_delete_extension_with_id(step, extension_id):
     world.response = extension_action_restapi.delete_extension(extension_id)
+
+
+@step(u'When I delete extension "(\d+)@([\w_-]+)"')
+def when_i_delete_extension_group1(step, exten, context):
+    extension = extension_helper.get_by_exten_context(exten, context)
+    world.response = extension_action_restapi.delete_extension(extension.id)
 
 
 @step(u'Then I get a list containing the following extensions:')
