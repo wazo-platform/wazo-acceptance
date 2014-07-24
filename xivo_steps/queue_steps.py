@@ -15,18 +15,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import time
-
+from hamcrest.core import assert_that
+from hamcrest.core.core.isequal import equal_to
 from lettuce import step, world
+import time
 
 from xivo_acceptance.action.webi import queue as queue_action_webi
 from xivo_acceptance.helpers import agent_helper, queue_helper, \
     schedule_helper, user_helper
-# from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common
 from xivo_lettuce import form
 
 
+# from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 @step(u'^Given there are queues with infos:$')
 def given_there_are_queues_with_infos(step):
     for info in step.hashes:
@@ -207,5 +208,4 @@ def then_i_see_the_element_not_exists(step, name):
 @step(u'Then the penalty is "([^"]*)" for queue "([^"]*)" and agent "([^"]*)"')
 def then_the_penalty_is_group1_for_queue_group2_and_agent_group3(step, penalty, queue_name, agent_number):
     agent_id = agent_helper.find_agent_id_with_number(agent_number)
-    assert queue_helper.get_penalty_for_agent(queue_name, agent_id) == int(penalty)
-
+    assert_that(queue_helper.get_penalty_for_agent(queue_name, agent_id), equal_to(int(penalty)))
