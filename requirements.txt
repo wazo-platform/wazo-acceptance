@@ -8,7 +8,7 @@ fuzzywuzzy
 pika
 psycopg2
 python-ldap
-requests
+requests>=2.0
 selenium
 sure
 wsgiref
