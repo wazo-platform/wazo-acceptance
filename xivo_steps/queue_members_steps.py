@@ -50,4 +50,9 @@ def when_i_edit_the_member_information_for_the_queue_with_id_1_and_the_agent_wit
 @step(u'Then I get a queue membership with the following parameters:')
 def then_i_get_a_queue_membership_with_the_following_parameters(step):
     queue_member = world.response.data
-    assert_that(queue_member, has_entries(step.hashes[0]))
+    expected_result = extract_queue_member(step.hashes[0])
+    assert_that(queue_member, has_entries(expected_result))
+
+
+def extract_queue_member(orig):
+    return {'penalty': int(orig['penalty'])}
