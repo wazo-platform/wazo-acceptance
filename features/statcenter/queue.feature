@@ -242,3 +242,25 @@ Feature: WEBI Queue Stats
           |         | Received | Answered | Closed | Answered rate |
           | 11h-12h | 1        | 1        | 0      | 100 %         |
           | Total   | 1        | 1        | 0      | 100 %         |
+
+    Scenario: First week of 2014
+        Given there is no entries in queue_log between "2013-12-30 00:00:00" and "2014-01-03 11:59:59"
+        Given there are queues with infos:
+            | name | number | context     |
+            | q01  | 5001   | statscenter |
+        Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01"
+        Given I have the following queue_log entries:
+          | time                       |        callid | queuename | agent | event  | data1 | data2 | data3 | data4 | data5 |
+          | 2013-12-30 11:34:11.154600 | 1394465650.18 | q01       | NONE  | CLOSED |       |       |       |       |       |
+          | 2014-01-01 11:34:11.155000 | 1394465650.19 | q01       | NONE  | CLOSED |       |       |       |       |       |
+        Given I clear and generate the statistics cache
+        Then I should have the following weekly statistics on "q01" on "2013-12-30" on configuration "test":
+          |             | Received | Answered | Closed | Answered rate |
+          | Monday 30   |        1 |        0 |      1 |               |
+          | Tuesday 31  |        0 |        0 |      0 |               |
+          | Wednesday 1 |        1 |        0 |      1 |               |
+          | Thursday 2  |        0 |        0 |      0 |               |
+          | Friday 3    |        0 |        0 |      0 |               |
+          | Saturday 4  |        0 |        0 |      0 |               |
+          | Sunday 5    |        0 |        0 |      0 |               |
+          | Total       |        2 |        0 |      2 |               |

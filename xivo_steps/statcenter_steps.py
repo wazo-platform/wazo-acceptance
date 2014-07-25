@@ -151,6 +151,12 @@ def then_i_should_have_stats_for_config(step, queue_name, day, config_name):
     stat_action_webi.check_queue_statistic(step.hashes)
 
 
+@step(u'^Then I should have the following weekly statistics on "(.+)" on "(.+)" on configuration "(\S+)":$')
+def then_i_should_have_stats_for_config(step, queue_name, day, config_name):
+    stat_action_webi.open_queue_stat_page_on_week(queue_name, day, config_name)
+    stat_action_webi.check_queue_statistic(step.hashes)
+
+
 @step(u'^Then I should have the following statistics on agent "(.+)" on "(.+)" on configuration "(\S+)":$')
 def then_i_should_have_stats_on_agent_for_config(step, agent_number, day, config_name):
     stat_action_webi.open_agent_stat_page_on_day(agent_number, day, config_name)

@@ -43,12 +43,24 @@ def generate_cache(start_time=None, end_time=None):
 
 
 def open_queue_stat_page_on_day(queue_name, day, config_name):
+    _open_queue_stat_page(queue_name, day, config_name, 'day')
+
+def open_queue_stat_page_on_week(queue_name, day, config_name):
+    _open_queue_stat_page(queue_name, day, config_name, 'week')
+
+def _open_queue_stat_page(queue_name, day, config_name, axis):
     conf_id = stat_helper.find_conf_id_with_name(config_name)
     queue_id = queue_helper.find_queue_id_with_name(queue_name)
     host = world.config.xivo_host
 
     uri = '''https://%s/statistics/call_center/index.php/data/stats1''' % host
-    qry = '''confid=%s&key=queue-%s&axetype=day&dbeg=%s&dend=%s&dday=%s&dweek=2012-08-17&dmonth=2012-08&dyear=2012''' % (conf_id, queue_id, day, day, day)
+    config = {
+        'conf_id': conf_id,
+        'queue_id': queue_id,
+        'axis': axis,
+        'day': day,
+    }
+    qry = '''confid=%(conf_id)s&key=queue-%(queue_id)s&axetype=%(axis)s&dbeg=%(day)s&dend=%(day)s&dday=%(day)s&dweek=%(day)s&dmonth=2014-07&dyear=2014''' % config
 
     url = '%s?%s' % (uri, qry)
 
