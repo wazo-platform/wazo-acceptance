@@ -14,8 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
-from hamcrest.core import assert_that
-from hamcrest.library.collection.isdict_containingentries import has_entries
+from hamcrest import assert_that, has_entries
 from lettuce.decorators import step
 from lettuce.registry import world
 

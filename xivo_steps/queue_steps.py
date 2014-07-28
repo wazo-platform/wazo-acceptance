@@ -27,7 +27,6 @@ from xivo_lettuce import common
 from xivo_lettuce import form
 
 
-# from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 @step(u'^Given there are queues with infos:$')
 def given_there_are_queues_with_infos(step):
     for info in step.hashes:
