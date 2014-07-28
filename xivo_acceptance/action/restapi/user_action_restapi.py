@@ -24,21 +24,12 @@ def all_users():
     return world.restapi_utils_1_1.rest_get(USERS_URL)
 
 
-def all_users_with_voicemail():
-    return world.restapi_utils_1_1.rest_get('%s/?include=voicemail' % USERS_URL)
-
-
 def get_lines_associated_to_a_user(userid):
     return world.restapi_utils_1_1.rest_get('%s/%s/user_links' % (USERS_URL, userid))
 
 
 def get_user(userid):
     return world.restapi_utils_1_1.rest_get('%s/%s' % (USERS_URL, userid))
-
-
-def get_user_with_voicemail(userid):
-    params = {'include': 'voicemail'}
-    return world.restapi_utils_1_1.rest_get('%s/%s' % (USERS_URL, userid), params=params)
 
 
 def user_search(search):
