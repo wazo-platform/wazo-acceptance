@@ -15,10 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest.core import assert_that
-from hamcrest.core.core.isequal import equal_to
-from lettuce import step, world
 import time
+from hamcrest import assert_that, equal_to
+from lettuce import step, world
 
 from xivo_acceptance.action.webi import queue as queue_action_webi
 from xivo_acceptance.helpers import agent_helper, queue_helper, \

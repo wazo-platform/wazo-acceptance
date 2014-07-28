@@ -15,8 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 from hamcrest import assert_that, has_entries
-from lettuce.decorators import step
-from lettuce.registry import world
+from lettuce import step, world
 
 from xivo_acceptance.action.restapi import queue_members_action_restapi
 from xivo_acceptance.helpers import queue_helper, agent_helper
