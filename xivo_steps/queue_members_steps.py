@@ -21,28 +21,16 @@ from xivo_acceptance.action.restapi import queue_members_action_restapi
 from xivo_acceptance.helpers import queue_helper, agent_helper
 
 
-@step(u'When I request the queue member information for the queue "([^"]*)" and the agent "([^"]*)"')
-def when_i_request_the_queue_member_information_for_the_queue_group1_and_the_agent_group2(step, queue_name, agent_number):
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
-    agent_id = agent_helper.find_agent_id_with_number(agent_number)
-    world.response = queue_members_action_restapi.get_agent_queue_association(queue_id, agent_id)
+@step(u'When I request the following queue member:')
+def when_i_request_the_following_queue_member(step):
+    infos = complete_queue_member_infos(step.hashes[0])
+    world.response = queue_members_action_restapi.get_agent_queue_association(infos)
 
 
-@step(u'When I request the queue member information for the queue with id "([^"]*)" and the agent with id "([^"]*)"')
-def when_i_request_the_queue_member_information_for_the_queue_with_id_group1_and_the_agent_with_id_group2(step, queue_id, agent_id):
-    world.response = queue_members_action_restapi.get_agent_queue_association(queue_id, agent_id)
-
-
-@step(u'When I edit the member information for the queue "([^"]*)" and the agent "([^"]*)" with the penalty "([^"]*)"')
-def when_i_edit_the_member_information_for_the_queue_1_and_the_agent_2_with_the_penalty_3(step, queue_name, agent_number, penalty):
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
-    agent_id = agent_helper.find_agent_id_with_number(agent_number)
-    world.response = queue_members_action_restapi.edit_agent_queue_association(queue_id, agent_id, int(penalty))
-
-
-@step(u'When I edit the member information for the queue with id "([^"]*)" and the agent with id "([^"]*)" with the penalty "([^"]*)"')
-def when_i_edit_the_member_information_for_the_queue_with_id_1_and_the_agent_with_id_2_with_the_penalty_3(step, queue_id, agent_id, penalty):
-    world.response = queue_members_action_restapi.edit_agent_queue_association(queue_id, agent_id, int(penalty))
+@step(u'When I edit the following queue member:')
+def when_i_edit_the_following_queue_member(step):
+    infos = complete_queue_member_infos(step.hashes[0])
+    world.response = queue_members_action_restapi.edit_agent_queue_association(infos)
 
 
 @step(u'Then I get a queue membership with the following parameters:')
@@ -54,3 +42,18 @@ def then_i_get_a_queue_membership_with_the_following_parameters(step):
 
 def extract_queue_member(orig):
     return {'penalty': int(orig['penalty'])}
+
+
+def complete_queue_member_infos(infos):
+    result = {}
+    if 'queue_name' in infos:
+        result['queue_id'] = queue_helper.find_queue_id_with_name(infos['queue_name'])
+    else:
+        result['queue_id'] = infos['queue_id']
+    if 'agent_number' in infos:
+        result['agent_id'] = agent_helper.find_agent_id_with_number(infos['agent_number'])
+    else:
+        result['agent_id'] = infos['agent_id']
+    if 'penalty' in infos:
+        result['penalty'] = int(infos['penalty'])
+    return result
