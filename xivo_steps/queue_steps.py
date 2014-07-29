@@ -16,13 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
-
+from hamcrest import assert_that, equal_to
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import queue as queue_action_webi
 from xivo_acceptance.helpers import agent_helper, queue_helper, \
     schedule_helper, user_helper
-from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common
 from xivo_lettuce import form
 
@@ -71,6 +70,17 @@ def convert_schedule_name(schedule_name):
 @step(u'Given there is no queue with number "([^"]*)"')
 def given_there_is_no_queue_with_number(step, queue_number):
     queue_helper.delete_queues_with_number(queue_number)
+
+
+@step(u'Given the agent "([^"]*)" has the penalty "([^"]*)" for the queue "([^"]*)"')
+def given_the_agent_group1_has_the_penalty_group2_for_the_queue_group3(step, agent_number, penalty, queue_name):
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
+    queue_helper.set_penalty_for_agent(queue_name, agent_id, int(penalty))
+
+
+@step(u'Given there is no queue with id "([^"]*)"')
+def given_there_is_no_queue_with_id_group1(step, queue_id):
+    queue_helper.delete_queue_with_id(queue_id)
 
 
 @step(u'When I create the following queues:')
@@ -191,3 +201,9 @@ def then_i_see_the_element_not_exists(step, name):
     common.open_url('queue')
     line = common.find_line(name)
     assert line is None, 'queue: %s exist' % name
+
+
+@step(u'Then the penalty is "([^"]*)" for queue "([^"]*)" and agent "([^"]*)"')
+def then_the_penalty_is_group1_for_queue_group2_and_agent_group3(step, penalty, queue_name, agent_number):
+    agent_id = agent_helper.find_agent_id_with_number(agent_number)
+    assert_that(queue_helper.get_penalty_for_agent(queue_name, agent_id), equal_to(int(penalty)))

@@ -15,15 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step, world
 from hamcrest import assert_that, equal_to
+from lettuce import step, world
 from selenium.webdriver.common.action_chains import ActionChains
+import time
+from xivo_ws.exception import WebServiceRequestError
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
 from xivo_acceptance.helpers import agent_helper, user_helper, line_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_lettuce import common, form, func
-import time
 
 
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
@@ -60,6 +61,15 @@ def given_i_logout_the_phone(step, agent_number, extension):
     phone = step.scenario.phone_register.get_user_phone(user.fullname)
     phone.call('*32%s' % agent_number)
     time.sleep(3)
+
+
+@step(u'Given there is no agent with id "([^"]*)"')
+def given_there_is_no_agent_with_id(step, agent_id):
+    try:
+        agent_helper.delete_agent_with_id(agent_id)
+    except WebServiceRequestError as e:
+        if e.code != 404:
+            raise
 
 
 @step(u'When I log agent "([^"]*)"')

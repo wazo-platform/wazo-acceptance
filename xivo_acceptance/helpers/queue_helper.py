@@ -19,6 +19,7 @@ from lettuce import world
 
 from xivo_ws import Queue
 from xivo_lettuce import sysutils
+from xivo_lettuce.postgres import exec_sql_request
 
 
 def add_queue(data):
@@ -158,3 +159,21 @@ def _parse_member_line(member_line):
     if membertype != "Agent":
         raise Exception("membertype %s different from Agent" % membertype)
     return int(number)
+
+
+def set_penalty_for_agent(queue_name, agent_id, penalty):
+    query = 'UPDATE queuemember SET penalty = :penalty WHERE queue_name = :queue_name AND userid = :userid AND usertype = \'agent\''
+    exec_sql_request(query, queue_name=queue_name, userid=agent_id, penalty=penalty)
+
+
+def delete_queue_with_id(queue_id):
+    try:
+        find_queue_with_id(queue_id)
+    except ValueError:
+        return
+    world.ws.queues.delete(queue_id)
+
+
+def get_penalty_for_agent(queue_name, agent_id):
+    query = 'SELECT penalty FROM queuemember WHERE queue_name = :queue_name AND userid = :userid AND usertype = \'agent\''
+    return exec_sql_request(query, queue_name=queue_name, userid=agent_id).first()['penalty']
