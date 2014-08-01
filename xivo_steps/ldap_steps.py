@@ -15,18 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step
+from lettuce import after, step
 
 from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_lettuce import assets, common, sysutils, ldap_utils
 from xivo_acceptance.helpers import cti_helper, directory_helper
-
-
-def _check_ldap_is_up():
-    if not ldap_utils.is_ldap_booted():
-        ldap_utils.boot_ldap_server()
-    ldap_utils.start_ldap_server()
 
 
 @step(u'Given there is no LDAP server "([^"]*)"$')
@@ -179,11 +173,13 @@ def given_the_ldap_server_is_configured_and_active(step):
 @step(u'When the LDAP service is stopped')
 def when_the_ldap_service_is_stopped(step):
     ldap_utils.stop_ldap_server()
+    after.all(_check_ldap_is_up_after_all_scenarios)
 
 
 @step(u'When I shut down the LDAP server')
 def when_i_shut_down_the_ldap_server(step):
     ldap_utils.shutdown_ldap_server()
+    after.all(_check_ldap_is_up_after_all_scenarios)
 
 
 def _configure_display_filter():
@@ -215,3 +211,13 @@ def _add_directory_to_direct_directories(directories=['ldapdirectory']):
         'Display',
         directories
     )
+
+
+def _check_ldap_is_up():
+    if not ldap_utils.is_ldap_booted():
+        ldap_utils.boot_ldap_server()
+    ldap_utils.start_ldap_server()
+
+
+def _check_ldap_is_up_after_all_scenarios(total):
+    _check_ldap_is_up()
