@@ -125,8 +125,8 @@ def fill_advanced_tab(queue):
         set_select_field_with_id('it-queue-wrapuptime', queue[REASSIGN_DELAY])
 
     if AUTOPAUSE_AGENTS in queue:
-        autopause_agents = (queue[AUTOPAUSE_AGENTS] == 'true')
-        set_checkbox_with_id('it-queue-autopause', autopause_agents)
+        autopause_agents = 'Yes' if (queue[AUTOPAUSE_AGENTS] == 'true') else 'No'
+        set_select_field_with_id('it-queue-autopause', autopause_agents)
 
 
 def add_agents_to_queue(agents):
