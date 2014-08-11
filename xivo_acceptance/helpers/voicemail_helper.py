@@ -25,7 +25,7 @@ def delete_voicemail_with_id(voicemail_id):
 def _delete_voicemail_with_id(channel, voicemail_id):
     from xivo_dao.data_handler.voicemail import services as voicemail_services
     from xivo_dao.data_handler.user_voicemail import services as user_voicemail_services
-    from xivo_dao.data_handler.exception import ElementNotExistsError
+    from xivo_dao.data_handler.exception import NotFoundError
 
     try:
         user_voicemail = user_voicemail_services.find_by_voicemail_id(voicemail_id)
@@ -35,7 +35,7 @@ def _delete_voicemail_with_id(channel, voicemail_id):
         voicemail = voicemail_services.get(voicemail_id)
         voicemail_services.delete(voicemail)
 
-    except ElementNotExistsError:
+    except NotFoundError:
         pass
 
 
@@ -124,12 +124,12 @@ def find_voicemail_id_with_number(number, context='default'):
 
 def _find_voicemail_id_with_number(channel, number, context):
     from xivo_dao.data_handler.voicemail import services
-    from xivo_dao.data_handler.exception import ElementNotExistsError
+    from xivo_dao.data_handler.exception import NotFoundError
 
     try:
         voicemail = services.get_by_number_context(number, context)
         channel.send(voicemail.id)
-    except ElementNotExistsError:
+    except NotFoundError:
         channel.send(None)
 
 
@@ -139,9 +139,10 @@ def find_voicemail_id_with_user(user_id):
 
 def _find_voicemail_id_with_user(channel, user_id):
     from xivo_dao import user_dao
+    from xivo_dao.data_handler.exception import NotFoundError
 
     try:
         user = user_dao.get(user_id)
         channel.send(user.voicemailid)
-    except LookupError:
+    except NotFoundError:
         channel.send(None)

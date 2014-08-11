@@ -17,7 +17,7 @@
 
 from xivo_lettuce import func
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
-from xivo_dao.data_handler.exception import ElementNotExistsError
+from xivo_dao.data_handler.exception import NotFoundError
 from xivo_dao.data_handler.line import services as line_services
 
 
@@ -32,7 +32,7 @@ def is_with_exten_context_exists(exten, context):
 def find_with_exten_context(exten, context):
     try:
         line = line_services.get_by_number_context(exten, context)
-    except ElementNotExistsError:
+    except NotFoundError:
         raise Exception('expecting line with number %r and context %r not found' % (exten, context))
     return line
 
@@ -49,7 +49,7 @@ def find_with_name(name):
 def find_with_user_id(user_id):
     try:
         line = line_services.get_by_user_id(user_id)
-    except ElementNotExistsError:
+    except NotFoundError:
         raise Exception('expecting line with user ID %r not found' % (user_id))
     return line
 
@@ -77,11 +77,12 @@ def line_exists(line_id):
 
 def _line_exists(channel, line_id):
     from xivo_dao.data_handler.line import services as line_services
+    from xivo_dao.data_handler.exception import NotFoundError
 
     try:
         line_services.get(line_id)
         channel.send(True)
-    except LookupError:
+    except NotFoundError:
         channel.send(False)
 
 
@@ -91,10 +92,11 @@ def delete_line_with_exten_context(exten, context):
 
 def _delete_line_with_exten_context(channel, exten, context):
     from xivo_dao.data_handler.line import services as line_services
+    from xivo_dao.data_handler.exception import NotFoundError
 
     try:
         line = line_services.get_by_number_context(exten, context)
-    except LookupError:
+    except NotFoundError:
         return
 
     line_services.delete(line)
@@ -119,14 +121,13 @@ def delete_line(line_id):
 
 
 def _delete_line(channel, line_id):
-    from xivo_dao.data_handler.exception import ElementDeletionError
-    from xivo_dao.data_handler.exception import ElementNotExistsError
+    from xivo_dao.data_handler.exception import NotFoundError
     from xivo_dao.data_handler.line import services as line_services
 
     try:
         line = line_services.get(line_id)
         line_services.delete(line)
-    except (ElementDeletionError, ElementNotExistsError):
+    except NotFoundError:
         pass
 
 

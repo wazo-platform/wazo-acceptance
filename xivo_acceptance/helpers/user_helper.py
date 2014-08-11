@@ -22,7 +22,7 @@ from xivo_acceptance.helpers import group_helper, provd_helper, line_helper, voi
     entity_helper, sip_config, sip_phone
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
-from xivo_dao.data_handler.exception import ElementNotExistsError
+from xivo_dao.data_handler.exception import NotFoundError
 from xivo_lettuce import postgres
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 from xivo_ws import User, UserLine, UserVoicemail
@@ -37,7 +37,7 @@ def add_or_replace_user(userinfo):
 def get_by_user_id(user_id):
     try:
         user = user_services.get(user_id)
-    except ElementNotExistsError:
+    except NotFoundError:
         return None
     return user
 
@@ -45,7 +45,7 @@ def get_by_user_id(user_id):
 def get_by_exten_context(exten, context):
     try:
         user = user_services.get_by_number_context(exten, context)
-    except ElementNotExistsError:
+    except NotFoundError:
         return None
     return user
 
