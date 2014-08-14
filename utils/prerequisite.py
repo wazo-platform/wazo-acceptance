@@ -42,6 +42,9 @@ def main():
         print 'Configuring RabbitMQ on XiVO'
         _allow_remote_access_to_rabbitmq()
 
+        print 'Configuring xivo-agid on XiVO'
+        _allow_agid_listen_on_all_interfaces()
+
         print 'Configuring Provd REST API on XiVO'
         _allow_provd_listen_on_all_interfaces()
 
@@ -111,6 +114,11 @@ def _remove_line_from_remote_file(line_text, file_name):
 
 def _xivo_service_restart_all():
     command = ['xivo-service', 'restart', 'all']
+    world.ssh_client_xivo.check_call(command)
+
+
+def _allow_agid_listen_on_all_interfaces():
+    command = ['sed', '-i', '-e', '"/^listen_addr/d"', '-e', '"/^\\[general\\]$/a\\listen_addr = 0.0.0.0"', '/etc/xivo/xivo-agid.conf']
     world.ssh_client_xivo.check_call(command)
 
 
