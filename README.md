@@ -1,60 +1,71 @@
-XiVO acceptance README
-======================
+XiVO acceptance
+===============
+
+xivo-acceptance is a testing framework for running automated tests on a XiVO
+server. These tests are used for fixing regressions and testing features before
+releasing a new version of XiVO.
 
 Requirements
-------------
+============
 
-```
-pip install -r requirements.txt
-apt-get install libsasl2-dev xvfb xserver-xephyr linphone-nogtk python-dev postgresql-server-dev-9.1 libldap2-dev lsof
-```
+We recommend running tests on a dedicated debian machine. Run the following
+commands to install requirements:
 
-.. important::
+    apt-get install libsasl2-dev xvfb xserver-xephyr linphone-nogtk python-dev postgresql-server-dev-9.1 libldap2-dev lsof
+    pip install -r requirements.txt
 
-    You must execute "utils/prerequisite.py" before testing !
+Once the requirements are installed, modify the configuration files and run the prerequisite script:
 
+    python utils/prerequisite.py
 
-If you need to display the browser update config.ini
-```
-[browser]
-visible = 1
-```
+XiVO Client
+-----------
 
+Tests require a local copy of the [XiVO Client](http://github.com/xivo-pbx/xivo-client-qt)
+on the test machine with FUNCTESTS enabled. Here is a quick example on how to
+install and compile the client:
 
-Execution on your local machine
--------------------------------
-
-You may use a config.ini.local to test on your local vm
-Use ip adresses and not names in config.ini.*
-
-
-```
-export XC_PATH - directory of XiVo client binary built with following options:
-qmake
-make FUNCTESTS=yes -s
-export XC_PATH=...
-```
-
-Access using ssh to machines in listed in config.ini without password.
+    git clone git://github.com/xivo-pbx/xivo-client-qt
+    cd xivo-client-qt
+    qmake
+    make FUNCTESTS=yes
 
 
-Example
--------
+Configuration
+=============
 
-Start a test using :
+Create a local configuration file in ```config/conf.d/default.local``` and
+redefine only options that need to be changed. Default options can be found in
+```config/default.ini```. Usually, you will only need to change the IP
+addresses and subnets. For example:
 
-```
-cd webi
+    [browser]
+    enable = 1
 
-PYTHONPATH=.. lettuce features/user.feature
-```
+    ;IP address of the XIVO server
+    [xivo]
+    hostname = 192.168.0.10
 
-Lettuce tests are in features/*.feature
-Actions for each step are in features/step_definitions/*_steps.py
-Common actions are in xivo_lettuce/common_steps_webi.py
+    ;we need to allow access from the test machine to the server.
+    ;add a subnet that includes the test machine's IP address
+    [prerequisites]
+    subnets = 10.0.0.8/24,192.168.0.0/24
+
+
+Running tests
+=============
+
+Tests can be found in the ```features``` directory. You can run all tests:
+
+    PYTHONPATH=.. XC_PATH=/path/to/xivo-client-qt/bin lettuce features
+
+Or only a single test file:
+
+    PYTHONPATH=.. XC_PATH=/path/to/xivo-client-qt/bin lettuce features/group/group.feature
 
 
 Documentation
--------------
+=============
 
-See doc/README for more infos
+A bit of documentation on the test framework API is available in the ```doc```
+directory.  Read ```doc/README``` for more details
