@@ -34,4 +34,4 @@ def when_i_try_to_log_off_agent_through_xivoagentctl(step, agent):
 
 @step(u'Then I see that xivo-agent has reconnected to the AMI in the logs')
 def then_i_see_that_xivo_agent_has_reconnected_to_the_ami_in_the_logs(step):
-    logs.search_str_in_xivo_agent_log("Connecting AMI client to localhost:5038")
+    assert logs.search_str_in_xivo_agent_log("Connecting AMI client to localhost:5038")
