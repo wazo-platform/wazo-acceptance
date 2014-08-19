@@ -144,6 +144,15 @@ def given_there_is_a_no_user_1_2(step, firstname, lastname):
 
 @step(u'Given user "([^"]*)" "([^"]*)" has the following function keys:')
 def given_user_has_the_following_function_keys(step, firstname, lastname):
+    _add_func_keys_to_user(step.hashes, firstname, lastname)
+
+
+@step(u'When I add the following function keys to user "([^"]*)" "([^"]*)":')
+def when_i_add_the_following_function_keys_to_user_group1_group2(step, firstname, lastname):
+    _add_func_keys_to_user(step.hashes, firstname, lastname)
+
+
+def _add_func_keys_to_user(hashes, firstname, lastname):
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     common.edit_line("%s %s" % (firstname, lastname))
     name_map = {
@@ -153,7 +162,7 @@ def given_user_has_the_following_function_keys(step, firstname, lastname):
         'Label': 'label',
         'Supervision': 'supervised',
     }
-    for key_definition in step.hashes:
+    for key_definition in hashes:
         key = dict((name_map[k], v) for k, v in key_definition.iteritems())
         user_action_webi.type_func_key(**key)
     form.submit.submit_form()

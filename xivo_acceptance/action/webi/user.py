@@ -19,6 +19,29 @@ import time
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
 from xivo_lettuce import common, form
+from collections import namedtuple
+
+
+FuncKeyRow = namedtuple('FuncKeyRow', ['id', 'input_type'])
+
+
+FUNCKEY_DESTINATIONS = {
+    'User': FuncKeyRow('user', 'autocomplete'),
+    'Group': FuncKeyRow('group', 'autocomplete'),
+    'Queue': FuncKeyRow('queue', 'autocomplete'),
+    'Conference Room': FuncKeyRow('meetme', 'autcomplete'),
+    'Customized': FuncKeyRow('custom', 'plaintext'),
+    'Filtering Boss - Secretary': FuncKeyRow('extenfeatures-bsfilter', 'dropdown'),
+    'Enable / Disable forwarding on no answer': FuncKeyRow('extension', 'plaintext'),
+    'Enable / Disable forwarding on busy': FuncKeyRow('extension', 'plaintext'),
+    'Enable / Disable forwarding unconditional': FuncKeyRow('extension', 'plaintext'),
+    'Connect/Disconnect an agent': FuncKeyRow('extenfeatures-agentstaticlogtoggle', 'autocomplete'),
+    'Connect an agent': FuncKeyRow('extenfeatures-agentstaticlogin', 'autocomplete'),
+    'Disconnect an agent': FuncKeyRow('extenfeatures-agentstaticlogoff', 'autocomplete'),
+    'Parking': FuncKeyRow('extension', 'plaintext'),
+    'Parking Position': FuncKeyRow('extension', 'plaintext'),
+    'Paging': FuncKeyRow('extension', 'plaintext'),
+}
 
 
 def type_user_names(firstName, lastName):
@@ -69,11 +92,13 @@ def get_line_number(line):
 
 
 def find_key_destination_field(key_type, line):
+    destination = FUNCKEY_DESTINATIONS[key_type]
+
     line_number = get_line_number(line)
-    if key_type == 'Filtering Boss - Secretary':
-        field_id = 'it-phonefunckey-extenfeatures-bsfilter-typeval-%s' % line_number
-    else:
-        field_id = 'it-phonefunckey-custom-typeval-%s' % line_number
+    if destination.input_type in ('plaintext', 'dropdown'):
+        field_id = "it-phonefunckey-%s-typeval-%s" % (destination.id, line_number)
+    elif destination.input_type == 'autocomplete':
+        field_id = "it-phonefunckey-%s-suggest-%s" % (destination.id, line_number)
     return line.find_element_by_id(field_id)
 
 
@@ -104,10 +129,17 @@ def type_func_key(key_type, destination, key_number=None, label=None, supervised
 
 def _fill_destination_field(key_type, line, destination):
     field = find_key_destination_field(key_type, line)
-    if key_type == 'Filtering Boss - Secretary':
-        Select(field).select_by_visible_text(destination)
-    else:
+    destination_row = FUNCKEY_DESTINATIONS[key_type]
+
+    if destination_row.input_type == 'plaintext':
         field.send_keys(destination)
+    elif destination_row.input_type == 'dropdown':
+        Select(field).select_by_visible_text(destination)
+    elif destination_row.input_type == 'autocomplete':
+        field.send_keys(destination)
+        field_id = "__dwho-suggest__%s-res-1" % destination.id
+        autocomplete_element = line.find_element_by_id(field_id)
+        autocomplete_element.click()
 
 
 def change_key_order(pairs):
