@@ -19,8 +19,7 @@ from xivo_acceptance.helpers import dialpattern_helper, user_helper, \
     group_helper, incall_helper, meetme_helper, queue_helper, line_helper
 
 from xivo_dao.data_handler.extension import services as extension_services
-from xivo_dao.data_handler.exception import ElementDeletionError, \
-    ElementNotExistsError
+from xivo_dao.data_handler.exception import NotFoundError
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 from xivo_lettuce.postgres import exec_sql_request
 
@@ -63,7 +62,7 @@ def _find_line_id_for_extension(channel, extension_id):
 def get_by_exten_context(exten, context):
     try:
         extension = extension_services.get_by_exten_context(exten, context)
-    except ElementNotExistsError:
+    except NotFoundError:
         return None
     return extension
 
@@ -131,6 +130,8 @@ def _delete_extension_associations(extension_id):
 
 
 def _delete_extension_type(exten, extension_type, typeval):
+    from xivo_dao.data_handler.exception import NotFoundError
+
     try:
         if extension_type == 'user':
             user_helper.delete_user(int(typeval))
@@ -144,17 +145,18 @@ def _delete_extension_type(exten, extension_type, typeval):
             meetme_helper.delete_meetme_with_confno(exten)
         elif extension_type == 'outcall':
             dialpattern_helper.delete((typeval))
-    except ElementDeletionError as e:
+    except NotFoundError as e:
         print "I tried deleting a type %s typeval %s but it didn't work." % (extension_type, typeval)
         print e
 
 
 def _delete_using_service(channel, extension_id):
     from xivo_dao.data_handler.extension import services as extension_services
+    from xivo_dao.data_handler.exception import NotFoundError
 
     try:
         extension = extension_services.get(extension_id)
-    except LookupError:
+    except NotFoundError:
         return
 
     extension_services.delete(extension)
