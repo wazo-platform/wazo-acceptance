@@ -31,12 +31,6 @@ def given_extension_group1_is_associated_to_sip_line_group2(step, exten, context
     assert_that(response.status, equal_to(201), str(response.data))
 
 
-def _associate_extension_to_line(exten, context, sip_username):
-    extension = extension_helper.find_extension_by_exten_context(exten, context)
-    line = line_sip_helper.get_by_username(sip_username)
-    return action.associate_extension(line['id'], extension.id)
-
-
 @step(u'When I get the list of extensions associated to a fake line')
 def when_i_get_the_list_of_extensions_associated_to_a_fake_line(step):
     world.response = action.extensions_for_line(FAKE_ID)
@@ -87,3 +81,9 @@ def when_i_dissociate_extension_group1_from_sip_line_group2(step, exten, context
     extension = extension_helper.find_extension_by_exten_context(exten, context)
     line = line_sip_helper.get_by_username(sip_username)
     world.response = action.dissociate_extension(line['id'], extension.id)
+
+
+def _associate_extension_to_line(exten, context, sip_username):
+    extension = extension_helper.find_extension_by_exten_context(exten, context)
+    line = line_sip_helper.get_by_username(sip_username)
+    return action.associate_extension(line['id'], extension.id)
