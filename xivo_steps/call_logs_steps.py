@@ -113,7 +113,7 @@ def _is_cel(cel):
 
 @step(u'Then I see that call log generation is already running')
 def then_i_see_that_call_log_generation_is_already_running(step):
-    assert_that(world.command_output.rstrip(), equal_to('xivo-call-logs is already running'))
+    assert_that(world.command_output.rstrip(), ends_with('An other instance of ourself is probably running.'))
 
 
 @step(u'Then I should have the following call logs:')
