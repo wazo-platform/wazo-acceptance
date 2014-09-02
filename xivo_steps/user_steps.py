@@ -20,7 +20,7 @@ from lettuce import step
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
 
-from xivo_acceptance.action.restapi import user_action_restapi
+from xivo_acceptance.action.confd import user_action_confd
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import user_helper, agent_helper, group_helper
@@ -203,53 +203,53 @@ def _edit_user(firstname, lastname):
 
 @step(u'When I ask for the list of users$')
 def when_i_ask_for_the_list_of_users(step):
-    world.response = user_action_restapi.all_users()
+    world.response = user_action_confd.all_users()
 
 
 @step(u'When I ask for the user with id "([^"]*)"$')
 def when_i_ask_for_the_user_with_id_group1(step, userid):
-    world.response = user_action_restapi.get_user(userid)
+    world.response = user_action_confd.get_user(userid)
 
 
 @step(u'When I search for the user "([^"]*)"$')
 def when_i_search_for_user_group1(step, search):
-    world.response = user_action_restapi.user_search(search)
+    world.response = user_action_confd.user_search(search)
 
 
 @step(u'When I create an empty user$')
 def when_i_create_an_empty_user(step):
-    world.response = user_action_restapi.create_user({})
+    world.response = user_action_confd.create_user({})
 
 
 @step(u'When I create users with the following parameters:$')
 def when_i_create_users_with_the_following_parameters(step):
     for userinfo in step.hashes:
-        world.response = user_action_restapi.create_user(userinfo)
+        world.response = user_action_confd.create_user(userinfo)
 
 
 @step(u'When I update the user with id "([^"]*)" using the following parameters:$')
 def when_i_update_the_user_with_id_group1_using_the_following_parameters(step, userid):
     userinfo = _get_user_info(step.hashes)
-    world.response = user_action_restapi.update_user(userid, userinfo)
+    world.response = user_action_confd.update_user(userid, userinfo)
 
 
 @step(u'When I update user "([^"]*)" "([^"]*)" with the following parameters:')
 def when_i_update_user_group1_group2_with_the_following_parameters(step, firstname, lastname):
     user = user_helper.find_by_firstname_lastname(firstname, lastname)
     userinfo = _get_user_info(step.hashes)
-    world.response = user_action_restapi.update_user(user.id, userinfo)
+    world.response = user_action_confd.update_user(user.id, userinfo)
 
 
 @step(u'When I delete the user with id "([^"]*)"$')
 def when_i_delete_the_user_with_id_group1(step, userid):
-    world.response = user_action_restapi.delete_user(userid)
+    world.response = user_action_confd.delete_user(userid)
 
 
 @step(u'When I delete the user with name "([^"]*)" "([^"]*)"')
 def when_i_delete_the_user_with_name_group1_group2(step, firstname, lastname):
     user = user_helper.find_by_firstname_lastname(firstname, lastname)
     assert_that(user, is_not(none()))
-    world.response = user_action_restapi.delete_user(user.id)
+    world.response = user_action_confd.delete_user(user.id)
 
 
 @step(u'When I reorder "([^"]*)" "([^"]*)"s function keys such that:')
@@ -527,7 +527,7 @@ def _get_user_info(hashes):
 def then_the_created_user_has_the_following_parameters(step):
     userid = world.response.data['id']
 
-    user = user_action_restapi.get_user(userid).data
+    user = user_action_confd.get_user(userid).data
     expected_user = _get_user_info(step.hashes)
 
     assert_that(user, has_entries(expected_user))
@@ -535,7 +535,7 @@ def then_the_created_user_has_the_following_parameters(step):
 
 @step(u'Then the user with id "([^"]*)" no longer exists')
 def then_the_user_with_id_group1_no_longer_exists(step, userid):
-    response = user_action_restapi.get_user(userid)
+    response = user_action_confd.get_user(userid)
     assert_that(response.status, equal_to(404))
 
 

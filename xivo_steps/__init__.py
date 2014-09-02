@@ -66,7 +66,7 @@ from provd_proxy_steps import *
 from queue_steps import *
 from queue_members_steps import *
 from resource_steps import *
-from restapi_steps import *
+from xivo_steps.confd_steps import *
 from result_steps import *
 from schedule_steps import *
 from service_extensions import *

@@ -22,20 +22,20 @@ USERS_URL = 'users'
 
 
 def all_profiles():
-    return world.restapi_utils_1_1.rest_get(CTI_PROFILES_URL)
+    return world.confd_utils_1_1.rest_get(CTI_PROFILES_URL)
 
 
 def get_cti_profile(profileid):
-    return world.restapi_utils_1_1.rest_get('%s/%s' % (CTI_PROFILES_URL, profileid))
+    return world.confd_utils_1_1.rest_get('%s/%s' % (CTI_PROFILES_URL, profileid))
 
 
 def associate_profile_to_user(cti_profile_id, user_id):
-    return world.restapi_utils_1_1.rest_put('%s/%s/cti' % (USERS_URL, user_id), {'cti_profile_id': cti_profile_id})
+    return world.confd_utils_1_1.rest_put('%s/%s/cti' % (USERS_URL, user_id), {'cti_profile_id': cti_profile_id})
 
 
 def get_cti_profile_for_user(userid):
-    return world.restapi_utils_1_1.rest_get('%s/%s/cti' % (USERS_URL, userid))
+    return world.confd_utils_1_1.rest_get('%s/%s/cti' % (USERS_URL, userid))
 
 
 def enable_cti_for_user(user_id):
-    return world.restapi_utils_1_1.rest_put('%s/%s/cti' % (USERS_URL, user_id), {'enabled': True})
+    return world.confd_utils_1_1.rest_put('%s/%s/cti' % (USERS_URL, user_id), {'enabled': True})

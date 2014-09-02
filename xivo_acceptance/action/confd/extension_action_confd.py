@@ -23,24 +23,24 @@ EXTENSIONS_URL = 'extensions'
 
 def all_extensions(parameters=None):
     parameters = parameters or {}
-    return world.restapi_utils_1_1.rest_get(EXTENSIONS_URL, params=parameters)
+    return world.confd_utils_1_1.rest_get(EXTENSIONS_URL, params=parameters)
 
 
 def get_extension(extension_id):
-    return world.restapi_utils_1_1.rest_get('%s/%s' % (EXTENSIONS_URL, extension_id))
+    return world.confd_utils_1_1.rest_get('%s/%s' % (EXTENSIONS_URL, extension_id))
 
 
 def all_user_links_by_extension_id(extension_id):
-    return world.restapi_utils_1_1.rest_get('%s/%s/user_links' % (EXTENSIONS_URL, extension_id))
+    return world.confd_utils_1_1.rest_get('%s/%s/user_links' % (EXTENSIONS_URL, extension_id))
 
 
 def create_extension(parameters):
-    return world.restapi_utils_1_1.rest_post(EXTENSIONS_URL, parameters)
+    return world.confd_utils_1_1.rest_post(EXTENSIONS_URL, parameters)
 
 
 def update(extension_id, parameters):
-    return world.restapi_utils_1_1.rest_put('%s/%s' % (EXTENSIONS_URL, extension_id), parameters)
+    return world.confd_utils_1_1.rest_put('%s/%s' % (EXTENSIONS_URL, extension_id), parameters)
 
 
 def delete_extension(extension_id):
-    return world.restapi_utils_1_1.rest_delete('%s/%s' % (EXTENSIONS_URL, extension_id))
+    return world.confd_utils_1_1.rest_delete('%s/%s' % (EXTENSIONS_URL, extension_id))

@@ -17,24 +17,13 @@
 
 from lettuce.registry import world
 
-LINES_SIP_URL = 'lines_sip'
+
+CALL_LOGS_URL = '/call_logs'
 
 
-def all_lines():
-    return world.restapi_utils_1_1.rest_get(LINES_SIP_URL)
+def call_logs_list():
+    return world.confd_utils_1_1.rest_get(CALL_LOGS_URL)
 
 
-def get(lineid):
-    return world.restapi_utils_1_1.rest_get('%s/%s' % (LINES_SIP_URL, lineid))
-
-
-def create_line_sip(parameters):
-    return world.restapi_utils_1_1.rest_post(LINES_SIP_URL, parameters)
-
-
-def update(lineid, parameters):
-    return world.restapi_utils_1_1.rest_put('%s/%s' % (LINES_SIP_URL, lineid), parameters)
-
-
-def delete(line_id):
-    return world.restapi_utils_1_1.rest_delete('%s/%s' % (LINES_SIP_URL, line_id))
+def call_logs_list_interval(params):
+    return world.confd_utils_1_1.rest_get(CALL_LOGS_URL, params=params)

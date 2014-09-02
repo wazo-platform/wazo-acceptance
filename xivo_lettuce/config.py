@@ -90,7 +90,7 @@ class XivoAcceptanceConfig(object):
         self.rest_provd = None
         self.provd_client = None
         self.ws_utils = None
-        self.restapi_utils_1_1 = None
+        self.confd_utils_1_1 = None
         self.xivo_configured = None
 
         self.xivo_host = self._config.get('xivo', 'hostname')
@@ -108,8 +108,8 @@ class XivoAcceptanceConfig(object):
 
         self.rest_username = self._config.get('webservices_infos', 'login')
         self.rest_passwd = self._config.get('webservices_infos', 'password')
-        self.rest_protocol = self._config.get('restapi', 'protocol')
-        self.rest_port = self._config.getint('restapi', 'port')
+        self.rest_protocol = self._config.get('confd', 'protocol')
+        self.rest_port = self._config.getint('confd', 'port')
 
         self.xc_login_timeout = self._config.getint('xivo_client', 'login_timeout')
 
@@ -164,12 +164,12 @@ class XivoAcceptanceConfig(object):
         }
 
         rest_config_dict.update({'api_version': '1.1'})
-        self.restapi_config_1_1 = RestConfiguration(**rest_config_dict)
+        self.confd_config_1_1 = RestConfiguration(**rest_config_dict)
 
         self.ws_utils = xivo_ws.XivoServer(self.xivo_host,
                                            self.rest_username,
                                            self.rest_passwd)
-        self.restapi_utils_1_1 = WsUtils(self.restapi_config_1_1)
+        self.confd_utils_1_1 = WsUtils(self.confd_config_1_1)
 
     def _setup_provd(self):
         provd_rest_port = 8667

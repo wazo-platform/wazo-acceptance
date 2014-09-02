@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2014 Avencall
+# Copyright (C) 2013-2014 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,16 +14,15 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
+from lettuce.registry import world
 
-from lettuce import world
-
-FUNC_KEY_URL = 'func_keys'
-
-
-def func_key_list(parameters=None):
-    parameters = parameters or {}
-    return world.restapi_utils_1_1.rest_get(FUNC_KEY_URL, params=parameters)
+AGENT_QUEUE_MEMBERS_PATH = 'queues/%s/memberships/agents/%s'
 
 
-def get_func_key(func_key_id):
-    return world.restapi_utils_1_1.rest_get('%s/%s' % (FUNC_KEY_URL, func_key_id))
+def get_agent_queue_association(queue_member):
+    return world.confd_utils_1_1.rest_get(AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id'], queue_member['agent_id']))
+
+
+def edit_agent_queue_association(queue_member):
+    return world.confd_utils_1_1.rest_put(AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id'], queue_member['agent_id']),
+                                            {'penalty': queue_member['penalty']})

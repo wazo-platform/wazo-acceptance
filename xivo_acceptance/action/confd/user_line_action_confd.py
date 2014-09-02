@@ -21,12 +21,12 @@ USER_LINE_PATH = 'users/%s/lines'
 
 
 def get_user_line(user_id):
-    return world.restapi_utils_1_1.rest_get('%s' % (USER_LINE_PATH % user_id))
+    return world.confd_utils_1_1.rest_get('%s' % (USER_LINE_PATH % user_id))
 
 
 def create_user_line(user_id, parameters):
-    return world.restapi_utils_1_1.rest_post('%s' % (USER_LINE_PATH % user_id), parameters)
+    return world.confd_utils_1_1.rest_post('%s' % (USER_LINE_PATH % user_id), parameters)
 
 
 def delete_user_line(user_id, line_id):
-    return world.restapi_utils_1_1.rest_delete('%s/%s' % (USER_LINE_PATH % user_id, line_id))
+    return world.confd_utils_1_1.rest_delete('%s/%s' % (USER_LINE_PATH % user_id, line_id))

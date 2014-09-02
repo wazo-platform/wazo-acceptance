@@ -20,7 +20,7 @@ from lettuce import step, world
 from StringIO import StringIO
 
 from xivo.unicode_csv import UnicodeDictReader
-from xivo_acceptance.action.restapi import call_logs_action_restapi
+from xivo_acceptance.action.confd import call_logs_action_confd
 from xivo_acceptance.action.webi import call_logs as call_logs_action_webi
 from xivo_acceptance.helpers import call_logs_helper, cel_helper
 from xivo_lettuce import assets, common, form, sysutils
@@ -56,13 +56,13 @@ def given_there_are_only_the_following_call_logs(step):
 
 @step(u'When I get the list of call logs$')
 def when_i_get_the_list_of_call_logs(step):
-    world.response = call_logs_action_restapi.call_logs_list()
+    world.response = call_logs_action_confd.call_logs_list()
 
 
 @step(u'When I get the list of call logs with arguments:')
 def when_i_get_the_list_of_call_logs_with_arguments(step):
     args = step.hashes[0]
-    world.response = call_logs_action_restapi.call_logs_list_interval(args)
+    world.response = call_logs_action_confd.call_logs_list_interval(args)
     world.status = world.response.status
 
 

@@ -27,7 +27,7 @@ XIVO_AGENT_LOGFILE = '/var/log/xivo-agentd.log'
 XIVO_AGID_LOGFILE = '/var/log/xivo-agid.log'
 XIVO_CTI_LOGFILE = '/var/log/xivo-ctid.log'
 XIVO_PROVD_LOGFILE = '/var/log/xivo-provd.log'
-XIVO_RESTAPI_LOGFILE = '/var/log/xivo-restapid.log'
+XIVO_CONFD_LOGFILE = '/var/log/xivo-confdd.log'
 XIVO_SYSCONFD_LOGFILE = '/var/log/xivo-sysconfd.log'
 
 DAEMON_DATE_FORMAT = "%b %d %H:%M:%S"
@@ -36,8 +36,8 @@ DAEMON_DATE_PATTERN = "([\w]{3} [\d ]{2} [\d]{2}:[\d]{2}:[\d]{2})"
 PYTHON_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 PYTHON_DATE_PATTERN = r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})"
 
-RESTAPI_DATE_FORMAT = "%Y-%m-%d %H:%M:%S,%f"
-RESTAPI_DATE_PATTERN = r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})"
+CONFD_DATE_FORMAT = "%Y-%m-%d %H:%M:%S,%f"
+CONFD_DATE_PATTERN = r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})"
 
 LogfileInfo = namedtuple('LogfileInfo', ['logfile', 'date_format', 'date_pattern'])
 
@@ -65,9 +65,9 @@ XIVO_PROVD_LOG_INFO = LogfileInfo(logfile=XIVO_PROVD_LOGFILE,
                                   date_format=PYTHON_DATE_FORMAT,
                                   date_pattern=PYTHON_DATE_PATTERN)
 
-XIVO_RESTAPI_LOG_INFO = LogfileInfo(logfile=XIVO_RESTAPI_LOGFILE,
-                                    date_format=RESTAPI_DATE_FORMAT,
-                                    date_pattern=RESTAPI_DATE_PATTERN)
+XIVO_CONFD_LOG_INFO = LogfileInfo(logfile=XIVO_CONFD_LOGFILE,
+                                    date_format=CONFD_DATE_FORMAT,
+                                    date_pattern=CONFD_DATE_PATTERN)
 
 XIVO_SYSCONFD_LOG_INFO = LogfileInfo(logfile=XIVO_SYSCONFD_LOGFILE,
                                      date_format=PYTHON_DATE_FORMAT,
@@ -98,8 +98,8 @@ def find_line_in_xivo_provd_log(delta=10):
     return _find_line_in_log_file(XIVO_PROVD_LOG_INFO, delta)
 
 
-def search_str_in_xivo_restapi_log(expression, delta=10):
-    return _search_str_in_log_file(expression, XIVO_RESTAPI_LOG_INFO, delta)
+def search_str_in_xivo_confd_log(expression, delta=10):
+    return _search_str_in_log_file(expression, XIVO_CONFD_LOG_INFO, delta)
 
 
 def find_line_in_xivo_sysconfd_log(delta=10):
@@ -110,8 +110,8 @@ def find_line_in_daemon_log(delta=10):
     return _find_line_in_log_file(DAEMON_LOG_INFO, delta)
 
 
-def find_line_in_xivo_restapi_log(delta=10):
-    return _find_line_in_log_file(XIVO_RESTAPI_LOG_INFO, delta)
+def find_line_in_xivo_confd_log(delta=10):
+    return _find_line_in_log_file(XIVO_CONFD_LOG_INFO, delta)
 
 
 def _find_line_in_log_file(loginfo, delta=10):

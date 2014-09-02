@@ -21,29 +21,29 @@ USERS_URL = 'users'
 
 
 def all_users():
-    return world.restapi_utils_1_1.rest_get(USERS_URL)
+    return world.confd_utils_1_1.rest_get(USERS_URL)
 
 
 def get_lines_associated_to_a_user(userid):
-    return world.restapi_utils_1_1.rest_get('%s/%s/user_links' % (USERS_URL, userid))
+    return world.confd_utils_1_1.rest_get('%s/%s/user_links' % (USERS_URL, userid))
 
 
 def get_user(userid):
-    return world.restapi_utils_1_1.rest_get('%s/%s' % (USERS_URL, userid))
+    return world.confd_utils_1_1.rest_get('%s/%s' % (USERS_URL, userid))
 
 
 def user_search(search):
     params = {'q': search}
-    return world.restapi_utils_1_1.rest_get(USERS_URL, params=params)
+    return world.confd_utils_1_1.rest_get(USERS_URL, params=params)
 
 
 def create_user(parameters):
-    return world.restapi_utils_1_1.rest_post(USERS_URL, parameters)
+    return world.confd_utils_1_1.rest_post(USERS_URL, parameters)
 
 
 def update_user(userid, parameters):
-    return world.restapi_utils_1_1.rest_put('%s/%s' % (USERS_URL, userid), parameters)
+    return world.confd_utils_1_1.rest_put('%s/%s' % (USERS_URL, userid), parameters)
 
 
 def delete_user(userid):
-    return world.restapi_utils_1_1.rest_delete('%s/%s' % (USERS_URL, userid))
+    return world.confd_utils_1_1.rest_delete('%s/%s' % (USERS_URL, userid))

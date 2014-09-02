@@ -22,37 +22,37 @@ DEVICES_URL = 'devices'
 
 
 def create_device(parameters):
-    return world.restapi_utils_1_1.rest_post(DEVICES_URL, parameters)
+    return world.confd_utils_1_1.rest_post(DEVICES_URL, parameters)
 
 
 def synchronize(device_id):
-    return world.restapi_utils_1_1.rest_get('%s/%s/synchronize' % (DEVICES_URL, device_id))
+    return world.confd_utils_1_1.rest_get('%s/%s/synchronize' % (DEVICES_URL, device_id))
 
 
 def delete_device(device_id):
-    return world.restapi_utils_1_1.rest_delete("%s/%s" % (DEVICES_URL, device_id))
+    return world.confd_utils_1_1.rest_delete("%s/%s" % (DEVICES_URL, device_id))
 
 
 def get_device(device_id):
-    return world.restapi_utils_1_1.rest_get("%s/%s" % (DEVICES_URL, device_id))
+    return world.confd_utils_1_1.rest_get("%s/%s" % (DEVICES_URL, device_id))
 
 
 def device_list(parameters=None):
     parameters = parameters or {}
-    return world.restapi_utils_1_1.rest_get(DEVICES_URL, params=parameters)
+    return world.confd_utils_1_1.rest_get(DEVICES_URL, params=parameters)
 
 
 def reset_to_autoprov(device_id):
-    return world.restapi_utils_1_1.rest_get('%s/%s/autoprov' % (DEVICES_URL, device_id))
+    return world.confd_utils_1_1.rest_get('%s/%s/autoprov' % (DEVICES_URL, device_id))
 
 
 def associate_line_to_device(device_id, line_id):
-    return world.restapi_utils_1_1.rest_get('%s/%s/associate_line/%s' % (DEVICES_URL, device_id, line_id))
+    return world.confd_utils_1_1.rest_get('%s/%s/associate_line/%s' % (DEVICES_URL, device_id, line_id))
 
 
 def remove_line_from_device(device_id, line_id):
-    return world.restapi_utils_1_1.rest_get('%s/%s/remove_line/%s' % (DEVICES_URL, device_id, line_id))
+    return world.confd_utils_1_1.rest_get('%s/%s/remove_line/%s' % (DEVICES_URL, device_id, line_id))
 
 
 def edit_device(device_id, parameters):
-    return world.restapi_utils_1_1.rest_put("%s/%s" % (DEVICES_URL, device_id), parameters)
+    return world.confd_utils_1_1.rest_put("%s/%s" % (DEVICES_URL, device_id), parameters)

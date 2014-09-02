@@ -27,19 +27,19 @@ def associate_extension(line_id, extension_id):
         'extension_id': extension_id
     }
     url = LINE_EXTENSIONS_URL % line_id
-    return world.restapi_utils_1_1.rest_post(url, parameters)
+    return world.confd_utils_1_1.rest_post(url, parameters)
 
 
 def dissociate_extension(line_id, extension_id):
     url = DISSOCIATE_LINE_EXTENSION_URL % (line_id, extension_id)
-    return world.restapi_utils_1_1.rest_delete(url)
+    return world.confd_utils_1_1.rest_delete(url)
 
 
 def extensions_for_line(line_id):
     url = LINE_EXTENSIONS_URL % line_id
-    return world.restapi_utils_1_1.rest_get(url)
+    return world.confd_utils_1_1.rest_get(url)
 
 
 def line_for_extension(extension_id):
     url = EXTENSION_LINE_URL % extension_id
-    return world.restapi_utils_1_1.rest_get(url)
+    return world.confd_utils_1_1.rest_get(url)

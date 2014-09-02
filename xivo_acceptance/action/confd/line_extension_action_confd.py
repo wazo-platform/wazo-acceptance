@@ -14,15 +14,31 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
+
 from lettuce.registry import world
 
-AGENT_QUEUE_MEMBERS_PATH = 'queues/%s/memberships/agents/%s'
+LINES_URL = 'lines/%s/extension'
+EXTENSIONS_URL = 'extensions/%s/line'
 
 
-def get_agent_queue_association(queue_member):
-    return world.restapi_utils_1_1.rest_get(AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id'], queue_member['agent_id']))
+def associate(line_id, extension_id):
+    parameters = {
+        'extension_id': int(extension_id)
+    }
+    url = LINES_URL % line_id
+    return world.confd_utils_1_1.rest_post(url, parameters)
 
 
-def edit_agent_queue_association(queue_member):
-    return world.restapi_utils_1_1.rest_put(AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id'], queue_member['agent_id']),
-                                            {'penalty': queue_member['penalty']})
+def get(line_id):
+    url = LINES_URL % line_id
+    return world.confd_utils_1_1.rest_get(url)
+
+
+def get_from_extension(extension_id):
+    url = EXTENSIONS_URL % extension_id
+    return world.confd_utils_1_1.rest_get(url)
+
+
+def dissociate(line_id):
+    url = LINES_URL % line_id
+    return world.confd_utils_1_1.rest_delete(url)

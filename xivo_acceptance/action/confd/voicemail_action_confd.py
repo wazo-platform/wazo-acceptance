@@ -17,16 +17,25 @@
 
 from lettuce import world
 
-CONFIGURATION_URL = 'configuration'
+VOICEMAIL_URL = 'voicemails'
 
 
-def get_live_reload_state():
-    return world.restapi_utils_1_1.rest_get('/%s/live_reload' % CONFIGURATION_URL)
+def get_voicemail(voicemail_id):
+    return world.confd_utils_1_1.rest_get('/%s/%s' % (VOICEMAIL_URL, voicemail_id))
 
 
-def disable_live_reload():
-    return world.restapi_utils_1_1.rest_put('/%s/live_reload' % CONFIGURATION_URL, {'enabled': False})
+def voicemail_list(parameters=None):
+    parameters = parameters or {}
+    return world.confd_utils_1_1.rest_get('%s' % VOICEMAIL_URL, params=parameters)
 
 
-def enable_live_reload():
-    return world.restapi_utils_1_1.rest_put('/%s/live_reload' % CONFIGURATION_URL, {'enabled': True})
+def create_voicemail(parameters):
+    return world.confd_utils_1_1.rest_post('%s' % VOICEMAIL_URL, parameters)
+
+
+def edit_voicemail(voicemail_id, parameters):
+    return world.confd_utils_1_1.rest_put('%s/%s' % (VOICEMAIL_URL, voicemail_id), parameters)
+
+
+def delete_voicemail(voicemail_id):
+    return world.confd_utils_1_1.rest_delete('%s/%s' % (VOICEMAIL_URL, voicemail_id))

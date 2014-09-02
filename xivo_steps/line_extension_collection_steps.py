@@ -18,7 +18,7 @@
 from hamcrest import assert_that, equal_to
 
 from lettuce import step, world
-from xivo_acceptance.action.restapi import line_extension_collection_action_restapi as action
+from xivo_acceptance.action.confd import line_extension_collection_action_confd as action
 from xivo_acceptance.helpers import extension_helper
 from xivo_acceptance.helpers import line_sip_helper
 

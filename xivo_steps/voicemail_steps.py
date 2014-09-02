@@ -19,8 +19,8 @@ from hamcrest import *
 from lettuce import step, world
 
 from xivo_acceptance.helpers import voicemail_helper, user_helper
-from xivo_acceptance.action.restapi import voicemail_action_restapi
-from xivo_acceptance.action.restapi import voicemail_link_action_restapi
+from xivo_acceptance.action.confd import voicemail_action_confd
+from xivo_acceptance.action.confd import voicemail_link_action_confd
 from xivo_lettuce import func, common
 
 FAKE_ID = 999999999
@@ -39,107 +39,107 @@ def given_i_have_no_voicemail_with_id_group1(step, voicemail_id):
 @step(u'Given I have the following voicemails:')
 def given_have_the_following_voicemails(step):
     for row in step.hashes:
-        voicemail_info = _extract_voicemail_info_to_restapi(row)
+        voicemail_info = _extract_voicemail_info_to_confd(row)
         voicemail_helper.add_or_replace_voicemail(voicemail_info)
 
 
 @step(u'When I request voicemail with id "([^"]*)"')
 def when_i_request_voicemail_with_id_group1(step, voicemail_id):
-    world.response = voicemail_action_restapi.get_voicemail(voicemail_id)
+    world.response = voicemail_action_confd.get_voicemail(voicemail_id)
 
 
 @step(u'When I send a request for the voicemail "([^"]*)", using its id')
 def when_i_send_a_request_for_the_voicemail_with_number_group1_using_its_id(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
-    world.response = voicemail_action_restapi.get_voicemail(voicemail_id)
+    world.response = voicemail_action_confd.get_voicemail(voicemail_id)
 
 
-@step(u'When I create an empty voicemail via RESTAPI:')
+@step(u'When I create an empty voicemail via CONFD:')
 def when_i_create_an_empty_voicemail(step):
-    world.response = voicemail_action_restapi.create_voicemail({})
+    world.response = voicemail_action_confd.create_voicemail({})
 
 
-@step(u'When I edit voicemail "([^"]*)" via RESTAPI:')
-def when_i_edit_voicemail_via_restapi(step, extension):
-    parameters = _extract_voicemail_info_to_restapi(step.hashes[0])
+@step(u'When I edit voicemail "([^"]*)" via CONFD:')
+def when_i_edit_voicemail_via_confd(step, extension):
+    parameters = _extract_voicemail_info_to_confd(step.hashes[0])
     number, context = func.extract_number_and_context_from_extension(extension)
     voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
-    world.response = voicemail_action_restapi.edit_voicemail(voicemail_id, parameters)
+    world.response = voicemail_action_confd.edit_voicemail(voicemail_id, parameters)
 
 
-@step(u'When I delete voicemail "([^"]*)" via RESTAPI')
-def when_i_delete_voicemail_with_number_group1_via_restapi(step, extension):
+@step(u'When I delete voicemail "([^"]*)" via CONFD')
+def when_i_delete_voicemail_with_number_group1_via_confd(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
-    world.response = voicemail_action_restapi.delete_voicemail(voicemail_id)
+    world.response = voicemail_action_confd.delete_voicemail(voicemail_id)
 
 
-@step(u'When I create the following voicemails via RESTAPI:')
+@step(u'When I create the following voicemails via CONFD:')
 def when_i_create_voicemails_with_the_following_parameters(step):
     for row in step.hashes:
-        voicemail = _extract_voicemail_info_to_restapi(row)
-        world.response = voicemail_action_restapi.create_voicemail(voicemail)
+        voicemail = _extract_voicemail_info_to_confd(row)
+        world.response = voicemail_action_confd.create_voicemail(voicemail)
 
 
-@step(u'When I request the list of voicemails via RESTAPI')
+@step(u'When I request the list of voicemails via CONFD')
 def when_i_request_the_list_of_voicemails(step):
-    world.response = voicemail_action_restapi.voicemail_list()
+    world.response = voicemail_action_confd.voicemail_list()
 
 
-@step(u'When I associate user "([^"]*)" with voicemail "([^"]*)" via RESTAPI')
-def when_i_link_user_group1_with_voicemail_group2_via_restapi(step, fullname, voicemail):
+@step(u'When I associate user "([^"]*)" with voicemail "([^"]*)" via CONFD')
+def when_i_link_user_group1_with_voicemail_group2_via_confd(step, fullname, voicemail):
     user = user_helper.find_user_by_name(fullname)
     number, context = func.extract_number_and_context_from_extension(voicemail)
     voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
 
-    world.response = voicemail_link_action_restapi.link_voicemail(user.id, voicemail_id)
+    world.response = voicemail_link_action_confd.link_voicemail(user.id, voicemail_id)
 
 
-@step(u'When I associate user "([^"]*)" with voicemail id "([^"]*)" via RESTAPI')
-def when_i_link_user_group1_with_voicemail_id_group2_via_restapi(step, fullname, voicemail_id):
+@step(u'When I associate user "([^"]*)" with voicemail id "([^"]*)" via CONFD')
+def when_i_link_user_group1_with_voicemail_id_group2_via_confd(step, fullname, voicemail_id):
     user = user_helper.find_user_by_name(fullname)
-    world.response = voicemail_link_action_restapi.link_voicemail(user.id, int(voicemail_id))
+    world.response = voicemail_link_action_confd.link_voicemail(user.id, int(voicemail_id))
 
 
-@step(u'When I associate a fake user with with voicemail "([^"]*)" via RESTAPI')
-def when_i_associate_a_fake_user_with_with_voicemail_group1_via_restapi(step, voicemail):
+@step(u'When I associate a fake user with with voicemail "([^"]*)" via CONFD')
+def when_i_associate_a_fake_user_with_with_voicemail_group1_via_confd(step, voicemail):
     number, context = func.extract_number_and_context_from_extension(voicemail)
     voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
 
-    world.response = voicemail_link_action_restapi.link_voicemail(FAKE_ID, voicemail_id)
+    world.response = voicemail_link_action_confd.link_voicemail(FAKE_ID, voicemail_id)
 
 
-@step(u'When I request the voicemail associated to user "([^"]*)" "([^"]*)" via RESTAPI')
-def when_i_request_the_voicemail_associated_to_user_group1_group2_via_restapi(step, firstname, lastname):
+@step(u'When I request the voicemail associated to user "([^"]*)" "([^"]*)" via CONFD')
+def when_i_request_the_voicemail_associated_to_user_group1_group2_via_confd(step, firstname, lastname):
     user = user_helper.find_by_firstname_lastname(firstname, lastname)
-    world.response = voicemail_link_action_restapi.get_voicemail_link(user.id)
+    world.response = voicemail_link_action_confd.get_voicemail_link(user.id)
 
 
-@step(u'When I request the voicemail associated to user with id "([^"]*)" via RESTAPI')
-def when_i_request_the_voicemail_associated_to_user_with_id_group1_via_restapi(step, user_id):
-    world.response = voicemail_link_action_restapi.get_voicemail_link(int(user_id))
+@step(u'When I request the voicemail associated to user with id "([^"]*)" via CONFD')
+def when_i_request_the_voicemail_associated_to_user_with_id_group1_via_confd(step, user_id):
+    world.response = voicemail_link_action_confd.get_voicemail_link(int(user_id))
 
 
-@step(u'When I dissociate user "([^"]*)" "([^"]*)" from his voicemail via RESTAPI')
-def when_i_dissociate_user_group1_from_his_voicemail_via_restapi(step, firstname, lastname):
+@step(u'When I dissociate user "([^"]*)" "([^"]*)" from his voicemail via CONFD')
+def when_i_dissociate_user_group1_from_his_voicemail_via_confd(step, firstname, lastname):
     user = user_helper.find_by_firstname_lastname(firstname, lastname)
-    world.response = voicemail_link_action_restapi.delete_voicemail_link(int(user.id))
+    world.response = voicemail_link_action_confd.delete_voicemail_link(int(user.id))
 
 
-@step(u'When I dissociate user with id "([^"]*)" from his voicemail via RESTAPI')
-def when_i_dissociate_user_with_id_group1_from_his_voicemail_via_restapi(step, user_id):
-    world.response = voicemail_link_action_restapi.delete_voicemail_link(int(user_id))
+@step(u'When I dissociate user with id "([^"]*)" from his voicemail via CONFD')
+def when_i_dissociate_user_with_id_group1_from_his_voicemail_via_confd(step, user_id):
+    world.response = voicemail_link_action_confd.delete_voicemail_link(int(user_id))
 
 
-@step(u'Then I have the following voicemails via RESTAPI:')
+@step(u'Then I have the following voicemails via CONFD:')
 def then_the_voicemail_has_the_following_parameters(step):
-    expected_voicemail = _extract_voicemail_info_to_restapi(step.hashes[0])
+    expected_voicemail = _extract_voicemail_info_to_confd(step.hashes[0])
 
     assert_that(world.response.data, has_entries(expected_voicemail))
 
 
-@step(u'Then I get a list containing the following voicemails via RESTAPI:')
+@step(u'Then I get a list containing the following voicemails via CONFD:')
 def then_i_get_a_list_containing_the_following_voicemails(step):
     assert_that(world.response.data, has_entries(
         'total', instance_of(int),
@@ -148,7 +148,7 @@ def then_i_get_a_list_containing_the_following_voicemails(step):
     voicemail_list = world.response.data['items']
 
     for voicemail in step.hashes:
-        voicemail = _extract_voicemail_info_to_restapi(voicemail)
+        voicemail = _extract_voicemail_info_to_confd(voicemail)
         assert_that(voicemail_list, has_item(has_entries(voicemail)))
 
 
@@ -160,7 +160,7 @@ def then_i_have_a_list_with_n_results(step, nb_list):
 
 @step(u'Then voicemail with number "([^"]*)" no longer exists')
 def then_voicemail_with_number_group1_no_longer_exists(step, number):
-    response = voicemail_action_restapi.voicemail_list({'search': number})
+    response = voicemail_action_confd.voicemail_list({'search': number})
     voicemails = response.data['items']
 
     assert_that(voicemails, is_not(has_item(has_entry('number', number))))
@@ -186,7 +186,7 @@ def then_i_see_the_element_not_exists(step, name):
     assert line is None, 'voicemail: %s exist' % name
 
 
-def _extract_voicemail_info_to_restapi(row):
+def _extract_voicemail_info_to_confd(row):
     voicemail = dict(row)
 
     if 'max_messages' in voicemail and voicemail['max_messages'] is not None and voicemail['max_messages'].isdigit():
@@ -199,7 +199,7 @@ def _extract_voicemail_info_to_restapi(row):
     return voicemail
 
 
-def _extract_voicemail_info_from_restapi(row):
+def _extract_voicemail_info_from_confd(row):
     voicemail = dict(row)
 
     if 'max_messages' in voicemail and voicemail['max_messages'] is not None:

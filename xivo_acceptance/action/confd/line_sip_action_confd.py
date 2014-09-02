@@ -15,21 +15,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import world
+from lettuce.registry import world
 
-VOICEMAIL_LINK_URL = 'users/%s/voicemail'
-
-
-def link_voicemail(user_id, voicemail_id):
-    parameters = {
-        'voicemail_id': voicemail_id
-    }
-    return world.restapi_utils_1_1.rest_post(VOICEMAIL_LINK_URL % user_id, parameters)
+LINES_SIP_URL = 'lines_sip'
 
 
-def get_voicemail_link(user_id):
-    return world.restapi_utils_1_1.rest_get(VOICEMAIL_LINK_URL % user_id)
+def all_lines():
+    return world.confd_utils_1_1.rest_get(LINES_SIP_URL)
 
 
-def delete_voicemail_link(user_id):
-    return world.restapi_utils_1_1.rest_delete(VOICEMAIL_LINK_URL % user_id)
+def get(lineid):
+    return world.confd_utils_1_1.rest_get('%s/%s' % (LINES_SIP_URL, lineid))
+
+
+def create_line_sip(parameters):
+    return world.confd_utils_1_1.rest_post(LINES_SIP_URL, parameters)
+
+
+def update(lineid, parameters):
+    return world.confd_utils_1_1.rest_put('%s/%s' % (LINES_SIP_URL, lineid), parameters)
+
+
+def delete(line_id):
+    return world.confd_utils_1_1.rest_delete('%s/%s' % (LINES_SIP_URL, line_id))

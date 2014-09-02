@@ -126,5 +126,5 @@ def restart_service(service_name, env=None):
     command = variables + ['/etc/init.d/{}'.format(service_name), 'restart']
     world.ssh_client_xivo.check_call(command)
 
-    if service_name == 'xivo-restapi':
-        world.config.restapi_utils_1_1.recreate_session()
+    if service_name == 'xivo-confd':
+        world.config.confd_utils_1_1.recreate_session()

@@ -38,7 +38,7 @@ def given_i_have_the_following_group1(step, resource):
 @step(u'When I request a list for "([^"]*)" using parameters:')
 def when_i_request_a_list_for_group1_using_parameters(step, resource):
     parameters = _convert_parameters(step.hashes)
-    world.response = world.restapi_utils_1_1.rest_get(resource, params=parameters)
+    world.response = world.confd_utils_1_1.rest_get(resource, params=parameters)
 
 
 @step(u'Then I get a response (\d+) matching "([^"]*)"')
@@ -54,7 +54,7 @@ def when_i_post_at_group1(step):
     for line in step.hashes:
         url = line['url']
         document = json.loads(line['document'])
-        world.response = world.restapi_utils_1_1.rest_post(url, document)
+        world.response = world.confd_utils_1_1.rest_post(url, document)
 
 
 @step(u'Then I get a list containing the following items:')
@@ -101,5 +101,5 @@ def _delete_similar_resources(resource, item):
 
 
 def _create_resource(resource, item):
-    response = world.restapi_utils_1_1.rest_post(resource, item)
+    response = world.confd_utils_1_1.rest_post(resource, item)
     response.check_status()

@@ -17,28 +17,16 @@
 
 from lettuce.registry import world
 
-LINES_URL = 'lines/%s/extension'
-EXTENSIONS_URL = 'extensions/%s/line'
+LINES_URL = 'lines'
 
 
-def associate(line_id, extension_id):
-    parameters = {
-        'extension_id': int(extension_id)
-    }
-    url = LINES_URL % line_id
-    return world.restapi_utils_1_1.rest_post(url, parameters)
+def all_lines():
+    return world.confd_utils_1_1.rest_get(LINES_URL)
 
 
 def get(line_id):
-    url = LINES_URL % line_id
-    return world.restapi_utils_1_1.rest_get(url)
+    return world.confd_utils_1_1.rest_get('%s/%s' % (LINES_URL, line_id))
 
 
-def get_from_extension(extension_id):
-    url = EXTENSIONS_URL % extension_id
-    return world.restapi_utils_1_1.rest_get(url)
-
-
-def dissociate(line_id):
-    url = LINES_URL % line_id
-    return world.restapi_utils_1_1.rest_delete(url)
+def all_user_links_by_line_id(line_id):
+    return world.confd_utils_1_1.rest_get('%s/%s/user_links' % (LINES_URL, line_id))

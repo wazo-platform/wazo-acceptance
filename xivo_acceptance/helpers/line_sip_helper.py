@@ -17,7 +17,7 @@
 
 from hamcrest import assert_that, equal_to, is_not, none
 
-from xivo_acceptance.action.restapi import line_sip_action_restapi as line_sip_action
+from xivo_acceptance.action.confd import line_sip_action_confd as line_sip_action
 from xivo_lettuce.remote_py_cmd import remote_exec
 
 

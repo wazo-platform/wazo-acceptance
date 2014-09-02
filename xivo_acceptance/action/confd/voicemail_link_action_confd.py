@@ -17,25 +17,19 @@
 
 from lettuce import world
 
-VOICEMAIL_URL = 'voicemails'
+VOICEMAIL_LINK_URL = 'users/%s/voicemail'
 
 
-def get_voicemail(voicemail_id):
-    return world.restapi_utils_1_1.rest_get('/%s/%s' % (VOICEMAIL_URL, voicemail_id))
+def link_voicemail(user_id, voicemail_id):
+    parameters = {
+        'voicemail_id': voicemail_id
+    }
+    return world.confd_utils_1_1.rest_post(VOICEMAIL_LINK_URL % user_id, parameters)
 
 
-def voicemail_list(parameters=None):
-    parameters = parameters or {}
-    return world.restapi_utils_1_1.rest_get('%s' % VOICEMAIL_URL, params=parameters)
+def get_voicemail_link(user_id):
+    return world.confd_utils_1_1.rest_get(VOICEMAIL_LINK_URL % user_id)
 
 
-def create_voicemail(parameters):
-    return world.restapi_utils_1_1.rest_post('%s' % VOICEMAIL_URL, parameters)
-
-
-def edit_voicemail(voicemail_id, parameters):
-    return world.restapi_utils_1_1.rest_put('%s/%s' % (VOICEMAIL_URL, voicemail_id), parameters)
-
-
-def delete_voicemail(voicemail_id):
-    return world.restapi_utils_1_1.rest_delete('%s/%s' % (VOICEMAIL_URL, voicemail_id))
+def delete_voicemail_link(user_id):
+    return world.confd_utils_1_1.rest_delete(VOICEMAIL_LINK_URL % user_id)

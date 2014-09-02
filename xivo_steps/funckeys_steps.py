@@ -19,7 +19,7 @@ from hamcrest import assert_that, equal_to, has_item, has_entry, has_length, has
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import user as user_action_webi
-from xivo_acceptance.action.restapi import func_key_action_restapi
+from xivo_acceptance.action.confd import func_key_action_confd
 from xivo_acceptance.helpers import extension_helper
 from xivo_acceptance.helpers import func_key_helper
 from xivo_acceptance.helpers import group_helper
@@ -35,9 +35,9 @@ def given_there_is_no_func_key_with_id_group1(step, func_key_id):
     func_key_helper.delete_func_key(func_key_id)
 
 
-@step(u'When I request the func key with id "([^"]*)" via RESTAPI')
-def when_i_request_the_func_key_with_id_group1_via_restapi(step, func_key_id):
-    world.response = func_key_action_restapi.get_func_key(func_key_id)
+@step(u'When I request the func key with id "([^"]*)" via CONFD')
+def when_i_request_the_func_key_with_id_group1_via_confd(step, func_key_id):
+    world.response = func_key_action_confd.get_func_key(func_key_id)
 
 
 @step(u'When I request the funckey with a destination for user "([^"]*)" "([^"]*)"')
@@ -46,18 +46,18 @@ def when_i_request_the_funckey_with_a_destination_for_user_group1_group2(step, f
     func_key_ids = func_key_helper.find_func_keys_with_user_destination(user.id)
     assert_that(func_key_ids, has_length(1), "More than one func key with the same destination")
 
-    world.response = func_key_action_restapi.get_func_key(func_key_ids[0])
+    world.response = func_key_action_confd.get_func_key(func_key_ids[0])
 
 
-@step(u'When I request the list of func keys via RESTAPI')
-def when_i_request_the_list_of_func_keys_via_restapi(step):
-    world.response = func_key_action_restapi.func_key_list()
+@step(u'When I request the list of func keys via CONFD')
+def when_i_request_the_list_of_func_keys_via_confd(step):
+    world.response = func_key_action_confd.func_key_list()
 
 
-@step(u'When I request the list of func keys with the following parameters via RESTAPI:')
-def when_i_request_the_list_of_func_keys_with_the_following_parameters_via_restapi(step):
+@step(u'When I request the list of func keys with the following parameters via CONFD:')
+def when_i_request_the_list_of_func_keys_with_the_following_parameters_via_confd(step):
     parameters = step.hashes[0]
-    world.response = func_key_action_restapi.func_key_list(parameters)
+    world.response = func_key_action_confd.func_key_list(parameters)
 
 
 @step(u'Then the user "([^"]*)" has the following func keys:')

@@ -20,7 +20,7 @@ from hamcrest import *
 from urllib2 import HTTPError
 
 from xivo_acceptance.action.webi import provd_plugins
-from xivo_acceptance.action.restapi import device_action_restapi
+from xivo_acceptance.action.confd import device_action_confd
 from xivo_acceptance.action.webi import device as device_action_webi
 from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
 from xivo_dao.data_handler.line import dao as line_dao
@@ -45,7 +45,7 @@ def given_i_have_the_following_devices(step):
             deviceinfo['plugin'] = provd_plugins.get_latest_plugin_name(deviceinfo['latest plugin of'])
             del deviceinfo['latest plugin of']
         device_id = device_helper.add_or_replace_device(deviceinfo)
-        device_action_restapi.reset_to_autoprov(device_id)
+        device_action_confd.reset_to_autoprov(device_id)
 
 
 @step(u'Given there exists the following device templates:')
@@ -56,7 +56,7 @@ def given_there_exists_the_following_device_template(step):
 
 @step(u'Given I set the HTTP_PROXY environment variables to "([^"]*)"')
 def given_i_set_the_http_proxy_environment_variables_to_group1(step, http_proxy):
-    sysutils.restart_service('xivo-restapi', env={'HTTP_PROXY': http_proxy})
+    sysutils.restart_service('xivo-confd', env={'HTTP_PROXY': http_proxy})
 
 
 @step(u'Given device with ip "([^"]*)" is provisionned with SIP line "([^"]*)"')
@@ -82,14 +82,14 @@ def _provisioning_server_http_requests(step):
 
 @step(u'When I create an empty device$')
 def when_i_create_an_empty_device(step):
-    world.response = device_action_restapi.create_device({})
+    world.response = device_action_confd.create_device({})
 
 
 @step(u'When I create the following devices:')
 def when_i_create_the_following_devices(step):
     for device in step.hashes:
         _update_device_from_step_hash(device)
-        world.response = device_action_restapi.create_device(device)
+        world.response = device_action_confd.create_device(device)
 
 
 @step(u'When I create a device using the device template id "([^"]*)"')
@@ -97,61 +97,61 @@ def when_i_create_a_device_using_the_device_template_id_group1(step, device_temp
     device = {
         'template_id': device_template_id
     }
-    world.response = device_action_restapi.create_device(device)
+    world.response = device_action_confd.create_device(device)
 
 
-@step(u'When I delete the device "([^"]*)" from restapi')
+@step(u'When I delete the device "([^"]*)" from confd')
 def when_i_delete_the_device(step, device_id):
-    world.response = device_action_restapi.delete_device(device_id)
+    world.response = device_action_confd.delete_device(device_id)
 
 
 @step(u'When I associate my line_id "([^"]*)" to the device "([^"]*)"')
 def when_i_associate_my_line_id_to_the_device(step, line_id, device_id):
-    world.response = device_action_restapi.associate_line_to_device(device_id, line_id)
+    world.response = device_action_confd.associate_line_to_device(device_id, line_id)
 
 
-@step(u'^When I synchronize the device "([^"]*)" from restapi$')
-def when_i_synchronize_the_device_group1_from_restapi(step, device_id):
-    world.response = device_action_restapi.synchronize(device_id)
+@step(u'^When I synchronize the device "([^"]*)" from confd$')
+def when_i_synchronize_the_device_group1_from_confd(step, device_id):
+    world.response = device_action_confd.synchronize(device_id)
 
 
 @step(u'When I go get the device with id "([^"]*)"')
 def when_i_go_get_the_device_with_id_group1(step, device_id):
-    world.response = device_action_restapi.get_device(device_id)
+    world.response = device_action_confd.get_device(device_id)
 
 
 @step(u'When I go get the device with mac "([^"]*)" using its id')
 def when_i_go_get_the_device_with_mac_group1_using_its_id(step, mac):
     device = provd_helper.find_by_mac(mac)
-    world.response = device_action_restapi.get_device(device['id'])
+    world.response = device_action_confd.get_device(device['id'])
 
 
 @step(u'When I request the list of devices')
 def when_i_access_the_list_of_devices(step):
-    world.response = device_action_restapi.device_list()
+    world.response = device_action_confd.device_list()
 
 
-@step(u'When I reset the device "([^"]*)" to autoprov from restapi')
-def when_i_reset_the_device_to_autoprov_from_restapi(step, device_id):
-    world.response = device_action_restapi.reset_to_autoprov(device_id)
+@step(u'When I reset the device "([^"]*)" to autoprov from confd')
+def when_i_reset_the_device_to_autoprov_from_confd(step, device_id):
+    world.response = device_action_confd.reset_to_autoprov(device_id)
 
 
 @step(u'When I remove line_id "([^"]*)" from device "([^"]*)"')
 def when_i_remove_line_id_group1_from_device_group2(step, line_id, device_id):
-    world.response = device_action_restapi.remove_line_from_device(device_id, line_id)
+    world.response = device_action_confd.remove_line_from_device(device_id, line_id)
 
 
 @step(u'When I edit the device with mac "([^"]*)" using no parameters')
 def when_i_edit_the_device_with_mac_group1_using_no_parameters(step, mac):
     device = provd_helper.find_by_mac(mac)
-    world.response = device_action_restapi.edit_device(device['id'], {})
+    world.response = device_action_confd.edit_device(device['id'], {})
 
 
 @step(u'When I edit the device with mac "([^"]*)" using the following parameters:')
 def when_i_edit_the_device_with_mac_group1_using_the_following_parameters(step, mac):
     device = provd_helper.find_by_mac(mac)
     parameters = step.hashes[0]
-    world.response = device_action_restapi.edit_device(device['id'], parameters)
+    world.response = device_action_confd.edit_device(device['id'], parameters)
 
 
 @step(u'When I request devices in the webi')

@@ -15,15 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce.registry import world
+from lettuce import world
+
+CONFIGURATION_URL = 'configuration'
 
 
-CALL_LOGS_URL = '/call_logs'
+def get_live_reload_state():
+    return world.confd_utils_1_1.rest_get('/%s/live_reload' % CONFIGURATION_URL)
 
 
-def call_logs_list():
-    return world.restapi_utils_1_1.rest_get(CALL_LOGS_URL)
+def disable_live_reload():
+    return world.confd_utils_1_1.rest_put('/%s/live_reload' % CONFIGURATION_URL, {'enabled': False})
 
 
-def call_logs_list_interval(params):
-    return world.restapi_utils_1_1.rest_get(CALL_LOGS_URL, params=params)
+def enable_live_reload():
+    return world.confd_utils_1_1.rest_put('/%s/live_reload' % CONFIGURATION_URL, {'enabled': True})

@@ -17,20 +17,20 @@
 from hamcrest import assert_that, has_entries
 from lettuce import step, world
 
-from xivo_acceptance.action.restapi import queue_members_action_restapi
+from xivo_acceptance.action.confd import queue_members_action_confd
 from xivo_acceptance.helpers import queue_helper, agent_helper
 
 
 @step(u'When I request the following queue member:')
 def when_i_request_the_following_queue_member(step):
     infos = complete_queue_member_infos(step.hashes[0])
-    world.response = queue_members_action_restapi.get_agent_queue_association(infos)
+    world.response = queue_members_action_confd.get_agent_queue_association(infos)
 
 
 @step(u'When I edit the following queue member:')
 def when_i_edit_the_following_queue_member(step):
     infos = complete_queue_member_infos(step.hashes[0])
-    world.response = queue_members_action_restapi.edit_agent_queue_association(infos)
+    world.response = queue_members_action_confd.edit_agent_queue_association(infos)
 
 
 @step(u'Then I get a queue membership with the following parameters:')
