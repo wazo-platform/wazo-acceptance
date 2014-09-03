@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 from lettuce.registry import world
 
-AGENT_QUEUE_MEMBERS_PATH = 'queues/%s/memberships/agents/%s'
+AGENT_QUEUE_MEMBERS_PATH = 'queues/%s/members/agents/%s'
 
 
 def get_agent_queue_association(queue_member):
