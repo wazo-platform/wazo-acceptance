@@ -27,7 +27,7 @@ XIVO_AGENT_LOGFILE = '/var/log/xivo-agentd.log'
 XIVO_AGID_LOGFILE = '/var/log/xivo-agid.log'
 XIVO_CTI_LOGFILE = '/var/log/xivo-ctid.log'
 XIVO_PROVD_LOGFILE = '/var/log/xivo-provd.log'
-XIVO_CONFD_LOGFILE = '/var/log/xivo-confdd.log'
+XIVO_CONFD_LOGFILE = '/var/log/xivo-confd.log'
 XIVO_SYSCONFD_LOGFILE = '/var/log/xivo-sysconfd.log'
 
 DAEMON_DATE_FORMAT = "%b %d %H:%M:%S"
