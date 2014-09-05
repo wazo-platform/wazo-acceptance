@@ -31,3 +31,6 @@ def add_agent_queue_association(queue_member):
     return world.confd_utils_1_1.rest_post(AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id']),
                                           { 'agent_id' : queue_member['agent_id'],
                                             'penalty': queue_member['penalty']})
+
+def remove_agent_queue_association(queue_member):
+    return world.confd_utils_1_1.rest_delete(EDIT_AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id'], queue_member['agent_id']))

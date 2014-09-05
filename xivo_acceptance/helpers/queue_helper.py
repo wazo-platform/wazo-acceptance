@@ -177,3 +177,8 @@ def delete_queue_with_id(queue_id):
 def get_penalty_for_agent(queue_name, agent_id):
     query = 'SELECT penalty FROM queuemember WHERE queue_name = :queue_name AND userid = :userid AND usertype = \'agent\''
     return exec_sql_request(query, queue_name=queue_name, userid=agent_id).first()['penalty']
+
+def get_queue_member(queue_name, agent_id):
+    query = 'SELECT * FROM queuemember WHERE queue_name = :queue_name AND userid = :userid AND usertype = \'agent\''
+    row = exec_sql_request(query, queue_name=queue_name, userid=agent_id).first()
+    return row

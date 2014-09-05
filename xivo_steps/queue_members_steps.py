@@ -44,6 +44,11 @@ def when_i_associate_the_following_agent(step):
     infos = complete_queue_member_infos(step.hashes[0])
     world.response = queue_members_action_confd.add_agent_queue_association(infos)
 
+@step(u'When I remove the following agent from a queue:')
+def when_i_remove_the_following_agent_from_a_queue(step):
+    infos = complete_queue_member_infos(step.hashes[0])
+    world.response = queue_members_action_confd.remove_agent_queue_association(infos)
+
 def extract_queue_member(orig):
     return {'penalty': int(orig['penalty'])}
 
