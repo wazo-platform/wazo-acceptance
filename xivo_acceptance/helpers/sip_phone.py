@@ -76,9 +76,6 @@ class SipPhone(object):
     def is_hungup(self):
         return self._session.hook_status() == HookStatus.OFFHOOK
 
-    def remote_caller_id(self):
-        return self._session.remote_caller_id()
-
 
 def register_line(sip_config):
     phone = SipPhone(sip_config)

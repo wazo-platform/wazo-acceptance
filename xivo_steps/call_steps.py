@@ -146,12 +146,6 @@ def then_user_hears_a_ringback_tone(step, user):
     assert_that(phone.is_ringback_tone())
 
 
-@step(u'Then "([^"]*)" sees callerid "([^"]*)"$')
-def then_i_see_called_from_callerid(step, user, callerid):
-    phone = step.scenario.phone_register.get_user_phone(user)
-    assert_that(phone.remote_caller_id(), equal_to(callerid))
-
-
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
 def given_there_is_group1_activated_in_extensions_page(step, option_label):
     common.open_url('extenfeatures')
