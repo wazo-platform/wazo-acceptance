@@ -157,6 +157,8 @@ def _find_destination_name(func_key):
         return _find_meetme_name_for_func_key(func_key)
     elif destination == 'service':
         return _find_extension_name_for_func_key(func_key)
+    elif destination == 'forward':
+        return _find_extension_name_for_func_key(func_key)
 
 
 def _find_user_name_for_func_key(func_key):
