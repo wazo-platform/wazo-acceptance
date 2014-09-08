@@ -24,8 +24,8 @@ from lettuce import step
 from xivo_acceptance.helpers import confd_requests_helper
 
 
-@step(u'Then the REST API received a request with infos:$')
-def then_the_rest_api_received_a_request_with_infos(step):
+@step(u'Then the confd REST API received a request with infos:$')
+def then_the_confd_rest_api_received_a_request_with_infos(step):
     last_requests = confd_requests_helper.last_requests_infos()
     for expected_request_infos in step.hashes:
         assert_that(last_requests, has_item(has_request_infos(expected_request_infos)))

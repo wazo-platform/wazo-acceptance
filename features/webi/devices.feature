@@ -40,7 +40,7 @@ Feature: Devices
 
     Scenario: List
         When I request devices in the webi
-        Then the REST API received a request with infos:
+        Then the confd REST API received a request with infos:
           | method | path         |
           | GET    | /1.1/devices |
 
@@ -49,7 +49,7 @@ Feature: Devices
         When I create the device with infos:
           |            ip | mac               |
           | 192.168.32.21 | 00:00:00:00:bb:02 |
-        Then the REST API received a request with infos:
+        Then the confd REST API received a request with infos:
           | method | path         |
           | POST   | /1.1/devices |
 
@@ -61,7 +61,7 @@ Feature: Devices
         When I edit the device "564635464951957" with infos:
           | description    |
           | toto           |
-        Then the REST API received a request with infos:
+        Then the confd REST API received a request with infos:
           | method | path                         | data                                                                                                                                       |
           | PUT    | /1.1/devices/564635464951957 | {"ip":"192.168.32.197","mac":"00:00:00:00:aa:01","template_id":"defaultconfigdevice","description":"toto","options":{"switchboard":false}} |
 
@@ -94,7 +94,7 @@ Feature: Devices
           |              id |             ip | mac               |
           | 542135468456498 | 192.168.32.197 | 00:00:00:00:aa:01 |
         When I delete the device "542135468456498"
-        Then the REST API received a request with infos:
+        Then the confd REST API received a request with infos:
           | method | path                         |
           | DELETE | /1.1/devices/542135468456498 |
         Then there is no device "00:00:00:00:aa:01"
@@ -115,7 +115,7 @@ Feature: Devices
           |             id |             ip | mac               |
           | 62144354987621 | 192.168.32.197 | 00:00:00:00:aa:01 |
         When I reset to autoprov the device with mac "00:00:00:00:aa:01" from webi
-        Then the REST API received a request with infos:
+        Then the confd REST API received a request with infos:
           | method | path                                    |
           | GET    | /1.1/devices/62144354987621/autoprov    |
           | GET    | /1.1/devices/62144354987621/synchronize |
