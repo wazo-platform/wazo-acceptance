@@ -20,6 +20,7 @@ from xivo_acceptance.helpers import dialpattern_helper, user_helper, \
 
 from xivo_dao.data_handler.extension import services as extension_services
 from xivo_dao.data_handler.exception import NotFoundError
+from xivo_dao.helpers.db_manager import daosession
 from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 from xivo_lettuce.postgres import exec_sql_request
 
@@ -112,7 +113,7 @@ def delete_all():
 
 
 def _delete_extension(extension_id):
-    exten_info = remote_exec_with_result(_get_exten_info, extension_id=extension_id)
+    exten_info = _get_exten_info(extension_id=extension_id)
     if not exten_info:
         return
 
@@ -164,9 +165,9 @@ def _delete_using_service(channel, extension_id):
 
 def _find_all_extension_ids(channel):
     from xivo_dao.alchemy.extension import Extension as ExtensionSchema
-    from xivo_dao.helpers.db_manager import DaoSession
+    from xivo_dao.helpers.db_utils import get_dao_session
 
-    rows = (DaoSession
+    rows = (get_dao_session()
             .query(ExtensionSchema.id)
             .filter(ExtensionSchema.context != 'xivo-features')
             .all())
@@ -175,20 +176,19 @@ def _find_all_extension_ids(channel):
     channel.send(extension_ids)
 
 
-def _get_exten_info(channel, extension_id):
+@daosession
+def _get_exten_info(session, extension_id):
     from xivo_dao.alchemy.extension import Extension as ExtensionSchema
-    from xivo_dao.helpers.db_manager import DaoSession
 
-    extension_row = (DaoSession
+    extension_row = (session
                      .query(ExtensionSchema)
                      .filter(ExtensionSchema.id == extension_id)
                      .first())
 
     if extension_row:
-        extension = (extension_row.exten, extension_row.type, extension_row.typeval)
-        channel.send(extension)
+        return (extension_row.exten, extension_row.type, extension_row.typeval)
     else:
-        channel.send(None)
+        return None
 
 
 def get_extension_typeval(extension_id):

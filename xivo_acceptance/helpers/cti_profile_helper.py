@@ -24,14 +24,14 @@ def create_profile(profile):
 
 
 def _create_profile(channel, profileinfo):
-    from xivo_dao.helpers.db_manager import DaoSession
+    from xivo_dao.helpers.db_utils import get_dao_session
     from xivo_dao.alchemy.cti_profile import CtiProfile
     from xivo_dao.alchemy.ctipresences import CtiPresences
     from xivo_dao.alchemy.ctiphonehints import CtiPhoneHints
     from xivo_dao.alchemy.ctiphonehintsgroup import CtiPhoneHintsGroup
 
     profile = CtiProfile(**profileinfo)
-    session = DaoSession()
+    session = get_dao_session()
     session.begin()
     session.execute('UPDATE userfeatures SET cti_profile_id = null WHERE cti_profile_id = :profile_id', {'profile_id': int(profile.id)})
     session.execute('DELETE FROM cti_profile WHERE id = :profile_id', {'profile_id': int(profile.id)})
@@ -44,14 +44,14 @@ def delete_profile_if_needed(profile_id):
 
 
 def _delete_profile_if_needed(channel, profile_id):
-    from xivo_dao.helpers.db_manager import DaoSession
+    from xivo_dao.helpers.db_utils import get_dao_session
     from xivo_dao.alchemy.cti_profile import CtiProfile
     from xivo_dao.alchemy.ctipresences import CtiPresences
     from xivo_dao.alchemy.ctiphonehints import CtiPhoneHints
     from xivo_dao.alchemy.ctiphonehintsgroup import CtiPhoneHintsGroup
     from xivo_dao.alchemy.userfeatures import UserFeatures
 
-    session = DaoSession()
+    session = get_dao_session()
     session.begin()
     result = session.query(CtiProfile).filter(CtiProfile.id == profile_id).first()
     if result is not None:
