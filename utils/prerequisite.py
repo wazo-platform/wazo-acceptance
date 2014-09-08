@@ -23,6 +23,7 @@ from lettuce import world
 
 from xivo_acceptance.helpers import context_helper
 from xivo_dao.helpers import db_manager
+from xivo_dao.helpers.db_manager import daosession
 from xivo_lettuce import common, assets
 from xivo_lettuce.assets import copy_asset_to_server
 from xivo_lettuce.terrain import initialize, deinitialize
@@ -122,9 +123,10 @@ def _allow_agid_listen_on_all_interfaces():
     world.ssh_client_xivo.check_call(command)
 
 
-def _allow_provd_listen_on_all_interfaces():
+@daosession
+def _allow_provd_listen_on_all_interfaces(session):
     query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
-    world.config.dao_engine.execute(query)
+    session.bind.execute(query)
     common.open_url('commonconf')
 
 

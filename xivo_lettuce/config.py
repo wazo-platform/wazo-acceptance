@@ -86,7 +86,6 @@ class XivoAcceptanceConfig(object):
 
         self.asset_dir = _find_first_existing_path(_ASSETS_DIR, _GLOBAL_ASSETS_DIR)
 
-        self.dao_engine = None
         self.rest_provd = None
         self.provd_client = None
         self.ws_utils = None
@@ -144,12 +143,7 @@ class XivoAcceptanceConfig(object):
             self.xivo_configured = True
 
     def _setup_dao(self):
-        dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % self.xivo_host
-        db_manager.reinit()
-        try:
-            self.dao_engine = db_manager._dao_engine
-        except OperationalError:
-            logging.exception('PGSQL ERROR: could not connect to server')
+        db_manager._init('postgresql://asterisk:proformatique@%s/asterisk' % self.xivo_host)
 
     def _setup_ssh_client(self):
         self.ssh_client_xivo = SSHClient(self.xivo_host, self.ssh_login)
