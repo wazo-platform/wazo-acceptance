@@ -16,13 +16,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 from lettuce.registry import world
 
-AGENT_QUEUE_MEMBERS_PATH = 'queues/%s/memberships/agents/%s'
-
+AGENT_QUEUE_MEMBERS_PATH= 'queues/%s/members/agents'
+EDIT_AGENT_QUEUE_MEMBERS_PATH = AGENT_QUEUE_MEMBERS_PATH + '/%s'
 
 def get_agent_queue_association(queue_member):
-    return world.confd_utils_1_1.rest_get(AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id'], queue_member['agent_id']))
+    return world.confd_utils_1_1.rest_get(EDIT_AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id'], queue_member['agent_id']))
 
 
 def edit_agent_queue_association(queue_member):
-    return world.confd_utils_1_1.rest_put(AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id'], queue_member['agent_id']),
+    return world.confd_utils_1_1.rest_put(EDIT_AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id'], queue_member['agent_id']),
                                             {'penalty': queue_member['penalty']})
+
+def add_agent_queue_association(queue_member):
+    return world.confd_utils_1_1.rest_post(AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id']),
+                                          { 'agent_id' : queue_member['agent_id'],
+                                            'penalty': queue_member['penalty']})
+
+def remove_agent_queue_association(queue_member):
+    return world.confd_utils_1_1.rest_delete(EDIT_AGENT_QUEUE_MEMBERS_PATH % (queue_member['queue_id'], queue_member['agent_id']))
