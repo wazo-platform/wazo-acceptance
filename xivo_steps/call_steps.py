@@ -40,9 +40,9 @@ def when_a_call_is_started(step):
         first_to_hangup = caller_phone if hangup == 'caller' else callee_phone
 
         caller_phone.call(dial)
-        time.sleep(int(ring_time))
+        _sleep(ring_time)
         callee_phone.answer()
-        time.sleep(int(talk_time))
+        _sleep(talk_time)
         first_to_hangup.hangup()
 
     for call_info in step.hashes:
@@ -94,6 +94,13 @@ def when_a_calls_exten(step, name, exten):
     phone.call(exten)
 
 
+@step(u'When "([^"]*)" calls "([^"]*)" and waits until the end$')
+def when_a_calls_exten_and_waits_until_the_end(step, name, exten):
+    phone = step.scenario.phone_register.get_user_phone(name)
+    phone.call(exten)
+    common.wait_until(phone.is_hungup, tries=10)
+
+
 @step(u'When "([^"]*)" answers')
 def when_a_answers(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)
@@ -107,8 +114,18 @@ def when_a_hangs_up(step, name):
 
 
 @step(u'When "([^"]*)" and "([^"]*)" talk for "([^"]*)" seconds')
-def when_a_and_b_talk_for_n_seconds(step, _a, _b, n):
-    time.sleep(float(n))
+def when_a_and_b_talk_for_n_seconds(step, _a, _b, seconds):
+    _sleep(seconds)
+
+
+@step(u'I wait (\d+) seconds')
+def given_i_wait_n_seconds(step, seconds):
+    _sleep(seconds)
+
+
+@step(u'When "([^"]*)" waits for (\d+) seconds')
+def when_a_waits_for_n_seconds(step, _waiter, seconds):
+    _sleep(seconds)
 
 
 @step(u'Then "([^"]*)" last dialed extension was not found')
@@ -154,11 +171,6 @@ def given_there_is_group1_activated_in_extensions_page(step, option_label):
     form.submit.submit_form()
 
 
-@step(u'I wait (\d+) seconds')
-def given_i_wait_n_seconds(step, count):
-    time.sleep(int(count))
-
-
 @step(u'Then I see no recording file of this call in monitoring audio files page')
 def then_i_not_see_recording_file_of_this_call_in_monitoring_audio_files_page(step):
     now = int(time.time())
@@ -176,3 +188,7 @@ def then_i_see_rejected_call_in_asterisk_log(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     expression = "to extension '%s' rejected because extension not found in context '%s'" % (number, context)
     assert search_str_in_asterisk_log(expression)
+
+
+def _sleep(seconds):
+    time.sleep(float(seconds))
