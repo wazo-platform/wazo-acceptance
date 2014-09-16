@@ -25,7 +25,6 @@ from sqlalchemy.exc import OperationalError
 from execnet.multi import makegateway
 
 from xivo_dao.helpers import config as dao_config
-from xivo_dao.helpers import db_manager
 from xivo_lettuce.ssh import SSHClient
 from xivo_lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_lettuce import postgres
@@ -143,7 +142,7 @@ class XivoAcceptanceConfig(object):
             self.xivo_configured = True
 
     def _setup_dao(self):
-        db_manager._init('postgresql://asterisk:proformatique@%s/asterisk' % self.xivo_host)
+        dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % self.xivo_host
 
     def _setup_ssh_client(self):
         self.ssh_client_xivo = SSHClient(self.xivo_host, self.ssh_login)
