@@ -19,7 +19,6 @@ import time
 
 from hamcrest import assert_that
 from hamcrest import has_items
-from hamcrest import equal_to
 from lettuce import step
 
 from xivo_acceptance.helpers import cti_helper, asterisk_helper
