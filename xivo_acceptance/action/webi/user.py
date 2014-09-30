@@ -156,7 +156,7 @@ def user_form_add_line(linenumber, context='default', protocol='SIP', device=Non
         select_entity_with_displayname(entity_displayname)
     click_add_line_button()
     select_context(context)
-    type_line_number(linenumber)
+    type_line_number(linenumber, go_to_tab=False)
     select_protocol(protocol)
     if device is not None:
         select_device(device)
@@ -182,8 +182,11 @@ def select_context(context):
     Select(input_context).select_by_value(context.lower())
 
 
-def type_line_number(linenumber):
+def type_line_number(linenumber, go_to_tab=True):
+    if go_to_tab:
+        open_line_tab()
     input_linenumber = world.browser.find_elements_by_id('linefeatures-number')[-2]
+    input_linenumber.clear()
     input_linenumber.send_keys(linenumber)
 
 
