@@ -185,3 +185,20 @@ Feature: User
         When I remove line from user "Abraham" "Maharba" with errors
         Then I see errors
         When I remove line "1456" from lines then I see errors
+
+    Scenario: Update user's extension to existing queue's extension
+        Given there are contexts with infos:
+          | type   | name      | range_start | range_end | entity_name |
+          | user   | samerange | 1000        | 1999      | xivo_entity |
+          | queue  | samerange | 1000        | 1999      | xivo_entity |
+        Given there are users with infos:
+          | firstname | lastname | number | context   | entity_name |
+          | Fab       | Lab      | 1001   | samerange | xivo_entity |
+        Given there are queues with infos:
+          | name          | display name   | number | context   |
+          | americandream | American Dream | 1002   | samerange |
+        Given I have no extension with exten "1003@samerange"
+        When I modify the extension of user "Fab" "Lab" to "1002" with errors
+        When I modify the extension of user "Fab" "Lab" to "1003"
+        When I edit the queue "americandream"
+        Then I see no errors
