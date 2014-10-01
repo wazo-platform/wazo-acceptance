@@ -24,33 +24,43 @@ class FormErrorException(Exception):
 
 
 def submit_form_with_errors(input_id='it-submit'):
-    error_element = _do_submit(input_id)
-    if not error_element:
-        raise Exception('No error occurred')
+    _do_submit(input_id)
+    assert_form_errors()
 
 
 def submit_form(input_id='it-submit'):
-    error_element = _do_submit(input_id)
-    if error_element:
-        world.dump_current_page()
-        raise FormErrorException(error_element.text)
+    _do_submit(input_id)
+    assert_no_form_errors(dump_current_page=True)
 
 
 def _do_submit(input_id):
     submit_button = world.browser.find_element_by_id(input_id)
     submit_button.click()
 
-    try:
-        error_element = find_form_errors()
-    except NoSuchElementException:
-        error_element = None
-
-    return error_element
-
 
 def assert_form_errors():
-    assert find_form_errors() is not None
+    error_element = _get_form_errors()
+    if error_element is None:
+        raise Exception('No error occured')
 
 
-def find_form_errors():
-    return world.browser.find_element_by_id('report-xivo-error')
+def assert_no_form_errors(dump_current_page=False):
+    error_element = _get_form_errors()
+    if error_element is not None:
+        if dump_current_page:
+            world.dump_current_page()
+        raise FormErrorException(error_element.text)
+
+
+def _get_form_errors():
+    try:
+        return world.browser.find_element_by_id('report-xivo-error')
+    except NoSuchElementException:
+        pass
+
+    try:
+        return world.browser.find_element_by_class_name('fm-txt-error')
+    except NoSuchElementException:
+        pass
+
+    return None

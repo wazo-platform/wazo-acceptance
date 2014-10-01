@@ -402,6 +402,20 @@ def when_i_modify_the_device_of_user_group1_group2_to_group3(step, firstname, la
     form.submit.submit_form()
 
 
+@step(u'When I modify the extension of user "([^"]*)" "([^"]*)" to "([^"]*)"$')
+def when_i_modify_the_extension_of_user_name_to_extension(step, firstname, lastname, new_extension):
+    _edit_user(firstname, lastname)
+    user_action_webi.type_line_number(new_extension)
+    form.submit.submit_form()
+
+
+@step(u'When I modify the extension of user "([^"]*)" "([^"]*)" to "([^"]*)" with errors$')
+def when_i_modify_the_extension_of_user_name_to_extension(step, firstname, lastname, new_extension):
+    _edit_user(firstname, lastname)
+    user_action_webi.type_line_number(new_extension)
+    form.submit.submit_form_with_errors()
+
+
 @step(u'When I remove the device of user "([^"]*)" "([^"]*)"')
 def when_i_remove_the_device_of_user_group1_group2(step, firstname, lastname):
     _edit_user(firstname, lastname)

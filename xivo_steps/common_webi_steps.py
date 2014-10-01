@@ -49,12 +49,7 @@ def then_the_search_results_are(step):
 def then_i_see_no_errors(step):
     # this step is there mostly for test readability; it's a no-op in most cases
     # since it's already checked when a form is submitted
-    try:
-        error_element = form.submit.find_form_errors()
-    except NoSuchElementException:
-        pass
-    else:
-        raise form.submit.FormErrorException(error_element.text)
+    form.submit.assert_no_form_errors()
 
 
 @step(u'Then I see errors')
