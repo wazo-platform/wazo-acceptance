@@ -28,20 +28,6 @@ def given_the_ami_is_monitored(step):
     asterisk.start_ami_monitoring()
 
 
-@step(u'Then I see in the AMI that the line "([^"]*)" has been synchronized')
-def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, extension):
-    time.sleep(1)
-    line = line_helper.find_with_extension(extension)
-    line_name = line.name
-    lines = [
-        'Action: SIPnotify',
-        'Channel: %s' % line_name,
-        'Variable: Event=check-sync',
-    ]
-    ami_lines = asterisk.fetch_ami_lines()
-    assert_that(ami_lines, has_items(*lines))
-
-
 @step(u'Asterisk command "([^"]*)" return no error')
 def then_asterisk_command_group1_return_no_error(step, ast_cmd):
     command = ['asterisk', '-rx', '"%s"' % ast_cmd]
@@ -126,3 +112,17 @@ def then_the_group1_section_of_group2_does_not_contain_the_options(step, section
     options = asterisk_helper.get_conf_options(filename, section, option_names)
 
     assert_that(options, equal_to([]))
+
+
+@step(u'Then I see in the AMI that the line "([^"]*)" has been synchronized')
+def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, extension):
+    time.sleep(1)
+    line = line_helper.find_with_extension(extension)
+    line_name = line.name
+    lines = [
+        'Action: SIPnotify',
+        'Channel: %s' % line_name,
+        'Variable: Event=check-sync',
+    ]
+    ami_lines = asterisk.fetch_ami_lines()
+    assert_that(ami_lines, has_items(*lines))
