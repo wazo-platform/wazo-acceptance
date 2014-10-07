@@ -366,3 +366,18 @@ def wait_until(function, *args, **kwargs):
         raise Exception(message)
 
     return return_value
+
+
+def wait_until_assert(assert_function, *args, **kwargs):
+    tries = kwargs.pop('tries', 1)
+    errors = []
+
+    for _ in xrange(tries):
+        try:
+            assert_function(*args, **kwargs)
+            return
+        except AssertionError as e:
+            errors.append(e)
+            time.sleep(1)
+    else:
+        raise Exception('\n'.join(errors))

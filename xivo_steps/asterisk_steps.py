@@ -20,7 +20,7 @@ import time
 from hamcrest import assert_that, equal_to, contains, has_items
 from lettuce import step, world
 from xivo_acceptance.helpers import asterisk_helper, line_helper
-from xivo_lettuce import asterisk, sysutils, logs
+from xivo_lettuce import asterisk, common, sysutils, logs
 
 
 @step(u'Given the AMI is monitored')
@@ -116,7 +116,6 @@ def then_the_group1_section_of_group2_does_not_contain_the_options(step, section
 
 @step(u'Then I see in the AMI that the line "([^"]*)" has been synchronized')
 def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, extension):
-    time.sleep(1)
     line = line_helper.find_with_extension(extension)
     line_name = line.name
     lines = [
@@ -124,5 +123,9 @@ def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, exten
         'Channel: %s' % line_name,
         'Variable: Event=check-sync',
     ]
-    ami_lines = asterisk.fetch_ami_lines()
-    assert_that(ami_lines, has_items(*lines))
+
+    def _assert():
+        ami_lines = asterisk.fetch_ami_lines()
+        assert_that(ami_lines, has_items(*lines))
+
+    common.wait_until_assert(_assert, tries=3)
