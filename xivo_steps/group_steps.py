@@ -40,7 +40,7 @@ def given_there_are_groups(step):
         common.open_url('group', 'list', {'search': group['name']})
         common.edit_line(group['name'])
         if 'ring seconds' in group:
-            form.select.set_select_field_with_label('Ring time', '%s seconds' % group['ring seconds'])
+            form.input.set_text_field_with_label('Ring time', '%s seconds' % group['ring seconds'])
         if 'noanswer' in group:
             common.go_to_tab('No answer')
             forward_dest_type, forward_dest_name = group['noanswer'].split(':', 1)
