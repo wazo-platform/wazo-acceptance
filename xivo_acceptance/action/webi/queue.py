@@ -17,8 +17,7 @@
 
 from xivo_acceptance.helpers import context_helper, queue_helper
 from xivo_lettuce import common
-from xivo_lettuce.form.input import set_text_field_with_label, \
-    set_text_field_with_id
+from xivo_lettuce.form.input import set_text_field_with_label
 from xivo_lettuce.form.select import set_select_field_with_label, \
     set_select_field_with_id
 from xivo_lettuce.form.checkbox import set_checkbox_with_id
@@ -116,8 +115,8 @@ def fill_advanced_tab(queue):
     common.go_to_tab('Advanced')
 
     if REACH_TIMEOUT in queue:
-        set_text_field_with_id('it-queue-timeout',
-                               queue[REACH_TIMEOUT])
+        set_select_field_with_id('it-queue-timeout',
+                                 queue[REACH_TIMEOUT])
 
     if CALL_RETRY in queue:
         set_select_field_with_id('it-queue-retry', queue[CALL_RETRY])
