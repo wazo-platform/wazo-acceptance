@@ -23,20 +23,30 @@ The xivo-acceptance image is build daily. To run the container, do the following
 
 Create your local config file:
 
-    echo -e """[xivo]\nhostname = <xivo_host>""" > /etc/xivo-acceptance/conf.d/default.local
+    echo -e """[xivo]\nhostname = <your_xivo_host>""" > /etc/xivo-acceptance/conf.d/default.local
 
-Test user/client feature is the good test:
+Test user/client feature is a good test:
 
     xivo-acceptance -v -f user/client
 
 Commands
 ------------------
 
+    /features
+    |-- backup
+    |   `-- backup.feature
+    |-- user
+    |   `-- client.feature
+    |-- call_center
+    |   |-- agent.feature
+    |   |-- queue.feature
+    ...
+
 Launch all features:
 
     xivo-acceptance -a
 
-Launch user feature:
+Launch user features:
 
     xivo-acceptance -f user
 
