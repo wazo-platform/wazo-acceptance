@@ -17,7 +17,6 @@
 
 import ConfigParser
 import os
-import sys
 import xivo_ws
 import logging
 
@@ -30,23 +29,19 @@ from xivo_lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_lettuce import postgres
 from provd.rest.client.client import new_provisioning_client
 
-logger = logging.getLogger('acceptance')
+logger = logging.getLogger(__name__)
 
 
-_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-_CONFIG_DIR = os.path.join(_ROOT_DIR, 'config')
-_ASSETS_DIR = os.path.join(_ROOT_DIR, 'assets')
-_GLOBAL_CONFIG_DIR = os.path.join(sys.prefix, 'etc', 'xivo-acceptance')
-_GLOBAL_ASSETS_DIR = os.path.join(sys.prefix, 'share', 'xivo-acceptance', 'assets')
+_CONFIG_DIR = '/etc/xivo-acceptance'
+_ASSETS_DIR = '/usr/share/xivo-acceptance/assets'
+_FEATURES_DIR = '/usr/share/xivo-acceptance/features'
 
 
 def read_config():
-    config_dir = _find_first_existing_path(_CONFIG_DIR, _GLOBAL_CONFIG_DIR)
+    logger.info('Using configuration dir %s', _CONFIG_DIR)
 
-    print 'Using configuration dir %s' % config_dir
-
-    config_dird = os.path.join(config_dir, 'conf.d')
-    config_file_default = os.path.join(config_dir, 'default.ini')
+    config_dird = os.path.join(_CONFIG_DIR, 'conf.d')
+    config_file_default = os.path.join(_CONFIG_DIR, 'default.ini')
 
     config = ConfigParser.RawConfigParser()
 
@@ -62,7 +57,7 @@ def read_config():
                                                   config_file_extra_local,
                                                   config_file_extra_default)
 
-    print 'Using extra configuration file %s' % config_file_extra
+    logger.info('Using extra configuration file %s', config_file_extra)
 
     with open(config_file_extra) as fobj:
         config.readfp(fobj)
@@ -83,7 +78,7 @@ class XivoAcceptanceConfig(object):
         self._config = raw_config
         logger.info("Configuring xivo-acceptance...")
 
-        self.asset_dir = _find_first_existing_path(_ASSETS_DIR, _GLOBAL_ASSETS_DIR)
+        self.asset_dir = _ASSETS_DIR
 
         self.rest_provd = None
         self.provd_client = None

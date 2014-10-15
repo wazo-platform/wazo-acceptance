@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import os
 import sys
 
 from lettuce import world
@@ -30,8 +29,6 @@ from xivo_lettuce.config import XivoAcceptanceConfig, read_config
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
-
-_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
 
 def main(args):

@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
-
-# Copyright (C) 2013-2014 Avencall
+# -*- coding: UTF-8 -*-
+#
+# Copyright (C) 2014 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,4 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import xivo_steps
+
+from xivo_acceptance.service import prerequisite
+
+
+class XiVOAcceptanceController(object):
+
+    def __init__(self, feature_manager):
+        self._feature_manager = feature_manager
+
+    def exec_prerequisite(self):
+        prerequisite.run()
+
+    def exec_feature(self, feature, interactive=False):
+        feature_file = None
+        try:
+            feature_folder, feature_file = feature.split('/')
+        except ValueError:
+            feature_folder = feature
+
+        self._feature_manager.exec_feature(feature_folder, feature_file, interactive)

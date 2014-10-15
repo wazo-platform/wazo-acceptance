@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
@@ -29,7 +27,7 @@ from xivo_lettuce.assets import copy_asset_to_server
 from xivo_lettuce.terrain import initialize, deinitialize
 
 
-def main():
+def run():
     print 'Initializing ...'
     initialize()
     try:
@@ -141,7 +139,3 @@ def _install_chan_test():
     remote_path = '/usr/lib/asterisk/modules/chan_test.so'
     command = ['scp', asset_full_path, '%s:%s' % (world.config.xivo_host, remote_path)]
     subprocess.call(command)
-
-
-if __name__ == '__main__':
-    main()
