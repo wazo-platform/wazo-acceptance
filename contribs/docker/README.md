@@ -25,6 +25,10 @@ Create your local config file:
 
     echo -e """[xivo]\nhostname = <your_xivo_host>""" > /etc/xivo-acceptance/conf.d/default.local
 
+Setting up ssh:
+
+    ssh-copy-id -i ~/.ssh/id_rsa $(awk -F "=" '/hostname/ {print $2}' /etc/xivo-acceptance/conf.d/default.local)
+
 Test user/client feature is a good test:
 
     xivo-acceptance -v -f user/client
