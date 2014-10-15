@@ -1,11 +1,11 @@
 ## Image to build from sources
 
-FROM debian-with-qt-5.2.1:latest
+FROM xivo/debian-qt5:latest
 MAINTAINER XiVO Team "dev@avencall.com"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV XC_PATH /root/xivo-client-qt/bin
-ENV PATH $PATH:/opt/Qt5.2.1/5.2.1/gcc_64/bin/
+ENV PATH $PATH:/usr/lib/x86_64-linux-gnu/qt5/bin
 ENV HOME /root
 
 # Add dependencies
@@ -51,7 +51,7 @@ WORKDIR /root
 RUN git clone git://github.com/xivo-pbx/xivo-client-qt
 WORKDIR xivo-client-qt
 RUN qmake
-RUN make FUNCTESTS=yes
+RUN make -j2 FUNCTESTS=yes
 
 # Set password
 RUN echo "root:xivo" | chpasswd
