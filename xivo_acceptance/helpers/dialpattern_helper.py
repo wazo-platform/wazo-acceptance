@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_acceptance.lettuce.remote_py_cmd import remote_exec
 from execnet.gateway_base import RemoteError
 
 

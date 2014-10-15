@@ -17,9 +17,9 @@
 
 from lettuce import world
 from selenium.webdriver.support.select import Select
-from xivo_lettuce import common
-from xivo_lettuce.form import submit
-from xivo_lettuce.form.list_pane import ListPane
+from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce.form import submit
+from xivo_acceptance.lettuce.form.list_pane import ListPane
 
 
 def type_callfilter_entity(name):

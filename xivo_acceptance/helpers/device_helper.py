@@ -20,7 +20,7 @@ import requests
 
 from lettuce.registry import world
 
-from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_acceptance.lettuce.remote_py_cmd import remote_exec
 from xivo_acceptance.helpers import provd_helper
 
 AUTOPROV_URL = 'https://%s/xivo/configuration/json.php/restricted/provisioning/autoprov?act=configure'

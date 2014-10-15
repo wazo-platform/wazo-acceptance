@@ -18,7 +18,7 @@
 import time
 
 from lettuce.registry import world
-from xivo_lettuce import common
+from xivo_acceptance.lettuce import common
 
 
 def configure_proxies(config):

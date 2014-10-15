@@ -17,9 +17,9 @@
 
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce import common
-from xivo_lettuce import form
-from xivo_lettuce import ldap_utils
+from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce import form
+from xivo_acceptance.lettuce import ldap_utils
 import time
 
 

@@ -18,7 +18,7 @@
 import time
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
-from xivo_lettuce import common, form
+from xivo_acceptance.lettuce import common, form
 from collections import namedtuple
 
 

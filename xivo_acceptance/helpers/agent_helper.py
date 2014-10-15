@@ -19,7 +19,7 @@ from lettuce import world
 from xivo_ws import Agent
 
 from xivo_acceptance.helpers import line_helper
-from xivo_lettuce import sysutils
+from xivo_acceptance.lettuce import sysutils
 
 
 def add_agent(data_dict):

@@ -23,13 +23,11 @@ def files_in(directory):
             yield '{dir}/{file}'.format(dir=dir, file=file)
 
 
-packages = (packages_in('xivo_acceptance') +
-            packages_in('xivo_lettuce') +
-            packages_in('xivo_steps'))
-
+packages = (packages_in('xivo_acceptance'))
 confd = list(files_in('etc/xivo-acceptance/conf.d'))
 assets = list(files_in('assets'))
 features = list(files_in('features'))
+partial_features = list(files_in('partial_features'))
 
 setup(
     name='xivo-acceptance',
@@ -48,5 +46,6 @@ setup(
         ('/etc/xivo-acceptance/conf.d', confd),
         ('/usr/share/xivo-acceptance/assets', assets),
         ('/usr/share/xivo-acceptance/features', features)
+        ('/usr/share/xivo-acceptance/partial_features', partial_features)
     ],
 )

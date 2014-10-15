@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+from xivo_acceptance.lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 
 
 def delete_voicemail_with_id(voicemail_id):

@@ -19,7 +19,7 @@ import os
 import logging
 import subprocess
 
-from xivo_lettuce import config
+from xivo_acceptance.lettuce import config
 
 
 logger = logging.getLogger(__name__)

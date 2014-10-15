@@ -20,7 +20,7 @@ from __future__ import unicode_literals
 from lettuce import world
 
 from xivo_acceptance.helpers import outcall_helper
-from xivo_lettuce.remote_py_cmd import remote_exec
+from xivo_acceptance.lettuce.remote_py_cmd import remote_exec
 from xivo_ws import Context, ContextRange, WebServiceRequestError
 
 

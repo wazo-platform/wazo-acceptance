@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.postgres import exec_sql_request
+from xivo_acceptance.lettuce.postgres import exec_sql_request
 
 
 def delete_func_key(func_key_id):

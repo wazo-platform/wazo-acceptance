@@ -16,4 +16,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-import xivo_steps
+from xivo_acceptance import steps

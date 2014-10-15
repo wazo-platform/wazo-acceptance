@@ -17,7 +17,7 @@
 
 import xivo_ws
 
-from xivo_lettuce import config
+from xivo_acceptance.lettuce import config
 
 
 raw_config = config.read_config()

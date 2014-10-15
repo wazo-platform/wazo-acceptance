@@ -18,7 +18,7 @@
 import urllib2
 from lettuce import world
 
-from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+from xivo_acceptance.lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 
 
 def device_config_has_properties(device_id, properties):

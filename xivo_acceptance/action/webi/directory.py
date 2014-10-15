@@ -19,8 +19,8 @@ import time
 from selenium.common.exceptions import NoSuchElementException
 
 from lettuce import world
-from xivo_lettuce.form import submit, input, select
-from xivo_lettuce import common
+from xivo_acceptance.lettuce.form import submit, input, select
+from xivo_acceptance.lettuce import common
 
 
 def add_or_replace_directory_config(directory):

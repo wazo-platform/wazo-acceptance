@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
-from xivo_lettuce import common, form
-from xivo_lettuce.form.checkbox import Checkbox
+from xivo_acceptance.lettuce import common, form
+from xivo_acceptance.lettuce.form.checkbox import Checkbox
 from selenium.common.exceptions import NoSuchElementException
 
 

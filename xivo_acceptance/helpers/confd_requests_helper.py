@@ -18,7 +18,7 @@
 import re
 from urlparse import urlparse
 
-from xivo_lettuce import logs
+from xivo_acceptance.lettuce import logs
 
 DATE_PATTERN = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d+)\s*'
 PID_PATTERN = r'\[([0-9]+)\]\s*'

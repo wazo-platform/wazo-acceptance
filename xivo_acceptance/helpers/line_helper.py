@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce import func
-from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+from xivo_acceptance.lettuce import func
+from xivo_acceptance.lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 from xivo_dao.data_handler.exception import NotFoundError
 from xivo_dao.data_handler.line import services as line_services
 

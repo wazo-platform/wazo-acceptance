@@ -18,7 +18,7 @@
 from hamcrest import *
 
 from xivo_acceptance.helpers import asterisk_helper
-from xivo_lettuce import form, common
+from xivo_acceptance.lettuce import form, common
 
 
 def set_parking_config(config_map):

@@ -22,9 +22,9 @@ from lettuce import world
 from xivo_acceptance.helpers import context_helper
 from xivo_dao.helpers import db_manager
 from xivo_dao.helpers.db_manager import daosession
-from xivo_lettuce import common, assets
-from xivo_lettuce.assets import copy_asset_to_server
-from xivo_lettuce.terrain import initialize, deinitialize
+from xivo_acceptance.lettuce import common, assets
+from xivo_acceptance.lettuce.assets import copy_asset_to_server
+from xivo_acceptance.lettuce.terrain import initialize, deinitialize
 
 
 def run():

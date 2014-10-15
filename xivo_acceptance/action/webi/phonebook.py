@@ -17,7 +17,7 @@
 
 from lettuce import world
 
-from xivo_lettuce import common, form
+from xivo_acceptance.lettuce import common, form
 
 
 def phonebook_search(term):

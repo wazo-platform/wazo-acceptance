@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce.registry import world
-from xivo_lettuce import common
-from xivo_lettuce import form
+from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce import form
 from functools import wraps
 
 

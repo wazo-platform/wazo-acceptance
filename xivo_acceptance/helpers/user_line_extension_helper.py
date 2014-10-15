@@ -18,7 +18,7 @@
 from lettuce import world
 
 from xivo_acceptance.helpers import user_helper, voicemail_helper, line_helper, extension_helper
-from xivo_lettuce.exception import NoSuchProfileException
+from xivo_acceptance.lettuce.exception import NoSuchProfileException
 
 
 def delete_user_line_extension_voicemail(firstname, lastname, context=None, exten=None, mailbox=None):
