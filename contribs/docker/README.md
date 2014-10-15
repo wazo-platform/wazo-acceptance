@@ -29,6 +29,10 @@ Setting up ssh:
 
     ssh-copy-id -i ~/.ssh/id_rsa $(awk -F "=" '/hostname/ {print $2}' /etc/xivo-acceptance/conf.d/default.local)
 
+Configuring xivo for test (Launch at first time)
+
+    xivo-acceptance -p
+
 Test user/client feature is a good test:
 
     xivo-acceptance -v -f user/client
