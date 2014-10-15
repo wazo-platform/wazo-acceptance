@@ -44,7 +44,7 @@ RUN git clone -b docker git://github.com/xivo-pbx/xivo-acceptance.git
 WORKDIR xivo-acceptance
 RUN pip install -r requirements.txt
 RUN python setup.py install
-RUN cp -r data/ /usr/share/xivo-acceptance/
+RUN cp -r data/* /usr/share/xivo-acceptance/
 
 # Install CTIClient
 WORKDIR /root
