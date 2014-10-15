@@ -69,7 +69,10 @@ class XivoClient(object):
             pass
 
     def clean(self):
-        self.process.poll()
+        try:
+            self.process.poll()
+        except AttributeError:
+            pass
         if self.process.returncode is None:
             self.exec_command('i_stop_the_xivo_client')
         self.stop()

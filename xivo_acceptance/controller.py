@@ -33,5 +33,7 @@ class XiVOAcceptanceController(object):
             feature_folder, feature_file = feature.split('/')
         except ValueError:
             feature_folder = feature
+        except AttributeError:
+            feature_folder = ''
 
         self._feature_manager.exec_feature(feature_folder, feature_file, interactive)

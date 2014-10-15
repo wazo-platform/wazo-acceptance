@@ -43,6 +43,17 @@ Mount directory :
 
     docker run -it -v /<acceptance_dir>:/acceptance  xivo-acceptance /bin/bash
 
+Launch all features:
+
+	xivo-acceptance -a
+
+Launch user feature:
+
+	xivo-acceptance -f user
+
+Launch user/client.feature feature:
+
+	xivo-acceptance -f user/client
 
 ## Infos
 

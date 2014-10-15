@@ -33,6 +33,7 @@ RUN apt-get -qq -y install \
     iceweasel
 
 # Configure environment
+RUN ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q  -N ""
 RUN mkdir -p /etc/xivo-acceptance
 RUN mkdir -p /usr/share/xivo-acceptance
 RUN touch /var/log/xivo-acceptance.log
@@ -43,6 +44,9 @@ RUN git clone -b docker git://github.com/xivo-pbx/xivo-acceptance.git
 WORKDIR xivo-acceptance
 RUN pip install -r requirements.txt
 RUN python setup.py install
+RUN cp -r assets /usr/share/xivo-acceptance/
+RUN cp -r features /usr/share/xivo-acceptance/
+RUN cp -r partial_features /usr/share/xivo-acceptance/
 
 # Install CTIClient
 WORKDIR /root
@@ -56,3 +60,4 @@ RUN echo "root:xivo" | chpasswd
 
 # Clean
 RUN apt-get clean
+WORKDIR /root
