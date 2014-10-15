@@ -51,7 +51,8 @@ WORKDIR /root
 RUN git clone git://github.com/xivo-pbx/xivo-client-qt
 WORKDIR xivo-client-qt
 RUN qmake
-RUN make -j2 FUNCTESTS=yes
+#make with -j 2 not work 
+RUN make FUNCTESTS=yes
 
 # Set password
 RUN echo "root:xivo" | chpasswd
