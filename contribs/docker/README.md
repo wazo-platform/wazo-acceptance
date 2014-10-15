@@ -16,7 +16,7 @@ To install docker on Linux :
 
 To build the image, simply invoke
 
-    $  docker build -t https://raw.githubusercontent.com/xivo-pbx/xivo-acceptance/master/contribs/docker/Dockerfile
+    $  docker build -t xivo-acceptance https://raw.githubusercontent.com/xivo-pbx/xivo-acceptance/master/contribs/docker/Dockerfile
 
 Or directly in the sources in contribs/docker
 
