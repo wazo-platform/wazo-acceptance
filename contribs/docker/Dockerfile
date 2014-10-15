@@ -34,6 +34,7 @@ RUN apt-get -qq -y install \
 
 # Configure environment
 RUN ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q  -N ""
+RUN mkdir -p ~/.xivo-acceptance
 RUN mkdir -p /etc/xivo-acceptance
 RUN mkdir -p /usr/share/xivo-acceptance
 RUN touch /var/log/xivo-acceptance.log

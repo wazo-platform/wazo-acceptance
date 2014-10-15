@@ -23,11 +23,11 @@ The xivo-acceptance image is build daily. To run the container, do the following
 
 Create your local config file:
 
-    echo -e """[xivo]\nhostname = <your_xivo_host>""" > /etc/xivo-acceptance/conf.d/default.local
+    echo -e """[xivo]\nhostname = <your_xivo_host>""" > ~/.xivo-acceptance/default
 
 Setting up ssh:
 
-    ssh-copy-id -i ~/.ssh/id_rsa $(awk -F "=" '/hostname/ {print $2}' /etc/xivo-acceptance/conf.d/default.local)
+    ssh-copy-id -i ~/.ssh/id_rsa <your_xivo_host>
 
 Configuring xivo for test (Launch at first time)
 

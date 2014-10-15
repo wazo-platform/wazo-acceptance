@@ -32,6 +32,7 @@ from provd.rest.client.client import new_provisioning_client
 logger = logging.getLogger(__name__)
 
 
+_HOME_DIR = os.path.join(os.path.expanduser("~"), '.xivo-acceptance')
 _CONFIG_DIR = '/etc/xivo-acceptance'
 _ASSETS_DIR = '/usr/share/xivo-acceptance/assets'
 _FEATURES_DIR = '/usr/share/xivo-acceptance/features'
@@ -49,10 +50,12 @@ def read_config():
         config.readfp(fobj)
 
     config_file_extra_absolute = os.getenv('LETTUCE_CONFIG', 'invalid_file_name')
+    config_file_home_dir = os.path.join(_HOME_DIR, 'default')
     config_file_extra_in_dird = os.path.join(config_dird, os.getenv('LETTUCE_CONFIG', 'invalid_file_name'))
     config_file_extra_default = os.path.join(config_dird, 'default')
     config_file_extra_local = '%s.local' % config_file_extra_default
     config_file_extra = _find_first_existing_path(config_file_extra_absolute,
+                                                  config_file_home_dir,
                                                   config_file_extra_in_dird,
                                                   config_file_extra_local,
                                                   config_file_extra_default)
