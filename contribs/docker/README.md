@@ -17,6 +17,10 @@ To install docker on Linux :
 Getting Started
 ===============
 
+Pull the container (also use to update container):
+
+    docker pull xivo/acceptance
+
 The xivo-acceptance image is build daily. To run the container, do the following:
 
     docker run -i -t xivo/acceptance
