@@ -42,6 +42,8 @@ def main():
     if parsed_args.feature:
         controller.exec_feature(feature=parsed_args.feature,
                                 interactive=parsed_args.interactive)
+    if parsed_args.acceptance_daily:
+        controller.exec_acceptance_daily_features()
     if parsed_args.all:
         controller.exec_feature(feature=None,
                                 interactive=parsed_args.interactive)
@@ -57,6 +59,8 @@ def _parse_args():
                         help='execute prerequisite')
     parser.add_argument('-a', '--all', action='store_true',
                         help='play all features')
+    parser.add_argument('-d', '--acceptance-daily',
+                        help='execute acceptance daily features')
     parser.add_argument('-f', '--feature',
                         help='feature name')
     return parser.parse_args()

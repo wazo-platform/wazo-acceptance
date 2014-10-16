@@ -44,6 +44,13 @@ class FeatureManager(object):
             else:
                 self._exec_lettuce_feature(feature_path)
 
+    def exec_acceptance_daily_features(self):
+        for fname in os.listdir(config._FEATURES_DIR):
+            exclude_features = ['__init__.py', 'wizard', 'post_install']
+            if fname not in exclude_features:
+                feature_file_path = os.path.join(config._FEATURES_DIR, fname)
+                self._exec_lettuce_feature(feature_file_path)
+
     def _exec_lettuce_feature(self, feature_path):
         self._exec_sys_cmd('lettuce %s' % feature_path)
 

@@ -104,7 +104,7 @@ On interactive mode:
 
 Mount directory quickly:
 
-    docker run -i -t -v /<acceptance_dir>:/acceptance  xivo-acceptance
+    docker run -i -t -v /<my_local_dir>:/<my_remote_dir>  xivo-acceptance
 
 Using GUI:
 
