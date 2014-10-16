@@ -30,7 +30,7 @@ class FeatureManager(object):
     def __init__(self):
         pass
 
-    def exec_feature(self, feature_folder=None, feature_file=None, interactive=False):
+    def exec_feature(self, feature_folder, feature_file=None, interactive=False):
         feature_path = os.path.join(config._FEATURES_DIR, feature_folder)
         if not os.path.exists(feature_path):
             logger.error('Feature folder not exist: %s', feature_path)
@@ -41,8 +41,6 @@ class FeatureManager(object):
                     logger.error('Feature file not exist: %s', feature_file_path)
                 else:
                     self._exec_lettuce_feature(feature_file_path)
-            else:
-                self._exec_lettuce_feature(feature_path)
 
     def exec_acceptance_daily_features(self):
         for fname in os.listdir(config._FEATURES_DIR):
