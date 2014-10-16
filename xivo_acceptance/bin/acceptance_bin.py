@@ -49,7 +49,7 @@ def main():
 def _parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-v', '--verbose', action='store_true',
-                        help="  Default: %(default)s")
+                        help="verbose mode")
     parser.add_argument('-i', '--interactive', action='store_true',
                         help='interactive mode')
     parser.add_argument('-p', '--prerequisite', action='store_true',
@@ -57,7 +57,7 @@ def _parse_args():
     parser.add_argument('-d', '--acceptance-daily', action='store_true',
                         help='execute acceptance daily features')
     parser.add_argument('-f', '--feature',
-                        help='feature name')
+                        help='execute feature name')
     return parser.parse_args()
 
 

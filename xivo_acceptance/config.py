@@ -31,7 +31,6 @@ from provd.rest.client.client import new_provisioning_client
 
 logger = logging.getLogger(__name__)
 
-
 _HOME_DIR = os.path.join(os.path.expanduser("~"), '.xivo-acceptance')
 _CONFIG_DIR = '/etc/xivo-acceptance'
 _ASSETS_DIR = '/usr/share/xivo-acceptance/assets'
@@ -72,7 +71,7 @@ def _find_first_existing_path(*args):
     for path in args:
         if path and os.path.exists(path):
             return path
-    raise Exception('Directories do not exist: %s' % ' '.join(args))
+    raise Exception('Directory do not exist: %s' % ' '.join(args))
 
 
 class XivoAcceptanceConfig(object):

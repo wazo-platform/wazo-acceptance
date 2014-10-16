@@ -20,15 +20,15 @@ import tempfile
 import logging
 
 from lettuce import before, after, world
-from xivobrowser import XiVOBrowser
+from selenium.common.exceptions import NoSuchElementException
 
+from xivobrowser import XiVOBrowser
 from xivo_acceptance.helpers import asterisk_helper
-from xivo_acceptance.lettuce.config import XivoAcceptanceConfig, read_config
+from xivo_acceptance.config import XivoAcceptanceConfig, read_config
 from xivo_acceptance.lettuce import asterisk
 from xivo_acceptance.lettuce import debug
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce.phone_register import PhoneRegister
-from selenium.common.exceptions import NoSuchElementException
 
 
 logger = logging.getLogger('acceptance')
