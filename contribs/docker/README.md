@@ -26,11 +26,12 @@ The xivo-acceptance image is build daily. To run the container:
 
 Creating our own configuration file that will override the contents of /etc/xivo-acceptance/default.ini:
 
+    #TODO passing xivo_host option to arg of xivo-acceptance script
     echo -e "[xivo]\nhostname = <xivo_host>" > ~/.xivo-acceptance/default
 
 Setting up ssh:
 
-    ssh-copy-id -i ~/.ssh/id_rsa <xivo_host>
+    ssh-copy-id -i ~/.ssh/id_rsa.pub <xivo_host>
 
 Configuring our xivo server for test (Launch once on the same xivo_host):
 
