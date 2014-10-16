@@ -17,27 +17,27 @@ To install docker on Linux :
 Getting Started
 ===============
 
-Pull the container (also use to update the container):
+Pulling the container (also use to update the container):
 
     docker pull xivo/acceptance
 
-The xivo-acceptance image is build daily. To run the container, do the following:
+The xivo-acceptance image is build daily. To run the container:
 
     docker run -i -t xivo/acceptance
 
-Create your local config file:
+Creating our own configuration file that will override the contents of /etc/xivo-acceptance/default.ini:
 
-    echo -e """[xivo]\nhostname = <your_xivo_host>""" > ~/.xivo-acceptance/default
+    echo -e "[xivo]\nhostname = <your_xivo_host>" > ~/.xivo-acceptance/default
 
 Setting up ssh:
 
     ssh-copy-id -i ~/.ssh/id_rsa <your_xivo_host>
 
-Configuring xivo for test (Launch once on the same xivo_host)
+Configuring our xivo server for test (Launch once on the same xivo_host):
 
     xivo-acceptance -p
 
-Test user/client feature is a good test:
+Testing user/client feature is a good test:
 
     xivo-acceptance -v -f user/client
 
@@ -81,11 +81,11 @@ To get the IP of your container use :
 Build
 =====
 
-To build the image, simply invoke
+To build the image, simply invoke:
 
     docker build -t xivo-acceptance https://raw.githubusercontent.com/xivo-pbx/xivo-acceptance/master/contribs/docker/Dockerfile
 
-Or directly in the sources in contribs/docker
+Or directly in the sources in contribs/docker:
 
     docker build -t xivo-acceptance .
 
@@ -93,7 +93,7 @@ Or directly in the sources in contribs/docker
 Usage
 -----
 
-To run the container, do the following:
+To run the container:
 
     docker run -d -P xivo-acceptance
 
@@ -104,10 +104,10 @@ Using GUI :
     DOCKER_IP=$(ifconfig docker | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
     docker run -e DISPLAY=${DOCKER_IP}:1.0 xivo-acceptance
 
-On interactive mode :
+On interactive mode:
 
     docker run -i -t xivo-acceptance
 
-Mount directory :
+Mount directory:
 
     docker run -i -t -v /<acceptance_dir>:/acceptance  xivo-acceptance
