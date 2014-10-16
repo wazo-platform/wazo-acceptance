@@ -19,7 +19,7 @@ import os
 import logging
 import subprocess
 
-from xivo_acceptance.lettuce import config
+from xivo_acceptance import config
 
 
 logger = logging.getLogger(__name__)
@@ -41,6 +41,8 @@ class FeatureManager(object):
                     logger.error('Feature file not exist: %s', feature_file_path)
                 else:
                     self._exec_lettuce_feature(feature_file_path)
+            else:
+                self._exec_lettuce_feature(feature_path)
 
     def exec_acceptance_daily_features(self):
         for fname in os.listdir(config._FEATURES_DIR):
