@@ -33,7 +33,7 @@ Setting up ssh:
 
     ssh-copy-id -i ~/.ssh/id_rsa <your_xivo_host>
 
-Configuring xivo for test (Launch at first time)
+Configuring xivo for test (Launch once on the same xivo_host)
 
     xivo-acceptance -p
 
