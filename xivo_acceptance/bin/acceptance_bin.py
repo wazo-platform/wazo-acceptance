@@ -54,7 +54,7 @@ def _parse_args():
                         help='interactive mode')
     parser.add_argument('-p', '--prerequisite', action='store_true',
                         help='execute prerequisite')
-    parser.add_argument('-d', '--acceptance-daily',
+    parser.add_argument('-d', '--acceptance-daily', action='store_true',
                         help='execute acceptance daily features')
     parser.add_argument('-f', '--feature',
                         help='feature name')
