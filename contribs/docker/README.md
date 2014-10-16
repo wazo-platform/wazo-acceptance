@@ -13,7 +13,6 @@ To install docker on Linux :
     wget -qO- https://get.docker.io/ | sh
 
 
-
 Getting Started
 ===============
 
@@ -42,7 +41,7 @@ Testing user/client feature is a good test:
     xivo-acceptance -v -f user/client
 
 Commands
-------------------
+--------
 
     /features
     |-- backup
@@ -54,9 +53,9 @@ Commands
     |   |-- queue.feature
     ...
 
-Launch all features:
+Launch all features (redirect stdout to /dev/null):
 
-    xivo-acceptance -a
+    xivo-acceptance -a >/dev/null
 
 Launch user features:
 
@@ -65,6 +64,7 @@ Launch user features:
 Launch user/client.feature feature:
 
     xivo-acceptance -f user/client
+
 
 Infos
 =====
@@ -77,6 +77,7 @@ To get the IP of your container use :
 
     docker ps -a
     docker inspect <container_id> | grep IPAddress | awk -F\" '{print $4}'
+
 
 Build
 =====
@@ -93,21 +94,44 @@ Or directly in the sources in contribs/docker:
 Usage
 -----
 
-To run the container:
+To run the container as daemon:
 
     docker run -d -P xivo-acceptance
 
-Using GUI :
+On interactive mode:
+
+    docker run -i -t xivo-acceptance
+
+Mount directory quickly:
+
+    docker run -i -t -v /<acceptance_dir>:/acceptance  xivo-acceptance
+
+Using GUI:
 
     apt-get install xserver-xephyr
     Xephyr -ac -br -noreset -screen 800x600 -host-cursor :1
     DOCKER_IP=$(ifconfig docker | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
     docker run -e DISPLAY=${DOCKER_IP}:1.0 xivo-acceptance
 
-On interactive mode:
 
-    docker run -i -t xivo-acceptance
+Developpers
+===========
 
-Mount directory:
+Add this lines to the Dockerfile file:
 
-    docker run -i -t -v /<acceptance_dir>:/acceptance  xivo-acceptance
+    MAINTAINER XiVO Team "dev@avencall.com"
+    + VOLUME ["/my_git_repositories_dir/xivo-acceptance/etc/xivo-acceptance", "/etc/xivo-acceptance"]
+    + VOLUME ["/my_git_repositories_dir/xivo-acceptance/data", "/usr/share/xivo-acceptance"]
+    + VOLUME ["/my_git_repositories_dir/xivo-acceptance/xivo_acceptance", "/usr/lib/python2.7/dist-packages/xivo_acceptance"]
+    + VOLUME ["/my_git_repositories_dir/xivo-lib-python/xivo", "/usr/lib/python2.7/dist-packages/xivo"]
+    + VOLUME ["/my_git_repositories_dir/xivo-confd/xivo_confd", "/usr/lib/python2.7/dist-packages/xivo_confd"]
+    ...
+    + CMD ["/usr/bin/true"]
+
+Build the container:
+
+    docker build -t xivo-acceptance .
+
+Run the container:
+
+    docker run -i -t  xivo-acceptance
