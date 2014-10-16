@@ -17,7 +17,7 @@ To install docker on Linux :
 Getting Started
 ===============
 
-Pull the container (also use to update container):
+Pull the container (also use to update the container):
 
     docker pull xivo/acceptance
 
