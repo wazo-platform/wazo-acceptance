@@ -27,6 +27,9 @@ class XiVOAcceptanceController(object):
     def exec_prerequisite(self):
         prerequisite.run()
 
+    def exec_acceptance_daily_features(self):
+        self._feature_manager.exec_acceptance_daily_features()
+
     def exec_feature(self, feature, interactive=False):
         feature_file = None
         try:
