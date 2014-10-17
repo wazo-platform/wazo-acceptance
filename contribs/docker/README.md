@@ -1,20 +1,38 @@
-Dockerfile for XiVO acceptance
-******************************
+#Docker for XiVO acceptance
 
-Install Docker
-==============
+[TOC]
+
+#Install Docker
 
 To install docker on Linux :
 
-    curl -sL https://get.docker.io/ | sh
- 
+	curl -sL https://get.docker.io/ | sh
  or
- 
     wget -qO- https://get.docker.io/ | sh
 
+> **Tip:** For others systems: http://docs.docker.com/installation/
 
-Getting Started
-===============
+#Getting Started
+
+##Configuration
+
+By default xivo-acceptance use this configuration directory:
+
+	/etc/xivo-acceptance/xivo-acceptance
+	-- etc
+		-- xivo-acceptance
+		    |-- conf.d
+		    |   |-- my-conffile
+		    |   `-- default (will be selected by default)
+		    |-- default.ini
+
+And use default.ini as configuration file:
+
+	/etc/xivo-acceptance/xivo-acceptance/default.ini
+
+Expand default configuration with this file:
+	
+	~/.xivo-acceptance/default
 
 Pulling the container (also use to update the container):
 
@@ -23,11 +41,6 @@ Pulling the container (also use to update the container):
 The xivo-acceptance image is build daily. To run the container:
 
     docker run -i -t xivo/acceptance
-
-Creating our own configuration file that will override the contents of /etc/xivo-acceptance/default.ini:
-
-    #TODO passing xivo_host option to arg of xivo-acceptance script
-    echo -e "[xivo]\nhostname = <xivo_host>" > ~/.xivo-acceptance/default
 
 Setting up ssh:
 
@@ -41,47 +54,44 @@ Testing user/client feature is a good test:
 
     xivo-acceptance -v -f user/client
 
-Commands
---------
+##Internal Features
 
-    /features
-    |-- backup
-    |   `-- backup.feature
-    |-- user
-    |   `-- client.feature
-    |-- call_center
-    |   |-- agent.feature
-    |   |-- queue.feature
-    ...
+	/usr/share/xivo-acceptance/features
+	|-- daily
+	|   |-- backup
+	|   |--...
+	|   |-- webi
+	|   |   |-- admin_user.feature
+	|   |   |-- ...
+	|   |   |-- entity_filter.feature
+	|   `-- xivo_configuration
+	|-- example
+	|   `-- example.feature
+	|-- post_daily
+	`-- pre_daily
+	    |-- 01_post_install
+	    `-- 02_wizard
+	    ...
 
-Launch all features (redirect stdout to /dev/null):
+Launch daily features:
 
-    xivo-acceptance -a >/dev/null
+    xivo-acceptance -i daily
 
-Launch user features:
+Launch webi features:
 
-    xivo-acceptance -f user
+    xivo-acceptance -i daily/webi
 
-Launch user/client.feature feature:
+Launch admin_user.feature feature:
 
-    xivo-acceptance -f user/client
+    xivo-acceptance -i daily/webi/admin_user
 
+##External Features
 
-Infos
-=====
+    xivo-acceptance -e /path/to/features_dir/or/file.feature
 
-- Using docker version 1.2.0 (from get.docker.io) on ubuntu 14.04.
-- The root password is xivo by default.
-- If you want to using a simple webi to administrate docker use : https://github.com/crosbymichael/dockerui
+#Examples
 
-To get the IP of your container use :
-
-    docker ps -a
-    docker inspect <container_id> | grep IPAddress | awk -F\" '{print $4}'
-
-
-Build
-=====
+##Build
 
 To build the image, simply invoke:
 
@@ -91,9 +101,7 @@ Or directly in the sources in contribs/docker:
 
     docker build -t xivo-acceptance .
 
-
-Usage
------
+##Usage
 
 To run the container as daemon:
 
@@ -114,9 +122,7 @@ Using GUI:
     DOCKER_IP=$(ifconfig docker | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
     docker run -e DISPLAY=${DOCKER_IP}:1.0 xivo-acceptance
 
-
-Developpers
-===========
+##For developpers
 
 Add this lines to the Dockerfile file:
 
@@ -129,10 +135,22 @@ Add this lines to the Dockerfile file:
     ...
     + CMD ["/usr/bin/true"]
 
-Build the container:
+##Build the container
 
     docker build -t xivo-acceptance .
 
-Run the container:
+##Run the container
 
     docker run -i -t  xivo-acceptance
+
+#Infos
+
+- Using docker version 1.2.0 (from get.docker.io) on ubuntu 14.04.
+- The root password is xivo by default.
+- If you want to using a simple webi to administrate docker use : https://github.com/crosbymichael/dockerui
+
+To get the IP of your container use :
+
+    docker ps -a
+    docker inspect <container_id> | grep IPAddress | awk -F\" '{print $4}'
+    

@@ -35,29 +35,32 @@ def main():
     setup_logging(log_file=_LOG_FILENAME, foreground=True, debug=parsed_args.verbose)
 
     feature_manager = FeatureManager()
-    controller = XiVOAcceptanceController(feature_manager)
+    feature_manager.set_xivo_host(xivo_host=parsed_args.xivo_host)
+
+    controller = XiVOAcceptanceController(feature_manager=feature_manager)
 
     if parsed_args.prerequisite:
         controller.exec_prerequisite()
-    if parsed_args.feature:
-        controller.exec_feature(feature=parsed_args.feature,
-                                interactive=parsed_args.interactive)
-    if parsed_args.acceptance_daily:
-        controller.exec_acceptance_daily_features()
+
+    if parsed_args.external_features:
+        controller.external_features(external_features=parsed_args.external_features)
+
+    if parsed_args.internal_features:
+        controller.internal_features(internal_features=parsed_args.internal_features)
 
 
 def _parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', '--verbose', action='store_true',
-                        help="verbose mode")
-    parser.add_argument('-i', '--interactive', action='store_true',
-                        help='interactive mode')
+    parser.add_argument('-e', '--external-features',
+                        help='execute external features')
+    parser.add_argument('-i', '--internal-features',
+                        help='execute finternal features')
     parser.add_argument('-p', '--prerequisite', action='store_true',
                         help='execute prerequisite')
-    parser.add_argument('-d', '--acceptance-daily', action='store_true',
-                        help='execute acceptance daily features')
-    parser.add_argument('-f', '--feature',
-                        help='execute feature name')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help="verbose mode")
+    parser.add_argument('-x', '--xivo-host',
+                        help='xivo host')
     return parser.parse_args()
 
 

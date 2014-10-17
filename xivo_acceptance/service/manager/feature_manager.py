@@ -15,8 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from __future__ import print_function
+
 import os
 import logging
+import re
 import subprocess
 
 from xivo_acceptance import config
@@ -27,11 +30,15 @@ logger = logging.getLogger(__name__)
 
 class FeatureManager(object):
 
-    def __init__(self):
-        pass
+    def set_xivo_host(self, xivo_host):
+        if xivo_host is None:
+            return
+        logger.debug('Set xivo_host: %s', xivo_host)
+        config_file_home_dir = os.path.join(config._HOME_DIR, 'default')
+        print('[xivo]\nhostname = {}'.format(xivo_host), file=open(config_file_home_dir, 'w'))
 
-    def exec_feature(self, feature_folder, feature_file=None, interactive=False):
-        feature_path = os.path.join(config._FEATURES_DIR, feature_folder)
+    def exec_internal_features(self, features_folder, feature_file=None):
+        feature_path = os.path.join(config._FEATURES_DIR, features_folder)
         if not os.path.exists(feature_path):
             logger.error('Feature folder not exist: %s', feature_path)
         else:
@@ -42,12 +49,12 @@ class FeatureManager(object):
                 else:
                     self._exec_lettuce_feature(feature_file_path)
             else:
-                self._exec_lettuce_feature(feature_path)
+                self.exec_external_features(feature_path)
 
-    def exec_acceptance_daily_features(self):
-        for fname in os.listdir(config._FEATURES_DIR):
-            exclude_features = ['__init__.py', 'wizard', 'post_install']
-            if fname not in exclude_features:
+    def exec_external_features(self, features_folder):
+        for fname in os.listdir(features_folder):
+            if re.match(r'.*\.feature', fname):
+                logger.debug('External feature file found: %s', fname)
                 feature_file_path = os.path.join(config._FEATURES_DIR, fname)
                 self._exec_lettuce_feature(feature_file_path)
 

@@ -27,14 +27,14 @@ class XiVOAcceptanceController(object):
     def exec_prerequisite(self):
         prerequisite.run()
 
-    def exec_acceptance_daily_features(self):
-        self._feature_manager.exec_acceptance_daily_features()
+    def external_features(self, external_features):
+        self._feature_manager.exec_external_features(external_features)
 
-    def exec_feature(self, feature, interactive=False):
+    def internal_features(self, internal_features):
         feature_file = None
         try:
-            feature_folder, feature_file = feature.split('/')
+            feature_folder, feature_file = internal_features.split('/')
         except ValueError:
-            feature_folder = feature
+            feature_folder = internal_features
 
-        self._feature_manager.exec_feature(feature_folder, feature_file, interactive)
+        self._feature_manager.exec_internal_features(feature_folder, feature_file)
