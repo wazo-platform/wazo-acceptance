@@ -25,7 +25,7 @@ By default xivo-acceptance use this configuration directory:
 		-- xivo-acceptance
 		    |-- conf.d
 		    |   |-- my-conffile
-		    |   `-- default (will be selected by default)
+		    |   `-- default
 		    |-- default.ini
 
 And use default.ini as configuration file:
