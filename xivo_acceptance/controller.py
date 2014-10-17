@@ -31,10 +31,4 @@ class XiVOAcceptanceController(object):
         self._feature_manager.exec_external_features(external_features)
 
     def internal_features(self, internal_features):
-        feature_file = None
-        try:
-            feature_folder, feature_file = internal_features.split('/')
-        except ValueError:
-            feature_folder = internal_features
-
-        self._feature_manager.exec_internal_features(feature_folder, feature_file)
+        self._feature_manager.exec_internal_features(internal_features)

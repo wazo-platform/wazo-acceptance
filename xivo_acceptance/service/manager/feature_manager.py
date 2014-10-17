@@ -34,25 +34,22 @@ class FeatureManager(object):
         if xivo_host is None:
             return
         config_home_file = os.path.join(config._HOME_DIR, 'default')
-        logger.debug('Set xivo_host %s into file %s', xivo_host, config_home_file)
+        logger.debug('Set xivo_host %s into the file %s', xivo_host, config_home_file)
         print('[xivo]\nhostname = %s' % xivo_host, file=open(config_home_file, 'w'))
 
-    def exec_internal_features(self, features_folder, feature_file=None):
-        feature_path = os.path.join(config._FEATURES_DIR, features_folder)
-        if not os.path.exists(feature_path):
-            logger.error('Feature folder not exist: %s', feature_path)
-        else:
-            if feature_file is not None:
-                feature_file_path = os.path.join(feature_path, '%s.feature' % feature_file)
-                if not os.path.exists(feature_file_path):
-                    logger.error('Feature file not exist: %s', feature_file_path)
-                else:
-                    self._exec_lettuce_feature(feature_file_path)
-            else:
-                self.exec_external_features(feature_path)
+    def exec_internal_features(self, internal_features):
+        feature_path = os.path.join(config._FEATURES_DIR, internal_features)
+        feature_file_path = '%s.feature' % feature_path
 
-    def exec_external_features(self, features_folder):
-        for feature in self._files_in(features_folder):
+        if os.path.exists(feature_file_path):
+            self._exec_lettuce_feature(feature_file_path)
+        elif os.path.isdir(feature_path):
+            self.exec_external_features(feature_path)
+        else:
+            raise Exception('Unknown path: %s', feature_path)
+
+    def exec_external_features(self, feature_path):
+        for feature in self._files_in(feature_path):
             if re.match(r'.*\.feature', feature):
                 feature_file_path = os.path.join(config._FEATURES_DIR, feature)
                 logger.debug('External feature file found: %s', feature_file_path)
