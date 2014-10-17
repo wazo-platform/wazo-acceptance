@@ -52,7 +52,7 @@ Configuring our xivo server for test (Launch once on the same xivo_host):
 
 Testing user/client feature is a good test:
 
-    xivo-acceptance -v -f user/client
+    xivo-acceptance -v -i user/client
 
 ##Internal Features
 
