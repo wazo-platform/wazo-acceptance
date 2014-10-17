@@ -7,8 +7,10 @@
 To install docker on Linux :
 
 	curl -sL https://get.docker.io/ | sh
+
  or
-    wget -qO- https://get.docker.io/ | sh
+
+	wget -qO- https://get.docker.io/ | sh
 
 > **Tip:** For others systems: http://docs.docker.com/installation/
 
