@@ -52,11 +52,16 @@ class FeatureManager(object):
                 self.exec_external_features(feature_path)
 
     def exec_external_features(self, features_folder):
-        for fname in os.listdir(features_folder):
-            if re.match(r'.*\.feature', fname):
-                logger.debug('External feature file found: %s', fname)
-                feature_file_path = os.path.join(config._FEATURES_DIR, fname)
+        for feature in self._files_in(features_folder):
+            if re.match(r'.*\.feature', feature):
+                feature_file_path = os.path.join(config._FEATURES_DIR, feature)
+                logger.debug('External feature file found: %s', feature_file_path)
                 self._exec_lettuce_feature(feature_file_path)
+
+    def _files_in(self, directory):
+        for dir, _, files in os.walk(directory):
+            for file in files:
+                yield '{dir}/{file}'.format(dir=dir, file=file)
 
     def _exec_lettuce_feature(self, feature_path):
         self._exec_sys_cmd('lettuce %s' % feature_path)
