@@ -33,9 +33,9 @@ class FeatureManager(object):
     def set_xivo_host(self, xivo_host):
         if xivo_host is None:
             return
-        logger.debug('Set xivo_host: %s', xivo_host)
-        config_file_home_dir = os.path.join(config._HOME_DIR, 'default')
-        print('[xivo]\nhostname = {}'.format(xivo_host), file=open(config_file_home_dir, 'w'))
+        config_home_file = os.path.join(config._HOME_DIR, 'default')
+        logger.debug('Set xivo_host %s into file %s', xivo_host, config_home_file)
+        print('[xivo]\nhostname = %s' % xivo_host, file=open(config_home_file, 'w'))
 
     def exec_internal_features(self, features_folder, feature_file=None):
         feature_path = os.path.join(config._FEATURES_DIR, features_folder)
