@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
 from lettuce import world
 from xivo_acceptance.lettuce.form.checkbox import Checkbox
 from xivo_acceptance.lettuce.form.list_pane import ListPane
@@ -35,6 +36,7 @@ class CodecWidget(object):
         self._pane.remove_all()
         for codec in codecs:
             self._pane.add(codec)
+            time.sleep(0.5)
 
     def uncustomize(self):
         self._pane.remove_all()
