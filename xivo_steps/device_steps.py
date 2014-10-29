@@ -115,11 +115,6 @@ def when_i_synchronize_the_device_group1_from_confd(step, device_id):
     world.response = device_action_confd.synchronize(device_id)
 
 
-@step(u'When I go get the device with id "([^"]*)"')
-def when_i_go_get_the_device_with_id_group1(step, device_id):
-    world.response = device_action_confd.get_device(device_id)
-
-
 @step(u'When I go get the device with mac "([^"]*)" using its id')
 def when_i_go_get_the_device_with_mac_group1_using_its_id(step, mac):
     device = provd_helper.find_by_mac(mac)

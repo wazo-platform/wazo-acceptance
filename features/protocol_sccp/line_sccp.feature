@@ -27,10 +27,9 @@ Feature: SCCP Line
           | firstname | lastname | number | context | protocol | device            | entity_name |
           | Albert    |  qwerty  | 1111   | default | sccp     | 11:11:11:11:11:11 | xivo_entity |
         When I remove line from user "Albert" "qwerty"
-        When I go get the device with mac "11:11:11:11:11:11" using its id
-        Then the device has the following parameters:
-          | status   |
-          | autoprov |
+        Then I see devices with infos:
+          |               mac | configured |
+          | 11:11:11:11:11:11 | False      |
 
     Scenario: Delete user with SCCP line resetting device to autoprov
         Given the latest plugin "xivo-cisco-sccp-legacy" is installed
@@ -41,10 +40,9 @@ Feature: SCCP Line
           | firstname | lastname | number | context | protocol | device            | entity_name |
           | Albert    |  qwerty  | 1112   | default | sccp     | 11:11:11:11:11:12 | xivo_entity |
         When I remove user "Albert" "qwerty"
-        When I go get the device with mac "11:11:11:11:11:12" using its id
-        Then the device has the following parameters:
-          | status   |
-          | autoprov |
+        Then I see devices with infos:
+          |               mac | configured |
+          | 11:11:11:11:11:12 | False      |
 
     Scenario: Remove device from user resetting device to autoprov
         Given the latest plugin "xivo-cisco-sccp-legacy" is installed
@@ -55,10 +53,9 @@ Feature: SCCP Line
           | firstname | lastname | number | context | protocol | device            | entity_name |
           | Albert    |  qwerty  |   1113 | default | sccp     | 11:11:11:11:11:13 | xivo_entity |
         When I modify the device of user "Albert" "qwerty" to ""
-        When I go get the device with mac "11:11:11:11:11:13" using its id
-        Then the device has the following parameters:
-          | status   |
-          | autoprov |
+        Then I see devices with infos:
+          |               mac | configured |
+          | 11:11:11:11:11:13 | False      |
 
     Scenario: Change device of user resetting old device to autoprov
         Given the latest plugin "xivo-cisco-sccp-legacy" is installed
@@ -70,15 +67,10 @@ Feature: SCCP Line
           | firstname | lastname | number | context | protocol | device            | entity_name |
           | Albert    |  qwerty  |   1113 | default | sccp     | 11:11:11:11:11:14 | xivo_entity |
         When I modify the device of user "Albert" "qwerty" to "11:11:11:11:11:15"
-        When I go get the device with mac "11:11:11:11:11:14" using its id
-        Then I get a response with a link to the "devices" resource
-        Then the device has the following parameters:
-          | status   |
-          | autoprov |
-        When I go get the device with mac "11:11:11:11:11:15" using its id
-        Then the device has the following parameters:
-          | status     |
-          | configured |
+        Then I see devices with infos:
+          |               mac | configured |
+          | 11:11:11:11:11:14 | False      |
+          | 11:11:11:11:11:15 | True       |
 
 #    Scenario: Replace SCCP line with SIP line resetting SCCP device to autoprov
 #        Given the latest plugin "xivo-cisco-sccp-legacy" is installed
@@ -92,11 +84,7 @@ Feature: SCCP Line
 #        When I add a new line to user "Albert" "qwerty" with infos:
 #          | number | context | protocol | device            | entity_displayname |
 #          | 1113   | default | SIP      | 11:11:11:11:11:17 | xivo_entity        |
-#        When I go get the device with mac "11:11:11:11:11:16" using its id
-#        Then the device has the following parameters:
-#          | status   |
-#          | autoprov |
-#        When I go get the device with mac "11:11:11:11:11:17" using its id
-#        Then the device has the following parameters:
-#          | status     |
-#          | configured |
+#        Then I see devices with infos:
+#          |               mac | configured |
+#          | 11:11:11:11:11:16 | False      |
+#          | 11:11:11:11:11:17 | True       |
