@@ -16,45 +16,55 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import ConfigParser
-import os
-import xivo_ws
 import logging
+import os
+import sys
 
-from sqlalchemy.exc import OperationalError
 from execnet.multi import makegateway
+from sqlalchemy.exc import OperationalError
 
-from xivo_dao.helpers import config as dao_config
+from provd.rest.client.client import new_provisioning_client
+from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.lettuce.ssh import SSHClient
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
-from xivo_acceptance.lettuce import postgres
-from provd.rest.client.client import new_provisioning_client
+from xivo_dao.helpers import config as dao_config
+import xivo_ws
+
 
 logger = logging.getLogger(__name__)
 
-_HOME_DIR = os.path.join(os.path.expanduser("~"), '.xivo-acceptance')
-_CONFIG_DIR = '/etc/xivo-acceptance'
-_ASSETS_DIR = '/usr/share/xivo-acceptance/assets'
-_FEATURES_DIR = '/usr/share/xivo-acceptance/features'
+_CONFIG_DIR = (
+    os.path.join(os.path.expanduser("~"), '.xivo-acceptance'),
+    '/etc/xivo-acceptance',
+    os.path.join(sys.prefix, 'etc', 'xivo-acceptance')
+)
+_ASSETS_DIR = (
+    '/usr/share/xivo-acceptance/assets',
+    os.path.join(sys.prefix, 'data', 'assets')
+)
+_FEATURES_DIR = (
+    '/usr/share/xivo-acceptance/features',
+    os.path.join(sys.prefix, 'data', 'features')
+)
 
 
 def read_config():
-    logger.info('Using configuration dir %s', _CONFIG_DIR)
+    default_config_file_path = _find_first_existing_path(*_CONFIG_DIR, suffix='default.ini')
+    default_config_path = os.path.dirname(default_config_file_path)
+    logger.info('Using default configuration dir %s', default_config_path)
 
-    config_dird = os.path.join(_CONFIG_DIR, 'conf.d')
-    config_file_default = os.path.join(_CONFIG_DIR, 'default.ini')
+    config_dird = os.path.join(default_config_path, 'conf.d')
 
     config = ConfigParser.RawConfigParser()
 
-    with open(config_file_default) as fobj:
+    with open(default_config_file_path) as fobj:
         config.readfp(fobj)
 
     config_file_extra_absolute = os.getenv('LETTUCE_CONFIG', 'invalid_file_name')
-    config_file_home_dir = os.path.join(_HOME_DIR, 'default')
     config_file_extra_in_dird = os.path.join(config_dird, os.getenv('LETTUCE_CONFIG', 'invalid_file_name'))
     config_file_extra_default = os.path.join(config_dird, 'default')
     config_file_extra_local = '%s.local' % config_file_extra_default
     config_file_extra = _find_first_existing_path(config_file_extra_absolute,
-                                                  config_file_home_dir,
                                                   config_file_extra_in_dird,
                                                   config_file_extra_local,
                                                   config_file_extra_default)
@@ -67,8 +77,10 @@ def read_config():
     return config
 
 
-def _find_first_existing_path(*args):
+def _find_first_existing_path(*args, **kwargs):
     for path in args:
+        if 'suffix' in kwargs:
+            path = os.path.join(path, kwargs['suffix'])
         if path and os.path.exists(path):
             return path
     raise Exception('Directory do not exist: %s' % ' '.join(args))
@@ -80,7 +92,8 @@ class XivoAcceptanceConfig(object):
         self._config = raw_config
         logger.info("Configuring xivo-acceptance...")
 
-        self.asset_dir = _ASSETS_DIR
+        self.asset_dir = _find_first_existing_path(*_ASSETS_DIR)
+        self.features_dir = _find_first_existing_path(*_FEATURES_DIR)
 
         self.rest_provd = None
         self.provd_client = None
