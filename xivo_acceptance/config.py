@@ -18,33 +18,34 @@
 import ConfigParser
 import logging
 import os
-import sys
 
 from execnet.multi import makegateway
 from sqlalchemy.exc import OperationalError
+
+import xivo_ws
 
 from provd.rest.client.client import new_provisioning_client
 from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.lettuce.ssh import SSHClient
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_dao.helpers import config as dao_config
-import xivo_ws
 
 
 logger = logging.getLogger(__name__)
 
+_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 _CONFIG_DIR = (
     os.path.join(os.path.expanduser("~"), '.xivo-acceptance'),
     '/etc/xivo-acceptance',
-    os.path.join(sys.prefix, 'etc', 'xivo-acceptance')
+    os.path.join(_ROOT_DIR, 'etc', 'xivo-acceptance')
 )
 _ASSETS_DIR = (
     '/usr/share/xivo-acceptance/assets',
-    os.path.join(sys.prefix, 'data', 'assets')
+    os.path.join(_ROOT_DIR, 'data', 'assets')
 )
 _FEATURES_DIR = (
     '/usr/share/xivo-acceptance/features',
-    os.path.join(sys.prefix, 'data', 'features')
+    os.path.join(_ROOT_DIR, 'data', 'features')
 )
 
 
