@@ -41,7 +41,7 @@ RUN touch /var/log/xivo-acceptance.log
 
 # Install xivo-acceptance
 WORKDIR /root
-RUN git clone -b docker git://github.com/xivo-pbx/xivo-acceptance.git
+RUN git clone git://github.com/xivo-pbx/xivo-acceptance.git
 WORKDIR xivo-acceptance
 RUN pip install -r requirements.txt
 RUN python setup.py install
