@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_acceptance.helpers import meetme_helper
-from xivo_lettuce import common, form
+from xivo_acceptance.lettuce import common, form
 
 
 def add_or_replace_meetme(meetme):

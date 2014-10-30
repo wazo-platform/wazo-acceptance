@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce import postgres
+from xivo_acceptance.lettuce import postgres
 
 
 def delete_all():

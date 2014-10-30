@@ -21,7 +21,7 @@ from lettuce import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 
 from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
-from xivo_lettuce import common
+from xivo_acceptance.lettuce import common
 
 
 def update_plugin_list(url, check_confirmation=True):

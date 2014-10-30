@@ -21,8 +21,8 @@ from xivo_acceptance.helpers import dialpattern_helper, user_helper, \
 from xivo_dao.data_handler.extension import services as extension_services
 from xivo_dao.data_handler.exception import NotFoundError
 from xivo_dao.helpers.db_manager import daosession
-from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
-from xivo_lettuce.postgres import exec_sql_request
+from xivo_acceptance.lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+from xivo_acceptance.lettuce.postgres import exec_sql_request
 
 
 def find_extension_by_exten(exten):

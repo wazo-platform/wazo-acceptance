@@ -18,8 +18,8 @@
 from lettuce import world
 
 from xivo_ws import Queue
-from xivo_lettuce import sysutils
-from xivo_lettuce.postgres import exec_sql_request
+from xivo_acceptance.lettuce import sysutils
+from xivo_acceptance.lettuce.postgres import exec_sql_request
 
 
 def add_queue(data):

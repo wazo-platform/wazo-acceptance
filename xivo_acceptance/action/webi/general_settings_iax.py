@@ -17,7 +17,7 @@
 
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
-from xivo_lettuce import common, form
+from xivo_acceptance.lettuce import common, form
 
 
 def find_call_limit_line(destination=None, netmask=None, limit=None):

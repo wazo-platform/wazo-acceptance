@@ -6,6 +6,7 @@ argparse
 execnet
 fuzzywuzzy
 jinja2
+lettuce
 pika
 psycopg2
 python-ldap

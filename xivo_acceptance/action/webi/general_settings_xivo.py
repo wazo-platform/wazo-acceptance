@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_lettuce.form.checkbox import Checkbox
-from xivo_lettuce import common, form
+from xivo_acceptance.lettuce.form.checkbox import Checkbox
+from xivo_acceptance.lettuce import common, form
 
 
 def enable_live_reload():

@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce.registry import world
-from xivo_lettuce import form
+from xivo_acceptance.lettuce import form
 
 
 def type_skill_rule_name(skill_rule_name):

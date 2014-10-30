@@ -23,8 +23,8 @@ from xivo_acceptance.helpers import group_helper, provd_helper, line_helper, voi
 from xivo_dao.data_handler.user import dao as user_dao
 from xivo_dao.data_handler.user import services as user_services
 from xivo_dao.data_handler.exception import NotFoundError
-from xivo_lettuce import postgres
-from xivo_lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+from xivo_acceptance.lettuce import postgres
+from xivo_acceptance.lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
 from xivo_ws import User, UserLine, UserVoicemail
 from xivo_ws.exception import WebServiceRequestError
 

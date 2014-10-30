@@ -17,8 +17,8 @@
 
 from lettuce import world
 from selenium.webdriver.support.select import Select
-from xivo_lettuce import common
-from xivo_lettuce.form import submit
+from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce.form import submit
 
 
 def type_pickup_entity(name):

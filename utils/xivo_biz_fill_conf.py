@@ -16,22 +16,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import os
 import sys
 
 from lettuce import world
 
-from utils import prerequisite
+from xivo_acceptance.config import XivoAcceptanceConfig, read_config
 from xivo_acceptance.helpers import line_helper, context_helper, \
     trunkcustom_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
-from xivo_lettuce import terrain
-from xivo_lettuce.config import XivoAcceptanceConfig, read_config
+from xivo_acceptance.service import prerequisite
+from xivo_acceptance.lettuce import terrain
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
 from xivo_ws.destination import UserDestination
-
-_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
 
 def main(args):

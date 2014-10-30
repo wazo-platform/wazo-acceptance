@@ -18,7 +18,7 @@
 from hamcrest import assert_that, has_items
 from lettuce import world
 from StringIO import StringIO
-from xivo_lettuce import asterisk
+from xivo_acceptance.lettuce import asterisk
 
 
 def get_confgen_file(file_name):

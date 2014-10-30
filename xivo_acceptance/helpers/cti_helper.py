@@ -21,7 +21,7 @@ from hamcrest import assert_that, equal_to
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
 from xivo_acceptance.helpers import user_helper
-from xivo_lettuce import common, sysutils, xivoclient, form
+from xivo_acceptance.lettuce import common, sysutils, xivoclient, form
 
 SORT_ASCENDING = 0
 SORT_DESCENDING = 1

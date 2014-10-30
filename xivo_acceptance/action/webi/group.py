@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
-from xivo_lettuce import common
+from xivo_acceptance.lettuce import common
 
 
 def type_group_name(group_name):

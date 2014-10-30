@@ -20,7 +20,7 @@ from __future__ import unicode_literals
 from lettuce import world
 
 from xivo_ws.objects.entity import Entity
-from xivo_lettuce import postgres
+from xivo_acceptance.lettuce import postgres
 
 
 def add_entity(name, display_name):

@@ -22,9 +22,9 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
-from xivo_lettuce import common
-from xivo_lettuce.exception import NoSuchProfileException
-from xivo_lettuce.form.list_pane import ListPane
+from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce.exception import NoSuchProfileException
+from xivo_acceptance.lettuce.form.list_pane import ListPane
 
 
 def delete_profile(profile_label):
