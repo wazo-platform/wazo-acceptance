@@ -247,13 +247,16 @@ def then_the_device_has_been_provisioned_with_a_configuration(step, device_id):
 
 @step(u'Then I see devices with infos:')
 def then_i_see_devices_with_infos(step):
-    for expected_device in step.hashes:
+    def assert_device_infos(expected_device):
         actual_device = device_action_webi.get_device_list_entry(expected_device['mac'])
         if 'ip' in expected_device:
             assert_that(actual_device['ip'], equal_to(expected_device['ip']))
         if 'configured' in expected_device:
             expected_configured = expected_device['configured'] == 'True'
             assert_that(actual_device['configured'], equal_to(expected_configured))
+
+    for expected_device in step.hashes:
+        common.wait_until_assert(assert_device_infos, expected_device, tries=3)
 
 
 @step(u'Then I see in the log file device "([^"]*)" synchronized')
