@@ -20,13 +20,9 @@ import xivo_ws
 
 
 config = config.load_config()
-xivo_host = config['xivo']['hostname']
-xivo_ws_username = config['rest_api']['username']
-xivo_ws_password = config['rest_api']['passwd']
-
-xivo_server_ws = xivo_ws.XivoServer(xivo_host,
-                                    xivo_ws_username,
-                                    xivo_ws_password)
+xivo_server_ws = xivo_ws.XivoServer(host=config['xivo_host'],
+                                    username=config['rest_api']['username'],
+                                    password=config['rest_api']['passwd'])
 
 
 def delete_with_id(obj, id_to_delete):
