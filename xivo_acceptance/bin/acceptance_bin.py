@@ -20,13 +20,12 @@ import logging
 import signal
 
 from xivo.xivo_logging import setup_logging
+from xivo_acceptance.config import _LOG_FILENAME
 from xivo_acceptance.controller import XiVOAcceptanceController
 from xivo_acceptance.service.manager.feature_manager import FeatureManager
 
 
 logger = logging.getLogger(__name__)
-
-_LOG_FILENAME = '/var/log/xivo-acceptance.log'
 
 
 def main():

@@ -32,6 +32,7 @@ import xivo_ws
 
 logger = logging.getLogger(__name__)
 
+_LOG_FILENAME = '/tmp/xivo-acceptance.log'
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 _CONFIG_DIR = (
     os.path.join(os.path.expanduser("~"), '.xivo-acceptance'),
