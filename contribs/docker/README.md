@@ -18,20 +18,6 @@ To install docker on Linux :
 
 ##Configuration
 
-By default xivo-acceptance use this configuration directory:
-
-	/etc/xivo-acceptance/xivo-acceptance
-	-- etc
-		-- xivo-acceptance
-		    |-- conf.d
-		    |   |-- my-conffile
-		    |   `-- default
-		    |-- default.ini
-
-And use default.ini as configuration file:
-
-	/etc/xivo-acceptance/xivo-acceptance/default.ini
-
 Expand default configuration with this file:
 	
 	~/.xivo-acceptance/default
@@ -129,7 +115,7 @@ Using GUI:
 Add this lines to the Dockerfile file:
 
     MAINTAINER XiVO Team "dev@avencall.com"
-    + VOLUME ["/my_git_repositories_dir/xivo-acceptance/etc/xivo-acceptance", "/etc/xivo-acceptance"]
+    + VOLUME ["/my_git_repositories_dir/xivo-acceptance/profiles", "/etc/xivo-acceptance"]
     + VOLUME ["/my_git_repositories_dir/xivo-acceptance/data", "/usr/share/xivo-acceptance"]
     + VOLUME ["/my_git_repositories_dir/xivo-acceptance/xivo_acceptance", "/usr/lib/python2.7/dist-packages/xivo_acceptance"]
     + VOLUME ["/my_git_repositories_dir/xivo-lib-python/xivo", "/usr/lib/python2.7/dist-packages/xivo"]

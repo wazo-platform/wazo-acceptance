@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+from distutils.core import setup
 import fnmatch
 import os
-
-from distutils.core import setup
 
 
 def is_package(path):
@@ -37,9 +36,5 @@ setup(
     packages=packages,
     scripts=[
         'bin/xivo-acceptance',
-    ],
-    data_files=[
-        ('/etc/xivo-acceptance', ['etc/xivo-acceptance/default.ini']),
-        ('/etc/xivo-acceptance/conf.d', confd)
-    ],
+    ]
 )

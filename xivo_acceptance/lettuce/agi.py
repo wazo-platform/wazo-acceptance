@@ -39,7 +39,7 @@ class _AGIConnection(object):
         self.sock.close()
 
     def connect(self):
-        self.sock.connect((world.config.xivo_host, self._PORT))
+        self.sock.connect((world.config['xivo_host'], self._PORT))
 
     def recv(self):
         data = self.sock.recv(2048)

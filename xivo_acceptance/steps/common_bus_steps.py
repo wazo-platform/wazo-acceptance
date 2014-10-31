@@ -25,7 +25,7 @@ from lettuce.registry import world
 @step(u'Given I listen on the bus for messages:')
 def given_i_listen_on_the_bus_for_messages(step):
     connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=world.config.xivo_host))
+        host=world.config['xivo_host']))
     channel = connection.channel()
 
     for entry in step.hashes:
@@ -46,7 +46,7 @@ def given_i_listen_on_the_bus_for_messages(step):
 @step(u'Then I see a message on bus with the following variables:')
 def then_i_see_a_message_on_bus_with_the_following_variables(step):
     connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=world.config.xivo_host))
+        host=world.config['xivo_host']))
     channel = connection.channel()
     queue_name = 'test_call_form_result'
 

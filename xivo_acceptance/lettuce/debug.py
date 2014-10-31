@@ -24,13 +24,13 @@ loggers = {
 }
 
 
-def setup_logging(raw_config):
+def setup_logging(config):
     file_handler = logging.FileHandler('/tmp/acceptance')
 
     for name, logger in loggers.iteritems():
         logger.setLevel(logging.INFO)
         logger.addHandler(file_handler)
-        if raw_config.getboolean('debug', name):
+        if config['debug'].get(name):
             logger.setLevel(logging.DEBUG)
 
 

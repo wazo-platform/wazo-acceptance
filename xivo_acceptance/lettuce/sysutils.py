@@ -127,4 +127,4 @@ def restart_service(service_name, env=None):
     world.ssh_client_xivo.check_call(command)
 
     if service_name == 'xivo-confd':
-        world.config.confd_utils_1_1.recreate_session()
+        world.confd_utils_1_1.recreate_session()

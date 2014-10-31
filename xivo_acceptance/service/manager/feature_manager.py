@@ -22,21 +22,17 @@ import os
 import re
 import subprocess
 
-from lettuce.registry import world
-
 
 logger = logging.getLogger(__name__)
 
 
 class FeatureManager(object):
 
-    def set_xivo_host(self, xivo_host):
-        if xivo_host:
-            logger.debug('Set xivo_host %s', xivo_host)
-            os.environ["XIVO_HOST"] = xivo_host
+    def __init__(self, config):
+        self.config = config
 
     def exec_internal_features(self, internal_features):
-        feature_path = os.path.join(world.config.features_dir, internal_features)
+        feature_path = os.path.join(self.config['features_dir'], internal_features)
         feature_file_path = '%s.feature' % feature_path
 
         if os.path.exists(feature_file_path):
@@ -49,7 +45,7 @@ class FeatureManager(object):
     def exec_external_features(self, feature_path):
         for feature in self._files_in(feature_path):
             if re.match(r'.*\.feature', feature):
-                feature_file_path = os.path.join(world.config.features_dir, feature)
+                feature_file_path = os.path.join(self.config['features_dir'], feature)
                 logger.debug('External feature file found: %s', feature_file_path)
                 self._exec_lettuce_feature(feature_file_path)
 

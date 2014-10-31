@@ -15,15 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import ConfigParser
 import logging
 import os
 
+from configobj import ConfigObj
 from execnet.multi import makegateway
-from sqlalchemy.exc import OperationalError
 
 from provd.rest.client.client import new_provisioning_client
-from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.lettuce.ssh import SSHClient
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_dao.helpers import config as dao_config
@@ -32,12 +30,10 @@ import xivo_ws
 
 logger = logging.getLogger(__name__)
 
-_LOG_FILENAME = '/tmp/xivo-acceptance.log'
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 _CONFIG_DIR = (
     os.path.join(os.path.expanduser("~"), '.xivo-acceptance'),
-    '/etc/xivo-acceptance',
-    os.path.join(_ROOT_DIR, 'etc', 'xivo-acceptance')
+    os.path.join(_ROOT_DIR, 'config')
 )
 _ASSETS_DIR = (
     '/usr/share/xivo-acceptance/assets',
@@ -49,17 +45,84 @@ _FEATURES_DIR = (
 )
 
 
-def read_config():
+def load_config():
+    XIVO_HOST = os.environ.get('XIVO_HOST', 'daily-xivo-pxe.lan-quebec.avencall.com')
+
+    default_config = {
+        'xivo_host': XIVO_HOST,
+        'log_file': '/tmp/xivo-acceptance.log',
+        'db_uri': 'postgresql://asterisk:proformatique@{}/asterisk'.format(XIVO_HOST),
+        'assets_dir': _find_first_existing_path(*_ASSETS_DIR),
+        'features_dir': _find_first_existing_path(*_FEATURES_DIR),
+        'frontend': {
+            'url': 'https://{}'.format(XIVO_HOST),
+            'username': 'root',
+            'passwd': 'superpass'
+        },
+        'rest_api': {
+            'protocol': 'https',
+            'username': 'admin',
+            'passwd': 'proformatique',
+            'protocol': 'https',
+            'port': 9486
+        },
+        'provd': {
+            'rest_port': 8667,
+            'rest_protocol': 'http',
+        },
+        'browser': {
+            'enable': True,
+            'visible': False,
+            'timeout': 5,
+            'resolution': '1024x768'
+        },
+        'xivo_client': {
+            'login_timeout': 5
+        },
+        'ssh_login': 'root',
+        'jenkins': {
+            'hostname': 'jenkins.lan-quebec.avencall.com',
+        },
+        'linphone': {
+            'sip_port_range': '5001,5009',
+            'rtp_port_range': '5100,5120'
+        },
+        'debug': {
+            'acceptance': False,
+            'selenium': False,
+            'linphone': False
+        },
+        'kvm_infos': {
+            'hostname': 'kvm-2-dev.lan-quebec.avencall.com',
+            'login': 'root',
+            'vm_name': 'openldap-dev',
+            'boot_timeout': 30,
+            'shutdown_timeout': 5
+        },
+        'prerequisites': {
+            'subnets': [
+                '10.0.0.0/8',
+                '192.168.0.0/16'
+            ]
+        }
+    }
+
+    try:
+        default_config.update(load_old_config())
+    except Exception as e:
+        print e
+
+    return default_config
+
+
+def load_old_config():
     default_config_file_path = _find_first_existing_path(*_CONFIG_DIR, suffix='default.ini')
     default_config_path = os.path.dirname(default_config_file_path)
-    logger.info('Using default configuration dir %s', default_config_path)
+    print 'Using default configuration dir {}'.format(default_config_path)
 
     config_dird = os.path.join(default_config_path, 'conf.d')
 
-    config = ConfigParser.RawConfigParser()
-
-    with open(default_config_file_path) as fobj:
-        config.readfp(fobj)
+    config = ConfigObj(default_config_file_path)
 
     config_file_extra_absolute = os.getenv('LETTUCE_CONFIG', 'invalid_file_name')
     config_file_extra_in_dird = os.path.join(config_dird, os.getenv('LETTUCE_CONFIG', 'invalid_file_name'))
@@ -70,10 +133,9 @@ def read_config():
                                                   config_file_extra_local,
                                                   config_file_extra_default)
 
-    logger.info('Using extra configuration file %s', config_file_extra)
+    print 'Using extra configuration file {}'.format(config_file_extra)
 
-    with open(config_file_extra) as fobj:
-        config.readfp(fobj)
+    config.update(ConfigObj(config_file_extra))
 
     return config
 
@@ -89,59 +151,53 @@ def _find_first_existing_path(*args, **kwargs):
 
 class XivoAcceptanceConfig(object):
 
-    def __init__(self, raw_config):
-        self._config = raw_config
-        logger.info("Configuring xivo-acceptance...")
-
-        self.asset_dir = _find_first_existing_path(*_ASSETS_DIR)
-        self.features_dir = _find_first_existing_path(*_FEATURES_DIR)
-
-        self.rest_provd = None
-        self.provd_client = None
-        self.ws_utils = None
-        self.confd_utils_1_1 = None
-        self.xivo_configured = None
-
-        self.xivo_host = os.environ.get('XIVO_HOST', self._config.get('xivo', 'hostname'))
-
-        self.ssh_login = self._config.get('ssh_infos', 'login')
-
-        self.browser_enable = self._config.getboolean('browser', 'enable')
-        self.browser_visible = self._config.getboolean('browser', 'visible')
-        self.browser_timeout = self._config.getint('browser', 'timeout')
-        self.browser_resolution = self._config.get('browser', 'resolution')
-
-        self.webi_url = 'https://%s' % self.xivo_host
-        self.webi_login = self._config.get('login_infos', 'login')
-        self.webi_password = self._config.get('login_infos', 'password')
-
-        self.rest_username = self._config.get('webservices_infos', 'login')
-        self.rest_passwd = self._config.get('webservices_infos', 'password')
-        self.rest_protocol = self._config.get('confd', 'protocol')
-        self.rest_port = self._config.getint('confd', 'port')
-
-        self.xc_login_timeout = self._config.getint('xivo_client', 'login_timeout')
-
-        self.kvm_hostname = self._config.get('kvm_infos', 'hostname')
-        self.kvm_login = self._config.get('kvm_infos', 'login')
-        self.kvm_vm_name = self._config.get('kvm_infos', 'vm_name')
-        self.kvm_shutdown_timeout = int(self._config.get('kvm_infos', 'shutdown_timeout'))
-        self.kvm_boot_timeout = int(self._config.get('kvm_infos', 'boot_timeout'))
-
-        self.linphone_sip_port_range = self._config.get('linphone', 'sip_port_range')
-        self.linphone_rtp_port_range = self._config.get('linphone', 'rtp_port_range')
-
-        self.linphone_debug = self._config.getboolean('debug', 'linphone')
-        self.browser_debug = self._config.getboolean('debug', 'selenium')
-
-        self.subnets = self._config.get('prerequisites', 'subnets').split(',')
-
-    def setup(self):
+    def __init__(self, config):
+        self._config = config
+        logger.info("_setup_dao...")
         self._setup_dao()
+        logger.info("_setup_ssh_client...")
         self._setup_ssh_client()
-        self._setup_ws()
+        logger.info("_setup_rest_api...")
+        self._setup_rest_api()
+        logger.info("_setup_provd...")
         self._setup_provd()
+        logger.info("_setup_webi...")
         self._setup_webi()
+
+    def _setup_dao(self):
+        dao_config.DB_URI = self._config['db_uri']
+
+    def _setup_ssh_client(self):
+        self.ssh_client_xivo = SSHClient(hostname=self._config['xivo_host'],
+                                         login=self._config['ssh_login'])
+
+    def _setup_rest_api(self):
+        rest_config_dict = {
+            'protocol': self._config['rest_api']['protocol'],
+            'hostname': self._config['xivo_host'],
+            'port': self._config['rest_api']['port'],
+            'auth_username': self._config['rest_api']['username'],
+            'auth_passwd': self._config['rest_api']['passwd']
+        }
+
+        rest_config_dict.update({'api_version': '1.1'})
+        self.confd_config_1_1 = RestConfiguration(**rest_config_dict)
+
+        self.ws_utils = xivo_ws.XivoServer(host=rest_config_dict['hostname'],
+                                           username=rest_config_dict['auth_username'],
+                                           password=rest_config_dict['auth_passwd'])
+        self.confd_utils_1_1 = WsUtils(self.confd_config_1_1)
+
+    def _setup_provd(self):
+        provd_config_obj = RestConfiguration(protocol=self._config['provd']['rest_protocol'],
+                                             hostname=self._config['xivo_host'],
+                                             port=self._config['provd']['rest_port'],
+                                             content_type='application/vnd.proformatique.provd+json')
+        self.rest_provd = WsUtils(provd_config_obj)
+
+        provd_url = "http://{host}:{port}/provd".format(host=self._config['xivo_host'],
+                                                        port=self._config['provd']['rest_port'])
+        self.provd_client = new_provisioning_client(provd_url)
 
     def _setup_webi(self):
         try:
@@ -152,51 +208,12 @@ class XivoAcceptanceConfig(object):
         else:
             self.xivo_configured = True
 
-    def _setup_dao(self):
-        dao_config.DB_URI = 'postgresql://asterisk:proformatique@%s/asterisk' % self.xivo_host
-
-    def _setup_ssh_client(self):
-        self.ssh_client_xivo = SSHClient(self.xivo_host, self.ssh_login)
-
-    def _setup_ws(self):
-        rest_config_dict = {
-            'protocol': self.rest_protocol,
-            'hostname': self.xivo_host,
-            'port': self.rest_port,
-            'auth_username': self.rest_username,
-            'auth_passwd': self.rest_passwd
-        }
-
-        rest_config_dict.update({'api_version': '1.1'})
-        self.confd_config_1_1 = RestConfiguration(**rest_config_dict)
-
-        self.ws_utils = xivo_ws.XivoServer(self.xivo_host,
-                                           self.rest_username,
-                                           self.rest_passwd)
-        self.confd_utils_1_1 = WsUtils(self.confd_config_1_1)
-
-    def _setup_provd(self):
-        provd_rest_port = 8667
-        try:
-            query = 'SELECT * FROM "provisioning" WHERE id = 1;'
-            result = postgres.exec_sql_request(query).fetchone()
-            provd_rest_port = result['http_port']
-        except OperationalError:
-            pass
-
-        provd_config_obj = RestConfiguration(protocol='http',
-                                             hostname=self.xivo_host,
-                                             port=provd_rest_port,
-                                             content_type='application/vnd.proformatique.provd+json')
-        self.rest_provd = WsUtils(provd_config_obj)
-
-        provd_url = "http://%s:%s/provd" % (self.xivo_host, provd_rest_port)
-        self.provd_client = new_provisioning_client(provd_url)
-
     @property
     def execnet_gateway(self):
         try:
             return self._execnet_gateway
         except AttributeError:
-            self._execnet_gateway = makegateway('ssh=%s@%s' % (self.ssh_login, self.xivo_host))
+            spec = 'ssh={login}@{host}'.format(login=self._config['ssh_login'],
+                                               host=self._config['xivo_host'])
+            self._execnet_gateway = makegateway(spec)
             return self._execnet_gateway

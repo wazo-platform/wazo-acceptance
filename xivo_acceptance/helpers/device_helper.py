@@ -16,12 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import json
-import requests
 
 from lettuce.registry import world
+import requests
 
-from xivo_acceptance.lettuce.remote_py_cmd import remote_exec
 from xivo_acceptance.helpers import provd_helper
+from xivo_acceptance.lettuce.remote_py_cmd import remote_exec
+
 
 AUTOPROV_URL = 'https://%s/xivo/configuration/json.php/restricted/provisioning/autoprov?act=configure'
 HEADERS = {'Content-Type': 'application/json'}
@@ -29,7 +30,7 @@ HEADERS = {'Content-Type': 'application/json'}
 
 def provision_device_using_webi(provcode, device_ip):
     data = json.dumps({'code': provcode, 'ip': device_ip})
-    requests.post(url=AUTOPROV_URL % world.config.xivo_host,
+    requests.post(url=AUTOPROV_URL % world.config['xivo_host'],
                   headers=HEADERS,
                   auth=_prepare_auth(),
                   data=data,
@@ -37,7 +38,8 @@ def provision_device_using_webi(provcode, device_ip):
 
 
 def _prepare_auth():
-    auth = requests.auth.HTTPBasicAuth(world.config.rest_username, world.config.rest_passwd)
+    auth = requests.auth.HTTPBasicAuth(world.config['rest_api']['username'],
+                                       world.config['rest_api']['passwd'])
     return auth
 
 

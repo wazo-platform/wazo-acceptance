@@ -27,7 +27,7 @@ def given_there_is_xivo_not_configured(step):
 
 @step(u'When I start the wizard')
 def when_i_start_the_wizard(step):
-    world.browser.get(world.config.webi_url)
+    world.browser.get(world.config['frontend']['url'])
 
 
 @step(u'Then I should see the welcome message (.*)')

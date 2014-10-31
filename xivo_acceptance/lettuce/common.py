@@ -17,14 +17,15 @@
 
 from __future__ import unicode_literals
 
-import urllib
 import time
+import urllib
 
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
+from selenium.webdriver.common.action_chains import ActionChains
+
 from form.checkbox import Checkbox
 from xivo_acceptance.lettuce import urls
-from selenium.webdriver.common.action_chains import ActionChains
 
 
 def get_value_with_label(field_label):
@@ -43,7 +44,9 @@ def webi_login(login, password, language):
 
 
 def webi_login_as_default():
-    webi_login(world.config.webi_login, world.config.webi_password, 'en')
+    webi_login(world.config['frontend']['username'],
+               world.config['frontend']['passwd'],
+               'en')
 
 
 def waitForLoginPage():
@@ -155,7 +158,7 @@ def build_url(uri, query={}):
     if not uri.startswith('/'):
         uri = '/%s' % uri
 
-    url = '%s%s' % (world.config.webi_url, uri)
+    url = '%s%s' % (world.config['frontend']['url'], uri)
 
     qry_encode = urllib.urlencode(query)
     if qry_encode:
@@ -346,7 +349,7 @@ def go_to_tab(tab_label, ss_tab_label=None):
 
 
 def get_host_address():
-    host = world.config.webi_url
+    host = world.config['frontend']['url']
     host = host.rstrip('/')
     host = host.partition('//')[2]
     return host

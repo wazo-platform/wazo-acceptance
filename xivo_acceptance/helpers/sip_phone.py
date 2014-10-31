@@ -2,9 +2,10 @@ import sys
 import time
 
 from lettuce import world
-from linphonelib import Session
+
 from linphonelib import ExtensionNotFoundException
 from linphonelib import LinphoneException
+from linphonelib import Session
 from linphonelib.commands import HookStatus
 
 
@@ -15,7 +16,7 @@ class CallResult(object):
 class SipPhone(object):
 
     def __init__(self, config):
-        if world.config.linphone_debug:
+        if world.config['debug']['linphone']:
             logfile = sys.stdout
         else:
             logfile = None
