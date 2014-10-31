@@ -30,13 +30,13 @@ logger = logging.getLogger(__name__)
 
 def main():
     parsed_args = _parse_args()
+    config = load_config()
+    setup_logging(log_file=config['log_file'], foreground=True, debug=parsed_args.verbose)
 
     if parsed_args.xivo_host:
         logger.debug('Set xivo_host %s', parsed_args.xivo_host)
         os.environ["XIVO_HOST"] = parsed_args.xivo_host
 
-    config = load_config()
-    setup_logging(log_file=config['log_file'], foreground=True, debug=parsed_args.verbose)
     feature_manager = FeatureManager(config)
 
     controller = XiVOAcceptanceController(feature_manager=feature_manager)

@@ -109,8 +109,8 @@ def load_config():
 
     try:
         default_config.update(load_old_config())
-    except Exception:
-        pass
+    except Exception as e:
+        print e
 
     return default_config
 
@@ -118,7 +118,7 @@ def load_config():
 def load_old_config():
     default_config_file_path = _find_first_existing_path(*_CONFIG_DIR, suffix='default.ini')
     default_config_path = os.path.dirname(default_config_file_path)
-    logger.info('Using default configuration dir %s', default_config_path)
+    print 'Using default configuration dir {}'.format(default_config_path)
 
     config_dird = os.path.join(default_config_path, 'conf.d')
 
@@ -133,7 +133,7 @@ def load_old_config():
                                                   config_file_extra_local,
                                                   config_file_extra_default)
 
-    logger.info('Using extra configuration file %s', config_file_extra)
+    print 'Using extra configuration file {}'.format(config_file_extra)
 
     config.update(ConfigObj(config_file_extra))
 
