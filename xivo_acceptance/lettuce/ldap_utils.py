@@ -15,13 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import ldap.modlist
-import time
-import hashlib
 import base64
+import hashlib
+import time
 
-from xivo_acceptance.lettuce.ssh import SSHClient
 from lettuce import world
+
+import ldap.modlist
+from xivo_acceptance.lettuce.ssh import SSHClient
+
 
 LDAP_SSH_HOSTNAME = 'openldap-dev.lan-quebec.avencall.com'
 LDAP_SSH_LOGIN = 'root'
@@ -109,7 +111,7 @@ def stop_ldap_server():
 
 
 def _kvm_ssh_client():
-    ssh_client = SSHClient(world.config.kvm_hostname, world.config.kvm_login)
+    ssh_client = SSHClient(world.config['kvm_infos']['hostname'], world.config['kvm_infos']['login'])
 
     return ssh_client
 
@@ -117,17 +119,17 @@ def _kvm_ssh_client():
 def shutdown_ldap_server():
     ssh_client = _kvm_ssh_client()
 
-    cmd = ['virsh', 'shutdown', world.config.kvm_vm_name]
+    cmd = ['virsh', 'shutdown', world.config['kvm_infos']['vm_name']]
     ssh_client.check_call(cmd)
-    time.sleep(world.config.kvm_shutdown_timeout)
+    time.sleep(world.config['kvm_infos']['shutdown_timeout'])
 
 
 def boot_ldap_server():
     ssh_client = _kvm_ssh_client()
 
-    cmd = ['virsh', 'start', world.config.kvm_vm_name]
+    cmd = ['virsh', 'start', world.config['kvm_infos']['vm_name']]
     ssh_client.check_call(cmd)
-    time.sleep(world.config.kvm_boot_timeout)
+    time.sleep(world.config['kvm_infos']['boot_timeout'])
 
 
 def is_ldap_booted():
@@ -137,7 +139,7 @@ def is_ldap_booted():
 
     output = ssh_client.out_call(cmd)
     for line in output.split('\n'):
-        if world.config.kvm_vm_name in line:
+        if world.config['kvm_infos']['vm_name'] in line:
             return True
 
     return False

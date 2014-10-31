@@ -45,13 +45,15 @@ def generate_cache(start_time=None, end_time=None):
 def open_queue_stat_page_on_day(queue_name, day, config_name):
     _open_queue_stat_page(queue_name, day, config_name, 'day')
 
+
 def open_queue_stat_page_on_week(queue_name, day, config_name):
     _open_queue_stat_page(queue_name, day, config_name, 'week')
+
 
 def _open_queue_stat_page(queue_name, day, config_name, axis):
     conf_id = stat_helper.find_conf_id_with_name(config_name)
     queue_id = queue_helper.find_queue_id_with_name(queue_name)
-    host = world.config.xivo_host
+    host = world.config['xivo_host']
 
     uri = '''https://%s/statistics/call_center/index.php/data/stats1''' % host
     config = {
@@ -70,7 +72,7 @@ def _open_queue_stat_page(queue_name, day, config_name, axis):
 def open_agent_stat_page_on_day(agent_number, day, config_name):
     conf_id = stat_helper.find_conf_id_with_name(config_name)
     agent_id = agent_helper.find_agent_id_with_number(agent_number)
-    host = world.config.xivo_host
+    host = world.config['xivo_host']
 
     uri = '''https://%s/statistics/call_center/index.php/data/stats2''' % host
     qry = '''confid=%s&key=agent-%s&axetype=day&dbeg=%s&dend=%s&dday=%s&dweek=2012-08-17&dmonth=2012-08&dyear=2012''' % (conf_id, agent_id, day, day, day)

@@ -20,15 +20,15 @@ import sys
 
 from lettuce import world
 
-from xivo_acceptance.config import XivoAcceptanceConfig, read_config
+from xivo_acceptance.config import XivoAcceptanceConfig, load_config
 from xivo_acceptance.helpers import line_helper, context_helper, \
     trunkcustom_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
-from xivo_acceptance.service import prerequisite
 from xivo_acceptance.lettuce import terrain
+from xivo_acceptance.service import prerequisite
+from xivo_ws.destination import UserDestination
 from xivo_ws.objects.incall import Incall
 from xivo_ws.objects.outcall import Outcall, OutcallExten
-from xivo_ws.destination import UserDestination
 
 
 def main(args):
@@ -39,10 +39,9 @@ def main(args):
     xivo_host = args[0]
 
     print 'Initializing...'
-    raw_config = read_config()
-    raw_config.set('xivo', 'hostname', xivo_host)
-    world.config = XivoAcceptanceConfig(raw_config)
-    world.config.setup()
+    world.config = load_config()
+    world.config['xivo_host'] = xivo_host
+    world.xivo_acceptance_config = XivoAcceptanceConfig(world.config)
     terrain._setup_ssh_client()
     terrain._setup_ws()
     terrain._setup_provd()

@@ -15,45 +15,49 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import logging
 import subprocess
 
 from lettuce import world
 
 from xivo_acceptance.helpers import context_helper
-from xivo_dao.helpers import db_manager
-from xivo_dao.helpers.db_manager import daosession
 from xivo_acceptance.lettuce import common, assets
 from xivo_acceptance.lettuce.assets import copy_asset_to_server
 from xivo_acceptance.lettuce.terrain import initialize, deinitialize
+from xivo_dao.helpers import db_manager
+from xivo_dao.helpers.db_manager import daosession
+
+
+logger = logging.getLogger(__name__)
 
 
 def run():
-    print 'Initializing ...'
+    logger.debug('Initializing ...')
     initialize()
     try:
-        print 'Configuring WebService Access on XiVO'
+        logger.debug('Configuring WebService Access on XiVO')
         _create_webservices_access()
 
-        print 'Configuring PostgreSQL on XiVO'
+        logger.debug('Configuring PostgreSQL on XiVO')
         _create_pgpass_on_remote_host()
         _allow_remote_access_to_pgsql()
 
-        print 'Configuring RabbitMQ on XiVO'
+        logger.debug('Configuring RabbitMQ on XiVO')
         _allow_remote_access_to_rabbitmq()
 
-        print 'Configuring xivo-agid on XiVO'
+        logger.debug('Configuring xivo-agid on XiVO')
         _allow_agid_listen_on_all_interfaces()
 
-        print 'Configuring Provd REST API on XiVO'
+        logger.debug('Configuring Provd REST API on XiVO')
         _allow_provd_listen_on_all_interfaces()
 
-        print 'Installing packages'
+        logger.debug('Installing packages')
         _install_packages(['tcpflow'])
 
-        print 'Installing chan_test (module for asterisk)'
+        logger.debug('Installing chan_test (module for asterisk)')
         _install_chan_test()
 
-        print 'Adding context'
+        logger.debug('Adding context')
         context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
         context_helper.update_contextnumbers_user('statscenter', 1000, 1100)
         context_helper.update_contextnumbers_user('default', 1000, 1999)
@@ -62,7 +66,7 @@ def run():
         context_helper.update_contextnumbers_meetme('default', 4000, 4999)
         context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
-        print 'Restarting All XiVO Services'
+        logger.debug('Restarting All XiVO Services')
         _xivo_service_restart_all()
     finally:
         deinitialize()
@@ -86,14 +90,14 @@ def _allow_remote_access_to_pgsql():
     postgres_conf_file = '/etc/postgresql/9.1/main/postgresql.conf'
 
     subnet_line = 'host all all {subnet} md5'
-    for subnet in world.config.subnets:
+    for subnet in world.config['prerequisites']['subnets']:
         _add_line_to_remote_file(subnet_line.format(subnet=subnet), hba_file)
 
     _add_line_to_remote_file("listen_addresses = '*'", postgres_conf_file)
 
     command = ['service', 'postgresql', 'restart']
     world.ssh_client_xivo.check_call(command)
-    db_manager.reinit()
+    db_manager._init()
 
 
 def _allow_remote_access_to_rabbitmq():
@@ -137,5 +141,5 @@ def _install_packages(packages):
 def _install_chan_test():
     asset_full_path = assets.full_path('chan_test.so')
     remote_path = '/usr/lib/asterisk/modules/chan_test.so'
-    command = ['scp', asset_full_path, '%s:%s' % (world.config.xivo_host, remote_path)]
+    command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
     subprocess.call(command)

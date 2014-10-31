@@ -15,15 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from xivo_acceptance import config
 import xivo_ws
 
-from xivo_acceptance import config
 
-
-raw_config = config.read_config()
-xivo_host = raw_config.get('xivo', 'hostname')
-xivo_ws_username = raw_config.get('webservices_infos', 'login')
-xivo_ws_password = raw_config.get('webservices_infos', 'password')
+config = config.load_config()
+xivo_host = config['xivo']['hostname']
+xivo_ws_username = config['rest_api']['username']
+xivo_ws_password = config['rest_api']['passwd']
 
 xivo_server_ws = xivo_ws.XivoServer(xivo_host,
                                     xivo_ws_username,

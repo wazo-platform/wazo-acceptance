@@ -18,8 +18,8 @@
 from lettuce import step
 from lettuce.registry import world
 
-from xivo_acceptance.action.webi import dhcpd as dhcpd_action_webi
 from xivo_acceptance.action.webi import commonconf as commonconf_action_webi
+from xivo_acceptance.action.webi import dhcpd as dhcpd_action_webi
 from xivo_acceptance.helpers import monit_helper
 from xivo_acceptance.lettuce import common, form, sysutils
 from xivo_acceptance.lettuce.form.checkbox import Checkbox
@@ -27,7 +27,7 @@ from xivo_acceptance.lettuce.form.checkbox import Checkbox
 
 @step(u'When I wizard correctly executed')
 def when_i_wizard_correctly_executed(step):
-    assert world.config.xivo_configured
+    assert world.xivo_acceptance_config.xivo_configured
 
 
 @step(u'When I activate dhcpd server')

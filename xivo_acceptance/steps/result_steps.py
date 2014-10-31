@@ -17,8 +17,8 @@
 
 import re
 
-from lettuce import step, world
 from hamcrest import assert_that, equal_to, has_item, has_entry, is_not, has_key, instance_of, ends_with, has_entries, has_length
+from lettuce import step, world
 
 
 @step(u'When I memorize the first entry in the list')
@@ -102,8 +102,8 @@ def assert_response_has_resource_link(resource, resource_id):
 
 
 def _build_resource_url(resource, resource_id):
-    host = world.config.xivo_host
-    port = world.config.rest_port
+    host = world.config['xivo_host']
+    port = world.config['rest_api']['port']
     expected_url = "https://%s:%s/1.1/%s/%s" % (host, port, resource, resource_id)
     return expected_url
 

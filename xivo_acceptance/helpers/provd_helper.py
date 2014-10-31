@@ -204,7 +204,7 @@ def _delete_device_with_ip(channel, ip):
 
 
 def request_http(path, user_agent):
-    url = 'http://%s:8667/%s' % (world.config.xivo_host, path)
+    url = 'http://%s:8667/%s' % (world.config['xivo_host'], path)
     request = urllib2.Request(url, headers={'User-Agent': user_agent})
     fobj = urllib2.urlopen(request)
     try:

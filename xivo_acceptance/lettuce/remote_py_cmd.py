@@ -19,12 +19,12 @@ from lettuce.registry import world
 
 
 def remote_exec(func, **kwargs):
-    channel = world.config.execnet_gateway.remote_exec(func, **kwargs)
+    channel = world.xivo_acceptance_config.execnet_gateway.remote_exec(func, **kwargs)
     channel.waitclose()
 
 
 def remote_exec_with_result(func, **kwargs):
-    channel = world.config.execnet_gateway.remote_exec(func, **kwargs)
+    channel = world.xivo_acceptance_config.execnet_gateway.remote_exec(func, **kwargs)
     result = channel.receive()
     channel.waitclose()
     return result

@@ -15,20 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import logging
 import sys
 import tempfile
-import logging
 
 from lettuce import before, after, world
 from selenium.common.exceptions import NoSuchElementException
 
-from xivobrowser import XiVOBrowser
+from xivo_acceptance.config import XivoAcceptanceConfig, load_config
 from xivo_acceptance.helpers import asterisk_helper
-from xivo_acceptance.config import XivoAcceptanceConfig, read_config
 from xivo_acceptance.lettuce import asterisk
-from xivo_acceptance.lettuce import debug
 from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce import debug
 from xivo_acceptance.lettuce.phone_register import PhoneRegister
+from xivobrowser import XiVOBrowser
 
 
 logger = logging.getLogger('acceptance')
@@ -63,56 +63,58 @@ def xivo_acceptance_lettuce_after_all(total):
 
 
 def initialize():
-    raw_config = read_config()
-    debug.setup_logging(raw_config)
-
     logger.info("Initializing acceptance tests...")
+    world.config = load_config()
+    debug.setup_logging(world.config)
 
-    world.config = XivoAcceptanceConfig(raw_config)
-    world.config.setup()
+    world.xivo_acceptance_config = XivoAcceptanceConfig(world.config)
 
-    _setup_ssh_client()
-    _setup_ws()
-    _setup_provd()
-    _setup_browser()
+    logger.debug("_setup_ssh_client...")
+    _setup_ssh_client(world.xivo_acceptance_config)
+    logger.debug("_setup_ws...")
+    _setup_ws(world.xivo_acceptance_config)
+    logger.debug("_setup_provd...")
+    _setup_provd(world.xivo_acceptance_config)
+    logger.debug("_setup_browser...")
+    _setup_browser(world.config)
     world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
 
 
 @debug.logcall
-def _setup_ssh_client():
-    world.ssh_client_xivo = world.config.ssh_client_xivo
+def _setup_ssh_client(xivo_acceptance_config):
+    world.ssh_client_xivo = xivo_acceptance_config.ssh_client_xivo
 
 
 @debug.logcall
-def _setup_ws():
-    world.ws = world.config.ws_utils
-    world.confd_utils_1_1 = world.config.confd_utils_1_1
+def _setup_ws(xivo_acceptance_config):
+    world.ws = world.xivo_acceptance_config.ws_utils
+    world.confd_utils_1_1 = xivo_acceptance_config.confd_utils_1_1
 
 
 @debug.logcall
-def _setup_provd():
-    world.rest_provd = world.config.rest_provd
-    world.provd_client = world.config.provd_client
+def _setup_provd(xivo_acceptance_config):
+    world.rest_provd = xivo_acceptance_config.rest_provd
+    world.provd_client = xivo_acceptance_config.provd_client
 
 
 @debug.logcall
-def _setup_browser():
-    if not world.config.browser_enable:
+def _setup_browser(config):
+    if not world.config['browser']['enable']:
         return
 
     from pyvirtualdisplay import Display
-    browser_size = width, height = tuple(world.config.browser_resolution.split('x', 1))
-    world.display = Display(visible=world.config.browser_visible, size=browser_size)
+    browser_size = width, height = tuple(config['browser']['resolution'].split('x', 1))
+    world.display = Display(visible=config['browser']['visible'], size=browser_size)
     world.display.start()
-    world.browser = XiVOBrowser(world.config.browser_debug)
+    world.browser = XiVOBrowser(config['debug']['selenium'])
     world.browser.set_window_size(width, height)
-    world.timeout = world.config.browser_timeout
+    world.timeout = config['browser']['timeout']
 
 
 @debug.logcall
 def _check_webi_login_root():
-    if world.config.browser_enable and world.config.xivo_configured:
+    if world.config['browser']['enable'] and world.xivo_acceptance_config.xivo_configured:
         try:
             element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
             username = element.text
@@ -137,7 +139,7 @@ def deinitialize():
 
 @debug.logcall
 def _teardown_browser():
-    if world.config.browser_enable:
+    if world.config['browser']['enable']:
         world.browser.quit()
         world.display.stop()
 

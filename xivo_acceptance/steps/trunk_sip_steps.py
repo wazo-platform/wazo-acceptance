@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import socket
-
 from lettuce import step, world
 
 from xivo_acceptance.helpers import trunksip_helper
@@ -32,12 +30,6 @@ def given_there_is_no_trunksip(step, name):
 def given_there_is_a_trunksip(step, name):
     trunksip_helper.delete_trunksips_with_name(name)
     trunksip_helper.add_trunksip('192.168.32.1', name)
-
-
-@step(u'Given there is a SIP trunk "([^"]*)" in context "([^"]*)"$')
-def given_there_is_a_siptrunk_with_callerid(step, name, context):
-    callgen_ip = socket.gethostbyname(world.config.callgen_host),
-    trunksip_helper.add_or_replace_trunksip(callgen_ip, name, context)
 
 
 @step(u'When I create a trunksip with name "([^"]*)"')

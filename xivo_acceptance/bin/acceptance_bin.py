@@ -17,10 +17,11 @@
 
 import argparse
 import logging
+import os
 import signal
 
 from xivo.xivo_logging import setup_logging
-from xivo_acceptance.config import _LOG_FILENAME
+from xivo_acceptance.config import load_config
 from xivo_acceptance.controller import XiVOAcceptanceController
 from xivo_acceptance.service.manager.feature_manager import FeatureManager
 
@@ -31,10 +32,15 @@ logger = logging.getLogger(__name__)
 def main():
     _init_signal()
     parsed_args = _parse_args()
-    setup_logging(log_file=_LOG_FILENAME, foreground=True, debug=parsed_args.verbose)
 
-    feature_manager = FeatureManager()
-    feature_manager.set_xivo_host(xivo_host=parsed_args.xivo_host)
+    if parsed_args.xivo_host:
+        logger.debug('Set xivo_host %s', parsed_args.xivo_host)
+        os.environ["XIVO_HOST"] = parsed_args.xivo_host
+
+    config = load_config()
+
+    feature_manager = FeatureManager(config)
+    setup_logging(log_file=config['log_file'], foreground=True, debug=parsed_args.verbose)
 
     controller = XiVOAcceptanceController(feature_manager=feature_manager)
 
