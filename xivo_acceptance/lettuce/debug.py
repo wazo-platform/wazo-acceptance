@@ -25,7 +25,7 @@ loggers = {
 
 
 def setup_logging(config):
-    file_handler = logging.FileHandler('/tmp/acceptance')
+    file_handler = logging.FileHandler(config['log_file'])
 
     for name, logger in loggers.iteritems():
         logger.setLevel(logging.INFO)

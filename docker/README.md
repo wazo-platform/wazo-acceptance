@@ -83,9 +83,9 @@ Launch admin_user.feature feature:
 
 To build the image, simply invoke:
 
-    docker build -t xivo-acceptance https://raw.githubusercontent.com/xivo-pbx/xivo-acceptance/master/contribs/docker/Dockerfile
+    docker build -t xivo-acceptance https://raw.githubusercontent.com/xivo-pbx/xivo-acceptance/master/Dockerfile
 
-Or directly in the sources in contribs/docker:
+Or directly in the sources:
 
     docker build -t xivo-acceptance .
 

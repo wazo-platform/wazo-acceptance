@@ -16,7 +16,7 @@ commands to install requirements:
 
 Once the requirements are installed, modify the configuration files and run the prerequisite script:
 
-    python utils/prerequisite.py
+    python ./bin/xivo-acceptance -p
 
 XiVO Client
 -----------
@@ -34,22 +34,23 @@ install and compile the client:
 Configuration
 =============
 
-Create a local configuration file in ```config/conf.d/default.local``` and
+Create a local configuration file in ```~/xivo-acceptance/default``` and
 redefine only options that need to be changed. Default options can be found in
-```config/default.ini```. Usually, you will only need to change the IP
+```xivo_acceptance/config.py```. Usually, you will only need to change the IP
 addresses and subnets. For example:
 
-    [browser]
-    enable = 1
+    browser:
+    	enable: True
 
     ;IP address of the XIVO server
-    [xivo]
-    hostname = 192.168.0.10
+    xivo_host: 192.168.0.10
 
     ;we need to allow access from the test machine to the server.
     ;add a subnet that includes the test machine's IP address
-    [prerequisites]
-    subnets = 10.0.0.8/24,192.168.0.0/24
+    prerequisites:
+    	subnets: 
+			- 10.0.0.8/24
+			- 192.168.0.0/24
 
 
 Running tests
@@ -57,11 +58,11 @@ Running tests
 
 Tests can be found in the ```features``` directory. You can run all tests:
 
-    PYTHONPATH=.. XC_PATH=/path/to/xivo-client-qt/bin lettuce features
+    PYTHONPATH=.. XC_PATH=/path/to/xivo-client-qt/bin lettuce data/features
 
 Or only a single test file:
 
-    PYTHONPATH=.. XC_PATH=/path/to/xivo-client-qt/bin lettuce features/group/group.feature
+    PYTHONPATH=.. XC_PATH=/path/to/xivo-client-qt/bin lettuce data/features/group/group.feature
 
 
 Documentation

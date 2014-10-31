@@ -15,11 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import logging
-import os
-
 from configobj import ConfigObj
 from execnet.multi import makegateway
+import logging
+import os
 
 from provd.rest.client.client import new_provisioning_client
 from xivo_acceptance.lettuce.ssh import SSHClient
@@ -45,7 +44,7 @@ _FEATURES_DIR = (
 )
 
 
-def load_config():
+def load_config(old_config=True):
     XIVO_HOST = os.environ.get('XIVO_HOST', 'daily-xivo-pxe.lan-quebec.avencall.com')
 
     default_config = {
@@ -61,10 +60,9 @@ def load_config():
         },
         'rest_api': {
             'protocol': 'https',
+            'port': 9486,
             'username': 'admin',
-            'passwd': 'proformatique',
-            'protocol': 'https',
-            'port': 9486
+            'passwd': 'proformatique'
         },
         'provd': {
             'rest_port': 8667,
@@ -107,35 +105,43 @@ def load_config():
         }
     }
 
-    try:
-        default_config.update(load_old_config())
-    except Exception as e:
-        print e
+    if old_config:
+        try:
+            default_config.update(load_old_config())
+        except Exception as e:
+            print e
+
+    logger.debug('xivo_host: %s', default_config['xivo_host'])
 
     return default_config
 
 
 def load_old_config():
-    default_config_file_path = _find_first_existing_path(*_CONFIG_DIR, suffix='default.ini')
-    default_config_path = os.path.dirname(default_config_file_path)
-    print 'Using default configuration dir {}'.format(default_config_path)
+    config = {}
+    try:
+        default_config_file_path = _find_first_existing_path(*_CONFIG_DIR, suffix='default')
+    except Exception as e:
+        print e
+    else:
+        default_config_path = os.path.dirname(default_config_file_path)
+        print 'Using default configuration dir {}'.format(default_config_path)
 
-    config_dird = os.path.join(default_config_path, 'conf.d')
+        config_dird = os.path.join(default_config_path, 'conf.d')
 
-    config = ConfigObj(default_config_file_path)
+        config = ConfigObj(default_config_file_path)
 
-    config_file_extra_absolute = os.getenv('LETTUCE_CONFIG', 'invalid_file_name')
-    config_file_extra_in_dird = os.path.join(config_dird, os.getenv('LETTUCE_CONFIG', 'invalid_file_name'))
-    config_file_extra_default = os.path.join(config_dird, 'default')
-    config_file_extra_local = '%s.local' % config_file_extra_default
-    config_file_extra = _find_first_existing_path(config_file_extra_absolute,
-                                                  config_file_extra_in_dird,
-                                                  config_file_extra_local,
-                                                  config_file_extra_default)
+        config_file_extra_absolute = os.getenv('LETTUCE_CONFIG', 'invalid_file_name')
+        config_file_extra_in_dird = os.path.join(config_dird, os.getenv('LETTUCE_CONFIG', 'invalid_file_name'))
+        config_file_extra_default = os.path.join(config_dird, 'default')
+        config_file_extra_local = '%s.local' % config_file_extra_default
+        config_file_extra = _find_first_existing_path(config_file_extra_absolute,
+                                                      config_file_extra_in_dird,
+                                                      config_file_extra_local,
+                                                      config_file_extra_default)
 
-    print 'Using extra configuration file {}'.format(config_file_extra)
+        print 'Using extra configuration file {}'.format(config_file_extra)
 
-    config.update(ConfigObj(config_file_extra))
+        config.update(ConfigObj(config_file_extra))
 
     return config
 
@@ -146,7 +152,7 @@ def _find_first_existing_path(*args, **kwargs):
             path = os.path.join(path, kwargs['suffix'])
         if path and os.path.exists(path):
             return path
-    raise Exception('Directory do not exist: %s' % ' '.join(args))
+    raise Exception('Directories does not exist: %s' % ' '.join(args))
 
 
 class XivoAcceptanceConfig(object):
