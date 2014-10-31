@@ -45,7 +45,7 @@ class _AvailableSipPortFinder(_AbstractAvailablePortFinder):
 class _AvailableRTPPortFinder(_AbstractAvailablePortFinder):
 
     def __init__(self, world_config):
-        start, end = self._port_range(['linphone']['rtp_port_range'])
+        start, end = self._port_range(world_config['linphone']['rtp_port_range'])
 
         # RTP port must be an even number
         # RTCP will use the higher odd number
@@ -71,6 +71,6 @@ def create_config(world_config, phone_register, line_config):
     rtp_port = _AvailableRTPPortFinder(world_config).get_available_port(existing_phones)
     sip_name = line_config.name
     sip_passwd = line_config.secret
-    sip_host = world.config['xivo_host']
+    sip_host = world_config['xivo_host']
 
     return SIPConfig(sip_port, rtp_port, sip_name, sip_passwd, sip_host)

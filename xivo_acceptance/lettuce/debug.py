@@ -30,7 +30,7 @@ def setup_logging(config):
     for name, logger in loggers.iteritems():
         logger.setLevel(logging.INFO)
         logger.addHandler(file_handler)
-        if config['debug'][name]:
+        if config['debug'].get(name):
             logger.setLevel(logging.DEBUG)
 
 
