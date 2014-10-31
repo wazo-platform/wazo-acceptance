@@ -22,13 +22,12 @@ import os
 from execnet.multi import makegateway
 from sqlalchemy.exc import OperationalError
 
-import xivo_ws
-
 from provd.rest.client.client import new_provisioning_client
 from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.lettuce.ssh import SSHClient
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_dao.helpers import config as dao_config
+import xivo_ws
 
 
 logger = logging.getLogger(__name__)
@@ -102,7 +101,7 @@ class XivoAcceptanceConfig(object):
         self.confd_utils_1_1 = None
         self.xivo_configured = None
 
-        self.xivo_host = self._config.get('xivo', 'hostname')
+        self.xivo_host = os.environ.get('XIVO_HOST', self._config.get('xivo', 'hostname'))
 
         self.ssh_login = self._config.get('ssh_infos', 'login')
 

@@ -31,11 +31,9 @@ logger = logging.getLogger(__name__)
 class FeatureManager(object):
 
     def set_xivo_host(self, xivo_host):
-        if xivo_host is None:
-            return
-        config_home_file = os.path.join(world.config.features_dir, 'default')
-        logger.debug('Set xivo_host %s into the file %s', xivo_host, config_home_file)
-        print('[xivo]\nhostname = %s' % xivo_host, file=open(config_home_file, 'w'))
+        if xivo_host:
+            logger.debug('Set xivo_host %s', xivo_host)
+            os.environ["XIVO_HOST"] = xivo_host
 
     def exec_internal_features(self, internal_features):
         feature_path = os.path.join(world.config.features_dir, internal_features)
