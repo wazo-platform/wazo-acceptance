@@ -38,9 +38,8 @@ def main():
         os.environ["XIVO_HOST"] = parsed_args.xivo_host
 
     config = load_config()
-
-    feature_manager = FeatureManager(config)
     setup_logging(log_file=config['log_file'], foreground=True, debug=parsed_args.verbose)
+    feature_manager = FeatureManager(config)
 
     controller = XiVOAcceptanceController(feature_manager=feature_manager)
 
