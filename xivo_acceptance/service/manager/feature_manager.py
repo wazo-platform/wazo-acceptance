@@ -55,7 +55,7 @@ class FeatureManager(object):
                 yield '{dir}/{file}'.format(dir=dir, file=file)
 
     def _exec_lettuce_feature(self, feature_path):
-        self._exec_sys_cmd('lettuce %s' % feature_path)
+        self._exec_sys_cmd('lettuce %s --with-xunit --verbosity=3 --xunit-file=/workspace/xunit-tests.xml' % feature_path)
 
     def _exec_sys_cmd(self, cmd):
         logger.debug('Executing commmand: %s', cmd)
