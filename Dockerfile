@@ -35,7 +35,8 @@ RUN apt-get -qq -y install \
     iceweasel
 
 # Configure environment
-RUN ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q  -N ""
+#RUN ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q  -N ""
+COPY docker/home/.ssh ${HOME}/.ssh
 RUN mkdir $BUILD_DIR
 RUN mkdir ~/.xivo-acceptance
 RUN mkdir $DATA_DIR
