@@ -15,10 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from configobj import ConfigObj
-from execnet.multi import makegateway
 import logging
 import os
+
+from configobj import ConfigObj
+from execnet.multi import makegateway
 
 from provd.rest.client.client import new_provisioning_client
 from xivo_acceptance.lettuce.ssh import SSHClient
@@ -53,6 +54,7 @@ def load_config(old_config=True):
         'db_uri': 'postgresql://asterisk:proformatique@{}/asterisk'.format(XIVO_HOST),
         'assets_dir': _find_first_existing_path(*_ASSETS_DIR),
         'features_dir': _find_first_existing_path(*_FEATURES_DIR),
+        'docker_dir': '/docker',
         'frontend': {
             'url': 'https://{}'.format(XIVO_HOST),
             'username': 'root',
