@@ -37,8 +37,9 @@ RUN apt-get -qq -y install \
 # Configure environment
 #RUN ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q  -N ""
 COPY docker/home/.ssh ${HOME}/.ssh
+RUN chmod 600 ${HOME}/.ssh/id_rsa
 RUN mkdir $BUILD_DIR
-RUN mkdir ~/.xivo-acceptance
+RUN mkdir ${HOME}/.xivo-acceptance
 RUN mkdir $DATA_DIR
 
 # Install xivo-acceptance
@@ -69,4 +70,4 @@ RUN rm -rf $BUILD_DIR
 # RUN
 ADD docker/run.sh ${HOME}/run.sh
 RUN chmod +x ${HOME}/run.sh
-CMD ${HOME}/run.sh
+#CMD ${HOME}/run.sh
