@@ -110,7 +110,7 @@ def load_config(old_config=True):
         except Exception as e:
             print e
 
-    logger.debug('xivo_host: %s', default_config['xivo_host'])
+    print 'xivo_host: %s', default_config['xivo_host']
 
     return default_config
 
