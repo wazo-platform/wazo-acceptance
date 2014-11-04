@@ -54,7 +54,7 @@ def load_config(old_config=True):
         'db_uri': 'postgresql://asterisk:proformatique@{}/asterisk'.format(XIVO_HOST),
         'assets_dir': _find_first_existing_path(*_ASSETS_DIR),
         'features_dir': _find_first_existing_path(*_FEATURES_DIR),
-        'docker_dir': '/docker',
+        'output_dir': '/output',
         'frontend': {
             'url': 'https://{}'.format(XIVO_HOST),
             'username': 'root',

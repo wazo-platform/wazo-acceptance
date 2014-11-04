@@ -55,8 +55,8 @@ class FeatureManager(object):
                 yield '{dir}/{file}'.format(dir=dir, file=file)
 
     def _exec_lettuce_feature(self, feature_path):
-        cmd = 'lettuce {feature_path} --with-xunit --verbosity=3 --xunit-file={docker_dir}/xunit-tests.xml'.format(feature_path=feature_path,
-                                                                                                                   docker_dir=self.config['docker_dir'])
+        cmd = 'lettuce {feature_path} --with-xunit --verbosity=3 --xunit-file={output_dir}/xunit-tests.xml'.format(feature_path=feature_path,
+                                                                                                                   output_dir=self.config['output_dir'])
         self._exec_sys_cmd(cmd)
 
     def _exec_sys_cmd(self, cmd):

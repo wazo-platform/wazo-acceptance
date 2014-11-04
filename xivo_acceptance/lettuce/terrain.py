@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import logging
+import os
 import sys
 import tempfile
 
@@ -149,12 +150,11 @@ def _teardown_browser():
 def dump_current_page(filename='lettuce.html'):
     """Use this if you want to debug your test
        Call it with world.dump_current_page()"""
-    dump_dir = tempfile.mkdtemp(prefix='lettuce-')
-    source_file_name = '%s/lettuce-dump.html' % dump_dir
+    source_file_name = os.path.join(world.config['output_dir'], 'lettuce-dump.html')
     with open(source_file_name, 'w') as fobj:
         fobj.write(world.browser.page_source.encode('utf-8'))
-    image_file_name = '%s/lettuce-dump.png' % dump_dir
+    image_file_name = os.path.join(world.config['output_dir'], 'lettuce-dump.png')
     world.browser.save_screenshot(image_file_name)
     print
-    print 'Screenshot dumped in %s' % dump_dir
+    print 'Debug files dumped in {}'.format(world.config['output_dir'])
     print

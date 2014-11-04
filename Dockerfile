@@ -5,6 +5,7 @@ MAINTAINER XiVO Team "dev@avencall.com"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /root
+ENV OUTPUT_DIR /output
 ENV BUILD_DIR ${HOME}/build
 ENV XC_PATH ${HOME}/xc_bin
 ENV PATH $PATH:/usr/lib/x86_64-linux-gnu/qt5/bin:${XC_PATH}
@@ -35,12 +36,12 @@ RUN apt-get -qq -y install \
     iceweasel
 
 # Configure environment
-#RUN ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q  -N ""
 COPY docker/home/.ssh ${HOME}/.ssh
 RUN chmod 600 ${HOME}/.ssh/id_rsa
+RUN mkdir ~/.xivo-acceptance
 RUN mkdir $BUILD_DIR
-RUN mkdir ${HOME}/.xivo-acceptance
 RUN mkdir $DATA_DIR
+RUN mkdir $OUTPUT_DIR
 
 # Install xivo-acceptance
 WORKDIR ${BUILD_DIR}
@@ -70,4 +71,4 @@ RUN rm -rf $BUILD_DIR
 # RUN
 ADD docker/run.sh ${HOME}/run.sh
 RUN chmod +x ${HOME}/run.sh
-#CMD ${HOME}/run.sh
+CMD ${HOME}/run.sh
