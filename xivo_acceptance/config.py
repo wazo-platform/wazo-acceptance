@@ -80,9 +80,6 @@ def load_config(old_config=True):
             'login_timeout': 5
         },
         'ssh_login': 'root',
-        'jenkins': {
-            'hostname': 'jenkins.lan-quebec.avencall.com',
-        },
         'linphone': {
             'sip_port_range': '5001,5009',
             'rtp_port_range': '5100,5120'
