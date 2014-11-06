@@ -110,7 +110,7 @@ def _setup_browser(config):
     world.display.start()
     world.browser = XiVOBrowser(config['debug']['selenium'])
     world.browser.set_window_size(width, height)
-    world.timeout = config['browser']['timeout']
+    world.timeout = float(config['browser']['timeout'])
 
 
 @debug.logcall
