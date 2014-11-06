@@ -18,7 +18,6 @@
 import logging
 import os
 import sys
-import tempfile
 
 from lettuce import before, after, world
 from selenium.common.exceptions import NoSuchElementException
@@ -64,9 +63,11 @@ def xivo_acceptance_lettuce_after_all(total):
 
 
 def initialize():
-    logger.info("Initializing acceptance tests...")
     world.config = load_config()
     debug.setup_logging(world.config)
+
+    logger.info("Initializing acceptance tests...")
+    logger.info('xivo_host: %s', world.config['xivo_host'])
 
     world.xivo_acceptance_config = XivoAcceptanceConfig(world.config)
 

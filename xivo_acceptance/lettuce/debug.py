@@ -17,6 +17,8 @@
 
 import logging
 
+from xivo.xivo_logging import setup_logging as xivo_setup_logging
+
 
 loggers = {
     'selenium': logging.getLogger('selenium'),
@@ -25,6 +27,7 @@ loggers = {
 
 
 def setup_logging(config):
+    xivo_setup_logging(log_file=config['log_file'], foreground=True, debug=True)
     file_handler = logging.FileHandler(config['log_file'])
 
     for name, logger in loggers.iteritems():
