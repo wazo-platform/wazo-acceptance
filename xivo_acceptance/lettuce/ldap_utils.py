@@ -17,16 +17,10 @@
 
 import base64
 import hashlib
-import time
-
-from lettuce import world
 
 import ldap.modlist
-from xivo_acceptance.lettuce.ssh import SSHClient
 
 
-LDAP_SSH_HOSTNAME = 'openldap-dev.lan-quebec.avencall.com'
-LDAP_SSH_LOGIN = 'root'
 LDAP_URI = 'ldap://openldap-dev.lan-quebec.avencall.com:389/'
 LDAP_LOGIN = 'cn=admin,dc=lan-quebec,dc=avencall,dc=com'
 LDAP_PASSWORD = 'superpass'
@@ -47,7 +41,7 @@ def encode_entry(entry):
     return dict((key, sanitize_string(value)) for key, value in entry.iteritems())
 
 
-def add_or_replace_entry(entry):
+def add_or_replace_ldap_entry(entry):
     entry = encode_entry(entry)
     ldap_server = connect_to_server()
 
@@ -68,8 +62,8 @@ def generate_ldap_password(password):
     return "{SHA}%s" % payload
 
 
-def connect_to_server():
-    ldap_server = ldap.initialize(LDAP_URI)
+def connect_to_server(uri=LDAP_URI):
+    ldap_server = ldap.initialize(uri)
     ldap_server.simple_bind(LDAP_LOGIN, LDAP_PASSWORD)
     return ldap_server
 
@@ -96,50 +90,3 @@ def _get_entry_id(common_name):
 def add_entry(ldap_server, dn, entry):
     entry_encoded = ldap.modlist.addModlist(entry)
     ldap_server.add_s(dn, entry_encoded)
-
-
-def start_ldap_server():
-    ssh_client = SSHClient(LDAP_SSH_HOSTNAME, LDAP_SSH_LOGIN)
-    cmd = ['service', 'slapd', 'start']
-    ssh_client.check_call(cmd)
-
-
-def stop_ldap_server():
-    ssh_client = SSHClient(LDAP_SSH_HOSTNAME, LDAP_SSH_LOGIN)
-    cmd = ['service', 'slapd', 'stop']
-    ssh_client.check_call(cmd)
-
-
-def _kvm_ssh_client():
-    ssh_client = SSHClient(world.config['kvm_infos']['hostname'], world.config['kvm_infos']['login'])
-
-    return ssh_client
-
-
-def shutdown_ldap_server():
-    ssh_client = _kvm_ssh_client()
-
-    cmd = ['virsh', 'shutdown', world.config['kvm_infos']['vm_name']]
-    ssh_client.check_call(cmd)
-    time.sleep(world.config['kvm_infos']['shutdown_timeout'])
-
-
-def boot_ldap_server():
-    ssh_client = _kvm_ssh_client()
-
-    cmd = ['virsh', 'start', world.config['kvm_infos']['vm_name']]
-    ssh_client.check_call(cmd)
-    time.sleep(world.config['kvm_infos']['boot_timeout'])
-
-
-def is_ldap_booted():
-    ssh_client = _kvm_ssh_client()
-
-    cmd = ['virsh', 'list']
-
-    output = ssh_client.out_call(cmd)
-    for line in output.split('\n'):
-        if world.config['kvm_infos']['vm_name'] in line:
-            return True
-
-    return False

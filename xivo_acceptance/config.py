@@ -93,13 +93,6 @@ def load_config(old_config=True):
             'selenium': False,
             'linphone': False
         },
-        'kvm_infos': {
-            'hostname': 'kvm-2-dev.lan-quebec.avencall.com',
-            'login': 'root',
-            'vm_name': 'openldap-dev',
-            'boot_timeout': 30,
-            'shutdown_timeout': 5
-        },
         'prerequisites': {
             'subnets': [
                 '10.0.0.0/8',

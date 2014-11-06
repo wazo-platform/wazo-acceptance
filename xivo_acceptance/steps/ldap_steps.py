@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import after, step
+from lettuce import step
 
-from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_acceptance.action.webi import directory as directory_action_webi
-from xivo_acceptance.lettuce import assets, common, sysutils, ldap_utils
+from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_acceptance.helpers import cti_helper, directory_helper
+from xivo_acceptance.lettuce import assets, common, sysutils, ldap_utils
 
 
 @step(u'Given there is no LDAP server "([^"]*)"$')
@@ -40,7 +40,7 @@ def i_create_an_ldap_server_with_name_1_and_host_2(step, name, host):
 
 @step(u'Given there is a LDAP server with name "([^"]*)" and with host "([^"]*)"')
 def given_there_is_a_ldap_server_with_name_1_and_with_host_2(step, name, host):
-    ldap_action_webi.add_or_replace_ldap_server(name, host)
+    ldap_action_webi.add_or_replace_ldap_server(name=name, host=host)
 
 
 @step(u'I create an LDAP filter with name "([^"]*)" and server "([^"]*)"')
@@ -55,7 +55,7 @@ def i_create_an_ldap_filter_with_name_and_server(step, name, server):
 @step(u'Given there are entries in the ldap server:')
 def given_there_are_entries_in_the_ldap_server(step):
     for directory_entry in step.hashes:
-        ldap_action_webi.add_or_replace_entry(directory_entry)
+        ldap_action_webi.add_or_replace_ldap_entry(directory_entry)
 
 
 @step(u'Given the CTI directory definition is configured for LDAP searches using the ldap filter "([^"]*)"')
@@ -80,7 +80,7 @@ def given_there_s_an_ldap_server_configured_for_reverse(step):
     ldap_filter = 'openldap-dev'
     given_the_ldap_server_is_configured_for_ssl_connections(step)
     for directory_entry in step.hashes:
-        ldap_action_webi.add_or_replace_entry(directory_entry)
+        ldap_action_webi.add_or_replace_ldap_entry(directory_entry)
     _configure_display_filter()
     _configure_ldap_directory(ldap_filter)
     _add_directory_to_direct_directories()
@@ -92,7 +92,9 @@ def given_there_s_an_ldap_server_configured_for_reverse(step):
 def given_the_ldap_server_is_configured_for_ssl_connections(step):
     _copy_ca_certificate()
     _configure_ca_certificate()
-    ldap_action_webi.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com', True)
+    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
+                                                host='openldap-dev.lan-quebec.avencall.com',
+                                                ssl=True)
     ldap_action_webi.add_or_replace_ldap_filter(
         name='openldap-dev',
         server='openldap-dev',
@@ -102,7 +104,6 @@ def given_the_ldap_server_is_configured_for_ssl_connections(step):
         display_name=['cn', 'st', 'givenName'],
         phone_number=['telephoneNumber'])
     ldap_action_webi.add_ldap_filter_to_phonebook('openldap-dev')
-    _check_ldap_is_up()
 
 
 def _copy_ca_certificate():
@@ -161,25 +162,26 @@ def given_there_is_a_user_with_common_name_group1_and_password_group2_on_the_lda
         'userPassword': ldap_utils.generate_ldap_password(password)
     }
 
-    ldap_utils.add_or_replace_entry(entry)
+    ldap_utils.add_or_replace_ldap_entry(entry)
 
 
 @step(u'Given the LDAP server is configured and active')
 def given_the_ldap_server_is_configured_and_active(step):
-    ldap_action_webi.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
-    _check_ldap_is_up()
+    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
+                                                host='openldap-dev.lan-quebec.avencall.com')
 
 
 @step(u'When the LDAP service is stopped')
 def when_the_ldap_service_is_stopped(step):
-    ldap_utils.stop_ldap_server()
-    after.all(_check_ldap_is_up_after_all_scenarios)
+    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
+                                                host='openldap-dev.lan-quebec.avencall.com',
+                                                port=44443)
 
 
 @step(u'When I shut down the LDAP server')
 def when_i_shut_down_the_ldap_server(step):
-    ldap_utils.shutdown_ldap_server()
-    after.all(_check_ldap_is_up_after_all_scenarios)
+    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
+                                                host='192.169.23.14')
 
 
 def _configure_display_filter():
@@ -211,13 +213,3 @@ def _add_directory_to_direct_directories(directories=['ldapdirectory']):
         'Display',
         directories
     )
-
-
-def _check_ldap_is_up():
-    if not ldap_utils.is_ldap_booted():
-        ldap_utils.boot_ldap_server()
-    ldap_utils.start_ldap_server()
-
-
-def _check_ldap_is_up_after_all_scenarios(total):
-    _check_ldap_is_up()

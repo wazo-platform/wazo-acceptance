@@ -15,19 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
+
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
+
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import form
 from xivo_acceptance.lettuce import ldap_utils
-import time
 
 
-def type_ldap_name_and_host(name, host):
+def type_ldap_name_and_host(name, host, port):
     input_name = world.browser.find_element_by_id('it-name', 'LDAP form not loaded')
     input_host = world.browser.find_element_by_id('it-host', 'LDAP form not loaded')
+    input_port = world.browser.find_element_by_id('it-port', 'LDAP form not loaded')
     input_name.send_keys(name)
     input_host.send_keys(host)
+    input_port.send_keys(port)
 
 
 def change_to_ssl():
@@ -35,19 +39,19 @@ def change_to_ssl():
     form.select.set_select_field_with_id("it-securitylayer", "SSL")
 
 
-def add_ldap_server(name, host, ssl=False):
+def add_ldap_server(name, host, ssl=False, port=389):
     common.open_url('ldapserver', 'add')
-    type_ldap_name_and_host(name, host)
+    type_ldap_name_and_host(name, host, port)
     if ssl:
         change_to_ssl()
     form.submit.submit_form()
 
 
-def add_or_replace_ldap_server(name, host, ssl=False):
+def add_or_replace_ldap_server(name, host, ssl=False, port=389):
     if common.element_is_in_list('ldapserver', name):
         common.remove_line(name)
     time.sleep(1)
-    add_ldap_server(name, host, ssl)
+    add_ldap_server(name, host, ssl=ssl, port=port)
 
 
 def add_or_replace_ldap_filter(**args):
@@ -63,9 +67,9 @@ def add_or_replace_ldap_filter(**args):
     _add_ldap_filter(**opts)
 
 
-def add_or_replace_entry(directory_entry):
+def add_or_replace_ldap_entry(directory_entry):
     entry = _convert_directory_entry(directory_entry)
-    ldap_utils.add_or_replace_entry(entry)
+    ldap_utils.add_or_replace_ldap_entry(entry)
 
 
 def _convert_directory_entry(directory_entry):

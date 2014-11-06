@@ -18,10 +18,10 @@
 from hamcrest import assert_that, equal_to
 from lettuce import step
 
-from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_acceptance.action.webi import directory as directory_action_webi
-from xivo_acceptance.action.webi import user as user_action_webi
+from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_acceptance.action.webi import queue as queue_action_webi
+from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import context_helper, cti_helper, incall_helper
 from xivo_acceptance.lettuce import func, common
 
@@ -67,7 +67,8 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
 def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
     context_helper.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
     step.given('Given the LDAP server is configured and active')
-    ldap_action_webi.add_or_replace_ldap_server('openldap-dev', 'openldap-dev.lan-quebec.avencall.com')
+    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
+                                                host='openldap-dev.lan-quebec.avencall.com')
     ldap_action_webi.add_or_replace_ldap_filter(
         name='openldap-dev',
         server='openldap-dev',
