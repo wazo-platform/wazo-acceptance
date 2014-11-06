@@ -19,6 +19,7 @@ import re
 
 from collections import namedtuple
 from datetime import datetime, timedelta
+from email.utils import parsedate
 from xivo_acceptance.lettuce import sysutils
 
 DAEMON_LOGFILE = '/var/log/daemon.log'
@@ -128,9 +129,12 @@ def _find_all_lines_in_log_file(loginfo):
 
 
 def xivo_current_datetime():
-    command = ['date', '+%s']
+    # The main problem here is the timezone: `date` must give us the date in
+    # localtime, because the log files are using localtime dates.
+    command = ['date', '-R']
     output = sysutils.output_command(command).strip()
-    return datetime.fromtimestamp(float(output))
+    date = parsedate(output)
+    return datetime(*date[:6])
 
 
 def _search_str_in_log_file(expression, loginfo, delta=10):
