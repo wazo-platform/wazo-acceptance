@@ -22,7 +22,7 @@ from configobj import ConfigObj
 from execnet.multi import makegateway
 
 from provd.rest.client.client import new_provisioning_client
-from xivo_acceptance.lettuce.ssh import SSHClient
+from xivo_acceptance.lettuce import ssh
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_dao.helpers import config as dao_config
 import xivo_ws
@@ -173,8 +173,8 @@ class XivoAcceptanceConfig(object):
         dao_config.DB_URI = self._config['db_uri']
 
     def _setup_ssh_client(self):
-        self.ssh_client_xivo = SSHClient(hostname=self._config['xivo_host'],
-                                         login=self._config['ssh_login'])
+        self.ssh_client_xivo = ssh.SSHClient(hostname=self._config['xivo_host'],
+                                             login=self._config['ssh_login'])
 
     def _setup_rest_api(self):
         rest_config_dict = {
@@ -218,7 +218,9 @@ class XivoAcceptanceConfig(object):
         try:
             return self._execnet_gateway
         except AttributeError:
-            spec = 'ssh={login}@{host}'.format(login=self._config['ssh_login'],
-                                               host=self._config['xivo_host'])
+            options = ' '.join(ssh.SSH_OPTIONS)
+            spec = 'ssh={options} -l {login} {host}'.format(options=options,
+                                                            login=self._config['ssh_login'],
+                                                            host=self._config['xivo_host'])
             self._execnet_gateway = makegateway(spec)
             return self._execnet_gateway

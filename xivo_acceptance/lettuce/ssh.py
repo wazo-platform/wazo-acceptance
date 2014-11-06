@@ -18,6 +18,12 @@
 import subprocess
 from subprocess import PIPE, STDOUT
 
+SSH_OPTIONS = [
+    '-o', 'PreferredAuthentications=publickey',
+    '-o', 'StrictHostKeyChecking=no',
+    '-o', 'UserKnownHostsFile=/dev/null'
+]
+
 
 class SSHClient(object):
     def __init__(self, hostname, login):
@@ -98,11 +104,8 @@ class SSHClient(object):
         return stdoutdata
 
     def _format_ssh_command(self, remote_command):
-        ssh_command = ['ssh',
-                       '-o', 'PreferredAuthentications=publickey',
-                       '-o', 'StrictHostKeyChecking=no',
-                       '-o', 'UserKnownHostsFile=/dev/null',
-                       '-l', self._login,
-                       self._hostname]
+        ssh_command = ['ssh']
+        ssh_command.extend(SSH_OPTIONS)
+        ssh_command.extend(['-l', self._login, self._hostname])
         ssh_command.extend(remote_command)
         return ssh_command
