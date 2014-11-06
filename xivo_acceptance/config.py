@@ -15,11 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from __future__ import print_function
+
 import logging
 import os
+import sys
 
-from configobj import ConfigObj
 from execnet.multi import makegateway
+import yaml
 
 from provd.rest.client.client import new_provisioning_client
 from xivo_acceptance.lettuce import ssh
@@ -32,6 +35,7 @@ logger = logging.getLogger(__name__)
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 _CONFIG_DIR = (
+    os.getenv('LETTUCE_CONFIG', 'invalid_lettuce_config'),
     os.path.join(os.path.expanduser("~"), '.xivo-acceptance'),
     os.path.join(_ROOT_DIR, 'config')
 )
@@ -106,43 +110,22 @@ def load_config(old_config=True):
 
     if old_config:
         try:
-            default_config.update(load_old_config())
+            extra_config_file_path = _find_first_existing_path(*_CONFIG_DIR, suffix='default')
+            print('Using extra configuration file {}'.format(extra_config_file_path))
+            default_config.update(_parse_config_file(extra_config_file_path))
         except Exception as e:
-            print e
-
-    print 'xivo_host: %s', default_config['xivo_host']
+            print(e)
 
     return default_config
 
 
-def load_old_config():
-    config = {}
+def _parse_config_file(config_file_name):
     try:
-        default_config_file_path = _find_first_existing_path(*_CONFIG_DIR, suffix='default')
-    except Exception as e:
-        print e
-    else:
-        default_config_path = os.path.dirname(default_config_file_path)
-        print 'Using default configuration dir {}'.format(default_config_path)
-
-        config_dird = os.path.join(default_config_path, 'conf.d')
-
-        config = ConfigObj(default_config_file_path)
-
-        config_file_extra_absolute = os.getenv('LETTUCE_CONFIG', 'invalid_file_name')
-        config_file_extra_in_dird = os.path.join(config_dird, os.getenv('LETTUCE_CONFIG', 'invalid_file_name'))
-        config_file_extra_default = os.path.join(config_dird, 'default')
-        config_file_extra_local = '%s.local' % config_file_extra_default
-        config_file_extra = _find_first_existing_path(config_file_extra_absolute,
-                                                      config_file_extra_in_dird,
-                                                      config_file_extra_local,
-                                                      config_file_extra_default)
-
-        print 'Using extra configuration file {}'.format(config_file_extra)
-
-        config.update(ConfigObj(config_file_extra))
-
-    return config
+        with open(config_file_name) as config_file:
+            return yaml.load(config_file)
+    except IOError as e:
+        print('Could not read config file {}: {}'.format(config_file_name, e), file=sys.stderr)
+        return {}
 
 
 def _find_first_existing_path(*args, **kwargs):
