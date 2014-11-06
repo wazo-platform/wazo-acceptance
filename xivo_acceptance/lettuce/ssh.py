@@ -107,5 +107,5 @@ class SSHClient(object):
         ssh_command = ['ssh']
         ssh_command.extend(SSH_OPTIONS)
         ssh_command.extend(['-l', self._login, self._hostname])
-        ssh_command.extend(remote_command)
+        ssh_command.extend([s.encode('utf-8') for s in remote_command])
         return ssh_command
