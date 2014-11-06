@@ -1,9 +1,137 @@
-XiVO acceptance
-===============
+#XiVO Acceptance
 
 xivo-acceptance is a testing framework for running automated tests on a XiVO
 server. These tests are used for fixing regressions and testing features before
 releasing a new version of XiVO.
+
+
+#Install Docker
+
+To install docker on Linux :
+
+	curl -sL https://get.docker.io/ | sh
+
+ or
+
+	wget -qO- https://get.docker.io/ | sh
+
+> **Tip:** For others systems: http://docs.docker.com/installation/
+
+#Getting Started
+
+DOCKER_RUN_OPTS="--privileged -v /dev/snd:/dev/snd -v /tmp:/output xivo/acceptance"
+
+Pulling the container (also use to update the container):
+
+    docker pull xivo/acceptance
+
+Testing user/client feature is a good test.
+	
+	$XA_CMD="xivo-acceptance -v -i daily/user/client"
+    docker run -it -e XA_CMD="$XA_CMD" $DOCKER_RUN_OPTS
+
+
+##Internal Features Structure
+
+	/usr/share/xivo-acceptance/features
+	|-- daily
+	|   |-- backup
+	|   |--...
+	|   |-- user
+	|   |   |-- client.feature
+	|   |   |-- ...
+	|   |   |-- webi.feature
+	|   `-- xivo_configuration
+	|-- example
+	|   `-- example.feature
+	`-- pre_daily
+	    |-- 01_post_install
+	    `-- 02_wizard
+	    ...
+
+Launch daily features:
+
+	$XA_CMD="xivo-acceptance -v -i daily"
+
+Launch daily/webi features:
+
+	$XA_CMD="xivo-acceptance -v -i daily/webi"
+
+Launch admin_user.feature feature:
+
+	$XA_CMD="xivo-acceptance -v -i daily/webi/admin_user"
+
+##External Features
+
+    python ./bin/xivo-acceptance -e /path/to/features_dir/or/file.feature
+
+#Examples
+
+##Build
+
+To build the image, simply invoke:
+
+    docker build --rm -t xivo/acceptance https://raw.githubusercontent.com/xivo-pbx/xivo-acceptance/master/Dockerfile
+
+Or directly in the sources:
+
+    docker build --rm -t xivo/acceptance .
+
+##Usage
+
+To run the container as daemon:
+
+    docker run -dP -e XA_CMD="$XA_CMD" $DOCKER_RUN_OPTS
+
+On interactive mode:
+
+    docker run -it -e XA_CMD="$XA_CMD" $DOCKER_RUN_OPTS
+
+Mount directory quickly:
+
+    docker run -it -e XA_CMD="$XA_CMD" -v /<my_local_dir>:/<my_remote_dir> $DOCKER_RUN_OPTS
+
+Using GUI:
+
+    apt-get install xserver-xephyr
+    Xephyr -ac -br -noreset -screen 800x600 -host-cursor :1
+    DOCKER_IP=$(ifconfig docker | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
+    docker run -e DISPLAY=${DOCKER_IP}:1.0 xivo-acceptance
+
+##For developpers
+
+Add this lines to the Dockerfile file:
+
+    MAINTAINER XiVO Team "dev@avencall.com"
+    + VOLUME ["/my_git_repositories_dir/xivo-acceptance/data", "/usr/share/xivo-acceptance"]
+    + VOLUME ["/my_git_repositories_dir/xivo-acceptance/xivo_acceptance", "/usr/lib/python2.7/dist-packages/xivo_acceptance"]
+    + VOLUME ["/my_git_repositories_dir/xivo-lib-python/xivo", "/usr/lib/python2.7/dist-packages/xivo"]
+    + VOLUME ["/my_git_repositories_dir/xivo-confd/xivo_confd", "/usr/lib/python2.7/dist-packages/xivo_confd"]
+    ...
+    + CMD ["/usr/bin/true"]
+
+##Build the container
+
+    docker build --rm -t xivo/acceptance .
+
+##Run the container
+
+    docker run -it -e XA_CMD="$XA_CMD" $DOCKER_RUN_OPTS
+
+#Infos
+
+- Using docker version 1.2.0 (from get.docker.io) on ubuntu 14.04.
+- The root password is xivo by default.
+- If you want to using a simple webi to administrate docker use : https://github.com/crosbymichael/dockerui
+
+To get the IP of your container use :
+
+    docker ps -a
+    docker inspect <container_id> | grep IPAddress | awk -F\" '{print $4}'
+    
+    
+# Don't Use Docker    
+
 
 Requirements
 ============
@@ -17,6 +145,8 @@ commands to install requirements:
 Once the requirements are installed, modify the configuration files and run the prerequisite script:
 
     python ./bin/xivo-acceptance -p
+    
+
 
 XiVO Client
 -----------
@@ -58,7 +188,7 @@ Running tests
 
 Tests can be found in the ```features``` directory. You can run all tests:
 
-    PYTHONPATH=.. XC_PATH=/path/to/xivo-client-qt/bin lettuce data/features
+    PYTHONPATH=path/to/xivo_acceptance XC_PATH=/path/to/xivo-client-qt/bin lettuce data/features/daily
 
 Or only a single test file:
 
