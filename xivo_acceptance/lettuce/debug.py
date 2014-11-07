@@ -22,7 +22,8 @@ from xivo.xivo_logging import setup_logging as xivo_setup_logging
 
 loggers = {
     'selenium': logging.getLogger('selenium'),
-    'acceptance': logging.getLogger('acceptance')
+    'acceptance': logging.getLogger('acceptance'),
+    'linphone': logging.getLogger('linphone')
 }
 
 
