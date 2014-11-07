@@ -31,6 +31,7 @@ def type_ldap_name_and_host(name, host, port):
     input_port = world.browser.find_element_by_id('it-port', 'LDAP form not loaded')
     input_name.send_keys(name)
     input_host.send_keys(host)
+    input_port.clear()
     input_port.send_keys(port)
 
 
