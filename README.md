@@ -5,6 +5,24 @@ server. These tests are used for fixing regressions and testing features before
 releasing a new version of XiVO.
 
 
+#Configuration
+
+Create a yaml local configuration file in ```~/xivo-acceptance/default``` and
+redefine only options that need to be changed. Default options can be found in
+```xivo_acceptance/config.py```. Usually, you will only need to change the IP
+addresses and subnets. For example:
+
+    ;IP address of the XIVO server
+    xivo_host: 192.168.0.10
+
+    ;we need to allow access from the test machine to the server.
+    ;add a subnet that includes the test machine's IP address
+    prerequisites:
+        subnets: 
+			- 10.0.0.8/24
+			- 192.168.0.0/24
+
+
 #Install Docker
 
 To install docker on Linux :
@@ -18,6 +36,22 @@ To install docker on Linux :
 > **Tip:** For others systems: http://docs.docker.com/installation/
 
 #Getting Started
+
+##Usage
+
+    usage: xivo-acceptance [-h] [-e EXTERNAL_FEATURES] [-i INTERNAL_FEATURES] [-p]
+	                       [-v] [-x XIVO_HOST]
+	
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -e EXTERNAL_FEATURES, --external-features EXTERNAL_FEATURES
+	                        execute external features
+	  -i INTERNAL_FEATURES, --internal-features INTERNAL_FEATURES
+	                        execute finternal features
+	  -p, --prerequisite    execute prerequisite
+	  -v, --verbose         verbose mode
+	  -x XIVO_HOST, --xivo-host XIVO_HOST
+	                        xivo host
 
 DOCKER_RUN_OPTS="--privileged -v /dev/snd:/dev/snd -v /tmp:/output xivo/acceptance"
 
@@ -69,15 +103,14 @@ Launch admin_user.feature feature:
 
 ##Build
 
-To build the image, simply invoke:
+###To build the image, simply invoke:
 
     docker build --rm -t xivo/acceptance https://raw.githubusercontent.com/xivo-pbx/xivo-acceptance/master/Dockerfile
 
-Or directly in the sources:
+###Or directly in the sources:
 
     docker build --rm -t xivo/acceptance .
-
-##Usage
+	
 
 To run the container as daemon:
 
@@ -132,9 +165,7 @@ To get the IP of your container use :
 
 # Don't Use Docker
 
-
-Requirements
-============
+##Requirements
 
 We recommend running tests on a dedicated debian machine. Run the following
 commands to install requirements:
@@ -147,9 +178,7 @@ Once the requirements are installed, modify the configuration files and run the 
     python ./bin/xivo-acceptance -p
 
 
-
-XiVO Client
------------
+##XiVO Client
 
 Tests require a local copy of the [XiVO Client](http://github.com/xivo-pbx/xivo-client-qt)
 on the test machine with FUNCTESTS enabled. Here is a quick example on how to
@@ -161,8 +190,7 @@ install and compile the client:
     make FUNCTESTS=yes
 
 
-Configuration
-=============
+##Configuration
 
 Create a local configuration file in ```~/xivo-acceptance/default``` and
 redefine only options that need to be changed. Default options can be found in
@@ -183,8 +211,7 @@ addresses and subnets. For example:
 			- 192.168.0.0/24
 
 
-Running tests
-=============
+#Running tests
 
 Tests can be found in the ```features``` directory. You can run all tests:
 
@@ -192,11 +219,10 @@ Tests can be found in the ```features``` directory. You can run all tests:
 
 Or only a single test file:
 
-    PYTHONPATH=.. XC_PATH=/path/to/xivo-client-qt/bin lettuce data/features/group/group.feature
+    PYTHONPATH=path/to/xivo_acceptance XC_PATH=/path/to/xivo-client-qt/bin lettuce data/features/group/group.feature
 
 
-Documentation
-=============
+#Documentation
 
 A bit of documentation on the test framework API is available in the ```doc```
 directory.  Read ```doc/README``` for more details
