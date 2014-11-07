@@ -91,7 +91,7 @@ def load_config(old_config=True):
         'debug': {
             'acceptance': False,
             'selenium': False,
-            'linphone': False
+            'linphone': True
         },
         'prerequisites': {
             'subnets': [

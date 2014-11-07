@@ -1,3 +1,4 @@
+import logging
 import sys
 import time
 
@@ -7,6 +8,8 @@ from linphonelib import ExtensionNotFoundException
 from linphonelib import LinphoneException
 from linphonelib import Session
 from linphonelib.commands import HookStatus
+
+logger = logging.getLogger()
 
 
 class CallResult(object):
@@ -49,8 +52,8 @@ class SipPhone(object):
             self._call_result = None
         except ExtensionNotFoundException as e:
             self._call_result = e
-        except LinphoneException:
-            print 'Not the good exception'
+        except LinphoneException as e:
+            logger.exception(e)
 
     def hangup(self):
         self._session.hangup()
