@@ -89,7 +89,7 @@ def when_i_generate_call_logs_using_the_last_unprocessed_1_cel_entries(step, cel
 @step(u'When I generate call logs twice in parallel')
 def when_i_generate_call_logs_twice_in_parallel(step):
     command = ['xivo-call-logs', '&', 'xivo-call-logs']
-    world.command_output = sysutils.output_command(command)
+    world.command_output = world.ssh_client_xivo.out_err_call(command)
 
 
 @step(u'When I ask for the list of CEL via WebService:')
