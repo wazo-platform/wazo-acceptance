@@ -40,7 +40,7 @@ def given_there_is_a_config_file_group1(step, config_file_name):
 def given_i_watch_the_log_files(step):
     # wait for pending actions to be written to the logs
     time.sleep(2)
-    world.start_watching_log_time = logs.xivo_current_datetime()
+    world.start_watching_log_time = sysutils.xivo_current_datetime()
 
 
 @step(u'When I create a configfiles "([^"]*)" with content "([^"]*)"')

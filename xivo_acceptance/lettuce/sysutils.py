@@ -16,6 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
+import datetime
+
+from email.utils import parsedate
 from lettuce import world
 
 
@@ -57,6 +60,15 @@ def file_owned_by_group(path, owner):
 def get_content_file(path):
     command = ['cat', path]
     return world.ssh_client_xivo.out_call(command)
+
+
+def xivo_current_datetime():
+    # The main problem here is the timezone: `date` must give us the date in
+    # localtime, because the log files are using localtime dates.
+    command = ['date', '-R']
+    output = output_command(command).strip()
+    date = parsedate(output)
+    return datetime.datetime(*date[:6])
 
 
 def send_command(command, check=True):

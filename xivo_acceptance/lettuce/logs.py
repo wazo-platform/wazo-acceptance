@@ -116,7 +116,7 @@ def find_line_in_xivo_confd_log(delta=10):
 
 
 def _find_line_in_log_file(loginfo, delta=10):
-    min_datetime = xivo_current_datetime() - timedelta(seconds=delta)
+    min_datetime = sysutils.xivo_current_datetime() - timedelta(seconds=delta)
     loglines = get_lines_since_timestamp(min_datetime, loginfo)
     return loglines
 
@@ -126,15 +126,6 @@ def _find_all_lines_in_log_file(loginfo):
     result = sysutils.output_command(command)
     lines = result.split("\n")
     return lines
-
-
-def xivo_current_datetime():
-    # The main problem here is the timezone: `date` must give us the date in
-    # localtime, because the log files are using localtime dates.
-    command = ['date', '-R']
-    output = sysutils.output_command(command).strip()
-    date = parsedate(output)
-    return datetime(*date[:6])
 
 
 def _search_str_in_log_file(expression, loginfo, delta=10):

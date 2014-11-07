@@ -21,6 +21,7 @@ from lettuce import step, world
 
 from xivo_acceptance.action.webi import stat as stat_action_webi
 from xivo_acceptance.helpers import stat_helper, queuelog_helper
+from xivo_acceptance.lettuce import sysutils
 
 
 @step(u'^Given there are a corrupt entry in queue_log$')
@@ -56,7 +57,7 @@ def given_i_have_the_following_queue_log_entries(step):
 
 @step(u'^Given I have the following queue_log entries in the last hour:$')
 def given_i_have_to_following_queue_log_entries_in_the_last_hour(step):
-    one_hour_ago = datetime.now() - timedelta(hours=1)
+    one_hour_ago = sysutils.xivo_current_datetime() - timedelta(hours=1)
     world.beginning_of_last_hour = one_hour_ago.replace(minute=0, second=0, microsecond=0)
     for entry in step.hashes:
         entry_time = datetime.strptime(entry['time'], "%M:%S.%f")
