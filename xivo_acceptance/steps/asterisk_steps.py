@@ -15,10 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import time
-
 from hamcrest import assert_that, equal_to, contains, has_items
-from lettuce import step, world
+from lettuce import step
 from xivo_acceptance.helpers import asterisk_helper, line_helper
 from xivo_acceptance.lettuce import asterisk, sysutils, logs, common
 
@@ -68,26 +66,6 @@ def then_the_service_group1_is_running(step, service):
 def then_the_service_group1_is_no_longer_running(step, service):
     pidfile = sysutils.get_pidfile_for_service_name(service)
     assert not sysutils.is_process_running(pidfile)
-
-
-@step(u'Given I check the number of file descriptor for asterisk')
-def given_i_check_the_number_of_file_descriptor_for_asterisk(step):
-    fd_count = sysutils.get_number_of_file_descriptor('asterisk')
-    world.asterisk_fd_count = fd_count
-
-
-@step(u'When I reload the module "([^"]*)"')
-def when_i_reload_the_module(step, module):
-    ast_cmd = 'module reload %s' % module
-    command = ['asterisk', '-rx', '"%s"' % ast_cmd]
-    assert sysutils.send_command(command)
-    time.sleep(3)
-
-
-@step(u'Then I should have the same number of open file descriptor')
-def then_i_should_have_the_same_number_of_open_file_descriptor(step):
-    fd_count = sysutils.get_number_of_file_descriptor('asterisk')
-    assert_that(fd_count, equal_to(world.asterisk_fd_count), 'Number of file descriptor')
 
 
 @step(u'Then I see in the log file service restarted by monit')
