@@ -215,6 +215,11 @@ def when_i_ask_for_the_list_of_users(step):
     world.response = user_action_confd.all_users()
 
 
+@step(u'When I ask for the list of users with view "([^"]*)"$')
+def when_i_ask_for_the_list_of_users_with_view_1(step, view):
+    world.response = user_action_confd.all_users_with_view(view)
+
+
 @step(u'When I ask for the user with id "([^"]*)"$')
 def when_i_ask_for_the_user_with_id_group1(step, userid):
     world.response = user_action_confd.get_user(userid)
@@ -527,6 +532,30 @@ def then_i_get_a_list_with_the_following_users(step):
 
     for expected_user in expected_users:
         assert_that(users, has_item(has_entries(expected_user)))
+
+
+@step(u'Then I get a list containing the following users with view directory:')
+def then_i_get_a_list_with_the_following_users_with_view_directory(step):
+    user_response = world.response.data
+    expected_users = step.hashes
+
+    assert_that(user_response, has_key('items'))
+    users = user_response['items']
+
+    for expected_user in expected_users:
+        user = user_helper.get_by_firstname_lastname(expected_user['firstname'],
+                                                     expected_user['lastname'])
+        line_id = user_helper.find_line_id_for_user(user.id)
+        agent_id = user_helper.find_agent_id_for_user(user.id)
+        raw_expected_user = {}
+        raw_expected_user['id'] = user.id if expected_user['id'] == 'yes' else None
+        raw_expected_user['firstname'] = expected_user['firstname']
+        raw_expected_user['lastname'] = expected_user['lastname']
+        raw_expected_user['exten'] = expected_user['exten'] or None
+        raw_expected_user['mobile_phone_number'] = expected_user['mobile_phone_number']
+        raw_expected_user['line_id'] = line_id if expected_user['line_id'] == 'yes' else None
+        raw_expected_user['agent_id'] = agent_id if expected_user['agent_id'] == 'yes' else None
+        assert_that(users, has_item(has_entries(raw_expected_user)))
 
 
 @step(u'Then I get a user with the following parameters:')

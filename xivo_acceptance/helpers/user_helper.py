@@ -85,6 +85,11 @@ def _find_line_id_for_user(channel, user_id):
         channel.send(None)
 
 
+def find_agent_id_for_user(user_id):
+    query = 'select agentid from userfeatures where id = {user_id}'.format(user_id=user_id)
+    return postgres.exec_sql_request(query).scalar()
+
+
 def is_user_with_name_exists(firstname, lastname):
     user = user_services.find_by_firstname_lastname(firstname, lastname)
     if user is None:
