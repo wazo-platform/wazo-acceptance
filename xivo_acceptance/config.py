@@ -134,15 +134,15 @@ class XivoAcceptanceConfig(object):
 
     def __init__(self, config):
         self._config = config
-        logger.info("_setup_dao...")
+        logger.debug("_setup_dao...")
         self._setup_dao()
-        logger.info("_setup_ssh_client...")
+        logger.debug("_setup_ssh_client...")
         self._setup_ssh_client()
-        logger.info("_setup_rest_api...")
+        logger.debug("_setup_rest_api...")
         self._setup_rest_api()
-        logger.info("_setup_provd...")
+        logger.debug("_setup_provd...")
         self._setup_provd()
-        logger.info("_setup_webi...")
+        logger.debug("_setup_webi...")
         self._setup_webi()
 
     def _setup_dao(self):

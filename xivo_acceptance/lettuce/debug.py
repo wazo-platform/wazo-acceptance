@@ -28,7 +28,8 @@ loggers = {
 
 
 def setup_logging(config):
-    xivo_setup_logging(log_file=config['log_file'], foreground=True, debug=True)
+    debug = config.get('debug', {}).get('global', True)
+    xivo_setup_logging(log_file=config['log_file'], foreground=True, debug=debug)
     file_handler = logging.FileHandler(config['log_file'])
 
     for name, logger in loggers.iteritems():
