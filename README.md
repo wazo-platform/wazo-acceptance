@@ -27,8 +27,8 @@ Pulling the container (also use to update the container):
 
 Testing user/client feature is a good test.
 
-    $XA_CMD="xivo-acceptance -v -i daily/user/client"
-    docker run -it -e XA_CMD="$XA_CMD" $DOCKER_RUN_OPTS
+	XA_CMD="xivo-acceptance -v -i daily/user/client"
+    docker run -it -e XA_CMD="$XA_CMD" -e XIVO_HOST=my.xivo.host.ip $DOCKER_RUN_OPTS
 
 
 ##Internal Features Structure
@@ -178,9 +178,9 @@ addresses and subnets. For example:
     ;we need to allow access from the test machine to the server.
     ;add a subnet that includes the test machine's IP address
     prerequisites:
-        subnets:
-            - 10.0.0.8/24
-            - 192.168.0.0/24
+    	subnets:
+			- 10.0.0.8/24
+			- 192.168.0.0/24
 
 
 Running tests
