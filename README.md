@@ -9,11 +9,11 @@ releasing a new version of XiVO.
 
 To install docker on Linux :
 
-	curl -sL https://get.docker.io/ | sh
+    curl -sL https://get.docker.io/ | sh
 
  or
 
-	wget -qO- https://get.docker.io/ | sh
+    wget -qO- https://get.docker.io/ | sh
 
 > **Tip:** For others systems: http://docs.docker.com/installation/
 
@@ -26,40 +26,40 @@ Pulling the container (also use to update the container):
     docker pull xivo/acceptance
 
 Testing user/client feature is a good test.
-	
-	$XA_CMD="xivo-acceptance -v -i daily/user/client"
+
+    $XA_CMD="xivo-acceptance -v -i daily/user/client"
     docker run -it -e XA_CMD="$XA_CMD" $DOCKER_RUN_OPTS
 
 
 ##Internal Features Structure
 
-	/usr/share/xivo-acceptance/features
-	|-- daily
-	|   |-- backup
-	|   |--...
-	|   |-- user
-	|   |   |-- client.feature
-	|   |   |-- ...
-	|   |   |-- webi.feature
-	|   `-- xivo_configuration
-	|-- example
-	|   `-- example.feature
-	`-- pre_daily
-	    |-- 01_post_install
-	    `-- 02_wizard
-	    ...
+    /usr/share/xivo-acceptance/features
+    |-- daily
+    |   |-- backup
+    |   |--...
+    |   |-- user
+    |   |   |-- client.feature
+    |   |   |-- ...
+    |   |   |-- webi.feature
+    |   `-- xivo_configuration
+    |-- example
+    |   `-- example.feature
+    `-- pre_daily
+        |-- 01_post_install
+        `-- 02_wizard
+        ...
 
 Launch daily features:
 
-	$XA_CMD="xivo-acceptance -v -i daily"
+    $XA_CMD="xivo-acceptance -v -i daily"
 
 Launch daily/webi features:
 
-	$XA_CMD="xivo-acceptance -v -i daily/webi"
+    $XA_CMD="xivo-acceptance -v -i daily/webi"
 
 Launch admin_user.feature feature:
 
-	$XA_CMD="xivo-acceptance -v -i daily/webi/admin_user"
+    $XA_CMD="xivo-acceptance -v -i daily/webi/admin_user"
 
 ##External Features
 
@@ -128,9 +128,9 @@ To get the IP of your container use :
 
     docker ps -a
     docker inspect <container_id> | grep IPAddress | awk -F\" '{print $4}'
-    
-    
-# Don't Use Docker    
+
+
+# Don't Use Docker
 
 
 Requirements
@@ -145,7 +145,7 @@ commands to install requirements:
 Once the requirements are installed, modify the configuration files and run the prerequisite script:
 
     python ./bin/xivo-acceptance -p
-    
+
 
 
 XiVO Client
@@ -170,7 +170,7 @@ redefine only options that need to be changed. Default options can be found in
 addresses and subnets. For example:
 
     browser:
-    	enable: True
+        enable: True
 
     ;IP address of the XIVO server
     xivo_host: 192.168.0.10
@@ -178,9 +178,9 @@ addresses and subnets. For example:
     ;we need to allow access from the test machine to the server.
     ;add a subnet that includes the test machine's IP address
     prerequisites:
-    	subnets: 
-			- 10.0.0.8/24
-			- 192.168.0.0/24
+        subnets:
+            - 10.0.0.8/24
+            - 192.168.0.0/24
 
 
 Running tests
