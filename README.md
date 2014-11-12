@@ -192,7 +192,7 @@ install and compile the client:
 
 ##Configuration
 
-Create a local configuration file in ```~/xivo-acceptance/default``` and
+Create a local configuration file in ```~/.xivo-acceptance/default``` and
 redefine only options that need to be changed. Default options can be found in
 ```xivo_acceptance/config.py```. Usually, you will only need to change the IP
 addresses and subnets. For example:
