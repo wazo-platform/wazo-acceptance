@@ -360,15 +360,13 @@ def wait_until(function, *args, **kwargs):
     tries = kwargs.pop('tries', 1)
     return_value = False
 
-    while tries > 0 and not return_value:
+    for _ in xrange(tries):
         return_value = function(*args, **kwargs)
-        tries -= 1
+        if return_value:
+            return return_value
         time.sleep(1)
-
-    if not return_value:
+    else:
         raise Exception(message)
-
-    return return_value
 
 
 def wait_until_assert(assert_function, *args, **kwargs):
