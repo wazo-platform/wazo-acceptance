@@ -30,6 +30,14 @@ from xivo_acceptance.lettuce.logs import search_str_in_asterisk_log
 from linphonelib import ExtensionNotFoundException
 
 
+@step(u'Given there is "([^"]*)" activated in extenfeatures page')
+def given_there_is_group1_activated_in_extensions_page(step, option_label):
+    common.open_url('extenfeatures')
+    option = Checkbox.from_label(option_label)
+    option.check()
+    form.submit.submit_form()
+
+
 @step(u'When a call is started:')
 def when_a_call_is_started(step):
 
@@ -46,18 +54,6 @@ def when_a_call_is_started(step):
 
     for call_info in step.hashes:
         _call(**call_info)
-
-
-@step(u'Then I should see the following caller id:')
-def then_i_should_see_the_following_caller_id(step):
-    caller_id_info = step.hashes[0]
-    expected = [
-        {'Variable': 'xivo-calleridname',
-         'Value': caller_id_info['Name']},
-        {'Variable': 'xivo-calleridnum',
-         'Value': caller_id_info['Number']},
-    ]
-    assert_that(cti_helper.get_sheet_infos(), has_items(*expected))
 
 
 @step(u'When chan_test calls "([^"]*)"$')
@@ -162,14 +158,6 @@ def then_user_hears_a_ringback_tone(step, user):
     common.wait_until(phone.is_ringback_tone)
 
 
-@step(u'Given there is "([^"]*)" activated in extenfeatures page')
-def given_there_is_group1_activated_in_extensions_page(step, option_label):
-    common.open_url('extenfeatures')
-    option = Checkbox.from_label(option_label)
-    option.check()
-    form.submit.submit_form()
-
-
 @step(u'Then I see no recording file of this call in monitoring audio files page')
 def then_i_not_see_recording_file_of_this_call_in_monitoring_audio_files_page(step):
     now = int(time.time())
@@ -187,6 +175,18 @@ def then_i_see_rejected_call_in_asterisk_log(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     expression = "to extension '%s' rejected because extension not found in context '%s'" % (number, context)
     assert search_str_in_asterisk_log(expression)
+
+
+@step(u'Then I should see the following caller id:')
+def then_i_should_see_the_following_caller_id(step):
+    caller_id_info = step.hashes[0]
+    expected = [
+        {'Variable': 'xivo-calleridname',
+         'Value': caller_id_info['Name']},
+        {'Variable': 'xivo-calleridnum',
+         'Value': caller_id_info['Number']},
+    ]
+    assert_that(cti_helper.get_sheet_infos(), has_items(*expected))
 
 
 def _sleep(seconds):
