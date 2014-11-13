@@ -48,6 +48,8 @@ def add_queue(data):
         queue.ringing_time = data['ringing_time']
     if 'wrapuptime' in data:
         queue.wrapuptime = data['wrapuptime']
+    if 'reachability_timeout' in data:
+        queue.reachability_timeout = data['reachability_timeout']
     world.ws.queues.add(queue)
 
 

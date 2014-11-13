@@ -58,11 +58,11 @@ Feature: Stats generation
           | firstname | lastname | number | context     | agent_number | protocol |
           | User      | 004      |   1004 | statscenter | 004          | sip      |
         Given there are queues with infos:
-          | name | number | context     | agents_number |
-          | q04  | 5004   | statscenter | 004           |
-        When "User 004" calls "*31004"
+          | name | number | context     | agents_number | reachability_timeout |
+          | q04  |   5004 | statscenter |           004 |                    5 |
+        When "User 004" calls "*31004" and waits until the end
         When chan_test calls "5004@statscenter" with id "5004-1"
-        When "User 004" calls "*32004"
+        When I wait 6 seconds to exceed the redistribution timer
         When chan_test hangs up "5004-1"
         When I wait 3 seconds for the data processing
         Then I should see 1 "RINGNOANSWER" event in queue "q04" in the queue log
@@ -181,12 +181,10 @@ Feature: Stats generation
         Given there are queues with infos:
           | name | number | context     | leavewhenempty     | agents_number |
           | q10  | 5010   | statscenter | unavailable,paused | 010           |
-        When "User 010" calls "*31010"
-        When I wait 2 seconds for the calls processing
+        When "User 010" calls "*31010" and waits until the end
         When chan_test calls "5010@statscenter" with id "5010-1"
         When chan_test calls "5010@statscenter" with id "5010-2"
-        When "User 010" calls "*32010"
-        When I wait 2 seconds for the calls processing
+        When "User 010" calls "*32010" and waits until the end
         When chan_test hangs up "5010-1"
         When chan_test hangs up "5010-2"
         When I wait 3 seconds for the data processing
