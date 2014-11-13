@@ -90,8 +90,9 @@ def load_config(old_config=True):
         },
         'debug': {
             'acceptance': False,
+            'global': False,
+            'linphone': False,
             'selenium': False,
-            'linphone': True
         },
         'prerequisites': {
             'subnets': [
