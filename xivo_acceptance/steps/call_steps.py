@@ -141,25 +141,25 @@ def then_user_last_dialed_extension_was_not_found(step, name):
 @step(u'Then "([^"]*)" is ringing')
 def then_user_is_ringing(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
-    assert_that(phone.is_ringing())
+    common.wait_until(phone.is_ringing, tries=3)
 
 
 @step(u'Then "([^"]*)" is hungup')
 def then_group1_is_hungup(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
-    assert_that(phone.is_hungup())
+    common.wait_until(phone.is_hungup)
 
 
 @step(u'Then "([^"]*)" is talking')
 def then_group1_is_talking(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
-    assert_that(phone.is_talking())
+    common.wait_until(phone.is_talking)
 
 
 @step(u'Then "([^"]*)" hears a ringback tone')
 def then_user_hears_a_ringback_tone(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
-    assert_that(phone.is_ringback_tone())
+    common.wait_until(phone.is_ringback_tone)
 
 
 @step(u'Given there is "([^"]*)" activated in extenfeatures page')
