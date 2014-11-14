@@ -44,19 +44,14 @@ def main():
     if parsed_args.prerequisite:
         controller.exec_prerequisite()
 
-    if parsed_args.external_features:
-        controller.external_features(external_features=parsed_args.external_features)
-
     if parsed_args.internal_features:
         controller.internal_features(internal_features=parsed_args.internal_features)
 
 
 def _parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-e', '--external-features',
-                        help='execute external features')
     parser.add_argument('-i', '--internal-features',
-                        help='execute finternal features')
+                        help='execute internal features')
     parser.add_argument('-p', '--prerequisite', action='store_true',
                         help='execute prerequisite')
     parser.add_argument('-v', '--verbose', action='store_true',

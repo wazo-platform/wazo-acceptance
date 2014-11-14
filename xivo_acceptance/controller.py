@@ -27,8 +27,5 @@ class XiVOAcceptanceController(object):
     def exec_prerequisite(self):
         prerequisite.run()
 
-    def external_features(self, external_features):
-        self._feature_manager.exec_external_features(external_features)
-
     def internal_features(self, internal_features):
         self._feature_manager.exec_internal_features(internal_features)

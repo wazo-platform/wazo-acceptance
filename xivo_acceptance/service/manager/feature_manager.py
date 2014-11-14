@@ -19,9 +19,7 @@ from __future__ import print_function
 
 import logging
 import os
-import re
 import subprocess
-import sys
 
 
 logger = logging.getLogger(__name__)
@@ -39,16 +37,9 @@ class FeatureManager(object):
         if os.path.exists(feature_file_path):
             self._exec_lettuce_feature(feature_file_path)
         elif os.path.isdir(feature_path):
-            self.exec_external_features(feature_path)
+            self._exec_lettuce_feature(feature_path)
         else:
             raise Exception('Unknown path: %s', feature_path)
-
-    def exec_external_features(self, feature_path):
-        for feature in self._files_in(feature_path):
-            if re.match(r'.*\.feature', feature):
-                feature_file_path = os.path.join(self.config['features_dir'], feature)
-                logger.debug('External feature file found: %s', feature_file_path)
-                self._exec_lettuce_feature(feature_file_path)
 
     def _files_in(self, directory):
         for dir, _, files in os.walk(directory):
