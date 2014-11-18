@@ -41,10 +41,12 @@ _CONFIG_DIR = (
 )
 _ASSETS_DIR = (
     '/usr/share/xivo-acceptance/assets',
+    os.path.join(sys.prefix, 'share', 'xivo-acceptance', 'assets'),
     os.path.join(_ROOT_DIR, 'data', 'assets')
 )
 _FEATURES_DIR = (
     '/usr/share/xivo-acceptance/features',
+    os.path.join(sys.prefix, 'share', 'xivo-acceptance', 'features'),
     os.path.join(_ROOT_DIR, 'data', 'features')
 )
 
