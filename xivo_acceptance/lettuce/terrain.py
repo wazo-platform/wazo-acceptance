@@ -44,6 +44,7 @@ def xivo_acceptance_lettuce_before_each_scenario(scenario):
     scenario.phone_register = PhoneRegister()
     _check_webi_login_root()
     world.confd_utils_1_1.recreate_session()
+    world.xivo_acceptance_config.reset_execnet()
 
 
 @after.each_step

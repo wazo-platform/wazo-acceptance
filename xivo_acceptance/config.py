@@ -203,3 +203,9 @@ class XivoAcceptanceConfig(object):
                                                             host=self._config['xivo_host'])
             self._execnet_gateway = makegateway(spec)
             return self._execnet_gateway
+
+    def reset_execnet(self):
+        try:
+            del self._execnet_gateway
+        except AttributeError:
+            pass
