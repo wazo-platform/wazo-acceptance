@@ -206,6 +206,7 @@ class XivoAcceptanceConfig(object):
 
     def reset_execnet(self):
         try:
+            self._execnet_gateway.close()
             del self._execnet_gateway
         except AttributeError:
             pass
