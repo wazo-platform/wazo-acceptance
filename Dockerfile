@@ -36,7 +36,7 @@ RUN apt-get -qq -y install \
     iceweasel
 
 # Configure environment
-COPY docker/home/.ssh ${HOME}/.ssh
+COPY docker/.ssh ${HOME}/.ssh
 RUN chmod 600 ${HOME}/.ssh/id_rsa
 RUN mkdir ~/.xivo-acceptance
 RUN mkdir $BUILD_DIR
