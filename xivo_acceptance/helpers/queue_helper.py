@@ -50,6 +50,8 @@ def add_queue(data):
         queue.wrapuptime = data['wrapuptime']
     if 'reachability_timeout' in data:
         queue.reachability_timeout = data['reachability_timeout']
+    if 'ring_strategy' in data:
+        queue.ring_strategy = data['ring_strategy']
     world.ws.queues.add(queue)
 
 
@@ -179,6 +181,7 @@ def delete_queue_with_id(queue_id):
 def get_penalty_for_agent(queue_name, agent_id):
     query = 'SELECT penalty FROM queuemember WHERE queue_name = :queue_name AND userid = :userid AND usertype = \'agent\''
     return exec_sql_request(query, queue_name=queue_name, userid=agent_id).first()['penalty']
+
 
 def get_queue_member(queue_name, agent_id):
     query = 'SELECT * FROM queuemember WHERE queue_name = :queue_name AND userid = :userid AND usertype = \'agent\''

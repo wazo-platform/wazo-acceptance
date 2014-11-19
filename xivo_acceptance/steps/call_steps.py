@@ -77,7 +77,7 @@ def when_chan_test_calls_with_id_calleridname_calleridnum(step, extension, chann
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 
-@step(u'When chan_test hangs up "([^"]*)"$')
+@step(u'chan_test hangs up "([^"]*)"$')
 def when_chan_test_hangs_up(step, channelid):
     cmd = 'channel request hangup SIP/pouet-%s' % channelid
     asterisk_helper.send_to_asterisk_cli(cmd)

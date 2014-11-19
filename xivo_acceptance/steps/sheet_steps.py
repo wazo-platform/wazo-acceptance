@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to, has_items
-from lettuce import step, world
-from selenium.webdriver.support.select import Select
+from hamcrest import assert_that, has_items, equal_to
+from lettuce import step
 from xivo_acceptance.helpers import cti_helper
 from xivo_acceptance.lettuce import common, form
 
@@ -49,7 +48,7 @@ def given_i_have_a_sheet_model_with_custom_ui(step):
 
 @step(u'Then I see a sheet with the following values:')
 def then_i_see_a_sheet_with_the_following_values(step):
-    res = cti_helper.get_sheet_infos()
+    res = common.wait_until(cti_helper.get_sheet_infos, tries=10)
     expected = step.hashes
 
     assert_that(res, has_items(*expected))
@@ -57,8 +56,10 @@ def then_i_see_a_sheet_with_the_following_values(step):
 
 @step(u'Then I should not see any sheet')
 def then_i_should_not_see_any_sheet(step):
-    res = cti_helper.get_sheet_infos()
-    assert_that(res, equal_to([]))
+    def assert_no_sheet():
+        res = cti_helper.get_sheet_infos()
+        assert_that(res, equal_to([]))
+    common.wait_until_assert(assert_no_sheet, tries=10)
 
 
 @step(u'Then I see a custom sheet with the following values:')

@@ -163,6 +163,61 @@ Feature: Sheet
 
         Then I should not see any sheet
 
+  Scenario: Sheet on dial event sent to ringing agent when calling queue
+        Given I have a sheet model named "testsheet" with the variables:
+        | variable          |
+        | xivo-calledidname |
+        | xivo-calledidnum  |
+        Given I assign the sheet "testsheet" to the "Dial" event
+
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile | agent_number | protocol |
+         | Alice     | Gopher   |   1119 | default | Client      |         1119 | sip      |
+         | Peter     | Jenkins  |   1120 | default | Client      |         1120 | sip      |
+        Given there are queues with infos:
+         | name | number | context | agents_number | ring_strategy |
+         | cue  | 3001   | default | 1119,1120     | linear        |
+
+        Given there is an incall "3001" in context "from-extern" to the "Queue" "cue" with caller id name "Tux" number "5555555555"
+
+        When I start the XiVO Client
+        When I enable screen pop-up
+        When I log in the XiVO client as "alice", pass "gopher", logged agent
+        When chan_test calls "3001@from-extern" with id "1043-1"
+
+        Then I see a sheet with the following values:
+        | Variable          | Value |
+        | xivo-calledidname | cue   |
+        | xivo-calledidnum  | 3001  |
+
+        Then chan_test hangs up "1043-1"
+
+  Scenario: Sheet on dial event not sent to non-ringing agent when calling queue
+        Given I have a sheet model named "testsheet" with the variables:
+        | variable          |
+        | xivo-calledidname |
+        | xivo-calledidnum  |
+        Given I assign the sheet "testsheet" to the "Dial" event
+
+        Given there are users with infos:
+         | firstname | lastname | number | context | cti_profile | agent_number | protocol |
+         | Alice     | Gopher   |   1119 | default | Client      |         1119 | sip      |
+         | Peter     | Jenkins  |   1120 | default | Client      |         1120 | sip      |
+        Given there are queues with infos:
+         | name | number | context | agents_number | ring_strategy |
+         | cue  | 3001   | default | 1119,1120     | linear        |
+
+        Given there is an incall "3001" in context "from-extern" to the "Queue" "cue" with caller id name "Tux" number "5555555555"
+
+        When I log agent "1119"
+        When I start the XiVO Client
+        When I enable screen pop-up
+        When I log in the XiVO client as "peter", pass "jenkins", logged agent
+        When chan_test calls "3001@from-extern" with id "1043-2"
+
+        Then I should not see any sheet
+        Then chan_test hangs up "1043-2"
+
     Scenario: Sheet distribution of link event to a Queue
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -187,7 +242,7 @@ Feature: Sheet
         When "Alice Gopher" answers
         When I wait 1 seconds for the calls processing
         When "Alice Gopher" hangs up
-        
+
         Then I see a sheet with the following values:
         | Variable          | Value |
         | xivo-calledidname | frere |
@@ -201,7 +256,7 @@ Feature: Sheet
         When "Alice Gopher" answers
         When I wait 1 seconds for the calls processing
         When "Alice Gopher" hangs up
-        
+
         Then I should not see any sheet
 
     Scenario: Sheet distribution of link event to a Group
@@ -230,7 +285,7 @@ Feature: Sheet
         When "Alice Gopher" answers
         When I wait 1 seconds for the calls processing
         When "Alice Gopher" hangs up
-        
+
         Then I see a sheet with the following values:
         | Variable          | Value   |
         | xivo-calledidname | groupie |
@@ -271,7 +326,7 @@ Feature: Sheet
         When "Alice Gopher" answers
         When I wait 1 seconds for the calls processing
         When "Alice Gopher" hangs up
-        
+
         Then I see a sheet with the following values:
         | Variable          | Value |
         | xivo-calledidname | frere |
@@ -310,7 +365,7 @@ Feature: Sheet
         When "Alice Gopher" answers
         When I wait 1 seconds for the calls processing
         When "Alice Gopher" hangs up
-        
+
         Then I see a sheet with the following values:
         | Variable          | Value |
         | xivo-calledidname | frere |
@@ -339,7 +394,7 @@ Feature: Sheet
         When "Alice Gopher" answers
         When I wait 1 seconds for the calls processing
         When "Alice Gopher" hangs up
-        
+
         Then I should not see any sheet
 
     Scenario: Sheet distribution of dial event to a User
@@ -361,7 +416,7 @@ Feature: Sheet
         When "Alice Gopher" answers
         When I wait 1 seconds for the calls processing
         When "Alice Gopher" hangs up
-        
+
         Then I see a sheet with the following values:
         | Variable         |      Value |
         | xivo-calleridnum | 5555555555 |
@@ -399,7 +454,7 @@ Feature: Sheet
         | db-special   |
         Given I assign the sheet "testsheet" to the "Link" event
         Given there is an incall "1043" in context "from-extern" to the "User" "GreatLord MacDonnell"
-        
+
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO Client as "greatlord", pass "macdonnell"
@@ -428,13 +483,13 @@ Feature: Sheet
         Given I assign the sheet "testvariable" to the "Dial" event
         Given I start the XiVO Client
         Given I log in the XiVO client as "donald", pass "macronald"
-        
+
         When chan_test calls "1624@default" with id "1624-1" and calleridname "Donald MacRonald" and calleridnum "to_default"
         When I wait 1 seconds for the calls processing
         When "Donald MacRonald" answers
         When I wait 1 seconds for the calls processing
         When "Donald MacRonald" hangs up
-        
+
         Then I see a custom sheet with the following values:
         | widget_name       | value            |
         | testlabel         | 1624             |
@@ -461,7 +516,7 @@ Feature: Sheet
         When "Donald MacRonald" answers
         When I wait 1 seconds for the calls processing
         When "Donald MacRonald" hangs up
-        
+
         When I fill a custom sheet with the following values:
         | widget_name       | value                         |
         | checkBox          | false                         |
