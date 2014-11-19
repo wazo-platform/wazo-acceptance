@@ -65,7 +65,7 @@ def complete_queue_member_infos(infos):
     if 'agent_number' in infos:
         result['agent_id'] = agent_helper.find_agent_id_with_number(infos['agent_number'])
     else:
-        result['agent_id'] = infos['agent_id']
+        result['agent_id'] = int(infos['agent_id'])
     if 'penalty' in infos:
         result['penalty'] = int(infos['penalty'])
     return result
