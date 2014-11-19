@@ -36,7 +36,6 @@ Feature: Filter resources
         | extensions |
         | voicemails |
         | devices    |
-        | func_keys  |
         | users      |
 
     Scenario Outline: Search a list
