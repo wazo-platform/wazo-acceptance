@@ -552,7 +552,7 @@ def then_i_get_a_list_with_the_following_users_with_view_directory(step):
         raw_expected_user['firstname'] = expected_user['firstname']
         raw_expected_user['lastname'] = expected_user['lastname']
         raw_expected_user['exten'] = expected_user['exten'] or None
-        raw_expected_user['mobile_phone_number'] = expected_user['mobile_phone_number']
+        raw_expected_user['mobile_phone_number'] = expected_user['mobile_phone_number'] or None
         raw_expected_user['line_id'] = line_id if expected_user['line_id'] == 'yes' else None
         raw_expected_user['agent_id'] = agent_id if expected_user['agent_id'] == 'yes' else None
         assert_that(users, has_item(has_entries(raw_expected_user)))
