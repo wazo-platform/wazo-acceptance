@@ -15,12 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from lettuce import before, after, world
 import logging
 import os
-import sys
-
-from lettuce import before, after, world
 from selenium.common.exceptions import NoSuchElementException
+import sys
 
 from xivo_acceptance.config import XivoAcceptanceConfig, load_config
 from xivo_acceptance.helpers import asterisk_helper
@@ -158,6 +157,4 @@ def dump_current_page(filename='lettuce.html'):
         fobj.write(world.browser.page_source.encode('utf-8'))
     image_file_name = os.path.join(world.config['output_dir'], 'lettuce-dump.png')
     world.browser.save_screenshot(image_file_name)
-    print
-    print 'Debug files dumped in {}'.format(world.config['output_dir'])
-    print
+    logger.debug('Debug files dumped in {}'.format(world.config['output_dir']))
