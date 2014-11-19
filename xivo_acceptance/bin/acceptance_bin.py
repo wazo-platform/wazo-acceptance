@@ -18,6 +18,7 @@
 import argparse
 import logging
 import os
+import signal
 
 from xivo.xivo_logging import setup_logging
 from xivo_acceptance.config import load_config
@@ -29,6 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 def main():
+    _init_signal()
     parsed_args = _parse_args()
 
     if parsed_args.xivo_host:
@@ -59,3 +61,11 @@ def _parse_args():
     parser.add_argument('-x', '--xivo-host',
                         help='xivo host')
     return parser.parse_args()
+
+
+def _init_signal():
+    signal.signal(signal.SIGTERM, _handle_sigterm)
+
+
+def _handle_sigterm(signum, frame):
+    raise SystemExit()
