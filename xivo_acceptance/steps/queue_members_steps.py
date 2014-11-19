@@ -39,15 +39,18 @@ def then_i_get_a_queue_membership_with_the_following_parameters(step):
     expected_result = extract_queue_member(step.hashes[0])
     assert_that(queue_member, has_entries(expected_result))
 
+
 @step(u'When I associate the following agent:')
 def when_i_associate_the_following_agent(step):
     infos = complete_queue_member_infos(step.hashes[0])
     world.response = queue_members_action_confd.add_agent_queue_association(infos)
 
+
 @step(u'When I remove the following agent from a queue:')
 def when_i_remove_the_following_agent_from_a_queue(step):
     infos = complete_queue_member_infos(step.hashes[0])
     world.response = queue_members_action_confd.remove_agent_queue_association(infos)
+
 
 def extract_queue_member(orig):
     return {'penalty': int(orig['penalty'])}
