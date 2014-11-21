@@ -15,9 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
+
 from lettuce import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
-import time
 
 from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
 from xivo_acceptance.lettuce import common
@@ -92,11 +93,9 @@ def _find_uninstall_btn(plugin_line):
 
 
 def install_plugin(plugin_name):
-    query = {'search': '%s' % plugin_name}
-    common.open_url('provd_plugin', 'search', query)
+    common.open_url('provd_plugin')
     plugin_line = common.get_line(plugin_name)
     _install_plugin(plugin_line)
-    common.open_url('provd_plugin', 'search', {'search': ''})
 
 
 def get_latest_plugin_name(plugin_prefix):
@@ -110,8 +109,7 @@ def install_latest_plugin(plugin_prefix):
 
 
 def _get_latest_plugin_line_and_name(plugin_prefix):
-    query = {'search': '%s' % plugin_prefix}
-    common.open_url('provd_plugin', 'search', query)
+    common.open_url('provd_plugin')
     plugin_lines = common.find_lines(plugin_prefix)
 
     chosen = None
@@ -128,7 +126,6 @@ def _get_latest_plugin_line_and_name(plugin_prefix):
     if not chosen:
         raise AssertionError('no plugin with name %s' % plugin_prefix)
 
-    common.open_url('provd_plugin', 'search', {'search': ''})
     return chosen, chosen_name
 
 
