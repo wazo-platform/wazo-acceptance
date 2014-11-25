@@ -19,6 +19,7 @@ import time
 
 from hamcrest import assert_that, is_
 from lettuce import step, world
+from selenium.common.exceptions import NoSuchElementException
 
 from xivo_acceptance.action.webi import admin_user as admin_user_action_webi
 from xivo_acceptance.lettuce import urls
@@ -48,7 +49,11 @@ def when_i_create_an_admin_user_with_login_and_password(step, login, password):
 
 @step(u'When I assign the following rights to the admin user "([^"]*)":')
 def when_i_assign_the_following_rights_to_the_admin_user(step, admin):
-    admin_user_action_webi.set_privileges(admin, step.hashes)
+    try:
+        admin_user_action_webi.set_privileges(admin, step.hashes)
+    except NoSuchElementException:
+        world.dump_current_page(filename='entity')
+        raise
 
 
 @step(u'When I logout from the web interface')
