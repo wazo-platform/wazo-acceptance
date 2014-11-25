@@ -149,12 +149,14 @@ def _teardown_browser():
 
 @debug.logcall
 @world.absorb
-def dump_current_page(filename='lettuce.html'):
-    """Use this if you want to debug your test
-       Call it with world.dump_current_page()"""
-    source_file_name = os.path.join(world.config['output_dir'], 'lettuce-dump.html')
+def dump_current_page(filename='lettuce-dump'):
+    """
+    Use this if you want to debug your test.
+    Call it with world.dump_current_page().
+    """
+    source_file_name = os.path.join(world.config['output_dir'], '{file}.html'.format(file=filename))
     with open(source_file_name, 'w') as fobj:
         fobj.write(world.browser.page_source.encode('utf-8'))
-    image_file_name = os.path.join(world.config['output_dir'], 'lettuce-dump.png')
+    image_file_name = os.path.join(world.config['output_dir'], '{file}.png'.format(file=filename))
     world.browser.save_screenshot(image_file_name)
-    logger.debug('Debug files dumped in {}'.format(world.config['output_dir']))
+    logger.info('Debug files dumped in {}'.format(world.config['output_dir']))
