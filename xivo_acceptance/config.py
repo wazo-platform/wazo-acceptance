@@ -34,21 +34,21 @@ import xivo_ws
 logger = logging.getLogger(__name__)
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-_CONFIG_DIR = (
+_CONFIG_DIRS = [
     os.getenv('LETTUCE_CONFIG', 'invalid_lettuce_config'),
     os.path.join(os.path.expanduser("~"), '.xivo-acceptance'),
     os.path.join(_ROOT_DIR, 'config')
-)
-_ASSETS_DIR = (
+]
+_ASSETS_DIRS = [
     '/usr/share/xivo-acceptance/assets',
     os.path.join(sys.prefix, 'share', 'xivo-acceptance', 'assets'),
     os.path.join(_ROOT_DIR, 'data', 'assets')
-)
-_FEATURES_DIR = (
+]
+_FEATURES_DIRS = [
     '/usr/share/xivo-acceptance/features',
     os.path.join(sys.prefix, 'share', 'xivo-acceptance', 'features'),
     os.path.join(_ROOT_DIR, 'data', 'features')
-)
+]
 
 
 def load_config(old_config=True):
@@ -58,8 +58,8 @@ def load_config(old_config=True):
         'xivo_host': XIVO_HOST,
         'log_file': '/tmp/xivo-acceptance.log',
         'db_uri': 'postgresql://asterisk:proformatique@{}/asterisk'.format(XIVO_HOST),
-        'assets_dir': _find_first_existing_path(*_ASSETS_DIR),
-        'features_dir': _find_first_existing_path(*_FEATURES_DIR),
+        'assets_dir': _find_first_existing_path(_ASSETS_DIRS),
+        'features_dir': _find_first_existing_path(_FEATURES_DIRS),
         'output_dir': '/output',
         'frontend': {
             'url': 'https://{}'.format(XIVO_HOST),
@@ -106,7 +106,7 @@ def load_config(old_config=True):
 
     if old_config:
         try:
-            extra_config_file_path = _find_first_existing_path(*_CONFIG_DIR, suffix='default')
+            extra_config_file_path = _find_first_existing_path(_CONFIG_DIRS, suffix='default')
             print('Using extra configuration file {}'.format(extra_config_file_path))
             default_config.update(_parse_config_file(extra_config_file_path))
         except Exception as e:
@@ -124,13 +124,13 @@ def _parse_config_file(config_file_name):
         return {}
 
 
-def _find_first_existing_path(*args, **kwargs):
-    for path in args:
-        if 'suffix' in kwargs:
-            path = os.path.join(path, kwargs['suffix'])
-        if path and os.path.exists(path):
+def _find_first_existing_path(paths, suffix=None):
+    for path in paths:
+        if suffix:
+            path = os.path.join(path, suffix)
+        if os.path.exists(path):
             return path
-    raise Exception('Directories does not exist: %s' % ' '.join(args))
+    raise Exception('Path does not exist: %s' % ' '.join(paths))
 
 
 class XivoAcceptanceConfig(object):
