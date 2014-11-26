@@ -26,13 +26,9 @@ from xivo_acceptance.lettuce import ldap_utils
 
 
 def type_ldap_name_and_host(name, host, port):
-    input_name = world.browser.find_element_by_id('it-name', 'LDAP form not loaded')
-    input_host = world.browser.find_element_by_id('it-host', 'LDAP form not loaded')
-    input_port = world.browser.find_element_by_id('it-port', 'LDAP form not loaded')
-    input_name.send_keys(name)
-    input_host.send_keys(host)
-    input_port.clear()
-    input_port.send_keys(port)
+    form.input.set_text_field_with_id("it-name", name)
+    form.input.set_text_field_with_id("it-host", host)
+    form.input.set_text_field_with_id("it-port", str(port))
 
 
 def change_to_ssl():
