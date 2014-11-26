@@ -57,7 +57,7 @@ WORKDIR ${BUILD_DIR}
 RUN git clone git://github.com/xivo-pbx/xivo-client-qt.git
 WORKDIR xivo-client-qt
 RUN qmake
-#make with -j 2 not work 
+# make -j 2 doesn't work
 RUN make -ks DEBUG=yes FUNCTESTS=yes
 RUN mkdir $XC_PATH
 RUN mv ${BUILD_DIR}/xivo-client-qt/bin/* $XC_PATH/
