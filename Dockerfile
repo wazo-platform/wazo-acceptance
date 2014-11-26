@@ -11,6 +11,9 @@ ENV XC_PATH ${HOME}/xc_bin
 ENV PATH $PATH:/usr/lib/x86_64-linux-gnu/qt5/bin:${XC_PATH}
 ENV DATA_DIR /usr/share/xivo-acceptance
 
+RUN echo "deb http://mozilla.debian.net/ wheezy-backports iceweasel-release icedove-esr" >> /etc/apt/sources.list.d/iceweasel.list
+RUN wget "http://mozilla.debian.net/archive.asc" -O - | apt-key add -
+
 # Add dependencies
 RUN apt-get -qq update
 RUN apt-get -qq -y install \
