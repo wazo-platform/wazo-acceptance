@@ -41,11 +41,6 @@ class FeatureManager(object):
         else:
             raise Exception('Unknown path: %s', feature_path)
 
-    def _files_in(self, directory):
-        for dir, _, files in os.walk(directory):
-            for file in files:
-                yield '{dir}/{file}'.format(dir=dir, file=file)
-
     def _exec_lettuce_feature(self, feature_path):
         cmd = 'lettuce {feature_path} --with-xunit --verbosity=3 --xunit-file={output_dir}/xunit-tests.xml'.format(feature_path=feature_path,
                                                                                                                    output_dir=self.config['output_dir'])
