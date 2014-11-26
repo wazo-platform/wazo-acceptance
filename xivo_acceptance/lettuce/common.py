@@ -382,3 +382,11 @@ def wait_until_assert(assert_function, *args, **kwargs):
             time.sleep(1)
     else:
         raise Exception('\n'.join(errors))
+
+
+def wait_for_assert_failure(assert_function, *args, **kwargs):
+    tries = kwargs.pop('tries', 2)
+
+    for _ in xrange(tries):
+        assert_function(*args, **kwargs)
+        time.sleep(1)

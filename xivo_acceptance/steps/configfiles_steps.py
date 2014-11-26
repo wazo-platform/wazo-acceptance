@@ -113,14 +113,20 @@ def when_i_delete_the_config_file_group1(step, file_name):
 
 @step(u'Then the dialplan has not been reloaded in the log files')
 def then_the_dialplan_has_not_been_reloaded(step):
-    expected_command = "Asterisk command 'dialplan reload' successfully executed"
-    assert_that(_watched_log_lines(), is_not(has_item(contains_string(expected_command))))
+    def _assert():
+        expected_command = "Asterisk command 'dialplan reload' successfully executed"
+        assert_that(_watched_log_lines(), is_not(has_item(contains_string(expected_command))))
+
+    common.wait_for_assert_failure(_assert)
 
 
 @step(u'Then the dialplan has been reloaded in the log files')
 def then_the_dialplan_has_been_reloaded(step):
-    expected_command = "Asterisk command 'dialplan reload' successfully executed"
-    assert_that(_watched_log_lines(), has_item(contains_string(expected_command)))
+    def _assert():
+        expected_command = "Asterisk command 'dialplan reload' successfully executed"
+        assert_that(_watched_log_lines(), has_item(contains_string(expected_command)))
+
+    common.wait_until_assert(_assert, tries=3)
 
 
 def _watched_log_lines():
