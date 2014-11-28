@@ -63,11 +63,9 @@ def create_admin_user(username, password, entity='xivo_entity'):
 
 
 def set_privileges(username, privileges):
-    def _get_line():
-        common.open_url('admin_user', 'list')
-        return common.find_line(username, column='Login')
+    common.open_url('admin_user', 'list')
 
-    line = common.wait_until(_get_line, tries=3)
+    line = common.get_line(username)
     acl_button = line.find_element_by_xpath(".//a[@title='Rules']")
     acl_button.click()
 
