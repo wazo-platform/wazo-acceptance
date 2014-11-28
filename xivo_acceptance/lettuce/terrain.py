@@ -15,12 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import before, after, world
 import logging
 import os
-from selenium.common.exceptions import NoSuchElementException
+import tempfile
 import sys
 
+from lettuce import before, after, world
+from selenium.common.exceptions import NoSuchElementException
 from xivo_acceptance.config import XivoAcceptanceConfig, load_config
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.lettuce import asterisk
@@ -149,14 +150,22 @@ def _teardown_browser():
 
 @debug.logcall
 @world.absorb
-def dump_current_page(filename='lettuce-dump'):
+def dump_current_page(dirname='pewt'):
     """
     Use this if you want to debug your test.
     Call it with world.dump_current_page().
     """
-    source_file_name = os.path.join(world.config['output_dir'], '{file}.html'.format(file=filename))
+    if dirname is None:
+        dump_dir = tempfile.mkdtemp(prefix='lettuce-dump-', dir=world.config['output_dir'])
+    else:
+        dump_dir = os.path.join(world.config['output_dir'], dirname)
+        os.mkdir(dump_dir)
+
+    source_file_name = os.path.join(dump_dir, 'page-source.html')
     with open(source_file_name, 'w') as fobj:
         fobj.write(world.browser.page_source.encode('utf-8'))
-    image_file_name = os.path.join(world.config['output_dir'], '{file}.png'.format(file=filename))
+
+    image_file_name = os.path.join(dump_dir, 'screenshot.png')
     world.browser.save_screenshot(image_file_name)
-    logger.info('Debug files dumped in {}'.format(world.config['output_dir']))
+
+    logger.info('Debug files dumped in {}'.format(dump_dir))
