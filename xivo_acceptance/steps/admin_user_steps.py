@@ -49,11 +49,7 @@ def when_i_create_an_admin_user_with_login_and_password(step, login, password):
 
 @step(u'When I assign the following rights to the admin user "([^"]*)":')
 def when_i_assign_the_following_rights_to_the_admin_user(step, admin):
-    try:
-        admin_user_action_webi.set_privileges(admin, step.hashes)
-    except NoSuchElementException:
-        world.dump_current_page(filename='entity')
-        raise
+    admin_user_action_webi.set_privileges(admin, step.hashes)
 
 
 @step(u'When I logout from the web interface')
