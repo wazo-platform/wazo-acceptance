@@ -63,4 +63,9 @@ def _get_form_errors():
     except NoSuchElementException:
         pass
 
+    try:
+        return world.browser.find_element_by_class_name('fm-error')
+    except NoSuchElementException:
+        pass
+
     return None
