@@ -93,47 +93,15 @@ def _find_uninstall_btn(plugin_line):
 
 
 def install_plugin(plugin_name):
-    common.open_url('provd_plugin')
+    common.open_url('provd_plugin', 'search', qry={'search': plugin_name})
     plugin_line = common.get_line(plugin_name)
-    _install_plugin(plugin_line)
 
-
-def get_latest_plugin_name(plugin_prefix):
-    _, plugin_name = _get_latest_plugin_line_and_name(plugin_prefix)
-    return plugin_name
-
-
-def install_latest_plugin(plugin_prefix):
-    plugin_line, _ = _get_latest_plugin_line_and_name(plugin_prefix)
-    _install_plugin(plugin_line)
-
-
-def _get_latest_plugin_line_and_name(plugin_prefix):
-    common.open_url('provd_plugin')
-    plugin_lines = common.find_lines(plugin_prefix)
-
-    chosen = None
-    chosen_name = ''
-    for candidate in plugin_lines:
-        candidate_name = candidate.find_element_by_xpath('.//td[2]').text
-        if 'switchboard' in candidate_name:
-            # exclude switchboard plugins, which are a special case
-            continue
-        if candidate_name > chosen_name:
-            chosen = candidate
-            chosen_name = candidate_name
-
-    if not chosen:
-        raise AssertionError('no plugin with name %s' % plugin_prefix)
-
-    return chosen, chosen_name
-
-
-def _install_plugin(plugin_line):
     install_btn = _find_install_btn(plugin_line)
     if install_btn:
         install_btn.click()
         _check_for_confirmation_message(2)
+
+    common.open_url('provd_plugin', 'search', {'search': ''})
 
 
 def _find_install_btn(plugin_line):
@@ -141,6 +109,33 @@ def _find_install_btn(plugin_line):
         return plugin_line.find_element_by_xpath(".//a[@title='Install']")
     except (NoSuchElementException, ElementNotVisibleException):
         return None
+
+
+def get_latest_plugin_name(plugin_prefix):
+    candidate_names = _find_all_candidate_names(plugin_prefix)
+    # exclude switchboard plugins, which are a special case
+    candidate_names = (name for name in candidate_names if 'switchboard' not in name)
+    try:
+        chosen_name = max(name for name in candidate_names)
+    except ValueError:
+        raise AssertionError('no plugin with name %s' % plugin_prefix)
+
+    return chosen_name
+
+
+def _find_all_candidate_names(plugin_prefix):
+    common.open_url('provd_plugin', 'search', qry={'search': plugin_prefix})
+    plugin_lines = common.find_lines(plugin_prefix)
+
+    candidate_names = [candidate.find_element_by_xpath('.//td[2]').text
+                       for candidate in plugin_lines]
+    common.open_url('provd_plugin', 'search', {'search': ''})
+    return candidate_names
+
+
+def install_latest_plugin(plugin_prefix):
+    plugin_name = get_latest_plugin_name(plugin_prefix)
+    install_plugin(plugin_name)
 
 
 def install_firmware(firmware):
