@@ -378,7 +378,7 @@ def wait_until_assert(assert_function, *args, **kwargs):
             assert_function(*args, **kwargs)
             return
         except AssertionError as e:
-            errors.append(e)
+            errors.append(str(e))
             time.sleep(1)
     else:
         raise Exception('\n'.join(errors))
