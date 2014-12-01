@@ -150,7 +150,7 @@ def _teardown_browser():
 
 @debug.logcall
 @world.absorb
-def dump_current_page(dirname='pewt'):
+def dump_current_page(dirname=None):
     """
     Use this if you want to debug your test.
     Call it with world.dump_current_page().
