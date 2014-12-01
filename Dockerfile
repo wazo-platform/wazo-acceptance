@@ -49,9 +49,10 @@ RUN mkdir $OUTPUT_DIR
 # Install xivo-acceptance
 WORKDIR ${BUILD_DIR}
 ADD data/ $DATA_DIR/
-ADD setup.py requirements.txt ${BUILD_DIR}/
-ADD bin ${BUILD_DIR}/bin
-ADD xivo_acceptance ${BUILD_DIR}/xivo_acceptance
+ADD bin ${BUILD_DIR}/
+ADD xivo_acceptance ${BUILD_DIR}/
+ADD setup.py ${BUILD_DIR}/
+ADD requirements.txt ${BUILD_DIR}/
 RUN pip install -r requirements.txt
 RUN python setup.py install
 
