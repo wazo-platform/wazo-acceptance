@@ -32,11 +32,13 @@ Feature: Entity Filter
           | meetme | foo     | 4000        | 4999      | entity_filter |           |
           | incall | alberta | 1000        | 4999      | entity_filter | 4         |
 
+        Given the latest plugin "xivo-aastra" is installed
+
         Given I have the following devices:
-          | id               | ip             | mac               | plugin                | model | vendor |
-          | 1654324689546241 | 192.168.32.101 | 00:00:00:df:ef:01 | xivo-aastra-3.3.1-SP2 | 6757i | Aastra |
-          | 1654324689546242 | 192.168.32.102 | 00:00:00:df:ef:02 | xivo-aastra-3.3.1-SP2 | 6757i | Aastra |
-          | 1654324689546243 | 192.168.32.103 | 00:00:00:df:ef:03 | xivo-aastra-3.3.1-SP2 | 6757i | Aastra |
+          |               id |             ip | mac               | latest plugin of | model | vendor |
+          | 1654324689546241 | 192.168.32.101 | 00:00:00:df:ef:01 | xivo-aastra      | 6757i | Aastra |
+          | 1654324689546242 | 192.168.32.102 | 00:00:00:df:ef:02 | xivo-aastra      | 6757i | Aastra |
+          | 1654324689546243 | 192.168.32.103 | 00:00:00:df:ef:03 | xivo-aastra      | 6757i | Aastra |
 
         Given there are users with infos:
           | firstname      | lastname | number | context | entity_name   | bsfilter  | device            |
