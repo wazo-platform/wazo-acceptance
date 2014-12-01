@@ -25,7 +25,6 @@ RUN apt-get -qq -y install \
     python-dev \
     libyaml-dev \
     libpq-dev \
-    vim \
     curl \
     net-tools \
     libsasl2-dev \
@@ -48,11 +47,11 @@ RUN mkdir $OUTPUT_DIR
 
 # Install xivo-acceptance
 WORKDIR ${BUILD_DIR}
-ADD data/ $DATA_DIR/
-ADD bin ${BUILD_DIR}/
-ADD xivo_acceptance ${BUILD_DIR}/
-ADD setup.py ${BUILD_DIR}/
-ADD requirements.txt ${BUILD_DIR}/
+ADD data $DATA_DIR/data
+ADD bin ${BUILD_DIR}/bin
+ADD xivo_acceptance ${BUILD_DIR}/xivo_acceptance
+ADD setup.py ${BUILD_DIR}/setup.py
+ADD requirements.txt ${BUILD_DIR}/requirements.txt
 RUN pip install -r requirements.txt
 RUN python setup.py install
 
