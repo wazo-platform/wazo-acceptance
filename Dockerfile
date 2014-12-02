@@ -49,7 +49,6 @@ ADD setup.py /acceptance/setup.py
 ADD requirements.txt /acceptance/requirements.txt
 
 WORKDIR /acceptance
-RUN ls -la
 RUN pip install -r requirements.txt
 RUN python setup.py install
 
