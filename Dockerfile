@@ -5,11 +5,7 @@ MAINTAINER XiVO Team "dev@avencall.com"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /root
-ENV OUTPUT_DIR /output
-ENV BUILD_DIR ${HOME}/build
-ENV XC_PATH ${HOME}/xc_bin
-ENV PATH $PATH:/usr/lib/x86_64-linux-gnu/qt5/bin:${XC_PATH}
-ENV DATA_DIR /usr/share/xivo-acceptance
+ENV PATH $PATH:/usr/lib/x86_64-linux-gnu/qt5/bin:/acceptance/xc_bin
 
 RUN echo "deb http://mozilla.debian.net/ wheezy-backports iceweasel-release icedove-esr" >> /etc/apt/sources.list.d/iceweasel.list
 RUN wget "http://mozilla.debian.net/archive.asc" -O - | apt-key add -
@@ -38,40 +34,38 @@ RUN apt-get -qq -y install \
     iceweasel
 
 # Configure environment
-COPY docker/.ssh ${HOME}/.ssh
-RUN chmod 600 ${HOME}/.ssh/id_rsa
+ADD docker/.ssh /root/.ssh
+RUN chmod 600 /root/.ssh/id_rsa
 RUN mkdir ~/.xivo-acceptance
-RUN mkdir $BUILD_DIR
-RUN mkdir $DATA_DIR
-RUN mkdir $OUTPUT_DIR
+RUN mkdir /acceptance
+RUN mkdir /acceptance/xc_bin/
+RUN mkdir /usr/share/xivo-acceptance
 
 # Install xivo-acceptance
-WORKDIR ${BUILD_DIR}
-ADD data $DATA_DIR/data
-ADD bin ${BUILD_DIR}/bin
-ADD xivo_acceptance ${BUILD_DIR}/xivo_acceptance
-ADD setup.py ${BUILD_DIR}/setup.py
-ADD requirements.txt ${BUILD_DIR}/requirements.txt
+ADD data /usr/share/xivo-acceptance/data
+ADD bin /acceptance/bin
+ADD xivo_acceptance /acceptance/xivo_acceptance
+ADD setup.py /acceptance/setup.py
+ADD requirements.txt /acceptance/requirements.txt
+
+WORKDIR /acceptance
+RUN ls -la
 RUN pip install -r requirements.txt
 RUN python setup.py install
 
 # Install CTIClient
-WORKDIR ${BUILD_DIR}
 RUN git clone git://github.com/xivo-pbx/xivo-client-qt.git
 WORKDIR xivo-client-qt
 RUN qmake
 # make -j 2 doesn't work
 RUN make -ks DEBUG=yes FUNCTESTS=yes
-RUN mkdir $XC_PATH
-RUN mv ${BUILD_DIR}/xivo-client-qt/bin/* $XC_PATH/
+RUN rsync -av /acceptance/xivo-client-qt/bin/ /acceptance/xc_bin/
 
 # Clean
-WORKDIR ${HOME}
 RUN apt-get clean
-RUN apt-get autoclean
-RUN rm -rf $BUILD_DIR
+RUN apt-get -y autoremove
 
 # RUN
-ADD docker/run.sh ${HOME}/run.sh
-RUN chmod +x ${HOME}/run.sh
-CMD ${HOME}/run.sh
+ADD docker/run.sh /acceptance/run.sh
+RUN chmod +x /acceptance/run.sh
+CMD /acceptance/run.sh
