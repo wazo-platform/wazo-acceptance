@@ -42,9 +42,9 @@ RUN mkdir /acceptance/xc_bin/
 RUN mkdir /usr/share/xivo-acceptance
 
 # Install xivo-acceptance
-ADD data /usr/share/xivo-acceptance/data
-ADD bin /acceptance/bin
-ADD xivo_acceptance /acceptance/xivo_acceptance
+ADD data/ /usr/share/xivo-acceptance/
+ADD bin/ /acceptance/bin/
+ADD xivo_acceptance/ /acceptance/xivo_acceptance/
 ADD setup.py /acceptance/setup.py
 ADD requirements.txt /acceptance/requirements.txt
 
