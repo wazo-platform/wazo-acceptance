@@ -5,7 +5,8 @@ MAINTAINER XiVO Team "dev@avencall.com"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /root
-ENV PATH $PATH:/usr/lib/x86_64-linux-gnu/qt5/bin:/acceptance/xc_bin
+ENV XC_PATH /acceptance/xc_bin
+ENV PATH $PATH:/usr/lib/x86_64-linux-gnu/qt5/bin:$XC_PATH
 
 RUN echo "deb http://mozilla.debian.net/ wheezy-backports iceweasel-release icedove-esr" >> /etc/apt/sources.list.d/iceweasel.list
 RUN wget "http://mozilla.debian.net/archive.asc" -O - | apt-key add -
