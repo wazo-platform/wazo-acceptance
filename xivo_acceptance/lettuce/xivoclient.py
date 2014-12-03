@@ -15,20 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import logging
-
-import os
-import subprocess
-import socket
-import json
-import time
 import errno
+import json
+import logging
+import os
+import pprint
+import socket
+import subprocess
+import time
 import uuid
 
-import pprint
 from lettuce import before, after, world
 
-logger = logging.getLogger('acceptance')
+
+logger = logging.getLogger('cticlient')
 
 
 class XivoClient(object):

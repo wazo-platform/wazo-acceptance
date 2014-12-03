@@ -9,7 +9,7 @@ from linphonelib import LinphoneException
 from linphonelib import Session
 from linphonelib.commands import HookStatus
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('linphone')
 
 
 class CallResult(object):
