@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import re
-
 from collections import namedtuple
 from datetime import datetime, timedelta
-from email.utils import parsedate
+import re
+
 from xivo_acceptance.lettuce import sysutils
+
 
 DAEMON_LOGFILE = '/var/log/daemon.log'
 ASTERISK_LOGFILE = '/var/log/asterisk/messages'
