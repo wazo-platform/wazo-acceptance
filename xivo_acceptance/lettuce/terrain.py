@@ -151,20 +151,17 @@ def _teardown_browser():
 
 @debug.logcall
 @world.absorb
-def dump_current_page(dirname=None):
+def dump_current_page(dirname='lettuce-dump-'):
     """
     Use this if you want to debug your test.
     Call it with world.dump_current_page().
     """
-    if dirname is None:
-        dump_dir = tempfile.mkdtemp(prefix='lettuce-dump-', dir=world.config['output_dir'])
-    else:
-        dump_dir = os.path.join(world.config['output_dir'], dirname)
-        try:
-            os.mkdir(dump_dir)
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
+    dump_dir = tempfile.mkdtemp(prefix=dirname, dir=world.config['output_dir'])
+    try:
+        os.mkdir(dump_dir)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
 
     source_file_name = os.path.join(dump_dir, 'page-source.html')
     with open(source_file_name, 'w') as fobj:
