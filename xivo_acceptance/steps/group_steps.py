@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step
+from lettuce import step, world
 
 from xivo_acceptance.action.webi import group as group_action_webi
 from xivo_acceptance.helpers import user_helper, group_helper
