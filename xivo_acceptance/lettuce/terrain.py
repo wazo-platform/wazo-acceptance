@@ -157,11 +157,6 @@ def dump_current_page(dirname='lettuce-dump-'):
     Call it with world.dump_current_page().
     """
     dump_dir = tempfile.mkdtemp(prefix=dirname, dir=world.config['output_dir'])
-    try:
-        os.mkdir(dump_dir)
-    except OSError as e:
-        if e.errno != errno.EEXIST:
-            raise
 
     source_file_name = os.path.join(dump_dir, 'page-source.html')
     with open(source_file_name, 'w') as fobj:
