@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import errno
 import logging
 import os
 import tempfile
@@ -159,7 +160,11 @@ def dump_current_page(dirname=None):
         dump_dir = tempfile.mkdtemp(prefix='lettuce-dump-', dir=world.config['output_dir'])
     else:
         dump_dir = os.path.join(world.config['output_dir'], dirname)
-        os.mkdir(dump_dir)
+        try:
+            os.mkdir(dump_dir)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
 
     source_file_name = os.path.join(dump_dir, 'page-source.html')
     with open(source_file_name, 'w') as fobj:
