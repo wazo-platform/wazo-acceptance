@@ -308,6 +308,7 @@ def remove_line(line_substring, column=None):
 
 def click_on_line_with_alert(act, line_substring, column=None):
     table_line = get_line(line_substring, column)
+    table_line.click()  # prevent the mouse from hovering on the add/arrow icons top right
     delete_button = table_line.find_element_by_xpath(".//a[@title='%s']" % act)
     delete_button.click()
     alert = world.browser.switch_to_alert()
