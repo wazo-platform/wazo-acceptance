@@ -69,9 +69,10 @@ def when_i_install_the_latest_plugin_group1(step, plugin):
     provdp_action_webi.install_latest_plugin(plugin)
 
 
-@step(u'When I install the "([^"]*)" firmware')
-def when_i_install_the_group1_firmware(step, firmware):
-    provdp_action_webi.install_firmware(firmware)
+@step(u'When I install the "([^"]*)" firmware for the latest plugin "([^"]*)"$')
+def when_i_install_the_group1_firmware(step, firmware, plugin_prefix):
+    plugin_name = provdp_action_webi.get_latest_plugin_name(plugin_prefix)
+    provdp_action_webi.install_firmware(plugin_name, firmware)
 
 
 @step(u'Then plugins list successfully updated')

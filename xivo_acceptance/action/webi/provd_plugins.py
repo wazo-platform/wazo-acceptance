@@ -138,7 +138,12 @@ def install_latest_plugin(plugin_prefix):
     install_plugin(plugin_name)
 
 
-def install_firmware(firmware):
+def edit_plugin(plugin_name):
+    common.open_url('provd_plugin', 'edit', qry={'id': plugin_name})
+
+
+def install_firmware(plugin, firmware):
+    edit_plugin(plugin)
     firmware_line = _find_firmware_line(firmware)
     install_btn = firmware_line.find_element_by_xpath(".//a[@title='Install']")
     install_btn.click()
