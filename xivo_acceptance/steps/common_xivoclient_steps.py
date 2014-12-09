@@ -22,7 +22,7 @@ from lettuce import step
 
 from xivo_acceptance.helpers import user_helper, cti_helper
 from xivo_acceptance.lettuce import common
-from xivo_acceptance.lettuce.xivoclient import start_xivoclient, stop_xivoclient
+from xivo_acceptance.lettuce import xivoclient
 
 
 @step(u'I log in the XiVO Client as "([^"]*)", pass "([^"]*)"$')
@@ -65,27 +65,32 @@ def when_i_restart_the_cti_server(step):
 
 @step(u'I start the XiVO Client$')
 def i_start_the_xivo_client(step):
-    start_xivoclient()
+    xivoclient.start_xivoclient()
 
 
 @step(u'When I start the XiVO Client "([^"]*)"$')
 def i_start_the_xivo_client_xxx(step, instance_name):
-    start_xivoclient('', name=instance_name)
+    xivoclient.start_xivoclient(name=instance_name)
+
+
+@step(u'When I start the XiVO Client "([^"]*)" with errors$')
+def i_start_the_xivo_client_xxx_with_errors(step, instance_name):
+    xivoclient.start_xivoclient_with_errors(name=instance_name)
 
 
 @step(u'When I start the XiVO Client with an argument "([^"]*)"$')
 def i_start_the_xivo_client_with_an_argument(step, argument):
-    start_xivoclient(argument)
+    xivoclient.start_xivoclient(argument)
 
 
 @step(u'When I stop the XiVO client$')
 def when_i_stop_the_xivo_client(step):
-    stop_xivoclient()
+    xivoclient.stop_xivoclient()
 
 
 @step(u'When I stop the XiVO client "([^"]*)"$')
 def when_i_stop_the_xivo_client_xxx(step, instance_name):
-    stop_xivoclient(instance_name)
+    xivoclient.stop_xivoclient(instance_name)
 
 
 @step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')

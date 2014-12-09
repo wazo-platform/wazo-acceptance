@@ -115,5 +115,5 @@ Feature: CTI Client Configuration
         When I stop the XiVO Client "toto"
         When I stop the XiVO Client "default"
         When I start the XiVO Client "default"
-        When I start the XiVO Client "toto"
+        When I start the XiVO Client "toto" with errors
         Then I have "1" instances of the client

@@ -22,11 +22,10 @@ import os
 import pprint
 import socket
 import subprocess
-import time
 import uuid
 
 from lettuce import before, after, world
-
+from xivo_acceptance.lettuce import common
 
 logger = logging.getLogger('cticlient')
 
@@ -52,16 +51,19 @@ class XivoClient(object):
 
     def start(self):
         self.launch()
-        # Waiting for the listening socket to open
-        time.sleep(1)
-        return self.listen_socket()
+        common.wait_until(self.listen_socket, tries=3, message='Error while connecting to the xivoclient socket')
+
+    def is_running(self):
+        return self.process is not None and self.process.poll() is None
 
     def stop(self):
         logger.debug('-------------------- STOP CLIENT ---------------------')
-        self.process.terminate()
-        self.process = None
-        self.socket.close()
-        self.socket = None
+        if self.is_running():
+            self.process.terminate()
+            self.process = None
+        if self.socket:
+            self.socket.close()
+            self.socket = None
         try:
             logger.debug('-------------------- REMOVE SOCKET %s ---------------------', self.socket_path)
             os.remove(self.socket_path)
@@ -69,11 +71,7 @@ class XivoClient(object):
             pass
 
     def clean(self):
-        try:
-            self.process.poll()
-        except AttributeError:
-            pass
-        if self.process.returncode is None:
+        if self.is_running():
             self.exec_command('i_stop_the_xivo_client')
         self.stop()
 
@@ -155,9 +153,8 @@ def setup_xivoclient_rc(scenario):
 
 @after.each_scenario
 def clean_xivoclient_rc(scenario):
-    if world.xc_process_dict:
-        for xc_name in world.xc_process_dict.iterkeys():
-            world.xc_process_dict[xc_name].clean()
+    for instance in world.xc_process_dict.itervalues():
+        instance.clean()
 
 
 def exec_command(cmd, *kargs):
@@ -167,13 +164,29 @@ def exec_command(cmd, *kargs):
 def start_xivoclient(argument='', name='default'):
     if name not in world.xc_process_dict:
         client_obj = XivoClient(argument, name=name)
-        if client_obj.start():
-            world.xc_process_dict[name] = client_obj
-            if name == 'default':
-                world.xc_instance = world.xc_process_dict[name]
+        client_obj.start()
+        _add_new_instance(name, client_obj)
+
+
+def start_xivoclient_with_errors(argument='', name='default'):
+    if name not in world.xc_process_dict:
+        client_obj = XivoClient(argument, name=name)
+        try:
+            client_obj.start()
+        except Exception:
+            logger.info('got an expected error when starting xivo client')
+            client_obj.clean()
+        else:
+            _add_new_instance(name, client_obj)
 
 
 def stop_xivoclient(name='default'):
     if name in world.xc_process_dict:
         world.xc_process_dict[name].stop()
         del world.xc_process_dict[name]
+
+
+def _add_new_instance(name, instance):
+    world.xc_process_dict[name] = instance
+    if name == 'default':
+        world.xc_instance = instance
