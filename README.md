@@ -170,7 +170,7 @@ To get the IP of your container use :
 We recommend running tests on a dedicated debian machine. Run the following
 commands to install requirements:
 
-    apt-get install libsasl2-dev xvfb xserver-xephyr linphone-nogtk python-dev postgresql-server-dev-9.1 libldap2-dev lsof
+    apt-get install libsasl2-dev xvfb xserver-xephyr linphone-nogtk python-dev postgresql-server-dev-all libldap2-dev lsof
     pip install -r requirements.txt
 
 Once the requirements are installed, modify the configuration files and run the prerequisite script:
