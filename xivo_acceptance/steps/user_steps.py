@@ -15,7 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
+from hamcrest import assert_that
+from hamcrest import equal_to
+from hamcrest import has_entries
+from hamcrest import has_entry
+from hamcrest import has_key
+from hamcrest import has_item
+from hamcrest import instance_of
+from hamcrest import is_not
+from hamcrest import none
 from lettuce import step
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
