@@ -15,13 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
-from lettuce import step, world
 from StringIO import StringIO
 
+from hamcrest import *
+from lettuce import step, world
 from xivo.unicode_csv import UnicodeDictReader
+
 from xivo_acceptance.action.confd import call_logs_action_confd
 from xivo_acceptance.action.webi import call_logs as call_logs_action_webi
+from xivo_acceptance.action.webi import common as common_action_webi
 from xivo_acceptance.helpers import call_logs_helper, cel_helper
 from xivo_acceptance.lettuce import assets, common, form, sysutils
 
@@ -77,6 +79,7 @@ def when_i_request_call_logs_in_the_webi_with_dates(step):
     common.open_url('cel')
     form_info = step.hashes[0]
     call_logs_action_webi.type_dates(form_info['start'], form_info['end'])
+    common_action_webi.reset_focus()
     form.submit.submit_form()
 
 
