@@ -119,6 +119,20 @@ class XiVOBrowser(webdriver.Firefox):
     def find_element_by_xpath(self, xpath, message='', timeout=None):
         return self.find_element(By.XPATH, xpath, message, timeout)
 
+    def find_element_by_class_name(self, xpath, message='', timeout=None):
+        return self.find_element(By.CLASS_NAME, xpath, message, timeout)
+
+    def find_element_by_css_selector(self, xpath, message='', timeout=None):
+        return self.find_element(By.CSS_SELECTOR, xpath, message, timeout)
+
+    def find_element_by_label(self, label):
+        """Finds the first element corresponding to the label containing the argument."""
+        webelement_label = self.find_element_by_xpath(
+            "//label[text() = '%s' or text() = '%s:']" % (label, label))
+        webelement_id = webelement_label.get_attribute('for')
+        webelement = self.find_element_by_id(webelement_id)
+        return webelement
+
     def find_elements(self, by=By.ID, value=None, message='', timeout=None):
         """This function is called by all find_element_by_*().
            This implementation adds a timeout to search for Webelements."""
@@ -134,16 +148,17 @@ class XiVOBrowser(webdriver.Firefox):
 
         return webdriver.Firefox.find_elements(self, by, value)
 
+    def find_elements_by_id(self, xpath, message='', timeout=None):
+        return self.find_elements(By.ID, xpath, message, timeout)
+
     def find_elements_by_xpath(self, xpath, message='', timeout=None):
         return self.find_elements(By.XPATH, xpath, message, timeout)
 
-    def find_element_by_label(self, label):
-        """Finds the first element corresponding to the label containing the argument."""
-        webelement_label = self.find_element_by_xpath(
-            "//label[text() = '%s' or text() = '%s:']" % (label, label))
-        webelement_id = webelement_label.get_attribute('for')
-        webelement = self.find_element_by_id(webelement_id)
-        return webelement
+    def find_elements_by_css_selector(self, xpath, message='', timeout=None):
+        return self.find_elements(By.CSS_SELECTOR, xpath, message, timeout)
+
+    def find_elements_by_tag_name(self, xpath, message='', timeout=None):
+        return self.find_elements(By.TAG_NAME, xpath, message, timeout)
 
     def find_elements_by_label(self, label):
         """Finds all elements corresponding to the labels containing the argument."""

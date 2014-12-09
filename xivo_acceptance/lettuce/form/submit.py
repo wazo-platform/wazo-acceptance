@@ -54,17 +54,17 @@ def assert_no_form_errors(dump_current_page=False):
 
 def _get_form_errors():
     try:
-        return world.browser.find_element_by_id('report-xivo-error')
+        return world.browser.find_element_by_id('report-xivo-error', timeout=1)
     except NoSuchElementException:
         pass
 
     try:
-        return world.browser.find_element_by_class_name('fm-txt-error')
+        return world.browser.find_element_by_class_name('fm-txt-error', timeout=1)
     except NoSuchElementException:
         pass
 
     try:
-        return world.browser.find_element_by_class_name('fm-error')
+        return world.browser.find_element_by_class_name('fm-error', timeout=1)
     except NoSuchElementException:
         pass
 
