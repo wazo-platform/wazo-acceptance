@@ -423,7 +423,7 @@ def when_i_modify_the_extension_of_user_name_to_extension(step, firstname, lastn
 
 
 @step(u'When I modify the extension of user "([^"]*)" "([^"]*)" to "([^"]*)" with errors$')
-def when_i_modify_the_extension_of_user_name_to_extension(step, firstname, lastname, new_extension):
+def when_i_modify_the_extension_of_user_name_to_extension_with_errors(step, firstname, lastname, new_extension):
     _edit_user(firstname, lastname)
     user_action_webi.type_line_number(new_extension)
     form.submit.submit_form_with_errors()
