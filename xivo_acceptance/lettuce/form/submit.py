@@ -54,7 +54,7 @@ def assert_no_form_errors(dump_current_page=False):
 
 def _get_form_errors():
     try:
-        return world.browser.find_element_by_id('report-xivo-error', timeout=1)
+        return world.browser.find_element_by_id('report-xivo-error', timeout=3)
     except NoSuchElementException:
         pass
 
