@@ -1,0 +1,2 @@
+nose
+git+git://github.com/xivo-pbx/xivo-ws.git
