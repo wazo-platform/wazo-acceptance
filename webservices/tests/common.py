@@ -15,14 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_acceptance import config
+import os
+
 import xivo_ws
 
 
-config = config.load_config()
-xivo_server_ws = xivo_ws.XivoServer(host=config['xivo_host'],
-                                    username=config['rest_api']['username'],
-                                    password=config['rest_api']['passwd'])
+XIVO_HOST = os.environ.get('XIVO_HOST', 'daily-xivo-pxe.lan-quebec.avencall.com')
+XIVO_CONFD_PORT = os.environ.get('XIVO_CONFD_PORT', 9486)
+XIVO_CONFD_USERNAME = os.environ.get('XIVO_CONFD_USERNAME', 'admin')
+XIVO_CONFD_PASSWORD = os.environ.get('XIVO_CONFD_PASSWORD', 'proformatique')
+
+
+xivo_server_ws = xivo_ws.XivoServer(host=XIVO_HOST,
+                                    username=XIVO_CONFD_USERNAME,
+                                    password=XIVO_CONFD_PASSWORD)
 
 
 def delete_with_id(obj, id_to_delete):
