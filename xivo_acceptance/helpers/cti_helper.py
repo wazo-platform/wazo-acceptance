@@ -236,6 +236,10 @@ def get_menu_availability_infos():
     return xivoclient.exec_command('get_menu_availability_infos')['return_value']
 
 
+def set_presence(state):
+    return xivoclient.exec_command('set_menu_availability', state)
+
+
 def get_main_window_infos():
     return xivoclient.exec_command('get_main_window_infos')['return_value']
 
