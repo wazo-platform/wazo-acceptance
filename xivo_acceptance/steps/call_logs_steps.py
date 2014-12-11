@@ -16,15 +16,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from StringIO import StringIO
-
-from hamcrest import *
+from datetime import timedelta
+from hamcrest import all_of
+from hamcrest import any_of
+from hamcrest import assert_that
+from hamcrest import ends_with
+from hamcrest import equal_to
+from hamcrest import greater_than
+from hamcrest import has_entries
+from hamcrest import has_item
+from hamcrest import has_length
+from hamcrest import has_property
 from lettuce import step, world
+from time import strptime
+
 from xivo.unicode_csv import UnicodeDictReader
 
 from xivo_acceptance.action.confd import call_logs_action_confd
 from xivo_acceptance.action.webi import call_logs as call_logs_action_webi
 from xivo_acceptance.action.webi import common as common_action_webi
 from xivo_acceptance.helpers import call_logs_helper, cel_helper
+from xivo_acceptance.helpers.datetime_helper import close_to
 from xivo_acceptance.lettuce import assets, common, form, sysutils
 
 
@@ -127,10 +139,20 @@ def then_i_should_have_the_following_call_logs(step):
 
 @step(u'Then I have the last call log matching:')
 def then_i_have_the_last_call_log_matching(step):
-    entry = step.hashes[0]
-    common.wait_until(call_logs_helper.matches_last_call_log, entry,
-                      tries=5,
-                      message="The last call_log entry did not match : %s" % entry)
+    expected = dict(step.hashes[0])
+    expected_duration_str = expected.pop('duration', None)
+
+    def _assert():
+        actual = call_logs_helper.get_last_call_log()
+        assert_that(actual, has_entries(expected))
+        if expected_duration_str:
+            expected_time = strptime(expected_duration_str, "%H:%M:%S")
+            expected_duration = timedelta(hours=expected_time.tm_hour,
+                                          minutes=expected_time.tm_min,
+                                          seconds=expected_time.tm_sec)
+            assert_that(actual['duration'], close_to(expected_duration, timedelta(seconds=2)))
+
+    common.wait_until_assert(_assert, tries=5)
 
 
 @step(u'Then I should not have the following call logs:')
