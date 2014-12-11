@@ -59,9 +59,7 @@ def create_admin_user(username, password, entity='xivo_entity'):
     form.input.set_text_field_with_label("login", username)
     form.input.set_text_field_with_label("password", password)
     form.select.set_select_field_with_label("Entity", entity)
-    world.dump_current_page('admin-user-before')
     form.submit.submit_form()
-    world.dump_current_page('admin-user-after')
 
 
 def set_privileges(username, privileges):

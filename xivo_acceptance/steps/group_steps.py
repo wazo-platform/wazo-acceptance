@@ -94,9 +94,7 @@ def given_there_is_a_group_with_n_users(step, group_size):
 def when_i_create_group_with_number(step, group_name, group_number):
     common.open_url('group', 'add')
     _type_group_name_number_context(group_name, group_number)
-    world.dump_current_page('group-before')
     form.submit.submit_form()
-    world.dump_current_page('group-after')
 
 
 @step(u'When I create a group "([^"]*)" with number "([^"]*)" with errors')
