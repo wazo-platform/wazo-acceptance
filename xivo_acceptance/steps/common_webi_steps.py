@@ -15,8 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step
-from selenium.common.exceptions import NoSuchElementException
+from lettuce import step, world
 
 from xivo_acceptance.lettuce import common, form
 
@@ -24,13 +23,21 @@ from xivo_acceptance.lettuce import common, form
 @step(u'Then ([a-z ]*) "([^"]*)" is displayed in the list$')
 def then_value_is_displayed_in_the_list(step, module, search):
     query = {'search': search.encode('utf-8')}
-    assert common.element_is_in_list(module, search, query)
+    try:
+        assert common.element_is_in_list(module, search, query)
+    except AssertionError:
+        world.dump_current_page()
+        raise
 
 
 @step(u'Then ([a-z ]*) "([^"]*)" is not displayed in the list$')
 def then_value_is_not_displayed_in_the_list(step, module, search):
     query = {'search': search.encode('utf-8')}
-    assert common.element_is_not_in_list(module, search, query)
+    try:
+        assert common.element_is_not_in_list(module, search, query)
+    except AssertionError:
+        world.dump_current_page()
+        raise
 
 
 @step(u'Then the search results are:')
