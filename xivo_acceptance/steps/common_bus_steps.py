@@ -32,7 +32,7 @@ def given_i_listen_on_the_bus_for_messages(step):
         try:
             exchange = entry['exchange'].encode('ascii')
             routing_key = entry['routing_key'].encode('ascii')
-            queue_name = 'test_%s' % routing_key
+            queue_name = 'test_{}'.format(exchange)
             result = channel.queue_declare(queue=queue_name)
             queue_name = result.method.queue
 
@@ -48,7 +48,7 @@ def then_i_see_a_message_on_bus_with_the_following_variables(step):
     connection = pika.BlockingConnection(pika.ConnectionParameters(
         host=world.config['xivo_host']))
     channel = connection.channel()
-    queue_name = 'test_call_form_result'
+    queue_name = 'test_xivo-cti'
 
     def callback(ch, method, props, body):
         unmarshaled_body = json.loads(body)
