@@ -20,7 +20,7 @@ Feature: User
         Given I log in the XiVO client as "donald", pass "macronald"
         Given I listen on the bus for messages:
         | exchange            | routing_key |
-        | xivo-status-updates | any         |
+        | xivo-status-updates | status.user |
         When I change my presence to "away"
         Then I receive a "user_status_update" on the bus with data on exchange "xivo-status-updates":
         | user_id | firstname | lastname  | status | xivo_uuid |
