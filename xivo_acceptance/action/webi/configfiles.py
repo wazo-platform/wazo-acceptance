@@ -18,12 +18,15 @@
 from lettuce import world
 from xivo_acceptance.lettuce import assets
 from xivo_acceptance.lettuce.form.checkbox import Checkbox
+from xivo_acceptance.lettuce.form import input
 
 
 def type_file_name(file_name):
-    input_filename = world.browser.find_element_by_id('it-configfile-filename')
-    input_filename.clear()
-    input_filename.send_keys(file_name)
+    input.set_text_field_with_id('it-configfile-filename', file_name)
+
+
+def type_file_content(content):
+    input.set_text_field_with_id('it-configfile-description', content)
 
 
 def type_reload_dialplan(reload_dialplan):

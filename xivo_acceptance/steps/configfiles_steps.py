@@ -46,12 +46,8 @@ def given_i_watch_the_log_files(step):
 @step(u'When I create a configfiles "([^"]*)" with content "([^"]*)"')
 def when_i_create_configfiles_with_content(step, filename, content):
     common.open_url('configfiles', 'add')
-    input_filename = world.browser.find_element_by_id('it-configfile-filename')
-    input_filename.clear()
-    input_filename.send_keys(filename)
-    input_description = world.browser.find_element_by_id('it-configfile-description')
-    input_description.clear()
-    input_description.send_keys(content)
+    actions.type_file_name(filename)
+    actions.type_file_content(content)
     form.submit.submit_form()
 
 
