@@ -1,15 +1,16 @@
 Feature: Configuration Files
 
-    Scenario: Add a configuration file
-        Given no config file "testlink.conf"
-        When I create a configfiles "testlink.conf" with content "[testlink]\n"
-        Then configfiles "testlink.conf" is displayed in the list
-
     Scenario: Add a configuration file without reloading dialplan
         Given no config file "test-add-no-dialplan-reload.conf"
         Given I watch the log files
         When I create a config file "test-add-no-dialplan-reload.conf" without reloading dialplan
+        Then configfiles "test-add-no-dialplan-reload.conf" is displayed in the list
         Then the dialplan has not been reloaded in the log files
+
+    Scenario: Add a configuration file
+        Given no config file "testlink.conf"
+        When I create a configfiles "testlink.conf" with content "[testlink]\n"
+        Then configfiles "testlink.conf" is displayed in the list
 
     Scenario: Add a configuration file and reload dialplan
         Given no config file "test-add-dialplan-reload.conf"
