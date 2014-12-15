@@ -48,7 +48,6 @@ def when_i_create_configfiles_with_content(step, filename, content):
     common.open_url('configfiles', 'add')
     actions.type_file_name(filename)
     actions.type_file_content(content)
-    world.dump_current_page()
     form.submit.submit_form()
 
 
