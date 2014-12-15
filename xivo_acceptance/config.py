@@ -147,6 +147,7 @@ class XivoAcceptanceConfig(object):
         self._setup_provd()
         logger.debug("_setup_webi...")
         self._setup_webi()
+        self._execnet_gateway = None
 
     def _setup_dao(self):
         dao_config.DB_URI = self._config['db_uri']
@@ -194,19 +195,16 @@ class XivoAcceptanceConfig(object):
 
     @property
     def execnet_gateway(self):
-        try:
-            return self._execnet_gateway
-        except AttributeError:
+        if self._execnet_gateway is None:
             options = ' '.join(ssh.SSH_OPTIONS)
             spec = 'ssh={options} -l {login} {host}'.format(options=options,
                                                             login=self._config['ssh_login'],
                                                             host=self._config['xivo_host'])
             self._execnet_gateway = makegateway(spec)
-            return self._execnet_gateway
+
+        return self._execnet_gateway
 
     def reset_execnet(self):
-        try:
-            self._execnet_gateway.close()
-            del self._execnet_gateway
-        except AttributeError:
-            pass
+        if self._execnet_gateway is not None:
+            self._execnet_gateway.exit()
+            self._execnet_gateway = None
