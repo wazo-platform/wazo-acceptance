@@ -208,6 +208,7 @@ def then_the_penalty_is_group1_for_queue_group2_and_agent_group3(step, penalty, 
     agent_id = agent_helper.find_agent_id_with_number(agent_number)
     assert_that(queue_helper.get_penalty_for_agent(queue_name, agent_id), equal_to(int(penalty)))
 
+
 @step(u'Then the agent "([^"]*)" is not associated to queue "([^"]*)"')
 def then_the_agent_group1_is_not_associated_to_queue_group2(step, agent_number, queue_name):
     agent_id = agent_helper.find_agent_id_with_number(agent_number)
