@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
-from hamcrest import assert_that, equal_to, none
+from hamcrest import assert_that, equal_to
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import queue as queue_action_webi
