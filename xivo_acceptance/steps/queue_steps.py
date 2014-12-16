@@ -16,12 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import time
-from hamcrest import assert_that, equal_to
+from hamcrest import assert_that, equal_to, contains
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import queue as queue_action_webi
-from xivo_acceptance.helpers import agent_helper, queue_helper, \
-    schedule_helper, user_helper
+from xivo_acceptance.helpers import agent_helper, asterisk_helper, \
+    queue_helper, schedule_helper, user_helper
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import form
 
@@ -213,3 +213,19 @@ def then_the_penalty_is_group1_for_queue_group2_and_agent_group3(step, penalty, 
 def then_the_agent_group1_is_not_associated_to_queue_group2(step, agent_number, queue_name):
     agent_id = agent_helper.find_agent_id_with_number(agent_number)
     assert queue_helper.get_queue_member(queue_name, agent_id) is None
+
+
+@step(u'When I edit the queue "([^"]*)" and set exit context at "([^"]*)"')
+def when_i_edit_the_queue_group1_and_set_exit_context_at_group2(step, queue_name, context_name):
+    queue_id = queue_helper.find_queue_id_with_name(queue_name)
+    common.open_url('queue', 'edit', {'id': queue_id})
+    common.go_to_tab('Advanced')
+    queue_action_webi.type_queue_exit_context(context_name)
+    form.submit.submit_form()
+
+
+@step(u'Then the exit context is "([^"]*)" for queue "([^"]*)" in asterisk')
+def then_the_exit_context_is_group1_for_queue_group2_in_asterisk(step, context_name, queue_name):
+    options = asterisk_helper.get_conf_options('queues.conf', queue_name, ['context'])
+    expected_option = [(u'context', context_name)]
+    assert_that(options, contains(*expected_option))

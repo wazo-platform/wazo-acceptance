@@ -153,3 +153,13 @@ Feature: Queues
         Then the agent "1108" is a member of the queue "queue8" in asterisk
         When I remove the agent with extension "1108@default" from the queue "queue8"
         Then the agent "1108" is not a member of the queue "queue8" in asterisk
+
+    Scenario: Add an exit context to an existing queue
+       Given there are contexts with infos:
+          | type | name       | range_start | range_end | entity_name | didlength |
+          | user | contextuel | 1000        | 1999      | default     |           |
+        Given there are queues with infos:
+          | name | display name | number | context |
+          | help | Help         | 3107   | default |
+        When I edit the queue "help" and set exit context at "contextuel"
+        Then the exit context is "contextuel" for queue "help" in asterisk
