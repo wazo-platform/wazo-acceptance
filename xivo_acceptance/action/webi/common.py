@@ -16,9 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
+import time
+
 from lettuce import world
 
 
 def reset_focus():
     non_interactive = world.browser.find_element_by_id("logo")
+    time.sleep(1)
     non_interactive.click()
