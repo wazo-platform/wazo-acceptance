@@ -46,6 +46,7 @@ class XiVOBrowser(webdriver.Firefox):
         fp.set_preference("browser.download.manager.showWhenStarting", False)
         fp.set_preference("browser.download.dir", self.DOWNLOAD_DIR + '/')
         fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download")
+        fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "text/csv")
 
         if self._debug:
             fp.set_preference("webdriver.log.file", "/tmp/firefox_console")
