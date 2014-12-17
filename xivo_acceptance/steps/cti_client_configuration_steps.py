@@ -88,6 +88,11 @@ def when_i_show_profile_on_status_bar(step):
     cti_helper.configure_client(conf_dict)
 
 
+@step(u'When I change my presence to "([^"]*)"')
+def when_i_change_my_presence_to_status(step, status):
+    cti_helper.set_presence(status)
+
+
 @step(u'When I enable menu availability')
 def when_i_enable_menu_availability(step):
     conf_dict = {'enable_presence_reporting': True}

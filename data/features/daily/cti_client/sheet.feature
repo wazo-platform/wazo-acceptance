@@ -506,6 +506,7 @@ Feature: Sheet
         | testsheetbus  | file:///tmp/test-sheet-to-bus.ui |
         Given I assign the sheet "testsheetbus" to the "Dial" event
         Given I start the XiVO Client
+        When I enable screen pop-up
         Given I log in the XiVO client as "donald", pass "macronald"
         Given I listen on the bus for messages:
         | exchange | routing_key      |

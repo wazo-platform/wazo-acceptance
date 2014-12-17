@@ -18,8 +18,20 @@
 import json
 import pika
 
+from hamcrest import all_of
+from hamcrest import assert_that
+from hamcrest import equal_to
+from hamcrest import has_entries
+from hamcrest import has_item
+from hamcrest import has_key
+from itertools import count
 from lettuce import step
 from lettuce.registry import world
+from xivo_acceptance.helpers import bus_helper
+from xivo_acceptance.helpers import user_helper
+from xivo_acceptance.helpers import xivo_helper
+
+MAGIC_COLUMNS = ['user_id', 'xivo_uuid', 'firstname', 'lastname']
 
 
 @step(u'Given I listen on the bus for messages:')
@@ -32,7 +44,7 @@ def given_i_listen_on_the_bus_for_messages(step):
         try:
             exchange = entry['exchange'].encode('ascii')
             routing_key = entry['routing_key'].encode('ascii')
-            queue_name = 'test_%s' % routing_key
+            queue_name = 'test_{}'.format(exchange)
             result = channel.queue_declare(queue=queue_name)
             queue_name = result.method.queue
 
@@ -45,20 +57,29 @@ def given_i_listen_on_the_bus_for_messages(step):
 
 @step(u'Then I see a message on bus with the following variables:')
 def then_i_see_a_message_on_bus_with_the_following_variables(step):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=world.config['xivo_host']))
-    channel = connection.channel()
-    queue_name = 'test_call_form_result'
+    events = bus_helper.get_messages_from_bus(exchange='xivo-cti')
 
-    def callback(ch, method, props, body):
-        unmarshaled_body = json.loads(body)
-        data = unmarshaled_body['data']['variables']
+    for event in events:
+        data = event['data']['variables']
 
         for expected_widget in step.hashes:
             widget_name = expected_widget['widget_name']
             widget_value = expected_widget['value']
             assert(unicode(data[widget_name]) == widget_value)
 
-    channel.basic_consume(callback, queue=queue_name, no_ack=True)
-    connection.process_data_events()
-    connection.close()
+
+@step(u'Then I receive a "([^"]*)" on the bus exchange "([^"]*)" with data:')
+def then_i_receive_a_message_on_the_bus_with_data_on_exchange(step, expected_message, exchange):
+    events = bus_helper.get_messages_from_bus(exchange)
+
+    for expected_event in step.hashes:
+        raw_expected_event = {'name': expected_message,
+                              'data': {}}
+        if expected_event['user_id'] == 'yes':
+            user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
+                                                         expected_event['lastname'])
+            raw_expected_event['data']['user_id'] = user.id
+        raw_expected_event['data']['status'] = expected_event['status']
+        raw_expected_event['data']['xivo_id'] = xivo_helper.get_uuid()
+
+        assert_that(events, has_item(has_entries(raw_expected_event)))
