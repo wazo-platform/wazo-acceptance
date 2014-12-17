@@ -22,6 +22,6 @@ Feature: User
         | exchange            | routing_key |
         | xivo-status-updates | status.user |
         When I change my presence to "away"
-        Then I receive a "user_status_update" on the bus with data on exchange "xivo-status-updates":
+        Then I receive a "user_status_update" on the bus exchange "xivo-status-updates" with data:
         | user_id | firstname | lastname  | status | xivo_uuid |
         | yes     | Donald    | MacRonald | away   | yes       |
