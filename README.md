@@ -39,19 +39,17 @@ To install docker on Linux :
 
 ##Usage
 
-    usage: xivo-acceptance [-h] [-e EXTERNAL_FEATURES] [-i INTERNAL_FEATURES] [-p]
-	                       [-v] [-x XIVO_HOST]
+	usage: xivo-acceptance [-h] [-i INTERNAL_FEATURES] [-p] [-v] [-x XIVO_HOST]
 	
 	optional arguments:
 	  -h, --help            show this help message and exit
-	  -e EXTERNAL_FEATURES, --external-features EXTERNAL_FEATURES
-	                        execute external features
 	  -i INTERNAL_FEATURES, --internal-features INTERNAL_FEATURES
-	                        execute finternal features
+	                        execute internal features
 	  -p, --prerequisite    execute prerequisite
 	  -v, --verbose         verbose mode
 	  -x XIVO_HOST, --xivo-host XIVO_HOST
 	                        xivo host
+
 
 DOCKER_RUN_OPTS="--privileged -v /dev/snd:/dev/snd -v /tmp:/output xivo/acceptance"
 
@@ -95,9 +93,6 @@ Launch admin_user.feature feature:
 
     $XA_CMD="xivo-acceptance -v -i daily/webi/admin_user"
 
-##External Features
-
-    python ./bin/xivo-acceptance -e /path/to/features_dir/or/file.feature
 
 #Examples
 
