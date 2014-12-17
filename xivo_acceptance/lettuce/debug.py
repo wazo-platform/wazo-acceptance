@@ -24,7 +24,9 @@ loggers = {
     'selenium': logging.getLogger('selenium'),
     'acceptance': logging.getLogger('acceptance'),
     'linphone': logging.getLogger('linphone'),
-    'cticlient': logging.getLogger('cticlient')
+    'cticlient': logging.getLogger('cticlient'),
+    'easyprocess': logging.getLogger('easyprocess'),
+    'pyvirtualdisplay': logging.getLogger('pyvirtualdisplay')
 }
 
 

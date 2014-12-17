@@ -23,11 +23,12 @@ import sys
 
 from execnet.multi import makegateway
 from provd.rest.client.client import new_provisioning_client
-from xivo_acceptance.lettuce import ssh
-from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
 from xivo_dao.helpers import config as dao_config
 import xivo_ws
 import yaml
+
+from xivo_acceptance.lettuce import ssh
+from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
 
 
 logger = logging.getLogger(__name__)
@@ -94,7 +95,9 @@ def load_config(old_config=True):
             'global': False,
             'linphone': False,
             'selenium': False,
-            'cticlient': False
+            'cticlient': False,
+            'easyprocess': False,
+            'pyvirtualdisplay': False
         },
         'prerequisites': {
             'subnets': [
