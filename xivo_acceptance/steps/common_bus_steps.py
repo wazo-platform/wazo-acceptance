@@ -15,16 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import json
 import pika
 
-from hamcrest import all_of
 from hamcrest import assert_that
-from hamcrest import equal_to
 from hamcrest import has_entries
 from hamcrest import has_item
-from hamcrest import has_key
-from itertools import count
 from lettuce import step
 from lettuce.registry import world
 from xivo_acceptance.helpers import bus_helper
