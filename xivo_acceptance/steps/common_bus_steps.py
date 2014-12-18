@@ -22,7 +22,6 @@ from hamcrest import has_entries
 from hamcrest import has_item
 from lettuce import step
 from lettuce.registry import world
-from xivo_acceptance.lettuce import common
 from xivo_acceptance.helpers import bus_helper
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import xivo_helper
@@ -66,19 +65,16 @@ def then_i_see_a_message_on_bus_with_the_following_variables(step):
 
 @step(u'Then I receive a "([^"]*)" on the bus exchange "([^"]*)" with data:')
 def then_i_receive_a_message_on_the_bus_with_data_on_exchange(step, expected_message, exchange):
-    def _assert():
-        events = bus_helper.get_messages_from_bus(exchange)
+    events = bus_helper.get_messages_from_bus(exchange)
 
-        for expected_event in step.hashes:
-            raw_expected_event = {'name': expected_message,
-                                  'data': {}}
-            if expected_event['user_id'] == 'yes':
-                user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
-                                                             expected_event['lastname'])
-                raw_expected_event['data']['user_id'] = user.id
-            raw_expected_event['data']['status'] = expected_event['status']
-            raw_expected_event['data']['xivo_id'] = xivo_helper.get_uuid()
+    for expected_event in step.hashes:
+        raw_expected_event = {'name': expected_message,
+                              'data': {}}
+        if expected_event['user_id'] == 'yes':
+            user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
+                                                         expected_event['lastname'])
+            raw_expected_event['data']['user_id'] = user.id
+        raw_expected_event['data']['status'] = expected_event['status']
+        raw_expected_event['data']['xivo_id'] = xivo_helper.get_uuid()
 
-            assert_that(events, has_item(has_entries(raw_expected_event)))
-
-    common.wait_until_assert(_assert, tries=3)
+        assert_that(events, has_item(has_entries(raw_expected_event)))
