@@ -357,6 +357,10 @@ def get_host_address():
     return host
 
 
+class NoMoreTries(Exception):
+    pass
+
+
 def wait_until(function, *args, **kwargs):
     message = kwargs.pop('message', None)
     tries = kwargs.pop('tries', 1)
@@ -368,7 +372,7 @@ def wait_until(function, *args, **kwargs):
             return return_value
         time.sleep(1)
     else:
-        raise Exception(message)
+        raise NoMoreTries(message)
 
 
 def wait_until_assert(assert_function, *args, **kwargs):
@@ -383,7 +387,7 @@ def wait_until_assert(assert_function, *args, **kwargs):
             errors.append(str(e))
             time.sleep(1)
     else:
-        raise Exception('\n'.join(errors))
+        raise NoMoreTries('\n'.join(errors))
 
 
 def assert_over_time(assert_function, *args, **kwargs):
