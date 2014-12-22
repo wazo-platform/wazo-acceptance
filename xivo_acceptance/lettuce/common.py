@@ -362,6 +362,19 @@ class NoMoreTries(Exception):
 
 
 def wait_until(function, *args, **kwargs):
+    """Run <function> <tries> times, spaced with 1 second. Stops when <function>
+    returns an object evaluating to True, and returns it.
+
+    Useful for waiting for an event.
+
+    Arguments:
+
+        - function: the function detecting the event
+        - message: the message raised if <function> does not return something
+          after <tries> times
+        - tries: the number of times to run <function>
+    """
+
     message = kwargs.pop('message', None)
     tries = kwargs.pop('tries', 1)
     return_value = False
@@ -376,6 +389,16 @@ def wait_until(function, *args, **kwargs):
 
 
 def wait_until_assert(assert_function, *args, **kwargs):
+    """Run <assert_function> <tries> times, spaced with 1 second. Stops when
+    <function> does not throw AssertionError.
+
+    Useful for waiting until an assert is True (or assert_that from hamcrest).
+
+    Arguments:
+
+        - assert_function: the function making the assertion
+        - tries: the number of times to run <function>
+    """
     tries = kwargs.pop('tries', 1)
     errors = []
 
@@ -391,6 +414,17 @@ def wait_until_assert(assert_function, *args, **kwargs):
 
 
 def assert_over_time(assert_function, *args, **kwargs):
+    """Run <assert_function> <tries> times, spaced with 1 second. Stops if
+    <function> throws AssertionError.
+
+    Useful for checking that an assert (or hamcrest.assert_that) is still
+    True after some time, e.g. an event that should not happen.
+
+    Arguments:
+
+        - assert_function: the function making the assertion
+        - tries: the number of times to run <function>
+    """
     tries = kwargs.pop('tries', 2)
 
     for _ in xrange(tries):
