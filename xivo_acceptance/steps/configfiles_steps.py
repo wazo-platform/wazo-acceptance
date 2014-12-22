@@ -113,7 +113,7 @@ def then_the_dialplan_has_not_been_reloaded(step):
         expected_command = "Asterisk command 'dialplan reload' successfully executed"
         assert_that(_watched_log_lines(), is_not(has_item(contains_string(expected_command))))
 
-    common.wait_for_assert_failure(_assert)
+    common.assert_over_time(_assert)
 
 
 @step(u'Then the dialplan has been reloaded in the log files')

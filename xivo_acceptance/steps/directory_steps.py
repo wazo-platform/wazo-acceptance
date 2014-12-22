@@ -151,7 +151,7 @@ def then_nothing_shows_up_in_the_directory_xlet(step):
         res = cti_helper.get_remote_directory_infos()
         assert_that(res['return_value']['content'], equal_to([]))
 
-    common.wait_for_assert_failure(_assert)
+    common.assert_over_time(_assert)
 
 
 @step(u'Then the following results does not show up in the directory xlet:')
