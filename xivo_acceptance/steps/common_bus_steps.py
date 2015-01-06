@@ -17,9 +17,12 @@
 
 import pika
 
+from hamcrest import all_of
 from hamcrest import assert_that
+from hamcrest import has_entry
 from hamcrest import has_entries
 from hamcrest import has_item
+from hamcrest import matches_regexp
 from lettuce import step
 from lettuce.registry import world
 from xivo_acceptance.helpers import bus_helper
@@ -61,6 +64,17 @@ def then_i_see_a_message_on_bus_with_the_following_variables(step):
             widget_name = expected_widget['widget_name']
             widget_value = expected_widget['value']
             assert(unicode(data[widget_name]) == widget_value)
+
+
+@step(u'Then I see an AMI message "([^"]*)" on the bus:')
+def then_i_see_an_ami_message_on_the_bus(step, event_name):
+    events = bus_helper.get_messages_from_bus(exchange='xivo-ami')
+
+    matcher_dict = dict((event_line['header'], matches_regexp(event_line['value']))
+                        for event_line in step.hashes)
+
+    assert_that(events, has_item(all_of(has_entry('name', event_name),
+                                        has_entry('data', has_entries(matcher_dict)))))
 
 
 @step(u'Then I receive a "([^"]*)" on the bus exchange "([^"]*)" with data:')
