@@ -39,6 +39,13 @@ def given_the_following_directories_exist(step):
         directory_action_webi.add_or_replace_directory_config(directory)
 
 
+@step(u'Given the following directories are used in reverse lookup:')
+def given_the_following_directories_are_used_in_reverse_lookup(step):
+    directories = [entry['directory'] for entry in step.hashes]
+    directory_action_webi.set_reverse_directories(directories)
+    submit.submit_form()
+
+
 @step(u'Given the directory definition "([^"]*)" does not exist')
 def given_the_directory_definition_does_not_exist(step, definition):
     directory_action_webi.remove_directory(definition)

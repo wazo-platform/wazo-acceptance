@@ -34,11 +34,20 @@ def create_entry(entry):
     form.input.set_text_field_with_label("First Name", entry['first name'])
     form.input.set_text_field_with_label("Last Name", entry['last name'])
     form.input.set_text_field_with_label("Display name", display_name)
-    if 'mobile' in entry:
-        form.input.set_text_field_with_label("Mobile phone", entry['mobile'])
+    form.input.set_text_field_with_label("Company", entry.get('company', ''))
+    form.input.set_text_field_with_label("Mobile phone", entry.get('mobile', ''))
+    form.input.set_text_field_with_label("E-mail", entry.get('email', ''))
+    form.input.set_text_field_with_label("Website URL", entry.get('website', ''))
 
     common.go_to_tab("Office")
     form.input.set_text_field_with_label('Phone', entry.get('phone', ''))
+    form.input.set_text_field_with_label('Fax', entry.get('fax', ''))
+    form.input.set_text_field_with_label('Address', entry.get('address1', ''))
+    form.input.set_text_field_with_label('Address (next)', entry.get('address2', ''))
+    form.input.set_text_field_with_label('City', entry.get('city', ''))
+    form.input.set_text_field_with_label('State', entry.get('state', ''))
+    form.input.set_text_field_with_label('Zip code', entry.get('zip code', ''))
+    form.select.set_select_field_with_label('Country', entry.get('country', ' '))
 
     form.submit.submit_form()
 

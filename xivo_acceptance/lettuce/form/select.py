@@ -39,14 +39,20 @@ def set_select_field_with_id_containing(field_id, filter_string):
     _select_option_containing(filter_string, select_input)
 
 
-def set_multiselect_field_with_id_containing(field_id, filter_string):
-    select_input = Select(world.browser.find_element_by_id(field_id))
-    select_input.deselect_all()
+def set_select_field_with_label_containing(label, filter_string):
+    select_input = Select(world.browser.find_element_by_label(label))
     _select_option_containing(filter_string, select_input)
 
 
-def set_select_field_with_label_containing(label, filter_string):
-    select_input = Select(world.browser.find_element_by_label(label))
+def set_multiselect_field_with_id(field_id, values):
+    select_input = Select(world.browser.find_element_by_id(field_id))
+    select_input.deselect_all()
+    _select_options(values, select_input)
+
+
+def set_multiselect_field_with_id_containing(field_id, filter_string):
+    select_input = Select(world.browser.find_element_by_id(field_id))
+    select_input.deselect_all()
     _select_option_containing(filter_string, select_input)
 
 
@@ -55,6 +61,11 @@ def _select_option_containing(filter_string, select_input):
     for option in options:
         if filter_string in option.text:
             select_input.select_by_value(option.get_attribute('value'))
+
+
+def _select_options(values, select_input):
+    for value in values:
+        select_input.select_by_visible_text(value)
 
 
 def select_all_with_id(field_id):
