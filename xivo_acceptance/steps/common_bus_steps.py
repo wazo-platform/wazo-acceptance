@@ -26,6 +26,7 @@ from hamcrest import has_item
 from hamcrest import matches_regexp
 from lettuce import step
 from lettuce.registry import world
+from xivo_acceptance.helpers import agent_helper
 from xivo_acceptance.helpers import bus_helper
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import line_helper
@@ -52,6 +53,7 @@ def given_i_listen_on_the_bus_for_messages(step):
             channel.queue_bind(exchange=exchange,
                                queue=queue_name,
                                routing_key=routing_key)
+            bus_helper.get_messages_from_bus(exchange)
         finally:
             connection.close()
 
@@ -88,18 +90,22 @@ def then_i_receive_a_message_on_the_bus_with_data_on_exchange(step, expected_mes
         raw_expected_event = {'name': expected_message,
                               'data': {}}
 
-        if expected_event.get('user_id') == 'yes':
+        raw_expected_event['data']['xivo_id'] = xivo_helper.get_uuid()
+        raw_expected_event['data']['status'] = expected_event['status']
+
+        if expected_event.get('user_id', 'no') == 'yes':
             user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
                                                          expected_event['lastname'])
             raw_expected_event['data']['user_id'] = user.id
-            raw_expected_event['data']['status'] = expected_event['status']
 
-        if expected_event.get('endpoint_id') == 'yes':
+        if expected_event.get('endpoint_id', 'no') == 'yes':
             line = line_helper.find_with_exten_context(expected_event['number'],
                                                        expected_event['context'])
             raw_expected_event['data']['endpoint_id'] = line.id
             raw_expected_event['data']['status'] = int(expected_event['status'])
 
-        raw_expected_event['data']['xivo_id'] = xivo_helper.get_uuid()
+        if expected_event.get('agent_id', 'no') == 'yes':
+            agent_id = agent_helper.find_agent_id_with_number(expected_event['agent_number'])
+            raw_expected_event['data']['agent_id'] = agent_id
 
         assert_that(events, has_item(has_entries(raw_expected_event)))
