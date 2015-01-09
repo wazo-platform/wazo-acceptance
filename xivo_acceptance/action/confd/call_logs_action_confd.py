@@ -19,11 +19,14 @@ from lettuce.registry import world
 
 
 CALL_LOGS_URL = '/call_logs'
+HEADERS = {'Accept': 'text/csv; charset=utf-8'}
 
 
 def call_logs_list():
-    return world.confd_utils_1_1.rest_get(CALL_LOGS_URL)
+    return world.confd_utils_1_1.rest_get(CALL_LOGS_URL, headers=HEADERS)
 
 
 def call_logs_list_interval(params):
-    return world.confd_utils_1_1.rest_get(CALL_LOGS_URL, params=params)
+    return world.confd_utils_1_1.rest_get(CALL_LOGS_URL,
+                                          params=params,
+                                          headers=HEADERS)

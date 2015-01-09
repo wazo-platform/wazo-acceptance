@@ -17,6 +17,8 @@
 
 from StringIO import StringIO
 from datetime import timedelta
+from time import strptime
+
 from hamcrest import all_of
 from hamcrest import any_of
 from hamcrest import assert_that
@@ -28,10 +30,7 @@ from hamcrest import has_item
 from hamcrest import has_length
 from hamcrest import has_property
 from lettuce import step, world
-from time import strptime
-
 from xivo.unicode_csv import UnicodeDictReader
-
 from xivo_acceptance.action.confd import call_logs_action_confd
 from xivo_acceptance.action.webi import call_logs as call_logs_action_webi
 from xivo_acceptance.action.webi import common as common_action_webi
@@ -164,7 +163,7 @@ def then_i_should_not_have_the_following_call_logs(step):
 @step(u'Then I get the following call logs in CSV format:')
 def then_i_get_the_following_call_logs_in_csv_format(step):
     assert_that(world.response.status, equal_to(200))
-    assert_that(world.response.headers['Content-Type'], equal_to('text/csv; charset=utf8'))
+    assert_that(world.response.headers['Content-Type'], equal_to('text/csv; charset=utf-8'))
 
     call_logs_response = world.response.data.encode('utf-8')
     assert_that(call_logs_response, has_length(greater_than(0)))

@@ -15,10 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, has_key, equal_to
-import requests
 import json
 import re
+
+from hamcrest import assert_that, has_key, equal_to
+import requests
+
 
 DEFAULT_CONTENT_TYPE = 'application/json'
 
@@ -80,6 +82,8 @@ class WsUtils(object):
     def _request(self, method, path, *args, **kwargs):
         path = path.lstrip('/')
         url = "%s/%s" % (self.baseurl, path)
+        if 'headers' in kwargs:
+            self.session.headers.update(kwargs['headers'])
         response = self.session.request(method, url, *args, **kwargs)
         return self._process_response(response)
 
