@@ -56,6 +56,7 @@ class WsUtils(object):
     def _prepare_session(self, rest_configuration_obj):
         session = requests.Session()
         session.headers.update({'Content-Type': rest_configuration_obj.content_type})
+        session.headers.update({'Accept': rest_configuration_obj.content_type})
         session.verify = False
 
         username = rest_configuration_obj.auth_username
