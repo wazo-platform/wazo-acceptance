@@ -44,9 +44,9 @@ def add_directory_definition(directory):
     _add_directory(
         directory['name'],
         directory['URI'],
-        directory['direct match'],
-        directory.get('delimiter'),
-        directory.get('reverse match'),
+        directory.get('direct match', ''),
+        directory.get('delimiter', ''),
+        directory.get('reverse match', ''),
     )
 
 
@@ -155,13 +155,12 @@ def assign_filter_and_directories_to_context(context, filter_name, directories):
 def set_reverse_directories(directories):
     common.open_url('cti_reverse_directory', '')
     _remove_all_reverse_directories()
-    for directory in directories:
-        _add_reverse_directory(directory)
+    _add_reverse_directories(directories)
     submit.submit_form()
 
 
-def _add_reverse_directory(directory):
-    select.set_multiselect_field_with_id_containing("it-directorieslist", directory)
+def _add_reverse_directories(directories):
+    select.set_multiselect_field_with_id("it-directorieslist", directories)
     button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[1]")
     button.click()
 
