@@ -5,6 +5,13 @@ server. These tests are used for fixing regressions and testing features before
 releasing a new version of XiVO.
 
 
+#Prerequisites
+
+For Linphone to work, you must do:
+
+    adduser jenkins audio  #Jenkins is the user tunning the tests
+
+
 #Configuration
 
 Create a yaml local configuration file in ```~/.xivo-acceptance/default``` and
