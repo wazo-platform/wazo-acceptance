@@ -8,7 +8,7 @@ Feature: Incoming calls
         Given there is an incall "1867" in context "from-extern" to the "user" "Oscar Latraverse"
         Given I listen on the bus for messages:
         | exchange | routing_key |
-        | xivo-ami | UserEvent   |
+        | xivo     | UserEvent   |
         When chan_test calls "1867@from-extern" with id "callid" and calleridname "Caller" and calleridnum "666"
         Then I see an AMI message "UserEvent" on the bus:
         | header    | value         |
@@ -43,7 +43,7 @@ Feature: Incoming calls
         | xivodirreverse  |
         Given I listen on the bus for messages:
         | exchange | routing_key |
-        | xivo-ami | UserEvent   |
+        | xivo     | UserEvent   |
         When chan_test calls "1868@from-extern" with id "callid" and calleridname "666" and calleridnum "666"
         When "Plume Wilde" answers
         When I wait 2 seconds
