@@ -510,7 +510,7 @@ Feature: Sheet
         Given I log in the XiVO client as "donald", pass "macronald"
         Given I listen on the bus for messages:
         | exchange | routing_key      |
-        | xivo-cti | call_form_result |
+        | xivo     | call_form_result |
 
         When chan_test calls "1624@default"
         When I wait 1 seconds for the calls processing
