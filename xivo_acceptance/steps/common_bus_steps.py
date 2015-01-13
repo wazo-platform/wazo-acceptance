@@ -60,7 +60,7 @@ def given_i_listen_on_the_bus_for_messages(step):
 
 @step(u'Then I see a message on bus with the following variables:')
 def then_i_see_a_message_on_bus_with_the_following_variables(step):
-    events = bus_helper.get_messages_from_bus(exchange='xivo-cti')
+    events = bus_helper.get_messages_from_bus(exchange='xivo')
 
     for event in events:
         data = event['data']['variables']
@@ -73,7 +73,7 @@ def then_i_see_a_message_on_bus_with_the_following_variables(step):
 
 @step(u'Then I see an AMI message "([^"]*)" on the bus:')
 def then_i_see_an_ami_message_on_the_bus(step, event_name):
-    events = bus_helper.get_messages_from_bus(exchange='xivo-ami')
+    events = bus_helper.get_messages_from_bus(exchange='xivo')
 
     matcher_dict = dict((event_line['header'], matches_regexp(event_line['value']))
                         for event_line in step.hashes)
