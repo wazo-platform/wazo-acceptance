@@ -49,9 +49,9 @@ Feature: Agent
         | name     | number | context     | agents_number |
         | thequeue |   5010 | statscenter |           042 |
         Given I listen on the bus for messages:
-        | exchange | routing_key  |
-        | xivo     | status.agent |
+        | queue             | routing_key  |
+        | test_status_agent | status.agent |
         When "User 003" calls "*31042" and waits until the end
-        Then I receive a "agent_status_update" on the bus exchange "xivo" with data:
+        Then I receive a "agent_status_update" on the queue "test_status_agent" with data:
         | agent_id | agent_number | status    | xivo_uuid |
         | yes      |          042 | logged_in | yes       |

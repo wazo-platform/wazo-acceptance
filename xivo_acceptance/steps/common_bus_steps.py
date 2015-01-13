@@ -44,23 +44,23 @@ def given_i_listen_on_the_bus_for_messages(step):
 
     for entry in step.hashes:
         try:
-            exchange = entry['exchange'].encode('ascii')
+            exchange = world.config['bus']['exchange']
+            queue_name = entry['queue'].encode('ascii')
             routing_key = entry['routing_key'].encode('ascii')
-            queue_name = 'test_{}'.format(exchange)
             result = channel.queue_declare(queue=queue_name)
-            queue_name = result.method.queue
 
+            channel.queue_purge(queue=queue_name)
             channel.queue_bind(exchange=exchange,
                                queue=queue_name,
                                routing_key=routing_key)
-            bus_helper.get_messages_from_bus(exchange)
+            bus_helper.get_messages_from_bus(queue_name)
         finally:
             connection.close()
 
 
-@step(u'Then I see a message on bus with the following variables:')
-def then_i_see_a_message_on_bus_with_the_following_variables(step):
-    events = bus_helper.get_messages_from_bus(exchange='xivo')
+@step(u'Then I see a message in queue "([^"]*)" with the following variables:')
+def then_i_see_a_message_on_bus_with_the_following_variables(step, queue):
+    events = bus_helper.get_messages_from_bus(queue)
 
     for event in events:
         data = event['data']['variables']
@@ -71,9 +71,9 @@ def then_i_see_a_message_on_bus_with_the_following_variables(step):
             assert(unicode(data[widget_name]) == widget_value)
 
 
-@step(u'Then I see an AMI message "([^"]*)" on the bus:')
-def then_i_see_an_ami_message_on_the_bus(step, event_name):
-    events = bus_helper.get_messages_from_bus(exchange='xivo')
+@step(u'Then I see an AMI message "([^"]*)" on the queue "([^"]*)":')
+def then_i_see_an_ami_message_on_the_queue(step, event_name, queue):
+    events = bus_helper.get_messages_from_bus(queue)
 
     matcher_dict = dict((event_line['header'], matches_regexp(event_line['value']))
                         for event_line in step.hashes)
@@ -82,9 +82,9 @@ def then_i_see_an_ami_message_on_the_bus(step, event_name):
                                         has_entry('data', has_entries(matcher_dict)))))
 
 
-@step(u'Then I receive a "([^"]*)" on the bus exchange "([^"]*)" with data:')
-def then_i_receive_a_message_on_the_bus_with_data_on_exchange(step, expected_message, exchange):
-    events = bus_helper.get_messages_from_bus(exchange)
+@step(u'Then I receive a "([^"]*)" on the queue "([^"]*)" with data:')
+def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queue):
+    events = bus_helper.get_messages_from_bus(queue)
 
     for expected_event in step.hashes:
         raw_expected_event = {'name': expected_message,

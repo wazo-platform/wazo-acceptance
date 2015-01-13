@@ -21,11 +21,10 @@ import pika
 from lettuce import world
 
 
-def get_messages_from_bus(exchange):
+def get_messages_from_bus(queue_name):
     parameters = pika.ConnectionParameters(host=world.config['xivo_host'])
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
-    queue_name = 'test_{}'.format(exchange)
     events = []
 
     def callback(channel, method, props, body):

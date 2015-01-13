@@ -509,8 +509,8 @@ Feature: Sheet
         When I enable screen pop-up
         Given I log in the XiVO client as "donald", pass "macronald"
         Given I listen on the bus for messages:
-        | exchange | routing_key      |
-        | xivo     | call_form_result |
+        | queue          | routing_key      |
+        | test_sheet_bus | call_form_result |
 
         When chan_test calls "1624@default"
         When I wait 1 seconds for the calls processing
@@ -532,7 +532,7 @@ Feature: Sheet
         | timeEdit          | 13:13:13                      |
         | plainTextEdit     | Text in a text in a text area |
         | calendar          | 2013-12-13                    |
-        Then I see a message on bus with the following variables:
+        Then I see a message in queue "test_sheet_bus" with the following variables:
         | widget_name       | value                           |
         | checkBox          | False                           |
         | combobox          | combobox_value2                 |

@@ -99,6 +99,9 @@ def load_config(old_config=True):
             'easyprocess': False,
             'pyvirtualdisplay': False
         },
+        'bus': {
+            'exchange': 'xivo'
+        },
         'prerequisites': {
             'subnets': [
                 '10.0.0.0/8',
