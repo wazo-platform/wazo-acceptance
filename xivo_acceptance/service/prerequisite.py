@@ -121,8 +121,7 @@ def _xivo_service_restart_all():
 
 
 def _allow_agid_listen_on_all_interfaces():
-    command = ['sed', '-i', '-e', '"/^listen_addr/d"', '-e', '"/^\\[general\\]$/a\\listen_addr = 0.0.0.0"', '/etc/xivo/xivo-agid.conf']
-    world.ssh_client_xivo.check_call(command)
+    _add_line_to_remote_file('listen_address: 0.0.0.0', '/etc/xivo-agid/conf.d/acceptance.yml')
 
 
 @daosession
