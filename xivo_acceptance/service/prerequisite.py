@@ -101,18 +101,14 @@ def _allow_remote_access_to_pgsql():
 
 
 def _allow_remote_access_to_rabbitmq():
-    text_to_remove = '{tcp_listeners, \[{"127.0.0.1", 5672}\]},'
-    text_to_add = '{tcp_listeners, [{"0.0.0.0", 5672}]},'
-    _modify_line_from_remote_file(text_to_remove, text_to_add, '/etc/rabbitmq/rabbitmq.config')
+    asset_full_path = assets.full_path('rabbitmq.config')
+    remote_path = '/etc/rabbitmq/rabbitmq.config'
+    command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
+    subprocess.call(command)
 
 
 def _add_line_to_remote_file(line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
-    world.ssh_client_xivo.check_call(command)
-
-
-def _modify_line_from_remote_file(to_remove, to_add, file_name):
-    command = ['sed', '-i', 's/%s/%s/' % (to_remove, to_add), file_name]
     world.ssh_client_xivo.check_call(command)
 
 
