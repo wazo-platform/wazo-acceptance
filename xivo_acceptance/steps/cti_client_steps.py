@@ -48,14 +48,14 @@ def given_i_send_a_cti_message(step):
 def then_i_should_receive_the_following_cti_command(step):
     events = step.scenario._pseudo_xivo_client.events
     assert_that(_has_received_event_before_timeout(events, step.multiline, 5),
-                'CTI event {} was not received')
+                'CTI event {} was not received'.format(step.multiline))
 
 
 @step(u'Then I should NOT receive the following cti command:')
 def then_i_should_not_receive_the_following_cti_command(step):
     events = step.scenario._pseudo_xivo_client.events
     assert_that(_has_received_event_before_timeout(events, step.multiline, 5), is_(False),
-                'Received an unexpected CTI event {} was not received')
+                'Received an unexpected CTI event {} was not received'.format(step.multiline))
 
 
 def _has_received_event_before_timeout(events, expected_raw, timeout):
