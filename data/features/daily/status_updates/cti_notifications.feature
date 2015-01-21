@@ -51,9 +51,9 @@ Feature: Status notifications to cti client
          """
 
     Scenario: Registered xivo clients receive the updated endpoint statuses
-        # Given there are users with infos:
-        #  | firstname | lastname | cti_profile | cti_login | cti_passwd |
-        #  | Donny     | Brasco   | Client      | joseph    | pistone    |
+        Given there are users with infos:
+         | firstname | lastname | cti_profile | cti_login | cti_passwd |
+         | Donny     | Brasco   | Client      | joseph    | pistone    |
          Given I connect to xivo-ctid:
          | username | password |
          | joseph   | pistone  |
