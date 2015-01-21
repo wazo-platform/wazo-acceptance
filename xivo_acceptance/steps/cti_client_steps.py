@@ -165,7 +165,7 @@ class _Client(object):
 
     def _send_message(self, message):
         msg = json.dumps(message)
-        self._socket.sendall('{}\n'.format(msg))
+        self._socket.sendall('{}\n'.format(msg.rstrip()))
 
     def _send_login(self):
         login_message = {
