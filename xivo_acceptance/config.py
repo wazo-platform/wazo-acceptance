@@ -22,13 +22,13 @@ import os
 import sys
 
 from execnet.multi import makegateway
-from provd.rest.client.client import new_provisioning_client
-from xivo_dao.helpers import config as dao_config
-import xivo_ws
 import yaml
 
+from provd.rest.client.client import new_provisioning_client
 from xivo_acceptance.lettuce import ssh
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
+from xivo_dao.helpers import config as dao_config
+import xivo_ws
 
 
 logger = logging.getLogger(__name__)
@@ -57,12 +57,10 @@ def load_config(old_config=True):
     default_config = {
         'xivo_host': XIVO_HOST,
         'log_file': '/tmp/xivo-acceptance.log',
-        'db_uri': 'postgresql://asterisk:proformatique@{}/asterisk'.format(XIVO_HOST),
         'assets_dir': _find_first_existing_path(_ASSETS_DIRS),
         'features_dir': _find_first_existing_path(_FEATURES_DIRS),
         'output_dir': '/output',
         'frontend': {
-            'url': 'https://{}'.format(XIVO_HOST),
             'username': 'root',
             'passwd': 'superpass'
         },
@@ -118,7 +116,16 @@ def load_config(old_config=True):
         except Exception as e:
             print(e)
 
+    _config_post_processor(default_config)
+
     return default_config
+
+
+def _config_post_processor(config):
+    if 'db_uri' not in config:
+        config['db_uri'] = 'postgresql://asterisk:proformatique@{}/asterisk'.format(config['xivo_host'])
+    if 'url' not in config['frontend']:
+        config['frontend']['url'] = 'https://{}'.format(config['xivo_host'])
 
 
 def _parse_config_file(config_file_name):
