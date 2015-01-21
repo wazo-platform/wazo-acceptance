@@ -48,7 +48,7 @@ def when_i_publish_the_following_message_on_group1(step, routing_key):
     channel.basic_publish(exchange=world.config['bus']['exchange'],
                           routing_key=routing_key,
                           properties=None,
-                          body=step.multiline)
+                          body=json.dumps(json.loads(step.multiline)))
     connection.close()
 
 
