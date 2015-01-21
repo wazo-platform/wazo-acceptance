@@ -47,13 +47,49 @@ Feature: Status notifications
         | yes         |   1101 | default |      8 | yes       |
 
     Scenario: Registered xivo clients receive the updated user statuses
-      Given I connect to xivo-ctid and register the following commands:
-      | event              |
-      | user_status_update |
-      Given I send a "register_user_status_update" for "my-uuid" "42"
-      When I publish a "user_status_update" on the "status.user" routing key with info:
-      | xivo_id | user_id | status          |
-      | my-uuid |      42 | some-new-status |
-      Then I should receive a "user_status_update" with info:
-      | xivo_uuid | user_id | status          |
-      | my-uuid   |      42 | some-new-status |
+        Given there are users with infos:
+         | firstname | lastname | cti_profile | cti_login | cti_passwd |
+         | Donny     | Brasco   | Client      | joseph    | pistone    |
+         Given I connect to xivo-ctid:
+         | username | password |
+         | joseph   | pistone  |
+         Given I send a cti message:
+         """
+         " {"class": "register_user_status_update",
+         "  "user_ids": [["my-uuid", 42]]}
+         """
+         When I publish the following message on "status.user":
+         """
+         " {"name": "user_status_update",
+         "  "data": {"user_id": 42,
+         "           "xivo_id": "my-uuid",
+         "           "status": "some-new-status"}}
+         """
+         Then I should receive the following cti command:
+         """
+         " {"class": "user_status_update",
+         "  "timenow": "%(xivo_cti_timenow)s",
+         "  "data": {"status": "some-new-status",
+         "           "user_id": 42,
+         "           "xivo_uuid": "my-uuid"}}
+         """
+         Given I send a cti message:
+         """
+         " {"class": "unregister_user_status_update",
+         "  "user_ids": [["my-uuid", 42]]}
+         """
+         When I publish the following message on "status.user":
+         """
+         " {"name": "user_status_update",
+         "  "data": {"user_id": 42,
+         "           "xivo_id": "my-uuid",
+         "           "status": "some-new-status"}}
+         """
+         Then I should NOT receive the following cti command:
+         """
+         " {"class": "user_status_update",
+         "  "timenow": "%(xivo_cti_timenow)s",
+         "  "data": {"status": "some-new-status",
+         "           "user_id": 42,
+         "           "xivo_uuid": "my-uuid"}}
+         """
