@@ -97,3 +97,50 @@ Feature: Status notifications to cti client
          "           "endpoint_id": 42,
          "           "xivo_uuid": "my-uuid"}}
          """
+    Scenario: Registered xivo clients receive the updated agent statuses
+        Given there are users with infos:
+         | firstname | lastname | cti_profile | cti_login | cti_passwd |
+         | Donny     | Brasco   | Client      | joseph    | pistone    |
+         Given I connect to xivo-ctid:
+         | username | password |
+         | joseph   | pistone  |
+         Given I send a cti message:
+         """
+         " {"class": "register_agent_status_update",
+         "  "agent_ids": [["my-uuid", 42]]}
+         """
+         When I publish the following message on "status.agent":
+         """
+         " {"name": "agent_status_update",
+         "  "data": {"agent_id": 42,
+         "           "xivo_id": "my-uuid",
+         "           "status": "gone fishing"}}
+         """
+         Then I should receive the following cti command:
+         """
+         " {"class": "agent_status_update",
+         "  "timenow": "%(xivo_cti_timenow)s",
+         "  "data": {"status": "gone fishing",
+         "           "agent_id": 42,
+         "           "xivo_uuid": "my-uuid"}}
+         """
+         Given I send a cti message:
+         """
+         " {"class": "unregister_agent_status_update",
+         "  "agent_ids": [["my-uuid", 42]]}
+         """
+         When I publish the following message on "status.agent":
+         """
+         " {"name": "agent_status_update",
+         "  "data": {"agent_id": 42,
+         "           "xivo_id": "my-uuid",
+         "           "status": "gone fishing"}}
+         """
+         Then I should NOT receive the following cti command:
+         """
+         " {"class": "agent_status_update",
+         "  "timenow": "%(xivo_cti_timenow)s",
+         "  "data": {"status": "gone fishing",
+         "           "agent_id": 42,
+         "           "xivo_uuid": "my-uuid"}}
+         """
