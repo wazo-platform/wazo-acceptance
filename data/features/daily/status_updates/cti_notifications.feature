@@ -24,7 +24,6 @@ Feature: Status notifications to cti client
          Then I should receive the following cti command:
          """
          " {"class": "user_status_update",
-         "  "timenow": "%(xivo_cti_timenow)s",
          "  "data": {"status": "some-new-status",
          "           "user_id": 42,
          "           "xivo_uuid": "my-uuid"}}
@@ -44,7 +43,6 @@ Feature: Status notifications to cti client
          Then I should NOT receive the following cti command:
          """
          " {"class": "user_status_update",
-         "  "timenow": "%(xivo_cti_timenow)s",
          "  "data": {"status": "some-new-status",
          "           "user_id": 42,
          "           "xivo_uuid": "my-uuid"}}
@@ -72,7 +70,6 @@ Feature: Status notifications to cti client
          Then I should receive the following cti command:
          """
          " {"class": "endpoint_status_update",
-         "  "timenow": "%(xivo_cti_timenow)s",
          "  "data": {"status": 12,
          "           "endpoint_id": 42,
          "           "xivo_uuid": "my-uuid"}}
@@ -92,11 +89,11 @@ Feature: Status notifications to cti client
          Then I should NOT receive the following cti command:
          """
          " {"class": "endpoint_status_update",
-         "  "timenow": "%(xivo_cti_timenow)s",
          "  "data": {"status": 13,
          "           "endpoint_id": 42,
          "           "xivo_uuid": "my-uuid"}}
          """
+
     Scenario: Registered xivo clients receive the updated agent statuses
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd |
@@ -119,7 +116,6 @@ Feature: Status notifications to cti client
          Then I should receive the following cti command:
          """
          " {"class": "agent_status_update",
-         "  "timenow": "%(xivo_cti_timenow)s",
          "  "data": {"status": "gone fishing",
          "           "agent_id": 42,
          "           "xivo_uuid": "my-uuid"}}
@@ -139,7 +135,6 @@ Feature: Status notifications to cti client
          Then I should NOT receive the following cti command:
          """
          " {"class": "agent_status_update",
-         "  "timenow": "%(xivo_cti_timenow)s",
          "  "data": {"status": "gone fishing",
          "           "agent_id": 42,
          "           "xivo_uuid": "my-uuid"}}

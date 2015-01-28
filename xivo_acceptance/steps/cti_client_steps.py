@@ -55,11 +55,11 @@ def then_i_should_receive_the_following_cti_command(step):
 def then_i_should_not_receive_the_following_cti_command(step):
     events = step.scenario._pseudo_xivo_client.events
     assert_that(_has_received_event_before_timeout(events, step.multiline, 5), is_(False),
-                'Received an unexpected CTI event {} was not received'.format(step.multiline))
+                'Received an unexpected CTI event {}'.format(step.multiline))
 
 
 def _has_received_event_before_timeout(events, expected_raw, timeout):
-    expected_class = json.loads(expected_raw)['class']
+    expected_msg = json.loads(expected_raw)
     start_time = time.time()
 
     while time.time() - start_time < timeout:
@@ -69,29 +69,19 @@ def _has_received_event_before_timeout(events, expected_raw, timeout):
 
         event = events.get()
 
-        if event['class'] != expected_class:
+        if event['class'] != expected_msg['class']:
             continue
 
-        if _message_matches_multiline(event, expected_raw):
+        if _message_matches_ignore_timenow(event, expected_msg):
             return True
 
     return False
 
 
-def _message_matches_multiline(msg, raw):
-    format_strings = {}
+def _message_matches_ignore_timenow(msg, expected_msg):
+    msg.pop('timenow', None)
 
-    timenow = msg.get('timenow')
-    if timenow:
-        format_strings['xivo_cti_timenow'] = timenow
-
-    received_message = json.loads(raw % format_strings)
-
-    timenow = received_message.get('timenow')
-    if timenow:
-        received_message['timenow'] = float(timenow)
-
-    return received_message == msg
+    return expected_msg == msg
 
 
 class _Client(object):
@@ -105,7 +95,7 @@ class _Client(object):
         self._thread = None
         self.events = Queue()
         self._stop = False
-        self._login_complete = False
+        self._login_complete = threading.Event()
         self._message_queue = Queue()
 
     def stop(self):
@@ -114,27 +104,17 @@ class _Client(object):
             self._thread.join()
 
     def connect(self):
-        self._thread = threading.Thread(group=None, target=self._start)
+        self._thread = threading.Thread(target=self._start)
         self._thread.start()
 
     def send_message(self, msg):
-        self._queue_message(msg)
+        self._login_complete.wait()
+
+        self._send_message(msg)
 
     def empty_event_queue(self):
         while not self.events.empty():
             self.events.get()
-
-    def _queue_message(self, msg):
-        while True:
-            if self._login_complete:
-                break
-
-        self._message_queue.put(msg)
-
-    def _empty_msg_queue(self):
-        while not self._message_queue.empty():
-            msg = self._message_queue.get()
-            self._send_message(msg)
 
     def _start(self):
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -153,7 +133,6 @@ class _Client(object):
                     message = json.loads(line)
                     self._on_message(message)
                     data = data.lstrip()
-            self._empty_msg_queue()
 
     def _on_message(self, message):
         klass = message[u'class']
@@ -201,4 +180,4 @@ class _Client(object):
 
     def _on_login_pass(self, message):
         self._send_login_capas(message['capalist'][0])
-        self._login_complete = True
+        self._login_complete.set()

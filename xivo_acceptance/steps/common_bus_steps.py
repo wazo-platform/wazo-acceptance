@@ -62,6 +62,7 @@ def when_i_publish_a_event_on_the_routing_key_with_info(step, message, routing_k
     bus_producer = BusProducer(bus_config)
     bus_producer.connect()
     bus_producer.publish_event(world.config['bus']['exchange'], routing_key, bus_msg)
+    bus_producer.close()
 
 
 @step(u'Given I listen on the bus for messages:')
