@@ -96,7 +96,6 @@ class _Client(object):
         self.events = Queue()
         self._stop = False
         self._login_complete = threading.Event()
-        self._message_queue = Queue()
 
     def stop(self):
         self._stop = True
