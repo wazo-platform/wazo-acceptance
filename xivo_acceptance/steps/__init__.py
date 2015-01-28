@@ -35,6 +35,7 @@ from .confd_steps import *
 from .configfiles_steps import *
 from .configuration_steps import *
 from .context_steps import *
+from .cti_client_steps import *
 from .cti_client_configuration_steps import *
 from .cti_profiles_steps import *
 from .cti_server_steps import *

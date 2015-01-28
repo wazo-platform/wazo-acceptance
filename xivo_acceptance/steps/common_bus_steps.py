@@ -17,6 +17,7 @@
 
 import pika
 import logging
+import json
 
 from hamcrest import all_of
 from hamcrest import assert_that
@@ -31,9 +32,37 @@ from xivo_acceptance.helpers import bus_helper
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import line_helper
 from xivo_acceptance.helpers import xivo_helper
+from xivo_bus.ctl.producer import BusProducer
+from xivo_bus.ctl.config import BusConfig
+from xivo_bus.resources.cti.event import UserStatusUpdateEvent
 
 
 logger = logging.getLogger('acceptance')
+
+
+@step(u'When I publish the following message on "([^"]*)":')
+def when_i_publish_the_following_message_on_group1(step, routing_key):
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+        host=world.config['xivo_host']))
+    channel = connection.channel()
+    channel.basic_publish(exchange=world.config['bus']['exchange'],
+                          routing_key=routing_key,
+                          properties=None,
+                          body=json.dumps(json.loads(step.multiline)))
+    connection.close()
+
+
+@step(u'When I publish a "([^"]*)" on the "([^"]*)" routing key with info:')
+def when_i_publish_a_event_on_the_routing_key_with_info(step, message, routing_key):
+    data = step.hashes[0]
+    bus_msg = UserStatusUpdateEvent(data['xivo_id'], data['user_id'], data['status'])
+    bus_config = BusConfig(
+        host=world.config['xivo_host'],
+    )
+    bus_producer = BusProducer(bus_config)
+    bus_producer.connect()
+    bus_producer.publish_event(world.config['bus']['exchange'], routing_key, bus_msg)
+    bus_producer.close()
 
 
 @step(u'Given I listen on the bus for messages:')
