@@ -32,7 +32,8 @@ RUN apt-get -qq -y install \
     libldap2-dev \
     lsof \
     libgl1-mesa-dev \
-    iceweasel
+    iceweasel \
+    libqt5svg5*
 
 # Configure environment
 ADD docker/.ssh /root/.ssh
