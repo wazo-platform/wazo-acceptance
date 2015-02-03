@@ -19,6 +19,8 @@ import pika
 import logging
 import json
 
+from kombu import Connection, Exchange, Producer
+
 from hamcrest import all_of
 from hamcrest import assert_that
 from hamcrest import has_entry
@@ -32,37 +34,34 @@ from xivo_acceptance.helpers import bus_helper
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import line_helper
 from xivo_acceptance.helpers import xivo_helper
-from xivo_bus.ctl.producer import BusProducer
-from xivo_bus.ctl.config import BusConfig
+from xivo_bus import Marshaler
 from xivo_bus.resources.cti.event import UserStatusUpdateEvent
 
 
 logger = logging.getLogger('acceptance')
 
 
+def _send_bus_msg(msg, routing_key):
+    bus_url = 'amqp://{username}:{password}@{host}:{port}//'.format(**world.config['bus'])
+    exchange = Exchange(world.config['bus']['exchange_name'],
+                        type=world.config['bus']['exchange_type'])
+    with Connection(bus_url) as conn:
+        producer = Producer(conn, exchange)
+        producer.publish(json.dumps(msg, routing_key=routing_key))
+
+
 @step(u'When I publish the following message on "([^"]*)":')
 def when_i_publish_the_following_message_on_group1(step, routing_key):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=world.config['xivo_host']))
-    channel = connection.channel()
-    channel.basic_publish(exchange=world.config['bus']['exchange'],
-                          routing_key=routing_key,
-                          properties=None,
-                          body=json.dumps(json.loads(step.multiline)))
-    connection.close()
+    msg = json.dumps(json.loads(step.multiline))  # Clean white spaces
+    _send_bus_msg(msg, routing_key)
 
 
 @step(u'When I publish a "([^"]*)" on the "([^"]*)" routing key with info:')
 def when_i_publish_a_event_on_the_routing_key_with_info(step, message, routing_key):
     data = step.hashes[0]
-    bus_msg = UserStatusUpdateEvent(data['xivo_id'], data['user_id'], data['status'])
-    bus_config = BusConfig(
-        host=world.config['xivo_host'],
-    )
-    bus_producer = BusProducer(bus_config)
-    bus_producer.connect()
-    bus_producer.publish_event(world.config['bus']['exchange'], routing_key, bus_msg)
-    bus_producer.close()
+    marshaler = Marshaler()
+    msg = marshaler.marshal_message(UserStatusUpdateEvent(data['xivo_id'], data['user_id'], data['status']))
+    _send_bus_msg(msg, routing_key)
 
 
 @step(u'Given I listen on the bus for messages:')
@@ -73,7 +72,7 @@ def given_i_listen_on_the_bus_for_messages(step):
 
     for entry in step.hashes:
         try:
-            exchange = world.config['bus']['exchange']
+            exchange = world.config['bus']['exchange_name']
             queue_name = entry['queue'].encode('ascii')
             routing_key = entry['routing_key'].encode('ascii')
             result = channel.queue_declare(queue=queue_name)

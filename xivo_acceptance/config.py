@@ -98,7 +98,13 @@ def load_config(old_config=True):
             'pyvirtualdisplay': False
         },
         'bus': {
-            'exchange': 'xivo'
+            'exchange_name': 'xivo',
+            'exchange_type': 'topic',
+            'exchange_durable': True,
+            'host': 'localhost',
+            'port': 5672,
+            'username': 'guest',
+            'password': 'guest',
         },
         'prerequisites': {
             'subnets': [
