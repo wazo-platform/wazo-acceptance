@@ -23,11 +23,11 @@ import sys
 
 from execnet.multi import makegateway
 import yaml
+import xivo_dao
 
 from provd.rest.client.client import new_provisioning_client
 from xivo_acceptance.lettuce import ssh
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
-from xivo_dao.helpers import config as dao_config
 import xivo_ws
 
 
@@ -163,7 +163,7 @@ class XivoAcceptanceConfig(object):
         self._execnet_gateway = None
 
     def _setup_dao(self):
-        dao_config.DB_URI = self._config['db_uri']
+        xivo_dao.init_db(xivo_dao.DBContext(self._config['db_uri']))
 
     def _setup_ssh_client(self):
         self.ssh_client_xivo = ssh.SSHClient(hostname=self._config['xivo_host'],
