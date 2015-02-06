@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import pika
 import logging
 import json
 
@@ -66,24 +65,10 @@ def when_i_publish_a_event_on_the_routing_key_with_info(step, message, routing_k
 
 @step(u'Given I listen on the bus for messages:')
 def given_i_listen_on_the_bus_for_messages(step):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=world.config['xivo_host']))
-    channel = connection.channel()
-
     for entry in step.hashes:
-        try:
-            exchange = world.config['bus']['exchange_name']
-            queue_name = entry['queue'].encode('ascii')
-            routing_key = entry['routing_key'].encode('ascii')
-            result = channel.queue_declare(queue=queue_name)
-
-            channel.queue_purge(queue=queue_name)
-            channel.queue_bind(exchange=exchange,
-                               queue=queue_name,
-                               routing_key=routing_key)
-            bus_helper.get_messages_from_bus(queue_name)
-        finally:
-            connection.close()
+        queue_name = entry['queue'].encode('ascii')
+        routing_key = entry['routing_key'].encode('ascii')
+        bus_helper.add_binding(queue_name, routing_key)
 
 
 @step(u'Then I see a message in queue "([^"]*)" with the following variables:')

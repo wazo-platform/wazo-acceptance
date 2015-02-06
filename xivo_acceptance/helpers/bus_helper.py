@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2014 Avencall
+# Copyright (C) 2014-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,23 +16,39 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import json
-import pika
+import time
+
+from kombu import Connection, Queue, Exchange, Consumer
 
 from lettuce import world
 
+_queues = {}
+
+
+def add_binding(queue_name, routing_key):
+    exchange = Exchange(world.config['bus']['exchange_name'], type=world.config['bus']['exchange_type'])
+    with Connection(world.config['bus_url']) as conn:
+        queue = Queue(queue_name, exchange=exchange, routing_key=routing_key,
+                      channel=conn.channel())
+        queue.declare()
+        queue.purge()
+        _queues[queue_name] = queue
+
 
 def get_messages_from_bus(queue_name):
-    parameters = pika.ConnectionParameters(host=world.config['xivo_host'])
-    connection = pika.BlockingConnection(parameters)
-    channel = connection.channel()
     events = []
 
-    def callback(channel, method, props, body):
-        unmarshaled_body = json.loads(body)
-        events.append(unmarshaled_body)
+    def on_event(body, message):
+        events.append(json.loads(body))
+        message.ack()
 
-    channel.basic_consume(callback, queue=queue_name, no_ack=True)
-    connection.process_data_events()
-    connection.close()
+    with Connection(world.config['bus_url']) as conn:
+        with Consumer(conn, [_queues[queue_name]], callbacks=[on_event]):
+            try:
+                end = time.time() + 3
+                while time.time() < end:
+                    conn.drain_events(timeout=1)
+            except Exception:  # timeout
+                pass
 
     return events

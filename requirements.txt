@@ -9,7 +9,6 @@ fuzzywuzzy
 jinja2
 unittest2
 lettuce
-pika
 psycopg2
 python-ldap
 requests>=2.0

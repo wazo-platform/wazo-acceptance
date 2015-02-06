@@ -132,6 +132,10 @@ def _config_post_processor(config):
         config['db_uri'] = 'postgresql://asterisk:proformatique@{}/asterisk'.format(config['xivo_host'])
     if 'url' not in config['frontend']:
         config['frontend']['url'] = 'https://{}'.format(config['xivo_host'])
+    config['bus_url'] = 'amqp://{username}:{password}@{host}:{port}//'.format(username=config['bus']['username'],
+                                                                              password=config['bus']['password'],
+                                                                              host=config['xivo_host'],
+                                                                              port=config['bus']['port'])
 
 
 def _parse_config_file(config_file_name):
