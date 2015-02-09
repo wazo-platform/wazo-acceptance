@@ -41,12 +41,11 @@ logger = logging.getLogger('acceptance')
 
 
 def _send_bus_msg(msg, routing_key):
-    bus_url = 'amqp://{username}:{password}@{host}:{port}//'.format(**world.config['bus'])
     exchange = Exchange(world.config['bus']['exchange_name'],
                         type=world.config['bus']['exchange_type'])
-    with Connection(bus_url) as conn:
+    with Connection(world.config['bus_url']) as conn:
         producer = Producer(conn, exchange)
-        producer.publish(json.dumps(msg, routing_key=routing_key))
+        producer.publish(json.dumps(msg), routing_key=routing_key)
 
 
 @step(u'When I publish the following message on "([^"]*)":')
