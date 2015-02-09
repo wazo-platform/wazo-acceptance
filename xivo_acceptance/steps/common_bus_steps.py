@@ -45,7 +45,7 @@ def _send_bus_msg(msg, routing_key):
                         type=world.config['bus']['exchange_type'])
     with Connection(world.config['bus_url']) as conn:
         producer = Producer(conn, exchange)
-        producer.publish(json.dumps(msg), routing_key=routing_key)
+        producer.publish(msg, routing_key=routing_key)
 
 
 @step(u'When I publish the following message on "([^"]*)":')
