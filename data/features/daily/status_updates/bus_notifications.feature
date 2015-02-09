@@ -18,14 +18,14 @@ Feature: Status notifications
         | yes      |          042 | logged_in | yes       |
 
     Scenario: Bus notification on presence change
+        Given I listen on the bus for messages:
+        | queue            | routing_key |
+        | test_status_user | status.user |
         Given there are users with infos:
          | firstname | lastname  | cti_profile | cti_login | cti_passwd |
          | Donald    | MacRonald | Client      | donald    | macronald  |
         Given I start the XiVO Client
         Given I log in the XiVO client as "donald", pass "macronald"
-        Given I listen on the bus for messages:
-        | queue            | routing_key |
-        | test_status_user | status.user |
         When I change my presence to "away"
         Then I receive a "user_status_update" on the queue "test_status_user" with data:
         | user_id | firstname | lastname  | status | xivo_uuid |
