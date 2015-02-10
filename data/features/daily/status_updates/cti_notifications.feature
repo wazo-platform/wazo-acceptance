@@ -17,8 +17,8 @@ Feature: Status notifications to cti client
          When I publish the following message on "status.user":
          """
          " {"name": "user_status_update",
+         "  "origin_uuid": "my-uuid",
          "  "data": {"user_id": 42,
-         "           "xivo_id": "my-uuid",
          "           "status": "some-new-status"}}
          """
          Then I should receive the following cti command:
@@ -36,8 +36,8 @@ Feature: Status notifications to cti client
          When I publish the following message on "status.user":
          """
          " {"name": "user_status_update",
+         "  "origin_uuid": "my-uuid",
          "  "data": {"user_id": 42,
-         "           "xivo_id": "my-uuid",
          "           "status": "some-new-status"}}
          """
          Then I should NOT receive the following cti command:
@@ -63,8 +63,8 @@ Feature: Status notifications to cti client
          When I publish the following message on "status.endpoint":
          """
          " {"name": "endpoint_status_update",
+         "  "origin_uuid": "my-uuid",
          "  "data": {"endpoint_id": 42,
-         "           "xivo_id": "my-uuid",
          "           "status": 12}}
          """
          Then I should receive the following cti command:
@@ -82,8 +82,8 @@ Feature: Status notifications to cti client
          When I publish the following message on "status.endpoint":
          """
          " {"name": "endpoint_status_update",
+         "  "origin_uuid": "my-uuid",
          "  "data": {"endpoint_id": 42,
-         "           "xivo_id": "my-uuid",
          "           "status": 13}}
          """
          Then I should NOT receive the following cti command:
@@ -109,8 +109,8 @@ Feature: Status notifications to cti client
          When I publish the following message on "status.agent":
          """
          " {"name": "agent_status_update",
+         "  "origin_uuid": "my-uuid",
          "  "data": {"agent_id": 42,
-         "           "xivo_id": "my-uuid",
          "           "status": "gone fishing"}}
          """
          Then I should receive the following cti command:
@@ -128,8 +128,8 @@ Feature: Status notifications to cti client
          When I publish the following message on "status.agent":
          """
          " {"name": "agent_status_update",
+         "  "origin_uuid": "my-uuid",
          "  "data": {"agent_id": 42,
-         "           "xivo_id": "my-uuid",
          "           "status": "gone fishing"}}
          """
          Then I should NOT receive the following cti command:

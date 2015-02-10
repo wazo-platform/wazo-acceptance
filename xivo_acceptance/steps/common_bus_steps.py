@@ -102,7 +102,6 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
         raw_expected_event = {'name': expected_message,
                               'data': {}}
 
-        raw_expected_event['data']['xivo_id'] = xivo_helper.get_uuid()
         raw_expected_event['data']['status'] = expected_event['status']
 
         if expected_event.get('user_id', 'no') == 'yes':
