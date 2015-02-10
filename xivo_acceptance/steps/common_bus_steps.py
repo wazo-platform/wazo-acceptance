@@ -57,7 +57,7 @@ def when_i_publish_the_following_message_on_group1(step, routing_key):
 @step(u'When I publish a "([^"]*)" on the "([^"]*)" routing key with info:')
 def when_i_publish_a_event_on_the_routing_key_with_info(step, message, routing_key):
     data = step.hashes[0]
-    marshaler = Marshaler()
+    marshaler = Marshaler(xivo_helper.get_uuid())
     msg = marshaler.marshal_message(UserStatusUpdateEvent(data['xivo_id'], data['user_id'], data['status']))
     _send_bus_msg(msg, routing_key)
 
