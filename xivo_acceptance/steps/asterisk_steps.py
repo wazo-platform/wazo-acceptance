@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,6 +35,12 @@ def then_asterisk_command_group1_return_no_error(step, ast_cmd):
 @step(u'When I stop Asterisk')
 def when_i_stop_asterisk(step):
     command = ['service', 'asterisk', 'stop']
+    assert sysutils.send_command(command)
+
+
+@step(u'When I start Asterisk')
+def when_i_stop_asterisk(step):
+    command = ['service', 'asterisk', 'start']
     assert sysutils.send_command(command)
 
 
