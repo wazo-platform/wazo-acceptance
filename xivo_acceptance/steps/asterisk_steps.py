@@ -39,7 +39,7 @@ def when_i_stop_asterisk(step):
 
 
 @step(u'When I start Asterisk')
-def when_i_stop_asterisk(step):
+def when_i_start_asterisk(step):
     command = ['service', 'asterisk', 'start']
     assert sysutils.send_command(command)
 
