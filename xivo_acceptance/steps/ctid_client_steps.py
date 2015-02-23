@@ -52,3 +52,12 @@ def then_i_should_have_a_group1_when_i_search_for_user_group2_on_the_cti_http_in
         c.users.get(int(user_id))
     except Exception as e:
         assert_that(str(e).startswith(status_code))
+
+
+@step(u'When I query the infos URL on the cti http interface, I receive the uuid')
+def when_i_query_the_infos_url_on_the_cti_http_interface_i_receive_the_uuid(step):
+    c = Client(host=world.config['xivo_host'])
+
+    uuid = xivo_helper.get_uuid()
+
+    assert_that(c.infos.get(), equal_to({'uuid': uuid}))
