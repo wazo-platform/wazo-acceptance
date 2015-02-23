@@ -86,6 +86,8 @@ def _message_matches_ignore_timenow(msg, expected_msg):
 
 class _Client(object):
 
+    LOGIN_TIMEOUT = 10
+
     def __init__(self, host, port, username, password):
         self._host = host
         self._port = port
@@ -107,7 +109,8 @@ class _Client(object):
         self._thread.start()
 
     def send_message(self, msg):
-        self._login_complete.wait()
+        if not self._login_complete.wait(self.LOGIN_TIMEOUT):
+            raise Exception('could not send message: client is not logged')
 
         self._send_message(msg)
 
