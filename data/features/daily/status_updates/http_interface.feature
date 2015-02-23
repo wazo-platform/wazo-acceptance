@@ -10,3 +10,7 @@ Feature: Status related HTTP interfaces
     Then I should have have the following user status when I query the cti:
     | user_id | origin_uuid | firstname | lastname  | presence |
     | yes     | yes         | Tyrion    | Lannister | away     |
+
+  Scenario: Inexistant user
+    Given there are no users with id "42"
+    Then I should have a "404" when I search for user "42" on the cti http interface

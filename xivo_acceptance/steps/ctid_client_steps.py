@@ -42,3 +42,13 @@ def then_i_should_have_have_the_following_user_status_when_i_query_the_cti(step)
         }
 
         assert_that(c.users.get(user_id), equal_to(expected))
+
+
+@step(u'Then I should have a "([^"]*)" when I search for user "([^"]*)" on the cti http interface')
+def then_i_should_have_a_group1_when_i_search_for_user_group2_on_the_cti_http_interface(step, status_code, user_id):
+    c = Client(host=world.config['xivo_host'])
+
+    try:
+        c.users.get(int(user_id))
+    except Exception as e:
+        assert_that(str(e).startswith(status_code))
