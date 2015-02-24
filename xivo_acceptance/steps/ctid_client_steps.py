@@ -20,12 +20,20 @@ from hamcrest import assert_that, equal_to
 
 from xivo_ctid_client import Client
 
+from xivo_acceptance.helpers import line_helper
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import xivo_helper
 
 
 def _find_user_id(info):
     return user_helper.find_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
+
+
+def _find_line_id(info):
+    exten = info['number']
+    context = info['context']
+    return int(line_helper.find_line_id_with_exten_context(exten, context))
+
 
 
 @step(u'Then I should have have the following user status when I query the cti:')
@@ -36,12 +44,28 @@ def then_i_should_have_have_the_following_user_status_when_i_query_the_cti(step)
     for info in step.hashes:
         user_id = _find_user_id(info)
         expected = {
-            'origin_uuid': uuid,
-            'id': user_id,
-            'presence': info['presence'],
+            u'origin_uuid': uuid,
+            u'id': user_id,
+            u'presence': info['presence'],
         }
 
         assert_that(c.users.get(user_id), equal_to(expected))
+
+
+@step(u'Then I should have have the following endpoint status when I query the cti:')
+def then_i_should_have_have_the_following_endpoint_status_when_i_query_the_cti(step):
+    c = Client(host=world.config['xivo_host'])
+
+    uuid = xivo_helper.get_uuid()
+    for info in step.hashes:
+        line_id = _find_line_id(info)
+        expected = {
+            u'origin_uuid': uuid,
+            u'id': line_id,
+            u'status': int(info['status']),
+        }
+
+        assert_that(c.endpoints.get(line_id), equal_to(expected))
 
 
 @step(u'Then I should have a "([^"]*)" when I search for endpoint "([^"]*)" on the cti http interface')
