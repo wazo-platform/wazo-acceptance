@@ -22,5 +22,8 @@ git+https://github.com/xivo-pbx/xivo-dao.git
 git+https://github.com/xivo-pbx/xivo-provisioning.git
 git+https://github.com/xivo-pbx/xivo-bus.git
 git+https://github.com/xivo-pbx/xivo-lib-python.git
+git+https://github.com/xivo-pbx/xivo-ctid-client.git
+git+https://github.com/xivo-pbx/xivo-lib-rest-client.git
 PyYAML
 kombu==2.1.8
+stevedore

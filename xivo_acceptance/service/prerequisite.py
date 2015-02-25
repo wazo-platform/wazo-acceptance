@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -65,6 +65,9 @@ def run():
         context_helper.update_contextnumbers_queue('default', 3000, 3999)
         context_helper.update_contextnumbers_meetme('default', 4000, 4999)
         context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
+
+        logger.debug('Configuring xivo-ctid')
+        _open_ctid_http()
 
         logger.debug('Restarting All XiVO Services')
         _xivo_service_restart_all()
@@ -137,5 +140,12 @@ def _install_packages(packages):
 def _install_chan_test():
     asset_full_path = assets.full_path('chan_test.so')
     remote_path = '/usr/lib/asterisk/modules/chan_test.so'
+    command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
+    subprocess.call(command)
+
+
+def _open_ctid_http():
+    asset_full_path = assets.full_path('cti_listen.yml')
+    remote_path = '/etc/xivo-ctid/conf.d/cti_listen.yml'
     command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
     subprocess.call(command)

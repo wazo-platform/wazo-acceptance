@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ from .cti_client_steps import *
 from .cti_client_configuration_steps import *
 from .cti_profiles_steps import *
 from .cti_server_steps import *
+from .ctid_client_steps import *
 from .device_steps import *
 from .dhcpd_steps import *
 from .directory_steps import *
