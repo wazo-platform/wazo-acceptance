@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step, world
-from hamcrest import assert_that, equal_to
+from hamcrest import assert_that, equal_to, calling, raises
 from requests.exceptions import HTTPError
 
 from xivo_ctid_client import Client
@@ -34,7 +34,6 @@ def _find_line_id(info):
     exten = info['number']
     context = info['context']
     return int(line_helper.find_line_id_with_exten_context(exten, context))
-
 
 
 @step(u'Then I should have have the following user status when I query the cti:')
@@ -73,22 +72,18 @@ def then_i_should_have_have_the_following_endpoint_status_when_i_query_the_cti(s
 def then_i_should_have_a_group1_when_i_search_for_endpoint_group2_on_the_cti_http_interface(step, status_code, endpoint_id):
     c = Client(host=world.config['xivo_host'])
 
-    try:
-        c.endpoints.get(int(endpoint_id))
-    except Exception as e:
-        assert_that(str(e).startswith(status_code))
+    assert_that(
+        calling(c.endpoints.get).with_args(int(endpoint_id)),
+        raises(HTTPError, r"^{}".format(status_code)))
 
 
 @step(u'Then I should have a "([^"]*)" when I search for user "([^"]*)" on the cti http interface')
 def then_i_should_have_a_group1_when_i_search_for_user_group2_on_the_cti_http_interface(step, status_code, user_id):
     c = Client(host=world.config['xivo_host'])
 
-    try:
-        c.users.get(int(user_id))
-    except HTTPError as e:
-        assert_that(str(e).startswith(status_code))
-    else:
-        assert False, "Expected HTTP error. Did not get any"
+    assert_that(
+        calling(c.users.get).with_args(int(user_id)),
+        raises(HTTPError, r"^{}".format(status_code)))
 
 
 @step(u'When I query the infos URL on the cti http interface, I receive the uuid')
