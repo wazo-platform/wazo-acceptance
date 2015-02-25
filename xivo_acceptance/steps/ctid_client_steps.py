@@ -17,6 +17,7 @@
 
 from lettuce import step, world
 from hamcrest import assert_that, equal_to
+from requests.exceptions import HTTPError
 
 from xivo_ctid_client import Client
 
@@ -50,5 +51,7 @@ def then_i_should_have_a_group1_when_i_search_for_user_group2_on_the_cti_http_in
 
     try:
         c.users.get(int(user_id))
-    except Exception as e:
+    except HTTPError as e:
         assert_that(str(e).startswith(status_code))
+    else:
+        assert False, "Expected HTTP error. Did not get any"
