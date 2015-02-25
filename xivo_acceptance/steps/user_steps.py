@@ -350,7 +350,6 @@ def when_i_delete_agent_number_1(step, agent_number):
 
 @step(u'When I add a user "([^"]*)" "([^"]*)" with a function key with type Customized and extension "([^"]*)"$')
 def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastname, extension):
-    ule_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'add')
     user_action_webi.type_user_names(firstname, lastname)
     user_action_webi.type_func_key('Customized', extension)
