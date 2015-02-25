@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,6 +36,11 @@ from xivo_acceptance.lettuce.widget.codec import CodecWidget
 @step(u'Given there are no custom lines with interface beginning with "([^"]*)"')
 def given_there_are_no_custom_lines_with_interface_beginning_with_1(step, interface_start):
     common.remove_element_if_exist('line', interface_start)
+
+
+@step(u'Given there are no lines with id "([^"]*)"')
+def given_there_are_no_lines_with_id_group1(step, line_id):
+    line_helper.delete_line(int(line_id))
 
 
 @step(u'Given I set the following options in line "([^"]*)":')
