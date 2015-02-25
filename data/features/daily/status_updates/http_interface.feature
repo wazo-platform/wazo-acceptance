@@ -14,3 +14,6 @@ Feature: Status related HTTP interfaces
   Scenario: Inexistant user
     Given there are no users with id "42"
     Then I should have a "404" when I search for user "42" on the cti http interface
+
+  Scenario: Infos
+    When I query the infos URL on the cti http interface, I receive the uuid
