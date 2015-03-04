@@ -67,7 +67,10 @@ def run():
         context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
         logger.debug('Configuring xivo-ctid')
-        _open_ctid_http()
+        _configure_xivo_ctid()
+
+        logger.debug('Configuring xivo-agentd')
+        _configure_xivo_agentd()
 
         logger.debug('Restarting All XiVO Services')
         _xivo_service_restart_all()
@@ -144,8 +147,16 @@ def _install_chan_test():
     subprocess.call(command)
 
 
-def _open_ctid_http():
-    asset_full_path = assets.full_path('cti_listen.yml')
-    remote_path = '/etc/xivo-ctid/conf.d/cti_listen.yml'
+def _configure_xivo_ctid():
+    _copy_daemon_config_file('xivo-ctid')
+
+
+def _configure_xivo_agentd():
+    _copy_daemon_config_file('xivo-agentd')
+
+
+def _copy_daemon_config_file(daemon_name):
+    asset_full_path = assets.full_path('{}-acceptance.yml'.format(daemon_name))
+    remote_path = '/etc/{}/conf.d'.format(daemon_name)
     command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
     subprocess.call(command)
