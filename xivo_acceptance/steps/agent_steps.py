@@ -23,7 +23,6 @@ from xivo_ws.exception import WebServiceRequestError
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
 from xivo_acceptance.helpers import agent_helper, user_helper, line_helper
-from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_acceptance.lettuce import common, form, func
 
 

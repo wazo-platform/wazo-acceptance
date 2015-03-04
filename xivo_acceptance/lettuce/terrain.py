@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import errno
 import logging
 import os
 import tempfile
@@ -29,6 +28,7 @@ from xivo_acceptance.lettuce import asterisk
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import debug
 from xivo_acceptance.lettuce.phone_register import PhoneRegister
+from xivo_agentd_client import Client as AgentdClient
 from xivobrowser import XiVOBrowser
 
 
@@ -85,6 +85,7 @@ def initialize():
     _setup_provd(world.xivo_acceptance_config)
     logger.debug("_setup_browser...")
     _setup_browser(world.config)
+    _setup_agentd_client()
     world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
 
@@ -92,6 +93,10 @@ def initialize():
 @debug.logcall
 def _setup_ssh_client(xivo_acceptance_config):
     world.ssh_client_xivo = xivo_acceptance_config.ssh_client_xivo
+
+
+def _setup_agentd_client():
+    world.agentd_client = AgentdClient(world.config['xivo_host'])
 
 
 @debug.logcall

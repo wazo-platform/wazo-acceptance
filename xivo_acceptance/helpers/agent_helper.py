@@ -19,7 +19,6 @@ from lettuce import world
 from xivo_ws import Agent
 
 from xivo_acceptance.helpers import line_helper
-from xivo_acceptance.lettuce import sysutils
 
 
 def add_agent(data_dict):
@@ -80,27 +79,20 @@ def _search_agents_with_number(number):
 
 
 def is_agent_logged_in(agent_number):
-    command = ['xivo-agentctl', '-c', '"status %s"' % agent_number]
-    output = sysutils.output_command(command)
-
-    log_line = output.split("\n")[1]
-    log_status = log_line.split(": ")[1].strip()
-
-    return log_status == "True"
+    agent_status = world.agentd_client.agents.get_agent_status_by_number(agent_number)
+    return agent_status.logged
 
 
 def unlog_all_agents():
-    sysutils.send_command(['xivo-agentctl', '-c', '"logoff all"'])
+    world.agentd_client.agents.logoff_all()
 
 
 def pause_agent(agent_number):
-    command = ['xivo-agentctl', '-c', '"pause %s"' % agent_number]
-    sysutils.send_command(command)
+    world.agentd_client.agents.pause_agent_by_number(agent_number)
 
 
 def unpause_agent(agent_number):
-    command = ['xivo-agentctl', '-c', '"unpause %s"' % agent_number]
-    sysutils.send_command(command)
+    world.agentd_client.agents.unpause_agent_by_number(agent_number)
 
 
 def _get_line_from_agent(agent_number):
