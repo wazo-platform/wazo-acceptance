@@ -53,15 +53,6 @@ def given_i_log_the_phone(step, agent_number, extension):
     time.sleep(3)
 
 
-@step(u'Given I logout agent "([^"]*)" on extension "([^"]*)"')
-def given_i_logout_the_phone(step, agent_number, extension):
-    line = line_helper.find_with_extension(extension)
-    user = user_helper.get_by_exten_context(line.number, line.context)
-    phone = step.scenario.phone_register.get_user_phone(user.fullname)
-    phone.call('*32%s' % agent_number)
-    time.sleep(3)
-
-
 @step(u'Given there is no agent with id "([^"]*)"')
 def given_there_is_no_agent_with_id(step, agent_id):
     try:
