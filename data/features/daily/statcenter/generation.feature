@@ -42,8 +42,7 @@ Feature: Stats generation
         Given there are queues with infos:
           | name | number | context     | agents_number |
           | q03  | 5003   | statscenter | 003           |
-        When "User 003" calls "*31003"
-        When I wait 2 seconds for the calls processing
+        When I log agent "003"
         When chan_test calls "5003@statscenter" with id "5003-1"
         When I wait 2 seconds for the calls processing
         When "User 003" answers
@@ -60,7 +59,7 @@ Feature: Stats generation
         Given there are queues with infos:
           | name | number | context     | agents_number | reachability_timeout |
           | q04  |   5004 | statscenter |           004 |                    5 |
-        When "User 004" calls "*31004" and waits until the end
+        When I log agent "004"
         When chan_test calls "5004@statscenter" with id "5004-1"
         When I wait 6 seconds to exceed the redistribution timer
         When chan_test hangs up "5004-1"
@@ -104,8 +103,7 @@ Feature: Stats generation
         Given there are users with infos:
          | firstname | lastname | number | context     | agent_number | protocol |
          | User      | 007      |   1007 | statscenter | 007          | sip      |
-        When "User 007" calls "*31007"
-        When I wait 3 seconds for the data processing
+        When I log agent "007"
         Then I should see 1 "AGENTCALLBACKLOGIN" event for agent "007" in the queue log
 
     Scenario: 08 Login twice using AGENTCALLBACKLOGIN
@@ -114,10 +112,8 @@ Feature: Stats generation
         Given there are users with infos:
          | firstname | lastname | number | context     | agent_number | protocol |
          | User      | 007      |   1007 | statscenter | 007          | sip      |
-        When "User 007" calls "*31007"
-        When I wait 2 seconds for the calls processing
-        When "User 007" calls "*31007"
-        When I wait 3 seconds for the data processing
+        When I log agent "007"
+        When I log agent "007", ignoring errors
         Then I should see 1 "AGENTCALLBACKLOGIN" event for agent "007" in the queue log
 
     Scenario: 09 Logoff when not logged in
@@ -126,12 +122,9 @@ Feature: Stats generation
         Given there are users with infos:
          | firstname | lastname | number | context     | agent_number | protocol |
          | User      | 007      |   1007 | statscenter | 007          | sip      |
-        When "User 007" calls "*31007"
-        When I wait 2 seconds for the calls processing
-        When "User 007" calls "*32007"
-        When I wait 2 seconds for the calls processing
-        When "User 007" calls "*32007"
-        When I wait 3 seconds for the data processing
+        When I log agent "007"
+        When I unlog agent "007"
+        When I unlog agent "007", ignoring errors
         Then I should see 1 "AGENTCALLBACKLOGOFF" event for agent "007" in the queue log
 
     Scenario: 10 Generation of event COMPLETECALLER
@@ -143,8 +136,7 @@ Feature: Stats generation
         Given there are queues with infos:
           | name | number | context     | agents_number |
           | q08  | 5008   | statscenter | 008           |
-        When "User 008" calls "*31008"
-        When I wait 2 seconds for the calls processing
+        When I log agent "008"
         When chan_test calls "5008@statscenter" with id "5008-1"
         When I wait 2 seconds for the calls processing
         When "User 008" answers
@@ -161,8 +153,7 @@ Feature: Stats generation
         Given there are queues with infos:
           | name | number | context     | agents_number |
           | q09  | 5009   | statscenter | 009           |
-        When "User 009" calls "*31009"
-        When I wait 2 seconds for the calls processing
+        When I log agent "009"
         When chan_test calls "5009@statscenter" with id "5009-1"
         When I wait 1 seconds for the calls processing
         When "User 009" answers
@@ -197,8 +188,7 @@ Feature: Stats generation
         Given there are queues with infos:
           | name | number | context     | ringing_time | agents_number |
           | q12  | 5012   | statscenter | 30           | 012           |
-        When "User 012" calls "*31012"
-        When I wait 2 seconds for the calls processing
+        When I log agent "012"
         When chan_test calls "5012@statscenter" with id "5012-1"
         When chan_test calls "5012@statscenter" with id "5012-2"
         When I wait 35 seconds for the calls processing
@@ -218,11 +208,9 @@ Feature: Stats generation
         Given there are users with infos:
          | firstname | lastname | number | context     | agent_number | protocol |
          | User      | 013      |   1013 | statscenter | 013          | sip      |
-        When "User 013" calls "*31013"
-        When I wait 2 seconds for the calls processing
+        When I log agent "013"
         When I pause agent "013"
         When I unpause agent "013"
-        When I wait 3 seconds for the data processing
         Then I should see 1 "PAUSEALL" event for agent "013" in the queue log
         Then I should see 1 "UNPAUSEALL" event for agent "013" in the queue log
 
@@ -235,8 +223,7 @@ Feature: Stats generation
         Given there are queues with infos:
           | name | number | context     | agents_number | wrapuptime |
           | q14  | 5014   | statscenter | 014           | 15         |
-        When "User 014" calls "*31014"
-        Given I wait 2 seconds for the calls processing
+        When I log agent "014"
         When chan_test calls "5014@statscenter" with id "5014-1"
         When I wait 1 seconds for the calls processing
         When "User 014" answers

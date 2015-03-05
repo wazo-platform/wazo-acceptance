@@ -12,7 +12,7 @@ Feature: Status notifications
         Given I listen on the bus for messages:
         | queue             | routing_key  |
         | test_status_agent | status.agent |
-        When "User 003" calls "*31042" and waits until the end
+        When I log agent "042"
         Then I receive a "agent_status_update" on the queue "test_status_agent" with data:
         | agent_id | agent_number | status    |
         | yes      |          042 | logged_in |

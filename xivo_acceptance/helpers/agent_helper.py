@@ -22,6 +22,7 @@ from xivo_ws import Agent
 
 from xivo_acceptance.helpers import line_helper, user_helper
 from xivo_acceptance.lettuce import func
+from xivo_agentd_client.error import AgentdClientError
 
 
 def add_agent(data_dict):
@@ -81,17 +82,25 @@ def _search_agents_with_number(number):
     return world.ws.agents.search_by_number(number)
 
 
-def login_agent(agent_number, extension=None):
+def login_agent(agent_number, extension=None, ignore_error=False):
     if extension is None:
         line = _get_line_from_agent(agent_number)
         number, context = line.number, line.context
     else:
         number, context = func.extract_number_and_context_from_extension(extension)
-    world.agentd_client.agents.login_agent_by_number(agent_number, number, context)
+    try:
+        world.agentd_client.agents.login_agent_by_number(agent_number, number, context)
+    except AgentdClientError:
+        if not ignore_error:
+            raise
 
 
-def logoff_agent(agent_number):
-    world.agentd_client.agents.logoff_agent_by_number(agent_number)
+def logoff_agent(agent_number, ignore_error=False):
+    try:
+        world.agentd_client.agents.logoff_agent_by_number(agent_number)
+    except AgentdClientError:
+        if not ignore_error:
+            raise
 
 
 def login_agent_from_phone(agent_number, phone_register):

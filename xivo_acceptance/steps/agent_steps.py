@@ -62,9 +62,19 @@ def when_i_log_agent_1(step, agent_number):
     agent_helper.login_agent(agent_number)
 
 
+@step(u'When I log agent "([^"]*)", ignoring errors$')
+def when_i_log_agent_1_ignoring_errors(step, agent_number):
+    agent_helper.login_agent(agent_number, ignore_error=True)
+
+
 @step(u'When I unlog agent "([^"]*)"$')
 def when_i_unlog_agent_group1(step, agent_number):
     agent_helper.logoff_agent(agent_number)
+
+
+@step(u'When I unlog agent "([^"]*)", ignoring errors$')
+def when_i_unlog_agent_group1_ignoring_errors(step, agent_number):
+    agent_helper.logoff_agent(agent_number, ignore_error=True)
 
 
 @step(u'When I log agent "([^"]*)" from the phone$')
