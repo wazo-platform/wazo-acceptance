@@ -62,22 +62,24 @@ def given_there_is_no_agent_with_id(step, agent_id):
             raise
 
 
-@step(u'When I log agent "([^"]*)"')
+@step(u'When I log agent "([^"]*)"$')
 def when_i_log_agent_1(step, agent_number):
-    line = agent_helper._get_line_from_agent(agent_number)
-    user = user_helper.get_by_exten_context(line.number, line.context)
-    phone = step.scenario.phone_register.get_user_phone(user.fullname)
-    phone.call('*31%s' % agent_number)
-    time.sleep(3)
+    agent_helper.login_agent_from_phone(agent_number, step.scenario.phone_register)
 
 
-@step(u'When I unlog agent "([^"]*)"')
+@step(u'When I unlog agent "([^"]*)"$')
 def when_i_unlog_agent_group1(step, agent_number):
-    line = agent_helper._get_line_from_agent(agent_number)
-    user = user_helper.get_by_exten_context(line.number, line.context)
-    phone = step.scenario.phone_register.get_user_phone(user.fullname)
-    phone.call('*32%s' % agent_number)
-    time.sleep(3)
+    agent_helper.logoff_agent_from_phone(agent_number, step.scenario.phone_register)
+
+
+@step(u'When I log agent "([^"]*)" from the phone$')
+def when_i_log_agent_1_from_the_phone(step, agent_number):
+    agent_helper.login_agent_from_phone(agent_number, step.scenario.phone_register)
+
+
+@step(u'When I unlog agent "([^"]*)" from the phone$')
+def when_i_unlog_agent_group1_from_the_phone(step, agent_number):
+    agent_helper.logoff_agent_from_phone(agent_number, step.scenario.phone_register)
 
 
 @step(u'When I pause agent "([^"]*)"')
@@ -181,3 +183,13 @@ def then_the_agent_password_is(step, number, password):
     current_password = agent_helper.find_agent_password_with_number(number)
 
     assert_that(current_password, equal_to(password))
+
+
+@step(u'Then the agent "([^"]*)" is logged')
+def then_the_agent_group1_is_logged(step, agent_number):
+    assert agent_helper.is_agent_logged(agent_number)
+
+
+@step(u'Then the agent "([^"]*)" is not logged')
+def then_the_agent_group1_is_not_logged(step, agent_number):
+    assert not agent_helper.is_agent_logged(agent_number)

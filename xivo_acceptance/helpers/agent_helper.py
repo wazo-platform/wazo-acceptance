@@ -15,10 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
+
 from lettuce import world
 from xivo_ws import Agent
 
-from xivo_acceptance.helpers import line_helper
+from xivo_acceptance.helpers import line_helper, user_helper
 
 
 def add_agent(data_dict):
@@ -78,7 +80,23 @@ def _search_agents_with_number(number):
     return world.ws.agents.search_by_number(number)
 
 
-def is_agent_logged_in(agent_number):
+def login_agent_from_phone(agent_number, phone_register):
+    line = _get_line_from_agent(agent_number)
+    user = user_helper.get_by_exten_context(line.number, line.context)
+    phone = phone_register.get_user_phone(user.fullname)
+    phone.call('*31%s' % agent_number)
+    time.sleep(3)
+
+
+def logoff_agent_from_phone(agent_number, phone_register):
+    line = _get_line_from_agent(agent_number)
+    user = user_helper.get_by_exten_context(line.number, line.context)
+    phone = phone_register.get_user_phone(user.fullname)
+    phone.call('*32%s' % agent_number)
+    time.sleep(3)
+
+
+def is_agent_logged(agent_number):
     agent_status = world.agentd_client.agents.get_agent_status_by_number(agent_number)
     return agent_status.logged
 

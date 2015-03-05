@@ -55,3 +55,12 @@ Feature: Agent
         Then I receive a "agent_status_update" on the queue "test_status_agent" with data:
         | agent_id | agent_number | status    | xivo_uuid |
         | yes      |          042 | logged_in | yes       |
+
+    Scenario: Login and logout an agent from the phone
+        Given there are users with infos:
+        | firstname | lastname | number | context     | agent_number | protocol |
+        | User      |      003 |   1003 | statscenter |         1003 | sip      |
+        When I log agent "1003" from the phone
+        Then the agent "1003" is logged
+        When I unlog agent "1003" from the phone
+        Then the agent "1003" is not logged
