@@ -18,11 +18,10 @@
 from hamcrest import assert_that, equal_to
 from lettuce import step, world
 from selenium.webdriver.common.action_chains import ActionChains
-import time
 from xivo_ws.exception import WebServiceRequestError
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
-from xivo_acceptance.helpers import agent_helper, user_helper, line_helper
+from xivo_acceptance.helpers import agent_helper
 from xivo_acceptance.lettuce import common, form, func
 
 
@@ -46,11 +45,7 @@ def given_there_is_no_agents_logged(step):
 
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
 def given_i_log_the_phone(step, agent_number, extension):
-    line = line_helper.find_with_extension(extension)
-    user = user_helper.get_by_exten_context(line.number, line.context)
-    phone = step.scenario.phone_register.get_user_phone(user.fullname)
-    phone.call('*31%s' % agent_number)
-    time.sleep(3)
+    agent_helper.login_agent(agent_number, extension)
 
 
 @step(u'Given there is no agent with id "([^"]*)"')
@@ -64,12 +59,12 @@ def given_there_is_no_agent_with_id(step, agent_id):
 
 @step(u'When I log agent "([^"]*)"$')
 def when_i_log_agent_1(step, agent_number):
-    agent_helper.login_agent_from_phone(agent_number, step.scenario.phone_register)
+    agent_helper.login_agent(agent_number)
 
 
 @step(u'When I unlog agent "([^"]*)"$')
 def when_i_unlog_agent_group1(step, agent_number):
-    agent_helper.logoff_agent_from_phone(agent_number, step.scenario.phone_register)
+    agent_helper.logoff_agent(agent_number)
 
 
 @step(u'When I log agent "([^"]*)" from the phone$')

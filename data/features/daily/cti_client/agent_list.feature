@@ -11,9 +11,7 @@ Feature: Agent list xlet
         When I log in the XiVO Client as "jim", pass "kirk"
         Then the agent list xlet shows agent "1110" as unlogged
         When I log agent "1110"
-        When I wait 3 seconds for the calls processing
         When I unlog agent "1110"
-        When I wait 3 seconds for the calls processing
         Then the agent list xlet shows agent "1110" as unlogged
 
     Scenario: Status since indicator changes when an agent receives a call from a queue
