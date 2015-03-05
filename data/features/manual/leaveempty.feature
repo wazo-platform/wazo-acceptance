@@ -10,10 +10,10 @@ Feature: Stats generation
         Given there are queues with infos:
           | name | number | context     | leavewhenempty     | agents_number |
           | q10  | 5010   | statscenter | unavailable,paused | 010           |
-        When I log agent "010"
+        When I log agent "010" from the phone
         When chan_test calls "5010@statscenter" with id "5010-1"
         When chan_test calls "5010@statscenter" with id "5010-2"
-        When I unlog agent "010"
+        When I unlog agent "010" from the phone
         When chan_test hangs up "5010-1"
         When chan_test hangs up "5010-2"
         When I wait 3 seconds for the data processing
