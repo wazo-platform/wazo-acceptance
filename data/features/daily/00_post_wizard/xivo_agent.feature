@@ -5,7 +5,7 @@ Feature: XIVO Agent
          | firstname | lastname  | number | context | agent_number |
          | Lord      | Sanderson |   1042 | default | 12345        |
         When I restart Asterisk
-        When I try to log in agent "12345" with extension "1042@default" through xivo-agentctl
-        When I try to log off agent "12345" through xivo-agentctl
+        When I log agent "12345"
+        When I unlog agent "12345"
         Then the service "xivo-agent" is running
         Then I see that xivo-agent has reconnected to the AMI in the logs
