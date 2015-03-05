@@ -116,7 +116,7 @@ def is_agent_logged(agent_number):
 
 
 def unlog_all_agents():
-    world.agentd_client.agents.logoff_all()
+    world.agentd_client.agents.logoff_all_agents()
 
 
 def pause_agent(agent_number):
