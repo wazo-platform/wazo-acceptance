@@ -25,7 +25,7 @@ from execnet.multi import makegateway
 import yaml
 import xivo_dao
 
-from provd.rest.client.client import new_provisioning_client
+from xivo_provd_client import new_provisioning_client
 from xivo_acceptance.lettuce import ssh
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
 import xivo_ws
