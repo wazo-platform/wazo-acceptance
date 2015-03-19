@@ -84,6 +84,9 @@ def _create_voicemail(channel, parameters):
     if 'email' in parameters:
         voicemail.email = parameters['email']
 
+    if 'pager' in parameters:
+        voicemail.pager = parameters['pager']
+
     if 'language' in parameters:
         voicemail.language = parameters['language']
 
