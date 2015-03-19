@@ -59,6 +59,28 @@ Feature: Call Log Generation
             | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered | source_line_identity | destination_line_identity |
             | 2013-01-01 11:02:38.0 |   612345678 |    612345678 |              1002 | 0:00:02.8 |            | True     | sip/trunk            | sip/hg63xv                |
 
+	Scenario: Generation of answered incoming call on s extension
+        Given there are no call logs
+        Given I have only the following CEL entries:
+            | eventtype    | eventtime             | cid_name   |    cid_num | exten | context     | channame            |      uniqueid |      linkedid | userfield |
+            | CHAN_START   | 2013-01-01 11:02:38.0 | 612345678  |  612345678 | s     | from-extern | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
+            | XIVO_FROM_S  | 2013-01-01 11:02:38.1 | 612345678  |  612345678 | 1002  | from-extern | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
+            | APP_START    | 2013-01-01 11:02:38.1 |            | 0612345678 | s     | user        | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
+            | CHAN_START   | 2013-01-01 11:02:38.2 | Bob Marley |       1002 | s     | default     | SIP/hg63xv-00000013 | 1376060558.18 | 1376060558.17 |           |
+            | ANSWER       | 2013-01-01 11:02:42.0 | Bob Marley |       1002 | s     | default     | SIP/hg63xv-00000013 | 1376060558.18 | 1376060558.17 |           |
+            | ANSWER       | 2013-01-01 11:02:42.1 |            | 0612345678 | s     | user        | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
+            | BRIDGE_START | 2013-01-01 11:02:42.2 |            | 0612345678 | s     | user        | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
+            | BRIDGE_END   | 2013-01-01 11:02:45.0 |            | 0612345678 | s     | user        | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
+            | HANGUP       | 2013-01-01 11:02:45.1 | Bob Marley |       1002 |       | user        | SIP/hg63xv-00000013 | 1376060558.18 | 1376060558.17 |           |
+            | CHAN_END     | 2013-01-01 11:02:45.2 | Bob Marley |       1002 |       | user        | SIP/hg63xv-00000013 | 1376060558.18 | 1376060558.17 |           |
+            | HANGUP       | 2013-01-01 11:02:45.3 |            | 0612345678 | s     | user        | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
+            | CHAN_END     | 2013-01-01 11:02:45.4 |            | 0612345678 | s     | user        | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
+            | LINKEDID_END | 2013-01-01 11:02:45.5 |            | 0612345678 | s     | user        | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
+        When I generate call logs
+        Then I should have the following call logs:
+            | date                  | source_name | source_exten | destination_exten |  duration | user_field | answered | source_line_identity | destination_line_identity |
+            | 2013-01-01 11:02:38.0 |   612345678 |    612345678 |              1002 | 0:00:02.8 |            | True     | sip/trunk            | sip/hg63xv                |
+
     Scenario: Generation of answered outgoing call
         Given there are no call logs
         Given I have only the following CEL entries:
