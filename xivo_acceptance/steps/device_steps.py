@@ -17,7 +17,6 @@
 
 from lettuce import step, world
 from hamcrest import *
-from urllib2 import HTTPError
 
 from xivo_acceptance.action.webi import provd_plugins
 from xivo_acceptance.action.confd import device_action_confd
@@ -25,6 +24,7 @@ from xivo_acceptance.action.webi import device as device_action_webi
 from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
 from xivo_dao.data_handler.line import dao as line_dao
 from xivo_acceptance.lettuce import form, common, logs, sysutils
+from xivo_provd_client import NotFoundError
 
 
 @step(u'Given there are no devices with mac "([^"]*)"')
@@ -280,7 +280,7 @@ def then_i_see_in_the_log_file_device_group1_autoprovisioned(step, device_id):
 def then_the_device_is_no_longer_exists_in_provd(step, device_id):
     try:
         provd_helper.get_device(device_id)
-    except HTTPError:
+    except NotFoundError:
         assert True
     else:
         assert False, 'The device %s is longer exists in provd' % device_id
