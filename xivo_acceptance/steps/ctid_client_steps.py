@@ -36,7 +36,7 @@ def _find_line_id(info):
     return int(line_helper.find_line_id_with_exten_context(exten, context))
 
 
-@step(u'Then I should have have the following user status when I query the cti:')
+@step(u'Then I should have the following user status when I query the cti:')
 def then_i_should_have_have_the_following_user_status_when_i_query_the_cti(step):
     c = Client(host=world.config['xivo_host'])
 
@@ -52,7 +52,7 @@ def then_i_should_have_have_the_following_user_status_when_i_query_the_cti(step)
         assert_that(c.users.get(user_id), equal_to(expected))
 
 
-@step(u'Then I should have have the following endpoint status when I query the cti:')
+@step(u'Then I should have the following endpoint status when I query the cti:')
 def then_i_should_have_have_the_following_endpoint_status_when_i_query_the_cti(step):
     c = Client(host=world.config['xivo_host'])
 

@@ -7,7 +7,7 @@ Feature: Status related HTTP interfaces
     Given I start the XiVO Client
     Given I log in the XiVO client as "tyrion", pass "tyrion"
     When I change my presence to "away"
-    Then I should have have the following user status when I query the cti:
+    Then I should have the following user status when I query the cti:
     | user_id | origin_uuid | firstname | lastname  | presence |
     | yes     | yes         | Tyrion    | Lannister | away     |
 
@@ -26,10 +26,10 @@ Feature: Status related HTTP interfaces
     | Tywin     | Lannister |   1111 | default | sip      |
     | Cersei    | Lannister |   1112 | default | sip      |
     When "Tywin Lannister" calls "1112"
-    Then I should have have the following endpoint status when I query the cti:
+    Then I should have the following endpoint status when I query the cti:
     | line_id | origin_uuid | context | number | status |
     | yes     | yes         | default |   1112 |      8 |
     When "Cersei Lannister" answers
-    Then I should have have the following endpoint status when I query the cti:
+    Then I should have the following endpoint status when I query the cti:
     | line_id | origin_uuid | context | number | status |
     | yes     | yes         | default |   1111 |      1 |
