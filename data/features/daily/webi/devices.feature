@@ -109,6 +109,17 @@ Feature: Devices
         When I delete the device "1654324689546246"
         Then there is no device "00:00:00:fa:1c:01"
 
+    Scenario: Update device slot
+        Given I have the following devices:
+          |       ip | mac               |
+          | 10.0.0.1 | 00:00:00:11:22:33 |
+        Given there are users with infos:
+          | firstname | lastname | number | context | protocol |            device |
+          | Han       | Solo     |   1138 | default | sip      | 00:00:00:11:22:33 |
+         When I modify the device slot of user "Han" "Solo" to "2"
+         When I modify the device slot of user "Han" "Solo" to "1"
+         Then I see no errors
+
     Scenario: Autoprov
         Given there are no devices with id "62144354987621"
         Given I have the following devices:

@@ -414,6 +414,13 @@ def when_i_modify_the_device_of_user_group1_group2_to_group3(step, firstname, la
     form.submit.submit_form()
 
 
+@step(u'When I modify the device slot of user "([^"]*)" "([^"]*)" to "([^"]*)"')
+def when_i_modify_the_device_slot_of_user_group1_group2_to_group3(step, firstname, lastname, device_slot):
+    _edit_user(firstname, lastname)
+    user_action_webi.select_device_slot(device_slot)
+    form.submit.submit_form()
+
+
 @step(u'When I modify the extension of user "([^"]*)" "([^"]*)" to "([^"]*)"$')
 def when_i_modify_the_extension_of_user_name_to_extension(step, firstname, lastname, new_extension):
     _edit_user(firstname, lastname)

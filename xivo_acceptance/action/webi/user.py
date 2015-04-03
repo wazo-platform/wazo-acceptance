@@ -210,6 +210,12 @@ def select_device(device):
     input_device_3.click()
 
 
+def select_device_slot(device_slot):
+    open_line_tab()
+    input_linenum = Select(world.browser.find_elements_by_id('linefeatures-num')[-2])
+    input_linenum.select_by_visible_text(device_slot)
+
+
 def type_voicemail(voicemail_number):
     common.go_to_tab('General')
     form.select.set_select_field_with_label('Language', 'en_US')
