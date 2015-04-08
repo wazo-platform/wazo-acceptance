@@ -111,14 +111,28 @@ Feature: Devices
 
     Scenario: Update device slot
         Given I have the following devices:
-          |       ip | mac               |
-          | 10.0.0.1 | 00:00:00:11:22:33 |
+          | mac               |
+          | 00:00:00:11:22:33 |
         Given there are users with infos:
           | firstname | lastname | number | context | protocol |            device |
           | Han       | Solo     |   1138 | default | sip      | 00:00:00:11:22:33 |
          When I modify the device slot of user "Han" "Solo" to "2"
          When I modify the device slot of user "Han" "Solo" to "1"
          Then I see no errors
+
+    Scenario: Associate and dissociate multiple lines to device
+        Given I have the following devices:
+          | mac               |
+          | 00:00:00:11:22:33 |
+        Given there are users with infos:
+          | firstname | lastname | number | context | protocol |            device | device_slot |
+          | Han       | Solo     |   1138 | default | sip      | 00:00:00:11:22:33 | 1           |
+          | Han       | Duo      |   1139 | default | sip      | 00:00:00:11:22:33 | 2           |
+        When I modify the device of user "Han" "Duo" to ""
+        When I modify the device of user "Han" "Duo" to "00:00:11:22:33" with device slot "2"
+        When I modify the device of user "Han" "Solo" to ""
+        When I modify the device of user "Han" "Duo" to ""
+        Then I see no errors
 
     Scenario: Autoprov
         Given there are no devices with id "62144354987621"
