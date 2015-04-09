@@ -261,6 +261,8 @@ def add_user(data_dict, step=None):
             device = provd_helper.find_by_mac(data_dict['device'])
             if device is not None:
                 user.line.device_id = str(device['id'])
+        if 'device_slot' in data_dict:
+            user.line.device_slot = int(data_dict['device_slot'])
 
     if 'voicemail_name' in data_dict and 'voicemail_number' in data_dict:
         user.voicemail = UserVoicemail()

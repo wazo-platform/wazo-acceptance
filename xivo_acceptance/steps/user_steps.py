@@ -90,6 +90,8 @@ def _add_user(user_data, step=None):
             user_ws_data['protocol'] = user_data['protocol']
         if 'device' in user_data:
             user_ws_data['device'] = user_data['device']
+        if 'device_slot' in user_data:
+            user_ws_data['device_slot'] = user_data['device_slot']
 
         if user_data.get('voicemail_name') and user_data.get('voicemail_number'):
             user_ws_data['voicemail_name'] = user_data['voicemail_name']
@@ -407,10 +409,25 @@ def when_i_remove_the_mobile_number_of_user_group1_group2(step, firstname, lastn
     form.submit.submit_form()
 
 
-@step(u'When I modify the device of user "([^"]*)" "([^"]*)" to "([^"]*)"')
+@step(u'When I modify the device of user "([^"]*)" "([^"]*)" to "([^"]*)"$')
 def when_i_modify_the_device_of_user_group1_group2_to_group3(step, firstname, lastname, device):
     _edit_user(firstname, lastname)
     user_action_webi.type_device(device)
+    form.submit.submit_form()
+
+
+@step(u'When I modify the device slot of user "([^"]*)" "([^"]*)" to "([^"]*)"$')
+def when_i_modify_the_device_slot_of_user_group1_group2_to_group3(step, firstname, lastname, device_slot):
+    _edit_user(firstname, lastname)
+    user_action_webi.select_device_slot(device_slot)
+    form.submit.submit_form()
+
+
+@step(u'When I modify the device of user "([^"]*)" "([^"]*)" to "([^"]*)" with device slot "([^"]*)"$')
+def when_i_modify_the_device_and_device_slot_of_user_group1_group2_to_group3(step, firstname, lastname, device, device_slot):
+    _edit_user(firstname, lastname)
+    user_action_webi.type_device(device)
+    user_action_webi.select_device_slot(device_slot)
     form.submit.submit_form()
 
 
