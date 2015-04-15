@@ -21,7 +21,6 @@ Feature: CTI Client Configuration
         Given there is a profile "full" with no services and xlets:
         | xlet                    | position |
         | Identity                | dock     |
-        | Dialer                  | dock     |
         | History                 | dock     |
         | Search                  | dock     |
         | Directory               | dock     |
