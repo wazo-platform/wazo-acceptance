@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, has_entries
+from hamcrest import assert_that, has_entries, has_item
 from lettuce import step
 
 from xivo_acceptance.action.webi import meetme as meetme_action_webi
@@ -53,9 +53,9 @@ def when_i_update_the_following_conference_rooms(step):
 
 @step(u'Then the following conference rooms appear in the conference room xlet:')
 def then_the_following_conference_rooms_appear_in_the_list(step):
-    res = cti_helper.get_conference_room_infos()
-    for src_dict, expected_dict in zip(res['return_value']['content'], step.hashes):
-        assert_that(src_dict, has_entries(expected_dict))
+    actual_conf_rooms = cti_helper.get_conference_room_infos()['return_value']['content']
+    for expected_conf_room in step.hashes:
+        assert_that(actual_conf_rooms, has_item(has_entries(expected_conf_room)))
 
 
 @step(u'Then I see the conference room "([^"]*)" exists$')
