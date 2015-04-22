@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import json
+import uuid
 
 from lettuce.registry import world
 import requests
@@ -68,4 +69,7 @@ def delete_similar_devices(device):
 
 
 def create_device(device):
+    if 'id' not in device:
+        device['id'] = str(uuid.uuid4())
     provd_helper.create_device(device)
+    return device['id']
