@@ -70,6 +70,6 @@ def delete_similar_devices(device):
 
 def create_device(device):
     if 'id' not in device:
-        device['id'] = str(uuid.uuid4())
+        device['id'] = uuid.uuid4().hex
     provd_helper.create_device(device)
     return device['id']

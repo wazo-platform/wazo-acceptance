@@ -86,7 +86,7 @@ def _create_device(channel, deviceinfo):
     config_manager = provd_connector.config_manager()
 
     if 'id' not in deviceinfo:
-        device_id = str(uuid.uuid4())
+        device_id = uuid.uuid4().hex
     else:
         device_id = deviceinfo['id']
 
