@@ -17,45 +17,39 @@
 
 import urllib2
 from lettuce import world
-
-from xivo_acceptance.lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+from hamcrest import assert_that, is_not, none, has_entries, has_key
+from xivo_provd_client.error import NotFoundError
+import uuid
 
 
 def device_config_has_properties(device_id, properties):
-    remote_exec(_device_config_has_properties, device_id=device_id, properties=dict(properties[0]))
+    config = get_provd_config(device_id)
+    assert_that(config, has_entries(properties))
 
 
-def _device_config_has_properties(channel, device_id, properties):
-    from xivo_dao.helpers import provd_connector
+def get_provd_config(device_id):
+    device = _check_device_exists(device_id)
+    config = _check_device_has_config(device)
+    return config
 
-    provd_config_manager = provd_connector.config_manager()
-    provd_device_manager = provd_connector.device_manager()
-    device = provd_device_manager.get(device_id)
-    if 'config' in device:
-        config = provd_config_manager.get(device['config'])
 
-        assert 'sip_lines' in config['raw_config'], "device does not have any SIP lines configured"
+def _check_device_exists(device_id):
+    device = world.provd_client.device_manager().get(device_id)
+    assert_that(device, is_not(none()), "Device id %s does not exist" % device_id)
+    return device
 
-        sip_lines = config['raw_config']['sip_lines']
-        sip_line = sip_lines['1']
 
-        keys = [u'username', u'auth_username', u'display_name', u'password', u'number']
-        for key in keys:
-            if key in properties:
-                message = u"Invalid %s ('%s' instead of '%s')" % (key, sip_line[key], properties[key])
-                message = message.encode('utf8')
-                assert sip_line[key] == properties[key], message
-    else:
-        assert False, 'Device has no config key.'
+def _check_device_has_config(device):
+    assert_that(device, has_key('config'), "Device does not have config key")
+
+    config = world.provd_client.config_manager().get(device['config'])
+    assert_that(config, is_not(none()), "Config %s does not exist" % device['config'])
+
+    return config
 
 
 def add_or_replace_device_template(properties):
-    remote_exec(_add_or_replace_device_template, properties=dict(properties))
-
-
-def _add_or_replace_device_template(channel, properties):
-    from xivo_dao.helpers import provd_connector
-    config_manager = provd_connector.config_manager()
+    config_manager = world.provd_client.config_manager()
 
     if 'id' in properties:
         existing = config_manager.find({'X_type': 'device', 'id': properties['id']})
@@ -74,133 +68,76 @@ def _add_or_replace_device_template(channel, properties):
     config_manager.add(properties)
 
 
+def total_devices():
+    device_manager = world.provd_client.device_manager()
+    return len(device_manager.find())
+
+
+def get_device(device_id):
+    return world.provd_client.device_manager().get(device_id)
+
+
 def create_device(deviceinfo):
-    remote_exec(_create_device, deviceinfo=deviceinfo)
+    deviceinfo = dict(deviceinfo)
+    device_manager = world.provd_client.device_manager()
+    config_manager = world.provd_client.config_manager()
 
-
-def _create_device(channel, deviceinfo):
-    import uuid
-    from xivo_dao.helpers import provd_connector
-
-    device_manager = provd_connector.device_manager()
-    config_manager = provd_connector.config_manager()
-
-    if 'id' not in deviceinfo:
-        device_id = uuid.uuid4().hex
-    else:
-        device_id = deviceinfo['id']
+    device_id = deviceinfo.get('id', uuid.uuid4().hex)
+    template_id = deviceinfo.pop('template_id', 'defaultconfigdevice')
 
     config = {
         'id': device_id,
         'deletable': True,
-        'parent_ids': ['base', deviceinfo.get('template_id', 'defaultconfigdevice')],
-        'configdevice': deviceinfo.get('template_id', 'defaultconfigdevice'),
+        'parent_ids': ['base', template_id],
+        'configdevice': template_id,
         'raw_config': {}
     }
-
-    if 'template_id' in deviceinfo:
-        del deviceinfo['template_id']
 
     device_manager.add(deviceinfo)
     config_manager.add(config)
 
 
-def get_provd_config(device_id):
-    device = get_device(device_id)
-    if device is None:
-        raise 'device %s not exist' % device_id
-    config = get_config(device['config'])
-    return config
-
-
-def get_config(config_id):
-    config = world.provd_client.config_manager().get(config_id)
-    return config
-
-
-def get_device(device_id):
-    device = world.provd_client.device_manager().get(device_id)
-    return device
-
-
-def total_devices():
-    return remote_exec_with_result(_total_devices)
-
-
-def _total_devices(channel):
-    from xivo_dao.helpers import provd_connector
-
-    device_manager = provd_connector.device_manager()
-    total = len(device_manager.find())
-    channel.send(total)
-
-
 def find_by_mac(mac):
-    return remote_exec_with_result(_find_by_mac, mac=mac)
-
-
-def _find_by_mac(channel, mac):
-    from xivo_dao.helpers import provd_connector
-    device_manager = provd_connector.device_manager()
-
-    devices = device_manager.find({'mac': mac})
-    if len(devices) == 0:
-        channel.send(None)
-    else:
-        channel.send(devices[0])
+    return _find_by('mac', mac)
 
 
 def delete_device(device_id):
-    remote_exec(_delete_device, device_id=device_id)
+    device_manager = world.provd_client.device_manager()
+    config_manager = world.provd_client.config_manager()
 
+    devices = device_manager.find({'id': device_id})
+    device = devices[0] if devices else None
+    if not device:
+        return
 
-def _delete_device(channel, device_id):
-    from xivo_dao.helpers import provd_connector
-    config_manager = provd_connector.config_manager()
-    device_manager = provd_connector.device_manager()
+    config_id = device.get('config', device['id'])
+    configs = config_manager.find({'id': config_id})
+    config = configs[0] if configs else None
 
-    try:
-        config_manager.remove(device_id)
-    except Exception:
-        pass
-    try:
-        device_manager.remove(device_id)
-    except Exception:
-        pass
+    device_manager.remove(device['id'])
+    if config:
+        try:
+            config_manager.remove(config['id'])
+        except NotFoundError:
+            pass
 
 
 def delete_device_with_mac(mac):
-    remote_exec(_delete_device_with_mac, mac=mac)
-
-
-def _delete_device_with_mac(channel, mac):
-    from xivo_dao.helpers import provd_connector
-    config_manager = provd_connector.config_manager()
-    device_manager = provd_connector.device_manager()
-
-    for device in device_manager.find({'mac': mac}):
-        try:
-            config_manager.remove(device['id'])
-        except Exception:
-            pass
-        device_manager.remove(device['id'])
+    device = _find_by('mac', mac)
+    if device:
+        delete_device(device['id'])
 
 
 def delete_device_with_ip(ip):
-    remote_exec(_delete_device_with_ip, ip=ip)
+    device = _find_by('ip', ip)
+    if device:
+        delete_device(device['id'])
 
 
-def _delete_device_with_ip(channel, ip):
-    from xivo_dao.helpers import provd_connector
-    config_manager = provd_connector.config_manager()
-    device_manager = provd_connector.device_manager()
-
-    for device in device_manager.find({'ip': ip}):
-        try:
-            config_manager.remove(device['id'])
-        except Exception:
-            pass
-        device_manager.remove(device['id'])
+def _find_by(key, value):
+    device_manager = world.provd_client.device_manager()
+    devices = device_manager.find({key: value})
+    return devices[0] if devices else None
 
 
 def request_http(path, user_agent):
