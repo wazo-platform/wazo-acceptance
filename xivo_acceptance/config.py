@@ -71,7 +71,7 @@ def load_config(old_config=True):
             'passwd': 'proformatique'
         },
         'provd': {
-            'rest_port': 8667,
+            'rest_port': 8666,
             'rest_protocol': 'http',
         },
         'browser': {

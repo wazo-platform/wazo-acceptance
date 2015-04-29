@@ -23,7 +23,7 @@ from lettuce import world
 from xivo_acceptance.helpers import context_helper
 from xivo_acceptance.lettuce import common, assets
 from xivo_acceptance.lettuce.assets import copy_asset_to_server
-from xivo_acceptance.lettuce.terrain import initialize, deinitialize
+from xivo_acceptance.lettuce.terrain import initialize, deinitialize, _check_webi_login_root
 from xivo_dao.helpers import db_manager
 from xivo_dao.helpers.db_manager import daosession
 
@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 def run():
     logger.debug('Initializing ...')
     initialize()
+    _check_webi_login_root()
     try:
         logger.debug('Configuring WebService Access on XiVO')
         _create_webservices_access()
@@ -130,7 +131,9 @@ def _allow_agid_listen_on_all_interfaces():
 @daosession
 def _allow_provd_listen_on_all_interfaces(session):
     query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
-    session.bind.execute(query)
+    session.begin()
+    session.execute(query)
+    session.commit()
     common.open_url('commonconf')
 
 
