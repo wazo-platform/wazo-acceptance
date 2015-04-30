@@ -261,7 +261,7 @@ def when_i_update_the_user_with_id_group1_using_the_following_parameters(step, u
 def when_i_update_user_group1_group2_with_the_following_parameters(step, firstname, lastname):
     user = user_helper.find_by_firstname_lastname(firstname, lastname)
     userinfo = _get_user_info(step.hashes)
-    world.response = user_action_confd.update_user(user.id, userinfo)
+    world.response = user_action_confd.update_user(user['id'], userinfo)
 
 
 @step(u'When I delete the user with id "([^"]*)"$')
@@ -273,7 +273,7 @@ def when_i_delete_the_user_with_id_group1(step, userid):
 def when_i_delete_the_user_with_name_group1_group2(step, firstname, lastname):
     user = user_helper.find_by_firstname_lastname(firstname, lastname)
     assert_that(user, is_not(none()))
-    world.response = user_action_confd.delete_user(user.id)
+    world.response = user_action_confd.delete_user(user['id'])
 
 
 @step(u'When I reorder "([^"]*)" "([^"]*)"s function keys such that:')
@@ -569,10 +569,10 @@ def then_i_get_a_list_with_the_following_users_with_view_directory(step):
     for expected_user in expected_users:
         user = user_helper.get_by_firstname_lastname(expected_user['firstname'],
                                                      expected_user['lastname'])
-        line_id = user_helper.find_line_id_for_user(user.id)
-        agent_id = user_helper.find_agent_id_for_user(user.id)
+        line_id = user_helper.find_line_id_for_user(user['id'])
+        agent_id = user_helper.find_agent_id_for_user(user['id'])
         raw_expected_user = {}
-        raw_expected_user['id'] = user.id if expected_user['id'] == 'yes' else None
+        raw_expected_user['id'] = user['id'] if expected_user['id'] == 'yes' else None
         raw_expected_user['firstname'] = expected_user['firstname']
         raw_expected_user['lastname'] = expected_user['lastname']
         raw_expected_user['exten'] = expected_user['exten'] or None

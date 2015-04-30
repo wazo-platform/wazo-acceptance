@@ -89,17 +89,17 @@ def when_i_request_the_list_of_voicemails(step):
 
 @step(u'When I associate user "([^"]*)" with voicemail "([^"]*)" via CONFD')
 def when_i_link_user_group1_with_voicemail_group2_via_confd(step, fullname, voicemail):
-    user = user_helper.find_user_by_name(fullname)
+    user = user_helper.get_user_by_name(fullname)
     number, context = func.extract_number_and_context_from_extension(voicemail)
     voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
 
-    world.response = voicemail_link_action_confd.link_voicemail(user.id, voicemail_id)
+    world.response = voicemail_link_action_confd.link_voicemail(user['id'], voicemail_id)
 
 
 @step(u'When I associate user "([^"]*)" with voicemail id "([^"]*)" via CONFD')
 def when_i_link_user_group1_with_voicemail_id_group2_via_confd(step, fullname, voicemail_id):
-    user = user_helper.find_user_by_name(fullname)
-    world.response = voicemail_link_action_confd.link_voicemail(user.id, int(voicemail_id))
+    user = user_helper.get_by_user_name(fullname)
+    world.response = voicemail_link_action_confd.link_voicemail(user['id'], int(voicemail_id))
 
 
 @step(u'When I associate a fake user with with voicemail "([^"]*)" via CONFD')
@@ -112,8 +112,8 @@ def when_i_associate_a_fake_user_with_with_voicemail_group1_via_confd(step, voic
 
 @step(u'When I request the voicemail associated to user "([^"]*)" "([^"]*)" via CONFD')
 def when_i_request_the_voicemail_associated_to_user_group1_group2_via_confd(step, firstname, lastname):
-    user = user_helper.find_by_firstname_lastname(firstname, lastname)
-    world.response = voicemail_link_action_confd.get_voicemail_link(user.id)
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+    world.response = voicemail_link_action_confd.get_voicemail_link(user['id'])
 
 
 @step(u'When I request the voicemail associated to user with id "([^"]*)" via CONFD')
@@ -123,8 +123,8 @@ def when_i_request_the_voicemail_associated_to_user_with_id_group1_via_confd(ste
 
 @step(u'When I dissociate user "([^"]*)" "([^"]*)" from his voicemail via CONFD')
 def when_i_dissociate_user_group1_from_his_voicemail_via_confd(step, firstname, lastname):
-    user = user_helper.find_by_firstname_lastname(firstname, lastname)
-    world.response = voicemail_link_action_confd.delete_voicemail_link(int(user.id))
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+    world.response = voicemail_link_action_confd.delete_voicemail_link(user['id'])
 
 
 @step(u'When I dissociate user with id "([^"]*)" from his voicemail via CONFD')

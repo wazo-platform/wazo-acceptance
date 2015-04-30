@@ -47,9 +47,9 @@ def convert_user_numbers(user_numbers, context):
     users = []
     user_number_list = user_numbers.split(',')
     for user_number in user_number_list:
-        user = user_helper.get_by_exten_context(user_number, context)
+        user = user_helper.find_by_exten_context(user_number, context)
         if user:
-            users.extend([user.id])
+            users.append(user['id'])
     return users
 
 

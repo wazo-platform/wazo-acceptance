@@ -34,7 +34,7 @@ def delete_user_line_extension_voicemail(firstname, lastname, context=None, exte
 def delete_user_line_extension_with_firstname_lastname(firstname, lastname):
     user = user_helper.find_by_firstname_lastname(firstname, lastname)
     if user:
-        delete_user_line_extension_with_user_id(user.id)
+        delete_user_line_extension_with_user_id(user['id'])
 
 
 def delete_sccp_lines_with_exten(exten, context):
@@ -56,7 +56,7 @@ def delete_user_line_extension_with_user_id(user_id):
     if extension_id:
         extension_helper.delete(extension_id)
 
-    user_helper.delete_user(user.id)
+    user_helper.delete_user(user['id'])
 
 
 def add_or_replace_user(data_dict, step=None):

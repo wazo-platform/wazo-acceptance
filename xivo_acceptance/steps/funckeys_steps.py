@@ -43,7 +43,7 @@ def when_i_request_the_func_key_with_id_group1_via_confd(step, func_key_id):
 @step(u'When I request the funckey with a destination for user "([^"]*)" "([^"]*)"')
 def when_i_request_the_funckey_with_a_destination_for_user_group1_group2(step, firstname, lastname):
     user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    func_key_ids = func_key_helper.find_func_keys_with_user_destination(user.id)
+    func_key_ids = func_key_helper.find_func_keys_with_user_destination(user['id'])
     assert_that(func_key_ids, has_length(1), "More than one func key with the same destination")
 
     world.response = func_key_action_confd.get_func_key(func_key_ids[0])
@@ -162,8 +162,9 @@ def _find_destination_name(func_key):
 
 
 def _find_user_name_for_func_key(func_key):
-    user = user_helper.get_by_user_id(func_key['destination_id'])
-    return "%s %s" % (user.firstname, user.lastname)
+    user = user_helper.find_by_user_id(func_key['destination_id'])
+    assert_that(user, is_not(none()))
+    return "%s %s" % (user['firstname'], user['lastname'])
 
 
 def _find_group_name_for_func_key(func_key):
@@ -194,4 +195,4 @@ def then_i_get_a_func_key_of_type_group1(step, func_key_type):
 def then_i_get_a_func_key_with_a_destination_id_for_user_group1_group2(step, firstname, lastname):
     destination_id = world.response.data['destination_id']
     user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    assert_that(user.id, equal_to(destination_id))
+    assert_that(user['id'], equal_to(destination_id))

@@ -106,7 +106,7 @@ def logoff_agent(agent_number, ignore_error=False):
 def login_agent_from_phone(agent_number, phone_register):
     line = _get_line_from_agent(agent_number)
     user = user_helper.get_by_exten_context(line.number, line.context)
-    phone = phone_register.get_user_phone(user.fullname)
+    phone = phone_register.get_user_phone(user['fullname'])
     phone.call('*31%s' % agent_number)
     time.sleep(3)
 
@@ -114,7 +114,7 @@ def login_agent_from_phone(agent_number, phone_register):
 def logoff_agent_from_phone(agent_number, phone_register):
     line = _get_line_from_agent(agent_number)
     user = user_helper.get_by_exten_context(line.number, line.context)
-    phone = phone_register.get_user_phone(user.fullname)
+    phone = phone_register.get_user_phone(user['fullname'])
     phone.call('*32%s' % agent_number)
     time.sleep(3)
 

@@ -107,7 +107,7 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
         if expected_event.get('user_id', 'no') == 'yes':
             user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
                                                          expected_event['lastname'])
-            raw_expected_event['data']['user_id'] = user.id
+            raw_expected_event['data']['user_id'] = user['id']
 
         if expected_event.get('endpoint_id', 'no') == 'yes':
             line = line_helper.find_with_exten_context(expected_event['number'],
