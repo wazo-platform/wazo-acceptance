@@ -24,7 +24,7 @@ from xivo_acceptance.helpers import extension_helper
 
 @step(u'Given I have no extension with id "([^"]*)"')
 def given_i_have_no_extension_with_id_group1(step, extension_id):
-    extension_helper.delete(int(extension_id))
+    extension_helper.delete_extension(int(extension_id))
 
 
 @step(u'Given I have no extension with exten "([^"]*)"')

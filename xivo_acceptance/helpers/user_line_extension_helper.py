@@ -23,12 +23,18 @@ from xivo_acceptance.lettuce.exception import NoSuchProfileException
 
 def delete_user_line_extension_voicemail(firstname, lastname, context=None, exten=None, mailbox=None):
     if exten and context:
-        extension_helper.delete_extension_with_exten_context(exten, context)
+        delete_extension(exten, context)
         delete_sccp_lines_with_exten(exten, context)
     if mailbox and context:
         voicemail_helper.delete_voicemail_with_number_context(mailbox, context)
     delete_user_line_extension_with_firstname_lastname(firstname, lastname)
     delete_user_with_firstname_lastname(firstname, lastname)
+
+
+def delete_extension(exten, context):
+    extension = extension_helper.find_extension_by_exten_context(exten, context)
+    if extension:
+        extension_helper.delete_extension(extension['id'])
 
 
 def delete_user_line_extension_with_firstname_lastname(firstname, lastname):
@@ -52,9 +58,9 @@ def delete_user_line_extension_with_user_id(user_id):
     if line_id:
         line_helper.delete_line(line_id)
 
-    extension_id = extension_helper.find_extension_id_for_line(line_id)
+    extension_id = line_helper.find_extension_id_for_line(line_id)
     if extension_id:
-        extension_helper.delete(extension_id)
+        extension_helper.delete_extension(extension_id)
 
     user_helper.delete_user(user['id'])
 
