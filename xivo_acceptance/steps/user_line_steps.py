@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
+from hamcrest import assert_that, equal_to
 from lettuce import step, world
 
 from xivo_acceptance.action.confd import user_line_action_confd
@@ -32,7 +32,7 @@ def given_i_have_no_user_line_with_the_following_parameters(step):
 @step(u'Given line "([^"]*)" is linked with user "([^"]*)" "([^"]*)"')
 def given_line_group1_is_linked_with_user_group2_group3(step, line_id, firstname, lastname):
     line_id = int(line_id)
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     world.response = user_line_action_confd.create_user_line(user_id, {'line_id': line_id})
     assert_that(world.response.status, equal_to(201), unicode(world.response.data))
 
@@ -48,7 +48,7 @@ def given_line_group1_is_linked_with_user_id_group2(step, line_id, user_id):
 @step(u'Given SIP line "([^"]*)" is associated to user "([^"]*)" "([^"]*)"')
 def given_sip_line_group1_is_associated_to_user_group2_group3(step, sip_username, firstname, lastname):
     line = line_sip_helper.find_by_username(sip_username)
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     world.response = user_line_action_confd.create_user_line(user_id, {'line_id': line['id']})
     assert_that(world.response.status, equal_to(201), unicode(world.response.data))
 

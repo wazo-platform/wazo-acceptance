@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step, world
+from lettuce import step
 
 from xivo_acceptance.action.webi import group as group_action_webi
 from xivo_acceptance.helpers import user_helper, group_helper
@@ -64,7 +64,7 @@ def given_there_is_a_group_with_extension_and_users(step, name, extension):
 
     user_ids = []
     for info in step.hashes:
-        user_id = user_helper.find_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
+        user_id = user_helper.get_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
         user_ids.append(user_id)
 
     group_helper.add_group(name, number, context, user_ids)

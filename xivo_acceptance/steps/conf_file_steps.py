@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
+from hamcrest import assert_that, contains_string, contains, is_not
 from itertools import ifilter
 from lettuce.decorators import step
 
@@ -24,7 +24,7 @@ from xivo_acceptance.helpers import user_helper, asterisk_helper
 
 @step(u'Then the sccp.conf file should contain "([^"]*)" function keys for "([^"]*)" "([^"]*)" sorted by key number')
 def then_the_sccp_conf_file_should_contain_function_keys_sorted_by_key_number(step, count, firstname, lastname):
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     expected_speeddials = ['speeddial = %s-%s' % (user_id, n) for n in xrange(1, int(count) + 1)]
     sccp_conf_content = asterisk_helper.get_confgen_file('sccp.conf')
     pattern = 'speeddial = %s-' % user_id

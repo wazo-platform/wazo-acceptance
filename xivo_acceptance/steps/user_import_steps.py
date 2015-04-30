@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
+from hamcrest import assert_that, is_not, none
 
 from xivo_acceptance.helpers import line_helper, user_helper, user_import_helper
 from xivo_acceptance.lettuce import func
@@ -44,7 +45,8 @@ def when_i_import_a_list_of_users(step):
 @step(u'Then user with name "([^"]*)" exists$')
 def then_user_with_name_exists(step, name):
     firstname, lastname = name.split(' ', 1)
-    assert user_helper.is_user_with_name_exists(firstname, lastname)
+    user = user_helper.find_by_firstname_lastname(firstname, lastname)
+    assert_that(user, is_not(none()), "User '%s' not found" % name)
 
 
 @step(u'Then line with number "([^"]*)" exists$')

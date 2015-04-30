@@ -144,7 +144,9 @@ def given_i_have_the_following_users(step):
 
 @step(u'Given there are no users with id "([^"]*)"$')
 def given_there_are_no_users_with_id_group1(step, user_id):
-    user_helper.delete_with_user_id(user_id)
+    user = user_helper.find_by_user_id(user_id)
+    if user:
+        user_helper.delete_user(user['id'])
 
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
@@ -216,7 +218,7 @@ def _select(id_, text):
 
 
 def _edit_user(firstname, lastname):
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'edit', qry={'id': user_id})
 
 
@@ -259,7 +261,7 @@ def when_i_update_the_user_with_id_group1_using_the_following_parameters(step, u
 
 @step(u'When I update user "([^"]*)" "([^"]*)" with the following parameters:')
 def when_i_update_user_group1_group2_with_the_following_parameters(step, firstname, lastname):
-    user = user_helper.find_by_firstname_lastname(firstname, lastname)
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
     userinfo = _get_user_info(step.hashes)
     world.response = user_action_confd.update_user(user['id'], userinfo)
 
@@ -271,7 +273,7 @@ def when_i_delete_the_user_with_id_group1(step, userid):
 
 @step(u'When I delete the user with name "([^"]*)" "([^"]*)"')
 def when_i_delete_the_user_with_name_group1_group2(step, firstname, lastname):
-    user = user_helper.find_by_firstname_lastname(firstname, lastname)
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
     assert_that(user, is_not(none()))
     world.response = user_action_confd.delete_user(user['id'])
 
@@ -319,7 +321,7 @@ def when_i_add_a_new_line_to_a_user(step, firstname, lastname):
 
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"$')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
-    user_id = user_helper.find_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
     ule_helper.delete_user_line_extension_with_firstname_lastname(dest_firstname, dest_lastname)
     common.open_url('user', 'edit', {'id': user_id})
     user_action_webi.type_user_names(dest_firstname, dest_lastname)
@@ -328,7 +330,7 @@ def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest
 
 @step(u'When I remove user "([^"]*)" "([^"]*)"$')
 def remove_user(step, firstname, lastname):
-    world.user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    world.user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     common.remove_line('%s %s' % (firstname, lastname))
     common.open_url('user', 'search', {'search': ''})
@@ -454,7 +456,7 @@ def when_i_remove_the_device_of_user_group1_group2(step, firstname, lastname):
 
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"$')
 def then_user_is_in_group(step, firstname, lastname, group_name):
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     assert user_helper.user_id_is_in_group_name(group_name, user_id)
 
 

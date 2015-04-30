@@ -53,7 +53,7 @@ def _new_destination(dst_type, dst_name):
 
 def _new_user_destination(fullname):
     firstname, lastname = fullname.split()
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     return UserDestination(user_id)
 
 

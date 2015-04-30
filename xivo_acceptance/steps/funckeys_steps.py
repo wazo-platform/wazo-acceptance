@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to, has_item, has_entry, has_length, has_entries, is_not
+from hamcrest import assert_that, equal_to, has_item, has_entry, has_length, has_entries, is_not, none
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import user as user_action_webi

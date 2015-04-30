@@ -27,7 +27,7 @@ from xivo_acceptance.helpers import xivo_helper
 
 
 def _find_user_id(info):
-    return user_helper.find_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
+    return user_helper.get_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
 
 
 def _find_line_id(info):

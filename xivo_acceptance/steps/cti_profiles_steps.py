@@ -55,7 +55,7 @@ def when_i_ask_for_the_cti_profile_with_id_group1(step, profileid):
 
 @step(u'When I associate CTI profile "([^"]*)" with user "([^"]*)" "([^"]*)"$')
 def when_i_associate_cti_profile_group1_with_user_group2_group3(step, cti_profile_id, firstname, lastname):
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     world.response = cti_profile_action_confd.associate_profile_to_user(int(cti_profile_id), int(user_id))
 
 
@@ -67,19 +67,19 @@ def when_i_activate_the_cti_client_for_user_group1_group2(step, firstname, lastn
 @step(u'When I associate CTI profile with name "([^"]*)" with user "([^"]*)" "([^"]*)"')
 def when_i_associate_cti_profile_with_name_group1_with_user_group2_group3(step, cti_profile_name, firstname, lastname):
     cti_profile_id = cti_profile_helper.get_id_with_name(cti_profile_name)
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     world.response = cti_profile_action_confd.associate_profile_to_user(cti_profile_id, int(user_id))
 
 
 @step(u'When I send request for the CTI configuration of the user "([^"]*)" "([^"]*)"$')
 def when_i_send_request_for_the_cti_configuration_of_the_user_group1_group2(step, firstname, lastname):
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     world.response = cti_profile_action_confd.get_cti_profile_for_user(user_id)
 
 
 @step(u'When I enable the CTI client for the user "([^"]*)" "([^"]*)"')
 def when_i_enable_the_cti_client_for_the_user_group1_group2(step, firstname, lastname):
-    user_id = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     world.response = cti_profile_action_confd.enable_cti_for_user(int(user_id))
 
 
@@ -127,6 +127,6 @@ def _perform_casts(hashes):
 
 def _create_association(association_infos):
     firstname, lastname = association_infos['firstname'], association_infos['lastname']
-    userid = user_helper.find_user_id_with_firstname_lastname(firstname, lastname)
+    userid = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     profileid = association_infos['cti_profile_id']
     cti_profile_action_confd.associate_profile_to_user(int(profileid), int(userid))
