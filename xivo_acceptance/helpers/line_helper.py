@@ -17,6 +17,7 @@
 
 from xivo_acceptance.lettuce import func
 from xivo_acceptance.lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 from xivo_dao.data_handler.exception import NotFoundError
 from xivo_dao.data_handler.line import services as line_services
 
@@ -57,6 +58,11 @@ def find_with_user_id(user_id):
 def find_line_id_with_exten_context(exten, context):
     line = find_with_exten_context(exten, context)
     return line.id
+
+
+def find_extension_id_for_line(line_id):
+    response = line_extension_action.get_from_line(line_id)
+    return response.resource()['extension_id'] if response.status_ok() else None
 
 
 def find_sccp_lines_with_exten_context(exten, context):
