@@ -16,13 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import json
-import uuid
-
-from lettuce.registry import world
 import requests
 
-from xivo_acceptance.helpers import provd_helper
-from xivo_acceptance.lettuce.remote_py_cmd import remote_exec
+from lettuce.registry import world
+from xivo_acceptance.action.confd import device_action_confd as device_action
 
 
 AUTOPROV_URL = 'https://%s/xivo/configuration/json.php/restricted/provisioning/autoprov?act=configure'
@@ -30,46 +27,56 @@ HEADERS = {'Content-Type': 'application/json'}
 
 
 def provision_device_using_webi(provcode, device_ip):
+    auth = requests.auth.HTTPBasicAuth(world.config['rest_api']['username'],
+                                       world.config['rest_api']['passwd'])
     data = json.dumps({'code': provcode, 'ip': device_ip})
-    requests.post(url=AUTOPROV_URL % world.config['xivo_host'],
+    requests.post(url=AUTOPROV_URL % world.config.xivo_host,
                   headers=HEADERS,
-                  auth=_prepare_auth(),
+                  auth=auth,
                   data=data,
                   verify=False)
 
 
-def _prepare_auth():
-    auth = requests.auth.HTTPBasicAuth(world.config['rest_api']['username'],
-                                       world.config['rest_api']['passwd'])
-    return auth
-
-
 def create_dummy_devices(nb_devices):
-    remote_exec(_create_dummy_devices, nb_devices=nb_devices)
-
-
-def _create_dummy_devices(channel, nb_devices):
-    from xivo_dao.data_handler.device import services as device_services
-    from xivo_dao.data_handler.device.model import Device
-
     for i in range(nb_devices):
-        device_services.create(Device())
+        create_dummy_device()
+
+
+def create_dummy_device():
+    return device_action.create_device({})
 
 
 def add_or_replace_device(device):
     delete_similar_devices(device)
-    create_device(device)
+    response = device_action.create_device(device)
+    return response.resource()
 
 
 def delete_similar_devices(device):
     if 'mac' in device:
-        provd_helper.delete_device_with_mac(device['mac'])
+        delete_device_with('mac', device['mac'])
     if 'ip' in device:
-        provd_helper.delete_device_with_ip(device['ip'])
+        delete_device_with('ip', device['ip'])
 
 
-def create_device(device):
-    if 'id' not in device:
-        device['id'] = uuid.uuid4().hex
-    provd_helper.create_device(device)
-    return device['id']
+def delete_device_with(key, value):
+    for device in find_devices_with(key, value):
+        _delete_device(device['id'])
+
+
+def find_devices_with(key, value):
+    response = device_action.device_list({key: value})
+    devices = [device
+               for device in response.items()
+               if device[key] == value]
+    return devices
+
+
+def find_device_with(key, value):
+    devices = find_devices_with(key, value)
+    return devices[0] if devices else None
+
+
+def _delete_device(device_id):
+    device_action.reset_to_autoprov(device_id)
+    device_action.delete_device(device_id)

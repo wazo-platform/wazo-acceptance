@@ -101,6 +101,12 @@ def find_by_mac(mac):
     return _find_by('mac', mac)
 
 
+def get_by_mac(mac):
+    device = find_by_mac(mac)
+    assert_that(device, is_not(none()), "Device %s does not exist" % mac)
+    return device
+
+
 def delete_device(device_id):
     device_manager = world.provd_client.device_manager()
     config_manager = world.provd_client.config_manager()
