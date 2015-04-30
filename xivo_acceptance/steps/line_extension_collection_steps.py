@@ -44,7 +44,7 @@ def when_i_get_the_list_of_lines_associated_to_a_fake_extension(step):
 @step(u'When I get the line associated to extension "(\d+)@([\w-]+)"')
 def when_i_get_the_line_associated_to_extension_group1(step, exten, context):
     extension = extension_helper.find_extension_by_exten_context(exten, context)
-    world.response = action.line_for_extension(extension.id)
+    world.response = action.line_for_extension(extension['id'])
 
 
 @step(u'When I get the list of extensions associated to SIP line "([^"]*)"')
@@ -56,7 +56,7 @@ def when_i_get_the_list_of_extensions_associated_to_sip_line_group1(step, sip_us
 @step(u'When I associate the extension "(\d+)@([\w-]+)" with a fake line')
 def when_i_associate_the_extension_group1_with_a_fake_line(step, exten, context):
     extension = extension_helper.find_extension_by_exten_context(exten, context)
-    world.response = action.associate_extension(FAKE_ID, extension.id)
+    world.response = action.associate_extension(FAKE_ID, extension['id'])
 
 
 @step(u'When I associate a fake extension to SIP line "([^"]*)"')
@@ -80,10 +80,10 @@ def when_i_dissociate_a_fake_extension_from_sip_line_group1(step, sip_username):
 def when_i_dissociate_extension_group1_from_sip_line_group2(step, exten, context, sip_username):
     extension = extension_helper.find_extension_by_exten_context(exten, context)
     line = line_sip_helper.get_by_username(sip_username)
-    world.response = action.dissociate_extension(line['id'], extension.id)
+    world.response = action.dissociate_extension(line['id'], extension['id'])
 
 
 def _associate_extension_to_line(exten, context, sip_username):
     extension = extension_helper.find_extension_by_exten_context(exten, context)
     line = line_sip_helper.get_by_username(sip_username)
-    return action.associate_extension(line['id'], extension.id)
+    return action.associate_extension(line['id'], extension['id'])

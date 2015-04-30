@@ -32,7 +32,7 @@ def given_i_have_no_extension_with_exten_group1(step, pattern):
     exten, context = pattern.split('@')
     extension = extension_helper.find_extension_by_exten_context(exten, context)
     if extension:
-        extension_helper.delete(extension.id)
+        extension_helper.delete_extension(extension['id'])
 
 
 @step(u'Given I have the following extensions:')
@@ -83,7 +83,7 @@ def when_i_delete_extension_with_id(step, extension_id):
 @step(u'When I delete extension "(\d+)@([\w_-]+)"')
 def when_i_delete_extension_group1(step, exten, context):
     extension = extension_helper.get_by_exten_context(exten, context)
-    world.response = extension_action_confd.delete_extension(extension.id)
+    world.response = extension_action_confd.delete_extension(extension['id'])
 
 
 @step(u'Then I get a list containing the following extensions:')
