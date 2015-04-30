@@ -89,13 +89,12 @@ Feature: REST API Devices
             | 10.0.0.1 | 00:11:22:33:44:55 | XX | null   | nullmodel | nullvendor | 1.0     | example     | {"switchboard": True} | mytemplate  |
 
     Scenario: Synchronize a device
-        Given there are no devices with id "123"
         Given there are no devices with mac "00:00:00:00:aa:01"
         Given I have the following devices:
-          | id  | ip             | mac               |
-          | 123 | 192.168.32.197 | 00:00:00:00:aa:01 |
-        When I synchronize the device "123" from confd
-        Then I see in the log file device "123" synchronized
+          | ip             | mac               |
+          | 192.168.32.197 | 00:00:00:00:aa:01 |
+        When I synchronize the device with mac "00:00:00:00:aa:01" from confd
+        Then I see in the log file device with mac "00:00:00:00:aa:01" synchronized
 
     Scenario: Edit a device with no parameters
         Given I have the following devices:
@@ -215,30 +214,29 @@ Feature: REST API Devices
         Then I get a response with status "200"
 
     Scenario: Reset to autoprov a device
-        Given there are no devices with id "123"
         Given there are no devices with mac "00:00:00:00:aa:01"
         Given I have the following devices:
-          | id  | ip             | mac               |
-          | 123 | 192.168.32.197 | 00:00:00:00:aa:01 |
-        When I reset the device "123" to autoprov from confd
-        Then I see in the log file device "123" autoprovisioned
+          | ip             | mac               |
+          | 192.168.32.197 | 00:00:00:00:aa:01 |
+        When I reset the device with mac "00:00:00:00:aa:01" to autoprov from confd
+        Then I see in the log file device with mac "00:00:00:00:aa:01" autoprovisioned
 
     Scenario: Delete a device
         Given I have the following devices:
-            |            id |       ip |               mac |
-            | 1346771446546 | 10.0.0.1 | 00:00:00:00:00:12 |
-        When I delete the device "1346771446546" from confd
+            |       ip |               mac |
+            | 10.0.0.1 | 00:00:00:00:00:12 |
+        When I delete the device with mac "00:00:00:00:00:12" from confd
         Then I get a response with status "204"
-        Then I see in the log file device "1346771446546" deleted
-        Then the device "1346771446546" is no longer exists in provd
+        Then I see in the log file that the device was deleted
+        Then the device with mac "00:00:00:00:00:12" is no longer exists in provd
 
     Scenario: Delete a device associated to a line
         Given I have the following devices:
-            |            id |       ip |               mac |
-            | 6521879216879 | 10.0.0.1 | 00:00:00:00:00:12 |
+            |       ip |               mac |
+            | 10.0.0.1 | 00:00:00:00:00:12 |
         Given there are users with infos:
             | firstname | lastname | number | context | protocol |            device |
             | Aayla     | Secura   |   1234 | default | sip      | 00:00:00:00:00:12 |
-        When I delete the device "6521879216879" from confd
+        When I delete the device with mac "00:00:00:00:00:12" from confd
         Then I get a response with status "400"
         Then I get an error message matching "Resource Error - Device is associated with a Line"

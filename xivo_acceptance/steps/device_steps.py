@@ -16,15 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step, world
-from hamcrest import *
-
+from hamcrest import assert_that, equal_to, is_, none, \
+    has_entry, has_entries, has_item, has_length, \
+    contains_string, instance_of
 from xivo_acceptance.action.webi import provd_plugins
 from xivo_acceptance.action.confd import device_action_confd
 from xivo_acceptance.action.webi import device as device_action_webi
 from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
 from xivo_dao.data_handler.line import dao as line_dao
 from xivo_acceptance.lettuce import form, common, logs, sysutils
-from xivo_provd_client import NotFoundError
 
 
 @step(u'Given there are no devices with mac "([^"]*)"')
@@ -100,9 +100,11 @@ def when_i_create_a_device_using_the_device_template_id_group1(step, device_temp
     world.response = device_action_confd.create_device(device)
 
 
-@step(u'When I delete the device "([^"]*)" from confd')
-def when_i_delete_the_device(step, device_id):
-    world.response = device_action_confd.delete_device(device_id)
+@step(u'When I delete the device with mac "([^"]*)" from confd')
+def when_i_delete_the_device(step, mac):
+    device = provd_helper.get_by_mac(mac)
+    world.deleted_device = device
+    world.response = device_action_confd.delete_device(device['id'])
 
 
 @step(u'When I associate my line_id "([^"]*)" to the device "([^"]*)"')
@@ -110,14 +112,15 @@ def when_i_associate_my_line_id_to_the_device(step, line_id, device_id):
     world.response = device_action_confd.associate_line_to_device(device_id, line_id)
 
 
-@step(u'^When I synchronize the device "([^"]*)" from confd$')
-def when_i_synchronize_the_device_group1_from_confd(step, device_id):
-    world.response = device_action_confd.synchronize(device_id)
+@step(u'^When I synchronize the device with mac "([^"]*)" from confd$')
+def when_i_synchronize_the_device_group1_from_confd(step, mac):
+    device = provd_helper.get_by_mac(mac)
+    world.response = device_action_confd.synchronize(device['id'])
 
 
 @step(u'When I go get the device with mac "([^"]*)" using its id')
 def when_i_go_get_the_device_with_mac_group1_using_its_id(step, mac):
-    device = provd_helper.find_by_mac(mac)
+    device = provd_helper.get_by_mac(mac)
     world.response = device_action_confd.get_device(device['id'])
 
 
@@ -126,9 +129,10 @@ def when_i_access_the_list_of_devices(step):
     world.response = device_action_confd.device_list()
 
 
-@step(u'When I reset the device "([^"]*)" to autoprov from confd')
-def when_i_reset_the_device_to_autoprov_from_confd(step, device_id):
-    world.response = device_action_confd.reset_to_autoprov(device_id)
+@step(u'When I reset the device with mac "([^"]*)" to autoprov from confd')
+def when_i_reset_the_device_to_autoprov_from_confd(step, mac):
+    device = provd_helper.get_by_mac(mac)
+    world.response = device_action_confd.reset_to_autoprov(device['id'])
 
 
 @step(u'When I remove line_id "([^"]*)" from device "([^"]*)"')
@@ -138,13 +142,13 @@ def when_i_remove_line_id_group1_from_device_group2(step, line_id, device_id):
 
 @step(u'When I edit the device with mac "([^"]*)" using no parameters')
 def when_i_edit_the_device_with_mac_group1_using_no_parameters(step, mac):
-    device = provd_helper.find_by_mac(mac)
+    device = provd_helper.get_by_mac(mac)
     world.response = device_action_confd.edit_device(device['id'], {})
 
 
 @step(u'When I edit the device with mac "([^"]*)" using the following parameters:')
 def when_i_edit_the_device_with_mac_group1_using_the_following_parameters(step, mac):
-    device = provd_helper.find_by_mac(mac)
+    device = provd_helper.get_by_mac(mac)
     parameters = step.hashes[0]
     world.response = device_action_confd.edit_device(device['id'], parameters)
 
@@ -259,35 +263,34 @@ def then_i_see_devices_with_infos(step):
         common.wait_until_assert(assert_device_infos, expected_device, tries=3)
 
 
-@step(u'Then I see in the log file device "([^"]*)" synchronized')
-def then_i_see_in_the_log_file_device_synchronized(step, device_id):
-    expected_log_lines = ['Synchronizing device %s' % device_id]
+@step(u'Then I see in the log file device with mac "([^"]*)" synchronized')
+def then_i_see_in_the_log_file_device_synchronized(step, mac):
+    device = provd_helper.get_by_mac(mac)
+    expected_log_lines = ['Synchronizing device %s' % device['id']]
     actual_log_lines = logs.find_line_in_xivo_provd_log()
     _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
 
 
-@step(u'Then I see in the log file device "([^"]*)" autoprovisioned')
-def then_i_see_in_the_log_file_device_group1_autoprovisioned(step, device_id):
+@step(u'Then I see in the log file device with mac "([^"]*)" autoprovisioned')
+def then_i_see_in_the_log_file_device_group1_autoprovisioned(step, mac):
+    device = provd_helper.get_by_mac(mac)
     expected_log_lines = ['Creating new config',
                           '/provd/cfg_mgr/autocreate',
                           'Updating device',
-                          '/provd/dev_mgr/devices/%s' % device_id]
+                          '/provd/dev_mgr/devices/%s' % device['id']]
     actual_log_lines = logs.find_line_in_xivo_provd_log()
     _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
 
 
-@step(u'Then the device "([^"]*)" is no longer exists in provd')
-def then_the_device_is_no_longer_exists_in_provd(step, device_id):
-    try:
-        provd_helper.get_device(device_id)
-    except NotFoundError:
-        assert True
-    else:
-        assert False, 'The device %s is longer exists in provd' % device_id
+@step(u'Then the device with mac "([^"]*)" is no longer exists in provd')
+def then_the_device_is_no_longer_exists_in_provd(step, mac):
+    device = provd_helper.find_by_mac(mac)
+    assert_that(device, none(), "Device still exists in provd")
 
 
-@step(u'Then I see in the log file device "([^"]*)" deleted')
-def then_i_see_in_the_log_file_device_deleted(step, device_id):
+@step(u'Then I see in the log file that the device was deleted')
+def then_i_see_in_the_log_file_device_deleted(step):
+    device_id = world.deleted_device['id']
     expected_log_lines = ['Deleting device %s' % device_id,
                           '/provd/dev_mgr/devices/%s' % device_id,
                           'Deleting config %s' % device_id,
