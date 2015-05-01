@@ -22,13 +22,19 @@ from xivo_acceptance.lettuce.exception import NoSuchProfileException
 
 
 def delete_user_line_extension_voicemail(firstname, lastname, context=None, exten=None, mailbox=None):
+    if mailbox and context:
+        delete_voicemail(mailbox, context)
     if exten and context:
         delete_extension(exten, context)
-        delete_sccp_lines_with_exten(exten, context)
-    if mailbox and context:
-        voicemail_helper.delete_voicemail_with_number_context(mailbox, context)
-    delete_user_line_extension_with_firstname_lastname(firstname, lastname)
-    delete_user_with_firstname_lastname(firstname, lastname)
+
+    user = user_helper.find_by_firstname_lastname(firstname, lastname)
+    if user:
+        delete_lines_for_user(user['id'])
+        delete_user(user['id'])
+
+
+def delete_voicemail(mailbox, context):
+    voicemail_helper.delete_voicemail_with_number_context(mailbox, context)
 
 
 def delete_extension(exten, context):
@@ -37,38 +43,16 @@ def delete_extension(exten, context):
         extension_helper.delete_extension(extension['id'])
 
 
-def delete_user_line_extension_with_firstname_lastname(firstname, lastname):
-    user = user_helper.find_by_firstname_lastname(firstname, lastname)
-    if user:
-        delete_user_line_extension_with_user_id(user['id'])
+def delete_lines_for_user(user_id):
+    user_lines = user_helper.user_lines_for_user(user_id)
+    main = [ul for ul in user_lines if ul['main_user']]
+    secondary = [ul for ul in user_lines if not ul['main_user']]
+    for user_line in (secondary + main):
+        line_helper.delete_line(user_line['line_id'])
 
 
-def delete_sccp_lines_with_exten(exten, context):
-    line_ids = line_helper.find_sccp_lines_with_exten_context(exten, context)
-    for line_id in line_ids:
-        line_helper.delete_line(line_id)
-
-
-def delete_user_line_extension_with_user_id(user_id):
-    user = user_helper.find_by_user_id(user_id)
-    if not user:
-        return
-
-    line_id = user_helper.find_line_id_for_user(user_id)
-    if line_id:
-        line_helper.delete_line(line_id)
-
-    extension_id = line_helper.find_extension_id_for_line(line_id)
-    if extension_id:
-        extension_helper.delete_extension(extension_id)
-
-    user_helper.delete_user(user['id'])
-
-
-def delete_user_with_firstname_lastname(firstname, lastname):
-    user = user_helper.find_by_firstname_lastname(firstname, lastname)
-    if user:
-        user_helper.delete_user(user['id'])
+def delete_user(user_id):
+    user_helper.delete_user(user_id)
 
 
 def add_or_replace_user(data_dict, step=None):
@@ -99,4 +83,5 @@ def delete_users_with_profile(profile_name):
         if user.client_profile_id == profile_id:
             if user.voicemail:
                 voicemail_helper.delete_voicemail_with_user_id(user.id)
-            delete_user_line_extension_with_user_id(user.id)
+            delete_lines_for_user(user.id)
+            delete_user(user.id)
