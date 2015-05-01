@@ -30,7 +30,7 @@ def provision_device_using_webi(provcode, device_ip):
     auth = requests.auth.HTTPBasicAuth(world.config['rest_api']['username'],
                                        world.config['rest_api']['passwd'])
     data = json.dumps({'code': provcode, 'ip': device_ip})
-    requests.post(url=AUTOPROV_URL % world.config.xivo_host,
+    requests.post(url=AUTOPROV_URL % world.config['xivo_host'],
                   headers=HEADERS,
                   auth=auth,
                   data=data,
