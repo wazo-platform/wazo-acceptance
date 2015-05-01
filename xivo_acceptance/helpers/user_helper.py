@@ -94,6 +94,11 @@ def find_line_id_for_user(user_id):
     return items[0]['line_id'] if items else None
 
 
+def user_lines_for_user(user_id):
+    response = user_line_action.get_user_line(user_id)
+    return response.items()
+
+
 def find_agent_id_for_user(user_id):
     query = 'select agentid from userfeatures where id = {user_id}'.format(user_id=user_id)
     return postgres.exec_sql_request(query).scalar()
