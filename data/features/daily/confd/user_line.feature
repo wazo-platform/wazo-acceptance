@@ -123,11 +123,11 @@ Feature: REST API Link line with a user
             | id     | firstname | lastname    |
             | 477024 | Roger     | Brainsville |
         Given I have the following devices:
-          | id                               | ip             | mac               |
-          | 778bb97fee77f390583c463655128033 | 192.168.168.55 | 03:3f:44:aa:4a:2b |
+          | ip             | mac               |
+          | 192.168.168.55 | 03:3f:44:aa:4a:2b |
         Given I have the following lines:
-            | id     | context | protocol | username | secret   | device_slot | device_id                        |
-            | 889863 | default | sip      | a8b7d45r | 8d8gjh53 | 1           | 778bb97fee77f390583c463655128033 |
+            | id     | context | protocol | username | secret   | device_slot | device_mac        |
+            | 889863 | default | sip      | a8b7d45r | 8d8gjh53 | 1           | 03:3f:44:aa:4a:2b |
         Given line "889863" is linked with user id "477024"
         When I dissociate the following user_line via CONFD:
             | line_id | user_id |

@@ -87,11 +87,11 @@ Feature: Link a line and an extension
 
     Scenario: Dissociate an extension when a device is associated
         Given I have the following devices:
-          | id                               | ip             | mac               |
-          | 48ff0fbd3a53ad329ca4f248331b72ca | 192.168.167.31 | 04:7f:14:ba:9a:23 |
+          | ip             | mac               |
+          | 192.168.167.31 | 04:7f:14:ba:9a:23 |
         Given I have the following lines:
-            | id     | context | protocol | username | secret   | device_slot | device_id                        |
-            | 719454 | default | sip      | a84nfkj6 | 8vbk3e7w | 1           | 48ff0fbd3a53ad329ca4f248331b72ca |
+            | id     | context | protocol | username | secret   | device_slot | device_mac        |
+            | 719454 | default | sip      | a84nfkj6 | 8vbk3e7w | 1           | 04:7f:14:ba:9a:23 |
         Given I have the following extensions:
             | exten | context |
             | 1511  | default |
