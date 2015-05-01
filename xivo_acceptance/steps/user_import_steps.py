@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from hamcrest import assert_that, is_not, none
+from hamcrest import assert_that, is_not, none, has_entry
 
-from xivo_acceptance.helpers import line_helper, user_helper, user_import_helper
+from xivo_acceptance.helpers import line_helper, line_sip_helper, user_helper, user_import_helper
 from xivo_acceptance.lettuce import func
 
 
@@ -52,12 +52,14 @@ def then_user_with_name_exists(step, name):
 @step(u'Then line with number "([^"]*)" exists$')
 def then_line_with_number_exists(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    assert line_helper.is_with_exten_context_exists(number, context)
+    line = line_helper.find_with_exten_context(number, context)
+    assert_that(line, is_not(none()),
+                "line with extension %s@%s not found" % extension)
 
 
 @step(u'Then line with number "([^"]*)" exists with password "([^"]*)"$')
 def then_line_with_number_exists_with_password(step, extension, password):
     number, context = func.extract_number_and_context_from_extension(extension)
-    line = line_helper.find_with_exten_context(number, context)
-    assert line
-    assert line.secret == password
+    line = line_helper.get_by_exten_context(number, context)
+    sip_line = line_sip_helper.get_by_id(line['id'])
+    assert_that(sip_line, has_entry('secret', password))

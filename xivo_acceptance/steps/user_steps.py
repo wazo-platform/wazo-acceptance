@@ -151,7 +151,7 @@ def given_there_are_no_users_with_id_group1(step, user_id):
 
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
 def given_there_is_a_no_user_1_2(step, firstname, lastname):
-    ule_helper.delete_user_line_extension_with_firstname_lastname(firstname, lastname)
+    ule_helper.delete_user_line_extension_voicemail(firstname, lastname)
 
 
 @step(u'Given user "([^"]*)" "([^"]*)" has the following function keys:')
@@ -322,7 +322,7 @@ def when_i_add_a_new_line_to_a_user(step, firstname, lastname):
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"$')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
     user_id = user_helper.get_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
-    ule_helper.delete_user_line_extension_with_firstname_lastname(dest_firstname, dest_lastname)
+    ule_helper.delete_user_line_extension_voicemail(dest_firstname, dest_lastname)
     common.open_url('user', 'edit', {'id': user_id})
     user_action_webi.type_user_names(dest_firstname, dest_lastname)
     form.submit.submit_form()

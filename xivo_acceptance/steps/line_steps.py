@@ -18,14 +18,14 @@
 import time
 import re
 
-from hamcrest import *
+from hamcrest import assert_that, equal_to, has_key, has_item, has_entries
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.action.confd import line_sip_action_confd
-from xivo_acceptance.action.confd import line_action_confd, line_sip_action_confd
+from xivo_acceptance.action.confd import line_action_confd
 from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import line_helper, line_sip_helper, context_helper
 from xivo_acceptance.lettuce import common, form, func
@@ -40,7 +40,7 @@ def given_there_are_no_custom_lines_with_interface_beginning_with_1(step, interf
 
 @step(u'Given there are no lines with id "([^"]*)"')
 def given_there_are_no_lines_with_id_group1(step, line_id):
-    line_helper.delete_line(int(line_id))
+    line_helper.delete_line(line_id)
 
 
 @step(u'Given I set the following options in line "([^"]*)":')
@@ -103,7 +103,7 @@ def _disable_selected_lines():
 def given_i_have_the_following_lines(step):
     for lineinfo in step.hashes:
         _delete_line(lineinfo)
-        _create_line(lineinfo)
+        line_helper.add_line(lineinfo)
 
 
 @step(u'Given I have no line with id "([^"]*)"')
@@ -116,17 +116,9 @@ def _delete_line(lineinfo):
     if 'id' in lineinfo:
         line_helper.delete_line(int(lineinfo['id']))
     if 'username' in lineinfo:
-        lines = line_helper.find_with_name(lineinfo['username'])
-        for line in lines:
-            line_helper.delete_line(line.id)
-
-
-def _create_line(lineinfo):
-    protocol = lineinfo['protocol'].lower()
-    if protocol == 'sip':
-        line_sip_helper.create_line_sip(lineinfo)
-    else:
-        line_helper.create(lineinfo)
+        line = line_sip_helper.find_by_username(lineinfo['username'])
+        if line:
+            line_helper.delete_line(line['id'])
 
 
 @step(u'Given I have an internal context named "([^"]*)"')
@@ -163,7 +155,10 @@ def when_i_delete_line_group1(step, line_id):
 
 @step(u'When I delete line sccp with "([^"]*)"@"([^"]*)"')
 def when_i_delete_line_sccp(step, exten, context):
-    world.response = line_helper.delete_line_with_exten_context(exten, context)
+    line = line_helper.get_with_exten_context(exten, context)
+    assert_that(line['protocol'], equal_to('sccp'),
+                "line with extension %s@%s is not SCCP" % (exten, context))
+    line_helper.delete_line(line['id'])
 
 
 @step(u'When I customize line "([^"]*)" codecs to:')
@@ -284,8 +279,8 @@ def then_i_see_a_line_with_infos(step):
 
 @step(u'Then the line with number "([^"]*)" does not have the codec "([^"]*)"')
 def then_the_line_with_number_group1_does_not_have_the_codec_group2(step, linenumber, codec):
-    line = line_helper.find_with_exten_context(linenumber, 'default')
-    sip_peer = line.name
+    line = line_helper.get_with_exten_context(linenumber, 'default')
+    sip_peer = line['name']
     assert not check_codec_for_sip_line(sip_peer, codec)
 
 
@@ -309,8 +304,8 @@ def then_the_codec_does_not_appear_after_typing_sip_show_peer_in_asterisk(step, 
 
 @step(u'Then the line with number "([^"]*)" has the codec "([^"]*)"')
 def then_the_line_with_number_group1_has_the_codec_group2(step, linenumber, codec):
-    line = line_helper.find_with_exten_context(linenumber, 'default')
-    sip_peer = line.name
+    line = line_helper.get_with_exten_context(linenumber, 'default')
+    sip_peer = line['name']
     assert check_codec_for_sip_line(sip_peer, codec)
 
 
@@ -330,7 +325,7 @@ def then_this_line_is_not_displayed_in_the_list(step):
 
 @step(u'Then the line "([^"]*)" has the following line options:')
 def then_the_line_1_has_the_following_line_options(step, line_number):
-    line_id = line_helper.find_line_id_with_exten_context(line_number, 'default')
+    line_id = line_helper.get_line_id_with_exten_context(line_number, 'default')
     common.open_url('line', 'edit', {'id': line_id})
     for line_data in step.hashes:
         for key, value in line_data.iteritems():
@@ -380,7 +375,7 @@ def _add_codec_to_line(codec, exten):
 
 
 def _add_codec_list_to_line(codecs, exten):
-    line_id = line_helper.find_line_id_with_exten_context(exten, 'default')
+    line_id = line_helper.get_line_id_with_exten_context(exten, 'default')
     common.open_url('line', 'edit', {'id': line_id})
     for codec in codecs:
         _add_custom_codec(codec)
