@@ -100,8 +100,10 @@ def _delete_extension_type(exten, extension_type, typeval):
 
 
 def _delete_extension(extension_id):
-    response = extension_action.delete_extension(extension_id)
-    response.check_status()
+    # response status isn't checked because a few helpers in
+    # _delete_extension_type will implicitly delete the extension and
+    # until we get rid of the webi, refactoring them isn't worth it
+    extension_action.delete_extension(extension_id)
 
 
 def _get_exten_info(extension_id):
