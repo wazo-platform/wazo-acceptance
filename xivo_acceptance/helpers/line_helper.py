@@ -15,26 +15,51 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from hamcrest import assert_that, is_not, is_in, none, equal_to
+
 from xivo_acceptance.lettuce import func
-from xivo_acceptance.lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+from xivo_acceptance.lettuce import postgres
+from xivo_acceptance.action.confd import line_extension_collection_action_confd as collection_action
 from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
-from xivo_dao.data_handler.exception import NotFoundError
-from xivo_dao.data_handler.line import services as line_services
+from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
+from xivo_acceptance.action.confd import line_action_confd as line_action
+from xivo_acceptance.helpers import line_sip_helper, line_sccp_helper, provd_helper
 
 
-def is_with_exten_context_exists(exten, context):
-    try:
-        find_with_exten_context(exten, context)
-    except Exception:
-        return False
-    return True
+def find_by_id(line_id):
+    response = line_action.get(line_id)
+    return response.resource() if response.status_ok() else None
 
 
-def find_with_exten_context(exten, context):
-    try:
-        line = line_services.get_by_number_context(exten, context)
-    except NotFoundError:
-        raise Exception('expecting line with number %r and context %r not found' % (exten, context))
+def get_by_id(line_id):
+    line = find_by_id(line_id)
+    assert_that(line, is_not(none()),
+                "line with id %s not found" % line_id)
+    return line
+
+
+def find_with_exten_context(exten, context='default'):
+    query = """
+    SELECT
+        user_line.line_id
+    FROM
+        user_line
+        INNER JOIN extensions
+            ON user_line.extension_id = extensions.id
+    WHERE
+        extensions.exten = :exten
+        AND extension.context = :context
+    """
+
+    result = postgres.exec_sql_request(query, exten=exten, context=context)
+    row = result.first()
+    return get_by_id(row[0]) if row else None
+
+
+def get_with_exten_context(exten, context='default'):
+    line = find_with_exten_context(exten, context)
+    assert_that(line, is_not(none()),
+                "line with extension %s@%s not found" % (exten, context))
     return line
 
 
@@ -44,20 +69,22 @@ def find_with_extension(extension):
 
 
 def find_with_name(name):
-    return line_services.find_all_by_name(name)
+    response = line_action.all_lines()
+    found = [line for line in response.items()
+             if line['name'] == name]
+    return found[0] if found else None
 
 
-def find_with_user_id(user_id):
-    try:
-        line = line_services.get_by_user_id(user_id)
-    except NotFoundError:
-        raise Exception('expecting line with user ID %r not found' % (user_id))
-    return line
-
-
-def find_line_id_with_exten_context(exten, context):
+def find_line_id_with_exten_context(exten, context='default'):
     line = find_with_exten_context(exten, context)
-    return line.id
+    return line['id'] if line else None
+
+
+def get_line_id_with_exten_context(exten, context='default'):
+    line_id = find_line_id_with_exten_context(exten, context)
+    assert_that(line_id, is_not(none()),
+                "line with extension %s@%s not found" % (exten, context))
+    return line_id
 
 
 def find_extension_id_for_line(line_id):
@@ -65,112 +92,125 @@ def find_extension_id_for_line(line_id):
     return response.resource()['extension_id'] if response.status_ok() else None
 
 
-def find_sccp_lines_with_exten_context(exten, context):
-    return remote_exec_with_result(_find_sccp_lines_with_exten_context, exten=exten, context=context)
+def get_extension_id_for_line(line_id):
+    extension_id = find_extension_id_for_line(line_id)
+    assert_that(extension_id, is_not(none()),
+                "Line %s has no extension" % line_id)
+    return extension_id
 
 
-def _find_sccp_lines_with_exten_context(channel, exten, context):
-    from xivo_dao.data_handler.line import services as line_services
-
-    lines = line_services.find_all_by_protocol('sccp')
-    sccp_line_ids = [line.id for line in lines if line.name == exten and line.context == context]
-    channel.send(sccp_line_ids)
+def add_line(parameters):
+    line_params = _extract_line_params(parameters)
+    line = line_sip_helper.create_line(line_params)
+    _manage_device(line, parameters)
 
 
-def line_exists(line_id):
-    return remote_exec_with_result(_line_exists, line_id=line_id)
+def _extract_line_params(parameters):
+    parameters = dict(parameters)
+    protocol = parameters.pop('protocol', 'sip')
+
+    assert_that(protocol, equal_to("sip"),
+                "Line helper can only create sip lines")
+
+    for key in ['device_id', 'device_mac']:
+        parameters.pop(key, None)
+
+    if 'id' in parameters:
+        parameters['id'] = int(parameters['id'])
+    if 'device_slot' in parameters:
+        parameters['device_slot'] = int(parameters['device_slot'])
+
+    return parameters
 
 
-def _line_exists(channel, line_id):
-    from xivo_dao.data_handler.line import services as line_services
-    from xivo_dao.data_handler.exception import NotFoundError
+def _manage_device(line, parameters):
+    device_slot = int(parameters.get('device_slot', 1))
 
-    try:
-        line_services.get(line_id)
-        channel.send(True)
-    except NotFoundError:
-        channel.send(False)
-
-
-def delete_line_with_exten_context(exten, context):
-    remote_exec(_delete_line_with_exten_context, exten=exten, context=context)
+    if 'device_mac' in parameters:
+        device = provd_helper.get_by_mac(parameters['device_mac'])
+        _associate_device(line, device['mac'], device_slot)
+    elif 'device_id' in parameters:
+        _associate_device(line, parameters['device_id'], device_slot)
 
 
-def _delete_line_with_exten_context(channel, exten, context):
-    from xivo_dao.data_handler.line import services as line_services
-    from xivo_dao.data_handler.exception import NotFoundError
+def _associate_device(line, device_id, device_slot):
+    query = """
+    UPDATE
+        linefeatures
+    SET
+        device = :device_id,
+        num = :device_slot
+    WHERE
+        id = :line_id
+    """
 
-    try:
-        line = line_services.get_by_number_context(exten, context)
-    except NotFoundError:
-        return
-
-    line_services.delete(line)
-
-
-def delete_all():
-    line_ids = remote_exec_with_result(_all_line_ids)
-    for line_id in line_ids:
-        remote_exec(_delete_line, line_id=line_id)
-
-
-def _all_line_ids(channel):
-    from xivo_dao.data_handler.line import services as line_services
-    lines = line_services.find_all()
-    line_ids = [line.id for line in lines]
-    channel.send(line_ids)
+    postgres.exec_sql_request(query,
+                              line_id=line['id'],
+                              device_id=device_id,
+                              device_slot=device_slot)
 
 
 def delete_line(line_id):
+    line = find_by_id(line_id)
+    if not line:
+        return
+
+    assert_that(line['protocol'], is_in(['sip', 'sccp']),
+                "Acceptance cannot delete line with protocol '%s'" % line['protocol'])
+
     delete_line_associations(line_id)
-    remote_exec(_delete_line, line_id=line_id)
-
-
-def _delete_line(channel, line_id):
-    from xivo_dao.data_handler.exception import NotFoundError
-    from xivo_dao.data_handler.line import services as line_services
-
-    try:
-        line = line_services.get(line_id)
-        line_services.delete(line)
-    except NotFoundError:
-        pass
+    if line['protocol'] == 'sccp':
+        line_sccp_helper.delete_line(line['id'])
+    elif line['protocol'] == 'sip':
+        line_sip_helper.delete_line(line['id'])
 
 
 def delete_line_associations(line_id):
-    if line_exists(line_id):
-        remote_exec(_delete_line_associations, line_id=line_id)
+    _dissociate_device(line_id)
+    _dissociate_extensions(line_id)
+    _dissociate_users(line_id)
 
 
-def _delete_line_associations(channel, line_id):
-    from xivo_dao.data_handler.line import services as line_services
-    from xivo_dao.data_handler.line_extension import services as line_extension_services
-    from xivo_dao.data_handler.user_line import services as user_line_services
+def _dissociate_device(line_id):
+    query = """
+    UPDATE
+        linefeatures
+    SET
+        device = NULL,
+        num = 1
+    WHERE
+        id = :line_id
+    """
 
-    line = line_services.get(line_id)
-    line.device_id = None
-    line.device_slot = 1
-    line_services.edit(line)
-
-    line_extension = line_extension_services.find_by_line_id(line_id)
-    if line_extension:
-        line_extension_services.dissociate(line_extension)
-
-    user_lines = user_line_services.find_all_by_line_id(line_id)
-    secondary_associations = [ul for ul in user_lines if not ul.main_user]
-    main_associations = [ul for ul in user_lines if ul.main_user]
-
-    for user_line in secondary_associations + main_associations:
-        user_line_services.dissociate(user_line)
+    postgres.exec_sql_request(query, line_id=line_id)
 
 
-def create(parameters):
-    remote_exec(_create, parameters=parameters)
+def _dissociate_extensions(line_id):
+    response = collection_action.extensions_for_line(line_id)
+    for line_extension in response.items():
+        dissociation = collection_action.dissociate_extension(line_id,
+                                                              line_extension['extension_id'])
+        dissociation.check_status()
 
 
-def _create(channel, parameters):
-    from xivo_dao.data_handler.line import services as line_services
-    from xivo_dao.data_handler.line.model import Line
+def _dissociate_users(line_id):
+    user_ids = _find_user_ids_for_line(line_id)
+    for user_id in user_ids:
+        response = user_line_action.delete_user_line(user_id, line_id)
+        response.check_status()
 
-    line = Line(**parameters)
-    line_services.create(line)
+
+def _find_user_ids_for_line(line_id):
+    query = """
+    SELECT
+        user_line.user_id
+    FROM
+        user_line
+    WHERE
+        user_line.line_id = :line_id
+    ORDER BY
+        user_line.main_user ASC
+    """
+
+    result = postgres.exec_sql_request(query, line_id=line_id)
+    return [row['user_id'] for row in result]

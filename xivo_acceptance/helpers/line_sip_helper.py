@@ -15,37 +15,35 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to, is_not, none
+from hamcrest import assert_that, is_not, none
 
 from xivo_acceptance.action.confd import line_sip_action_confd as line_sip_action
-from xivo_acceptance.lettuce.remote_py_cmd import remote_exec
-
-
-def create_line_sip(parameters):
-    remote_exec(_create_line_sip, parameters=parameters)
-
-
-def _create_line_sip(channel, parameters):
-    from xivo_dao.data_handler.line import services as line_services
-    from xivo_dao.data_handler.line.model import LineSIP
-
-    line = LineSIP(**parameters)
-    line_services.create(line)
 
 
 def find_by_username(username):
-    all_lines = _all_lines()
-    found = [line for line in all_lines if line['username'] == username]
-    return found[0] if found else None
-
-
-def _all_lines():
     response = line_sip_action.all_lines()
-    assert_that(response.status, equal_to(200), str(response.data))
-    return response.data['items']
+    found = [line for line in response.items()
+             if line['username'] == username]
+    return found[0] if found else None
 
 
 def get_by_username(username):
     line = find_by_username(username)
-    assert_that(line, is_not(none()), "line with username '%s' does not exist" % username)
+    assert_that(line, is_not(none()),
+                "line with username '%s' does not exist" % username)
     return line
+
+
+def get_by_id(line_id):
+    response = line_sip_action.get(line_id)
+    return response.resource()
+
+
+def delete_line(line_id):
+    response = line_sip_action.delete(line_id)
+    response.check_status()
+
+
+def create_line(parameters):
+    response = line_sip_action.create_line_sip(parameters)
+    return response.resource()
