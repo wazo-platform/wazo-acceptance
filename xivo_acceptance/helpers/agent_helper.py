@@ -20,7 +20,7 @@ import time
 from lettuce import world
 from xivo_ws import Agent
 
-from xivo_acceptance.helpers import line_helper, user_helper
+from xivo_acceptance.helpers import line_helper, user_helper, extension_helper
 from xivo_acceptance.lettuce import func
 from xivo_agentd_client.error import AgentdClientError
 
@@ -84,8 +84,7 @@ def _search_agents_with_number(number):
 
 def login_agent(agent_number, extension=None, ignore_error=False):
     if extension is None:
-        line = _get_line_from_agent(agent_number)
-        number, context = line.number, line.context
+        number, context = _get_extension_from_agent(agent_number)
     else:
         number, context = func.extract_number_and_context_from_extension(extension)
     try:
@@ -104,16 +103,16 @@ def logoff_agent(agent_number, ignore_error=False):
 
 
 def login_agent_from_phone(agent_number, phone_register):
-    line = _get_line_from_agent(agent_number)
-    user = user_helper.get_by_exten_context(line.number, line.context)
+    number, context = _get_extension_from_agent(agent_number)
+    user = user_helper.get_by_exten_context(number, context)
     phone = phone_register.get_user_phone(user['fullname'])
     phone.call('*31%s' % agent_number)
     time.sleep(3)
 
 
 def logoff_agent_from_phone(agent_number, phone_register):
-    line = _get_line_from_agent(agent_number)
-    user = user_helper.get_by_exten_context(line.number, line.context)
+    number, context = _get_extension_from_agent(agent_number)
+    user = user_helper.get_by_exten_context(number, context)
     phone = phone_register.get_user_phone(user['fullname'])
     phone.call('*32%s' % agent_number)
     time.sleep(3)
@@ -136,10 +135,12 @@ def unpause_agent(agent_number):
     world.agentd_client.agents.unpause_agent_by_number(agent_number)
 
 
-def _get_line_from_agent(agent_number):
+def _get_extension_from_agent(agent_number):
     agent = get_agent_with_number(agent_number)
     if not agent.users:
         raise Exception('agent %s has no users' % agent_number)
     user_id = agent.users[0]
-    line = line_helper.find_with_user_id(user_id)
-    return line
+    line_id = user_helper.get_line_id_for_user(user_id)
+    extension_id = line_helper.get_extension_id_for_line(line_id)
+    extension = extension_helper.get_extension(extension_id)
+    return extension['exten'], extension['context']
