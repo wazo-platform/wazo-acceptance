@@ -124,8 +124,8 @@ def delete_similar_users(userinfo):
 
 def delete_user(user_id):
     if find_by_user_id(user_id):
-        _delete_line_associations(user_id)
         _delete_voicemail_associations(user_id)
+        _delete_line_associations(user_id)
         _delete_func_key_associations(user_id)
 
         template_id = func_key_helper.find_template_for_user(user_id)
@@ -134,9 +134,11 @@ def delete_user(user_id):
 
 
 def _delete_line_associations(user_id):
-    line_id = find_line_id_for_user(user_id)
-    if line_id:
-        line_helper.delete_line_associations(line_id)
+    user_lines = user_lines_for_user(user_id)
+    main = [ul for ul in user_lines if ul['main_user']]
+    secondary = [ul for ul in user_lines if not ul['main_user']]
+    for ul in (secondary + main):
+        line_helper.delete_line_associations(ul['line_id'])
 
 
 def _delete_voicemail_associations(user_id):
