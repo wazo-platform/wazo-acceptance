@@ -58,8 +58,8 @@ def find_by_exten_context(exten, context):
     """
 
     result = postgres.exec_sql_request(query, exten=exten, context=context)
-    row = result.first()
-    return find_by_user_id(row[0]) if row else None
+    user_id = result.scalar()
+    return find_by_user_id(user_id) if user_id else None
 
 
 def find_by_firstname_lastname(firstname, lastname):

@@ -52,8 +52,8 @@ def find_with_exten_context(exten, context='default'):
     """
 
     result = postgres.exec_sql_request(query, exten=exten, context=context)
-    row = result.first()
-    return get_by_id(row[0]) if row else None
+    line_id = result.scalar()
+    return get_by_id(line_id) if line_id else None
 
 
 def get_with_exten_context(exten, context='default'):
