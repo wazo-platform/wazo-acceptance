@@ -20,7 +20,6 @@ from __future__ import unicode_literals
 from lettuce import world
 
 from xivo_acceptance.helpers import outcall_helper
-from xivo_acceptance.lettuce.remote_py_cmd import remote_exec
 from xivo_ws import Context, ContextRange, WebServiceRequestError
 
 
@@ -124,17 +123,3 @@ def get_context_with_name(name):
         return world.ws.contexts.view(name)
     except WebServiceRequestError:
         return False
-
-
-def create_context(context_name):
-    remote_exec(_create_context, name=context_name)
-
-
-def _create_context(channel, name):
-    from xivo_dao.data_handler.context import services as context_services
-    from xivo_dao.data_handler.context.model import Context, ContextType
-
-    existing_context = context_services.find_by_name(name)
-    if not existing_context:
-        context = Context(name=name, display_name=name, type=ContextType.internal)
-        context_services.create(context)

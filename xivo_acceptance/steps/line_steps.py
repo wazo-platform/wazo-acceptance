@@ -123,7 +123,7 @@ def _delete_line(lineinfo):
 
 @step(u'Given I have an internal context named "([^"]*)"')
 def given_i_have_an_internal_context_named_group1(step, context):
-    context_helper.create_context(context)
+    context_helper.add_or_replace_context(context, context, 'internal')
 
 
 @step(u'When I ask for the line_sip with id "([^"]*)"')
