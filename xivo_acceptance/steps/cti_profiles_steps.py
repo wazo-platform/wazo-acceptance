@@ -29,12 +29,12 @@ from hamcrest.core.core.isnone import not_none, none
 @step(u'Given I have the following CTI profiles:$')
 def given_i_have_the_following_cti_profiles(step):
     for profile in step.hashes:
-        cti_profile_helper.create_profile(profile)
+        cti_profile_helper.add_or_replace_profile(profile)
 
 
 @step(u'Given there is no CTI profile with id "([^"]*)"$')
 def given_there_is_no_cti_profile_with_id_group1(step, profileid):
-    cti_profile_helper.delete_profile_if_needed(profileid)
+    cti_profile_helper.delete_profile(int(profileid))
 
 
 @step(u'Given the following users, CTI profiles are linked:$')

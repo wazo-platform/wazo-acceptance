@@ -15,51 +15,80 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_acceptance.lettuce.remote_py_cmd import remote_exec
-from xivo_dao.data_handler.cti_profile import dao as cti_profile_dao
+from xivo_acceptance.lettuce import postgres
+from hamcrest import assert_that, is_not, none
 
 
-def create_profile(profile):
-    remote_exec(_create_profile, profileinfo=profile)
+def add_or_replace_profile(profile):
+    if 'id' in profile:
+        delete_profile(int(profile['id']))
+    if 'name' in profile:
+        existing_profile_id = find_profile_id_by_name(profile['name'])
+        if existing_profile_id:
+            delete_profile(existing_profile_id)
+    create_profile(profile['id'], profile['name'])
 
 
-def _create_profile(channel, profileinfo):
-    from xivo_dao.helpers.db_utils import get_dao_session
-    from xivo_dao.alchemy.cti_profile import CtiProfile
-    from xivo_dao.alchemy.ctipresences import CtiPresences
-    from xivo_dao.alchemy.ctiphonehints import CtiPhoneHints
-    from xivo_dao.alchemy.ctiphonehintsgroup import CtiPhoneHintsGroup
+def create_profile(profile_id, profile_name):
+    query = """
+    INSERT INTO cti_profile
+    (
+       id,
+       name
+    )
+    VALUES
+    (
+        :profile_id,
+        :profile_name
+    )
+    """
 
-    profile = CtiProfile(**profileinfo)
-    session = get_dao_session()
-    session.begin()
-    session.execute('UPDATE userfeatures SET cti_profile_id = null WHERE cti_profile_id = :profile_id', {'profile_id': int(profile.id)})
-    session.execute('DELETE FROM cti_profile WHERE id = :profile_id', {'profile_id': int(profile.id)})
-    session.add(profile)
-    session.commit()
-
-
-def delete_profile_if_needed(profile_id):
-    remote_exec(_delete_profile_if_needed, profile_id=profile_id)
-
-
-def _delete_profile_if_needed(channel, profile_id):
-    from xivo_dao.helpers.db_utils import get_dao_session
-    from xivo_dao.alchemy.cti_profile import CtiProfile
-    from xivo_dao.alchemy.ctipresences import CtiPresences
-    from xivo_dao.alchemy.ctiphonehints import CtiPhoneHints
-    from xivo_dao.alchemy.ctiphonehintsgroup import CtiPhoneHintsGroup
-    from xivo_dao.alchemy.userfeatures import UserFeatures
-
-    session = get_dao_session()
-    session.begin()
-    result = session.query(CtiProfile).filter(CtiProfile.id == profile_id).first()
-    if result is not None:
-        (session.query(UserFeatures).filter(UserFeatures.cti_profile_id == profile_id)
-                                    .update({'cti_profile_id': None}))
-        session.delete(result)
-    session.commit()
+    postgres.exec_sql_request(query,
+                              profile_id=profile_id,
+                              profile_name=profile_name)
 
 
-def get_id_with_name(cti_profile_name):
-    return cti_profile_dao.get_id_by_name(cti_profile_name)
+def delete_profile(profile_id):
+    query = """
+    UPDATE
+        userfeatures
+    SET
+        cti_profile_id = NULL
+    WHERE
+        cti_profile_id = :profile_id
+    """
+
+    postgres.exec_sql_request(query,
+                              profile_id=profile_id)
+
+    query = """
+    DELETE FROM
+        cti_profile
+    WHERE
+        cti_profile.id = :profile_id
+    """
+
+    postgres.exec_sql_request(query,
+                              profile_id=profile_id)
+
+
+def get_id_with_name(profile_name):
+    profile_id = find_profile_id_by_name(profile_name)
+    assert_that(profile_id, is_not(none()),
+                "CTI profile '%s' not found" % profile_name)
+    return profile_id
+
+
+def find_profile_id_by_name(profile_name):
+    query = """
+    SELECT
+        id
+    FROM
+        cti_profile
+    WHERE
+        name = :profile_name
+    """
+
+    result = postgres.exec_sql_request(query,
+                                       profile_name=profile_name)
+    return result.scalar()
