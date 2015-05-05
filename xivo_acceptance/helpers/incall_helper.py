@@ -69,8 +69,8 @@ def _new_group_destination(group_name):
 
 def _new_voicemail_destination(number_context):
     number, _, context = number_context.partition('@')
-    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
-    return VoicemailDestination(voicemail_id)
+    voicemail = voicemail_helper.get_voicemail_by_number(number, context)
+    return VoicemailDestination(voicemail['id'])
 
 
 def delete_incalls_with_did(incall_did, context='from-extern'):

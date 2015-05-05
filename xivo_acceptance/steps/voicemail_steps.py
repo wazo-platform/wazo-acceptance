@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
+from hamcrest import assert_that, has_item, has_entry, has_entries, has_length, \
+    instance_of, is_not
 from lettuce import step, world
 
 from xivo_acceptance.helpers import voicemail_helper, user_helper
@@ -28,12 +29,14 @@ FAKE_ID = 999999999
 
 @step(u'Given there is no voicemail with number "([^"]*)" and context "([^"]*)"')
 def given_there_is_no_voicemail_with_number_and_context(step, voicemail_number, context):
-    voicemail_helper.delete_voicemail_with_number_context(voicemail_number, context)
+    voicemail = voicemail_helper.get_voicemail_by_number(voicemail_number, context)
+    voicemail_helper.delete_voicemail(voicemail['id'])
 
 
 @step(u'Given I have no voicemail with id "([^"]*)"')
 def given_i_have_no_voicemail_with_id_group1(step, voicemail_id):
-    voicemail_helper.delete_voicemail_with_id(voicemail_id)
+    # SO WATCHA GONNA DO IF THE ID DOESN'T EXIST ?!? HUH ?!?!? HUH ?!?!?!
+    voicemail_helper.delete_voicemail(voicemail_id)
 
 
 @step(u'Given I have the following voicemails:')
@@ -51,8 +54,8 @@ def when_i_request_voicemail_with_id_group1(step, voicemail_id):
 @step(u'When I send a request for the voicemail "([^"]*)", using its id')
 def when_i_send_a_request_for_the_voicemail_with_number_group1_using_its_id(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
-    world.response = voicemail_action_confd.get_voicemail(voicemail_id)
+    voicemail = voicemail_helper.get_voicemail_by_number(number, context)
+    world.response = voicemail_action_confd.get_voicemail(voicemail['id'])
 
 
 @step(u'When I create an empty voicemail via CONFD:')
@@ -64,15 +67,15 @@ def when_i_create_an_empty_voicemail(step):
 def when_i_edit_voicemail_via_confd(step, extension):
     parameters = _extract_voicemail_info_to_confd(step.hashes[0])
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
-    world.response = voicemail_action_confd.edit_voicemail(voicemail_id, parameters)
+    voicemail = voicemail_helper.get_voicemail_by_number(number, context)
+    world.response = voicemail_action_confd.edit_voicemail(voicemail['id'], parameters)
 
 
 @step(u'When I delete voicemail "([^"]*)" via CONFD')
 def when_i_delete_voicemail_with_number_group1_via_confd(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
-    world.response = voicemail_action_confd.delete_voicemail(voicemail_id)
+    voicemail = voicemail_helper.get_voicemail_by_number(number, context)
+    world.response = voicemail_action_confd.delete_voicemail(voicemail['id'])
 
 
 @step(u'When I create the following voicemails via CONFD:')
@@ -91,9 +94,8 @@ def when_i_request_the_list_of_voicemails(step):
 def when_i_link_user_group1_with_voicemail_group2_via_confd(step, fullname, voicemail):
     user = user_helper.get_user_by_name(fullname)
     number, context = func.extract_number_and_context_from_extension(voicemail)
-    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
-
-    world.response = voicemail_link_action_confd.link_voicemail(user['id'], voicemail_id)
+    voicemail = voicemail_helper.get_voicemail_by_number(number, context)
+    world.response = voicemail_link_action_confd.link_voicemail(user['id'], voicemail['id'])
 
 
 @step(u'When I associate user "([^"]*)" with voicemail id "([^"]*)" via CONFD')
@@ -105,9 +107,8 @@ def when_i_link_user_group1_with_voicemail_id_group2_via_confd(step, fullname, v
 @step(u'When I associate a fake user with with voicemail "([^"]*)" via CONFD')
 def when_i_associate_a_fake_user_with_with_voicemail_group1_via_confd(step, voicemail):
     number, context = func.extract_number_and_context_from_extension(voicemail)
-    voicemail_id = voicemail_helper.find_voicemail_id_with_number(number, context)
-
-    world.response = voicemail_link_action_confd.link_voicemail(FAKE_ID, voicemail_id)
+    voicemail = voicemail_helper.get_voicemail_by_number(number, context)
+    world.response = voicemail_link_action_confd.link_voicemail(FAKE_ID, voicemail['id'])
 
 
 @step(u'When I request the voicemail associated to user "([^"]*)" "([^"]*)" via CONFD')

@@ -35,7 +35,9 @@ def delete_user_line_extension_voicemail(firstname, lastname, context=None, exte
 
 
 def delete_voicemail(mailbox, context):
-    voicemail_helper.delete_voicemail_with_number_context(mailbox, context)
+    voicemail = voicemail_helper.find_voicemail_by_number(mailbox, context)
+    if voicemail:
+        voicemail_helper.delete_voicemail(voicemail['id'])
 
 
 def delete_extension(exten, context):
@@ -87,6 +89,6 @@ def delete_users_with_profile(profile_name):
     for user in users:
         if user.client_profile_id == profile_id:
             if user.voicemail:
-                voicemail_helper.delete_voicemail_with_user_id(user.id)
+                voicemail_helper.delete_voicemail(user.voicemail.id)
             delete_lines_for_user(user.id)
             delete_user(user.id)
