@@ -4,7 +4,6 @@ PyHamcrest
 PyVirtualDisplay
 SQLAlchemy
 argparse
-execnet
 fuzzywuzzy
 jinja2
 unittest2

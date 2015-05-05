@@ -21,7 +21,6 @@ import logging
 import os
 import sys
 
-from execnet.multi import makegateway
 import yaml
 import xivo_dao
 
@@ -170,7 +169,6 @@ class XivoAcceptanceConfig(object):
         self._setup_provd()
         logger.debug("_setup_webi...")
         self._setup_webi()
-        self._execnet_gateway = None
 
     def _setup_dao(self):
         xivo_dao.init_db(xivo_dao.DBContext(self._config['db_uri']))
@@ -215,19 +213,3 @@ class XivoAcceptanceConfig(object):
             self.xivo_configured = False
         else:
             self.xivo_configured = True
-
-    @property
-    def execnet_gateway(self):
-        if self._execnet_gateway is None:
-            options = ' '.join(ssh.SSH_OPTIONS)
-            spec = 'ssh={options} -l {login} {host}'.format(options=options,
-                                                            login=self._config['ssh_login'],
-                                                            host=self._config['xivo_host'])
-            self._execnet_gateway = makegateway(spec)
-
-        return self._execnet_gateway
-
-    def reset_execnet(self):
-        if self._execnet_gateway is not None:
-            self._execnet_gateway.exit()
-            self._execnet_gateway = None
