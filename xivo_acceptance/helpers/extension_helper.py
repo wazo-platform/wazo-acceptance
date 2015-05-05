@@ -96,7 +96,7 @@ def _delete_extension_type(exten, extension_type, typeval):
     elif extension_type == 'meetme':
         meetme_helper.delete_meetme_with_confno(exten)
     elif extension_type == 'outcall':
-        dialpattern_helper.delete((typeval))
+        dialpattern_helper.delete(int(typeval))
 
 
 def _delete_extension(extension_id):

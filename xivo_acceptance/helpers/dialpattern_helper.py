@@ -15,18 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_acceptance.lettuce.remote_py_cmd import remote_exec
-from execnet.gateway_base import RemoteError
+from xivo_acceptance.lettuce import postgres
 
 
 def delete(dialpattern_id):
-    try:
-        remote_exec(_delete, dialpattern_id=dialpattern_id)
-    except RemoteError:
-        pass
-
-
-def _delete(channel, dialpattern_id):
-    from xivo_dao import dialpattern_dao
-
-    dialpattern_dao.delete(dialpattern_id)
+    query = """
+    DELETE FROM
+        dialpattern
+    WHERE
+        dialpattern.id = :dialpattern_id
+    """
+    postgres.exec_sql_request(query, dialpattern_id=dialpattern_id)
