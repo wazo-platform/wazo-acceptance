@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -113,7 +113,10 @@ def _extract_line_params(parameters):
                 "Line helper can only create sip lines")
 
     for key in ['device_id', 'device_mac']:
-        parameters.pop(key, None)
+        try:
+            parameters.pop(key)
+        except KeyError:
+            pass
 
     if 'id' in parameters:
         parameters['id'] = int(parameters['id'])

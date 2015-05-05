@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ def given_there_is_no_voicemail_with_number_and_context(step, voicemail_number, 
 
 @step(u'Given I have no voicemail with id "([^"]*)"')
 def given_i_have_no_voicemail_with_id_group1(step, voicemail_id):
-    # SO WATCHA GONNA DO IF THE ID DOESN'T EXIST ?!? HUH ?!?!? HUH ?!?!?!
     voicemail_helper.delete_voicemail(voicemail_id)
 
 
