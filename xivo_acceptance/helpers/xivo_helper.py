@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_dao.data_handler.infos import services
+from xivo_dao.data_handler.infos import dao
+
 
 def get_uuid():
-    return services.get().uuid
+    return dao.get().uuid

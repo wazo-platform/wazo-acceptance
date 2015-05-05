@@ -19,7 +19,6 @@
 from lettuce.decorators import step
 
 from xivo_acceptance.helpers import context_helper
-from xivo_dao.data_handler.context.model import ContextType
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce.common import open_url
 
@@ -34,7 +33,7 @@ def given_i_have_the_following_extensions(step):
     for context_data in step.hashes:
         context_helper.add_or_replace_context(context_data['name'],
                                               context_data['name'],
-                                              ContextType.internal)
+                                              'internal')
         context_helper.update_contextnumbers_user(context_data['name'],
                                                   context_data['numberbeg'],
                                                   context_data['numberend'])
