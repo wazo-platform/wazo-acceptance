@@ -26,6 +26,7 @@ def delete_user_line_extension_voicemail(firstname, lastname, context=None, exte
         delete_voicemail(mailbox, context)
     if exten and context:
         delete_extension(exten, context)
+        delete_lines(exten)
 
     user = user_helper.find_by_firstname_lastname(firstname, lastname)
     if user:
@@ -41,6 +42,10 @@ def delete_extension(exten, context):
     extension = extension_helper.find_extension_by_exten_context(exten, context)
     if extension:
         extension_helper.delete_extension(extension['id'])
+
+
+def delete_lines(exten):
+    line_helper.delete_similar_lines(exten)
 
 
 def delete_lines_for_user(user_id):

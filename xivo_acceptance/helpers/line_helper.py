@@ -165,6 +165,12 @@ def delete_line(line_id):
         line_sip_helper.delete_line(line['id'])
 
 
+def delete_similar_lines(exten):
+    line_ids = line_sccp_helper.find_all_line_ids_by_exten(exten)
+    for line_id in line_ids:
+        delete_line(line_id)
+
+
 def delete_line_associations(line_id):
     _dissociate_device(line_id)
     _dissociate_extensions(line_id)
