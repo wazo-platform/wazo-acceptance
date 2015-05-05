@@ -15,40 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from xivo_acceptance.lettuce.remote_py_cmd import remote_exec, remote_exec_with_result
+from hamcrest import assert_that, is_not, none
 
-
-def delete_voicemail_with_id(voicemail_id):
-    remote_exec(_delete_voicemail_with_id, voicemail_id=voicemail_id)
-
-
-def _delete_voicemail_with_id(channel, voicemail_id):
-    from xivo_dao.data_handler.voicemail import services as voicemail_services
-    from xivo_dao.data_handler.user_voicemail import services as user_voicemail_services
-    from xivo_dao.data_handler.exception import NotFoundError
-
-    try:
-        user_voicemail = user_voicemail_services.find_by_voicemail_id(voicemail_id)
-        if user_voicemail:
-            user_voicemail_services.dissociate(user_voicemail)
-
-        voicemail = voicemail_services.get(voicemail_id)
-        voicemail_services.delete(voicemail)
-
-    except NotFoundError:
-        pass
-
-
-def delete_voicemail_with_number_context(number, context):
-    voicemail_id = find_voicemail_id_with_number(number, context)
-    if voicemail_id:
-        delete_voicemail_with_id(voicemail_id)
-
-
-def delete_voicemail_with_user_id(user_id):
-    voicemail_id = find_voicemail_id_with_user(user_id)
-    if voicemail_id:
-        delete_voicemail_with_id(voicemail_id)
+from xivo_acceptance.action.confd import voicemail_action_confd as voicemail_action
+from xivo_acceptance.action.confd import voicemail_link_action_confd as voicemail_link_action
+from xivo_acceptance.lettuce import postgres
 
 
 def add_or_replace_voicemail(parameters):
@@ -60,93 +31,72 @@ def delete_similar_voicemails(parameters):
     if 'number' in parameters:
         number = parameters['number']
         context = parameters.get('context', 'default')
-        delete_voicemail_with_number_context(number, context)
+        voicemail = find_voicemail_by_number(number, context)
+        if voicemail:
+            delete_voicemail(voicemail['id'])
 
 
 def create_voicemail(parameters):
-    remote_exec(_create_voicemail, parameters=parameters)
+    parameters = dict(parameters)
+    response = voicemail_action.create_voicemail(parameters)
+    return response.resource()
 
 
-def _create_voicemail(channel, parameters):
-    from xivo_dao.alchemy.voicemail import Voicemail as VoicemailSchema
-    from xivo_dao.helpers.db_utils import get_dao_session
-    from xivo_dao.helpers.db_utils import commit_or_abort
-
-    voicemail = VoicemailSchema()
-
-    voicemail.fullname = parameters['name']
-    voicemail.mailbox = parameters['number']
-    voicemail.context = parameters['context']
-
-    if 'password' in parameters:
-        voicemail.password = parameters['password']
-
-    if 'email' in parameters:
-        voicemail.email = parameters['email']
-
-    if 'pager' in parameters:
-        voicemail.pager = parameters['pager']
-
-    if 'language' in parameters:
-        voicemail.language = parameters['language']
-
-    if 'timezone' in parameters:
-        voicemail.tz = parameters['timezone']
-
-    if 'max_messages' in parameters:
-        voicemail.maxmsg = int(parameters['max_messages'])
-
-    if 'attach_audio' in parameters:
-        voicemail.attach = int(parameters['attach_audio'])
-
-    if 'delete_messages' in parameters:
-        voicemail.deletevoicemail = int(parameters['delete_messages'])
-
-    if 'ask_password' in parameters:
-        voicemail.skipcheckpass = int(not parameters['ask_password'])
-
-    s = get_dao_session()
-    with commit_or_abort(s):
-        s.add(voicemail)
+def delete_voicemail(voicemail_id):
+    _delete_associations(voicemail_id)
+    _delete_voicemail(voicemail_id)
 
 
-def total_voicemails():
-    return remote_exec_with_result(_total_voicemails)
+def _delete_associations(voicemail_id):
+    user_id = find_user_id_for_voicemail(voicemail_id)
+    if user_id:
+        voicemail_link_action.delete_voicemail_link(user_id)
 
 
-def _total_voicemails(channel):
-    from xivo_dao.alchemy.voicemail import Voicemail as VoicemailSchema
-    from xivo_dao.helpers.db_utils import get_dao_session
-
-    count = get_dao_session().query(VoicemailSchema).count()
-    channel.send(count)
+def _delete_voicemail(voicemail_id):
+    voicemail_action.delete_voicemail(voicemail_id)
 
 
-def find_voicemail_id_with_number(number, context='default'):
-    return remote_exec_with_result(_find_voicemail_id_with_number, number=number, context=context)
+def find_user_id_for_voicemail(voicemail_id):
+    query = """
+    SELECT
+        id
+    FROM
+        userfeatures
+    WHERE
+        voicemailid = :voicemail_id
+    """
+
+    result = postgres.exec_sql_request(query, voicemail_id=voicemail_id)
+    return result.scalar()
 
 
-def _find_voicemail_id_with_number(channel, number, context):
-    from xivo_dao.data_handler.voicemail import services
-    from xivo_dao.data_handler.exception import NotFoundError
-
-    try:
-        voicemail = services.get_by_number_context(number, context)
-        channel.send(voicemail.id)
-    except NotFoundError:
-        channel.send(None)
+def find_voicemail_by_user_id(user_id):
+    response = voicemail_link_action.get_voicemail_link(user_id)
+    if response.status_ok():
+        return get_by_id(response.resource()['voicemail_id'])
+    return None
 
 
-def find_voicemail_id_with_user(user_id):
-    return remote_exec_with_result(_find_voicemail_id_with_user, user_id=user_id)
+def find_voicemail_by_number(number, context='default'):
+    response = voicemail_action.voicemail_list({'search': number})
+    found = [item for item in response.items()
+             if item['number'] == number and item['context'] == context]
+    return found[0] if found else None
 
 
-def _find_voicemail_id_with_user(channel, user_id):
-    from xivo_dao import user_dao
-    from xivo_dao.data_handler.exception import NotFoundError
+def get_voicemail_by_number(number, context='default'):
+    voicemail = find_voicemail_by_number(number, context)
+    assert_that(voicemail, is_not(none()),
+                "voicemail %s@%s not found" % (number, context))
+    return voicemail
 
-    try:
-        user = user_dao.get(user_id)
-        channel.send(user.voicemailid)
-    except NotFoundError:
-        channel.send(None)
+
+def find_voicemail_id_by_number(number, context='default'):
+    voicemail = find_voicemail_by_number(number, context)
+    return voicemail['id'] if voicemail else None
+
+
+def get_by_id(voicemail_id):
+    response = voicemail_action.get_voicemail(voicemail_id)
+    return response.resource()
