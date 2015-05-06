@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,14 @@
 
 import urllib2
 from lettuce import world
-from hamcrest import assert_that, is_not, none, has_entries, has_key
+from hamcrest import assert_that, is_not, none, has_entry, has_entries, has_key
 from xivo_provd_client.error import NotFoundError
 import uuid
 
 
 def device_config_has_properties(device_id, properties):
     config = get_provd_config(device_id)
-    assert_that(config, has_entries(properties))
+    assert_that(config, has_entry('raw_config', has_entry('sip_lines', has_entry('1', has_entries(properties)))))
 
 
 def get_provd_config(device_id):

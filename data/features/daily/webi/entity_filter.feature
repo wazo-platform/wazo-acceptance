@@ -35,10 +35,10 @@ Feature: Entity Filter
         Given the latest plugin "xivo-aastra" is installed
 
         Given I have the following devices:
-          |               id |             ip | mac               | latest plugin of | model | vendor |
-          | 1654324689546241 | 192.168.32.101 | 00:00:00:df:ef:01 | xivo-aastra      | 6757i | Aastra |
-          | 1654324689546242 | 192.168.32.102 | 00:00:00:df:ef:02 | xivo-aastra      | 6757i | Aastra |
-          | 1654324689546243 | 192.168.32.103 | 00:00:00:df:ef:03 | xivo-aastra      | 6757i | Aastra |
+          |             ip | mac               | latest plugin of | model | vendor |
+          | 192.168.32.101 | 00:00:00:df:ef:01 | xivo-aastra      | 6757i | Aastra |
+          | 192.168.32.102 | 00:00:00:df:ef:02 | xivo-aastra      | 6757i | Aastra |
+          | 192.168.32.103 | 00:00:00:df:ef:03 | xivo-aastra      | 6757i | Aastra |
 
         Given there are users with infos:
           | firstname      | lastname | number | context | entity_name   | bsfilter  | device            |

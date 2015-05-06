@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ def when_i_create_a_device_using_the_device_template_id_group1(step, device_temp
     world.response = device_action_confd.create_device(device)
 
 
-@step(u'When I delete the device with mac "([^"]*)" from confd')
+@step(u'When I delete the device with mac "([^"]*)" from confd$')
 def when_i_delete_the_device(step, mac):
     device = provd_helper.get_by_mac(mac)
     world.deleted_device = device
@@ -199,9 +199,10 @@ def when_i_create_the_device_with_infos(step):
     form.submit.submit_form()
 
 
-@step(u'When I edit the device "([^"]*)" with infos:')
-def when_i_edit_the_device_with_infos(step, device_id):
-    common.open_url('device', 'edit', qry={'id': device_id})
+@step(u'When I edit the device with mac "([^"]*)" via webi with infos:')
+def when_i_edit_the_device_with_mac_via_webi_with_infos(step, mac):
+    device = provd_helper.get_by_mac(mac)
+    common.open_url('device', 'edit', qry={'id': device['id']})
     device_infos = step.hashes[0]
     if 'plugin' in device_infos:
         device_action_webi.type_input('plugin', device_infos['plugin'])
@@ -212,9 +213,10 @@ def when_i_edit_the_device_with_infos(step, device_id):
     form.submit.submit_form()
 
 
-@step(u'^When I delete the device "([^"]*)"$')
-def when_i_delete_device(step, device_id):
-    common.open_url('device', 'delete', qry={'id': '%s' % device_id})
+@step(u'^When I delete the device with mac "([^"]*)" via webi$')
+def when_i_delete_device(step, mac):
+    device = provd_helper.get_by_mac(mac)
+    common.open_url('device', 'delete', qry={'id': '%s' % device['id']})
 
 
 @step(u'When I provision my device with my line_id "([^"]*)" and ip "([^"]*)"')
@@ -223,9 +225,10 @@ def when_i_provision_my_device_with_my_line_id_group1(step, line_id, device_ip):
     device_helper.provision_device_using_webi(line.provisioning_extension, device_ip)
 
 
-@step(u'When I open the edit page of the device "([^"]*)"')
-def when_i_open_the_edit_page_of_the_device_group1(step, device_id):
-    common.open_url('device', 'edit', qry={'id': device_id})
+@step(u'When I open the edit page of the device with mac "([^"]*)"')
+def when_i_open_the_edit_page_of_the_device_with_mac_group1(step, mac):
+    device = provd_helper.get_by_mac(mac)
+    common.open_url('device', 'edit', qry={'id': device['id']})
 
 
 @step(u'When I select a plugin "([^"]*)"')
@@ -244,9 +247,10 @@ def then_there_is_no_device(step, search):
     assert common.element_is_not_in_list('device', search, query)
 
 
-@step(u'Then the device "([^"]*)" has been provisioned with a configuration:')
-def then_the_device_has_been_provisioned_with_a_configuration(step, device_id):
-    provd_helper.device_config_has_properties(device_id, step.hashes)
+@step(u'Then the device with mac "([^"]*)" has been provisioned with a configuration:')
+def then_the_device_with_mac_has_been_provisioned_with_a_configuration(step, mac):
+    device = provd_helper.get_by_mac(mac)
+    provd_helper.device_config_has_properties(device['id'], step.hashes[0])
 
 
 @step(u'Then I see devices with infos:')
