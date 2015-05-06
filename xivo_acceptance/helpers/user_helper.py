@@ -144,7 +144,8 @@ def _delete_line_associations(user_id):
     main = [ul for ul in user_lines if ul['main_user']]
     secondary = [ul for ul in user_lines if not ul['main_user']]
     for ul in (secondary + main):
-        line_helper.delete_line_associations(ul['line_id'])
+        line_helper.dissociate_device(ul['line_id'])
+        line_helper.dissociate_users(ul['line_id'])
 
 
 def _delete_voicemail_associations(user_id):

@@ -81,7 +81,8 @@ def delete_extension(extension_id):
 def _delete_extension_associations(extension_id):
     line_id = find_line_id_for_extension(extension_id)
     if line_id:
-        line_helper.delete_line_associations(line_id)
+        line_helper.dissociate_device(line_id)
+        line_helper.dissociate_extensions(line_id)
 
 
 def _delete_extension_type(exten, extension_type, typeval):
