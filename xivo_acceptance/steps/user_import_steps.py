@@ -54,12 +54,12 @@ def then_line_with_number_exists(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     line = line_helper.find_with_exten_context(number, context)
     assert_that(line, is_not(none()),
-                "line with extension %s@%s not found" % extension)
+                "line with extension %s@%s not found" % (extension, context))
 
 
 @step(u'Then line with number "([^"]*)" exists with password "([^"]*)"$')
 def then_line_with_number_exists_with_password(step, extension, password):
     number, context = func.extract_number_and_context_from_extension(extension)
-    line = line_helper.get_by_exten_context(number, context)
+    line = line_helper.get_with_exten_context(number, context)
     sip_line = line_sip_helper.get_by_id(line['id'])
     assert_that(sip_line, has_entry('secret', password))
