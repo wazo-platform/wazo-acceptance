@@ -88,7 +88,7 @@ def get_line_id_with_exten_context(exten, context='default'):
 
 
 def find_extension_id_for_line(line_id):
-    response = line_extension_action.get_from_line(line_id)
+    response = line_extension_action.get(line_id)
     return response.resource()['extension_id'] if response.status_ok() else None
 
 
