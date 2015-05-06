@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ def has_call_log(entry):
     return postgres.exec_sql_request(query, **entry).scalar()
 
 
-def get_last_call_log():
+def find_last_call_log():
     query = '''SELECT date,
                       source_name,
                       source_exten,
@@ -58,6 +58,7 @@ def get_last_call_log():
                LIMIT 1'''
 
     call_log = postgres.exec_sql_request(query).fetchone()
+
     return {'date': call_log[0],
             'source_name': call_log[1],
             'source_exten': call_log[2],
@@ -65,7 +66,7 @@ def get_last_call_log():
             'destination_exten': call_log[4],
             'duration': call_log[5],
             'user_field': call_log[6],
-            'answered': str(call_log[7])}
+            'answered': str(call_log[7])} if call_log else None
 
 
 def _query_from_entry(entry):

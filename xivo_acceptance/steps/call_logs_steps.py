@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -142,7 +142,7 @@ def then_i_have_the_last_call_log_matching(step):
     expected_duration_str = expected.pop('duration', None)
 
     def _assert():
-        actual = call_logs_helper.get_last_call_log()
+        actual = call_logs_helper.find_last_call_log()
         assert_that(actual, has_entries(expected))
         if expected_duration_str:
             expected_time = strptime(expected_duration_str, "%H:%M:%S")

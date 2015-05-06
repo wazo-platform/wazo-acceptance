@@ -48,7 +48,7 @@ def find_with_exten_context(exten, context='default'):
             ON user_line.extension_id = extensions.id
     WHERE
         extensions.exten = :exten
-        AND extension.context = :context
+        AND extensions.context = :context
     """
 
     result = postgres.exec_sql_request(query, exten=exten, context=context)
