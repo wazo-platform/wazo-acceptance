@@ -110,7 +110,7 @@ Feature: Remote Directory in CTI Client
         | xivo-calleridname |
         Given I assign the sheet "testsheet" to the "Link" event
         Given there is an incall "1043" in context "from-extern" to the "User" "GreatLord MacDonnell"
-        
+
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO Client as "greatlord", pass "macdonnell"
@@ -120,7 +120,7 @@ Feature: Remote Directory in CTI Client
         When I wait 1 seconds for the calls processing
         When chan_test hangs up "1043-1"
         When I wait 1 seconds for the call processing
-        
+
         Then I see a sheet with the following values:
         | Variable          | Value     |
         | xivo-calleridname | DÉSPROGES |
