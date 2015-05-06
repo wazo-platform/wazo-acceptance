@@ -94,6 +94,12 @@ def find_line_id_for_user(user_id):
     return items[0]['line_id'] if items else None
 
 
+def get_line_id_for_user(user_id):
+    line_id = find_line_id_for_user(user_id)
+    assert_that(line_id, is_not(none()),
+                "User %s has no lines" % user_id)
+
+
 def user_lines_for_user(user_id):
     response = user_line_action.get_user_line(user_id)
     return response.items()

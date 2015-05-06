@@ -140,7 +140,7 @@ def _get_extension_from_agent(agent_number):
     if not agent.users:
         raise Exception('agent %s has no users' % agent_number)
     user_id = agent.users[0]
-    line_id = user_helper.find_line_id_for_user(user_id)
+    line_id = user_helper.get_line_id_for_user(user_id)
     extension_id = line_helper.get_extension_id_for_line(line_id)
     extension = extension_helper.get_extension(extension_id)
     return extension['exten'], extension['context']
