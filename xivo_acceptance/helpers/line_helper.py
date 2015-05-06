@@ -153,6 +153,12 @@ def _associate_device(line, device_id, device_slot):
                               device_slot=device_slot)
 
 
+def delete_similar_lines(exten):
+    line_ids = line_sccp_helper.find_all_line_ids_by_exten(exten)
+    for line_id in line_ids:
+        delete_line(line_id)
+
+
 def delete_line(line_id):
     line = find_by_id(line_id)
     if not line:
@@ -161,26 +167,17 @@ def delete_line(line_id):
     assert_that(line['protocol'], is_in(['sip', 'sccp']),
                 "Acceptance cannot delete line with protocol '%s'" % line['protocol'])
 
-    delete_line_associations(line_id)
-    if line['protocol'] == 'sccp':
-        line_sccp_helper.delete_line(line['id'])
-    elif line['protocol'] == 'sip':
-        line_sip_helper.delete_line(line['id'])
+    _delete_line_associations(line_id)
+    _delete_line(line)
 
 
-def delete_similar_lines(exten):
-    line_ids = line_sccp_helper.find_all_line_ids_by_exten(exten)
-    for line_id in line_ids:
-        delete_line(line_id)
+def _delete_line_associations(line_id):
+    dissociate_device(line_id)
+    dissociate_extensions(line_id)
+    dissociate_users(line_id)
 
 
-def delete_line_associations(line_id):
-    _dissociate_device(line_id)
-    _dissociate_extensions(line_id)
-    _dissociate_users(line_id)
-
-
-def _dissociate_device(line_id):
+def dissociate_device(line_id):
     query = """
     UPDATE
         linefeatures
@@ -194,7 +191,7 @@ def _dissociate_device(line_id):
     postgres.exec_sql_request(query, line_id=line_id)
 
 
-def _dissociate_extensions(line_id):
+def dissociate_extensions(line_id):
     response = collection_action.extensions_for_line(line_id)
     for line_extension in response.items():
         dissociation = collection_action.dissociate_extension(line_id,
@@ -202,7 +199,7 @@ def _dissociate_extensions(line_id):
         dissociation.check_status()
 
 
-def _dissociate_users(line_id):
+def dissociate_users(line_id):
     user_ids = _find_user_ids_for_line(line_id)
     for user_id in user_ids:
         response = user_line_action.delete_user_line(user_id, line_id)
@@ -223,3 +220,10 @@ def _find_user_ids_for_line(line_id):
 
     result = postgres.exec_sql_request(query, line_id=line_id)
     return [row['user_id'] for row in result]
+
+
+def _delete_line(line):
+    if line['protocol'] == 'sccp':
+        line_sccp_helper.delete_line(line['id'])
+    elif line['protocol'] == 'sip':
+        line_sip_helper.delete_line(line['id'])
