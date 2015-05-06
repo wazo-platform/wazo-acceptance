@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -43,6 +43,11 @@ def get_by_exten_context(exten, context='default'):
     assert_that(extension, is_not(none()),
                 "extension %s@%s not found" % (exten, context))
     return extension
+
+
+def get_by_id(extension_id):
+    response = extension_action.get_extension(extension_id)
+    return response.resource()
 
 
 def add_or_replace_extension(extension):
