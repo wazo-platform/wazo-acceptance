@@ -84,6 +84,7 @@ def insert_adv_user_with_incall(entries):
                                                         context=context,
                                                         mailbox=mailbox)
         incall_helper.delete_incalls_with_did(entry['incall'])
+        incall_helper.delete_extensions_with_did(entry['incall'])
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']

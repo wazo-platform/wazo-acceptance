@@ -18,6 +18,7 @@
 from lettuce import world
 
 from xivo_acceptance.helpers import user_helper, group_helper, queue_helper, voicemail_helper
+from xivo_acceptance.action.confd import extension_action_confd as extension_action
 from xivo_ws import Incall, OverwriteCallerIDMode
 from xivo_ws import GroupDestination, QueueDestination, UserDestination, VoicemailDestination
 
@@ -77,8 +78,17 @@ def delete_incalls_with_did(incall_did, context='from-extern'):
     incalls = find_incalls_with_did(incall_did, context)
     for incall in incalls:
         world.ws.incalls.delete(incall.id)
+    _delete_extensions_with_did(incall_did, context)
 
 
 def find_incalls_with_did(incall_did, context='from-extern'):
     return [incall for incall in world.ws.incalls.search_by_number(incall_did)
             if incall.context == context]
+
+
+def _delete_extensions_with_did(did, context):
+    response = extension_action.all_extensions({'search': did})
+    extensions = [e for e in response.items()
+                  if e['exten'] == did and e['context'] == context]
+    for extension in extensions:
+        extension_action.delete_extension(extension['id'])
