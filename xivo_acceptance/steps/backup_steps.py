@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,12 +45,16 @@ def when_i_download_backup_file(step, filename):
 def when_i_execute_database_backup_command(step):
     command = 'bash /tmp/xivo-backup-manager backup'
     world.ssh_client_xivo.out_call([command])
+    world.confd_utils_1_1.recreate_session()
+    world.rest_provd.recreate_session()
 
 
 @step(u'When I execute database restore command')
 def when_i_execute_database_restore_command(step):
     command = 'bash /tmp/xivo-backup-manager restore'
     world.ssh_client_xivo.out_call([command])
+    world.confd_utils_1_1.recreate_session()
+    world.rest_provd.recreate_session()
 
 
 @step(u'Then a non-empty file "([^"]*)" is present on disk')
