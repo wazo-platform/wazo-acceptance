@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2014 Avencall
+# Copyright (C) 2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import logging
+import requests
 
 from xivo.xivo_logging import setup_logging as xivo_setup_logging
 
@@ -40,6 +41,8 @@ def setup_logging(config):
         logger.addHandler(file_handler)
         if config['debug'].get(name):
             logger.setLevel(logging.DEBUG)
+
+    requests.packages.urllib3.disable_warnings()
 
 
 def logcall(func):
