@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -98,6 +98,7 @@ def get_line_id_for_user(user_id):
     line_id = find_line_id_for_user(user_id)
     assert_that(line_id, is_not(none()),
                 "User %s has no lines" % user_id)
+    return line_id
 
 
 def user_lines_for_user(user_id):
