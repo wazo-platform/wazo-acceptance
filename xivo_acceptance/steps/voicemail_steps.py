@@ -29,8 +29,9 @@ FAKE_ID = 999999999
 
 @step(u'Given there is no voicemail with number "([^"]*)" and context "([^"]*)"')
 def given_there_is_no_voicemail_with_number_and_context(step, voicemail_number, context):
-    voicemail = voicemail_helper.get_voicemail_by_number(voicemail_number, context)
-    voicemail_helper.delete_voicemail(voicemail['id'])
+    voicemail = voicemail_helper.find_voicemail_by_number(voicemail_number, context)
+    if voicemail:
+        voicemail_helper.delete_voicemail(voicemail['id'])
 
 
 @step(u'Given I have no voicemail with id "([^"]*)"')
