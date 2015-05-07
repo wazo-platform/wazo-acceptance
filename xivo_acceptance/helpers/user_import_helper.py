@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -84,7 +84,6 @@ def insert_adv_user_with_incall(entries):
                                                         context=context,
                                                         mailbox=mailbox)
         incall_helper.delete_incalls_with_did(entry['incall'])
-        incall_helper.delete_extensions_with_did(entry['incall'])
         user = User()
         user.firstname = entry['firstname']
         user.lastname = entry['lastname']
