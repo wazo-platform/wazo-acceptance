@@ -114,7 +114,8 @@ def login_agent_from_phone(agent_number, phone_register):
 def logoff_agent_from_phone(agent_number, phone_register):
     number, context = _get_extension_from_agent(agent_number)
     user = user_helper.get_by_exten_context(number, context)
-    phone = phone_register.get_user_phone(user['fullname'])
+    fullname = " ".join([user['firstname'], user.get('lastname', '')])
+    phone = phone_register.get_user_phone(fullname)
     phone.call('*32%s' % agent_number)
     time.sleep(3)
 
