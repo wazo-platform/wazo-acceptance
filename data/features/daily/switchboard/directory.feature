@@ -16,6 +16,31 @@ Feature: Switchboard search
          | Uncle Bob | 8197644444 |
          | Uncle Bob | 8197621114 |
 
+    Scenario: Search transfer destination with different name and same number
+        Given there are users with infos:
+         | firstname | lastname | cti_profile | cti_login | cti_passwd |
+         | Switch    | Board    | Switchboard | switch    | board      |
+        Given the switchboard is configured for internal directory lookup
+        Given there are entries in the phonebook:
+         | first name | last name |      phone |     mobile |
+         | Alice      | Wonder    |        555 |          1 |
+         | Bob        | Gainey    |        555 |          2 |
+        When I start the XiVO Client
+        When I log in the XiVO Client as "switch", pass "board"
+        When I search a transfer destination "Alice"
+        Then I see transfer destinations:
+         | Name         | Number     |
+         | Alice Wonder | 555        |
+        When I search a transfer destination "Bob"
+        Then I see transfer destinations:
+         | Name         | Number     |
+         | Bob Gainey   | 555        |
+        When I search a transfer destination "555"
+        Then I see transfer destinations:
+         | Name         | Number     |
+         | Alice Wonder | 555        |
+         | Bob Gainey   | 555        |
+
     Scenario: Search mobile number of transfer destination
         Given there are users with infos:
          | firstname | lastname   | mobile_number | cti_profile | cti_login | cti_passwd |
