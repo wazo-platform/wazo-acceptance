@@ -23,7 +23,7 @@ from xivo_acceptance.action.webi import provd_plugins
 from xivo_acceptance.action.confd import device_action_confd
 from xivo_acceptance.action.webi import device as device_action_webi
 from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
-from xivo_dao.data_handler.line import dao as line_dao
+from xivo_dao.resources.line import dao as line_dao
 from xivo_acceptance.lettuce import form, common, logs, sysutils
 
 
