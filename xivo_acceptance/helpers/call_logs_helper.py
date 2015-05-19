@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_acceptance.lettuce import postgres
-from xivo_dao.data_handler.call_log import dao
-from xivo_dao.data_handler.call_log.model import CallLog
+from xivo_dao.resources.call_log import dao
+from xivo_dao.resources.call_log.model import CallLog
 
 
 def delete_all():
