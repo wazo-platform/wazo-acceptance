@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -245,4 +245,4 @@ def then_i_see_no_transfer_destinations(step):
         res = cti_helper.get_switchboard_infos()
         assert_that(res['return_value']['content'], contains())
 
-    common.wait_until_assert(_switchboard_has_no_transfer_destination, tries=3)
+    common.wait_until_assert(_switchboard_has_no_transfer_destination, tries=10)
