@@ -8,7 +8,7 @@ ENV HOME /root
 ENV XC_PATH /acceptance/xc_bin
 ENV PATH $PATH:/usr/lib/x86_64-linux-gnu/qt5/bin:$XC_PATH
 
-RUN echo "deb http://mozilla.debian.net/ wheezy-backports iceweasel-release icedove-esr" >> /etc/apt/sources.list.d/iceweasel.list
+RUN echo "deb http://mozilla.debian.net/ wheezy-backports iceweasel-release iceweasel-esr" >> /etc/apt/sources.list.d/iceweasel.list
 RUN wget "http://mozilla.debian.net/archive.asc" -O - | apt-key add -
 
 # Add dependencies
