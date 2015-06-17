@@ -38,7 +38,7 @@ Feature: Line
         Given there are users with infos:
         | firstname | lastname   | number | context |
         | Johnny    | Wilkinson  | 1601   | default |
-        When I add the codec "SpeeX (Audio)" to the line with number "1601"
+        When I add the codec "Speex (Audio)" to the line with number "1601"
         When I edit the user "Johnny" "Wilkinson" without changing anything
         Then the line with number "1601" has the codec "speex"
 
@@ -46,7 +46,7 @@ Feature: Line
         Given there are users with infos:
         | firstname | lastname   | number | context |
         | Johnny    | Wilkinson  | 1601   | default |
-        Given the line "1601" has the codec "SpeeX (Audio)"
+        Given the line "1601" has the codec "Speex (Audio)"
         When I edit the line "1601" without changing anything
         When I edit the user "Johnny" "Wilkinson" without changing anything
         Then the line with number "1601" has the codec "speex"
@@ -55,8 +55,8 @@ Feature: Line
         Given there are users with infos:
         | firstname | lastname   | number | context |
         | Johnny    | Wilkinson  | 1601   | default |
-        Given the line "1601" has the codec "SpeeX (Audio)"
-        When I remove the codec "SpeeX (Audio)" from the line with number "1601"
+        Given the line "1601" has the codec "Speex (Audio)"
+        When I remove the codec "Speex (Audio)" from the line with number "1601"
         When I edit the user "Johnny" "Wilkinson" without changing anything
         Then the line with number "1601" does not have the codec "speex"
 
@@ -64,7 +64,7 @@ Feature: Line
         Given there are users with infos:
         | firstname | lastname   | number | context |
         | Johnny    | Wilkinson  | 1601   | default |
-        When I add the codec "SpeeX (Audio)" to the line with number "1601"
+        When I add the codec "Speex (Audio)" to the line with number "1601"
         When I add the codec "iLBC (Audio)" to the line with number "1601"
         When I edit the user "Johnny" "Wilkinson" without changing anything
         Then the line with number "1601" has the codec "speex"
@@ -74,9 +74,9 @@ Feature: Line
         Given there are users with infos:
         | firstname | lastname   | number | context |
         | Johnny    | Wilkinson  | 1601   | default |
-        Given the line "1601" has the codec "SpeeX (Audio)"
+        Given the line "1601" has the codec "Speex (Audio)"
         Given the line "1601" has the codec "iLBC (Audio)"
-        When I remove the codec "SpeeX (Audio)" from the line with number "1601"
+        When I remove the codec "Speex (Audio)" from the line with number "1601"
         When I edit the user "Johnny" "Wilkinson" without changing anything
         Then the line with number "1601" has the codec "ilbc"
         Then the line with number "1601" does not have the codec "speex"
