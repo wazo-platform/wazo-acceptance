@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 import re
 
 from hamcrest import *
-from lettuce import step
+from lettuce import step, world
 
 from xivo_acceptance.helpers import file_helper
 from xivo_acceptance.lettuce import sysutils
@@ -135,3 +135,9 @@ def then_the_mirror_list_does_not_contain_a_line_matching_group1(step, regex):
 def _match_on_mirror_list(regex):
     output = sysutils.output_command(['apt-cache', 'policy'])
     return re.search(regex, output)
+
+
+@step(u'When I remove the directory "([^"]*)"')
+def when_i_remove_the_directory_group1(step, path):
+    command = 'rm -rf {}'.format(path).split()
+    world.ssh_client_xivo.check_call(command)
