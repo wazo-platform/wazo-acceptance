@@ -1,6 +1,5 @@
 Feature: Line
 
-	# XXX a believe this tests is never run on daily-xivo-pxe
     Scenario: Add a custom line with 127 characters
         Given there are no custom lines with interface beginning with "12345670000000000111111111122"
         When I add a custom line with infos:
