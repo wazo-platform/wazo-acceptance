@@ -1,13 +1,17 @@
 #!/bin/bash
 
 action=$1
+target=$2
 
 usage() {
     cat <<-EOF
-    usage : $0 action
-    availables actions :
-        backup  : execute backup
-        restore : execute restore
+    usage : $0 action target
+    availables actions:
+        backup
+        restore
+    available targets:
+        db
+        data
 EOF
 
     exit 0
@@ -16,13 +20,33 @@ EOF
 cd /tmp
 
 xivo_backup() {
+    case $target in
+        db) xivo_backup_db;;
+        data) xivo_backup_data;;
+        *) usage;;
+    esac
+}
+
+xivo_restore() {
+    case $target in
+        db) xivo_restore_db;;
+        data) xivo_restore_data;;
+        *) usage;;
+    esac
+}
+
+xivo_backup_data() {
+    xivo-backup data /tmp/data
+}
+
+xivo_backup_db() {
     xivo-service stop
     service postgresql restart
     xivo-backup db db
     xivo-service start
 }
 
-xivo_restore() {
+xivo_restore_db() {
     xivo-service stop
     tar xvf db.tgz -C /tmp
     cd /tmp/pg-backup
@@ -32,6 +56,10 @@ xivo_restore() {
     sudo -u postgres dropdb xivo
     sudo -u postgres pg_restore -C -d postgres xivo-*.dump
     xivo-service start
+}
+
+xivo_restore_data() {
+    tar xvfp /tmp/data.tgz -C /
 }
 
 case $action in
