@@ -18,6 +18,7 @@ Feature: Line
          | "André óíúéåäë" <1801> |
 
     Scenario: Choose custom SIP codec
+        # This test fails on asterisk 13 because of https://issues.asterisk.org/jira/browse/ASTERISK-25182
         When I add a SIP line with infos:
         | context | custom_codecs              |
         | default | Siren14 (G.722.1C) (Audio) |
@@ -52,6 +53,7 @@ Feature: Line
         Then the line with number "1601" has the codec "speex"
 
     Scenario: Remove custom SIP codec from user line
+        # This test fails on asterisk 13 because of https://issues.asterisk.org/jira/browse/ASTERISK-25182
         Given there are users with infos:
         | firstname | lastname   | number | context |
         | Johnny    | Wilkinson  | 1601   | default |
