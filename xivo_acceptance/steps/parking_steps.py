@@ -26,7 +26,7 @@ def when_i_change_the_parking_configuration_to_be(step):
     parking_action_webi.set_parking_config(parking_configuration)
 
 
-@step(u'Then I should have to following lines in "([^"]*)":')
-def then_i_should_have_to_following_lines_in_group1(step, group1):
+@step(u'Then asterisk should have the following parking configuration:')
+def then_asterisk_should_have_the_following_parking_configuration(step):
     expected_parking_info = step.hashes[0]
     parking_action_webi.check_parking_info(expected_parking_info)
