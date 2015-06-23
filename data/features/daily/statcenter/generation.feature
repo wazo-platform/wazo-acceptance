@@ -208,6 +208,9 @@ Feature: Stats generation
         Given there are users with infos:
          | firstname | lastname | number | context     | agent_number | protocol |
          | User      | 013      |   1013 | statscenter | 013          | sip      |
+        Given there are queues with infos:
+          | name | number | context     | agents_number |
+          | q13  | 5013   | statscenter | 013           |
         When I log agent "013"
         When I pause agent "013"
         When I unpause agent "013"
