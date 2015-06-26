@@ -59,7 +59,7 @@ xivo_restore_db() {
 }
 
 xivo_restore_data() {
-    tar xvfp /tmp/data.tgz -C /
+    tar xfp /tmp/data.tgz -C /
 }
 
 case $action in
