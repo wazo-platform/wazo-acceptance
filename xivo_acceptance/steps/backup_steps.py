@@ -25,7 +25,7 @@ from xivo_acceptance.lettuce import assets, common
 @step(u'Given there is a backup file "([^"]*)"')
 def given_there_is_a_backup_file(step, filename):
     command = 'dd if=/dev/zero of=/var/backups/xivo/%s bs=1024 count=200240' % filename
-    world.ssh_client_xivo.out_call([command])
+    world.ssh_client_xivo.call([command])
 
 
 @step(u'Given the asset file "([^"]*)" is copied on the server into "([^"]*)"')
@@ -44,7 +44,7 @@ def when_i_download_backup_file(step, filename):
 @step(u'When I execute database backup command')
 def when_i_execute_database_backup_command(step):
     command = 'bash /tmp/xivo-backup-manager backup db'
-    world.ssh_client_xivo.out_call([command])
+    world.ssh_client_xivo.call([command])
     world.confd_utils_1_1.recreate_session()
     world.rest_provd.recreate_session()
 
@@ -52,13 +52,13 @@ def when_i_execute_database_backup_command(step):
 @step(u'When I execute a data backup command')
 def when_i_execute_a_data_backup_command(step):
     command = 'bash /tmp/xivo-backup-manager backup data'
-    world.ssh_client_xivo.out_call([command])
+    world.ssh_client_xivo.call([command])
 
 
 @step(u'When I execute database restore command')
 def when_i_execute_database_restore_command(step):
     command = 'bash /tmp/xivo-backup-manager restore db'
-    world.ssh_client_xivo.out_call([command])
+    world.ssh_client_xivo.call([command])
     world.confd_utils_1_1.recreate_session()
     world.rest_provd.recreate_session()
 
@@ -66,7 +66,7 @@ def when_i_execute_database_restore_command(step):
 @step(u'When I execute a data restore command')
 def when_i_execute_data_restore_command(step):
     command = 'bash /tmp/xivo-backup-manager restore data'
-    world.ssh_client_xivo.out_call([command])
+    world.ssh_client_xivo.call([command])
 
 
 @step(u'Then a non-empty file "([^"]*)" is present on disk')
