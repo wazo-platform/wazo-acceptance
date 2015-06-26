@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -86,8 +86,14 @@ def initialize():
     logger.debug("_setup_browser...")
     _setup_browser(world.config)
     _setup_agentd_client()
+    _setup_consul()
     world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
+
+
+def _setup_consul():
+    command = 'cat /var/lib/consul/master_token'.split()
+    world.config['consul_token'] = world.ssh_client_xivo.out_call(command).strip()
 
 
 @debug.logcall

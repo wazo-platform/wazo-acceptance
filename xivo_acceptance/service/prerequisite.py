@@ -39,6 +39,9 @@ def run():
         logger.debug('Configuring WebService Access on XiVO')
         _create_webservices_access()
 
+        logger.debug('Configuring Consul')
+        _configure_consul()
+
         logger.debug('Configuring PostgreSQL on XiVO')
         _create_pgpass_on_remote_host()
         _allow_remote_access_to_pgsql()
@@ -148,6 +151,12 @@ def _install_chan_test():
     remote_path = '/usr/lib/asterisk/modules/chan_test.so'
     command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
     subprocess.call(command)
+
+
+def _configure_consul():
+    copy_asset_to_server('public_consul.json', '/etc/consul/xivo/public_consul.json')
+    command = 'service consul restart'.split()
+    world.ssh_client_xivo.check_call(command)
 
 
 def _configure_xivo_ctid():

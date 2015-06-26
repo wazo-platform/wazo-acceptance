@@ -27,3 +27,4 @@ git+https://github.com/xivo-pbx/xivo-lib-rest-client.git
 PyYAML
 kombu==2.1.8
 stevedore
+python-consul

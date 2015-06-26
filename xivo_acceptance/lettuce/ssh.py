@@ -15,17 +15,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import os
 import subprocess
 from subprocess import PIPE, STDOUT
 
 SSH_OPTIONS = [
     '-o', 'PreferredAuthentications=publickey',
     '-o', 'StrictHostKeyChecking=no',
-    '-o', 'UserKnownHostsFile=/dev/null'
+    '-o', 'UserKnownHostsFile=/dev/null',
 ]
 
 
 class SSHClient(object):
+
+    _fobj_devnull = open(os.devnull, 'r+')
+
     def __init__(self, hostname, login):
         self._hostname = hostname
         self._login = login
@@ -70,8 +74,8 @@ class SSHClient(object):
         command = self._format_ssh_command(remote_command)
 
         return subprocess.call(command,
-                               stdout=PIPE,
-                               stderr=STDOUT,
+                               stdout=self._fobj_devnull,
+                               stderr=self._fobj_devnull,
                                close_fds=True)
 
     def _exec_ssh_command_with_return_stdout(self, remote_command):
