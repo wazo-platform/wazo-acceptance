@@ -24,7 +24,6 @@ from lettuce import before, after, world
 from selenium.common.exceptions import NoSuchElementException
 from xivo_acceptance.config import XivoAcceptanceConfig, load_config
 from xivo_acceptance.helpers import asterisk_helper
-from xivo_acceptance.lettuce import assets
 from xivo_acceptance.lettuce import asterisk
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import debug
@@ -93,11 +92,8 @@ def initialize():
 
 
 def _setup_consul():
-    assets.copy_asset_to_server('public_consul.json', '/etc/consul/xivo/public_consul.json')
     command = 'cat /var/lib/consul/master_token'.split()
     world.config['consul_token'] = world.ssh_client_xivo.out_call(command).strip()
-    command = 'service consul restart'.split()
-    world.ssh_client_xivo.check_call(command)
 
 
 @debug.logcall
