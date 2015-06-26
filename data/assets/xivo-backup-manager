@@ -59,7 +59,11 @@ xivo_restore_db() {
 }
 
 xivo_restore_data() {
+    xivo-service stop
+    service consul stop
     tar xfp /tmp/data.tgz -C /
+    service consul start
+    xivo-service start
 }
 
 case $action in
