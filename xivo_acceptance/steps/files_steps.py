@@ -139,5 +139,5 @@ def _match_on_mirror_list(regex):
 
 @step(u'When I remove the directory "([^"]*)"')
 def when_i_remove_the_directory_group1(step, path):
-    command = 'rm -rf {}'.format(path).split()
+    command = ['rm', '-rf', path]
     world.ssh_client_xivo.check_call(command)
