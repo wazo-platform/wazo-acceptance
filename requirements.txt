@@ -3,7 +3,6 @@ EasyProcess
 PyHamcrest
 PyVirtualDisplay
 SQLAlchemy
-argparse
 fuzzywuzzy
 jinja2
 unittest2
