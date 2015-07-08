@@ -42,7 +42,7 @@ def insert_entries(entries):
             cel['call_log_id'] = None
 
         query = """INSERT INTO cel VALUES (
-                      DEFAULT,
+                      {id},
                       :eventtype,
                       :eventtime,
                       :userdeftype,
@@ -64,6 +64,6 @@ def insert_entries(entries):
                       :userfield,
                       :peer,
                       :call_log_id
-                      )"""
+                      )""".format(id=':id' if 'id' in cel else 'DEFAULT')
 
         postgres.exec_sql_request(query, **cel)

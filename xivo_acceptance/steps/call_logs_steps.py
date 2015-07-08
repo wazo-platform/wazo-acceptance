@@ -109,9 +109,8 @@ def when_i_generate_call_logs_twice_in_parallel(step):
 @step(u'When I ask for the list of CEL via WebService:')
 def when_i_ask_for_the_list_of_cel_via_webservice(step):
     list_infos = step.hashes[0]
-    start_date = list_infos['start date']
-    end_date = list_infos['end date']
-    world.response = world.ws.cels.search_by_date(start_date, end_date)
+    id_beg = list_infos['id beg']
+    world.response = world.ws.cels.search_by_id(id_beg)
 
 
 @step(u'Then I get a list with the following CEL:')

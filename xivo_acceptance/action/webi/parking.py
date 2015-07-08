@@ -42,7 +42,7 @@ def set_parking_config(config_map):
 
 
 def check_parking_info(expected_parking_info):
-    output = asterisk_helper.check_output_asterisk_cli('features show')
+    output = asterisk_helper.check_output_asterisk_cli('parking show')
     parking_info = _parse_parking_info(output)
 
     assert_that(parking_info, has_entries(expected_parking_info))
