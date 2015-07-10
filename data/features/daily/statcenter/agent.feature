@@ -37,25 +37,34 @@ Feature: WEBI Agent Stats
         Given there is a agent "Agent" "2" with extension "2@statscenter"
         Given there is a statistic configuration "test_talktime" from "8:00" to "12:00" with queue "q02" and agent "2"
         Given I have the following queue_log entries:
-          | time                       | callid      | queuename | agent    | event          | data1 | data2        | data3 | data4 | data5 |
-          | 2012-01-01 09:01:06.555555 | talk_time_1 | q02       | Agent/2  | ENTERQUEUE     |       |              |       |       |       |
-          | 2012-01-01 09:01:06.666666 | talk_time_1 | q02       | Agent/2  | CONNECT        | 4     | 123456.435   |       |       |       |
-          | 2012-01-01 09:01:10.777777 | talk_time_1 | q02       | Agent/2  | COMPLETEAGENT  | 4     | 10           |       |       |       |
-          | 2012-01-01 09:02:06.555555 | talk_time_2 | q02       | Agent/2  | ENTERQUEUE     |       |              |       |       |       |
-          | 2012-01-01 09:02:06.666666 | talk_time_2 | q02       | Agent/2  | CONNECT        | 5     | 12334234.435 |       |       |       |
-          | 2012-01-01 09:02:10.777777 | talk_time_2 | q02       | Agent/2  | COMPLETECALLER | 4     | 7            |       |       |       |
-          | 2012-01-01 09:03:06.555555 | talk_time_3 | q02       | Agent/2  | ENTERQUEUE     |       |              |       |       |       |
-          | 2012-01-01 09:03:06.666666 | talk_time_3 | q02       | Agent/2  | CONNECT        | 6     | 2222456.435  |       |       |       |
-          | 2012-01-01 09:03:10.777777 | talk_time_3 | q02       | Agent/2  | TRANSFER       | 4     | 0            | 0     | 22    |       |
+          | time                       | callid      | queuename | agent    | event            | data1  | data2        | data3   | data4 | data5  |
+          | 2012-01-01 09:01:06.555555 | talk_time_1 | q02       | Agent/2  | ENTERQUEUE       |        |              |         |       |        |
+          | 2012-01-01 09:01:06.666666 | talk_time_1 | q02       | Agent/2  | CONNECT          | 4      | 123456.435   |         |       |        |
+          | 2012-01-01 09:01:10.777777 | talk_time_1 | q02       | Agent/2  | COMPLETEAGENT    | 4      | 10           |         |       |        |
+          | 2012-01-01 09:02:06.555555 | talk_time_2 | q02       | Agent/2  | ENTERQUEUE       |        |              |         |       |        |
+          | 2012-01-01 09:02:06.666666 | talk_time_2 | q02       | Agent/2  | CONNECT          | 5      | 12334234.435 |         |       |        |
+          | 2012-01-01 09:02:10.777777 | talk_time_2 | q02       | Agent/2  | COMPLETECALLER   | 4      | 10           |         |       |        |
+          | 2012-01-01 09:03:06.555555 | talk_time_3 | q02       | Agent/2  | ENTERQUEUE       |        |              |         |       |        |
+          | 2012-01-01 09:03:06.666666 | talk_time_3 | q02       | Agent/2  | CONNECT          | 6      | 2222456.435  |         |       |        |
+          | 2012-01-01 09:03:10.777777 | talk_time_3 | q02       | Agent/2  | TRANSFER         | 1001   | default      | 0       | 10    |        |
+          | 2012-01-01 09:04:06.555555 | talk_time_4 | q02       | Agent/2  | ENTERQUEUE       |        |              |         |       |        |
+          | 2012-01-01 09:04:06.666666 | talk_time_4 | q02       | Agent/2  | CONNECT          | 6      | 3222456.435  |         |       |        |
+          | 2012-01-01 09:04:10.777777 | talk_time_4 | q02       | Agent/2  | BLINDTRANSFER    | 1001   | default      | 0       | 10    |        |
+          | 2012-01-01 09:05:06.555555 | talk_time_5 | q02       | Agent/2  | ENTERQUEUE       |        |              |         |       |        |
+          | 2012-01-01 09:05:06.666666 | talk_time_5 | q02       | Agent/2  | CONNECT          | 6      | 3222456.435  |         |       |        |
+          | 2012-01-01 09:05:10.777777 | talk_time_5 | q02       | Agent/2  | ATTENDEDTRANSFER | BRIDGE | foobar       | 0       | 10    |        |
+          | 2012-01-01 09:06:06.555555 | talk_time_6 | q02       | Agent/2  | ENTERQUEUE       |        |              |         |       |        |
+          | 2012-01-01 09:06:06.666666 | talk_time_6 | q02       | Agent/2  | CONNECT          | 6      | 3222456.435  |         |       |        |
+          | 2012-01-01 09:06:10.777777 | talk_time_6 | q02       | Agent/2  | ATTENDEDTRANSFER | LINK   | SIP/a-1      | SIP/b-2 | 0     | 10\|1  |
 
         Given I clear and generate the statistics cache
         Then I should have the following statistics on agent "2" on "2012-01-01" on configuration "test_talktime":
           |         | Answered | Conversation |
           | 8h-9h   |        0 |     00:00:00 |
-          | 9h-10h  |        3 |     00:00:39 |
+          | 9h-10h  |        6 |     00:01:00 |
           | 10h-11h |        0 |     00:00:00 |
           | 11h-12h |        0 |     00:00:00 |
-          | Total   |        3 |     00:00:39 |
+          | Total   |        6 |     00:01:00 |
 
 
     Scenario: Generate stats for total login time
