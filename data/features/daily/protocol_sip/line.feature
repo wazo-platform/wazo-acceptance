@@ -17,14 +17,14 @@ Feature: Line
          | Caller ID              |
          | "André óíúéåäë" <1801> |
 
-    Scenario: Choose custom SIP codec
-        # This test fails on asterisk 13 because of https://issues.asterisk.org/jira/browse/ASTERISK-25182
-        When I add a SIP line with infos:
-        | context | custom_codecs              |
-        | default | Siren14 (G.722.1C) (Audio) |
-        Then the codec "siren14" appears after typing 'sip show peer' in asterisk
-        When I disable custom codecs for this line
-        Then the codec "siren14" does not appear after typing 'sip show peer' in asterisk
+    ## This test fails on asterisk 13 because of https://issues.asterisk.org/jira/browse/ASTERISK-25182
+    #    Scenario: Choose custom SIP codec
+    #        When I add a SIP line with infos:
+    #        | context | custom_codecs              |
+    #        | default | Siren14 (G.722.1C) (Audio) |
+    #        Then the codec "siren14" appears after typing 'sip show peer' in asterisk
+    #        When I disable custom codecs for this line
+    #        Then the codec "siren14" does not appear after typing 'sip show peer' in asterisk
 
     Scenario: Edit SIP line with no modifications
         Given there are users with infos:
@@ -52,15 +52,15 @@ Feature: Line
         When I edit the user "Johnny" "Wilkinson" without changing anything
         Then the line with number "1601" has the codec "speex"
 
-    Scenario: Remove custom SIP codec from user line
-        # This test fails on asterisk 13 because of https://issues.asterisk.org/jira/browse/ASTERISK-25182
-        Given there are users with infos:
-        | firstname | lastname   | number | context |
-        | Johnny    | Wilkinson  | 1601   | default |
-        Given the line "1601" has the codec "Speex (Audio)"
-        When I remove the codec "Speex (Audio)" from the line with number "1601"
-        When I edit the user "Johnny" "Wilkinson" without changing anything
-        Then the line with number "1601" does not have the codec "speex"
+    ## This test fails on asterisk 13 because of https://issues.asterisk.org/jira/browse/ASTERISK-25182
+    #    Scenario: Remove custom SIP codec from user line
+    #        Given there are users with infos:
+    #        | firstname | lastname   | number | context |
+    #        | Johnny    | Wilkinson  | 1601   | default |
+    #        Given the line "1601" has the codec "Speex (Audio)"
+    #        When I remove the codec "Speex (Audio)" from the line with number "1601"
+    #        When I edit the user "Johnny" "Wilkinson" without changing anything
+    #        Then the line with number "1601" does not have the codec "speex"
 
     Scenario: Add 2 custom SIP codecs to user line
         Given there are users with infos:
