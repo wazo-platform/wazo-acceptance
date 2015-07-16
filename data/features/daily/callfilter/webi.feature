@@ -20,11 +20,11 @@ Feature: Callfilter
          | bigboss | Sylvain Boily | Angelique Dedelot |
         Given user "Sylvain" "Boily" has the following function keys:
          | Key | Type                       | Destination                 | Label | Supervision |
-         | 1   | Customized                 | 1000                        | 1000  | Disabled    |
-         | 2   | Filtering Boss - Secretary | bigboss / Angelique Dedelot | boss  | Disabled    |
-         | 3   | Customized                 | 1001                        | 1001  | Disabled    |
+         | 1   | Customized                 | 1000                        | 1000  | Enabled     |
+         | 2   | Filtering Boss - Secretary | bigboss / Angelique Dedelot | boss  | Enabled     |
+         | 3   | Customized                 | 1001                        | 1001  | Enabled     |
         When I deactivate boss secretary filtering for user "Sylvain Boily"
         Then the user "Sylvain Boily" has the following func keys:
-          | Key | Type       | Destination | Label | Supervision |
-          | 1   | Customized | 1000        | 1000  | Disabled    |
-          | 3   | Customized | 1001        | 1001  | Disabled    |
+         | Key | Type       | Destination | Label | Supervision |
+         | 1   | Customized | 1000        | 1000  | Enabled     |
+         | 3   | Customized | 1001        | 1001  | Enabled     |
