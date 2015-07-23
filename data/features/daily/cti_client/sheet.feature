@@ -427,8 +427,8 @@ Feature: Sheet
          | GreatLord | MacDonnell | 1043   | default | Client      | sip      |
         Given the CSV file "phonebook-dbvars.csv" is copied on the server into "/tmp"
         Given the following directory configurations exist:
-          | name              | type | URI                       |
-          | phonebook-dbvars | File | /tmp/phonebook-dbvars.csv |
+          | name             | type     | URI                       |
+          | phonebook-dbvars | CSV File | /tmp/phonebook-dbvars.csv |
         Given the directory definition "dbvars" does not exist
         When I add the following CTI directory definition:
           | name   | URI                              | delimiter | direct match   | reverse match |

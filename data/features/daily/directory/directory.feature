@@ -3,8 +3,8 @@ Feature: Remote Directory in CTI Client
     Scenario: Create a directory from CSV file
         Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
         When I create the following directory configurations:
-          | name           | type | URI                     |
-          | phonebook-x254 | File | /tmp/phonebook-x254.csv |
+          | name           | type     | URI                     |
+          | phonebook-x254 | CSV file | /tmp/phonebook-x254.csv |
         Then the directory configuration "phonebook-x254" has the URI "file:///tmp/phonebook-x254.csv"
         When I edit and save the directory configuration "phonebook-x254"
         Then the directory configuration "phonebook-x254" has the URI "file:///tmp/phonebook-x254.csv"
@@ -15,8 +15,8 @@ Feature: Remote Directory in CTI Client
          | GreatLord | MacDonnell | 1043   | default | Client      |
         Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"
         Given the following directory configurations exist:
-          | name           | type | URI                     |
-          | phonebook-x254 | File | /tmp/phonebook-x254.csv |
+          | name           | type     | URI                     |
+          | phonebook-x254 | CSV file | /tmp/phonebook-x254.csv |
         Given the directory definition "phonebookcsv" does not exist
         Given the display filter "Display" exists with the following fields:
           | Field title | Field type | Default value | Display format               |
@@ -53,8 +53,8 @@ Feature: Remote Directory in CTI Client
          | GreatLord | MacDonnell | 1043   | default | Client      |
         Given the CSV file "phonebook-unicode.csv" is copied on the server into "/tmp"
         Given the following directory configurations exist:
-          | name              | type | URI                        |
-          | phonebook-unicode | File | /tmp/phonebook-unicode.csv |
+          | name              | type     | URI                        |
+          | phonebook-unicode | CSV file | /tmp/phonebook-unicode.csv |
         Given the directory definition "phonebookunicode" does not exist
         Given the display filter "Display" exists with the following fields:
           | Field title | Field type | Default value | Display format               |
@@ -87,8 +87,8 @@ Feature: Remote Directory in CTI Client
          | GreatLord | MacDonnell | 1043   | default | Client      | sip      |
         Given the CSV file "phonebook-unicode.csv" is copied on the server into "/tmp"
         Given the following directory configurations exist:
-          | name              | type | URI                        |
-          | phonebook-unicode | File | /tmp/phonebook-unicode.csv |
+          | name              | type     | URI                        |
+          | phonebook-unicode | CSV file | /tmp/phonebook-unicode.csv |
         Given the directory definition "phonebookunicode" does not exist
         When I add the following CTI directory definition:
           | name             | URI                               | delimiter | direct match   | reverse match |
