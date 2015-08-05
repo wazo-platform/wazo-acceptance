@@ -38,6 +38,44 @@ Feature: Sheet
         | xivo-queuename    | frere           |
         | xivo-agentnumber  | 1153            |
 
+    Scenario: xivo-calleridname variable on agent unlinked
+        Given I have a sheet model named "testsheet" with the variables:
+        | variable          |
+        | xivo-calleridnum  |
+        | xivo-calleridname |
+        | xivo-queuename    |
+        | xivo-agentnumber  |
+
+        Given I assign the sheet "testsheet" to the "Unlink" event
+
+        Given there are users with infos:
+        | firstname | lastname | number | context | agent_number | cti_profile | protocol |
+        | Cedric    | Abunar   | 1153   | default | 1153         | Client      | sip      |
+
+        Given there are queues with infos:
+        | name  | number | context | agents_number |
+        | foo   | 3009   | default | 1153          |
+
+        Given there is an incall "3001" in context "from-extern" to the "Queue" "foo" with caller id name "Laurent Demange" number "1234"
+
+        When I start the XiVO Client
+        When I enable screen pop-up
+        When I log in the XiVO Client as "cedric", pass "abunar", unlogged agent
+
+        Given I log agent "1153" on extension "1153@default"
+        When chan_test calls "3001@from-extern"
+        When I wait 1 seconds for the calls processing
+        When "Cedric Abunar" answers
+        When I wait 1 seconds for the calls processing
+        When "Cedric Abunar" hangs up
+
+        Then I see a sheet with the following values:
+        | Variable          | Value           |
+        | xivo-calleridnum  | 1234            |
+        | xivo-calleridname | Laurent Demange |
+        | xivo-queuename    | foo             |
+        | xivo-agentnumber  | 1153            |
+
     Scenario: Variables on link event to a User
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
