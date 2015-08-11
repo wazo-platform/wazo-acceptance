@@ -8,6 +8,7 @@ Feature: Directed pickup
          | User      | 102      |   1102 | default | sip      |
          
         When "User 100" calls "1101"
+        Then "User 101" is ringing
         When "User 102" calls "*81101"
         Then "User 100" is talking
         Then "User 102" is talking
@@ -23,6 +24,7 @@ Feature: Directed pickup
           | User      | 101      |
           
         When "User 100" calls "2001"
+        Then "User 101" is ringing
         When "User 102" calls "*81101"
         Then "User 100" is talking
         Then "User 102" is talking
@@ -35,5 +37,6 @@ Feature: Directed pickup
         Given there is an incall "1143" in context "from-extern" to the "user" "User 143"
         
         When chan_test calls "1143@from-extern"
+        Then "User 143" is ringing
         When "User 148" calls "*81143"
         Then "User 148" is talking
