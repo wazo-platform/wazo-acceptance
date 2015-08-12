@@ -6,8 +6,8 @@ Feature: REST API Users
           | Clémence  | Dupond   |
         When I ask for the list of users
         Then I get a list containing the following users:
-          | firstname | lastname | userfield | caller_id         |
-          | Clémence  | Dupond   |           | "Clémence Dupond" |
+          | firstname | lastname | caller_id         |
+          | Clémence  | Dupond   | "Clémence Dupond" |
 
     Scenario: User list with two users
         Given I have the following users:
@@ -16,9 +16,9 @@ Feature: REST API Users
           | Louis     | Martin   |
         When I ask for the list of users
         Then I get a list containing the following users:
-          | firstname | lastname | userfield | caller_id         |
-          | Clémence  | Dupond   |           | "Clémence Dupond" |
-          | Louis     | Martin   |           | "Louis Martin"    |
+          | firstname | lastname | caller_id         |
+          | Clémence  | Dupond   | "Clémence Dupond" |
+          | Louis     | Martin   | "Louis Martin"    |
 
     Scenario: User list ordered by lastname, then firstname
         Given I have the following users:
@@ -29,11 +29,11 @@ Feature: REST API Users
           | Frédéric  | Martin   |
         When I ask for the list of users
         Then I get a list containing the following users:
-          | firstname | lastname | userfield | caller_id         |
-          | Albert    | Dupond   |           | "Albert Dupond"   |
-          | Clémence  | Dupond   |           | "Clémence Dupond" |
-          | Frédéric  | Martin   |           | "Frédéric Martin" |
-          | Louis     | Martin   |           | "Louis Martin"    |
+          | firstname | lastname | caller_id         |
+          | Albert    | Dupond   | "Albert Dupond"   |
+          | Clémence  | Dupond   | "Clémence Dupond" |
+          | Frédéric  | Martin   | "Frédéric Martin" |
+          | Louis     | Martin   | "Louis Martin"    |
 
     Scenario: User search with an empty filter
         Given I have the following users:
@@ -124,13 +124,13 @@ Feature: REST API Users
         When I ask for the user with id "323450"
         Then I get a response with status "200"
         Then I get a user with the following parameters:
-          | id     | firstname | lastname | userfield |
-          | 323450 | Irène     | Dupont   |           |
+          | id     | firstname | lastname |
+          | 323450 | Irène     | Dupont   |
 
     Scenario: Getting a user with all available parameters:
         Given I have the following users:
             | id     | firstname | lastname | timezone         | language | description        | caller_id | outgoing_caller_id | mobile_phone_number | username | password | music_on_hold | preprocess_subroutine | userfield |
-            | 766763 | James     | Hetfield | America/Montreal | en_US    | Metallica Musician | METAL     | anonymous          | 5551234567          | james    | hetfield | missing       | subroutine            | userfield |
+            | 766763 | James     | Hetfield | America/Montreal | en_US    | Metallica Musician | "METAL"   | anonymous          | 5551234567          | james    | hetfield | missing       | subroutine            | userfield |
         When I ask for the user with id "766763"
         Then I get a response with status "200"
         Then I get a user with the following parameters:
@@ -164,8 +164,8 @@ Feature: REST API Users
         Then I get a header with a location for the "users" resource
         Then I get a response with a link to the "users" resource
         Then the created user has the following parameters:
-         | firstname | lastname | userfield | caller_id |
-         | Irène     |          |           | "Irène "  |
+         | firstname | caller_id |
+         | Irène     | "Irène"   |
 
     Scenario: Creating two users with the same firstname
         When I create users with the following parameters:
@@ -174,14 +174,14 @@ Feature: REST API Users
           | Lord      |
         When I ask for the list of users
         Then I get a list containing the following users:
-          | firstname | lastname | userfield | caller_id |
-          | Lord      |          |           | "Lord "   |
-          | Lord      |          |           | "Lord "   |
+          | firstname | caller_id |
+          | Lord      | "Lord"    |
+          | Lord      | "Lord"    |
 
     Scenario: Creating a user with all available parameters
         When I create users with the following parameters:
             | firstname | lastname | timezone         | language | description        | caller_id | outgoing_caller_id | mobile_phone_number | username | password | music_on_hold | preprocess_subroutine | userfield |
-            | James     | Hetfield | America/Montreal | en_US    | Metallica Musician | METAL     | anonymous          | 5551234567          | james    | hetfield | missing       | subroutine            | userfield |
+            | James     | Hetfield | America/Montreal | en_US    | Metallica Musician | "METAL"   | anonymous          | 5551234567          | james    | hetfield | missing       | subroutine            | userfield |
         Then I get a response with status "201"
         Then I get a response with an id
         Then I get a header with a location for the "users" resource
@@ -200,8 +200,8 @@ Feature: REST API Users
         Then I get a response with status "204"
         When I ask for the user with id "995414"
         Then I get a user with the following parameters:
-          | id     | firstname | lastname | userfield | caller_id      |
-          | 995414 | Brézé     | Dupond   |           | "Brézé Dupond" |
+          | id     | firstname | lastname | caller_id         |
+          | 995414 | Brézé     | Dupond   | "Clémence Dupond" |
 
     Scenario: Editing the lastname of a user
         Given I have the following users:
@@ -213,8 +213,8 @@ Feature: REST API Users
         Then I get a response with status "204"
         When I ask for the user with id "924465"
         Then I get a user with the following parameters:
-          | id     | firstname | lastname  | userfield | caller_id            |
-          | 924465 | Clémence  | Argentine |           | "Clémence Argentine" |
+          | id     | firstname | lastname  | caller_id         |
+          | 924465 | Clémence  | Argentine | "Clémence Dupond" |
 
     Scenario: Editing a user associated with a voicemail
         Given there are users with infos:
@@ -234,8 +234,8 @@ Feature: REST API Users
             | id     | firstname | lastname |
             | 726313 | Clémence  | Dujas    |
         When I update the user with id "726313" using the following parameters:
-            | firstname | lastname       | caller_id         |
-            | Olivia    | Schtroumpfette | La Schtroumpfette |
+            | firstname | lastname       | caller_id           |
+            | Olivia    | Schtroumpfette | "La Schtroumpfette" |
         Then I get a response with status "204"
         When I ask for the user with id "726313"
         Then I get a user with the following parameters:
@@ -247,8 +247,8 @@ Feature: REST API Users
             | id     | firstname | lastname |
             | 447520 | Benoit    | Thierri  |
         When I update the user with id "447520" using the following parameters:
-            | caller_id        |
-            | Grand Schtroumpf |
+            | caller_id          |
+            | "Grand Schtroumpf" |
         Then I get a response with status "204"
         When I ask for the user with id "447520"
         Then I get a user with the following parameters:
@@ -258,10 +258,10 @@ Feature: REST API Users
     Scenario: Editing all available parameters of a user
         Given I have the following users:
             | id     | firstname | lastname | timezone         | language | description        | caller_id | outgoing_caller_id | mobile_phone_number | username | password | music_on_hold | preprocess_subroutine | userfield |
-            | 140270 | James     | Hetfield | America/Montreal | en_US    | Metallica Musician | METAL     | anonymous          | 5551234567          | james    | hetfield | missing       | subroutine            | userfield |
+            | 140270 | James     | Hetfield | America/Montreal | en_US    | Metallica Musician | "METAL"   | anonymous          | 5551234567          | james    | hetfield | missing       | subroutine            | userfield |
         When I update the user with id "140270" using the following parameters:
-            | firstname | lastname | timezone       | language | description | caller_id | outgoing_caller_id | mobile_phone_number | username  | password | music_on_hold | preprocess_subroutine | userfield |
-            | Alexander | Powell   | Africa/Abidjan | fr_FR    | updated     | ALEXANDER | default            | 1234567890          | alexander | powell   | default       | other_subroutine      | myvalue   |
+            | firstname | lastname | timezone       | language | description | caller_id   | outgoing_caller_id | mobile_phone_number | username  | password | music_on_hold | preprocess_subroutine | userfield |
+            | Alexander | Powell   | Africa/Abidjan | fr_FR    | updated     | "ALEXANDER" | default            | 1234567890          | alexander | powell   | default       | other_subroutine      | myvalue   |
         Then I get a response with status "204"
         When I ask for the user with id "140270"
         Then I get a user with the following parameters:
