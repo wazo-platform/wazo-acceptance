@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -505,9 +505,9 @@ def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstna
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     common.edit_line("%s %s" % (firstname, lastname))
     common.go_to_tab('Func Keys')
-    destination_field = world.browser.find_element_by_id('it-phonefunckey-custom-typeval-0')
+    destination_field = world.browser.find_element_by_id('phonefunckey[typevalidentity][]')
     assert destination_field.get_attribute('value') == extension
-    type_field = Select(world.browser.find_element_by_id('it-phonefunckey-type-0'))
+    type_field = Select(world.browser.find_element_by_id('phonefunckey[type][]'))
     assert type_field.first_selected_option.text == "Customized"
     common.open_url('user', 'search', {'search': ''})
 

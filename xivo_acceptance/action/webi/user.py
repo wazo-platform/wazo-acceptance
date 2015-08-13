@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ FUNCKEY_DESTINATIONS = {
     'Queue': FuncKeyRow('queue', 'autocomplete'),
     'Conference Room': FuncKeyRow('meetme', 'autcomplete'),
     'Customized': FuncKeyRow('custom', 'plaintext'),
-    'Filtering Boss - Secretary': FuncKeyRow('extenfeatures-bsfilter', 'dropdown'),
+    'Filtering Boss - Secretary': FuncKeyRow('fkbsfilter', 'dropdown'),
     'Enable / Disable forwarding on no answer': FuncKeyRow('extension', 'plaintext'),
     'Enable / Disable forwarding on busy': FuncKeyRow('extension', 'plaintext'),
     'Enable / Disable forwarding unconditional': FuncKeyRow('extension', 'plaintext'),
@@ -94,11 +94,10 @@ def get_line_number(line):
 def find_key_destination_field(key_type, line):
     destination = FUNCKEY_DESTINATIONS[key_type]
 
-    line_number = get_line_number(line)
-    if destination.input_type in ('plaintext', 'dropdown'):
-        field_id = "it-phonefunckey-%s-typeval-%s" % (destination.id, line_number)
-    elif destination.input_type == 'autocomplete':
-        field_id = "it-phonefunckey-%s-suggest-%s" % (destination.id, line_number)
+    if destination.input_type == 'dropdown':
+        field_id = 'phonefunckey[{fk_type}][]'.format(fk_type=destination.id)
+    else:
+        field_id = 'phonefunckey[typevalidentity][]'
     return line.find_element_by_id(field_id)
 
 
