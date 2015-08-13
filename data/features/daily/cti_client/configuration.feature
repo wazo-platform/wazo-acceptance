@@ -29,7 +29,6 @@ Feature: CTI Client Configuration
         | Conference rooms        | dock     |
         | Datetime                | dock     |
         | Tabber                  | grid     |
-        | MyDirectory             | dock     |
         | Customer info           | dock     |
         | Agents (list)           | dock     |
         | Agents (detail)         | dock     |
@@ -39,6 +38,7 @@ Feature: CTI Client Configuration
         | Switchboard             | dock     |
         | Remote directory        | dock     |
         | Agent status dashboard  | dock     |
+        | People                  | dock     |
         Given there are users with infos:
          | firstname | lastname | number | context | cti_profile |
          | Bernard   | Derome   | 1044   | default | full        |
