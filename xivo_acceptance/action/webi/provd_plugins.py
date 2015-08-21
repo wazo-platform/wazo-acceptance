@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -111,8 +111,8 @@ def _find_install_btn(plugin_line):
         return None
 
 
-def get_latest_plugin_name(plugin_prefix):
-    candidate_names = _find_all_candidate_names(plugin_prefix)
+def get_latest_plugin_name(plugin_prefix, model=None):
+    candidate_names = _find_all_candidate_names(plugin_prefix, model)
     # exclude switchboard plugins, which are a special case
     candidate_names = (name for name in candidate_names if 'switchboard' not in name)
     try:
@@ -123,9 +123,13 @@ def get_latest_plugin_name(plugin_prefix):
     return chosen_name
 
 
-def _find_all_candidate_names(plugin_prefix):
+def _find_all_candidate_names(plugin_prefix, model=None):
     common.open_url('provd_plugin', 'search', qry={'search': plugin_prefix})
     plugin_lines = common.find_lines(plugin_prefix)
+    if model:
+        plugin_lines = [plugin_line
+                        for plugin_line in plugin_lines
+                        if model in plugin_line.find_element_by_xpath('.//td[3]').text]
 
     candidate_names = [candidate.find_element_by_xpath('.//td[2]').text
                        for candidate in plugin_lines]
@@ -133,8 +137,8 @@ def _find_all_candidate_names(plugin_prefix):
     return candidate_names
 
 
-def install_latest_plugin(plugin_prefix):
-    plugin_name = get_latest_plugin_name(plugin_prefix)
+def install_latest_plugin(plugin_prefix, model=None):
+    plugin_name = get_latest_plugin_name(plugin_prefix, model)
     install_plugin(plugin_name)
 
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -53,6 +53,10 @@ def given_the_latest_plugin_group1_is_installed(step, plugin):
     provdp_action_webi.update_plugin_list(STABLE_URL)
     provdp_action_webi.install_latest_plugin(plugin)
 
+@step(u'Given the latest plugin "([^"]*)" for "([^"]*)" is installed')
+def given_the_latest_plugin_group1_is_installed(step, plugin, model):
+    provdp_action_webi.update_plugin_list(STABLE_URL)
+    provdp_action_webi.install_latest_plugin(plugin, model)
 
 @step(u'Given the provisioning plugin cache has been cleared')
 def given_the_provisioning_plugin_cache_has_been_cleared(step):

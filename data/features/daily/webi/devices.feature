@@ -64,7 +64,7 @@ Feature: Devices
     Scenario: Edit the switchboard option
         Given the plugin "null" is installed
         Given there's no plugins "xivo-aastra" installed
-        Given the latest plugin "xivo-aastra" is installed
+        Given the latest plugin "xivo-aastra" for "67XXi" is installed
         Given I have the following devices:
           |             ip | mac               | vendor | model | plugin |
           | 192.168.32.197 | 00:00:00:00:aa:01 | Aastra | 6757i | null   |

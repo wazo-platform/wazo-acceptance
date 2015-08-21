@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ class XiVOBrowser(webdriver.Firefox):
         fp.set_preference("browser.download.manager.showWhenStarting", False)
         fp.set_preference("browser.download.dir", self.DOWNLOAD_DIR + '/')
         fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/force-download;text/csv")
+        fp.set_preference("reader.parse-on-load.enabled", False)
 
         if self._debug:
             fp.set_preference("webdriver.log.file", "/tmp/firefox_console")
