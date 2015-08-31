@@ -15,9 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import os
 import re
 
-from hamcrest import *
+from hamcrest import assert_that
+from hamcrest import equal_to
+from hamcrest import is_not
+from hamcrest import none
 from lettuce import step, world
 
 from xivo_acceptance.helpers import file_helper
@@ -86,25 +90,27 @@ def then_moh_files_owned_by_asterisk_www_data(step):
 
 @step(u'Then backup files successfully rotated')
 def then_backup_files_successfully_rotated(step):
-    command = ['rm', '-f', '%s/*' % BACKUP_DIR]
-    sysutils.send_command(command)
-    command = ['touch', '%s/data.tgz' % BACKUP_DIR]
-    sysutils.send_command(command)
-    command = ['touch', '%s/db.tgz' % BACKUP_DIR]
-    sysutils.send_command(command)
-    command = ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup']
-    sysutils.send_command(command)
+    backuped_files = [os.path.join(BACKUP_DIR, 'data.tgz'),
+                      os.path.join(BACKUP_DIR, 'db.tgz'),
+                      os.path.join(BACKUP_DIR, 'consul-kv.json')]
+    rotated_files = [os.path.join(BACKUP_DIR, 'data.tgz.{num}'),
+                     os.path.join(BACKUP_DIR, 'db.tgz.{num}'),
+                     os.path.join(BACKUP_DIR, 'consul-kv.json.{num}.gz')]
+    for file_ in backuped_files:
+        sysutils.send_command(['rm', '-f', '{file_}*'.format(file_=file_)])
+        sysutils.send_command(['touch', file_])
 
-    expected_files = ['data.tgz', 'data.tgz.1', 'db.tgz', 'db.tgz.1']
+    sysutils.send_command(['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup'])
+
+    expected_files = backuped_files + [file_.format(num='1') for file_ in rotated_files]
     for expected_file in expected_files:
-        assert sysutils.path_exists('%s/%s' % (BACKUP_DIR, expected_file))
+        assert sysutils.path_exists(expected_file)
 
-    command = ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup']
-    sysutils.send_command(command)
+    sysutils.send_command(['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup'])
 
-    expected_files.extend(['data.tgz.2', 'db.tgz.2'])
+    expected_files = expected_files + [file_.format(num='2') for file_ in rotated_files]
     for expected_file in expected_files:
-        assert sysutils.path_exists('%s/%s' % (BACKUP_DIR, expected_file))
+        assert sysutils.path_exists(expected_file)
 
 
 def _get_asterisk_pid():
