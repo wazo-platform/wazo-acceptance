@@ -160,14 +160,6 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
     )
 
 
-@step(u'Given the display filter "([^"]*)" exists with the following fields:')
-def given_the_display_filter_group1_exists_with_the_following_fields(step, filter_name):
-    field_list = []
-    for line in step.hashes:
-        field_list.append((line['Field title'], line['Field type'], line['Display format']))
-    directory_action_webi.add_or_replace_display(filter_name, field_list)
-
-
 @step(u'Given the user "([^"]*)" is configured for switchboard use')
 def given_the_user_group1_is_configured_for_switchboard_use(step, user):
     user_action_webi.switchboard_config_for_user(user)
