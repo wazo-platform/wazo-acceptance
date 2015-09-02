@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -81,24 +81,6 @@ def configure_client(conf_dict):
 
 def set_search_for_directory(search):
     res = xivoclient.exec_command('set_search_for_directory', search)
-    time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
-
-
-def set_search_for_remote_directory(search):
-    res = xivoclient.exec_command('set_search_for_remote_directory', search)
-    time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
-
-
-def exec_double_click_on_number_for_name(name):
-    res = xivoclient.exec_command('exec_double_click_on_number_for_name', name)
-    time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
-
-
-def sort_list_for_remote_directory(column, order=SORT_ASCENDING):
-    res = xivoclient.exec_command('sort_list_for_remote_directory', column, order)
     time.sleep(world.config['xivo_client']['login_timeout'])
     return res
 

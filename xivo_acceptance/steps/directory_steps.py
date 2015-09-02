@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,13 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to
 from lettuce import step
 
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.helpers import cti_helper
 from xivo_acceptance.helpers import directory_helper
-from xivo_acceptance.lettuce import assets, common, func
+from xivo_acceptance.lettuce import assets, common
 from xivo_acceptance.lettuce.form import submit
 
 
@@ -129,63 +128,9 @@ def when_i_set_the_following_directories_for_directory_reverse_lookup(step):
     directory_action_webi.set_reverse_directories(directories)
 
 
-@step(u'When I search for "([^"]*)" in the directory xlet')
-def when_i_search_for_1_in_the_directory_xlet(step, search):
-    cti_helper.set_search_for_remote_directory(search)
-
-
-@step(u'When I sort results by column "([^"]*)" in ascending order')
-def when_i_sort_results_by_column_group1_in_ascending_order(step, column):
-    cti_helper.sort_list_for_remote_directory(column)
-
-
-@step(u'When I double-click on the phone number for "([^"]*)"')
-def when_i_double_click_on_the_phone_number_for_name(step, name):
-    cti_helper.exec_double_click_on_number_for_name(name)
-
-
 @step(u'Then the directory configuration "([^"]*)" has the URI "([^"]*)"')
 def then_the_directory_has_the_uri(step, directory, uri):
     line = common.get_line(directory)
     cells = line.find_elements_by_tag_name("td")
     uri_cell = cells[2]
     assert uri_cell.text == uri
-
-
-@step(u'Then nothing shows up in the directory xlet')
-def then_nothing_shows_up_in_the_directory_xlet(step):
-    def _assert():
-        res = cti_helper.get_remote_directory_infos()
-        assert_that(res['return_value']['content'], equal_to([]))
-
-    common.assert_over_time(_assert)
-
-
-@step(u'Then the following results does not show up in the directory xlet:')
-def then_the_following_results_does_not_show_up_in_the_directory_xlet(step):
-    def _assert():
-        res = cti_helper.get_remote_directory_infos()
-        assert_res = func.has_subsets_of_dicts(step.hashes, res['return_value']['content'])
-        assert_that(assert_res, equal_to(False))
-
-    common.wait_until_assert(_assert, tries=3)
-
-
-@step(u'Then the following results show up in the directory xlet:')
-def then_the_following_results_show_up_in_the_directory_xlet(step):
-    def _assert():
-        res = cti_helper.get_remote_directory_infos()
-        assert_res = func.has_subsets_of_dicts(step.hashes, res['return_value']['content'])
-        assert_that(assert_res, equal_to(True))
-
-    common.wait_until_assert(_assert, tries=3)
-
-
-@step(u'Then the following sorted results show up in the directory xlet:')
-def then_the_following_sorted_results_show_up_in_the_directory_xlet(step):
-    def _assert():
-        res = cti_helper.get_remote_directory_infos()
-        assert_res = func.has_subsets_of_dicts_in_order(step.hashes, res['return_value']['content'])
-        assert_that(assert_res, equal_to(True))
-
-    common.wait_until_assert(_assert, tries=3)
