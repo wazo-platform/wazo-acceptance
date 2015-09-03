@@ -472,13 +472,13 @@ Feature: Sheet
           | name   | URI                              | delimiter | direct match   | reverse match |
           | dbvars | file:///tmp/phonebook-dbvars.csv | ;         | nom,prenom,tel | tel           |
         When I map the following fields and save the directory definition:
-          | field name | value   |
-          | firstname  | prenom  |
-          | lastname   | nom     |
-          | phone      | tel     |
-          | mail       | mail    |
-          | special    | special |
-          | reverse    | nom     |
+          | field name | value     |
+          | firstname  | {prenom}  |
+          | lastname   | {nom}     |
+          | phone      | {tel}     |
+          | mail       | {mail}    |
+          | special    | {special} |
+          | reverse    | {nom}     |
         When I set the following directories for directory reverse lookup:
         | directory |
         | dbvars    |
