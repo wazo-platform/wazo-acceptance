@@ -45,18 +45,18 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
         'ldapfilter://openldap-dev',
         'cn,telephoneNumber,st,o',
         '',
-        {'name': 'cn',
-         'number': 'telephoneNumber',
-         'location': 'st',
-         'department': 'o'}
+        {'name': '{cn}',
+         'number': '{telephoneNumber}',
+         'location': '{st}',
+         'department': '{o}'}
     )
     directory_action_webi.add_or_replace_display(
         'switchboard',
         [('Icon', 'status', ''),
-         ('Name', 'name', '{db-name}'),
-         ('Number', 'number_office', '{db-number}'),
-         ('Location', '', '{db-location}'),
-         ('Department', '', '{db-department}')]
+         ('Name', 'name', 'name'),
+         ('Number', 'number_office', 'number'),
+         ('Location', '', 'location'),
+         ('Department', '', 'department')]
     )
     directory_action_webi.assign_filter_and_directories_to_context(
         '__switchboard_directory',
@@ -84,16 +84,16 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
         'ldapfilter://openldap-dev',
         'cn,telephoneNumber,st',
         '',
-        {'name': 'cn',
-         'number': 'telephoneNumber',
-         'location': 'st'}
+        {'name': '{cn}',
+         'number': '{telephoneNumber}',
+         'location': '{st}'}
     )
     directory_action_webi.add_or_replace_display(
         'switchboard',
         [('Icon', 'status', ''),
-         ('Name', 'name', '{db-name}'),
-         ('Number', 'number_office', '{db-number}'),
-         ('Location', '', '{db-location}')]
+         ('Name', 'name', 'name'),
+         ('Number', 'number_office', 'number'),
+         ('Location', '', 'location')]
     )
     directory_action_webi.assign_filter_and_directories_to_context(
         '__switchboard_directory',
@@ -118,14 +118,14 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
         'ldapfilter://openldap-dev',
         'cn,telephoneNumber',
         '',
-        {'name': 'cn',
-         'number': 'telephoneNumber'}
+        {'name': '{cn}',
+         'number': '{telephoneNumber}'}
     )
     directory_action_webi.add_or_replace_display(
         'switchboard',
         [('Icon', 'status', ''),
-         ('Name', 'name', '{db-name}'),
-         ('Number', 'number_office', '{db-number}')]
+         ('Name', 'name', 'name'),
+         ('Number', 'number_office', 'number')]
     )
     directory_action_webi.assign_filter_and_directories_to_context(
         '__switchboard_directory',
@@ -142,16 +142,16 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
         'http://localhost/service/ipbx/json.php/private/pbx_services/phonebook',
         'phonebook.firstname,phonebook.lastname,phonebook.displayname,phonebook.society,phonebooknumber.office.number',
         '',
-        {'name': 'phonebook.displayname',
-         'number': 'phonebooknumber.office.number',
-         'mobile': 'phonebooknumber.mobile.number'}
+        {'name': '{phonebook.displayname}',
+         'number': '{phonebooknumber.office.number}',
+         'mobile': '{phonebooknumber.mobile.number}'}
     )
     directory_action_webi.add_or_replace_display(
         'switchboard',
         [('Icon', 'status', ''),
-         ('Name', 'name', '{db-name}'),
-         ('Number', 'number_office', '{db-number}'),
-         ('Number', 'number_mobile', '{db-mobile}')]
+         ('Name', 'name', 'name'),
+         ('Number', 'number_office', 'number'),
+         ('Number', 'number_mobile', 'mobile')]
     )
     directory_action_webi.assign_filter_and_directories_to_context(
         '__switchboard_directory',

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -186,8 +186,8 @@ def when_i_shut_down_the_ldap_server(step):
 
 def _configure_display_filter():
     field_list = [
-        (u'Nom', u'', u'{db-firstname} {db-lastname}'),
-        (u'Numéro', u'', u'{db-phone}')
+        (u'Nom', u'', u'name'),
+        (u'Numéro', u'', u'phone')
     ]
     directory_action_webi.add_or_replace_display("Display", field_list)
 
@@ -199,10 +199,11 @@ def _configure_ldap_directory(ldap_filter):
         direct_match='sn,givenName,telephoneNumber',
         reverse_match='telephoneNumber',
         fields={
-            'firstname': 'givenName',
-            'lastname': 'sn',
-            'phone': 'telephoneNumber',
-            'reverse': 'givenName',
+            'firstname': '{givenName}',
+            'lastname': '{sn}',
+            'name': '{givenName} {sn}',
+            'phone': '{telephoneNumber}',
+            'reverse': '{givenName}',
         },
     )
 

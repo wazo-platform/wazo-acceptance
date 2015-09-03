@@ -22,9 +22,9 @@ def configure_internal_directory():
     directory_action_webi.add_or_replace_directory(
         name='internal',
         uri='http://localhost:9487',
-        direct_match='userfeatures.firstname,userfeatures.lastname',
+        direct_match='firstname,lastname',
         reverse_match='',
-        fields={'firstname': 'userfeatures.firstname',
-                'lastname': 'userfeatures.lastname',
-                'phone': 'extensions.exten'}
+        fields={'firstname': '{firstname}',
+                'lastname': '{lastname}',
+                'phone': '{exten}'}
     )
