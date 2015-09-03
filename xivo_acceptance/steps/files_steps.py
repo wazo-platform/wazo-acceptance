@@ -100,13 +100,15 @@ def then_backup_files_successfully_rotated(step):
         sysutils.send_command(['rm', '-f', '{file_}*'.format(file_=file_)])
         sysutils.send_command(['touch', file_])
 
-    sysutils.send_command(['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup'])
+    # sysutils.send_command(['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup'])
+    print world.ssh_client_xivo.out_err_call(['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup'])
 
     expected_files = backuped_files + [file_.format(num='1') for file_ in rotated_files]
     for expected_file in expected_files:
         assert sysutils.path_exists(expected_file)
 
-    sysutils.send_command(['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup'])
+    # sysutils.send_command(['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup'])
+    print world.ssh_client_xivo.out_err_call(['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup'])
 
     expected_files = expected_files + [file_.format(num='2') for file_ in rotated_files]
     for expected_file in expected_files:
