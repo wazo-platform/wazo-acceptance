@@ -67,6 +67,7 @@ def insert_adv_user_with_mevo(entries):
         user.voicemail = UserVoicemail()
         user.voicemail.name = '%s %s' % (entry['firstname'], entry['lastname'])
         user.voicemail.number = entry['voicemail']
+        user.voicemail.context = entry['context']
         users.append(user)
 
     world.ws.users.import_(users)
@@ -121,6 +122,7 @@ def insert_adv_user_full_infos(entries):
         user.voicemail = UserVoicemail()
         user.voicemail.name = '%s %s' % (entry['firstname'], entry['lastname'])
         user.voicemail.number = entry['voicemail']
+        user.voicemail.context = entry['context']
         user.incall = UserIncall()
         user.incall.exten = entry['incall']
         user.incall.context = 'from-extern'
