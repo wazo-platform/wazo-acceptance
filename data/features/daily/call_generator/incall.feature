@@ -32,15 +32,15 @@ Feature: Incoming calls
         | name           | URI                                                                   | reverse match                 |
         | xivodirreverse | http://localhost/service/ipbx/json.php/private/pbx_services/phonebook | phonebooknumber.office.number |
         When I map the following fields and save the directory definition:
-        | field name | value                            |
-        | firstname  | phonebook.firstname              |
-        | lastname   | phonebook.lastname               |
-        | fullname   | phonebook.fullname               |
-        | phone      | phonebooknumber.office.number    |
-        | mail       | phonebook.email                  |
-        | reverse    | phonebook.fullname               |
-        | address1   | phonebookaddress.office.address1 |
-        | company    | phonebook.society                |
+        | field name | value                              |
+        | firstname  | {phonebook.firstname}              |
+        | lastname   | {phonebook.lastname}               |
+        | fullname   | {phonebook.fullname}               |
+        | phone      | {phonebooknumber.office.number}    |
+        | mail       | {phonebook.email}                  |
+        | reverse    | {phonebook.fullname}               |
+        | address1   | {phonebookaddress.office.address1} |
+        | company    | {phonebook.society}                |
         Given the following directories are used in reverse lookup:
         | directory       |
         | xivodirreverse  |
@@ -52,14 +52,14 @@ Feature: Incoming calls
         When I wait 2 seconds
         When "Plume Wilde" hangs up
         Then I see an AMI message "UserEvent" on the queue "test_incall_reverselookup":
-        | header       | value           |
-        | UserEvent    | ReverseLookup   |
-        | CHANNEL      | .+-callid       |
-        | db-reverse   | El Diablo       |
-        | db-phone     | 666             |
-        | db-lastname  | Diablo          |
-        | db-firstname | El              |
-        | db-fullname  | El Diablo       |
-        | db-address1  | 666 Hell        |
-        | db-mail      | diablo@hell.org |
-        | db-company   | Hell Inc.       |
+        | header    | value           |
+        | UserEvent | ReverseLookup   |
+        | CHANNEL   | .+-callid       |
+        | reverse   | El Diablo       |
+        | phone     | 666             |
+        | lastname  | Diablo          |
+        | firstname | El              |
+        | fullname  | El Diablo       |
+        | address1  | 666 Hell        |
+        | mail      | diablo@hell.org |
+        | company   | Hell Inc.       |
