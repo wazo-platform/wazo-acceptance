@@ -137,24 +137,6 @@ Feature: User
           | NAT | IP addressing type | IP address | Call limit |
           | No  | Static             |   10.0.0.1 |         10 |
 
-    Scenario: Add a voicemail to a user without a line
-        Given there are users with infos:
-          | firstname | lastname |
-          | Indiana   | Jones    |
-        Given there is no voicemail with number "1405" and context "default"
-        When I add a voicemail "1405" to the user "Indiana" "Jones" with errors
-        Then I see errors
-
-    Scenario: Add a voicemail to an existing user
-        Given there are users with infos:
-          | firstname | lastname | number | context | entity_name |
-          | Tom       | Sawyer   |   1405 | default | xivo_entity |
-        Given there is no voicemail with number "1405" and context "default"
-        When I add a voicemail "" to the user "Tom" "Sawyer" with errors
-        Then I see errors
-        When I add a voicemail "1405" to the user "Tom" "Sawyer"
-        Then voicemail "1405" is displayed in the list
-
     Scenario: Delete user 
         Given there are users with infos:
           | firstname | lastname | number | context |
@@ -178,14 +160,6 @@ Feature: User
           | americandream  | American Dream |  3203  | default |    1405      |
         When I remove user "Tom" "Sawyer"
         Then there is no data about this user remaining in the database.
-
-    Scenario: Delete line from user with voicemail
-        Given there are users with infos:
-          | firstname | lastname | number | context | language | voicemail_name | voicemail_number | entity_name |
-          | Abraham   | Maharba  |   1456 | default | en_US    | 1456           | 1456             | xivo_entity |
-        When I remove line from user "Abraham" "Maharba" with errors
-        Then I see errors
-        When I remove line "1456" from lines then I see errors
 
     Scenario: Update user's extension to existing queue's extension
         Given there are contexts with infos:
