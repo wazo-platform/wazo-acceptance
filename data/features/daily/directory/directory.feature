@@ -22,11 +22,11 @@ Feature: Remote Directory in CTI Client
           | name             | URI                               | delimiter | direct match   | reverse match |
           | phonebookunicode | file:///tmp/phonebook-unicode.csv | ;         | nom,prenom,tel | tel           |
         When I map the following fields and save the directory definition:
-          | field name | value  |
-          | firstname  | prenom |
-          | lastname   | nom    |
-          | phone      | tel    |
-          | reverse    | nom    |
+          | field name | value    |
+          | firstname  | {prenom} |
+          | lastname   | {nom}    |
+          | phone      | {tel}    |
+          | reverse    | {nom}    |
         When I include "phonebookunicode" in the default directory
         When I set the following directories for directory reverse lookup:
         | directory        |
