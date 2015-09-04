@@ -1,4 +1,4 @@
-Feature: Remote Directory in CTI Client
+Feature: CTI Directories
 
     Scenario: Create a directory from CSV file
         Given the CSV file "phonebook-x254.csv" is copied on the server into "/tmp"

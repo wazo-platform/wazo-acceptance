@@ -36,7 +36,6 @@ Feature: CTI Client Configuration
         | Queue members           | dock     |
         | Queues (entries detail) | dock     |
         | Switchboard             | dock     |
-        | Remote directory        | dock     |
         | Agent status dashboard  | dock     |
         | People                  | dock     |
         Given there are users with infos:
