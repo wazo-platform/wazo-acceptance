@@ -93,9 +93,10 @@ def _add_user(user_data, step=None):
         if 'device_slot' in user_data:
             user_ws_data['device_slot'] = user_data['device_slot']
 
-        if user_data.get('voicemail_name') and user_data.get('voicemail_number'):
+        if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(user_data):
             user_ws_data['voicemail_name'] = user_data['voicemail_name']
             user_ws_data['voicemail_number'] = user_data['voicemail_number']
+            user_ws_data['voicemail_context'] = user_data['voicemail_context']
 
     if user_data.get('bsfilter'):
         user_ws_data['bsfilter'] = user_data['bsfilter']

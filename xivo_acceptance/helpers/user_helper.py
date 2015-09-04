@@ -209,10 +209,11 @@ def add_user(data_dict, step=None):
         if 'device_slot' in data_dict:
             user.line.device_slot = int(data_dict['device_slot'])
 
-    if 'voicemail_name' in data_dict and 'voicemail_number' in data_dict:
+    if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(data_dict):
         user.voicemail = UserVoicemail()
         user.voicemail.name = data_dict['voicemail_name']
         user.voicemail.number = data_dict['voicemail_number']
+        user.voicemail.context = data_dict['voicemail_context']
 
     if 'mobile_number' in data_dict:
         user.mobile_number = data_dict['mobile_number']

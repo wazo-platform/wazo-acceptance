@@ -12,8 +12,8 @@ Feature: Xlet identity
 
     Scenario: Display voicemail icon and number
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile | voicemail_name | voicemail_number |
-         | Bail      | Tarkin   | 1152   | default | Client      | 1152           | 1152             |
+         | firstname | lastname | number | context | cti_profile | voicemail_name | voicemail_number | voicemail_context |
+         | Bail      | Tarkin   | 1152   | default | Client      | 1152           | 1152             | default           |
 
         When I start the XiVO Client
         When I log in the XiVO Client as "bail", pass "tarkin"
