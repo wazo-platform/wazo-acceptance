@@ -210,8 +210,13 @@ Feature: REST API Devices
 
     Scenario: Search for devices with HTTP_PROXY set
         Given I set the HTTP_PROXY environment variables to "10.99.99.99"
+        Given there is no voicemail with number "4977" and context "default"
         When I request the list of devices
         Then I get a response with status "200"
+        When I create the following voicemails via CONFD:
+          | name       | number | context |
+          | test-proxy |   4977 | default |
+        Then I get a response with status "201"
 
     Scenario: Reset to autoprov a device
         Given there are no devices with mac "00:00:00:00:aa:01"
