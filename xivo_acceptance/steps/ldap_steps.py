@@ -64,6 +64,7 @@ def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the
     _configure_ldap_directory(ldap_filter)
     _add_directory_to_direct_directories()
     cti_helper.restart_server()
+    sysutils.restart_service('xivo-dird')
 
 
 @step(u'Given the CTI server searches both the internal directory and the LDAP filter "([^"]*)"')
@@ -73,6 +74,7 @@ def given_the_cti_server_searches_both_the_internal_directory_and_the_ldap_filte
     directory_helper.configure_internal_directory()
     _add_directory_to_direct_directories(['ldapdirectory', 'internal'])
     cti_helper.restart_server()
+    sysutils.restart_service('xivo-dird')
 
 
 @step(u"Given there's an LDAP server configured for reverse lookup with entries:")
@@ -86,6 +88,7 @@ def given_there_s_an_ldap_server_configured_for_reverse(step):
     _add_directory_to_direct_directories()
     directory_action_webi.set_reverse_directories(['ldapdirectory'])
     cti_helper.restart_server()
+    sysutils.restart_service('xivo-dird')
 
 
 @step(u'Given the LDAP server is configured for SSL connections')

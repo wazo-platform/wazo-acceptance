@@ -25,7 +25,7 @@ from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_acceptance.action.webi import queue as queue_action_webi
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import context_helper, cti_helper, incall_helper
-from xivo_acceptance.lettuce import func, common
+from xivo_acceptance.lettuce import func, common, sysutils
 
 
 @step(u'Given the switchboard is configured for ldap lookup with location and department$')
@@ -63,6 +63,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
         'switchboard',
         ['openldap']
     )
+    sysutils.restart_service('xivo-dird')
 
 
 @step(u'Given the switchboard is configured for ldap lookup with location$')
@@ -100,6 +101,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
         'switchboard',
         ['openldap']
     )
+    sysutils.restart_service('xivo-dird')
 
 
 @step(u'Given the switchboard is configured for ldap lookup$')
@@ -132,6 +134,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup(step):
         'switchboard',
         ['openldap']
     )
+    sysutils.restart_service('xivo-dird')
 
 
 @step(u'Given the switchboard is configured for internal directory lookup')
@@ -158,6 +161,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
         'switchboard',
         ['xivodirswitchboard']
     )
+    sysutils.restart_service('xivo-dird')
 
 
 @step(u'Given the user "([^"]*)" is configured for switchboard use')
