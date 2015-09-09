@@ -1,5 +1,8 @@
 Feature: Backup
 
+    Scenario: Log Rotate Backup Files
+        Then backup files successfully rotated
+
     Scenario: Backup and restore database
         Given the asset file "xivo-backup-manager" is copied on the server into "/tmp"
         Given there is no user "Greg" "Backup"
