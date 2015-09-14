@@ -19,6 +19,7 @@ import argparse
 import logging
 import os
 import signal
+import ssl
 
 from xivo.xivo_logging import setup_logging
 from xivo_acceptance.config import load_config
@@ -31,6 +32,7 @@ logger = logging.getLogger(__name__)
 
 def main():
     _init_signal()
+    _disable_ssl_cert_verification()
     parsed_args = _parse_args()
 
     if parsed_args.xivo_host:
@@ -65,6 +67,15 @@ def _parse_args():
 
 def _init_signal():
     signal.signal(signal.SIGTERM, _handle_sigterm)
+
+
+def _disable_ssl_cert_verification():
+    try:
+        _create_unverified_https_context = ssl._create_unverified_context
+    except AttributeError:
+        pass
+    else:
+        ssl._create_default_https_context = _create_unverified_https_context
 
 
 def _handle_sigterm(signum, frame):
