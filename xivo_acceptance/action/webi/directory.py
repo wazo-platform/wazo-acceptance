@@ -19,6 +19,7 @@ import time
 
 from lettuce import world
 from xivo_acceptance.lettuce.form import submit, input, select
+from xivo_acceptance.lettuce.form.list_pane import ListPane
 from xivo_acceptance.lettuce import common
 
 
@@ -132,10 +133,8 @@ def _add_display_field(title, f_type, value):
 
 
 def add_directory_to_context(directory):
-    select.set_select_field_with_id("it-directorieslist", directory)
-
-    right_arrow = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[position()=1]")
-    right_arrow.click()
+    lp = ListPane.from_id('contexts_services')
+    lp.add(directory)
 
 
 def assign_filter_and_directories_to_context(context, filter_name, directories):
