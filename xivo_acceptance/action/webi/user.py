@@ -18,6 +18,9 @@
 import time
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
 from xivo_acceptance.lettuce import common, form
 from collections import namedtuple
 
@@ -131,7 +134,7 @@ def _fill_destination_field(key_type, line, destination):
     destination_row = FUNCKEY_DESTINATIONS[key_type]
 
     if destination_row.input_type == 'plaintext':
-        field.send_keys(destination)
+        fill_fk_plaintext(line, field, destination)
     elif destination_row.input_type == 'dropdown':
         Select(field).select_by_visible_text(destination)
     elif destination_row.input_type == 'autocomplete':
@@ -139,6 +142,24 @@ def _fill_destination_field(key_type, line, destination):
         field_id = "__dwho-suggest__%s-res-1" % destination.id
         autocomplete_element = line.find_element_by_id(field_id)
         autocomplete_element.click()
+
+
+def fill_fk_plaintext(line, field, destination):
+    hidden = line.find_element_by_name("phonefunckey[typeval][]")
+    wait = WebDriverWait(world.browser, 2)
+    for i in range(5):
+        print "func key attempt", i
+        print "typeval before", hidden.get_attribute('value')
+        field.clear()
+        field.send_keys(destination)
+        field.send_keys(Keys.TAB)
+        print "typeval after", hidden.get_attribute('value')
+        try:
+            wait.until(lambda x: hidden.get_attribute('value') != "")
+            return
+        except TimeoutException:
+            pass
+    raise AssertionError("Was not able to fill func key destination '{}'".format(destination))
 
 
 def change_key_order(pairs):
