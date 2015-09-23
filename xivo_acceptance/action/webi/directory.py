@@ -152,18 +152,8 @@ def assign_filter_and_directories_to_context(context, filter_name, directories):
 
 def set_reverse_directories(directories):
     common.open_url('cti_reverse_directory', '')
-    _remove_all_reverse_directories()
-    _add_reverse_directories(directories)
+    lp = ListPane.from_id('contexts_services')
+    lp.remove_all()
+    for directory in directories:
+        lp.add(directory)
     submit.submit_form()
-
-
-def _add_reverse_directories(directories):
-    select.set_multiselect_field_with_id("it-directorieslist", directories)
-    button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[1]")
-    button.click()
-
-
-def _remove_all_reverse_directories():
-    select.select_all_with_id("it-directories")
-    button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[2]")
-    button.click()
