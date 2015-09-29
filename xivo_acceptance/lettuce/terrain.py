@@ -43,6 +43,7 @@ def xivo_acceptance_lettuce_before_all():
 @before.each_scenario
 def xivo_acceptance_lettuce_before_each_scenario(scenario):
     scenario.phone_register = PhoneRegister()
+    _setup_browser(world.config)
     _check_webi_login_root()
     world.confd_utils_1_1.recreate_session()
     world.deleted_device = None
@@ -55,6 +56,7 @@ def xivo_acceptance_lettuce_after_each_step(step):
 
 @after.each_scenario
 def xivo_acceptance_lettuce_after_each_scenario(scenario):
+    _stop_browser()
     asterisk.stop_ami_monitoring()
     scenario.phone_register.clear()
     xc = getattr(scenario, '_pseudo_xivo_client', None)
@@ -83,8 +85,6 @@ def initialize():
     _setup_ws(world.xivo_acceptance_config)
     logger.debug("_setup_provd...")
     _setup_provd(world.xivo_acceptance_config)
-    logger.debug("_setup_browser...")
-    _setup_browser(world.config)
     _setup_agentd_client()
     _setup_consul()
     world.logged_agents = []
@@ -129,6 +129,15 @@ def _setup_browser(config):
     world.browser = XiVOBrowser(config['debug']['selenium'])
     world.browser.set_window_size(width, height)
     world.timeout = float(config['browser']['timeout'])
+
+
+@debug.logcall
+def _stop_browser():
+    if not world.config['browser']['enable']:
+        return
+
+    world.browser.close()
+    world.display.stop()
 
 
 @debug.logcall
