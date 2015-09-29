@@ -20,12 +20,6 @@ Feature: User
         Then I should be at the user list page
         Then "Bob" "Dylan" is in group "rastafarien"
 
-    Scenario: Add user with function keys
-        Given there is no user "Tom" "Sawyer"
-        When I add a user "Tom" "Sawyer" with a function key with type Customized and extension "1234"
-        Then I see the user "Tom" "Sawyer" exists
-        Then i see user with username "Tom" "Sawyer" has a function key with type Customized and extension "1234"
-
     Scenario: Add user with SIP line and remove it
         Given there is no user "Bill" "Bush"
         Given I have no extension with exten "1632@default"
