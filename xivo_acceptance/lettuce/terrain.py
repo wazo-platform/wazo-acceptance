@@ -56,7 +56,6 @@ def xivo_acceptance_lettuce_after_each_step(step):
 
 @after.each_scenario
 def xivo_acceptance_lettuce_after_each_scenario(scenario):
-    _stop_browser()
     asterisk.stop_ami_monitoring()
     scenario.phone_register.clear()
     xc = getattr(scenario, '_pseudo_xivo_client', None)
@@ -85,7 +84,11 @@ def initialize():
     _setup_ws(world.xivo_acceptance_config)
     logger.debug("_setup_provd...")
     _setup_provd(world.xivo_acceptance_config)
+    logger.debug("_setup_browser...")
+    _setup_browser(world.config)
+    logger.debug("_setup_agentd_client...")
     _setup_agentd_client()
+    logger.debug("_setup_consul...")
     _setup_consul()
     world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
@@ -121,6 +124,9 @@ def _setup_provd(xivo_acceptance_config):
 def _setup_browser(config):
     if not world.config['browser']['enable']:
         return
+
+    if hasattr(world, 'display') and hasattr(world, 'browser'):
+        _stop_browser()
 
     from pyvirtualdisplay import Display
     browser_size = width, height = tuple(config['browser']['resolution'].split('x', 1))
