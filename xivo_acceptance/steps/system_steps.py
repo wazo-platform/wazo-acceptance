@@ -25,8 +25,11 @@ from xivo_acceptance.helpers import cti_helper
 
 
 @step(u'I restart "([^"]*)"$')
-def when_i_restart_xivo_dird(step, service_name):
-    if service_name == 'xivo-ctid':
+def when_i_restart_service(step, service_name):
+    if service_name == 'asterisk':
+        sysutils.restart_service('asterisk')
+        sysutils.restart_service('xivo-ctid')
+    elif service_name == 'xivo-ctid':
         cti_helper.restart_server()
     else:
         sysutils.restart_service(service_name)

@@ -44,12 +44,6 @@ def when_i_start_asterisk(step):
     assert sysutils.send_command(command)
 
 
-@step(u'When I restart Asterisk')
-def when_i_restart_asterisk(step):
-    sysutils.restart_service('asterisk')
-    sysutils.restart_service('xivo-ctid')
-
-
 @step(u'When I wait for the service "([^"]*)" to stop')
 def when_i_wait_for_the_service_group1_to_stop(step, service):
     pidfile = sysutils.get_pidfile_for_service_name(service)
