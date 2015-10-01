@@ -31,7 +31,7 @@ Feature: CTI Directories
         When I set the following directories for directory reverse lookup:
         | directory        |
         | phonebookunicode |
-        When I restart the CTI server
+        When I restart "xivo-ctid"
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
         | xivo-calleridnum  |

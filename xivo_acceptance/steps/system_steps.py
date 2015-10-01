@@ -21,11 +21,15 @@ from lettuce import step
 from lettuce.registry import world
 
 from xivo_acceptance.lettuce import sysutils, assets
+from xivo_acceptance.helpers import cti_helper
 
 
 @step(u'I restart "([^"]*)"$')
 def when_i_restart_xivo_dird(step, service_name):
-    sysutils.restart_service(service_name)
+    if service_name == 'xivo-ctid':
+        cti_helper.restart_server()
+    else:
+        sysutils.restart_service(service_name)
 
 
 @step(u'When I generate a core dump and remember the pid as "([^"]*)" and the epoch as "([^"]*)"')
