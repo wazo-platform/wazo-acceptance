@@ -51,9 +51,9 @@ def when_i_search_for_term(step, term):
     phonebook_action_webi.phonebook_search(term)
 
 
-@step(u'When I search the phonebook for "([^"]*)" on my Aastra')
-def when_i_search_the_phonebook_on_my_aastra(step, term):
-    phonebook_browser = AastraPhonebookBrowser()
+@step(u'When I search the phonebook for "([^"]*)" on my Aastra "([^"]*)"')
+def when_i_search_the_phonebook_on_my_aastra(step, term, mac_address):
+    phonebook_browser = AastraPhonebookBrowser(mac_address)
     world.phone_results = phonebook_browser.search(term)
 
 

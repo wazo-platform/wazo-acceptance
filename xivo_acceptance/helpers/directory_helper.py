@@ -26,5 +26,6 @@ def configure_internal_directory():
         reverse_match='',
         fields={'firstname': '{firstname}',
                 'lastname': '{lastname}',
+                'display_name': '{firstname} {lastname}',
                 'phone': '{exten}'}
     )
