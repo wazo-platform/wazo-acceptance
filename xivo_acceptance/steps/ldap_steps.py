@@ -103,10 +103,7 @@ def given_the_ldap_server_is_configured_for_ssl_connections(step):
         server='openldap-dev',
         base_dn='dc=lan-quebec,dc=avencall,dc=com',
         username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-        password='superpass',
-        display_name=['cn', 'st', 'givenName'],
-        phone_number=['telephoneNumber'])
-    ldap_action_webi.add_ldap_filter_to_phonebook('openldap-dev')
+        password='superpass')
 
 
 def _copy_ca_certificate():
@@ -131,29 +128,10 @@ def given_there_are_the_following_ldap_filters(step):
             username=ldap_filter['username'],
             password=ldap_filter['password'])
 
-        if 'display name' in ldap_filter:
-            options['display_name'] = ldap_filter['display name'].split(',')
-
-        if 'phone number' in ldap_filter:
-            options['phone_number'] = ldap_filter['phone number'].split(',')
-
         if 'filter' in ldap_filter:
             options['custom_filter'] = ldap_filter['filter']
 
-        if 'phone number type' in ldap_filter:
-            options['number_type'] = ldap_filter['phone number type']
-
         ldap_action_webi.add_or_replace_ldap_filter(**options)
-
-
-@step(u'Given the ldap filter "([^"]*)" has been added to the phonebook')
-def given_the_ldap_filter_group1_has_been_added_to_the_phonebook(step, ldap_filter):
-    ldap_action_webi.add_ldap_filter_to_phonebook(ldap_filter)
-
-
-@step(u'Given there are no LDAP filters configured in the phonebook')
-def given_there_are_no_ldap_filters_configured_in_the_phonebook(step):
-    ldap_action_webi.remove_all_filters_from_phonebook()
 
 
 @step(u'Given there is a user with common name "([^"]*)" and password "([^"]*)" on the ldap server')
@@ -172,19 +150,6 @@ def given_there_is_a_user_with_common_name_group1_and_password_group2_on_the_lda
 def given_the_ldap_server_is_configured_and_active(step):
     ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
                                                 host='openldap-dev.lan-quebec.avencall.com')
-
-
-@step(u'When the LDAP service is stopped')
-def when_the_ldap_service_is_stopped(step):
-    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
-                                                host='openldap-dev.lan-quebec.avencall.com',
-                                                port=44443)
-
-
-@step(u'When I shut down the LDAP server')
-def when_i_shut_down_the_ldap_server(step):
-    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
-                                                host='192.169.23.14')
 
 
 def _configure_display_filter():

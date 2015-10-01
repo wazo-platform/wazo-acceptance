@@ -52,16 +52,10 @@ def add_or_replace_ldap_server(name, host, ssl=False, port=389):
 
 
 def add_or_replace_ldap_filter(**args):
-    opts = {
-        'display_name': ['cn'],
-        'phone_number': ['telephoneNumber'],
-    }
-    opts.update(args)
+    if common.element_is_in_list('ldapfilter', args['name']):
+        common.remove_line(args['name'])
 
-    if common.element_is_in_list('ldapfilter', opts['name']):
-        common.remove_line(opts['name'])
-
-    _add_ldap_filter(**opts)
+    _add_ldap_filter(**args)
 
 
 def add_or_replace_ldap_entry(directory_entry):
@@ -106,7 +100,6 @@ def _get_entry_common_name(directory_entry):
 
 
 def _add_ldap_filter(**args):
-
     common.open_url('ldapfilter', 'add')
 
     _type_ldap_filter_name(args['name'])
@@ -120,34 +113,7 @@ def _add_ldap_filter(**args):
     if 'custom_filter' in args:
         _type_ldap_custom_filter(args['custom_filter'])
 
-    if 'number_type' in args:
-        _select_phone_number_type(args['number_type'])
-
-    common.go_to_tab("Attributes")
-
-    for field in args.get('display_name', []):
-        _add_filter_display_name_field(field)
-
-    for field in args.get('phone_number', []):
-        _add_filter_phone_number_field(field)
-
     form.submit.submit_form()
-
-
-def _add_filter_phone_number_field(field):
-    add_button = world.browser.find_element_by_id('bt-ldapfilter-attrphonenumber-add')
-    add_button.click()
-    alert = world.browser.switch_to_alert()
-    alert.send_keys(field)
-    alert.accept()
-
-
-def _add_filter_display_name_field(field):
-    add_button = world.browser.find_element_by_id('bt-ldapfilter-attrdisplayname-add')
-    add_button.click()
-    alert = world.browser.switch_to_alert()
-    alert.send_keys(field)
-    alert.accept()
 
 
 def _choose_ldap_server(server):
@@ -178,46 +144,3 @@ def _type_username_and_password(username, password):
     text_input = world.browser.find_element_by_label("Password")
     text_input.clear()
     text_input.send_keys(password)
-
-
-def _select_phone_number_type(number_type):
-    if number_type in ['Office', 'Home', 'Mobile', 'Fax', 'Other']:
-        form.select.set_select_field_with_id("it-ldapfilter-additionaltype", number_type)
-    else:
-        form.select.set_select_field_with_id("it-ldapfilter-additionaltype", "Customized")
-        form.input.set_text_field_with_id("it-ldapfilter-additionaltext", number_type)
-
-
-def add_ldap_filter_to_phonebook(ldap_filter):
-    common.open_url('phonebook_settings')
-    common.go_to_tab('LDAP filters')
-    _move_filter_to_right_pane(ldap_filter)
-    form.submit.submit_form()
-
-
-def _move_filter_to_right_pane(ldap_filter):
-    form.select.set_multiselect_field_with_id_containing("it-ldapfilterlist", ldap_filter)
-    button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[1]")
-    button.click()
-
-
-def remove_all_filters_from_phonebook():
-    common.open_url('phonebook_settings')
-    common.go_to_tab('LDAP filters')
-    if _ldap_filters_available():
-        _move_all_filters_to_left_pane()
-        form.submit.submit_form()
-
-
-def _ldap_filters_available():
-    try:
-        world.browser.find_element_by_id('it-ldapfilter')
-    except NoSuchElementException:
-        return False
-    return True
-
-
-def _move_all_filters_to_left_pane():
-    form.select.select_all_with_id("it-ldapfilter")
-    button = world.browser.find_element_by_xpath("//div[@class='inout-list']/a[2]")
-    button.click()

@@ -37,8 +37,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_depart
         server='openldap-dev',
         base_dn='dc=lan-quebec,dc=avencall,dc=com',
         username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-        password='superpass',
-        display_name=['cn', 'st', 'o'])
+        password='superpass')
 
     directory_action_webi.add_or_replace_directory(
         'openldap',
@@ -77,8 +76,7 @@ def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
         server='openldap-dev',
         base_dn='dc=lan-quebec,dc=avencall,dc=com',
         username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-        password='superpass',
-        display_name=['cn', 'st'])
+        password='superpass')
 
     directory_action_webi.add_or_replace_directory(
         'openldap',
