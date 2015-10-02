@@ -142,7 +142,7 @@ def _stop_browser():
     if not world.config['browser']['enable']:
         return
 
-    world.browser.close()
+    world.browser.quit()
     world.display.stop()
 
 
