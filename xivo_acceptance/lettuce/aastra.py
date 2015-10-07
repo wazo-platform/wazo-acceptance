@@ -23,19 +23,26 @@ from lettuce import world
 
 class AastraPhonebookBrowser(object):
 
-    # TODO change this, this is actually for Cisco
-    _REGEX_DISPLAY = re.compile(r'<Name>(.+)</Name>')
-    _REGEX_NUMBER = re.compile(r'<Telephone>(.+)</Telephone>')
+    _REGEX_DISPLAY = re.compile(r'<Prompt>(.+)</Prompt>')
+    _REGEX_NUMBER = re.compile(r'<URI>Dial:(.+)</URI>')
 
     def __init__(self, mac_address):
+        self._mac_address = mac_address
         user_agent = 'Aastra6731i MAC:{} V:3.2.2.1136-SIP'.format(mac_address.replace(':', '-'))
         self._session = requests.Session()
         self._session.headers = {'User-Agent': user_agent}
-        input_url = self._get_phonebook_input_url(mac_address)
-        self._lookup_url = self._get_phonebook_lookup_url(input_url)
+        self._lookup_url = None
 
-    def _get_phonebook_input_url(self, mac_address):
-        filename = ''.join(c for c in mac_address if c in string.hexdigits)
+    def use_provd_lookup_url(self):
+        input_url = self._get_phonebook_input_url()
+        lookup_url = self._get_phonebook_lookup_url(input_url)
+        self._lookup_url = lookup_url + '&term='
+
+    def use_compat_lookup_url(self):
+        self._lookup_url = 'http://{}/service/ipbx/web_services.php/phonebook/search?name='.format(world.config['xivo_host'])
+
+    def _get_phonebook_input_url(self):
+        filename = ''.join(c for c in self._mac_address if c in string.hexdigits)
         url = 'http://{}:8667/Aastra/{}.cfg'.format(world.config['xivo_host'], filename)
         r = self._session.get(url)
         if r.status_code != 200:
@@ -53,7 +60,6 @@ class AastraPhonebookBrowser(object):
         if r.status_code != 200:
             r.raise_for_status()
 
-        # TODO change this, this is actually for Cisco
         regex = re.compile(r'<URL>(.+)</URL>')
         for line in r.content.splitlines():
             m = regex.search(line)
@@ -62,7 +68,7 @@ class AastraPhonebookBrowser(object):
         raise Exception('could not extract lookup URL')
 
     def search(self, term):
-        url = '{}&term={}'.format(self._lookup_url, term.encode('utf-8'))
+        url = self._lookup_url + term.encode('utf-8')
         r = self._session.get(url)
         if r.status_code != 200:
             r.raise_for_status()

@@ -25,3 +25,16 @@ Feature: Phonebook
         Then I see the following results on the phone:
           | name           | number
           | Michaud Pascal | 1001
+
+    Scenario: Phonebook search from a phone using compat URL
+        Given the phonebook is accessible by any hosts
+        Given there are users with infos:
+          | firstname | lastname | number | context | protocol |
+          | Michaud   | Pascal   |   1001 | default | sip      |
+        Given the internal directory exists
+        Given the directory definition "internal" is included in the default directory
+        Given I restart "xivo-dird"
+        When I search the phonebook for "Mich" on my Aastra "00:11:22:33:44:55" using the compatibility URL
+        Then I see the following results on the phone:
+          | name           | number
+          | Michaud Pascal | 1001
