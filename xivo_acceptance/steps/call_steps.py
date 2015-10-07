@@ -143,19 +143,19 @@ def then_user_is_ringing(step, user):
 @step(u'Then "([^"]*)" is hungup')
 def then_group1_is_hungup(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
-    common.wait_until(phone.is_hungup)
+    common.wait_until(phone.is_hungup, tries=3)
 
 
 @step(u'Then "([^"]*)" is talking')
 def then_group1_is_talking(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
-    common.wait_until(phone.is_talking)
+    common.wait_until(phone.is_talking, tries=3)
 
 
 @step(u'Then "([^"]*)" hears a ringback tone')
 def then_user_hears_a_ringback_tone(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
-    common.wait_until(phone.is_ringback_tone)
+    common.wait_until(phone.is_ringback_tone, tries=3)
 
 
 @step(u'Then I see no recording file of this call in monitoring audio files page')
