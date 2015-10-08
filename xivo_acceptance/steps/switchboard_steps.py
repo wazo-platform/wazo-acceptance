@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
+
 from hamcrest import assert_that
 from hamcrest import contains
 from hamcrest import equal_to
@@ -213,8 +215,17 @@ def when_the_switchboard_group1_hangs_up(step, switchboard):
 
 @step(u'Then the switchboard "([^"]*)" is not talking to anyone')
 def then_the_switchboard_1_is_not_talking_to_anyone(step, switchboard):
-    current_call = cti_helper.get_switchboard_current_call_infos()
-    assert_that(current_call['caller_id'], equal_to(""))
+    timeout = 3
+    while timeout > 0:
+        try:
+            current_call = cti_helper.get_switchboard_current_call_infos()
+            assert_that(current_call['caller_id'], equal_to(""))
+            break
+        except AssertionError as e:
+            timeout -= 1
+            if not timeout:
+                raise e
+            time.sleep(0.25)
     phone = step.scenario.phone_register.get_user_phone(switchboard)
     phone.is_hungup()
 
