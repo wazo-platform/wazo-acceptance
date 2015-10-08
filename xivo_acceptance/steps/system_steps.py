@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ from xivo_acceptance.helpers import cti_helper
 
 
 @step(u'I restart "([^"]*)"$')
-def when_i_restart_service(step, service_name):
+def i_restart_service(step, service_name):
     if service_name == 'asterisk':
         sysutils.restart_service('asterisk')
         sysutils.restart_service('xivo-ctid')
