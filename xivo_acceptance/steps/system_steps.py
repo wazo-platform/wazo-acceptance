@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,6 +21,18 @@ from lettuce import step
 from lettuce.registry import world
 
 from xivo_acceptance.lettuce import sysutils, assets
+from xivo_acceptance.helpers import cti_helper
+
+
+@step(u'I restart "([^"]*)"$')
+def i_restart_service(step, service_name):
+    if service_name == 'asterisk':
+        sysutils.restart_service('asterisk')
+        sysutils.restart_service('xivo-ctid')
+    elif service_name == 'xivo-ctid':
+        cti_helper.restart_server()
+    else:
+        sysutils.restart_service(service_name)
 
 
 @step(u'When I generate a core dump and remember the pid as "([^"]*)" and the epoch as "([^"]*)"')

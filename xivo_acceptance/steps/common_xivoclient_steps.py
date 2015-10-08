@@ -58,11 +58,6 @@ def log_out_of_the_xivo_client(step):
     cti_helper.log_out_of_the_xivo_client()
 
 
-@step(u'When I restart the CTI server')
-def when_i_restart_the_cti_server(step):
-    cti_helper.restart_server()
-
-
 @step(u'I start the XiVO Client$')
 def i_start_the_xivo_client(step):
     xivoclient.start_xivoclient()

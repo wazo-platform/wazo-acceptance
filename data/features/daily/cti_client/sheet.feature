@@ -271,7 +271,7 @@ Feature: Sheet
          | frere |   3001 | default | 1117,1118    |
         Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
 
-        When I restart the CTI server
+        When I restart "xivo-ctid"
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
@@ -313,7 +313,7 @@ Feature: Sheet
           | Peter     | Jenkins  |
         Given there is an incall "2001" in context "from-extern" to the "Group" "groupie" with caller id name "Tux" number "5555555555"
 
-        When I restart the CTI server
+        When I restart "xivo-ctid"
 
         When I start the XiVO Client
         When I enable screen pop-up
@@ -355,7 +355,7 @@ Feature: Sheet
          | frere |   3001 | default |         1117 |
         Given there is an incall "3001" in context "from-extern" to the "Queue" "frere" with caller id name "Tux" number "5555555555"
 
-        When I restart the CTI server
+        When I restart "xivo-ctid"
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
@@ -445,7 +445,7 @@ Feature: Sheet
          | Alice     | Gopher   |   1117 | default | Client      | sip      |
         Given there is an incall "1117" in context "from-extern" to the "User" "Alice Gopher" with caller id name "Tux" number "5555555555"
 
-        When I restart the CTI server
+        When I restart "xivo-ctid"
         When I start the XiVO Client
         When I enable screen pop-up
         When I log in the XiVO client as "alice", pass "gopher"
@@ -482,7 +482,7 @@ Feature: Sheet
         When I set the following directories for directory reverse lookup:
         | directory |
         | dbvars    |
-        When I restart the CTI server
+        When I restart "xivo-ctid"
         Given I have a sheet model named "testsheet" with the variables:
         | variable     |
         | db-firstname |

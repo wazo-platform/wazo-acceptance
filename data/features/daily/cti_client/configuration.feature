@@ -83,7 +83,7 @@ Feature: CTI Client Configuration
         When I set auto-reconnect interval to "5" seconds
         When I enable auto-reconnect
         When I log in the XiVO Client as "gonzales", pass "dacosta"
-        When I restart the CTI server
+        When I restart "xivo-ctid"
         Then I logged after "5" seconds
 
     Scenario: Enable/Disable connect at startup
