@@ -27,3 +27,4 @@ PyYAML
 kombu==2.1.8
 stevedore
 python-consul
+python-Levenshtein
