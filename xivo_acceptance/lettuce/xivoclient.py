@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -97,9 +97,8 @@ class XivoClient(object):
             self.socket.connect(self.socket_path)
         except socket.error as(error_number, message):
             if error_number == errno.ENOENT:
-                msg = 'XiVO Client multiples instance is disabled or'
-                msg += ' XiVO Client must be built for functional testing'
-                logger.info(msg)
+                msg = 'XiVO Client multiples instance is disabled or not built for functional testing'
+                logger.exception('%s', msg)
                 return False
             else:
                 raise Exception(message)
