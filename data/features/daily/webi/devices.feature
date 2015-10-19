@@ -16,21 +16,21 @@ Feature: Devices
 
     Scenario: Search devices by number
         Given I have the following users:
-            |     id | firstname | lastname |
-            | 984346 | Richard   | Stallman |
+            | firstname | lastname |
+            | Richard   | Stallman |
         Given I have the following lines:
-            |     id | context | protocol | username | secret | device_slot |
-            | 654134 | default | sip      | toto     | tata   |           1 |
+            | context | protocol | username       | secret         | device_slot |
+            | default | sip      | devicebynumber | devicebynumber | 1           |
         Given I have the following extensions:
-            |     id | context | exten |
-            | 135477 | default |  1000 |
+            | context | exten |
+            | default |  1000 |
         Given I have the following devices:
-          |             ip | mac               |
+          | ip             | mac               |
           | 192.168.32.104 | 00:00:00:00:aa:02 |
           | 192.168.32.10  | 00:00:00:00:cc:22 |
-        Given line "654134" is linked with extension "1000@default"
-        Given line "654134" is linked with user id "984346"
-        When I provision my device with my line_id "654134" and ip "192.168.32.104"
+        Given SIP line "devicebynumber" is associated to extension "1000@default"
+        Given SIP line "devicebynumber" is associated to user "Richard" "Stallman"
+        When I provision device having ip "192.168.32.104" with line having username "devicebynumber"
         When I search device by number "1000"
         Then the search results are:
           | present           | not present       |
@@ -140,23 +140,23 @@ Feature: Devices
 
     Scenario: Provision
         Given I have the following users:
-            |     id | firstname | lastname  |
-            | 984346 | Greg      | Sanderson |
+            | firstname     | lastname |
+            | Provisionable | NiceGuy  |
         Given I have the following lines:
-            |     id | context | protocol | username | secret | device_slot |
-            | 654134 | default | sip      | toto     | tata   |           1 |
+            | context | protocol | username        | secret          | device_slot |
+            | default | sip      | deviceprovision | deviceprovision | 1           |
         Given I have the following extensions:
-            |     id | context | exten |
-            | 135477 | default |  1000 |
+            | context | exten |
+            | default |  1000 |
         Given I have the following devices:
-          |             ip | mac               |
+          | ip             | mac               |
           | 192.168.32.104 | 00:00:00:00:aa:02 |
           | 192.168.32.10  | 00:00:00:00:cc:22 |
           | 192.168.32.101 | 00:00:00:00:aa:05 |
           | 192.168.32.1   | 00:00:00:00:bb:09 |
-        Given line "654134" is linked with extension "1000@default"
-        Given line "654134" is linked with user id "984346"
-        When I provision my device with my line_id "654134" and ip "192.168.32.1"
+        Given SIP line "deviceprovision" is associated to extension "1000@default"
+        Given SIP line "deviceprovision" is associated to user "Provisionable" "NiceGuy"
+        When I provision device having ip "192.168.32.1" with line having username "deviceprovision"
         Then the device with mac "00:00:00:00:bb:09" has been provisioned with a configuration:
-            | display_name   | number | username | auth_username | password |
-            | Greg Sanderson | 1000   | toto     | toto          | tata     |
+            | display_name          | number | username        | auth_username   | password        |
+            | Provisionable NiceGuy | 1000   | deviceprovision | deviceprovision | deviceprovision |

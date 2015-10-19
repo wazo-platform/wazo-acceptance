@@ -18,7 +18,7 @@
 from lettuce import step, world
 from hamcrest import assert_that, equal_to, is_, none, \
     has_entry, has_entries, has_item, has_length, \
-    contains_string, instance_of
+    contains_string, instance_of, is_not
 from xivo_acceptance.action.webi import provd_plugins
 from xivo_acceptance.action.confd import device_action_confd
 from xivo_acceptance.action.webi import device as device_action_webi
@@ -223,6 +223,13 @@ def when_i_delete_device(step, mac):
 def when_i_provision_my_device_with_my_line_id_group1(step, line_id, device_ip):
     line = line_dao.get(line_id)
     device_helper.provision_device_using_webi(line.provisioning_extension, device_ip)
+
+
+@step(u'When I provision device having ip "([^"]*)" with line having username "([^"]*)"')
+def when_i_provision_device_having_ip_group1_with_line_having_username_group2(step, device_ip, sip_username):
+    line = line_sip_helper.find_by_username(sip_username)
+    assert_that(line, is_not(none()), "Line with username {} not found".format(sip_username))
+    device_helper.provision_device_using_webi(line['provisioning_extension'], device_ip)
 
 
 @step(u'When I open the edit page of the device with mac "([^"]*)"')
