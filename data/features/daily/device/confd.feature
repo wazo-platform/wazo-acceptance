@@ -234,14 +234,3 @@ Feature: REST API Devices
         Then I get a response with status "204"
         Then I see in the log file that the device was deleted
         Then the device with mac "00:00:00:00:00:12" is no longer exists in provd
-
-    Scenario: Delete a device associated to a line
-        Given I have the following devices:
-            |       ip |               mac |
-            | 10.0.0.1 | 00:00:00:00:00:12 |
-        Given there are users with infos:
-            | firstname | lastname | number | context | protocol |            device |
-            | Aayla     | Secura   |   1234 | default | sip      | 00:00:00:00:00:12 |
-        When I delete the device with mac "00:00:00:00:00:12" from confd
-        Then I get a response with status "400"
-        Then I get an error message matching "Resource Error - Device is associated with a Line"

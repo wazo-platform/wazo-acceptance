@@ -222,18 +222,6 @@ Feature: REST API Extensions
         Then I get a response with status "204"
         Then the extension "954147" no longer exists
 
-    Scenario: Delete an extension associated to a line
-        Given I have the following lines:
-            | id     | context | protocol | device_slot |
-            | 299568 | default | sip      | 1           |
-        Given I have the following extensions:
-            | id     | exten | context |
-            | 328785 | 1226  | default |
-        Given line "299568" is linked with extension "1226@default"
-        When I delete extension with id "328785"
-        Then I get a response with status "400"
-        Then I get an error message matching "Resource Error - Extension is associated with a Line"
-
     Scenario: Delete an extension associated to a queue
         Given there are queues with infos:
             | name     | number | context |
