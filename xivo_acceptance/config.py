@@ -171,7 +171,7 @@ class XivoAcceptanceConfig(object):
         self._setup_webi()
 
     def _setup_dao(self):
-        xivo_dao.init_db(xivo_dao.DBContext(self._config['db_uri']))
+        xivo_dao.init_db(self._config['db_uri'])
 
     def _setup_ssh_client(self):
         self.ssh_client_xivo = ssh.SSHClient(hostname=self._config['xivo_host'],

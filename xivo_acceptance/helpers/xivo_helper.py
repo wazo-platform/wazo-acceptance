@@ -16,7 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from xivo_dao.resources.infos import dao
+from xivo_dao.helpers.db_utils import session_scope
 
 
 def get_uuid():
-    return dao.get().uuid
+    with session_scope():
+        return dao.get().uuid
