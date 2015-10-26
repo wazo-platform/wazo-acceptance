@@ -6,7 +6,7 @@ SQLAlchemy
 fuzzywuzzy
 jinja2
 unittest2
-lettuce>=0.2.21
+lettuce<0.2.21
 psycopg2
 python-ldap
 requests>=2.0
