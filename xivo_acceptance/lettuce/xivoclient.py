@@ -51,7 +51,10 @@ class XivoClient(object):
 
     def start(self):
         self.launch()
-        common.wait_until(self.listen_socket, tries=3, message='Error while connecting to the xivoclient socket')
+        message = ('Error while connecting to the xivoclient socket: the socket {socket} does not exist. '
+                   'The cause may be: XiVO Client multiples instance is disabled, or '
+                   'the XiVO Client was not built for functional testing.').format(socket=self.socket_path)
+        common.wait_until(self.listen_socket, tries=3, message=message)
 
     def is_running(self):
         return self.process is not None and self.process.poll() is None
@@ -97,8 +100,6 @@ class XivoClient(object):
             self.socket.connect(self.socket_path)
         except socket.error as(error_number, message):
             if error_number == errno.ENOENT:
-                msg = 'XiVO Client multiples instance is disabled or not built for functional testing'
-                logger.exception('%s', msg)
                 return False
             else:
                 raise Exception(message)
