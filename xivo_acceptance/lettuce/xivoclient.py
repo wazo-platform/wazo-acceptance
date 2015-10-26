@@ -94,7 +94,9 @@ class XivoClient(object):
                 raise
 
     def listen_socket(self):
-        logger.debug('-------------------- LISTENNING SOCKET: %s ---------------------', self.socket_path)
+        logger.debug('-------------------- LISTENING SOCKET: %s ---------------------', self.socket_path)
+        if not self.is_running():
+            raise Exception('XiVO Client has crashed')
         self.socket = socket.socket(socket.AF_UNIX)
         try:
             self.socket.connect(self.socket_path)
@@ -106,6 +108,8 @@ class XivoClient(object):
         return True
 
     def exec_command(self, cmd, *kargs):
+        if not self.is_running():
+            raise Exception('XiVO Client is not running')
         formatted_command = self._format_command(cmd, kargs)
         return self._send_and_receive_command(formatted_command)
 
