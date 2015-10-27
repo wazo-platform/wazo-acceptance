@@ -18,8 +18,13 @@
 from hamcrest import assert_that, is_not, none
 
 
-from xivo_acceptance.helpers import dialpattern_helper, user_helper, \
-    group_helper, incall_helper, meetme_helper, queue_helper, line_helper
+from xivo_acceptance.helpers import dialpattern_helper
+from xivo_acceptance.helpers import user_helper
+from xivo_acceptance.helpers import group_helper
+from xivo_acceptance.helpers import incall_helper
+from xivo_acceptance.helpers import meetme_helper
+from xivo_acceptance.helpers import queue_helper
+from xivo_acceptance.helpers import line_write_helper
 from xivo_acceptance.action.confd import extension_action_confd as extension_action
 from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 
@@ -86,8 +91,8 @@ def delete_extension(extension_id):
 def _delete_extension_associations(extension_id):
     line_id = find_line_id_for_extension(extension_id)
     if line_id:
-        line_helper.dissociate_device(line_id)
-        line_helper.dissociate_extensions(line_id)
+        line_write_helper.dissociate_device(line_id)
+        line_write_helper.dissociate_extensions(line_id)
 
 
 def _delete_extension_type(exten, extension_type, typeval):

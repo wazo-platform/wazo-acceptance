@@ -31,7 +31,7 @@ from lettuce.registry import world
 from xivo_acceptance.helpers import agent_helper
 from xivo_acceptance.helpers import bus_helper
 from xivo_acceptance.helpers import user_helper
-from xivo_acceptance.helpers import line_helper
+from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import xivo_helper
 from xivo_bus import Marshaler
 from xivo_bus.resources.cti.event import UserStatusUpdateEvent
@@ -110,8 +110,8 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
             raw_expected_event['data']['user_id'] = user['id']
 
         if expected_event.get('endpoint_id', 'no') == 'yes':
-            line = line_helper.get_with_exten_context(expected_event['number'],
-                                                      expected_event['context'])
+            line = line_read_helper.get_with_exten_context(expected_event['number'],
+                                                           expected_event['context'])
             raw_expected_event['data']['endpoint_id'] = line['id']
             raw_expected_event['data']['status'] = int(expected_event['status'])
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,10 @@
 from lettuce import step
 from hamcrest import assert_that, is_not, none, has_entry
 
-from xivo_acceptance.helpers import line_helper, line_sip_helper, user_helper, user_import_helper
+from xivo_acceptance.helpers import line_read_helper
+from xivo_acceptance.helpers import line_sip_helper
+from xivo_acceptance.helpers import user_helper
+from xivo_acceptance.helpers import user_import_helper
 from xivo_acceptance.lettuce import func
 
 
@@ -52,7 +55,7 @@ def then_user_with_name_exists(step, name):
 @step(u'Then line with number "([^"]*)" exists$')
 def then_line_with_number_exists(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    line = line_helper.find_with_exten_context(number, context)
+    line = line_read_helper.find_with_exten_context(number, context)
     assert_that(line, is_not(none()),
                 "line with extension %s@%s not found" % (extension, context))
 
@@ -60,6 +63,6 @@ def then_line_with_number_exists(step, extension):
 @step(u'Then line with number "([^"]*)" exists with password "([^"]*)"$')
 def then_line_with_number_exists_with_password(step, extension, password):
     number, context = func.extract_number_and_context_from_extension(extension)
-    line = line_helper.get_with_exten_context(number, context)
+    line = line_read_helper.get_with_exten_context(number, context)
     sip_line = line_sip_helper.get_by_id(line['id'])
     assert_that(sip_line, has_entry('secret', password))

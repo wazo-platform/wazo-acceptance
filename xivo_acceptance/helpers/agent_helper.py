@@ -20,7 +20,9 @@ import time
 from lettuce import world
 from xivo_ws import Agent
 
-from xivo_acceptance.helpers import line_helper, user_helper, extension_helper
+from xivo_acceptance.helpers import extension_helper
+from xivo_acceptance.helpers import line_read_helper
+from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.lettuce import func
 from xivo_agentd_client.error import AgentdClientError
 
@@ -143,6 +145,6 @@ def _get_extension_from_agent(agent_number):
         raise Exception('agent %s has no users' % agent_number)
     user_id = agent.users[0]
     line_id = user_helper.get_line_id_for_user(user_id)
-    extension_id = line_helper.get_extension_id_for_line(line_id)
+    extension_id = line_read_helper.get_extension_id_for_line(line_id)
     extension = extension_helper.get_by_id(extension_id)
     return extension['exten'], extension['context']

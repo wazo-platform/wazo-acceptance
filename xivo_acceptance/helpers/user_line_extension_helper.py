@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,7 +17,10 @@
 
 from lettuce import world
 
-from xivo_acceptance.helpers import user_helper, voicemail_helper, line_helper, extension_helper
+from xivo_acceptance.helpers import user_helper
+from xivo_acceptance.helpers import voicemail_helper
+from xivo_acceptance.helpers import line_write_helper
+from xivo_acceptance.helpers import extension_helper
 from xivo_acceptance.lettuce.exception import NoSuchProfileException
 
 
@@ -47,7 +50,7 @@ def delete_extension(exten, context):
 
 
 def delete_lines(exten):
-    line_helper.delete_similar_lines(exten)
+    line_write_helper.delete_similar_lines(exten)
 
 
 def delete_lines_for_user(user_id):
@@ -55,7 +58,7 @@ def delete_lines_for_user(user_id):
     main = [ul for ul in user_lines if ul['main_user']]
     secondary = [ul for ul in user_lines if not ul['main_user']]
     for user_line in (secondary + main):
-        line_helper.delete_line(user_line['line_id'])
+        line_write_helper.delete_line(user_line['line_id'])
 
 
 def delete_user(user_id):

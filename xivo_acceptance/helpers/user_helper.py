@@ -18,8 +18,15 @@
 from lettuce import world
 from hamcrest import assert_that, is_not, none
 
-from xivo_acceptance.helpers import group_helper, provd_helper, line_helper, voicemail_helper, func_key_helper, \
-    entity_helper, sip_config, sip_phone
+from xivo_acceptance.helpers import group_helper
+from xivo_acceptance.helpers import provd_helper
+from xivo_acceptance.helpers import line_write_helper
+from xivo_acceptance.helpers import line_sip_helper
+from xivo_acceptance.helpers import voicemail_helper
+from xivo_acceptance.helpers import func_key_helper
+from xivo_acceptance.helpers import entity_helper
+from xivo_acceptance.helpers import sip_config
+from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.action.confd import user_action_confd as user_action
 from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
@@ -145,8 +152,8 @@ def _delete_line_associations(user_id):
     main = [ul for ul in user_lines if ul['main_user']]
     secondary = [ul for ul in user_lines if not ul['main_user']]
     for ul in (secondary + main):
-        line_helper.dissociate_device(ul['line_id'])
-        line_helper.dissociate_users(ul['line_id'])
+        line_write_helper.dissociate_device(ul['line_id'])
+        line_write_helper.dissociate_users(ul['line_id'])
 
 
 def _delete_voicemail_associations(user_id):

@@ -21,7 +21,7 @@ from requests.exceptions import HTTPError
 
 from xivo_ctid_client import Client
 
-from xivo_acceptance.helpers import line_helper
+from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import xivo_helper
 
@@ -33,7 +33,7 @@ def _find_user_id(info):
 def _find_line_id(info):
     exten = info['number']
     context = info['context']
-    return int(line_helper.find_line_id_with_exten_context(exten, context))
+    return int(line_read_helper.find_line_id_with_exten_context(exten, context))
 
 
 @step(u'Then I should have the following user status when I query the cti:')
