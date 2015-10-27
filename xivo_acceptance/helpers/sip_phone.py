@@ -1,3 +1,20 @@
+# -*- coding: utf-8 -*-
+# Copyright (C) 2015 Avencall
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+import datetime
 import logging
 import sys
 import time
@@ -16,11 +33,40 @@ class CallResult(object):
     not_found = 'not_found'
 
 
+class LinphoneLogWrapper(object):
+
+    def __init__(self, file_, prefix):
+        self._file = file_
+        self._prefix = prefix
+
+    def write(self, data):
+        data = self._prefix_lines(data)
+        data = self._add_last_newline(data)
+        return self._file.write(data)
+
+    def __getattr__(self, attr):
+        return getattr(self._file, attr)
+
+    def _prefix_lines(self, data):
+        lines = data.split('\n')
+        prefixed_lines = [self._prefix_line(line) for line in lines]
+        return '\n'.join(prefixed_lines)
+
+    def _prefix_line(self, line):
+        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+        return '{date} {prefix} {line}'.format(date=now, prefix=self._prefix, line=line)
+
+    def _add_last_newline(self, data):
+        if not data.endswith('\n'):
+            return data + '\n'
+        return data
+
+
 class SipPhone(object):
 
     def __init__(self, config):
         if world.config['debug']['linphone']:
-            logfile = sys.stdout
+            logfile = LinphoneLogWrapper(sys.stdout, prefix='[sip:{}]'.format(config.sip_name))
         else:
             logfile = None
         self._session = Session(config.sip_name,
