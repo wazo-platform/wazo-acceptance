@@ -245,14 +245,14 @@ def _register_and_track_phone(scenario, user_data):
 
     number = user_data['line_number']
     context = user_data.get('line_context', 'default')
-    line_configs = world.ws.lines.search_by_number_context(number, context)
-    if not line_configs:
+    line = line_sip_helper.find_with_exten_context(number, context)
+    if not line:
         return
 
     name = ('%s %s' % (user_data.get('firstname', ''),
                        user_data.get('lastname', ''))).strip()
 
-    phone_config = sip_config.create_config(world.config, scenario.phone_register, line_configs[0])
+    phone_config = sip_config.create_config(world.config, scenario.phone_register, line)
     phone = sip_phone.register_line(phone_config)
     if phone:
         scenario.phone_register.add_registered_phone(phone, name)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 
 from hamcrest import assert_that, is_not, none
 
+from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.action.confd import line_sip_action_confd as line_sip_action
 
 
@@ -47,3 +48,10 @@ def delete_line(line_id):
 def create_line(parameters):
     response = line_sip_action.create_line_sip(parameters)
     return response.resource()
+
+
+def find_with_exten_context(exten, context):
+    line_id = line_read_helper.find_line_id_with_exten_context(exten, context)
+    if line_id:
+        return get_by_id(line_id)
+    return None
