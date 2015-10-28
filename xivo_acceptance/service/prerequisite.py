@@ -25,7 +25,7 @@ from xivo_acceptance.lettuce import common, assets
 from xivo_acceptance.lettuce.assets import copy_asset_to_server
 from xivo_acceptance.lettuce.terrain import initialize, deinitialize, _check_webi_login_root
 from xivo_dao.helpers import db_manager
-from xivo_dao.helpers.db_manager import daosession
+from xivo_dao.helpers.db_utils import session_scope
 
 
 logger = logging.getLogger(__name__)
@@ -107,7 +107,7 @@ def _allow_remote_access_to_pgsql():
 
     command = ['service', 'postgresql', 'restart']
     world.ssh_client_xivo.check_call(command)
-    db_manager._init()
+    db_manager.init_db(world.config['db_uri'])
 
 
 def _allow_remote_access_to_rabbitmq():
@@ -131,12 +131,10 @@ def _allow_agid_listen_on_all_interfaces():
     _add_line_to_remote_file('listen_address: 0.0.0.0', '/etc/xivo-agid/conf.d/acceptance.yml')
 
 
-@daosession
-def _allow_provd_listen_on_all_interfaces(session):
-    query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
-    session.begin()
-    session.execute(query)
-    session.commit()
+def _allow_provd_listen_on_all_interfaces():
+    with session_scope() as session:
+        query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
+        session.execute(query)
     common.open_url('commonconf')
 
 

@@ -18,10 +18,12 @@
 from xivo_acceptance.lettuce import postgres
 from xivo_dao.resources.call_log import dao
 from xivo_dao.resources.call_log.model import CallLog
+from xivo_dao.helpers.db_utils import session_scope
 
 
 def delete_all():
-    dao.delete_all()
+    with session_scope():
+        dao.delete_all()
 
 
 def delete_entries_between(start, end):
@@ -78,4 +80,5 @@ def _query_from_entry(entry):
 
 def create_call_logs(entries):
     call_logs = [CallLog(**entry) for entry in entries]
-    dao.create_from_list(call_logs)
+    with session_scope():
+        dao.create_from_list(call_logs)

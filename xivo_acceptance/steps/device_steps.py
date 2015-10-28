@@ -24,6 +24,7 @@ from xivo_acceptance.action.confd import device_action_confd
 from xivo_acceptance.action.webi import device as device_action_webi
 from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
 from xivo_dao.resources.line import dao as line_dao
+from xivo_dao.helpers.db_utils import session_scope
 from xivo_acceptance.lettuce import form, common, logs, sysutils
 
 
@@ -221,8 +222,9 @@ def when_i_delete_device(step, mac):
 
 @step(u'When I provision my device with my line_id "([^"]*)" and ip "([^"]*)"')
 def when_i_provision_my_device_with_my_line_id_group1(step, line_id, device_ip):
-    line = line_dao.get(line_id)
-    device_helper.provision_device_using_webi(line.provisioning_extension, device_ip)
+    with session_scope():
+        line = line_dao.get(line_id)
+        device_helper.provision_device_using_webi(line.provisioning_extension, device_ip)
 
 
 @step(u'When I provision device having ip "([^"]*)" with line having username "([^"]*)"')

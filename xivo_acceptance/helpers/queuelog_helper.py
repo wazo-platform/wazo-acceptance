@@ -17,6 +17,7 @@
 
 from xivo_acceptance.lettuce import postgres
 from xivo_dao import queue_log_dao
+from xivo_dao.helpers.db_utils import session_scope
 
 
 def delete_event_by_queue(event, queuename):
@@ -31,11 +32,13 @@ def delete_event_by_agent_number(event, agent_number):
 
 
 def delete_event_by_queue_between(event, queuename, start, end):
-    queue_log_dao.delete_event_by_queue_between(event, queuename, start, end)
+    with session_scope():
+        queue_log_dao.delete_event_by_queue_between(event, queuename, start, end)
 
 
 def delete_event_between(start, end):
-    queue_log_dao.delete_event_between(start, end)
+    with session_scope():
+        queue_log_dao.delete_event_between(start, end)
 
 
 def insert_corrupt_data():
@@ -60,10 +63,11 @@ def get_event_count_agent(event, agent_number):
 
 
 def get_last_callid(event, agent_number):
-    callid = queue_log_dao.get_last_callid_with_event_for_agent(
-        event,
-        _build_agent_db_tag_from_number(agent_number)
-    )
+    with session_scope():
+        callid = queue_log_dao.get_last_callid_with_event_for_agent(
+            event,
+            _build_agent_db_tag_from_number(agent_number)
+        )
     return callid
 
 
@@ -72,16 +76,17 @@ def _build_agent_db_tag_from_number(agent_number):
 
 
 def insert_entries(entries):
-    for entry in entries:
-        queue_log_dao.insert_entry(
-            entry['time'],
-            entry['callid'],
-            entry['queuename'],
-            entry['agent'],
-            entry['event'],
-            entry['data1'],
-            entry['data2'],
-            entry['data3'],
-            entry['data4'],
-            entry['data5']
-        )
+    with session_scope():
+        for entry in entries:
+            queue_log_dao.insert_entry(
+                entry['time'],
+                entry['callid'],
+                entry['queuename'],
+                entry['agent'],
+                entry['event'],
+                entry['data1'],
+                entry['data2'],
+                entry['data3'],
+                entry['data4'],
+                entry['data5']
+            )

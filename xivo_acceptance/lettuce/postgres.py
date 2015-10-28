@@ -16,17 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from sqlalchemy.sql import text
-from xivo_dao.helpers.db_manager import daosession
+from xivo_dao.helpers.db_utils import session_scope
 
 
-@daosession
-def exec_sql_request(session, query, **args):
-    engine = session.bind
-    return engine.execute(text(query), args)
+def exec_sql_request(query, **args):
+    with session_scope() as session:
+        return session.execute(text(query), args)
 
 
-@daosession
-def exec_count_request(session, table, **cond_dict):
+def exec_count_request(table, **cond_dict):
     pg_command = 'SELECT COUNT(*) FROM "%s"' % table
     if len(cond_dict) > 0:
         pg_command += " WHERE "
@@ -35,6 +33,7 @@ def exec_count_request(session, table, **cond_dict):
             cond.append('%s = %s' % (key, value))
         pg_command = '%s%s' % (pg_command, ' AND '.join(cond))
 
-    result = session.bind.execute(pg_command)
-    row = result.fetchone()
-    return int(row[0])
+    with session_scope() as session:
+        result = session.execute(pg_command)
+        row = result.fetchone()
+        return int(row[0])
