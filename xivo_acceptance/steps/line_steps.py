@@ -78,7 +78,7 @@ def given_the_line_group1_has_the_codec_group2(step, linenumber, codec):
 def given_the_line_group1_is_disabled(step, extension, context):
     common.open_url('line')
     _search_for_line(extension, context)
-    _click_checkbox_for_line(extension)
+    _click_checkbox_for_all_lines()
     _disable_selected_lines()
     time.sleep(world.timeout)  # wait for dialplan to finish reloading
 
@@ -88,10 +88,9 @@ def _search_for_line(extension, context):
     form.select.set_select_field_with_id('it-toolbar-context', context)
 
 
-def _click_checkbox_for_line(extension):
-    line_element = common.get_line(extension)
-    checkbox = line_element.find_element_by_css_selector(".it-checkbox")
-    checkbox.click()
+def _click_checkbox_for_all_lines():
+    for checkbox in world.browser.find_elements_by_css_selector(".it-checkbox"):
+        checkbox.click()
 
 
 def _disable_selected_lines():
