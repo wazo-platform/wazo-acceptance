@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,14 +18,17 @@
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import pickup as pickup_action_webi
-from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce import common, form
 
 _PICKUP_PREFIX = '*8'
 
 
 @step(u'Given there is no pickup "([^"]*)"$')
 def given_there_is_no_pickup(step, search):
+    common.open_url('pickup')
+    _pickup_search(search)
     common.remove_element_if_exist('pickup', search)
+    _pickup_search('')
 
 
 @step(u'Given there are pickups:$')
@@ -37,3 +40,8 @@ def given_there_are_pickup(step):
 @step(u'Then the directed pickup is successful')
 def the_directed_pickup_is_successful(step):
     assert world.pickup_success
+
+
+def _pickup_search(term):
+    form.input.set_text_field_with_id('it-toolbar-search', term)
+    form.submit.submit_form('it-toolbar-subsearch')
