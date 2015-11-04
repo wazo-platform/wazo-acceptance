@@ -105,7 +105,7 @@ def _setup_ssh_client(xivo_acceptance_config):
 
 
 def _setup_agentd_client():
-    world.agentd_client = AgentdClient(world.config['xivo_host'])
+    world.agentd_client = AgentdClient(world.config['xivo_host'], verify_certificate=False)
 
 
 @debug.logcall
