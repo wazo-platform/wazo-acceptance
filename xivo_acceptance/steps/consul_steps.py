@@ -23,7 +23,9 @@ from hamcrest import assert_that, equal_to
 
 def _client():
     return Consul(host=world.config['xivo_host'],
-                  token=world.config['consul_token'])
+                  token=world.config['consul_token'],
+                  scheme='https',
+                  verify=False)
 
 
 @step(u'When I create a consul key "([^"]*)" with value "([^"]*)"')
