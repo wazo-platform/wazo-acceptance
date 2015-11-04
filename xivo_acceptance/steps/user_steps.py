@@ -81,7 +81,7 @@ def _add_user(user_data, step=None):
     user_ws_data['lastname'] = user_data['lastname']
 
     if user_data.get('entity_name'):
-        user_ws_data['entity_name'] = user_data['entity_name']
+        user_ws_data['entity_name'] = user_data.get('entity_name', 'xivo_entity')
 
     if user_data.get('number') and user_data.get('context'):
         user_ws_data['line_number'] = user_data['number']
