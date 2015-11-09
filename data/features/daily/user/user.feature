@@ -40,7 +40,7 @@ Feature: User
         | Bill      | Bush     | SCCP     |  1632  | Default | xivo_entity        |
         Then I see a user with infos:
         | fullname  | number | provisioning_code | protocol |
-        | Bill Bush |   1632 |                 0 | sccp     |
+        | Bill Bush |   1632 |                 - | sccp     |
         When I remove user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
