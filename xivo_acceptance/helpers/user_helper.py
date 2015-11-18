@@ -323,3 +323,24 @@ def count_schedulepath(user_id):
 
 def _count_table_with_cond(table, cond_dict):
     return postgres.exec_count_request(table, **cond_dict)
+
+
+def get_unconditional_forward(fullname):
+    firstname, lastname = fullname.split(' ', 1)
+    query = """
+    SELECT
+        enableunc,
+        destunc
+    FROM
+        userfeatures
+    WHERE
+        firstname = :firstname
+        AND lastname = :lastname
+    """
+
+    rows = postgres.exec_sql_request(query, firstname=firstname, lastname=lastname).fetchall()
+    if len(rows) != 1:
+        raise Exception('expected 1 user "{} {}": got {}'.format(firstname, lastname, len(rows)))
+
+    enabled, dest = rows[0]
+    return bool(enabled), dest
