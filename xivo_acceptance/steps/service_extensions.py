@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2014 Avencall
+# Copyright (C) 2014-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,20 +20,44 @@ from lettuce import step
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import form
 from xivo_acceptance.lettuce.form.checkbox import Checkbox
+from xivo_acceptance.lettuce.form.input import set_text_field_with_id
 
-_exten_url_map = {
-    'Enable forwarding on no-answer': 'forward_extension',
-    'Enable forwarding on busy': 'forward_extension',
+_EXTENSIONS = {
+    'Enable forwarding on no-answer': {
+        'tab': ['General', 'Forwards'],
+        'checkbox_id': 'it-extenfeatures-enable-fwdrna',
+        'text_id': 'it-extenfeatures-fwdrna',
+    },
+   'Enable forwarding on busy': {
+        'tab': ['General', 'Forwards'],
+        'checkbox_id': 'it-extenfeatures-enable-fwdbusy',
+        'text_id': 'it-extenfeatures-fwdbusy',
+    },
+   'Enable unconditional forwarding': {
+        'tab': ['General', 'Forwards'],
+        'checkbox_id': 'it-extenfeatures-enable-fwdunc',
+        'text_id': 'it-extenfeatures-fwdunc',
+    },
 }
 
 
-@step(u'Given the "([^"]*)" extension is "([^"]*)"')
-def given_the_extension_is_enabled_disabled(step, exten_name, enabled_disabled):
-    enabled = enabled_disabled == 'enabled'
-    _set_exten(exten_name, enabled)
-
-
-def _set_exten(exten_name, enabled):
-    common.open_url(_exten_url_map[exten_name])
-    Checkbox.from_label(exten_name).set_checked(enabled)
+@step(u'Given the "([^"]*)" extension is disabled')
+def given_the_extension_is_disabled(step, exten_name):
+    extension = _EXTENSIONS[exten_name]
+    _open_url_and_go_to_tab(extension)
+    Checkbox.from_id(extension['checkbox_id']).uncheck()
     form.submit.submit_form()
+
+
+@step(u'Given the "([^"]*)" extension is set to "([^"]*)"')
+def given_the_extension_is_set_to(step, exten_name, exten_value):
+    extension = _EXTENSIONS[exten_name]
+    _open_url_and_go_to_tab(extension)
+    Checkbox.from_id(extension['checkbox_id']).check()
+    set_text_field_with_id(extension['text_id'], exten_value)
+    form.submit.submit_form()
+
+
+def _open_url_and_go_to_tab(extension):
+    common.open_url('extensions')
+    common.go_to_tab(*extension['tab'])

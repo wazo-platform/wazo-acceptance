@@ -22,6 +22,7 @@ from hamcrest import has_entry
 from hamcrest import has_key
 from hamcrest import has_item
 from hamcrest import instance_of
+from hamcrest import is_
 from hamcrest import is_not
 from hamcrest import none
 from lettuce import step
@@ -621,3 +622,16 @@ def then_the_user_with_id_group1_no_longer_exists(step, userid):
 @step(u'Then I get a response with a user id')
 def then_i_get_a_response_with_a_user_id(step):
     assert_that(world.response.data, has_entry('user_id', instance_of(int)))
+
+
+@step(u'Then "([^"]*)" has an unconditional forward set to "([^"]*)"')
+def then_user_has_an_unconditional_forward_set_to_group2(step, fullname, expected_destination):
+    enabled, destination = user_helper.get_unconditional_forward(fullname)
+    assert_that(enabled)
+    assert_that(destination, equal_to(expected_destination))
+
+
+@step(u'Then "([^"]*)" has no unconditional forward')
+def then_user_has_no_unconditional_forward(step, fullname):
+    enabled, _ = user_helper.get_unconditional_forward(fullname)
+    assert_that(enabled, is_(False))

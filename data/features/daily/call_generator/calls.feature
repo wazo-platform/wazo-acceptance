@@ -40,7 +40,7 @@ Feature: Callgen
         Then "Bountrabi Sylla" last dialed extension was not found
 
     Scenario: No answer destination with disabled forward exten on no answer
-        Given the "Enable forwarding on no-answer" extension is "disabled"
+        Given the "Enable forwarding on no-answer" extension is disabled
         Given there are users with infos:
         | firstname | lastname | number | context | protocol |
         | James     | Bond     |   1101 | default | sip      |
@@ -54,7 +54,7 @@ Feature: Callgen
         Then "Pussy Galore" is ringing
 
     Scenario: Busy destination with disabled forward exten on busy
-        Given the "Enable forwarding on busy" extension is "disabled"
+        Given the "Enable forwarding on busy" extension is disabled
         Given there are users with infos:
         | firstname | lastname | number | context | protocol |
         | James     | Bond     |   1101 | default | sip      |

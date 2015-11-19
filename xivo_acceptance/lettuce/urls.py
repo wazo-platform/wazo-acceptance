@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -96,6 +96,6 @@ URLS = {
     'cti_display_filter': '/cti/index.php/displays',
     'admin_user': '/xivo/configuration/index.php/manage/user',
     'schedule': '/service/ipbx/index.php/call_management/schedule',
-    'forward_extension': '/service/ipbx/index.php/pbx_services/extenfeatures/#forward',
+    'extensions': '/service/ipbx/index.php/pbx_services/extenfeatures',
     'entity': '/xivo/configuration/index.php/manage/entity',
 }
