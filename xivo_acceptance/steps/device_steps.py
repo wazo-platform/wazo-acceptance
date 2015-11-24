@@ -304,10 +304,11 @@ def then_the_device_is_no_longer_exists_in_provd(step, mac):
 @step(u'Then I see in the log file that the device was deleted')
 def then_i_see_in_the_log_file_device_deleted(step):
     device_id = world.deleted_device['id']
+    config_id = world.deleted_device['config']
     expected_log_lines = ['Deleting device %s' % device_id,
                           '/provd/dev_mgr/devices/%s' % device_id,
-                          'Deleting config %s' % device_id,
-                          '/provd/cfg_mgr/configs/%s' % device_id]
+                          'Deleting config %s' % config_id,
+                          '/provd/cfg_mgr/configs/%s' % config_id]
     actual_log_lines = logs.find_line_in_xivo_provd_log()
     _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
 
