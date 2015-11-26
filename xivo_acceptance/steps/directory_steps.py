@@ -20,7 +20,7 @@ from lettuce import step
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.helpers import cti_helper
 from xivo_acceptance.helpers import directory_helper
-from xivo_acceptance.lettuce import assets, common
+from xivo_acceptance.lettuce import assets, common, sysutils
 from xivo_acceptance.lettuce.form import submit
 
 
@@ -108,6 +108,7 @@ def when_i_include_phonebook_in_the_default_directory(step, phonebook):
 def when_i_set_the_following_directories_for_directory_reverse_lookup(step):
     directories = [entry['directory'] for entry in step.hashes]
     directory_action_webi.set_reverse_directories(directories)
+    sysutils.restart_service('xivo-dird')
 
 
 @step(u'Then the directory configuration "([^"]*)" has the URI "([^"]*)"')
