@@ -23,7 +23,6 @@ from xivo_acceptance.helpers import provd_helper
 from xivo_acceptance.helpers import line_write_helper
 from xivo_acceptance.helpers import line_sip_helper
 from xivo_acceptance.helpers import voicemail_helper
-from xivo_acceptance.helpers import func_key_helper
 from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
@@ -140,11 +139,6 @@ def delete_user(user_id):
     if find_by_user_id(user_id):
         _delete_voicemail_associations(user_id)
         _delete_line_associations(user_id)
-        _delete_func_key_associations(user_id)
-
-        template_id = func_key_helper.find_template_for_user(user_id)
-        _delete_user(user_id)
-        func_key_helper.delete_template_and_func_keys(template_id)
 
 
 def _delete_line_associations(user_id):
@@ -160,10 +154,6 @@ def _delete_voicemail_associations(user_id):
     voicemail = voicemail_helper.find_voicemail_by_user_id(user_id)
     if voicemail:
         voicemail_helper.delete_voicemail(voicemail['id'])
-
-
-def _delete_func_key_associations(user_id):
-    func_key_helper.delete_func_keys_with_user_destination(user_id)
 
 
 def _delete_user(user_id):
