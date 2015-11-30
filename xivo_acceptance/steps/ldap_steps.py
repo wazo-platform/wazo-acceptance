@@ -88,7 +88,6 @@ def given_there_s_an_ldap_server_configured_for_reverse(step):
     _add_directory_to_direct_directories()
     directory_action_webi.set_reverse_directories(['ldapdirectory'])
     cti_helper.restart_server()
-    sysutils.restart_service('xivo-dird')
 
 
 @step(u'Given the LDAP server is configured for SSL connections')

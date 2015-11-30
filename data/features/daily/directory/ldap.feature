@@ -19,6 +19,7 @@ Feature: LDAP
         Given there's an LDAP server configured for reverse lookup with entries:
          | first name | last name |      phone |
          | Peter      | Pan       | 5551236666 |
+        Given I restart "xivo-dird"
         Given there is an incall "1767" in context "from-extern" to the "User" "Sam Well"
         When I start the XiVO Client
         When I enable screen pop-up
