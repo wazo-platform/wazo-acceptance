@@ -47,7 +47,7 @@ def run():
         _allow_remote_access_to_pgsql()
 
         logger.debug('Configuring RabbitMQ on XiVO')
-        _allow_remote_access_to_rabbitmq()
+        copy_asset_to_server('rabbitmq.config', '/etc/rabbitmq/rabbitmq.config')
 
         logger.debug('Configuring xivo-agid on XiVO')
         _allow_agid_listen_on_all_interfaces()
@@ -59,10 +59,10 @@ def run():
         _install_packages(['tcpflow'])
 
         logger.debug('Installing chan_test (module for asterisk)')
-        _install_chan_test()
+        copy_asset_to_server('chan_test.so', '/usr/lib/asterisk/modules/chan_test.so')
 
         logger.debug('Adding xivo-acceptance key')
-        _copy_asset('xivo-acceptance-key.yml', '/var/lib/xivo-auth-keys')
+        copy_asset_to_server('xivo-acceptance-key.yml', '/var/lib/xivo-auth-keys')
 
         logger.debug('Adding context')
         context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
@@ -113,13 +113,6 @@ def _allow_remote_access_to_pgsql():
     db_manager.init_db(world.config['db_uri'])
 
 
-def _allow_remote_access_to_rabbitmq():
-    asset_full_path = assets.full_path('rabbitmq.config')
-    remote_path = '/etc/rabbitmq/rabbitmq.config'
-    command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
-    subprocess.call(command)
-
-
 def _add_line_to_remote_file(line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
     world.ssh_client_xivo.check_call(command)
@@ -147,13 +140,6 @@ def _install_packages(packages):
     world.ssh_client_xivo.check_call(command)
 
 
-def _install_chan_test():
-    asset_full_path = assets.full_path('chan_test.so')
-    remote_path = '/usr/lib/asterisk/modules/chan_test.so'
-    command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
-    subprocess.call(command)
-
-
 def _configure_consul():
     copy_asset_to_server('public_consul.json', '/etc/consul/xivo/public_consul.json')
     command = 'service consul restart'.split()
@@ -169,13 +155,6 @@ def _configure_xivo_ctid():
 
 
 def _copy_daemon_config_file(daemon_name):
-    asset_full_path = assets.full_path('{}-acceptance.yml'.format(daemon_name))
+    asset_filename = '{}-acceptance.yml'.format(daemon_name)
     remote_path = '/etc/{}/conf.d'.format(daemon_name)
-    command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
-    subprocess.call(command)
-
-
-def _copy_asset(asset_filename, remote_path):
-    asset_full_path = assets.full_path(asset_filename)
-    command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
-    subprocess.call(command)
+    copy_asset_to_server(asset_filename, remote_path)
