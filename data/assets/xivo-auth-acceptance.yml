@@ -1,0 +1,3 @@
+services:
+  xivo-acceptance:
+    key_file: /var/lib/xivo-auth-keys/xivo-acceptance-key.yml
