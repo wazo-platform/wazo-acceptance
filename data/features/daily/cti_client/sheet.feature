@@ -468,10 +468,10 @@ Feature: Sheet
           | name             | type     | URI                       |
           | phonebook-dbvars | CSV file | /tmp/phonebook-dbvars.csv |
         Given the directory definition "dbvars" does not exist
-        When I add the following CTI directory definition:
+        Given I add the following CTI directory definition:
           | name   | URI                              | delimiter | direct match   | reverse match |
           | dbvars | file:///tmp/phonebook-dbvars.csv | ;         | nom,prenom,tel | tel           |
-        When I map the following fields and save the directory definition:
+        Given I map the following fields and save the directory definition:
           | field name | value     |
           | firstname  | {prenom}  |
           | lastname   | {nom}     |
@@ -482,7 +482,7 @@ Feature: Sheet
         When I set the following directories for directory reverse lookup:
         | directory |
         | dbvars    |
-        When I restart "xivo-ctid"
+        Given I restart "xivo-ctid"
         Given I have a sheet model named "testsheet" with the variables:
         | variable     |
         | db-firstname |

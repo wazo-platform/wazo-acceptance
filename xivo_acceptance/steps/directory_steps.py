@@ -82,14 +82,14 @@ def when_i_edit_and_save_the_directory(step, directory):
     submit.submit_form()
 
 
-@step(u'When I add the following CTI directory definition:')
-def when_i_add_the_following_cti_directory_definition(step):
+@step(u'Given I add the following CTI directory definition:')
+def given_i_add_the_following_cti_directory_definition(step):
     for directory in step.hashes:
         directory_action_webi.add_directory_definition(directory)
 
 
-@step(u'When I map the following fields and save the directory definition:')
-def when_i_map_the_following_fields_and_save_the_directory_definition(step):
+@step(u'Given I map the following fields and save the directory definition:')
+def given_i_map_the_following_fields_and_save_the_directory_definition(step):
     for field in step.hashes:
         directory_action_webi.add_field(field['field name'], field['value'])
     submit.submit_form()
