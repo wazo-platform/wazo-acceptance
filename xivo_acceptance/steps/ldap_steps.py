@@ -58,25 +58,6 @@ def given_there_are_entries_in_the_ldap_server(step):
         ldap_action_webi.add_or_replace_ldap_entry(directory_entry)
 
 
-@step(u'Given the CTI directory definition is configured for LDAP searches using the ldap filter "([^"]*)"')
-def given_the_cti_directory_definition_is_configured_for_ldap_searches_using_the_ldap_filter(step, ldap_filter):
-    _configure_display_filter()
-    _configure_ldap_directory(ldap_filter)
-    _add_directory_to_direct_directories()
-    cti_helper.restart_server()
-    sysutils.restart_service('xivo-dird')
-
-
-@step(u'Given the CTI server searches both the internal directory and the LDAP filter "([^"]*)"')
-def given_the_cti_server_searches_both_the_internal_directory_and_the_ldap_filter_group1(step, ldap_filter):
-    _configure_display_filter()
-    _configure_ldap_directory(ldap_filter)
-    directory_helper.configure_internal_directory()
-    _add_directory_to_direct_directories(['ldapdirectory', 'internal'])
-    cti_helper.restart_server()
-    sysutils.restart_service('xivo-dird')
-
-
 @step(u"Given there's an LDAP server configured for reverse lookup with entries:")
 def given_there_s_an_ldap_server_configured_for_reverse(step):
     ldap_filter = 'openldap-dev'
