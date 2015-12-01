@@ -22,7 +22,6 @@ Feature: CTI Client Configuration
         | xlet                    | position |
         | Identity                | dock     |
         | History                 | dock     |
-        | Search                  | dock     |
         | Directory               | dock     |
         | Fax                     | dock     |
         | Features                | dock     |
