@@ -224,16 +224,6 @@ def _edit_user(firstname, lastname):
     common.open_url('user', 'edit', qry={'id': user_id})
 
 
-@step(u'When I ask for the list of users$')
-def when_i_ask_for_the_list_of_users(step):
-    world.response = user_action_confd.all_users()
-
-
-@step(u'When I ask for the list of users with view "([^"]*)"$')
-def when_i_ask_for_the_list_of_users_with_view_1(step, view):
-    world.response = user_action_confd.all_users_with_view(view)
-
-
 @step(u'When I ask for the user with id "([^"]*)"$')
 def when_i_ask_for_the_user_with_id_group1(step, userid):
     world.response = user_action_confd.get_user(userid)

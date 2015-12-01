@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2012-2014 Avencall
+# Copyright (C) 2012-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,19 +18,6 @@
 from lettuce.registry import world
 
 USERS_URL = 'users'
-
-
-def all_users():
-    return world.confd_utils_1_1.rest_get(USERS_URL)
-
-
-def all_users_with_view(view):
-    url = '{users}?view={view}'.format(users=USERS_URL, view=view)
-    return world.confd_utils_1_1.rest_get(url)
-
-
-def get_lines_associated_to_a_user(userid):
-    return world.confd_utils_1_1.rest_get('%s/%s/user_links' % (USERS_URL, userid))
 
 
 def get_user(userid):
