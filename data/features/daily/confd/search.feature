@@ -31,6 +31,16 @@ Feature: Filter resources
             | skip | -32   |
         Then I get a response 400 matching "Input Error - field 'skip': wrong type. Should be a positive number"
 
+        When I request a list for "<resource>" using parameters:
+            | name | value |
+            | offset | asdf  |
+        Then I get a response 400 matching "Input Error - field 'offset': wrong type. Should be a positive number"
+
+        When I request a list for "<resource>" using parameters:
+            | name | value |
+            | offset | -32   |
+        Then I get a response 400 matching "Input Error - field 'offset': wrong type. Should be a positive number"
+
     Examples:
         | resource   |
         | extensions |
@@ -129,7 +139,7 @@ Feature: Filter resources
         | devices    | {"mac": "aa:11:22:33:44:55", "ip": "10.0.0.1"}           | {"mac": "bb:aa:11:bb:22:cc", "ip": "10.1.0.1"}           |
         | users      | {"firstname": "Daphne", "lastname": "Richards"}          | {"firstname": "Tom", "lastname": "Hilgers"}              |
 
-    Scenario Outline: Skip items in a list
+    Scenario Outline: Skip items in a list (legacy)
         Given I have the following "<resource>":
             | item          |
             | <first item>  |
@@ -137,6 +147,30 @@ Feature: Filter resources
         When I request a list for "<resource>" using parameters:
             | name   | value    |
             | skip   | 1        |
+            | order  | <column> |
+            | search | <search> |
+        Then I get a list containing the following items:
+            | item          |
+            | <second item> |
+        Then I get a list that does not contain the following items:
+            | item         |
+            | <first item> |
+
+    Examples:
+        | resource   | column    | search | first item                                               | second item                                              |
+        | extensions | exten     | 499    | {"exten": "4998", "context": "default"}                  | {"exten": "4999", "context": "from-extern"}              |
+        | voicemails | number    | 999    | {"number": "9998", "context": "default", "name": "9998"} | {"number": "9999", "context": "default", "name": "9999"} |
+        | devices    | mac       | 00:    | {"mac": "00:00:00:00:00:00", "ip": "10.0.0.1"}           | {"mac": "00:aa:11:bb:22:cc", "ip": "10.1.0.1"}           |
+        | users      | firstname | aaaaa  | {"firstname": "aaaaabc", "lastname": "Depp"}             | {"firstname": "aaaaade", "lastname": "Meiers"}           |
+
+    Scenario Outline: Skip items in a list
+        Given I have the following "<resource>":
+            | item          |
+            | <first item>  |
+            | <second item> |
+        When I request a list for "<resource>" using parameters:
+            | name   | value    |
+            | offset | 1        |
             | order  | <column> |
             | search | <search> |
         Then I get a list containing the following items:
