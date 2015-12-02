@@ -64,3 +64,7 @@ Feature: Agent
         Then the agent "1003" is logged
         When I unlog agent "1003" from the phone
         Then the agent "1003" is not logged
+
+    Scenario: Mandatory token authentication for xivo-agentd
+        When I request the agent statuses with an invalid token
+        Then I get an "invalid token" response from xivo-agentd

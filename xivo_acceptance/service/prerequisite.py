@@ -16,14 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import logging
-import subprocess
 
 from lettuce import world
 
 from xivo_acceptance.helpers import context_helper
-from xivo_acceptance.lettuce import common, assets
+from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce import setup
 from xivo_acceptance.lettuce.assets import copy_asset_to_server
-from xivo_acceptance.lettuce.terrain import initialize, deinitialize, _check_webi_login_root
+from xivo_acceptance.lettuce.terrain import _check_webi_login_root
 from xivo_dao.helpers import db_manager
 from xivo_dao.helpers.db_utils import session_scope
 
@@ -33,9 +33,16 @@ logger = logging.getLogger(__name__)
 
 def run():
     logger.debug('Initializing ...')
-    initialize()
-    _check_webi_login_root()
+    setup.setup_config()
+    setup.setup_logging()
+    setup.setup_xivo_acceptance_config()
+    setup.setup_ssh_client()
+    setup.setup_ws()
+
+    setup.setup_browser()
     try:
+        _check_webi_login_root()
+
         logger.debug('Configuring WebService Access on XiVO')
         _create_webservices_access()
 
@@ -47,7 +54,7 @@ def run():
         _allow_remote_access_to_pgsql()
 
         logger.debug('Configuring RabbitMQ on XiVO')
-        _allow_remote_access_to_rabbitmq()
+        copy_asset_to_server('rabbitmq.config', '/etc/rabbitmq/rabbitmq.config')
 
         logger.debug('Configuring xivo-agid on XiVO')
         _allow_agid_listen_on_all_interfaces()
@@ -59,7 +66,10 @@ def run():
         _install_packages(['tcpflow'])
 
         logger.debug('Installing chan_test (module for asterisk)')
-        _install_chan_test()
+        copy_asset_to_server('chan_test.so', '/usr/lib/asterisk/modules/chan_test.so')
+
+        logger.debug('Adding xivo-acceptance key')
+        copy_asset_to_server('xivo-acceptance-key.yml', '/var/lib/xivo-auth-keys')
 
         logger.debug('Adding context')
         context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
@@ -70,16 +80,16 @@ def run():
         context_helper.update_contextnumbers_meetme('default', 4000, 4999)
         context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
+        logger.debug('Configuring xivo-auth')
+        _configure_xivo_auth()
+
         logger.debug('Configuring xivo-ctid')
         _configure_xivo_ctid()
-
-        logger.debug('Configuring xivo-agentd')
-        _configure_xivo_agentd()
 
         logger.debug('Restarting All XiVO Services')
         _xivo_service_restart_all()
     finally:
-        deinitialize()
+        setup.teardown_browser()
 
 
 def _create_webservices_access():
@@ -110,13 +120,6 @@ def _allow_remote_access_to_pgsql():
     db_manager.init_db(world.config['db_uri'])
 
 
-def _allow_remote_access_to_rabbitmq():
-    asset_full_path = assets.full_path('rabbitmq.config')
-    remote_path = '/etc/rabbitmq/rabbitmq.config'
-    command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
-    subprocess.call(command)
-
-
 def _add_line_to_remote_file(line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
     world.ssh_client_xivo.check_call(command)
@@ -144,29 +147,21 @@ def _install_packages(packages):
     world.ssh_client_xivo.check_call(command)
 
 
-def _install_chan_test():
-    asset_full_path = assets.full_path('chan_test.so')
-    remote_path = '/usr/lib/asterisk/modules/chan_test.so'
-    command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
-    subprocess.call(command)
-
-
 def _configure_consul():
     copy_asset_to_server('public_consul.json', '/etc/consul/xivo/public_consul.json')
     command = 'service consul restart'.split()
     world.ssh_client_xivo.check_call(command)
 
 
+def _configure_xivo_auth():
+    _copy_daemon_config_file('xivo-auth')
+
+
 def _configure_xivo_ctid():
     _copy_daemon_config_file('xivo-ctid')
 
 
-def _configure_xivo_agentd():
-    _copy_daemon_config_file('xivo-agentd')
-
-
 def _copy_daemon_config_file(daemon_name):
-    asset_full_path = assets.full_path('{}-acceptance.yml'.format(daemon_name))
+    asset_filename = '{}-acceptance.yml'.format(daemon_name)
     remote_path = '/etc/{}/conf.d'.format(daemon_name)
-    command = ['scp', asset_full_path, '%s:%s' % (world.config['xivo_host'], remote_path)]
-    subprocess.call(command)
+    copy_asset_to_server(asset_filename, remote_path)

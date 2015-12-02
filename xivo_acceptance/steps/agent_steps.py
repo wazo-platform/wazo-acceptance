@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,14 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to
+from hamcrest import assert_that, equal_to, instance_of
 from lettuce import step, world
 from selenium.webdriver.common.action_chains import ActionChains
 from xivo_ws.exception import WebServiceRequestError
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
-from xivo_acceptance.helpers import agent_helper
+from xivo_acceptance.helpers import agent_helper, auth_helper
 from xivo_acceptance.lettuce import common, form, func
+from xivo_agentd_client import Client as AgentdClient
+from xivo_agentd_client.error import AgentdClientError
 
 
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
@@ -164,6 +166,30 @@ def when_i_select_an_agent_group(step, agent_group_list):
     common.open_url('agent', 'list')
     list = agent_group_list.split(',')
     agent_action_webi.select_agent_group_list(list)
+
+
+@step(u'When I request the agent statuses with an invalid token')
+def when_i_request_the_agent_statuses_with_an_invalid_token(step):
+    token = auth_helper.new_invalid_token_id()
+    agentd_client = AgentdClient(world.config['xivo_host'],
+                                 token=token,
+                                 verify_certificate=False)
+    _agentd_request(agentd_client.agents.get_agent_statuses)
+
+
+def _agentd_request(fun, *args):
+    world.agentd_response = None
+    world.agentd_exception = None
+    try:
+        world.agentd_response = fun(*args)
+    except Exception as e:
+        world.agentd_exception = e
+
+
+@step(u'Then I get an "invalid token" response from xivo-agentd')
+def then_i_get_an_invalid_token_response_from_xivo_agentd(step):
+    assert_that(world.agentd_exception, instance_of(AgentdClientError))
+    assert_that(world.agentd_exception.error, equal_to('invalid token or unauthorized'))
 
 
 @step(u'Then agent "([^"]*)" is displayed in the list of "([^"]*)" agent group')
