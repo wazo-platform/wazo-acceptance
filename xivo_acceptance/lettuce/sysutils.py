@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -93,11 +93,11 @@ def is_process_running(pidfile):
     return path_exists("/proc/%s" % pid)
 
 
-def wait_service_successfully_stopped(pidfile, maxtries=15, wait_secs=10):
+def wait_service_successfully_stopped(pidfile, maxtries=16, wait_secs=10):
     return _wait_for_the_service_state(pidfile, False, maxtries, wait_secs)
 
 
-def wait_service_successfully_started(pidfile, maxtries=15, wait_secs=10):
+def wait_service_successfully_started(pidfile, maxtries=16, wait_secs=10):
     return _wait_for_the_service_state(pidfile, True, maxtries, wait_secs)
 
 
