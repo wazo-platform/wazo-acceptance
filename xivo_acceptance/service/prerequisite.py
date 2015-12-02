@@ -21,8 +21,9 @@ from lettuce import world
 
 from xivo_acceptance.helpers import context_helper
 from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce import setup
 from xivo_acceptance.lettuce.assets import copy_asset_to_server
-from xivo_acceptance.lettuce.terrain import initialize, deinitialize, _check_webi_login_root
+from xivo_acceptance.lettuce.terrain import _check_webi_login_root
 from xivo_dao.helpers import db_manager
 from xivo_dao.helpers.db_utils import session_scope
 
@@ -32,9 +33,16 @@ logger = logging.getLogger(__name__)
 
 def run():
     logger.debug('Initializing ...')
-    initialize()
-    _check_webi_login_root()
+    setup.setup_config()
+    setup.setup_logging()
+    setup.setup_xivo_acceptance_config()
+    setup.setup_ssh_client()
+    setup.setup_ws()
+
+    setup.setup_browser()
     try:
+        _check_webi_login_root()
+
         logger.debug('Configuring WebService Access on XiVO')
         _create_webservices_access()
 
@@ -81,7 +89,7 @@ def run():
         logger.debug('Restarting All XiVO Services')
         _xivo_service_restart_all()
     finally:
-        deinitialize()
+        setup.teardown_browser()
 
 
 def _create_webservices_access():
