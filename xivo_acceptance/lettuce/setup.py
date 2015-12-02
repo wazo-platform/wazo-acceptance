@@ -19,13 +19,28 @@ from lettuce import world
 
 from xivo_acceptance.config import load_config, XivoAcceptanceConfig
 from xivo_acceptance.lettuce import debug
+from xivo_agentd_client import Client as AgentdClient
+from xivo_auth_client import Client as AuthClient
 from xivobrowser import XiVOBrowser
+
+
+def setup_agentd_client():
+    world.agentd_client = AgentdClient(world.config['xivo_host'],
+                                       token=world.config['auth_token'],
+                                       verify_certificate=False)
+
+
+def setup_auth_token():
+    # service_id/service_key is defined in data/assets/xivo-acceptance-key.yml
+    auth_client = AuthClient(world.config['xivo_host'],
+                             username='xivo-acceptance',
+                             password='0b34aefe-5c86-4fda-8a4a-0aac2532d053',
+                             verify_certificate=False)
+    world.config['auth_token'] = auth_client.token.new('xivo_service', expiration=6*3600)['token']
 
 
 @debug.logcall
 def setup_browser():
-    # Prerequisite:
-    # - setup_config
     if not world.config['browser']['enable']:
         return
 
@@ -54,22 +69,27 @@ def setup_config():
     world.config = load_config()
 
 
+def setup_consul():
+    command = 'cat /var/lib/consul/master_token'.split()
+    world.config['consul_token'] = world.ssh_client_xivo.out_call(command).strip()
+
+
 def setup_logging():
-    # Prerequisite:
-    # - setup_config
     debug.setup_logging(world.config)
 
 
 @debug.logcall
+def setup_provd():
+    world.rest_provd = world.xivo_acceptance_config.rest_provd
+    world.provd_client = world.xivo_acceptance_config.provd_client
+
+
+@debug.logcall
 def setup_ssh_client():
-    # Prerequisite:
-    # - setup_xivo_acceptance_config
     world.ssh_client_xivo = world.xivo_acceptance_config.ssh_client_xivo
 
 
 def setup_xivo_acceptance_config():
-    # Prerequisite:
-    # - setup_config
     world.xivo_acceptance_config = XivoAcceptanceConfig(world.config)
 
 

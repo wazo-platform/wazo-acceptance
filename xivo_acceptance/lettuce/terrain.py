@@ -28,8 +28,6 @@ from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import debug
 from xivo_acceptance.lettuce import setup
 from xivo_acceptance.lettuce.phone_register import PhoneRegister
-from xivo_agentd_client import Client as AgentdClient
-from xivo_auth_client import Client as AuthClient
 
 
 logger = logging.getLogger('acceptance')
@@ -83,43 +81,17 @@ def initialize():
     logger.debug("setup ws...")
     setup.setup_ws()
     logger.debug("setup provd...")
-    _setup_provd(world.xivo_acceptance_config)
+    setup.setup_provd()
     logger.debug("setup browser...")
     setup.setup_browser()
-    logger.debug("get auth token...")
-    _get_auth_token()
+    logger.debug("setup auth token...")
+    setup.setup_auth_token()
     logger.debug("setup agentd client...")
-    _setup_agentd_client()
+    setup.setup_agentd_client()
     logger.debug("setup consul...")
-    _setup_consul()
+    setup.setup_consul()
     world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
-
-
-def _get_auth_token():
-    # service_id/service_key is defined in data/assets/xivo-acceptance-key.yml
-    auth_client = AuthClient(world.config['xivo_host'],
-                             username='xivo-acceptance',
-                             password='0b34aefe-5c86-4fda-8a4a-0aac2532d053',
-                             verify_certificate=False)
-    world.config['auth_token'] = auth_client.token.new('xivo_service', expiration=6*3600)['token']
-
-
-def _setup_consul():
-    command = 'cat /var/lib/consul/master_token'.split()
-    world.config['consul_token'] = world.ssh_client_xivo.out_call(command).strip()
-
-
-def _setup_agentd_client():
-    world.agentd_client = AgentdClient(world.config['xivo_host'],
-                                       token=world.config['auth_token'],
-                                       verify_certificate=False)
-
-
-@debug.logcall
-def _setup_provd(xivo_acceptance_config):
-    world.rest_provd = xivo_acceptance_config.rest_provd
-    world.provd_client = xivo_acceptance_config.provd_client
 
 
 @debug.logcall
