@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import logging
+
 from lettuce import world
 
 from xivo_acceptance.config import load_config, XivoAcceptanceConfig
@@ -22,6 +24,8 @@ from xivo_acceptance.lettuce import debug
 from xivo_agentd_client import Client as AgentdClient
 from xivo_auth_client import Client as AuthClient
 from xivobrowser import XiVOBrowser
+
+logger = logging.getLogger('acceptance')
 
 
 def setup_agentd_client():
@@ -36,7 +40,12 @@ def setup_auth_token():
                              username='xivo-acceptance',
                              password='0b34aefe-5c86-4fda-8a4a-0aac2532d053',
                              verify_certificate=False)
-    world.config['auth_token'] = auth_client.token.new('xivo_service', expiration=6*3600)['token']
+    try:
+        token_id = auth_client.token.new('xivo_service', expiration=6*3600)['token']
+    except Exception as e:
+        logger.warning('creating auth token failed: %s', e)
+        token_id = None
+    world.config['auth_token'] = token_id
 
 
 @debug.logcall
