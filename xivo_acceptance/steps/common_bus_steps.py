@@ -97,12 +97,23 @@ def then_i_see_an_ami_message_on_the_queue(step, event_name, queue):
 @step(u'Then I receive a "([^"]*)" on the queue "([^"]*)" with data:')
 def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queue):
     events = bus_helper.get_messages_from_bus(queue)
+    local_xivo_uuid = xivo_helper.get_uuid()
 
     for expected_event in step.hashes:
         raw_expected_event = {'name': expected_message,
                               'data': {}}
 
-        raw_expected_event['data']['status'] = expected_event['status']
+        if 'status' in expected_event:
+            raw_expected_event['data']['status'] = expected_event['status']
+        if 'to' in expected_event:
+            raw_expected_event['data']['to'] = json.loads(expected_event['to'])
+        if 'alias' in expected_event:
+            raw_expected_event['data']['alias'] = expected_event['alias']
+        if 'msg' in expected_event:
+            raw_expected_event['data']['msg'] = expected_event['msg']
+
+        if expected_event.get('origin_uuid', 'no') == 'yes':
+            raw_expected_event['origin_uuid'] = local_xivo_uuid
 
         if expected_event.get('user_id', 'no') == 'yes':
             user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
@@ -118,5 +129,11 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
         if expected_event.get('agent_id', 'no') == 'yes':
             agent_id = agent_helper.find_agent_id_with_number(expected_event['agent_number'])
             raw_expected_event['data']['agent_id'] = agent_id
+
+        if expected_event.get('from', 'no') == 'yes':
+            user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
+                                                         expected_event['lastname'])
+            from_ = [local_xivo_uuid, user['id']]
+            raw_expected_event['data']['from'] = from_
 
         assert_that(events, has_item(has_entries(raw_expected_event)))
