@@ -35,6 +35,7 @@ from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import xivo_helper
 from xivo_bus import Marshaler
 from xivo_bus.resources.cti.event import UserStatusUpdateEvent
+from xivo_bus.resources.chat.event import ChatMessageEvent
 
 
 logger = logging.getLogger('acceptance')
@@ -52,6 +53,17 @@ def _send_bus_msg(msg, routing_key):
 def when_i_publish_the_following_message_on_group1(step, routing_key):
     msg = json.dumps(json.loads(step.multiline))  # Clean white spaces
     _send_bus_msg(msg, routing_key)
+
+
+@step(u'When I publish a chat message:')
+def when_i_publish_a_chat_message(step):
+    data = step.hashes[0]
+    local_xivo_uuid = xivo_helper.get_uuid()
+    user_id = user_helper.get_by_firstname_lastname(data['firstname'], data['lastname'])['id']
+    to = local_xivo_uuid, user_id
+    event = ChatMessageEvent(json.loads(data['from']), to, data['alias'], data['msg'])
+    msg = Marshaler(local_xivo_uuid).marshal_message(event)
+    _send_bus_msg(msg, event.routing_key)
 
 
 @step(u'When I publish a "([^"]*)" on the "([^"]*)" routing key with info:')

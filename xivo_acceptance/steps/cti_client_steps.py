@@ -29,6 +29,8 @@ from Queue import Queue
 
 from lettuce.decorators import step
 
+from xivo_acceptance.helpers import (user_helper, xivo_helper)
+
 
 @step(u'Given I connect to xivo-ctid:')
 def given_i_connect_to_xivo_ctid(step):
@@ -49,6 +51,22 @@ def then_i_should_receive_the_following_cti_command(step):
     events = step.scenario._pseudo_xivo_client.events
     assert_that(_has_received_event_before_timeout(events, step.multiline, 5),
                 'CTI event {} was not received'.format(step.multiline))
+
+
+@step(u'Then I should receive the following chat message:')
+def then_i_should_receive_the_following_chat_message(step):
+    data = step.hashes[0]
+    local_xivo_uuid = xivo_helper.get_uuid()
+    user_id = user_helper.get_by_firstname_lastname(data['firstname'], data['lastname'])['id']
+    to = local_xivo_uuid, user_id
+    expected_raw_event = {'class': 'chitchat',
+                          'alias': data['alias'],
+                          'to': to,
+                          'from': json.loads(data['from']),
+                          'text': data['msg']}
+    events = step.scenario._pseudo_xivo_client.events
+    assert_that(_has_received_event_before_timeout(events, json.dumps(expected_raw_event), 5),
+                'CTI event {} was not received'.format(expected_raw_event))
 
 
 @step(u'Then I should NOT receive the following cti command:')
