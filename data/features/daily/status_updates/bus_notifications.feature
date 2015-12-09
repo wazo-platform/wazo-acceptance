@@ -44,24 +44,3 @@ Feature: Status notifications
         Then I receive a "endpoint_status_update" on the queue "test_status_endpoint" with data:
         | endpoint_id | number | context | status |
         | yes         |   1101 | default |      8 |
-
-    Scenario: Bus notification on chat message
-        Given I listen on the bus for messages:
-        | queue              | routing_key                  |
-        | test_chat_messages | chat.message.d0e36147-49f6-40b0-ac78-1af2048bed55.# |
-        Given there are users with infos:
-        | firstname | lastname | cti_profile | cti_login | cti_passwd |
-        | Alice     | A        | Client      | alicea    | alicea     |
-        Given I connect to xivo-ctid:
-        | username | password |
-        | alicea   | alicea   |
-        Given I send a cti message:
-        """
-        " {"class": "chitchat",
-        "  "alias": "Alice",
-        "  "to": ["d0e36147-49f6-40b0-ac78-1af2048bed55", 16],
-        "  "text": "Yo yo yo"}
-        """
-        Then I receive a "chat_message_event" on the queue "test_chat_messages" with data:
-        | alias | msg      | to                                           | from | firstname | lastname | origin_uuid |
-        | Alice | Yo yo yo | ["d0e36147-49f6-40b0-ac78-1af2048bed55", 16] | yes  | Alice     | A        | yes         |

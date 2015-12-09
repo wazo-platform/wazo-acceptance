@@ -139,17 +139,3 @@ Feature: Status notifications to cti client
          "           "agent_id": 42,
          "           "xivo_uuid": "my-uuid"}}
          """
-
-     Scenario: Chat messages published to the bus are forwarded to the appropriate client
-        Given there are users with infos:
-         | firstname | lastname | cti_profile | cti_login | cti_passwd |
-         | Timothy   | Dalton   | Client      | jamesbond | bond007    |
-         Given I connect to xivo-ctid:
-         | username  | password |
-         | jamesbond | bond007  |
-         When I publish a chat message:
-         | firstname | lastname | alias       | msg                     | from                  |
-         | Timothy   | Dalton   | Pam Bouvier | Sweet dreams, Mr. Bond. | ["some-uuid-007", 42] |
-         Then I should receive the following chat message:
-         | firstname | lastname | alias       | msg                     | from                  |
-         | Timothy   | Dalton   | Pam Bouvier | Sweet dreams, Mr. Bond. | ["some-uuid-007", 42] |
