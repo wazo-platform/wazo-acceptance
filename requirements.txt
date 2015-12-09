@@ -7,9 +7,9 @@ fuzzywuzzy
 jinja2
 unittest2
 lettuce<0.2.21
-psycopg2
-python-ldap
-requests>=2.0
+psycopg2==2.5.4
+python-ldap==2.4.10
+requests==2.4.3
 selenium
 sure
 wsgiref
@@ -24,8 +24,8 @@ git+https://github.com/xivo-pbx/xivo-lib-python.git
 git+https://github.com/xivo-pbx/xivo-agentd-client.git
 git+https://github.com/xivo-pbx/xivo-ctid-client.git
 git+https://github.com/xivo-pbx/xivo-lib-rest-client.git
-PyYAML
-kombu==2.1.8
-stevedore
-python-consul
-python-Levenshtein
+pyyaml==3.11
+kombu==3.0.26
+stevedore==0.14.1
+python-consul==0.4.7
+python-levenshtein==0.11.2
