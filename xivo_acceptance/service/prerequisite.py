@@ -106,8 +106,8 @@ def _create_pgpass_on_remote_host():
 
 
 def _allow_remote_access_to_pgsql():
-    hba_file = '/etc/postgresql/9.1/main/pg_hba.conf'
-    postgres_conf_file = '/etc/postgresql/9.1/main/postgresql.conf'
+    hba_file = '/etc/postgresql/9.4/main/pg_hba.conf'
+    postgres_conf_file = '/etc/postgresql/9.4/main/postgresql.conf'
 
     subnet_line = 'host all all {subnet} md5'
     for subnet in world.config['prerequisites']['subnets']:
