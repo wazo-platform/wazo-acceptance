@@ -1,6 +1,5 @@
 Feature: Status notifications
 
-
     Scenario: Agent login status update events
         Given there is no agents logged
         Given there are users with infos:

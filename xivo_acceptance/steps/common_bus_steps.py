@@ -35,6 +35,7 @@ from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import xivo_helper
 from xivo_bus import Marshaler
 from xivo_bus.resources.cti.event import UserStatusUpdateEvent
+from xivo_bus.resources.chat.event import ChatMessageEvent
 
 
 logger = logging.getLogger('acceptance')
@@ -52,6 +53,17 @@ def _send_bus_msg(msg, routing_key):
 def when_i_publish_the_following_message_on_group1(step, routing_key):
     msg = json.dumps(json.loads(step.multiline))  # Clean white spaces
     _send_bus_msg(msg, routing_key)
+
+
+@step(u'When I publish a chat message:')
+def when_i_publish_a_chat_message(step):
+    data = step.hashes[0]
+    local_xivo_uuid = xivo_helper.get_uuid()
+    user_id = user_helper.get_by_firstname_lastname(data['firstname'], data['lastname'])['id']
+    to = local_xivo_uuid, user_id
+    event = ChatMessageEvent(json.loads(data['from']), to, data['alias'], data['msg'])
+    msg = Marshaler(local_xivo_uuid).marshal_message(event)
+    _send_bus_msg(msg, event.routing_key)
 
 
 @step(u'When I publish a "([^"]*)" on the "([^"]*)" routing key with info:')
@@ -97,12 +109,23 @@ def then_i_see_an_ami_message_on_the_queue(step, event_name, queue):
 @step(u'Then I receive a "([^"]*)" on the queue "([^"]*)" with data:')
 def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queue):
     events = bus_helper.get_messages_from_bus(queue)
+    local_xivo_uuid = xivo_helper.get_uuid()
 
     for expected_event in step.hashes:
         raw_expected_event = {'name': expected_message,
                               'data': {}}
 
-        raw_expected_event['data']['status'] = expected_event['status']
+        if 'status' in expected_event:
+            raw_expected_event['data']['status'] = expected_event['status']
+        if 'to' in expected_event:
+            raw_expected_event['data']['to'] = json.loads(expected_event['to'])
+        if 'alias' in expected_event:
+            raw_expected_event['data']['alias'] = expected_event['alias']
+        if 'msg' in expected_event:
+            raw_expected_event['data']['msg'] = expected_event['msg']
+
+        if expected_event.get('origin_uuid', 'no') == 'yes':
+            raw_expected_event['origin_uuid'] = local_xivo_uuid
 
         if expected_event.get('user_id', 'no') == 'yes':
             user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
@@ -118,5 +141,11 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
         if expected_event.get('agent_id', 'no') == 'yes':
             agent_id = agent_helper.find_agent_id_with_number(expected_event['agent_number'])
             raw_expected_event['data']['agent_id'] = agent_id
+
+        if expected_event.get('from', 'no') == 'yes':
+            user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
+                                                         expected_event['lastname'])
+            from_ = [local_xivo_uuid, user['id']]
+            raw_expected_event['data']['from'] = from_
 
         assert_that(events, has_item(has_entries(raw_expected_event)))
