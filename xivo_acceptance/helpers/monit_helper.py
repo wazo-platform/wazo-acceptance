@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ def _wait_monit_restart(maxtries):
 
 def is_monit_started():
     result = get_monit_status()
-    if 'monit: error connecting to the monit daemon' in result:
+    if 'Status not available -- the monit daemon is not running' in result:
         return False
     return True
 
