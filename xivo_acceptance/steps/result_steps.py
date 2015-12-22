@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2015 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -67,16 +67,16 @@ def then_i_get_a_header_with_a_location_for_the_group1_resource(step, resource):
     resource_id = world.response.data['id']
     expected_location = '/1.1/%s/%s' % (resource, resource_id)
 
-    assert_that(world.response.headers, has_entry('Location', ends_with(expected_location)))
+    assert_that(world.response.headers, has_entry('location', ends_with(expected_location)))
 
 
 @step(u'Then I get a header with a location matching "([^"]*)"$')
 def then_i_get_a_header_with_a_location_matching_group1(step, regex):
-    assert_that(world.response.headers, has_key('Location'))
-    location = world.response.headers['Location']
+    assert_that(world.response.headers, has_key('location'))
+    location = world.response.headers['location']
 
     matches = re.search(regex, location) is not None
-    assert_that(matches, "regex '%s' did not match location header. Location: %s" % (regex, location))
+    assert_that(matches, "regex '%s' did not match location header. location: %s" % (regex, location))
 
 
 @step(u'Then I get a response with a link to the "([^"]*)" resource$')
