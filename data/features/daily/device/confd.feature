@@ -207,17 +207,6 @@ Feature: REST API Devices
             | 10.0.0.2 | 00:11:22:33:44:56 | null   | nullmodel | nullvendor | 1.0     | defaultconfigdevice  |
         Then the list contains the same number of devices as on the provisioning server
 
-
-    Scenario: Search for devices with HTTP_PROXY set
-        Given I set the HTTP_PROXY environment variables to "10.99.99.99"
-        Given there is no voicemail with number "4977" and context "default"
-        When I request the list of devices
-        Then I get a response with status "200"
-        When I create the following voicemails via CONFD:
-          | name       | number | context |
-          | test-proxy |   4977 | default |
-        Then I get a response with status "201"
-
     Scenario: Reset to autoprov a device
         Given there are no devices with mac "00:00:00:00:aa:01"
         Given I have the following devices:

@@ -119,12 +119,8 @@ def get_pidfile_for_service_name(service):
     return pidfile
 
 
-def restart_service(service_name, env=None):
-    if env is None:
-        env = {}
-    variables = ['{}={}'.format(variable, value) for (variable, value) in env.iteritems()]
-    # we must use /etc/init.d, not the service utility, because service clears env variables
-    command = variables + ['/etc/init.d/{}'.format(service_name), 'restart']
+def restart_service(service_name):
+    command = ['systemctl', 'restart', service_name]
     world.ssh_client_xivo.check_call(command)
 
     if service_name == 'xivo-confd':

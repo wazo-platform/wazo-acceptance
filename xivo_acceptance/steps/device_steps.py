@@ -55,11 +55,6 @@ def given_there_exists_the_following_device_template(step):
         provd_helper.add_or_replace_device_template(template)
 
 
-@step(u'Given I set the HTTP_PROXY environment variables to "([^"]*)"')
-def given_i_set_the_http_proxy_environment_variables_to_group1(step, http_proxy):
-    sysutils.restart_service('xivo-confd', env={'HTTP_PROXY': http_proxy})
-
-
 @step(u'Given device with ip "([^"]*)" is provisionned with SIP line "([^"]*)"')
 def given_device_with_mac_group1_is_provisionned_with_sip_line_group2(step, device_ip, sip_username):
     line = line_sip_helper.get_by_username(sip_username)
