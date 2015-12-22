@@ -28,7 +28,7 @@ RUN apt-get -qq -y install \
     xvfb \
     xserver-xephyr \
     linphone-nogtk \
-    postgresql-server-dev-9.1 \
+    postgresql-server-dev-9.4 \
     libldap2-dev \
     lsof \
     libgl1-mesa-dev \
