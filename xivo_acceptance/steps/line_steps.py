@@ -328,6 +328,7 @@ def then_this_line_is_not_displayed_in_the_list(step):
 @step(u'Then the line "([^"]*)" has the following line options:')
 def then_the_line_1_has_the_following_line_options(step, line_number):
     line_id = line_read_helper.get_line_id_with_exten_context(line_number, 'default')
+    time.sleep(world.timeout)
     common.open_url('line', 'edit', {'id': line_id})
     for line_data in step.hashes:
         for key, value in line_data.iteritems():
