@@ -43,7 +43,7 @@ def _wait_monit_restart(maxtries):
 
 def is_monit_started():
     result = get_monit_status()
-    if 'Status not available -- the monit daemon is not running' in result:
+    if 'Error connecting to the monit daemon' in result:
         return False
     return True
 
