@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -82,7 +82,6 @@ from .system_steps import *
 from .trunk_custom_steps import *
 from .trunk_iax_steps import *
 from .trunk_sip_steps import *
-from .user_import_steps import *
 from .user_line_steps import *
 from .user_steps import *
 from .voicemail_steps import *
