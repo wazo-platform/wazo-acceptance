@@ -86,5 +86,6 @@ Feature: Switchboard
         When "Alice A" answers
         When I wait 3 seconds for the call processing
         When the switchboard "Switch Board" hangs up
+        When I wait 1 seconds for the call processing
         Then the switchboard "Switch Board" is not talking to anyone
         Then "Alice A" is hungup
