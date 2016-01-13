@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -187,16 +187,10 @@ def then_i_should_see_the_following_caller_id(step):
          'Value': caller_id_info['Number']},
     ]
 
-    timeout = 3
-    while timeout > 0:
-        try:
-            assert_that(cti_helper.get_sheet_infos(), has_items(*expected))
-            break
-        except AssertionError as e:
-            timeout -= 1
-            if not timeout:
-                raise e
-            _sleep(0.25)
+    def assertion():
+        assert_that(cti_helper.get_sheet_infos(), has_items(*expected))
+
+    common.wait_until_assert(assertion, tries=4)
 
 
 def _sleep(seconds):

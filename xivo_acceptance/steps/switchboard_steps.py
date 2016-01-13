@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
-
-import time
 
 from hamcrest import assert_that
 from hamcrest import contains
@@ -213,19 +211,17 @@ def when_the_switchboard_group1_hangs_up(step, switchboard):
 
 @step(u'Then the switchboard "([^"]*)" is not talking to anyone')
 def then_the_switchboard_1_is_not_talking_to_anyone(step, switchboard):
-    timeout = 3
-    while timeout > 0:
-        try:
-            current_call = cti_helper.get_switchboard_current_call_infos()
-            assert_that(current_call['caller_id'], equal_to(""))
-            break
-        except AssertionError as e:
-            timeout -= 1
-            if not timeout:
-                raise e
-            time.sleep(0.25)
-    phone = step.scenario.phone_register.get_user_phone(switchboard)
-    phone.is_hungup()
+    def assert_switchboard_is_empty():
+        current_call = cti_helper.get_switchboard_current_call_infos()
+        assert_that(current_call['caller_id'], equal_to(""))
+
+    common.wait_until_assert(assert_switchboard_is_empty, tries=3)
+
+    def assert_switchboard_phone_is_hungup():
+        phone = step.scenario.phone_register.get_user_phone(switchboard)
+        assert_that(phone.is_hungup(), equal_to(True))
+
+    common.wait_until_assert(assert_switchboard_phone_is_hungup, tries=10)
 
 
 @step(u'Then the switchboard is talking to "([^"]*)" number "([^"]*)"')
