@@ -171,8 +171,7 @@ class _Client(object):
             'userlogin': self._username,
             'company': 'lol',
             'ident': 'python-client',
-            'xivoversion': '1.2',
-            'version': '9999',
+            'xivoversion': '2.0',
         }
         self._send_message(login_message)
 
