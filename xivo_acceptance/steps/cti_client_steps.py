@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2015 Avencall
+# Copyright (C) 2015-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import hashlib
 import socket
 import json
 import threading
@@ -178,9 +177,8 @@ class _Client(object):
         self._send_message(login_message)
 
     def _send_login_pass(self, sessionid):
-        hashedpassword = hashlib.sha1('{}:{}'.format(sessionid, self._password)).hexdigest()
         login_pass_message = {
-            "hashedpassword": hashedpassword,
+            "password": self._password,
             "class": "login_pass",
         }
         self._send_message(login_pass_message)
