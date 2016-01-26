@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2014-2015 Avencall
+# Copyright (C) 2014-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ def load_config(old_config=True):
         'log_file': '/tmp/xivo-acceptance.log',
         'assets_dir': _find_first_existing_path(_ASSETS_DIRS),
         'features_dir': _find_first_existing_path(_FEATURES_DIRS),
-        'output_dir': '/output',
+        'output_dir': '/tmp',
         'frontend': {
             'username': 'root',
             'passwd': 'superpass'
