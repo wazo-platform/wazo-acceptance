@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2015 Avencall
+# Copyright (C) 2015-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ def setup_auth_token():
     # service_id/service_key is defined in data/assets/xivo-acceptance-key.yml
     auth_client = AuthClient(world.config['xivo_host'],
                              username='xivo-acceptance',
-                             password='0b34aefe-5c86-4fda-8a4a-0aac2532d053',
+                             password='proformatique',
                              verify_certificate=False)
     try:
         token_id = auth_client.token.new('xivo_service', expiration=6*3600)['token']

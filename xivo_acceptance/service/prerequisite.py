@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -68,9 +68,6 @@ def run():
         logger.debug('Installing chan_test (module for asterisk)')
         copy_asset_to_server('chan_test.so', '/usr/lib/asterisk/modules/chan_test.so')
 
-        logger.debug('Adding xivo-acceptance key')
-        copy_asset_to_server('xivo-acceptance-key.yml', '/var/lib/xivo-auth-keys')
-
         logger.debug('Adding context')
         context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
         context_helper.update_contextnumbers_user('statscenter', 1000, 1100)
@@ -95,6 +92,8 @@ def run():
 def _create_webservices_access():
     copy_asset_to_server('webservices.sql', '/tmp')
     cmd = ['sudo', '-u', 'postgres', 'psql', '-f', '/tmp/webservices.sql']
+    world.ssh_client_xivo.check_call(cmd)
+    cmd = ['xivo-update-keys']
     world.ssh_client_xivo.check_call(cmd)
 
 
