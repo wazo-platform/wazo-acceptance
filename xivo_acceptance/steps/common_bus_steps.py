@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ def _send_bus_msg(msg, routing_key):
                         type=world.config['bus']['exchange_type'])
     with Connection(world.config['bus_url']) as conn:
         producer = Producer(conn, exchange)
-        producer.publish(msg, routing_key=routing_key)
+        producer.publish(msg, routing_key=routing_key, content_type='application/json')
 
 
 @step(u'When I publish the following message on "([^"]*)":')
