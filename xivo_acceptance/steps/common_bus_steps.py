@@ -58,8 +58,8 @@ def when_i_publish_the_following_message_on_group1(step, routing_key):
 def when_i_publish_a_chat_message(step):
     data = step.hashes[0]
     local_xivo_uuid = xivo_helper.get_uuid()
-    user_id = user_helper.get_by_firstname_lastname(data['firstname'], data['lastname'])['id']
-    to = local_xivo_uuid, user_id
+    user_uuid = user_helper.get_by_firstname_lastname(data['firstname'], data['lastname'])['uuid']
+    to = local_xivo_uuid, user_uuid
     event = ChatMessageEvent(json.loads(data['from']), to, data['alias'], data['msg'])
     msg = Marshaler(local_xivo_uuid).marshal_message(event)
     _send_bus_msg(msg, event.routing_key)
@@ -136,7 +136,7 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
         if expected_event.get('from', 'no') == 'yes':
             user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
                                                          expected_event['lastname'])
-            from_ = [local_xivo_uuid, user['id']]
+            from_ = [local_xivo_uuid, user['uuid']]
             raw_expected_event['data']['from'] = from_
 
         assert_that(events, has_item(has_entries(raw_expected_event)))

@@ -63,8 +63,8 @@ def when_i_send_switchboardhold_message(step):
 def then_i_should_receive_the_following_chat_message(step):
     data = step.hashes[0]
     local_xivo_uuid = xivo_helper.get_uuid()
-    user_id = user_helper.get_by_firstname_lastname(data['firstname'], data['lastname'])['id']
-    to = local_xivo_uuid, user_id
+    user_uuid = user_helper.get_by_firstname_lastname(data['firstname'], data['lastname'])['uuid']
+    to = local_xivo_uuid, user_uuid
     expected_raw_event = {'class': 'chitchat',
                           'alias': data['alias'],
                           'to': to,
