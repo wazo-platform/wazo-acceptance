@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,11 +30,6 @@ from hamcrest.core.core.isnone import not_none, none
 def given_i_have_the_following_cti_profiles(step):
     for profile in step.hashes:
         cti_profile_helper.add_or_replace_profile(profile)
-
-
-@step(u'Given there is no CTI profile with id "([^"]*)"$')
-def given_there_is_no_cti_profile_with_id_group1(step, profileid):
-    cti_profile_helper.delete_profile(int(profileid))
 
 
 @step(u'Given the following users, CTI profiles are linked:$')
@@ -75,12 +70,6 @@ def when_i_associate_cti_profile_with_name_group1_with_user_group2_group3(step, 
 def when_i_send_request_for_the_cti_configuration_of_the_user_group1_group2(step, firstname, lastname):
     user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     world.response = cti_profile_action_confd.get_cti_profile_for_user(user_id)
-
-
-@step(u'When I enable the CTI client for the user "([^"]*)" "([^"]*)"')
-def when_i_enable_the_cti_client_for_the_user_group1_group2(step, firstname, lastname):
-    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
-    world.response = cti_profile_action_confd.enable_cti_for_user(int(user_id))
 
 
 @step(u'Then I get a list containing the following CTI profiles:$')
