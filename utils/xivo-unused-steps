@@ -14,6 +14,10 @@ function project_root {
     echo "$this_script_directory/$relative_path_to_project_root"
 }
 
+ROOT=$(project_root)
+STEP_DIR=$(project_root)/xivo_acceptance/steps
+FEATURE_DIR=$(project_root)/data/features
+
 function escape_pattern {
     raw_pattern="$1"
     echo "$raw_pattern" | \
@@ -36,11 +40,11 @@ function extract_step_pattern {
 
 function find_step_usage {
     step_pattern="$1"
-    grep -qrIi --include '*.feature' "$step_pattern" .
+    grep -qrIi --include '*.feature' "$step_pattern" $FEATURE_DIR
 }
 
 function list_step_definitions {
-    find . -name '*.py' | xargs grep -Hn '@step('
+    find $STEP_DIR -name '*.py' | xargs grep -Hn '@step('
 }
 
 function remove_used_step_definitions {
