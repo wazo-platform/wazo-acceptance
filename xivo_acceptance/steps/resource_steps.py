@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2014 Avencall
+# Copyright (C) 2014-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,14 +47,6 @@ def then_i_get_a_response_status_matching_group1(step, status, regex):
 
     world.response.check_status(status)
     world.response.check_regex(regex)
-
-
-@step(u'When the client sends a POST request:$')
-def when_i_post_at_group1(step):
-    for line in step.hashes:
-        url = line['url']
-        document = json.loads(line['document'])
-        world.response = world.confd_utils_1_1.rest_post(url, document)
 
 
 @step(u'Then I get a list containing the following items:')
