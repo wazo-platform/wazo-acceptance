@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -65,11 +65,6 @@ def convert_agent_numbers(agent_numbers):
 def convert_schedule_name(schedule_name):
     schedule_id = schedule_helper.find_schedule_id_with_name(schedule_name)
     return schedule_id
-
-
-@step(u'Given there is no queue with number "([^"]*)"')
-def given_there_is_no_queue_with_number(step, queue_number):
-    queue_helper.delete_queues_with_number(queue_number)
 
 
 @step(u'Given the agent "([^"]*)" has the penalty "([^"]*)" for the queue "([^"]*)"')
