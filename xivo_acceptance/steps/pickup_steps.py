@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step, world
+from lettuce import step
 
 from xivo_acceptance.action.webi import pickup as pickup_action_webi
 from xivo_acceptance.lettuce import common, form
@@ -35,11 +35,6 @@ def given_there_is_no_pickup(step, search):
 def given_there_are_pickup(step):
     for data in step.hashes:
         pickup_action_webi.add_pickup(**data)
-
-
-@step(u'Then the directed pickup is successful')
-def the_directed_pickup_is_successful(step):
-    assert world.pickup_success
 
 
 def _pickup_search(term):
