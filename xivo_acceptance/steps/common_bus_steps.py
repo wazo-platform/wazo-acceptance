@@ -34,7 +34,6 @@ from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import xivo_helper
 from xivo_bus import Marshaler
-from xivo_bus.resources.cti.event import UserStatusUpdateEvent
 from xivo_bus.resources.chat.event import ChatMessageEvent
 
 
@@ -64,14 +63,6 @@ def when_i_publish_a_chat_message(step):
     event = ChatMessageEvent(json.loads(data['from']), to, data['alias'], data['msg'])
     msg = Marshaler(local_xivo_uuid).marshal_message(event)
     _send_bus_msg(msg, event.routing_key)
-
-
-@step(u'When I publish a "([^"]*)" on the "([^"]*)" routing key with info:')
-def when_i_publish_a_event_on_the_routing_key_with_info(step, message, routing_key):
-    data = step.hashes[0]
-    marshaler = Marshaler(xivo_helper.get_uuid())
-    msg = marshaler.marshal_message(UserStatusUpdateEvent(data['xivo_id'], data['user_id'], data['status']))
-    _send_bus_msg(msg, routing_key)
 
 
 @step(u'Given I listen on the bus for messages:')
