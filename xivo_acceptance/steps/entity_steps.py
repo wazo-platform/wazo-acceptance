@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,13 +18,7 @@
 
 from lettuce.decorators import step
 
-from xivo_acceptance.lettuce import common
 from xivo_acceptance.helpers import entity_helper
-
-
-@step(u'Given there is no entity "([^"]*)"$')
-def given_there_is_no_element(step, search):
-    common.remove_element_if_exist('entity', search)
 
 
 @step(u'^Given there are entities with infos:$')
