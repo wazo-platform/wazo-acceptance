@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,20 +18,16 @@
 import time
 import re
 
-from hamcrest import assert_that, equal_to, has_key, has_item, has_entries
+from hamcrest import assert_that, has_entries
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
-from selenium.webdriver.common.action_chains import ActionChains
 
-from xivo_acceptance.action.confd import line_sip_action_confd
-from xivo_acceptance.action.confd import line_action_confd
 from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import line_sip_helper
 from xivo_acceptance.helpers import line_write_helper
-from xivo_acceptance.helpers import context_helper
-from xivo_acceptance.lettuce import common, form, func
+from xivo_acceptance.lettuce import common, form
 from xivo_acceptance.lettuce.form.checkbox import Checkbox
 from xivo_acceptance.lettuce.widget.codec import CodecWidget
 
@@ -39,11 +35,6 @@ from xivo_acceptance.lettuce.widget.codec import CodecWidget
 @step(u'Given there are no custom lines with interface beginning with "([^"]*)"')
 def given_there_are_no_custom_lines_with_interface_beginning_with_1(step, interface_start):
     common.remove_element_if_exist('line', interface_start)
-
-
-@step(u'Given there are no lines with id "([^"]*)"')
-def given_there_are_no_lines_with_id_group1(step, line_id):
-    line_write_helper.delete_line(line_id)
 
 
 @step(u'Given I set the following options in line "([^"]*)":')
@@ -74,44 +65,11 @@ def given_the_line_group1_has_the_codec_group2(step, linenumber, codec):
     _add_codec_to_line(codec, linenumber)
 
 
-@step(u'Given the line "(\d+)@(\w+)" is disabled')
-def given_the_line_group1_is_disabled(step, extension, context):
-    common.open_url('line')
-    _search_for_line(extension, context)
-    _click_checkbox_for_all_lines()
-    _disable_selected_lines()
-    time.sleep(world.timeout)  # wait for dialplan to finish reloading
-
-
-def _search_for_line(extension, context):
-    form.input.edit_text_field_with_id('it-toolbar-search', extension)
-    form.select.set_select_field_with_id('it-toolbar-context', context)
-
-
-def _click_checkbox_for_all_lines():
-    for checkbox in world.browser.find_elements_by_css_selector(".it-checkbox"):
-        checkbox.click()
-
-
-def _disable_selected_lines():
-    menu_button = world.browser.find_element_by_id("toolbar-bt-advanced")
-    ActionChains(world.browser).move_to_element(menu_button).perform()
-
-    disable_button = world.browser.find_element_by_id("toolbar-advanced-menu-disable")
-    ActionChains(world.browser).click(disable_button).perform()
-
-
 @step(u'Given I have the following lines:')
 def given_i_have_the_following_lines(step):
     for lineinfo in step.hashes:
         _delete_line(lineinfo)
         line_write_helper.add_line(lineinfo)
-
-
-@step(u'Given I have no line with id "([^"]*)"')
-def given_i_have_no_line_with_id_group1(step, line_id):
-    line_id = int(line_id)
-    line_write_helper.delete_line(line_id)
 
 
 def _delete_line(lineinfo):
@@ -121,46 +79,6 @@ def _delete_line(lineinfo):
         line = line_sip_helper.find_by_username(lineinfo['username'])
         if line:
             line_write_helper.delete_line(line['id'])
-
-
-@step(u'Given I have an internal context named "([^"]*)"')
-def given_i_have_an_internal_context_named_group1(step, context):
-    context_helper.add_or_replace_context(context, context, 'internal')
-
-
-@step(u'When I ask for the line_sip with id "([^"]*)"')
-def when_i_ask_for_the_line_sip_with_id_group1(step, lineid):
-    world.response = line_sip_action_confd.get(lineid)
-
-
-@step(u'When I create an empty SIP line$')
-def when_i_create_an_empty_line(step):
-    world.response = line_sip_action_confd.create_line_sip({})
-
-
-@step(u'When I create a line_sip with the following parameters:')
-def when_i_create_a_line_with_the_following_parameters(step):
-    parameters = _extract_line_parameters(step)
-    world.response = line_sip_action_confd.create_line_sip(parameters)
-
-
-@step(u'When I update the line_sip with id "([^"]*)" using the following parameters:')
-def when_i_update_the_user_with_id_group1_using_the_following_parameters(step, lineid):
-    lineinfo = _extract_line_parameters(step)
-    world.response = line_sip_action_confd.update(lineid, lineinfo)
-
-
-@step(u'When I delete line sip "([^"]*)"')
-def when_i_delete_line_group1(step, line_id):
-    world.response = line_sip_action_confd.delete(line_id)
-
-
-@step(u'When I delete line sccp with "([^"]*)"@"([^"]*)"')
-def when_i_delete_line_sccp(step, exten, context):
-    line = line_read_helper.get_with_exten_context(exten, context)
-    assert_that(line['protocol'], equal_to('sccp'),
-                "line with extension %s@%s is not SCCP" % (exten, context))
-    line_write_helper.delete_line(line['id'])
 
 
 @step(u'When I customize line "([^"]*)" codecs to:')
@@ -232,14 +150,6 @@ def when_i_remove_this_line(step):
     common.open_url('line', 'search', {'search': ''})
 
 
-@step(u'When I remove line with extension "([^"]*)"')
-def when_i_remove_line_with_extension(step, extension):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    common.open_url('line', 'search', {'search': number})
-    common.remove_line(number)
-    common.open_url('line', 'search', {'search': ''})
-
-
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
     line_id = line_read_helper.find_line_id_with_exten_context(linenumber, 'default')
@@ -254,17 +164,6 @@ def when_i_remove_the_codec_from_the_line_with_number(step, codec, linenumber):
     codec_widget = CodecWidget()
     codec_widget.remove(codec)
     form.submit.submit_form()
-
-
-@step(u'When I ask for the list of lines$')
-def when_i_ask_for_the_list_of_lines(step):
-    world.response = line_action_confd.all_lines()
-
-
-@step(u'When I ask for line with id "([^"]*)"')
-def when_i_ask_for_line_with_id_group1(step, line_id):
-    line_id = int(line_id)
-    world.response = line_action_confd.get(line_id)
 
 
 @step(u'Then I see a line with infos:')
@@ -391,75 +290,3 @@ def _open_codec_page():
     except NoSuchElementException:
         # SCCP line has no Signalling tab
         return
-
-
-@step(u'Then the line "([^"]*)" no longer exists')
-def then_the_line__no_longer_exists(step, line_id):
-    response = line_action_confd.get(line_id)
-    assert_that(response.status, equal_to(404))
-
-
-@step(u'Then the line sip "([^"]*)" no longer exists')
-def then_the_line_sip_no_longer_exists(step, line_id):
-    response = line_sip_action_confd.get(line_id)
-    assert_that(response.status, equal_to(404))
-
-
-@step(u'Then I get a list containing the following lines:')
-def then_i_get_a_list_containing_the_following_lines(step):
-    line_response = world.response.data
-    expected_lines = step.hashes
-
-    assert_that(line_response, has_key('items'))
-    lines = line_response['items']
-
-    for expected_line in expected_lines:
-        expected_line = _convert_line_parameters(expected_line)
-        assert_that(lines, has_item(has_entries(expected_line)))
-
-
-def _convert_line_parameters(line):
-
-    if 'id' in line:
-        line['id'] = int(line['id'])
-
-    if 'device_slot' in line:
-        line['device_slot'] = int(line['device_slot'])
-
-    return line
-
-
-@step(u'Then I get a line with the following parameters:')
-def then_i_get_a_line_with_the_following_parameters(step):
-    expected_line = _convert_line_parameters(step.hashes[0])
-    line_response = world.response.data
-
-    assert_that(line_response, has_entries(expected_line))
-
-
-@step(u'Then I have a line_sip with the following parameters:')
-def then_i_have_an_line_sip_with_the_following_parameters(step):
-    parameters = _extract_line_parameters(step)
-    line = world.response.data
-
-    assert_that(line, has_entries(parameters))
-
-
-def _extract_line_parameters(step):
-    parameters = step.hashes[0]
-
-    if 'id' in parameters:
-        parameters['id'] = int(parameters['id'])
-
-    if parameters.get('device_slot'):
-        parameters['device_slot'] = int(parameters['device_slot'])
-
-    return parameters
-
-
-@step(u'Then I have a line_sip with the following attributes:')
-def then_i_have_an_line_sip_with_the_following_attributes(step):
-    line = world.response.data
-
-    for line_attribute in step.hashes:
-        assert_that(line.keys(), has_item(line_attribute['attribute']))
