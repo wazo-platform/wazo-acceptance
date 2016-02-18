@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from hamcrest import *
+from hamcrest import assert_that, has_length
 
 from xivo_acceptance.action.webi import incall as incall_action_webi
 from xivo_acceptance.helpers import incall_helper
@@ -57,12 +57,6 @@ def when_i_create_incall_with_did(step, incall_did, context):
 @step(u'When incall "([^"]*)" is removed')
 def when_incall_is_removed(step, incall_did):
     incall_action_webi.remove_incall_with_did(incall_did)
-
-
-@step(u'Then incall "([^"]*)" is associated to nothing')
-def then_incall_group1_is_associated_to_nothing(step, did):
-    incall = _find_incall_with_did(did)
-    assert_that(incall.destination, none())
 
 
 @step(u'Then I see the incall "([^"]*)" exists$')
