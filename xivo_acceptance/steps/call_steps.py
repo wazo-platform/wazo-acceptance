@@ -108,11 +108,6 @@ def when_a_hangs_up(step, name):
     phone.hangup()
 
 
-@step(u'When "([^"]*)" and "([^"]*)" talk for "([^"]*)" seconds')
-def when_a_and_b_talk_for_n_seconds(step, _a, _b, seconds):
-    _sleep(seconds)
-
-
 @step(u'I wait (\d+) seconds')
 def given_i_wait_n_seconds(step, seconds):
     _sleep(seconds)
@@ -152,12 +147,6 @@ def then_group1_is_talking(step, user):
     common.wait_until(phone.is_talking, tries=3)
 
 
-@step(u'Then "([^"]*)" hears a ringback tone')
-def then_user_hears_a_ringback_tone(step, user):
-    phone = step.scenario.phone_register.get_user_phone(user)
-    common.wait_until(phone.is_ringback_tone, tries=3)
-
-
 @step(u'Then I see no recording file of this call in monitoring audio files page')
 def then_i_not_see_recording_file_of_this_call_in_monitoring_audio_files_page(step):
     now = int(time.time())
@@ -168,13 +157,6 @@ def then_i_not_see_recording_file_of_this_call_in_monitoring_audio_files_page(st
         file_name = search % (now - nbtries)
         assert not common.element_is_in_list('sounds', file_name, {'dir': 'monitor'})
         nbtries += 1
-
-
-@step(u'Then I see rejected call to extension "([^"]+)" in asterisk log')
-def then_i_see_rejected_call_in_asterisk_log(step, extension):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    expression = "to extension '%s' rejected because extension not found in context '%s'" % (number, context)
-    assert search_str_in_asterisk_log(expression)
 
 
 @step(u'Then I should see the following caller id:')
