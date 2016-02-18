@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,49 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to, has_item, has_entry, has_length, has_entries, is_not, none
-from lettuce import step, world
+from hamcrest import assert_that, equal_to
+from lettuce import step
 
 from xivo_acceptance.action.webi import user as user_action_webi
-from xivo_acceptance.action.confd import func_key_action_confd
-from xivo_acceptance.helpers import extension_helper
-from xivo_acceptance.helpers import func_key_helper
-from xivo_acceptance.helpers import group_helper
-from xivo_acceptance.helpers import meetme_helper
-from xivo_acceptance.helpers import queue_helper
-from xivo_acceptance.helpers import user_helper
-from xivo_acceptance.lettuce.xivo_hamcrest import assert_has_dicts_in_order
 from xivo_acceptance.lettuce import common
-
-
-@step(u'Given there is no func key with id "([^"]*)"')
-def given_there_is_no_func_key_with_id_group1(step, func_key_id):
-    func_key_helper.delete_func_key(func_key_id)
-
-
-@step(u'When I request the func key with id "([^"]*)" via CONFD')
-def when_i_request_the_func_key_with_id_group1_via_confd(step, func_key_id):
-    world.response = func_key_action_confd.get_func_key(func_key_id)
-
-
-@step(u'When I request the funckey with a destination for user "([^"]*)" "([^"]*)"')
-def when_i_request_the_funckey_with_a_destination_for_user_group1_group2(step, firstname, lastname):
-    user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    func_key_ids = func_key_helper.find_func_keys_with_user_destination(user['id'])
-    assert_that(func_key_ids, has_length(1), "More than one func key with the same destination")
-
-    world.response = func_key_action_confd.get_func_key(func_key_ids[0])
-
-
-@step(u'When I request the list of func keys via CONFD')
-def when_i_request_the_list_of_func_keys_via_confd(step):
-    world.response = func_key_action_confd.func_key_list()
-
-
-@step(u'When I request the list of func keys with the following parameters via CONFD:')
-def when_i_request_the_list_of_func_keys_with_the_following_parameters_via_confd(step):
-    parameters = step.hashes[0]
-    world.response = func_key_action_confd.func_key_list(parameters)
 
 
 @step(u'Then the user "([^"]*)" has the following func keys:')
@@ -110,89 +72,3 @@ def _extract_destination_value(key_type, line):
         value = key_destination_field.get_attribute('value')
 
     return value
-
-
-@step(u'Then the list contains the following func keys:')
-def then_the_list_contains_the_following_func_keys(step):
-    func_keys = _map_func_keys_with_destination_name(world.response.data['items'])
-    for func_key in step.hashes:
-        assert_that(func_keys, has_item(has_entries(func_key)))
-
-
-@step(u'Then the list does not contain the following func keys:')
-def then_the_list_does_not_contain_the_following_func_keys(step):
-    func_keys = _map_func_keys_with_destination_name(world.response.data['items'])
-    for func_key in step.hashes:
-        assert_that(func_keys, is_not(has_item(has_entries(func_key))))
-
-
-@step(u'Then the list contains the following func keys in the right order:')
-def then_the_list_contains_the_following_func_keys_in_the_right_order(step):
-    func_keys = _map_func_keys_with_destination_name(world.response.data['items'])
-    expected_func_keys = [f for f in step.hashes]
-    assert_has_dicts_in_order(func_keys, expected_func_keys)
-
-
-def _map_func_keys_with_destination_name(func_keys):
-    converted = []
-    for func_key in func_keys:
-        converted.append({
-            'type': func_key['type'],
-            'destination': func_key['destination'],
-            'destination name': _find_destination_name(func_key)})
-
-    return converted
-
-
-def _find_destination_name(func_key):
-    destination = func_key['destination']
-
-    if destination == 'user':
-        return _find_user_name_for_func_key(func_key)
-    elif destination == 'group':
-        return _find_group_name_for_func_key(func_key)
-    elif destination == 'queue':
-        return _find_queue_name_for_func_key(func_key)
-    elif destination == 'conference':
-        return _find_meetme_name_for_func_key(func_key)
-    elif destination == 'service':
-        return _find_extension_name_for_func_key(func_key)
-    elif destination == 'forward':
-        return _find_extension_name_for_func_key(func_key)
-
-
-def _find_user_name_for_func_key(func_key):
-    user = user_helper.find_by_user_id(func_key['destination_id'])
-    assert_that(user, is_not(none()))
-    return "%s %s" % (user['firstname'], user['lastname'])
-
-
-def _find_group_name_for_func_key(func_key):
-    group = group_helper.get_group(func_key['destination_id'])
-    return group.name
-
-
-def _find_queue_name_for_func_key(func_key):
-    queue = queue_helper.find_queue_with_id(func_key['destination_id'])
-    return queue.name
-
-
-def _find_meetme_name_for_func_key(func_key):
-    meetme = meetme_helper.find_meetme_with_id(func_key['destination_id'])
-    return meetme.name
-
-
-def _find_extension_name_for_func_key(func_key):
-    return extension_helper.get_extension_typeval(func_key['destination_id'])
-
-
-@step(u'Then I get a func key of type "([^"]*)"')
-def then_i_get_a_func_key_of_type_group1(step, func_key_type):
-    assert_that(world.response.data, has_entry('type', func_key_type))
-
-
-@step(u'Then I get a func key with a destination id for user "([^"]*)" "([^"]*)"')
-def then_i_get_a_func_key_with_a_destination_id_for_user_group1_group2(step, firstname, lastname):
-    destination_id = world.response.data['destination_id']
-    user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    assert_that(user['id'], equal_to(destination_id))
