@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,11 +32,6 @@ def given_there_is_no_conference_with_number(step, conf_number):
 def given_there_are_the_following_conference_rooms(step):
     for meetme in step.hashes:
         meetme_action_webi.add_or_replace_meetme(meetme)
-
-
-@step(u'When I delete the conference room with number "([^"]*)"')
-def when_i_delete_the_conference_room_with_number_group1(step, conf_number):
-    meetme_helper.delete_meetme_with_confno(conf_number)
 
 
 @step(u'When I add the following conference rooms:')
