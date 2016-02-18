@@ -23,6 +23,15 @@ from xivo_acceptance.helpers import incall_helper
 from xivo_acceptance.lettuce import form, common
 
 
+@step(u'Given there are incalls with infos:')
+def given_there_are_incalls_with_infos(step):
+    for incall in step.hashes:
+        did = incall['extension']
+        context = incall['context']
+        incall_helper.delete_incalls_with_did(did, context)
+        _add_incall(did, context)
+
+
 @step(u'Given there is no incall "([^"]*)"$')
 def given_there_is_no_incall(step, did):
     incall_helper.delete_incalls_with_did(did)
@@ -48,10 +57,7 @@ def given_there_is_an_incall_group1_in_context_group2_to_the_queue_group3(step, 
 
 @step(u'When I create an incall with DID "([^"]*)" in context "([^"]*)"')
 def when_i_create_incall_with_did(step, incall_did, context):
-    common.open_url('incall', 'add')
-    incall_action_webi.type_incall_did(incall_did)
-    incall_action_webi.type_incall_context(context)
-    form.submit.submit_form()
+    _add_incall(incall_did, context)
 
 
 @step(u'When incall "([^"]*)" is removed')
@@ -77,3 +83,10 @@ def _find_incall_with_did(did):
     incalls = incall_helper.find_incalls_with_did(did)
     assert_that(incalls, has_length(1), "more that one incall with DID %s found" % did)
     return incalls[0]
+
+
+def _add_incall(did, context):
+    common.open_url('incall', 'add')
+    incall_action_webi.type_incall_did(did)
+    incall_action_webi.type_incall_context(context)
+    form.submit.submit_form()
