@@ -75,12 +75,6 @@ def then_i_see_the_element_not_exists(step, name):
     assert line is None, 'incall: %s exist' % name
 
 
-def _find_incall_with_did(did):
-    incalls = incall_helper.find_incalls_with_did(did)
-    assert_that(incalls, has_length(1), "more that one incall with DID %s found" % did)
-    return incalls[0]
-
-
 def _add_incall(did, context):
     common.open_url('incall', 'add')
     incall_action_webi.type_incall_did(did)
