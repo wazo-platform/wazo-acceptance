@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
-from hamcrest import assert_that, has_length
 
 from xivo_acceptance.action.webi import incall as incall_action_webi
 from xivo_acceptance.helpers import incall_helper
