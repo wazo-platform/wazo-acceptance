@@ -56,6 +56,7 @@ from .group_steps import *
 from .incall_steps import *
 from .ipbx_count_steps import *
 from .ldap_steps import *
+from .line_extension_steps import *
 from .line_extension_collection_steps import *
 from .line_steps import *
 from .meetme_steps import *
