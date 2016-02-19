@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,10 +17,8 @@
 
 from lettuce import step
 
-from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.action.webi import ldap as ldap_action_webi
-from xivo_acceptance.helpers import cti_helper, directory_helper
-from xivo_acceptance.lettuce import assets, common, sysutils, ldap_utils
+from xivo_acceptance.lettuce import common
 
 
 @step(u'Given there is no LDAP server "([^"]*)"$')
@@ -56,109 +54,3 @@ def i_create_an_ldap_filter_with_name_and_server(step, name, server):
 def given_there_are_entries_in_the_ldap_server(step):
     for directory_entry in step.hashes:
         ldap_action_webi.add_or_replace_ldap_entry(directory_entry)
-
-
-@step(u"Given there's an LDAP server configured for reverse lookup with entries:")
-def given_there_s_an_ldap_server_configured_for_reverse(step):
-    ldap_filter = 'openldap-dev'
-    given_the_ldap_server_is_configured_for_ssl_connections(step)
-    for directory_entry in step.hashes:
-        ldap_action_webi.add_or_replace_ldap_entry(directory_entry)
-    _configure_display_filter()
-    _configure_ldap_directory(ldap_filter)
-    _add_directory_to_direct_directories()
-    directory_action_webi.set_reverse_directories(['ldapdirectory'])
-    cti_helper.restart_server()
-
-
-@step(u'Given the LDAP server is configured for SSL connections')
-def given_the_ldap_server_is_configured_for_ssl_connections(step):
-    _copy_ca_certificate()
-    _configure_ca_certificate()
-    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
-                                                host='openldap-dev.lan-quebec.avencall.com',
-                                                ssl=True)
-    ldap_action_webi.add_or_replace_ldap_filter(
-        name='openldap-dev',
-        server='openldap-dev',
-        base_dn='dc=lan-quebec,dc=avencall,dc=com',
-        username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-        password='superpass')
-
-
-def _copy_ca_certificate():
-    assets.copy_asset_to_server("ca-certificates.crt", "/etc/ssl/certs/ca-certificates.crt")
-
-
-def _configure_ca_certificate():
-    command = ['grep', 'TLS_CACERT', '/etc/ldap/ldap.conf']
-    output = sysutils.output_command(command)
-    if not output.strip():
-        command = ["echo 'TLS_CACERT /etc/ssl/certs/ca-certificates.crt' >> /etc/ldap/ldap.conf"]
-        sysutils.send_command(command)
-
-
-@step(u'Given there are the following ldap filters:')
-def given_there_are_the_following_ldap_filters(step):
-    for ldap_filter in step.hashes:
-        options = dict(
-            name=ldap_filter['name'],
-            server=ldap_filter['server'],
-            base_dn=ldap_filter['base dn'],
-            username=ldap_filter['username'],
-            password=ldap_filter['password'])
-
-        if 'filter' in ldap_filter:
-            options['custom_filter'] = ldap_filter['filter']
-
-        ldap_action_webi.add_or_replace_ldap_filter(**options)
-
-
-@step(u'Given there is a user with common name "([^"]*)" and password "([^"]*)" on the ldap server')
-def given_there_is_a_user_with_common_name_group1_and_password_group2_on_the_ldap_server(step, common_name, password):
-    entry = {
-        'objectClass': ['top', 'inetOrgPerson'],
-        'cn': common_name,
-        'sn': common_name,
-        'userPassword': ldap_utils.generate_ldap_password(password)
-    }
-
-    ldap_utils.add_or_replace_ldap_entry(entry)
-
-
-@step(u'Given the LDAP server is configured and active')
-def given_the_ldap_server_is_configured_and_active(step):
-    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
-                                                host='openldap-dev.lan-quebec.avencall.com')
-
-
-def _configure_display_filter():
-    field_list = [
-        (u'Nom', u'', u'name'),
-        (u'Numéro', u'', u'phone')
-    ]
-    directory_action_webi.add_or_replace_display("Display", field_list)
-
-
-def _configure_ldap_directory(ldap_filter):
-    directory_action_webi.add_or_replace_directory(
-        name='ldapdirectory',
-        uri='ldapfilter://%s' % ldap_filter,
-        direct_match='sn,givenName,telephoneNumber',
-        reverse_match='telephoneNumber',
-        fields={
-            'firstname': '{givenName}',
-            'lastname': '{sn}',
-            'name': '{givenName} {sn}',
-            'phone': '{telephoneNumber}',
-            'reverse': '{givenName}',
-        },
-    )
-
-
-def _add_directory_to_direct_directories(directories=['ldapdirectory']):
-    directory_action_webi.assign_filter_and_directories_to_context(
-        'default',
-        'Display',
-        directories
-    )
