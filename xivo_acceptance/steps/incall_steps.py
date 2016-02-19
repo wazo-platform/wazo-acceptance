@@ -43,11 +43,6 @@ def when_i_group1_incall_group2(step, enable_disable, did):
         common.enable_selected_lines()
 
 
-@step(u'Given there is no incall "([^"]*)"$')
-def given_there_is_no_incall(step, did):
-    incall_helper.delete_incalls_with_did(did)
-
-
 @step(u'Given there is no incall "([^"]*)" in context "([^"]*)"$')
 def given_there_is_no_incall_in_context(step, did, context):
     incall_helper.delete_incalls_with_did(did, context)
