@@ -466,3 +466,12 @@ def then_user_has_an_unconditional_forward_set_to_group2(step, fullname, expecte
 def then_user_has_no_unconditional_forward(step, fullname):
     enabled, _ = user_helper.get_unconditional_forward(fullname)
     assert_that(enabled, is_(False))
+
+
+def _get_user_info(hashes):
+    userinfo = hashes[0]
+
+    if 'id' in userinfo:
+        userinfo['id'] = int(userinfo['id'])
+
+    return userinfo
