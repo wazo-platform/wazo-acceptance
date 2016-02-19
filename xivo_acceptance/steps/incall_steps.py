@@ -32,6 +32,17 @@ def given_there_are_incalls_with_infos(step):
         _add_incall(did, context)
 
 
+@step(u'When I "([^"]*)" incall "([^"]*)"')
+def when_i_group1_incall_group2(step, enable_disable, did):
+    enable = enable_disable == 'enable'
+    incall_action_webi.search_incall_number(did)
+    common.click_checkbox_for_all_lines()
+    if not enable:
+        common.disable_selected_lines()
+    else:
+        common.enable_selected_lines()
+
+
 @step(u'Given there is no incall "([^"]*)"$')
 def given_there_is_no_incall(step, did):
     incall_helper.delete_incalls_with_did(did)

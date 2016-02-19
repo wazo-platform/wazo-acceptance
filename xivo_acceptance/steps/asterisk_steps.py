@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, equal_to, contains, has_items
+from hamcrest import assert_that, equal_to, contains, has_items, not_
 from lettuce import step
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.helpers import line_read_helper
@@ -108,3 +108,24 @@ def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, exten
         assert_that(ami_lines, has_items(*lines))
 
     common.wait_until_assert(_assert, tries=3)
+
+
+@step(u'Then extension "([^"]*)" is not in context "([^"]*)"')
+def then_extension_is_not_in_context(step, extension, context):
+    in_context = _extension_in_context(extension, context)
+    common.wait_until_assert(lambda: assert_that(not_(in_context)), tries=3)
+
+
+@step(u'Then extension "([^"]*)" is in context "([^"]*)"')
+def then_extension_is_in_context(step, extension, context):
+    in_context = _extension_in_context(extension, context)
+    common.wait_until_assert(lambda: assert_that(not_(in_context)), tries=3)
+
+
+def _extension_in_context(extension, context):
+    asterisk_cmd = 'dialplan show {}@{}'.format(extension, context)
+    command = ['asterisk', '-rx', '"{}"'.format(asterisk_cmd)]
+
+    output = sysutils.output_command(command)
+
+    return 'There is no existence of' not in output

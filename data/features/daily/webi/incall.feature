@@ -17,3 +17,12 @@ Feature: Incalls
     Then incall "1830" is displayed in the list
     Then incall "1831" is displayed in the list
     Then incall "1832" is displayed in the list
+
+  Scenario: Disabled incall should not be in the available
+    Given there are incalls with infos:
+    | extension | context     |
+    |      1888 | from-extern |
+    When I "disable" incall "1888"
+    Then extension "1888" is not in context "from-extern"
+    When I "enable" incall "1888"
+    Then extension "1888" is in context "from-extern"
