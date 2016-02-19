@@ -17,18 +17,15 @@ function project_root {
 ROOT=$(project_root)
 STEP_DIR=$(project_root)/xivo_acceptance/steps
 FEATURE_DIR=$(project_root)/data/features
+FEATURES_CAT=/tmp/xivo-unused-steps-features
+
+find $FEATURE_DIR -name '*.feature' | xargs cat > $FEATURES_CAT
 
 function escape_pattern {
     raw_pattern="$1"
     echo "$raw_pattern" | \
-        # escape word letters
-        sed 's/S+/\\S\+/g' | \
-        # escape digit letters
-        sed 's/\d+/[[:digit:]]\+/g' | \
-        # escape regexp special characters
-        sed 's/\([()?+]\)/\\\1/g' | \
         # reindent line
-        sed 's/^\^/^ \\+/g'
+        sed 's/^\^/^ +/g'
 }
 
 function extract_step_pattern {
@@ -38,9 +35,32 @@ function extract_step_pattern {
     echo "$escaped_pattern"
 }
 
-function find_step_usage {
+function pygrep {
+    SCRIPT=$(cat <<EOF
+import re
+import sys
+
+pattern = r'''$1'''
+file_name = '''$2'''
+
+file = open(file_name, "r")
+
+for line_num, line in enumerate(file):
+    if re.search(pattern, line):
+        print "OK"
+        sys.exit(0)
+print 'KO'
+EOF
+          )
+    set -e
+    result=$(python -c "$SCRIPT")
+    set +e
+    [ "$result" = "OK" ]
+}
+
+function step_is_used {
     step_pattern="$1"
-    grep -qrIi --include '*.feature' "$step_pattern" $FEATURE_DIR
+    pygrep "$step_pattern" $FEATURES_CAT
 }
 
 function list_step_definitions {
@@ -48,11 +68,10 @@ function list_step_definitions {
 }
 
 function remove_used_step_definitions {
-    while read step_definition
+    while read -r step_definition
     do
         step_pattern=$(extract_step_pattern "$step_definition")
-        find_step_usage "$step_pattern"
-        if [ "$?" -eq "$STEP_NOT_FOUND" ] ; then
+        if ! step_is_used "$step_pattern" ; then
             echo "$step_definition"
         fi
     done
