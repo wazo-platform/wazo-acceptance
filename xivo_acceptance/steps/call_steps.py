@@ -96,6 +96,13 @@ def when_a_calls_exten_and_waits_until_the_end(step, name, exten):
     common.wait_until(phone.is_hungup, tries=10)
 
 
+@step(u'When "([^"]*)" calls "([^"]*)" and wait for "([^"]*)" seconds')
+def when_someone_calls_an_exten_and_wait_for_n_seconds(step, name, exten, tries):
+    phone = step.scenario.phone_register.get_user_phone(name)
+    phone.call(exten)
+    common.wait_until(phone.is_hungup, tries=int(tries))
+
+
 @step(u'When "([^"]*)" answers')
 def when_a_answers(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)
