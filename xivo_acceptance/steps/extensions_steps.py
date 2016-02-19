@@ -75,6 +75,12 @@ def when_i_delete_extension_with_id(step, extension_id):
     world.response = extension_action_confd.delete_extension(extension_id)
 
 
+@step(u'When I delete extension "(\d+)@([\w_-]+)"')
+def when_i_delete_extension_group1(step, exten, context):
+    extension = extension_helper.get_by_exten_context(exten, context)
+    world.response = extension_action_confd.delete_extension(extension['id'])
+
+
 @step(u'Then I get a list containing the following extensions:')
 def then_i_get_a_list_containing_the_following_extensions(step):
     expected_extensions = step.hashes
