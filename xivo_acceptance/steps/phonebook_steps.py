@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step, world
-from hamcrest import *
+from hamcrest import assert_that, has_items
 
 from xivo_acceptance.action.webi import phonebook as phonebook_action_webi
-from xivo_acceptance.lettuce import assets, common
+from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce.aastra import AastraPhonebookBrowser
 
 
@@ -73,23 +73,9 @@ def then_i_see_the_following_results_on_the_phone(step):
     assert_that(results, has_items(*expected_results))
 
 
-@step(u'Then I do not see the following results on the phone')
-def then_i_do_not_see_the_following_results_on_the_phone(step):
-    expected_results = step.hashes
-    results = _extract_results(step.keys, world.phone_results)
-
-    assert_that(results, is_not(has_items(*expected_results)))
-
-
 @step(u'Then "([^"]*)" appears in the list')
 def then_entry_appears_in_the_list(step, entry):
     assert common.find_line(entry) is not None
-
-
-@step(u'When I import the CSV file "([^"]*)" into the phonebook')
-def when_i_import_the_csv_file_into_the_phonebook(step, csvfile):
-    path = assets.full_path(csvfile)
-    phonebook_action_webi.import_csv_file(path)
 
 
 def _extract_results(keys, phone_results):
