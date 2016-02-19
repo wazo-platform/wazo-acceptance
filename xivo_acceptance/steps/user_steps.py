@@ -17,21 +17,13 @@
 
 from hamcrest import assert_that
 from hamcrest import equal_to
-from hamcrest import has_entries
-from hamcrest import has_entry
-from hamcrest import has_key
-from hamcrest import has_item
-from hamcrest import instance_of
 from hamcrest import is_
-from hamcrest import is_not
-from hamcrest import none
 from lettuce import step
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.confd import user_action_confd
 from xivo_acceptance.action.webi import user as user_action_webi
-from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import user_helper, agent_helper, group_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_acceptance.lettuce import common, form
