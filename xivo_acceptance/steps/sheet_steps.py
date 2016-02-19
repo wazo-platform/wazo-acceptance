@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ def given_i_have_a_sheet_model_with_custom_ui(step):
     form.submit.submit_form()
 
 
-@step(u'Then I see a sheet with the following values:')
+@step(u'(?:Then|Given) I see a sheet with the following values:')
 def then_i_see_a_sheet_with_the_following_values(step):
     res = common.wait_until(cti_helper.get_sheet_infos, tries=10)
     expected = step.hashes
@@ -73,3 +73,8 @@ def then_i_see_a_custom_sheet_with_the_following_values(step):
 @step(u'When I fill a custom sheet with the following values:')
 def when_i_fill_a_custom_sheet_with_the_following_values(step):
     cti_helper.set_infos_in_custom_sheet(step.hashes)
+
+
+@step(u'When I close all sheets')
+def when_i_close_all_sheets(step):
+    cti_helper.close_all_sheets()

@@ -25,7 +25,6 @@ from xivo_acceptance.helpers import cti_helper, asterisk_helper
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import form, func
 from xivo_acceptance.lettuce.form.checkbox import Checkbox
-from xivo_acceptance.lettuce.logs import search_str_in_asterisk_log
 
 from linphonelib import ExtensionNotFoundException
 
@@ -83,8 +82,8 @@ def when_chan_test_hangs_up(step, channelid):
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 
-@step(u'When "([^"]*)" calls "([^"]*)"$')
-def when_a_calls_exten(step, name, exten):
+@step(u'(?:When|Given) "([^"]*)" calls "([^"]*)"$')
+def a_calls_exten(step, name, exten):
     phone = step.scenario.phone_register.get_user_phone(name)
     phone.call(exten)
 
@@ -103,8 +102,8 @@ def when_someone_calls_an_exten_and_wait_for_n_seconds(step, name, exten, tries)
     common.wait_until(phone.is_hungup, tries=int(tries))
 
 
-@step(u'When "([^"]*)" answers')
-def when_a_answers(step, name):
+@step(u'(?:When|Given) "([^"]*)" answers')
+def a_answers(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)
     phone.answer()
 
@@ -113,6 +112,18 @@ def when_a_answers(step, name):
 def when_a_hangs_up(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)
     phone.hangup()
+
+
+@step(u'When "([^"]*)" puts his call on hold')
+def when_a_puts_his_call_on_hold(step, name):
+    phone = step.scenario.phone_register.get_user_phone(name)
+    phone.hold()
+
+
+@step(u'When "([^"]*)" resumes his call')
+def when_a_resumes_his_call(step, name):
+    phone = step.scenario.phone_register.get_user_phone(name)
+    phone.resume()
 
 
 @step(u'I wait (\d+) seconds')

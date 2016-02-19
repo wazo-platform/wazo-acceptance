@@ -459,6 +459,31 @@ Feature: Sheet
         | Variable         |      Value |
         | xivo-calleridnum | 5555555555 |
 
+    Scenario: No sheet when a call is resumed on Link
+        Given I have a sheet model named "testsheet" with the variables:
+        | variable          |
+        | xivo-calleridname  |
+        | xivo-calleridnum   |
+        Given I assign the sheet "testsheet" to the "Link" event
+        Given there are users with infos:
+        | firstname | lastname | number | context | cti_profile | protocol |
+        | Vito      | Corleone |   1001 | default | Client      | sip      |
+        | Michael   | Corleone |   1002 | default | Client      | sip      |
+        Given I start the XiVO Client
+        Given I log in the XiVO client as "michael", pass "corleone", unlogged agent
+        Given "Vito Corleone" calls "1002"
+        Given "Michael Corleone" answers
+        Given I see a sheet with the following values:
+        | Variable          | Value         |
+        | xivo-calleridname | Vito Corleone |
+        | xivo-calleridnum  | 1001          |
+
+        When I close all sheets
+        When "Vito Corleone" puts his call on hold
+        When "Vito Corleone" resumes his call
+
+        Then I should not see any sheet
+
     Scenario: db-variables on reverse lookup in a directory definition
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile | protocol |

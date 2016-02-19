@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -136,6 +136,10 @@ def get_sheet_infos():
         return _to_var_vals(xivoclient.exec_command('get_sheet_infos')['return_value']['content'])
     except KeyError:
         return []
+
+
+def close_all_sheets():
+    return xivoclient.exec_command('close_all_sheets')
 
 
 def get_infos_in_custom_sheet():
