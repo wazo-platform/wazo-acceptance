@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -81,11 +81,6 @@ def i_start_the_xivo_client_with_an_argument(step, argument):
 @step(u'When I stop the XiVO client$')
 def when_i_stop_the_xivo_client(step):
     xivoclient.stop_xivoclient()
-
-
-@step(u'When I stop the XiVO client "([^"]*)"$')
-def when_i_stop_the_xivo_client_xxx(step, instance_name):
-    xivoclient.stop_xivoclient(instance_name)
 
 
 @step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')
