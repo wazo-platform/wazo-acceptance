@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -307,6 +307,11 @@ def remove_line(line_substring, column=None):
     click_on_line_with_alert('Delete', line_substring, column)
 
 
+def click_checkbox_for_all_lines():
+    for checkbox in world.browser.find_elements_by_css_selector(".it-checkbox"):
+        checkbox.click()
+
+
 def click_on_line_with_alert(act, line_substring, column=None):
     table_line = get_line(line_substring, column)
     common_action_webi.reset_focus()
@@ -314,6 +319,14 @@ def click_on_line_with_alert(act, line_substring, column=None):
     delete_button.click()
     alert = world.browser.switch_to_alert()
     alert.accept()
+
+
+def disable_selected_lines():
+    menu_button = world.browser.find_element_by_id("toolbar-bt-advanced")
+    ActionChains(world.browser).move_to_element(menu_button).perform()
+
+    disable_button = world.browser.find_element_by_id("toolbar-advanced-menu-disable")
+    ActionChains(world.browser).click(disable_button).perform()
 
 
 def edit_line(line_substring, column=None):
@@ -327,6 +340,14 @@ def edit_line(line_substring, column=None):
     table_line = get_line(line_substring, column)
     edit_button = table_line.find_element_by_xpath(".//a[@title='Edit']")
     edit_button.click()
+
+
+def enable_selected_lines():
+    menu_button = world.browser.find_element_by_id("toolbar-bt-advanced")
+    ActionChains(world.browser).move_to_element(menu_button).perform()
+
+    enable_button = world.browser.find_element_by_id("toolbar-advanced-menu-enable")
+    ActionChains(world.browser).click(enable_button).perform()
 
 
 def go_to_tab(tab_label, ss_tab_label=None):

@@ -62,10 +62,10 @@ Feature: Entity Filter
           | entity_filter |  4234  | foo     |
           | mm001         |  4321  | default |
 
-        Given there is no incall "4234" in context "alberta"
-        When I create an incall with DID "4234" in context "alberta"
-        Given there is no incall "4321" in context "from-extern"
-        When I create an incall with DID "4321" in context "from-extern"
+        Given there are incalls with infos:
+          | extension | context     |
+          |      4234 | alberta     |
+          |      4321 | from-extern |
 
         Given there is a agent "entity_filter" "" with extension "1111@foo"
         Given there is a agent "agent02" "" with extension "2222@default"

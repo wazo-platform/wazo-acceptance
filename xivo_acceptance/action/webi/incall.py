@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -56,3 +56,13 @@ def type_incall_caller_id(caller_id):
 
 def remove_incall_with_did(incall_did):
     common.remove_element_if_exist('incall', incall_did)
+
+
+def search_incall_number(did):
+    common.open_url('incall')
+    searchbox_id = 'it-toolbar-search'
+    text_input = world.browser.find_element_by_id(searchbox_id)
+    text_input.clear()
+    text_input.send_keys(did)
+    submit_button = world.browser.find_element_by_id('it-subsearch')
+    submit_button.click()
