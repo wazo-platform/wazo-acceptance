@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2013-2014 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,6 +49,12 @@ def given_there_are_groups(step):
                 form.select.set_select_field_with_id_containing('it-dialaction-noanswer-group-actionarg1', forward_dest_name)
         form.submit.submit_form()
         common.open_url('group', 'list', {'search': ''})
+
+
+@step(u'Given there is a group "([^"]*)" with extension "(\d+)@(\w+)"$')
+def given_there_is_a_group_with_extension(step, name, number, context):
+    group_helper.delete_groups_with_number(number)
+    group_helper.add_group(name, number, context)
 
 
 @step(u'Given there is a group "([^"]*)" with extension "([^"]*)" and users:$')
