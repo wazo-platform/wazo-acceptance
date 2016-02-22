@@ -17,8 +17,12 @@
 
 from lettuce import step
 
+from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.action.webi import ldap as ldap_action_webi
+from xivo_acceptance.helpers import cti_helper
+from xivo_acceptance.lettuce import assets
 from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce import sysutils
 
 
 @step(u'Given there is no LDAP server "([^"]*)"$')
@@ -54,3 +58,74 @@ def i_create_an_ldap_filter_with_name_and_server(step, name, server):
 def given_there_are_entries_in_the_ldap_server(step):
     for directory_entry in step.hashes:
         ldap_action_webi.add_or_replace_ldap_entry(directory_entry)
+
+
+@step(u"Given there's an LDAP server configured for reverse lookup with entries:")
+def given_there_s_an_ldap_server_configured_for_reverse(step):
+    ldap_filter = 'openldap-dev'
+    _configure_ldap_ssl(step)
+    for directory_entry in step.hashes:
+        ldap_action_webi.add_or_replace_ldap_entry(directory_entry)
+    _configure_display_filter()
+    _configure_ldap_directory(ldap_filter)
+    _add_directory_to_direct_directories()
+    directory_action_webi.set_reverse_directories(['ldapdirectory'])
+    cti_helper.restart_server()
+
+
+def _configure_ldap_ssl(step):
+    _copy_ca_certificate()
+    _configure_ca_certificate()
+    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
+                                                host='openldap-dev.lan-quebec.avencall.com',
+                                                ssl=True)
+    ldap_action_webi.add_or_replace_ldap_filter(
+        name='openldap-dev',
+        server='openldap-dev',
+        base_dn='dc=lan-quebec,dc=avencall,dc=com',
+        username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
+        password='superpass')
+
+
+def _copy_ca_certificate():
+    assets.copy_asset_to_server("ca-certificates.crt", "/etc/ssl/certs/ca-certificates.crt")
+
+
+def _configure_ca_certificate():
+    command = ['grep', 'TLS_CACERT', '/etc/ldap/ldap.conf']
+    output = sysutils.output_command(command)
+    if not output.strip():
+        command = ["echo 'TLS_CACERT /etc/ssl/certs/ca-certificates.crt' >> /etc/ldap/ldap.conf"]
+        sysutils.send_command(command)
+
+
+def _configure_display_filter():
+    field_list = [
+        (u'Nom', u'', u'name'),
+        (u'Numéro', u'', u'phone')
+    ]
+    directory_action_webi.add_or_replace_display("Display", field_list)
+
+
+def _configure_ldap_directory(ldap_filter):
+    directory_action_webi.add_or_replace_directory(
+        name='ldapdirectory',
+        uri='ldapfilter://%s' % ldap_filter,
+        direct_match='sn,givenName,telephoneNumber',
+        reverse_match='telephoneNumber',
+        fields={
+            'firstname': '{givenName}',
+            'lastname': '{sn}',
+            'name': '{givenName} {sn}',
+            'phone': '{telephoneNumber}',
+            'reverse': '{givenName}',
+        },
+    )
+
+
+def _add_directory_to_direct_directories(directories=['ldapdirectory']):
+    directory_action_webi.assign_filter_and_directories_to_context(
+        'default',
+        'Display',
+        directories
+    )

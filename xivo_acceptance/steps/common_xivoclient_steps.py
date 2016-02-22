@@ -83,6 +83,11 @@ def when_i_stop_the_xivo_client(step):
     xivoclient.stop_xivoclient()
 
 
+@step(u'When I stop the XiVO client "([^"]*)"$')
+def when_i_stop_the_xivo_client_xxx(step, instance_name):
+    xivoclient.stop_xivoclient(instance_name)
+
+
 @step(u'When I disable access to XiVO Client to user "([^"]*)" "([^"]*)"')
 def when_i_disable_access_to_xivo_client_to_user_group1_group2(step, firstname, lastname):
     user_helper.disable_cti_client(firstname, lastname)
