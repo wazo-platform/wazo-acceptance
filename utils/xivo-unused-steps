@@ -30,7 +30,7 @@ function escape_pattern {
 
 function extract_step_pattern {
     step_definition="$1"
-    raw_pattern=$(sed "s/.*step(u\?'\(.*\)')/\1/" <<< "$step_definition")
+    raw_pattern=$(sed "s/.*step(u\?['"\""]\(.*\)['"\""])$/\1/" <<< "$step_definition")
     escaped_pattern=$(escape_pattern "$raw_pattern")
     echo "$escaped_pattern"
 }
