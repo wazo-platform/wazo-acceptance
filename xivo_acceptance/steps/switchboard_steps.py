@@ -21,121 +21,12 @@ from hamcrest import equal_to
 from lettuce import step
 
 from xivo_acceptance.action.webi import directory as directory_action_webi
-from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_acceptance.action.webi import queue as queue_action_webi
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import context_helper
 from xivo_acceptance.helpers import cti_helper
 from xivo_acceptance.helpers import incall_helper
 from xivo_acceptance.lettuce import func, common, sysutils
-
-
-@step(u'Given the switchboard is configured for ldap lookup with location and department$')
-def given_the_switchboard_is_configured_for_ldap_lookup_with_location_and_department(step):
-    context_helper.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
-    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
-                                                host='openldap-dev.lan-quebec.avencall.com')
-    ldap_action_webi.add_or_replace_ldap_filter(
-        name='openldap-dev',
-        server='openldap-dev',
-        base_dn='dc=lan-quebec,dc=avencall,dc=com',
-        username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-        password='superpass')
-
-    directory_action_webi.add_or_replace_directory(
-        'openldap',
-        'ldapfilter://openldap-dev',
-        'cn,telephoneNumber,st,o',
-        '',
-        {'name': '{cn}',
-         'number': '{telephoneNumber}',
-         'location': '{st}',
-         'department': '{o}'}
-    )
-    directory_action_webi.add_or_replace_display(
-        'switchboard',
-        [('Icon', 'status', ''),
-         ('Name', 'name', 'name'),
-         ('Number', 'number_office', 'number'),
-         ('Location', '', 'location'),
-         ('Department', '', 'department')]
-    )
-    directory_action_webi.assign_filter_and_directories_to_context(
-        '__switchboard_directory',
-        'switchboard',
-        ['openldap']
-    )
-    sysutils.restart_service('xivo-dird')
-
-
-@step(u'Given the switchboard is configured for ldap lookup with location$')
-def given_the_switchboard_is_configured_for_ldap_lookup_with_location(step):
-    context_helper.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
-    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
-                                                host='openldap-dev.lan-quebec.avencall.com')
-    ldap_action_webi.add_or_replace_ldap_filter(
-        name='openldap-dev',
-        server='openldap-dev',
-        base_dn='dc=lan-quebec,dc=avencall,dc=com',
-        username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-        password='superpass')
-
-    directory_action_webi.add_or_replace_directory(
-        'openldap',
-        'ldapfilter://openldap-dev',
-        'cn,telephoneNumber,st',
-        '',
-        {'name': '{cn}',
-         'number': '{telephoneNumber}',
-         'location': '{st}'}
-    )
-    directory_action_webi.add_or_replace_display(
-        'switchboard',
-        [('Icon', 'status', ''),
-         ('Name', 'name', 'name'),
-         ('Number', 'number_office', 'number'),
-         ('Location', '', 'location')]
-    )
-    directory_action_webi.assign_filter_and_directories_to_context(
-        '__switchboard_directory',
-        'switchboard',
-        ['openldap']
-    )
-    sysutils.restart_service('xivo-dird')
-
-
-@step(u'Given the switchboard is configured for ldap lookup$')
-def given_the_switchboard_is_configured_for_ldap_lookup(step):
-    context_helper.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
-    ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
-                                                host='openldap-dev.lan-quebec.avencall.com')
-    ldap_action_webi.add_or_replace_ldap_filter(
-        name='openldap-dev',
-        server='openldap-dev',
-        base_dn='dc=lan-quebec,dc=avencall,dc=com',
-        username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
-        password='superpass')
-
-    directory_action_webi.add_or_replace_directory(
-        'openldap',
-        'ldapfilter://openldap-dev',
-        'cn,telephoneNumber',
-        '',
-        {'name': '{cn}',
-         'number': '{telephoneNumber}'}
-    )
-    directory_action_webi.add_or_replace_display(
-        'switchboard',
-        [('Icon', 'status', ''),
-         ('Name', 'name', 'name'),
-         ('Number', 'number_office', 'number')]
-    )
-    directory_action_webi.assign_filter_and_directories_to_context(
-        '__switchboard_directory',
-        'switchboard',
-        ['openldap']
-    )
-    sysutils.restart_service('xivo-dird')
 
 
 @step(u'Given the switchboard is configured for internal directory lookup')

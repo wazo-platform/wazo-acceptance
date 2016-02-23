@@ -54,12 +54,6 @@ def i_create_an_ldap_filter_with_name_and_server(step, name, server):
     )
 
 
-@step(u'Given there are entries in the ldap server:')
-def given_there_are_entries_in_the_ldap_server(step):
-    for directory_entry in step.hashes:
-        ldap_action_webi.add_or_replace_ldap_entry(directory_entry)
-
-
 @step(u"Given there's an LDAP server configured for reverse lookup with entries:")
 def given_there_s_an_ldap_server_configured_for_reverse(step):
     ldap_filter = 'openldap-dev'
