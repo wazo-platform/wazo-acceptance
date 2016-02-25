@@ -15,15 +15,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from lettuce import step, world
-from hamcrest import assert_that, equal_to, is_, none, \
-    has_entry, has_entries, has_item, has_length, \
-    contains_string, instance_of, is_not
+from hamcrest import assert_that
+from hamcrest import contains_string
+from hamcrest import equal_to
+from hamcrest import has_item
+from hamcrest import is_
+from hamcrest import is_not
+from hamcrest import none
+from lettuce import step
 from xivo_acceptance.action.webi import provd_plugins
 from xivo_acceptance.action.confd import device_action_confd
 from xivo_acceptance.action.webi import device as device_action_webi
 from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
-from xivo_acceptance.lettuce import form, common, logs
+from xivo_acceptance.lettuce import form, common
 
 
 @step(u'Given there are no devices with mac "([^"]*)"')
@@ -42,12 +46,6 @@ def given_i_have_the_following_devices(step):
         device_action_confd.reset_to_autoprov(device_id)
 
 
-@step(u'Given there exists the following device templates:')
-def given_there_exists_the_following_device_template(step):
-    for template in step.hashes:
-        provd_helper.add_or_replace_device_template(template)
-
-
 @step(u'Given the provisioning server has received the following HTTP requests:')
 def given_the_provisioning_server_has_received_the_following_http_requests(step):
     _provisioning_server_http_requests(step)
@@ -61,69 +59,6 @@ def when_the_provisioning_server_receives_the_following_http_requests(step):
 def _provisioning_server_http_requests(step):
     for request_data in step.hashes:
         provd_helper.request_http(request_data['path'], request_data['user-agent'])
-
-
-@step(u'When I create an empty device$')
-def when_i_create_an_empty_device(step):
-    world.response = device_action_confd.create_device({})
-
-
-@step(u'When I create the following devices:')
-def when_i_create_the_following_devices(step):
-    for device in step.hashes:
-        _update_device_from_step_hash(device)
-        world.response = device_action_confd.create_device(device)
-
-
-@step(u'When I create a device using the device template id "([^"]*)"')
-def when_i_create_a_device_using_the_device_template_id_group1(step, device_template_id):
-    device = {
-        'template_id': device_template_id
-    }
-    world.response = device_action_confd.create_device(device)
-
-
-@step(u'When I delete the device with mac "([^"]*)" from confd$')
-def when_i_delete_the_device(step, mac):
-    device = provd_helper.get_by_mac(mac)
-    world.deleted_device = device
-    world.response = device_action_confd.delete_device(device['id'])
-
-
-@step(u'^When I synchronize the device with mac "([^"]*)" from confd$')
-def when_i_synchronize_the_device_group1_from_confd(step, mac):
-    device = provd_helper.get_by_mac(mac)
-    world.response = device_action_confd.synchronize(device['id'])
-
-
-@step(u'When I go get the device with mac "([^"]*)" using its id')
-def when_i_go_get_the_device_with_mac_group1_using_its_id(step, mac):
-    device = provd_helper.get_by_mac(mac)
-    world.response = device_action_confd.get_device(device['id'])
-
-
-@step(u'When I request the list of devices')
-def when_i_access_the_list_of_devices(step):
-    world.response = device_action_confd.device_list()
-
-
-@step(u'When I reset the device with mac "([^"]*)" to autoprov from confd')
-def when_i_reset_the_device_to_autoprov_from_confd(step, mac):
-    device = provd_helper.get_by_mac(mac)
-    world.response = device_action_confd.reset_to_autoprov(device['id'])
-
-
-@step(u'When I edit the device with mac "([^"]*)" using no parameters')
-def when_i_edit_the_device_with_mac_group1_using_no_parameters(step, mac):
-    device = provd_helper.get_by_mac(mac)
-    world.response = device_action_confd.edit_device(device['id'], {})
-
-
-@step(u'When I edit the device with mac "([^"]*)" using the following parameters:')
-def when_i_edit_the_device_with_mac_group1_using_the_following_parameters(step, mac):
-    device = provd_helper.get_by_mac(mac)
-    parameters = step.hashes[0]
-    world.response = device_action_confd.edit_device(device['id'], parameters)
 
 
 @step(u'When I request devices in the webi')
@@ -241,43 +176,6 @@ def then_i_see_devices_with_infos(step):
         common.wait_until_assert(assert_device_infos, expected_device, tries=3)
 
 
-@step(u'Then I see in the log file device with mac "([^"]*)" synchronized')
-def then_i_see_in_the_log_file_device_synchronized(step, mac):
-    device = provd_helper.get_by_mac(mac)
-    expected_log_lines = ['Synchronizing device %s' % device['id']]
-    actual_log_lines = logs.find_line_in_xivo_provd_log()
-    _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
-
-
-@step(u'Then I see in the log file device with mac "([^"]*)" autoprovisioned')
-def then_i_see_in_the_log_file_device_group1_autoprovisioned(step, mac):
-    device = provd_helper.get_by_mac(mac)
-    expected_log_lines = ['Creating new config',
-                          '/provd/cfg_mgr/autocreate',
-                          'Updating device',
-                          '/provd/dev_mgr/devices/%s' % device['id']]
-    actual_log_lines = logs.find_line_in_xivo_provd_log()
-    _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
-
-
-@step(u'Then the device with mac "([^"]*)" is no longer exists in provd')
-def then_the_device_is_no_longer_exists_in_provd(step, mac):
-    device = provd_helper.find_by_mac(mac)
-    assert_that(device, none(), "Device still exists in provd")
-
-
-@step(u'Then I see in the log file that the device was deleted')
-def then_i_see_in_the_log_file_device_deleted(step):
-    device_id = world.deleted_device['id']
-    config_id = world.deleted_device['config']
-    expected_log_lines = ['Deleting device %s' % device_id,
-                          '/provd/dev_mgr/devices/%s' % device_id,
-                          'Deleting config %s' % config_id,
-                          '/provd/cfg_mgr/configs/%s' % config_id]
-    actual_log_lines = logs.find_line_in_xivo_provd_log()
-    _assert_all_lines_in_log(actual_log_lines, expected_log_lines)
-
-
 def _assert_all_lines_in_log(actual_log, expected_lines):
     for expected_line in expected_lines:
         assert_that(actual_log, has_item(contains_string(expected_line)))
@@ -292,43 +190,6 @@ def then_the_web_interfaces_shows_a_device_with(step):
     if 'switchboard_checked' in device_infos:
         expected = eval(device_infos['switchboard_checked'])
         assert_that(device_action_webi.is_switchboard_checked(), is_(expected))
-
-
-@step(u'Then I get a response with a device id')
-def then_i_get_a_response_with_a_device_id(step):
-    assert_that(world.response.data,
-                has_entry('id', has_length(32)))
-
-
-@step(u'Then the device has the following parameters:')
-def then_the_device_has_the_following_parameters(step):
-    device_response = world.response.data
-    expected_device = step.hashes[0]
-    _update_device_from_step_hash(expected_device)
-
-    assert_that(device_response, has_entries(expected_device))
-
-
-@step(u'Then I get a list containing the following devices:')
-def then_i_get_a_list_containing_the_following_devices(step):
-    assert_that(world.response.data, has_entries(
-        'total', instance_of(int),
-        'items', instance_of(list)))
-
-    device_list = world.response.data['items']
-
-    for device in step.hashes:
-        _update_device_from_step_hash(device)
-        assert_that(device_list, has_item(has_entries(device)))
-
-
-@step(u'Then the list contains the same number of devices as on the provisioning server')
-def then_the_list_contains_the_same_number_of_devices_as_on_the_provisioning_server(step):
-    total_provd = provd_helper.total_devices()
-
-    device_list = world.response.data['items']
-
-    assert_that(device_list, has_length(total_provd))
 
 
 def _update_device_from_step_hash(device):
