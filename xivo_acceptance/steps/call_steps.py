@@ -147,8 +147,8 @@ def then_user_last_dialed_extension_was_not_found(step, name):
         raise AssertionError('ExtensionNotFound was not raised')
 
 
-@step(u'Then "([^"]*)" is ringing')
-def then_user_is_ringing(step, user):
+@step(u'(?:Given|Then) "([^"]*)" is ringing')
+def user_is_ringing(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
     common.wait_until(phone.is_ringing, tries=3)
 
