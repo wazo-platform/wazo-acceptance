@@ -102,6 +102,12 @@ def when_someone_calls_an_exten_and_wait_for_n_seconds(step, name, exten, tries)
     common.wait_until(phone.is_hungup, tries=int(tries))
 
 
+@step(u'When "([^"]*)" transfers to "([^"]*)"')
+def when_alice_transfers_to_exten(step, name, exten):
+    phone = step.scenario.phone_register.get_user_phone(name)
+    phone.transfer(exten)
+
+
 @step(u'(?:When|Given) "([^"]*)" answers')
 def a_answers(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)

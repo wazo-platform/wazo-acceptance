@@ -113,6 +113,9 @@ class SipPhone(object):
     def resume(self):
         self._session.resume()
 
+    def transfer(self, exten):
+        self._session.transfer(exten)
+
     def unregister(self):
         self._session.unregister()
 

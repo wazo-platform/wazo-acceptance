@@ -38,6 +38,7 @@ _switchboard_events = {
     'SwitchboardCompletedEvent': 'switchboard-switchboard.__switchboard/counter-completed',
     'SwitchboardAbandonedEvent': 'switchboard-switchboard.__switchboard/counter-abandoned',
     'SwitchboardForwardedEvent': 'switchboard-switchboard.__switchboard/counter-forwarded',
+    'SwitchboardTransferedEvent': 'switchboard-switchboard.__switchboard/counter-transfered',
     'SwitchboardWaitTimeEvent': 'switchboard-switchboard.__switchboard/gauge-wait',
 }
 
