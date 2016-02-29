@@ -210,7 +210,7 @@ def add_user_with_infos(user_data, step=None):
     if user_data.get('mobile_number'):
         user_ws_data['mobile_number'] = user_data['mobile_number']
 
-    user_id = ule_helper.add_or_replace_user(user_ws_data, step=step)
+    user_id = helpers.user_line_extension_helper.add_or_replace_user(user_ws_data, step=step)
 
     if user_data.get('agent_number'):
         helpers.agent_helper.delete_agents_with_number(user_data['agent_number'])

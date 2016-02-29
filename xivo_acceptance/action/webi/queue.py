@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -86,7 +86,10 @@ def fill_form(queue):
     fill_advanced_tab(queue)
 
     if 'agents' in queue:
-        agentlist = queue['agents'].split(",")
+        if isinstance(queue['agents'], list):
+            agentlist = queue['agents']
+        else:
+            agentlist = queue['agents'].split(",")
         add_agents_to_queue(agentlist)
 
 
