@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 from lettuce import world
 from hamcrest import assert_that, is_not, none
 
+from xivo_acceptance.helpers import agent_helper
 from xivo_acceptance.helpers import group_helper
 from xivo_acceptance.helpers import provd_helper
 from xivo_acceptance.helpers import line_write_helper
@@ -160,6 +161,68 @@ def _delete_voicemail_associations(user_id):
 def _delete_user(user_id):
     response = user_action.delete_user(user_id)
     response.check_status()
+
+
+def add_user_with_infos(user_data, step=None):
+    user_ws_data = {}
+    user_ws_data['firstname'] = user_data['firstname']
+    user_ws_data['lastname'] = user_data['lastname']
+
+    if user_data.get('entity_name'):
+        user_ws_data['entity_name'] = user_data.get('entity_name', 'xivo_entity')
+
+    if user_data.get('number') and user_data.get('context'):
+        user_ws_data['line_number'] = user_data['number']
+        user_ws_data['line_context'] = user_data['context']
+        if 'protocol' in user_data:
+            user_ws_data['protocol'] = user_data['protocol']
+        if 'device' in user_data:
+            user_ws_data['device'] = user_data['device']
+        if 'device_slot' in user_data:
+            user_ws_data['device_slot'] = user_data['device_slot']
+
+        if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(user_data):
+            user_ws_data['voicemail_name'] = user_data['voicemail_name']
+            user_ws_data['voicemail_number'] = user_data['voicemail_number']
+            user_ws_data['voicemail_context'] = user_data['voicemail_context']
+
+    if user_data.get('bsfilter'):
+        user_ws_data['bsfilter'] = user_data['bsfilter']
+
+    if user_data.get('language'):
+        user_ws_data['language'] = user_data['language']
+
+    if 'voicemail_name' in user_data and 'language' not in user_data:
+        user_ws_data['language'] = 'en_US'
+
+    if user_data.get('cti_profile'):
+        user_ws_data['enable_client'] = True
+        user_ws_data['client_profile'] = user_data['cti_profile']
+        if user_data.get('cti_login'):
+            user_ws_data['client_username'] = user_data['cti_login']
+        else:
+            user_ws_data['client_username'] = user_ws_data['firstname'].lower()
+        if user_data.get('cti_passwd'):
+            user_ws_data['client_password'] = user_data['cti_passwd']
+        else:
+            user_ws_data['client_password'] = user_ws_data['lastname'].lower()
+
+    if user_data.get('mobile_number'):
+        user_ws_data['mobile_number'] = user_data['mobile_number']
+
+    user_id = ule_helper.add_or_replace_user(user_ws_data, step=step)
+
+    if user_data.get('agent_number'):
+        agent_helper.delete_agents_with_number(user_data['agent_number'])
+        agent_data = {'firstname': user_data['firstname'],
+                      'lastname': user_data['lastname'],
+                      'number': user_data['agent_number'],
+                      'context': user_data.get('context', 'default'),
+                      'users': [int(user_id)]}
+        agent_helper.add_agent(agent_data)
+
+    if user_data.get('group_name'):
+        group_helper.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
 
 
 def add_user(data_dict, step=None):
