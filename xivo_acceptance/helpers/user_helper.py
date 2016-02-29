@@ -18,7 +18,7 @@
 from lettuce import world
 from hamcrest import assert_that, is_not, none
 
-from xivo_acceptance.helpers import agent_helper
+from xivo_acceptance import helpers
 from xivo_acceptance.helpers import group_helper
 from xivo_acceptance.helpers import provd_helper
 from xivo_acceptance.helpers import line_write_helper
@@ -213,13 +213,13 @@ def add_user_with_infos(user_data, step=None):
     user_id = ule_helper.add_or_replace_user(user_ws_data, step=step)
 
     if user_data.get('agent_number'):
-        agent_helper.delete_agents_with_number(user_data['agent_number'])
+        helpers.agent_helper.delete_agents_with_number(user_data['agent_number'])
         agent_data = {'firstname': user_data['firstname'],
                       'lastname': user_data['lastname'],
                       'number': user_data['agent_number'],
                       'context': user_data.get('context', 'default'),
                       'users': [int(user_id)]}
-        agent_helper.add_agent(agent_data)
+        helpers.agent_helper.add_agent(agent_data)
 
     if user_data.get('group_name'):
         group_helper.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
