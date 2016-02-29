@@ -51,7 +51,7 @@ _FEATURES_DIRS = [
 
 
 def load_config(old_config=True):
-    XIVO_HOST = os.environ.get('XIVO_HOST', 'daily-xivo-pxe.lan-quebec.avencall.com')
+    XIVO_HOST = os.environ.get('XIVO_HOST', 'daily-xivo-pxe.lan.proformatique.com')
 
     default_config = {
         'xivo_host': XIVO_HOST,

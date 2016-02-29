@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2012-2014 Avencall
+# Copyright (C) 2012-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ import os
 import xivo_ws
 
 
-XIVO_HOST = os.environ.get('XIVO_HOST', 'daily-xivo-pxe.lan-quebec.avencall.com')
+XIVO_HOST = os.environ.get('XIVO_HOST', 'daily-xivo-pxe.lan.proformatique.com')
 XIVO_CONFD_PORT = os.environ.get('XIVO_CONFD_PORT', 9486)
 XIVO_CONFD_USERNAME = os.environ.get('XIVO_CONFD_USERNAME', 'admin')
 XIVO_CONFD_PASSWORD = os.environ.get('XIVO_CONFD_PASSWORD', 'proformatique')

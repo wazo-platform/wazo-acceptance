@@ -71,7 +71,7 @@ def _configure_ldap_ssl(step):
     _copy_ca_certificate()
     _configure_ca_certificate()
     ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
-                                                host='openldap-dev.lan-quebec.avencall.com',
+                                                host='openldap-dev.lan.proformatique.com',
                                                 ssl=True)
     ldap_action_webi.add_or_replace_ldap_filter(
         name='openldap-dev',
