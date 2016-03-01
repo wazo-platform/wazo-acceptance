@@ -42,8 +42,8 @@ def given_i_have_the_following_devices(step):
             deviceinfo = dict(deviceinfo)
             deviceinfo['plugin'] = provd_plugins.get_latest_plugin_name(deviceinfo['latest plugin of'])
             del deviceinfo['latest plugin of']
-        device_id = device_helper.add_or_replace_device(deviceinfo)
-        device_action_confd.reset_to_autoprov(device_id)
+        device = device_helper.add_or_replace_device(deviceinfo)
+        device_action_confd.reset_to_autoprov(device['id'])
 
 
 @step(u'Given the provisioning server has received the following HTTP requests:')
