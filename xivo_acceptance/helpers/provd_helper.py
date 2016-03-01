@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,26 +46,6 @@ def _check_device_has_config(device):
     assert_that(config, is_not(none()), "Config %s does not exist" % device['config'])
 
     return config
-
-
-def add_or_replace_device_template(properties):
-    config_manager = world.provd_client.config_manager()
-
-    if 'id' in properties:
-        existing = config_manager.find({'X_type': 'device', 'id': properties['id']})
-        if len(existing) > 0:
-            return
-
-    default_properties = {
-        'X_type': 'device',
-        'deletable': True,
-        'parent_ids': [],
-        'raw_config': {}
-    }
-
-    properties.update(default_properties)
-
-    config_manager.add(properties)
 
 
 def total_devices():
