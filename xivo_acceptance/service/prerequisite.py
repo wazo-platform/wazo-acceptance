@@ -46,6 +46,9 @@ def run():
         logger.debug('Configuring WebService Access on XiVO')
         _create_webservices_access()
 
+        logger.debug('Configuring CA certificates')
+        _configure_ca_certificates()
+
         logger.debug('Configuring Consul')
         _configure_consul()
 
@@ -144,6 +147,11 @@ def _install_packages(packages):
     command = ['apt-get', 'update', '&&', 'apt-get', 'install', '-y']
     command.extend(packages)
     world.ssh_client_xivo.check_call(command)
+
+
+def _configure_ca_certificates():
+    copy_asset_to_server('openldap-dev.crt', '/usr/local/share/ca-certificates')
+    world.ssh_client_xivo.check_call(['update-ca-certificates'])
 
 
 def _configure_consul():

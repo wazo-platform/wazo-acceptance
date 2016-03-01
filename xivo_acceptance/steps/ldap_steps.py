@@ -68,8 +68,6 @@ def given_there_s_an_ldap_server_configured_for_reverse(step):
 
 
 def _configure_ldap_ssl(step):
-    _copy_ca_certificate()
-    _configure_ca_certificate()
     ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
                                                 host='openldap-dev.lan.proformatique.com',
                                                 ssl=True)
@@ -79,18 +77,6 @@ def _configure_ldap_ssl(step):
         base_dn='dc=lan-quebec,dc=avencall,dc=com',
         username='cn=admin,dc=lan-quebec,dc=avencall,dc=com',
         password='superpass')
-
-
-def _copy_ca_certificate():
-    assets.copy_asset_to_server("ca-certificates.crt", "/etc/ssl/certs/ca-certificates.crt")
-
-
-def _configure_ca_certificate():
-    command = ['grep', 'TLS_CACERT', '/etc/ldap/ldap.conf']
-    output = sysutils.output_command(command)
-    if not output.strip():
-        command = ["echo 'TLS_CACERT /etc/ssl/certs/ca-certificates.crt' >> /etc/ldap/ldap.conf"]
-        sysutils.send_command(command)
 
 
 def _configure_display_filter():
