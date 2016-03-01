@@ -88,7 +88,7 @@ def a_calls_exten(step, name, exten):
     phone.call(exten)
 
 
-@step(u'When "([^"]*)" calls "([^"]*)" and waits until the end$')
+@step(u'(?:Given|When) "([^"]*)" calls "([^"]*)" and waits until the end$')
 def when_a_calls_exten_and_waits_until_the_end(step, name, exten):
     phone = step.scenario.phone_register.get_user_phone(name)
     phone.call(exten)

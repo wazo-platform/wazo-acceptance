@@ -55,9 +55,16 @@ def given_a_configured_switchboard_with_an_operator_with_infos(step):
 
     queue_action_webi.add_or_replace_switchboard_queue('__switchboard', '3009',
                                                        'default', switchboard_agents)
+    switchboard_queue = queue_helper.get_queue_with_name('__switchboard')
+    switchboard_queue.joinempty = 'unavailable'
+    switchboard_queue.leavewhenempty = 'unavailable'
+    world.ws.queues.edit(switchboard_queue)
     queue_action_webi.add_or_replace_switchboard_hold_queue('__switchboard_hold', '3010', 'default')
 
     for data in step.hashes:
+        if data.get('logged') == 'false':
+            continue
+
         agent_name = '{firstname} {lastname}'.format(**data)
         agent_number = data['agent_number']
         phone = step.scenario.phone_register.get_user_phone(agent_name)
