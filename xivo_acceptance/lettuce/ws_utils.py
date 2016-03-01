@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2012-2014 Avencall
+# Copyright (C) 2012-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -86,6 +86,8 @@ class WsUtils(object):
         if 'headers' in kwargs:
             self.session.headers.update(kwargs['headers'])
         response = self.session.request(method, url, *args, **kwargs)
+        if response.status_code == 500:
+            response.raise_for_status()
         return self._process_response(response)
 
     def _process_response(self, response):
