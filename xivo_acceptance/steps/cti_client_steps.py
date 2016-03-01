@@ -52,6 +52,13 @@ def then_i_should_receive_the_following_cti_command(step):
                 'CTI event {} was not received'.format(step.multiline))
 
 
+@step(u'(?:Given|When) I send a SwitchboardHold message')
+def when_i_send_switchboardhold_message(step):
+    msg = {'class': 'hold_switchboard',
+           'queue_name': '__switchboard_hold'}
+    step.scenario._pseudo_xivo_client.send_message(msg)
+
+
 @step(u'Then I should receive the following chat message:')
 def then_i_should_receive_the_following_chat_message(step):
     data = step.hashes[0]

@@ -16,6 +16,26 @@ Feature: Switchboard statistics
     | SwitchboardAbandonedEvent |
     | SwitchboardWaitTimeEvent  |
 
+  Scenario: Call abandoned in the hold queue
+    Given a configured switchboard with an operator with infos:
+    | firstname | lastname | number | context | protocol | agent_number | cti_login | cti_passwd | cti_profile |
+    | Alice     | A        |   1001 | default | sip      |         1001 | alicea    | secr37     | Switchboard |
+    Given there are users with infos:
+    | firstname | lastname | number | context | protocol |
+    | Bob       | B        |   1002 | default | sip      |
+    Given "Bob B" calls "3009"
+    Given "Alice A" answers
+    Given I connect to xivo-ctid:
+    | username | password |
+    | alicea   | secr37   |
+    Given I send a SwitchboardHold message
+    When "Bob B" hangs up
+    Then I should receive the following switchboard statistics:
+    | Event                     |
+    | SwitchboardEnteredEvent   |
+    | SwitchboardAbandonedEvent |
+    | SwitchboardWaitTimeEvent  |
+
   Scenario: Call transfered
     Given a configured switchboard with an operator with infos:
     | firstname | lastname | number | context | protocol | agent_number |
