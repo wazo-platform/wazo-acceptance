@@ -66,3 +66,17 @@ Feature: Switchboard statistics
     | SwitchboardEnteredEvent   |
     | SwitchboardForwardedEvent |
     | SwitchboardWaitTimeEvent  |
+
+  Scenario: Call on no answer
+    Given a configured switchboard with an operator with infos:
+    | firstname | lastname | number | context | protocol | agent_number |
+    | Alice     | A        |   1001 | default | sip      |         1001 |
+    Given there are users with infos:
+    | firstname | lastname | number | context | protocol |
+    | Bob       | B        |   1002 | default | sip      |
+    When "Bob B" calls "3009" and waits until the end
+    Then I should receive the following switchboard statistics:
+    | Event                     |
+    | SwitchboardEnteredEvent   |
+    | SwitchboardForwardedEvent |
+    | SwitchboardWaitTimeEvent  |

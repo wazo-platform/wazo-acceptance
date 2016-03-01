@@ -56,9 +56,10 @@ def add_or_replace_switchboard_queue(name, number, context, agents):
         'number': number,
         'context': context,
         'agents': agents,
+        'timeout': 5,
         CALLEE_TRANSFER: 'true',
         CALLER_HANGUP: 'true',
-        REACH_TIMEOUT: 'Disabled',
+        REACH_TIMEOUT: '5 seconds',
         CALL_RETRY: '1 second',
         REASSIGN_DELAY: 'Disabled',
         AUTOPAUSE_AGENTS: 'false',
@@ -118,6 +119,9 @@ def fill_application_tab(queue):
     if CALLER_HANGUP in queue:
         caller_hangup = (queue[CALLER_HANGUP] == 'true')
         set_checkbox_with_id('it-queuefeatures-hitting-caller', caller_hangup)
+
+    if 'timeout' in queue:
+        set_text_field_with_label('Ringing time', queue['timeout'])
 
 
 def fill_advanced_tab(queue):
