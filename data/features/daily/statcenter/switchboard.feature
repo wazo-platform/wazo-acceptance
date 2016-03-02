@@ -36,7 +36,7 @@ Feature: Switchboard statistics
     | SwitchboardAbandonedEvent |
     | SwitchboardWaitTimeEvent  |
 
-  Scenario: Call transfered
+  Scenario: Call transferred
     Given a configured switchboard with an operator with infos:
     | firstname | lastname | number | context | protocol | agent_number |
     | Alice     | A        |   1001 | default | sip      |         1001 |
@@ -49,10 +49,10 @@ Feature: Switchboard statistics
     Given "Alice A" answers
     When "Alice A" transfers to "1003"
     Then I should receive the following switchboard statistics:
-    | Event                      |
-    | SwitchboardEnteredEvent    |
-    | SwitchboardTransferedEvent |
-    | SwitchboardWaitTimeEvent   |
+    | Event                       |
+    | SwitchboardEnteredEvent     |
+    | SwitchboardTransferredEvent |
+    | SwitchboardWaitTimeEvent    |
 
   Scenario: Call answered by the operator with no transfer
     Given a configured switchboard with an operator with infos:
