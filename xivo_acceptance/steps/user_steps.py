@@ -24,7 +24,7 @@ from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.confd import user_action_confd
 from xivo_acceptance.action.webi import user as user_action_webi
-from xivo_acceptance.helpers import user_helper, agent_helper, group_helper
+from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_acceptance.lettuce import common, form
 
@@ -65,69 +65,7 @@ def given_there_are_users_with_infos(step):
         device
     """
     for user_data in step.hashes:
-        _add_user(user_data, step=step)
-
-
-def _add_user(user_data, step=None):
-    user_ws_data = {}
-    user_ws_data['firstname'] = user_data['firstname']
-    user_ws_data['lastname'] = user_data['lastname']
-
-    if user_data.get('entity_name'):
-        user_ws_data['entity_name'] = user_data.get('entity_name', 'xivo_entity')
-
-    if user_data.get('number') and user_data.get('context'):
-        user_ws_data['line_number'] = user_data['number']
-        user_ws_data['line_context'] = user_data['context']
-        if 'protocol' in user_data:
-            user_ws_data['protocol'] = user_data['protocol']
-        if 'device' in user_data:
-            user_ws_data['device'] = user_data['device']
-        if 'device_slot' in user_data:
-            user_ws_data['device_slot'] = user_data['device_slot']
-
-        if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(user_data):
-            user_ws_data['voicemail_name'] = user_data['voicemail_name']
-            user_ws_data['voicemail_number'] = user_data['voicemail_number']
-            user_ws_data['voicemail_context'] = user_data['voicemail_context']
-
-    if user_data.get('bsfilter'):
-        user_ws_data['bsfilter'] = user_data['bsfilter']
-
-    if user_data.get('language'):
-        user_ws_data['language'] = user_data['language']
-
-    if 'voicemail_name' in user_data and 'language' not in user_data:
-        user_ws_data['language'] = 'en_US'
-
-    if user_data.get('cti_profile'):
-        user_ws_data['enable_client'] = True
-        user_ws_data['client_profile'] = user_data['cti_profile']
-        if user_data.get('cti_login'):
-            user_ws_data['client_username'] = user_data['cti_login']
-        else:
-            user_ws_data['client_username'] = user_ws_data['firstname'].lower()
-        if user_data.get('cti_passwd'):
-            user_ws_data['client_password'] = user_data['cti_passwd']
-        else:
-            user_ws_data['client_password'] = user_ws_data['lastname'].lower()
-
-    if user_data.get('mobile_number'):
-        user_ws_data['mobile_number'] = user_data['mobile_number']
-
-    user_id = ule_helper.add_or_replace_user(user_ws_data, step=step)
-
-    if user_data.get('agent_number'):
-        agent_helper.delete_agents_with_number(user_data['agent_number'])
-        agent_data = {'firstname': user_data['firstname'],
-                      'lastname': user_data['lastname'],
-                      'number': user_data['agent_number'],
-                      'context': user_data.get('context', 'default'),
-                      'users': [int(user_id)]}
-        agent_helper.add_agent(agent_data)
-
-    if user_data.get('group_name'):
-        group_helper.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
+        user_helper.add_user_with_infos(user_data, step=step)
 
 
 @step(u'Given I have the following users:')

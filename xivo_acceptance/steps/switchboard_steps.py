@@ -18,15 +18,81 @@
 from hamcrest import assert_that
 from hamcrest import contains
 from hamcrest import equal_to
-from lettuce import step
+from lettuce import step, world
 
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.action.webi import queue as queue_action_webi
 from xivo_acceptance.action.webi import user as user_action_webi
-from xivo_acceptance.helpers import context_helper
-from xivo_acceptance.helpers import cti_helper
-from xivo_acceptance.helpers import incall_helper
+from xivo_acceptance.helpers import (asterisk_helper,
+                                     bus_helper,
+                                     user_helper,
+                                     context_helper,
+                                     cti_helper,
+                                     incall_helper,
+                                     queue_helper)
 from xivo_acceptance.lettuce import func, common, sysutils
+
+
+_switchboard_events = {
+    'SwitchboardEnteredEvent': 'switchboard-switchboard.__switchboard/counter-entered',
+    'SwitchboardCompletedEvent': 'switchboard-switchboard.__switchboard/counter-completed',
+    'SwitchboardAbandonedEvent': 'switchboard-switchboard.__switchboard/counter-abandoned',
+    'SwitchboardForwardedEvent': 'switchboard-switchboard.__switchboard/counter-forwarded',
+    'SwitchboardTransferredEvent': 'switchboard-switchboard.__switchboard/counter-transferred',
+    'SwitchboardWaitTimeEvent': 'switchboard-switchboard.__switchboard/gauge-wait',
+}
+
+
+@step(u'Given a configured switchboard with an operator with infos:')
+def given_a_configured_switchboard_with_an_operator_with_infos(step):
+    switchboard_agents = ['{agent_number}@{context}'.format(**data) for data in step.hashes]
+    agent_names = ['{firstname} {lastname}'.format(**data)]
+    for data in step.hashes:
+        user_helper.add_user_with_infos(data, step=step)
+
+    for agent_name in agent_names:
+        user_action_webi.switchboard_config_for_user(agent_name)
+
+    queue_action_webi.add_or_replace_switchboard_queue('__switchboard', '3009',
+                                                       'default', switchboard_agents)
+    switchboard_queue = queue_helper.get_queue_with_name('__switchboard')
+    switchboard_queue.joinempty = 'unavailable'
+    switchboard_queue.leavewhenempty = 'unavailable'
+    world.ws.queues.edit(switchboard_queue)
+    queue_action_webi.add_or_replace_switchboard_hold_queue('__switchboard_hold', '3010', 'default')
+
+    for data in step.hashes:
+        if data.get('logged') == 'false':
+            continue
+
+        agent_name = '{firstname} {lastname}'.format(**data)
+        agent_number = data['agent_number']
+        phone = step.scenario.phone_register.get_user_phone(agent_name)
+        phone.call('*31{}'.format(agent_number))
+        common.wait_until(phone.is_hungup, tries=20)
+
+    bus_helper.add_binding('switchboard_stats', 'collectd.switchboard', 'collectd')
+
+
+@step(u'Given the switchboard is configured to receive a maxium of "([^"]*)" call')
+def given_the_switchboard_is_configured_to_receive_a_maxium_of_n_call(step, n):
+    switchboard_queue = queue_helper.get_queue_with_name('__switchboard')
+    switchboard_queue.maxlen = n
+    world.ws.queues.edit(switchboard_queue)
+    asterisk_helper.send_to_asterisk_cli('queue reload')
+
+
+@step(u'Then I should receive the following switchboard statistics:')
+def then_i_should_receive_the_following_switchboard_statistics(step):
+    events = bus_helper.get_messages_from_bus('switchboard_stats')
+
+    for line in step.hashes:
+        pattern = _switchboard_events[line['Event']]
+        for event in events:
+            if pattern in event:
+                break
+        else:
+            assert False, 'No event matched {} in:\n{}'.format(line['Event'], events)
 
 
 @step(u'Given the switchboard is configured for internal directory lookup')

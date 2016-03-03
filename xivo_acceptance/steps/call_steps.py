@@ -88,7 +88,7 @@ def a_calls_exten(step, name, exten):
     phone.call(exten)
 
 
-@step(u'When "([^"]*)" calls "([^"]*)" and waits until the end$')
+@step(u'(?:Given|When) "([^"]*)" calls "([^"]*)" and waits until the end$')
 def when_a_calls_exten_and_waits_until_the_end(step, name, exten):
     phone = step.scenario.phone_register.get_user_phone(name)
     phone.call(exten)
@@ -100,6 +100,12 @@ def when_someone_calls_an_exten_and_wait_for_n_seconds(step, name, exten, tries)
     phone = step.scenario.phone_register.get_user_phone(name)
     phone.call(exten)
     common.wait_until(phone.is_hungup, tries=int(tries))
+
+
+@step(u'When "([^"]*)" transfers to "([^"]*)"')
+def when_alice_transfers_to_exten(step, name, exten):
+    phone = step.scenario.phone_register.get_user_phone(name)
+    phone.transfer(exten)
 
 
 @step(u'(?:When|Given) "([^"]*)" answers')
@@ -147,8 +153,8 @@ def then_user_last_dialed_extension_was_not_found(step, name):
         raise AssertionError('ExtensionNotFound was not raised')
 
 
-@step(u'Then "([^"]*)" is ringing')
-def then_user_is_ringing(step, user):
+@step(u'(?:Given|Then) "([^"]*)" is ringing')
+def user_is_ringing(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
     common.wait_until(phone.is_ringing, tries=3)
 
