@@ -34,12 +34,12 @@ from xivo_acceptance.lettuce import func, common, sysutils
 
 
 _switchboard_events = {
-    'SwitchboardEnteredEvent': 'switchboard-switchboard.__switchboard/counter-entered',
-    'SwitchboardCompletedEvent': 'switchboard-switchboard.__switchboard/counter-completed',
-    'SwitchboardAbandonedEvent': 'switchboard-switchboard.__switchboard/counter-abandoned',
-    'SwitchboardForwardedEvent': 'switchboard-switchboard.__switchboard/counter-forwarded',
-    'SwitchboardTransferredEvent': 'switchboard-switchboard.__switchboard/counter-transferred',
-    'SwitchboardWaitTimeEvent': 'switchboard-switchboard.__switchboard/gauge-wait',
+    'SwitchboardEnteredEvent': 'switchboard-__switchboard/counter-entered',
+    'SwitchboardCompletedEvent': 'switchboard-__switchboard/counter-completed',
+    'SwitchboardAbandonedEvent': 'switchboard-__switchboard/counter-abandoned',
+    'SwitchboardForwardedEvent': 'switchboard-__switchboard/counter-forwarded',
+    'SwitchboardTransferredEvent': 'switchboard-__switchboard/counter-transferred',
+    'SwitchboardWaitTimeEvent': 'switchboard-__switchboard/gauge-wait',
 }
 
 
