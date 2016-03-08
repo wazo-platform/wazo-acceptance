@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from datetime import date, datetime, timedelta
-from hamcrest import *
+from hamcrest import assert_that
+from hamcrest import equal_to
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import stat as stat_action_webi
@@ -153,7 +154,7 @@ def then_i_should_have_stats_for_config(step, queue_name, day, config_name):
 
 
 @step(u'^Then I should have the following weekly statistics on "(.+)" on "(.+)" on configuration "(\S+)":$')
-def then_i_should_have_stats_for_config(step, queue_name, day, config_name):
+def then_i_should_have_weekly_stats_for_config(step, queue_name, day, config_name):
     stat_action_webi.open_queue_stat_page_on_week(queue_name, day, config_name)
     stat_action_webi.check_queue_statistic(step.hashes)
 
