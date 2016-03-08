@@ -28,3 +28,7 @@ Feature: Asterisk
         When I wait for the service "xivo-ctid" to restart
         Then the service "xivo-ctid" is running
         Then I see in the log file service restarted by monit
+
+    Scenario: Monit password
+        Given I change the "xivo_monit_user" AMI password to "secret"
+        Then asterisk should be restarted in the following "5" minutes
