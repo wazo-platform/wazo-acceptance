@@ -19,7 +19,7 @@ import logging
 
 from lettuce import world
 
-from xivo_acceptance.helpers import context_helper, general_sip
+from xivo_acceptance.helpers import context_helper
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import setup
 from xivo_acceptance.lettuce.assets import copy_asset_to_server
@@ -79,9 +79,6 @@ def run():
         context_helper.update_contextnumbers_queue('default', 3000, 3999)
         context_helper.update_contextnumbers_meetme('default', 4000, 4999)
         context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
-
-        logger.debug('Configuring SIP general')
-        general_sip.enable_nat()
 
         logger.debug('Configuring xivo-auth')
         _configure_xivo_auth()
