@@ -30,6 +30,7 @@ from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.action.confd import user_action_confd as user_action
 from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
+from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_ws import User, UserLine, UserVoicemail
 from xivo_ws.exception import WebServiceRequestError
 
@@ -211,6 +212,11 @@ def add_user_with_infos(user_data, step=None):
         user_ws_data['mobile_number'] = user_data['mobile_number']
 
     user_id = helpers.user_line_extension_helper.add_or_replace_user(user_ws_data, step=step)
+
+    schedule = user_data.get('schedule')
+    if schedule:
+        fullname = '{firstname} {lastname}'.format(**user_data).strip()
+        user_action_webi.add_schedule(fullname, schedule)
 
     if user_data.get('agent_number'):
         helpers.agent_helper.delete_agents_with_number(user_data['agent_number'])

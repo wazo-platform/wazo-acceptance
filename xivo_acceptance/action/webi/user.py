@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -288,9 +288,19 @@ def get_user_list_entry(search_fullname):
     }
 
 
-def deactivate_bsfilter(user):
+def add_schedule(user, schedule):
+    edit_user(user)
+    form.select.set_select_field_with_label('Schedules', schedule)
+    form.submit.submit_form()
+
+
+def edit_user(user):
     common.open_url('user', 'search', {'search': user})
     common.edit_line(user)
+
+
+def deactivate_bsfilter(user):
+    edit_user(user)
     common.go_to_tab('Services')
     form.select.set_select_field_with_id('it-userfeatures-bsfilter', 'No')
     form.submit.submit_form()
