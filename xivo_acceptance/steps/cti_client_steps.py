@@ -203,5 +203,10 @@ class _Client(object):
         self._send_login_pass(message['sessionid'])
 
     def _on_login_pass(self, message):
-        self._send_login_capas(message['capalist'][0])
+        error = message.get('error_string')
+        if error:
+            raise Exception('Connection failed: {}'.format(error))
+
+        profile = message['capalist'][0]
+        self._send_login_capas(profile)
         self._login_complete.set()
