@@ -21,7 +21,13 @@ import time
 
 from datetime import timedelta
 
-from hamcrest import assert_that, equal_to, contains, has_items, not_
+from hamcrest import assert_that
+from hamcrest import contains
+from hamcrest import equal_to
+from hamcrest import has_entries
+from hamcrest import has_item
+from hamcrest import has_items
+from hamcrest import not_
 from lettuce import step, registry
 from xivo_acceptance.helpers import asterisk_helper, file_helper
 from xivo_acceptance.helpers import line_read_helper
@@ -219,3 +225,27 @@ def _extension_in_context(extension, context):
     output = sysutils.output_command(command)
 
     return 'There is no existence of' not in output
+
+
+@step('Then I have the following hints')
+def then_i_have_the_following_hints(step):
+    actual_hints = _list_hints()
+
+    for expected_hint in step.hashes:
+        assert_that(actual_hints, has_item(has_entries(expected_hint)))
+
+
+def _list_hints():
+    asterisk_cmd = 'core show hints'
+    command = ['asterisk', '-rx', '"{}"'.format(asterisk_cmd)]
+
+    output = sysutils.output_command(command).split('\n')
+    output = output[2:-3]  # strip header and footer
+    return [_parse_hint(line) for line in output]
+
+
+def _parse_hint(line):
+    hint = {}
+    hint['exten'] = line[:20].strip()
+    hint['line'] = line[22:44].strip()
+    return hint

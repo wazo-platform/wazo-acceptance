@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,23 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from lettuce.registry import world
 
-class PhoneRegister(object):
+ENDPOINTS_URL = 'endpoints/sip'
 
-    def __init__(self):
-        self._sip_phones = {}
 
-    def add_registered_phone(self, phone, name):
-        self._sip_phones[name] = phone
+def search(search):
+    return world.confd_utils_1_1.rest_get('{url}?search={search}'.format(url=ENDPOINTS_URL, search=search))
 
-    def clear(self):
-        self._sip_phones.clear()
 
-    def remove(self, name):
-        self._sip_phones.pop(name, None)
-
-    def get_user_phone(self, name):
-        return self._sip_phones.get(name)
-
-    def phones(self):
-        return self._sip_phones
+def delete(endpoint_id):
+    world.confd_utils_1_1.rest_delete('{url}/{id}'.format(url=ENDPOINTS_URL, id=endpoint_id))

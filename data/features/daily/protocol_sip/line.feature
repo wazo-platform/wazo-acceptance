@@ -80,3 +80,19 @@ Feature: Line
         When I edit the user "Johnny" "Wilkinson" without changing anything
         Then the line with number "1601" has the codec "ilbc"
         Then the line with number "1601" does not have the codec "speex"
+
+    Scenario: Change SIP line username
+        Given there are no SIP lines with username "newusername"
+        Given there are users with infos:
+        | firstname | lastname | number | context | protocol |
+        | Ruffnut   | Thorson  |   1602 | default | sip      |
+        | Tuffnut   | Thorson  |   1603 | default | sip      |
+        When I set the following options in line "1603@default":
+        | username    |
+        | newusername |
+        When I reconfigure the phone "Tuffnut Thorson" on line 1603@default
+        When "Ruffnut Thorson" calls "1603"
+        Then "Tuffnut Thorson" is ringing
+        Then I have the following hints:
+        | exten        | line            |
+        | 1603@default | SIP/newusername |

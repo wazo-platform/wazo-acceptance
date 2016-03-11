@@ -22,9 +22,9 @@ from hamcrest import assert_that, has_entries
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
-from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.action.webi import line as line_action_webi
+from xivo_acceptance.action.confd import endpoint_action_confd
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import line_sip_helper
 from xivo_acceptance.helpers import line_write_helper
@@ -38,9 +38,16 @@ def given_there_are_no_custom_lines_with_interface_beginning_with_1(step, interf
     common.remove_element_if_exist('line', interface_start)
 
 
-@step(u'Given I set the following options in line "([^"]*)":')
-def given_i_set_the_following_options_in_line_1(step, line_number):
-    line_id = line_read_helper.find_line_id_with_exten_context(line_number, 'default')
+@step(u'Given there are no SIP lines with username "([^"]*)"')
+def given_there_are_no_sip_lines_with_infos(step, username):
+    lines = [line for line in endpoint_action_confd.search(username).items() if line['username'] == username]
+    for line in lines:
+        endpoint_action_confd.delete(line['id'])
+
+
+@step(u'(?:Given|When) I set the following options in line "(\d+)@(\w+)":')
+def given_i_set_the_following_options_in_line_1(step, line_number, line_context):
+    line_id = line_read_helper.find_line_id_with_exten_context(line_number, line_context)
     common.open_url('line', 'edit', {'id': line_id})
 
     for line_data in step.hashes:
@@ -55,6 +62,8 @@ def given_i_set_the_following_options_in_line_1(step, line_number):
                 common.go_to_tab('Advanced')
                 form.select.set_select_field_with_label('IP Addressing type', 'Static')
                 form.input.set_text_field_with_label('IP address', value)
+            elif key == 'username':
+                form.input.set_text_field_with_label('Username', value)
             else:
                 raise Exception('%s is not a valid key' % key)
 

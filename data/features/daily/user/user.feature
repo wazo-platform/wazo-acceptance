@@ -120,7 +120,7 @@ Feature: User
         Given there are users with infos:
           | firstname | lastname | number | context | entity_name |
           | Tom       | Sawyer   |   1405 | default | xivo_entity |
-        Given I set the following options in line "1405":
+        Given I set the following options in line "1405@default":
           | NAT | IP addressing type | IP address |
           | No  | Static             | 10.0.0.1   |
         Then the line "1405" has the following line options:
@@ -131,7 +131,7 @@ Feature: User
           | NAT | IP addressing type | IP address | Call limit |
           | No  | Static             |   10.0.0.1 |         10 |
 
-    Scenario: Delete user 
+    Scenario: Delete user
         Given there are users with infos:
           | firstname | lastname | number | context |
           | Tom       | Sawyer   |   1405 | default |

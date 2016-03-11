@@ -86,6 +86,9 @@ def run():
         logger.debug('Configuring xivo-ctid')
         _configure_xivo_ctid()
 
+        logger.debug('Allowing SIP usernames to change')
+        _set_sip_usernames_read_write()
+
         logger.debug('Restarting All XiVO Services')
         _xivo_service_restart_all()
     finally:
@@ -166,6 +169,13 @@ def _configure_xivo_auth():
 
 def _configure_xivo_ctid():
     _copy_daemon_config_file('xivo-ctid')
+
+
+def _set_sip_usernames_read_write():
+    command = ['sed', '-i',
+               """'s/readonly-idpwd = "true"/readonly-idpwd = "false"/'""",
+               '/etc/xivo/web-interface/ipbx.ini']
+    world.ssh_client_xivo.check_call(command)
 
 
 def _copy_daemon_config_file(daemon_name):
