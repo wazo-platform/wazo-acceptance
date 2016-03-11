@@ -131,11 +131,9 @@ class _Client(object):
     def connect(self):
         self._thread = threading.Thread(target=self._start)
         self._thread.start()
+        self._login_complete.wait(self.LOGIN_TIMEOUT)
 
     def send_message(self, msg):
-        if not self._login_complete.wait(self.LOGIN_TIMEOUT):
-            raise Exception('could not send message: client is not logged')
-
         self._send_message(msg)
 
     def empty_event_queue(self):
@@ -209,4 +207,6 @@ class _Client(object):
 
         profile = message['capalist'][0]
         self._send_login_capas(profile)
+
+    def _on_login_capas(self, message):
         self._login_complete.set()
