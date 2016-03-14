@@ -29,7 +29,7 @@ Feature: Schedule
   Scenario: Call distribution when the schedule is opened:
     Given I have a schedule "open" in "America/Montreal" with the following schedules:
     | Status | Months | Days of month | Days of week | Start hour | End hour |
-    | Opened |   1-12 |          1-31 |          1-5 |      00:00 |    23:59 |
+    | Opened |   1-12 |          1-31 |          1-7 |      00:00 |    23:59 |
     Given there are users with infos:
     | firstname | lastname | number | context | protocol | schedule |
     | Peter     | Parker   |   1001 | default | sip      |          |
