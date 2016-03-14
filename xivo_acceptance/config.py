@@ -59,6 +59,7 @@ def load_config(old_config=True):
         'assets_dir': _find_first_existing_path(_ASSETS_DIRS),
         'features_dir': _find_first_existing_path(_FEATURES_DIRS),
         'output_dir': '/tmp',
+        'default_entity': 'xivo_entity',
         'frontend': {
             'username': 'root',
             'passwd': 'superpass'

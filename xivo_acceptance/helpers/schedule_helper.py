@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import *
+from hamcrest import assert_that
+from hamcrest import equal_to
 from lettuce import world
 
 from xivo_ws import Schedule
@@ -34,7 +35,7 @@ def add_or_replace_schedule(data):
     if entity:
         entity_id = entity.id
     else:
-        entity_id = entity_helper.oldest_entity_id()
+        entity_id = entity_helper.default_entity_id()
     schedule = Schedule(
         entity_id=entity_id,
         name=data['name'],
@@ -52,7 +53,7 @@ def assert_schedule_exists(name, timezone, times):
 
 def _create_schedule(name, timezone, times):
     schedule = Schedule(
-        entity_id=entity_helper.oldest_entity_id(),
+        entity_id=entity_helper.default_entity_id(),
         name=name,
         timezone=timezone,
     )

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,8 +38,9 @@ def get_entity_with_name(name):
     return None
 
 
-def oldest_entity_id():
-    """The closest we have to the "default" entity"""
-    query = 'SELECT id FROM "entity" ORDER BY "id"'
-    result = postgres.exec_sql_request(query).fetchone()
-    return result.id
+def default_entity_id():
+    default_entity_name = world.config['default_entity']
+    default_entity = get_entity_with_name(default_entity_name)
+    if not default_entity:
+        raise Exception('Invalid default entity {}'.format(default_entity_name))
+    return default_entity.id
