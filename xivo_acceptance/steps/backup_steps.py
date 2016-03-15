@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,8 +45,6 @@ def when_i_download_backup_file(step, filename):
 def when_i_execute_database_backup_command(step):
     command = 'bash /tmp/xivo-backup-manager backup db'
     world.ssh_client_xivo.call([command])
-    world.confd_utils_1_1.recreate_session()
-    world.rest_provd.recreate_session()
 
 
 @step(u'When I execute a data backup command')
@@ -59,8 +57,6 @@ def when_i_execute_a_data_backup_command(step):
 def when_i_execute_database_restore_command(step):
     command = 'bash /tmp/xivo-backup-manager restore db'
     world.ssh_client_xivo.call([command])
-    world.confd_utils_1_1.recreate_session()
-    world.rest_provd.recreate_session()
 
 
 @step(u'When I execute a data restore command')

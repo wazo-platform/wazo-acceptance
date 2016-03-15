@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -122,6 +122,3 @@ def get_pidfile_for_service_name(service):
 def restart_service(service_name):
     command = ['systemctl', 'restart', service_name]
     world.ssh_client_xivo.check_call(command)
-
-    if service_name == 'xivo-confd':
-        world.confd_utils_1_1.recreate_session()

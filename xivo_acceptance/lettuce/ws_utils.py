@@ -35,10 +35,6 @@ class WsUtils(object):
     def __init__(self, rest_configuration_obj):
         self.config = rest_configuration_obj
         self.baseurl = self._prepare_baseurl(self.config)
-        self.recreate_session()
-
-    def recreate_session(self):
-        self.session = self._prepare_session(self.config)
 
     def _prepare_baseurl(self, rest_configuration_obj):
         protocol = rest_configuration_obj.protocol
@@ -83,9 +79,10 @@ class WsUtils(object):
     def _request(self, method, path, *args, **kwargs):
         path = path.lstrip('/')
         url = "%s/%s" % (self.baseurl, path)
+        session = self._prepare_session(self.config)
         if 'headers' in kwargs:
-            self.session.headers.update(kwargs['headers'])
-        response = self.session.request(method, url, *args, **kwargs)
+            session.headers.update(kwargs['headers'])
+        response = session.request(method, url, *args, **kwargs)
         if response.status_code == 500:
             response.raise_for_status()
         return self._process_response(response)
