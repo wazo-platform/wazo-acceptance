@@ -19,24 +19,24 @@ Feature: CTI Client Configuration
 
     Scenario: Client doesn't crash after disconnecting
         Given there is a profile "full" with no services and xlets:
-        | xlet                    | position |
-        | Identity                | dock     |
-        | History                 | dock     |
-        | Directory               | dock     |
-        | Fax                     | dock     |
-        | Features                | dock     |
-        | Conference rooms        | dock     |
-        | Datetime                | dock     |
-        | Tabber                  | grid     |
-        | Customer info           | dock     |
-        | Agents (list)           | dock     |
-        | Agents (detail)         | dock     |
-        | Queues (list)           | dock     |
-        | Queue members           | dock     |
-        | Queues (entries detail) | dock     |
-        | Switchboard             | dock     |
-        | Agent status dashboard  | dock     |
-        | People                  | dock     |
+        | xlet                         | position |
+        | Identity                     | dock     |
+        | History                      | dock     |
+        | Directory (switchboard only) | dock     |
+        | Fax                          | dock     |
+        | Features                     | dock     |
+        | Conference rooms             | dock     |
+        | Datetime                     | dock     |
+        | Tabber                       | grid     |
+        | Customer info                | dock     |
+        | Agents (list)                | dock     |
+        | Agents (detail)              | dock     |
+        | Queues (list)                | dock     |
+        | Queue members                | dock     |
+        | Queues (entries detail)      | dock     |
+        | Switchboard                  | dock     |
+        | Agent status dashboard       | dock     |
+        | People                       | dock     |
         Given there are users with infos:
          | firstname | lastname | number | context | cti_profile |
          | Bernard   | Derome   | 1044   | default | full        |
