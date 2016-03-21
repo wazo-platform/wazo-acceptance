@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ def given_there_is_a_group_with_extension_and_users(step, name, extension):
 
     user_ids = []
     for info in step.hashes:
-        user_id = user_helper.get_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
+        user_id = user_helper.get_user_id_with_firstname_lastname(info['firstname'], info.get('lastname'))
         user_ids.append(user_id)
 
     group_helper.add_group(name, number, context, user_ids)
