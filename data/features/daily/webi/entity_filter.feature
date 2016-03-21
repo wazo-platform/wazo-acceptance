@@ -82,8 +82,6 @@ Feature: Entity Filter
          | entity_filter | boss 1 | secretary 1 | entity_filter |
          | no_filter     | boss 2 | secretary 2 |               |
 
-        Given there is no pickup "entity_filter"
-        Given there is no pickup "no_filter"
         Given there are pickups:
           | name          | entity        |
           | entity_filter | entity_filter |
