@@ -71,7 +71,7 @@ def find_by_exten_context(exten, context):
 
 
 def find_by_firstname_lastname(firstname, lastname):
-    fullname = '{} {}'.format(firstname, lastname or '').strip()
+    fullname = u'{} {}'.format(firstname, lastname or '').strip()
     response = user_action.user_search(fullname)
     users = [user
              for user in response.items()
