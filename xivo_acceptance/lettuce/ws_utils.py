@@ -69,8 +69,8 @@ class WsUtils(object):
         data = json.dumps(payload)
         return self._request('POST', path, data=data, **kwargs)
 
-    def rest_put(self, path, payload, **kwargs):
-        data = json.dumps(payload)
+    def rest_put(self, path, payload=None, **kwargs):
+        data = json.dumps(payload) if payload else ''
         return self._request('PUT', path, data=data, **kwargs)
 
     def rest_delete(self, path, **kwargs):

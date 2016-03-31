@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,20 +17,14 @@
 
 from lettuce.registry import world
 
-LINES_URL = 'lines'
+
+def associate_sip(line_id, endpoint_id):
+    world.confd_utils_1_1.rest_put('lines/{}/endpoints/sip/{}'.format(line_id, endpoint_id))
 
 
-def all_lines():
-    return world.confd_utils_1_1.rest_get(LINES_URL)
+def associate_sccp(line_id, endpoint_id):
+    world.confd_utils_1_1.rest_put('lines/{}/endpoints/sccp/{}'.format(line_id, endpoint_id))
 
 
-def get(line_id):
-    return world.confd_utils_1_1.rest_get('%s/%s' % (LINES_URL, line_id))
-
-
-def all_user_links_by_line_id(line_id):
-    return world.confd_utils_1_1.rest_get('%s/%s/user_links' % (LINES_URL, line_id))
-
-
-def create(parameters):
-    return world.confd_utils_1_1.rest_post(LINES_URL, parameters)
+def associate_custom(line_id, endpoint_id):
+    world.confd_utils_1_1.rest_put('lines/{}/endpoints/custom/{}'.format(line_id, endpoint_id))

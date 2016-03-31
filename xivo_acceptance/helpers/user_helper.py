@@ -19,8 +19,8 @@ from lettuce import world
 from hamcrest import assert_that, is_not, none
 
 from xivo_acceptance import helpers
+from xivo_acceptance.helpers import device_helper
 from xivo_acceptance.helpers import group_helper
-from xivo_acceptance.helpers import provd_helper
 from xivo_acceptance.helpers import line_write_helper
 from xivo_acceptance.helpers import line_sip_helper
 from xivo_acceptance.helpers import voicemail_helper
@@ -28,10 +28,18 @@ from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
+from xivo_acceptance.action.confd import device_action_confd as device_action
+from xivo_acceptance.action.confd import endpoint_action_confd as endpoint_action
+from xivo_acceptance.action.confd import extension_action_confd as extension_action
+from xivo_acceptance.action.confd import line_action_confd as line_action
+from xivo_acceptance.action.confd import line_endpoint_action_confd as line_endpoint_action
+from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 from xivo_acceptance.action.confd import user_action_confd as user_action
 from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
+from xivo_acceptance.action.confd import user_voicemail_action_confd as user_voicemail_action
+from xivo_acceptance.action.confd import voicemail_action_confd as voicemail_action
 from xivo_acceptance.action.webi import user as user_action_webi
-from xivo_ws import User, UserLine, UserVoicemail
+from xivo_ws import User
 from xivo_ws.exception import WebServiceRequestError
 
 
@@ -263,39 +271,59 @@ def add_user(data_dict, step=None):
     else:
         user.entity_id = entity_helper.default_entity_id()
 
-    if 'line_number' in data_dict and 'line_context' in data_dict:
-        user.line = UserLine()
-        user.line.number = data_dict['line_number']
-        user.line.context = data_dict['line_context']
-        if 'protocol' in data_dict:
-            user.line.protocol = data_dict['protocol']
-        if 'device' in data_dict:
-            device = provd_helper.find_by_mac(data_dict['device'])
-            if device is not None:
-                user.line.device_id = str(device['id'])
-        if 'device_slot' in data_dict:
-            user.line.device_slot = int(data_dict['device_slot'])
-
-    if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(data_dict):
-        user.voicemail = UserVoicemail()
-        user.voicemail.name = data_dict['voicemail_name']
-        user.voicemail.number = data_dict['voicemail_number']
-        user.voicemail.context = data_dict['voicemail_context']
-
     if 'mobile_number' in data_dict:
         user.mobile_number = data_dict['mobile_number']
 
     try:
-        ret = world.ws.users.add(user)
+        user_id = world.ws.users.add(user)
     except WebServiceRequestError as e:
         raise Exception('Could not add user %s %s: %s' % (user.firstname, user.lastname, e))
-    if not ret:
+    if not user_id:
         return False
+
+    if 'line_number' in data_dict and 'line_context' in data_dict:
+        extension = extension_action.create_extension({
+            'context': data_dict['line_context'],
+            'exten': data_dict['line_number'],
+        }).resource()
+
+        line_data = {
+            'context': data_dict['line_context'],
+        }
+        if 'device_slot' in data_dict:
+            line_data['device_slot'] = data_dict['device_slot']
+        line = line_action.create(line_data).resource()
+
+        protocol = data_dict.get('protocol', 'sip')
+        if protocol == 'sip':
+            endpoint = endpoint_action.create_sip().resource()
+            line_endpoint_action.associate_sip(line['id'], endpoint['id'])
+        elif protocol == 'sccp':
+            endpoint = endpoint_action.create_sccp().resource()
+            line_endpoint_action.associate_sccp(line['id'], endpoint['id'])
+        elif protocol == 'custom':
+            endpoint = endpoint_action.create_custom().resource()
+            line_endpoint_action.associate_custom(line['id'], endpoint['id'])
+
+        line_extension_action.associate(line['id'], extension['id'])
+        user_line_action.create_user_line(user_id, {'line_id': line['id']})
+
+        if 'device' in data_dict:
+            device = device_helper.find_device_with('mac', data_dict['device'])
+            device_action.associate_line_to_device(line['id'], device['id'])
+
+    if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(data_dict):
+        voicemail = voicemail_action.create_voicemail({
+            'name': data_dict['voicemail_name'],
+            'number': data_dict['voicemail_number'],
+            'context': data_dict['voicemail_context'],
+        })
+        user_voicemail_action.associate(user_id, {'voicemail_id': voicemail['id']})
 
     if step is not None:
         _register_and_track_phone(step.scenario, data_dict)
 
-    return int(ret)
+    return int(user_id)
 
 
 def _register_and_track_phone(scenario, user_data):

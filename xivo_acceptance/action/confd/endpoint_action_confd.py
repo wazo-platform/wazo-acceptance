@@ -17,12 +17,29 @@
 
 from lettuce.registry import world
 
-ENDPOINTS_URL = 'endpoints/sip'
+SIP_ENDPOINTS_URL = 'endpoints/sip'
+SCCP_ENDPOINTS_URL = 'endpoints/sccp'
+CUSTOM_ENDPOINTS_URL = 'endpoints/custom'
 
 
 def search(search):
-    return world.confd_utils_1_1.rest_get('{url}?search={search}'.format(url=ENDPOINTS_URL, search=search))
+    return world.confd_utils_1_1.rest_get('{url}?search={search}'.format(url=SIP_ENDPOINTS_URL, search=search))
 
 
 def delete(endpoint_id):
-    world.confd_utils_1_1.rest_delete('{url}/{id}'.format(url=ENDPOINTS_URL, id=endpoint_id))
+    world.confd_utils_1_1.rest_delete('{url}/{id}'.format(url=SIP_ENDPOINTS_URL, id=endpoint_id))
+
+
+def create_sip(parameters=None):
+    parameters = parameters or {}
+    return world.confd_utils_1_1.rest_post(SIP_ENDPOINTS_URL, parameters)
+
+
+def create_sccp(parameters=None):
+    parameters = parameters or {}
+    return world.confd_utils_1_1.rest_post(SCCP_ENDPOINTS_URL, parameters)
+
+
+def create_custom(parameters=None):
+    parameters = parameters or {}
+    return world.confd_utils_1_1.rest_post(CUSTOM_ENDPOINTS_URL, parameters)
