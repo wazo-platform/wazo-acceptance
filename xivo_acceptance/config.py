@@ -70,6 +70,12 @@ def load_config(old_config=True):
             'username': 'admin',
             'passwd': 'proformatique'
         },
+        'confd': {
+            'host': XIVO_HOST,
+            'port': 9486,
+            'https': True,
+            'verify_certificate': False
+        },
         'provd': {
             'rest_port': 8666,
             'rest_protocol': 'http',

@@ -23,6 +23,7 @@ from xivo_acceptance.config import load_config, XivoAcceptanceConfig
 from xivo_acceptance.lettuce import debug
 from xivo_agentd_client import Client as AgentdClient
 from xivo_auth_client import Client as AuthClient
+from xivo_confd_client import Client as ConfdClient
 from xivobrowser import XiVOBrowser
 
 logger = logging.getLogger('acceptance')
@@ -34,8 +35,12 @@ def setup_agentd_client():
                                        verify_certificate=False)
 
 
+def setup_confd_client():
+    world.confd_client = ConfdClient(**world.config['confd'])
+    world.confd_client.set_token(world.config['auth_token'])
+
+
 def setup_auth_token():
-    # service_id/service_key is defined in data/assets/xivo-acceptance-key.yml
     auth_client = AuthClient(world.config['xivo_host'],
                              username='xivo-acceptance',
                              password='proformatique',
