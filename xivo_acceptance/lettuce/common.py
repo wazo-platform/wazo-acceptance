@@ -23,6 +23,8 @@ import urllib
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.expected_conditions import staleness_of
 
 from form.checkbox import Checkbox
 from xivo_acceptance.action.webi import common as common_action_webi
@@ -319,6 +321,7 @@ def click_on_line_with_alert(act, line_substring, column=None):
     delete_button.click()
     alert = world.browser.switch_to_alert()
     alert.accept()
+    WebDriverWait(world.browser, world.timeout).until(staleness_of(delete_button))
 
 
 def disable_selected_lines():
