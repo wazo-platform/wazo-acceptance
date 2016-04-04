@@ -295,3 +295,39 @@ def get_switchboard_incoming_calls_infos():
 def dial(extension):
     response = xivoclient.exec_command('dial', extension)
     assert_that(response['test_result'], equal_to('passed'))
+
+
+def set_dnd(enabled):
+    res = xivoclient.exec_command('set_dnd', enabled)
+    time.sleep(world.config['xivo_client']['login_timeout'])
+    return res
+
+
+def set_incallfilter(enabled):
+    res = xivoclient.exec_command('set_incallfilter', enabled)
+    time.sleep(world.config['xivo_client']['login_timeout'])
+    return res
+
+
+def set_noanswer(enabled, destination=''):
+    res = xivoclient.exec_command('set_noanswer', enabled, destination)
+    time.sleep(world.config['xivo_client']['login_timeout'])
+    return res
+
+
+def set_busy(enabled, destination=''):
+    res = xivoclient.exec_command('set_busy', enabled, destination)
+    time.sleep(world.config['xivo_client']['login_timeout'])
+    return res
+
+
+def set_unconditional(enabled, destination=''):
+    res = xivoclient.exec_command('set_unconditional', enabled, destination)
+    time.sleep(world.config['xivo_client']['login_timeout'])
+    return res
+
+
+def disable_all_forwards():
+    res = xivoclient.exec_command('disable_all_forwards')
+    time.sleep(world.config['xivo_client']['login_timeout'])
+    return res
