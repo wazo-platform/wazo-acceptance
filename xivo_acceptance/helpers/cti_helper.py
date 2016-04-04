@@ -298,36 +298,78 @@ def dial(extension):
 
 
 def set_dnd(enabled):
-    res = xivoclient.exec_command('set_dnd', enabled)
+    response = xivoclient.exec_command('set_dnd', enabled)
+    assert_that(response['test_result'], equal_to('passed'))
     time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
+    return response
+
+
+def get_dnd():
+    response = xivoclient.exec_command('get_dnd')
+    assert_that(response['test_result'], equal_to('passed'))
+    return response['return_value']
 
 
 def set_incallfilter(enabled):
-    res = xivoclient.exec_command('set_incallfilter', enabled)
+    response = xivoclient.exec_command('set_incallfilter', enabled)
+    assert_that(response['test_result'], equal_to('passed'))
     time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
+    return response
+
+
+def get_incallfilter():
+    response = xivoclient.exec_command('get_incallfilter')
+    assert_that(response['test_result'], equal_to('passed'))
+    return response['return_value']
 
 
 def set_noanswer(enabled, destination=''):
-    res = xivoclient.exec_command('set_noanswer', enabled, destination)
+    response = xivoclient.exec_command('set_noanswer', enabled, destination)
+    assert_that(response['test_result'], equal_to('passed'))
     time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
+    return response
+
+
+def get_noanswer():
+    response = xivoclient.exec_command('get_noanswer')
+    assert_that(response['test_result'], equal_to('passed'))
+    return response['return_value']
 
 
 def set_busy(enabled, destination=''):
-    res = xivoclient.exec_command('set_busy', enabled, destination)
+    response = xivoclient.exec_command('set_busy', enabled, destination)
+    assert_that(response['test_result'], equal_to('passed'))
     time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
+    return response
+
+
+def get_busy():
+    response = xivoclient.exec_command('get_busy')
+    assert_that(response['test_result'], equal_to('passed'))
+    return response['return_value']
 
 
 def set_unconditional(enabled, destination=''):
-    res = xivoclient.exec_command('set_unconditional', enabled, destination)
+    response = xivoclient.exec_command('set_unconditional', enabled, destination)
+    assert_that(response['test_result'], equal_to('passed'))
     time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
+    return response
+
+
+def get_unconditional():
+    response = xivoclient.exec_command('get_unconditional')
+    assert_that(response['test_result'], equal_to('passed'))
+    return response['return_value']
 
 
 def disable_all_forwards():
-    res = xivoclient.exec_command('disable_all_forwards')
+    response = xivoclient.exec_command('disable_all_forwards')
+    assert_that(response['test_result'], equal_to('passed'))
     time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
+    return response
+
+
+def get_disable_all_forwards():
+    response = xivoclient.exec_command('get_disable_all_forwards')
+    assert_that(response['test_result'], equal_to('passed'))
+    return response['return_value']
