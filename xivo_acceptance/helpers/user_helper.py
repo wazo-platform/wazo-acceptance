@@ -317,7 +317,7 @@ def add_user(data_dict, step=None):
             'name': data_dict['voicemail_name'],
             'number': data_dict['voicemail_number'],
             'context': data_dict['voicemail_context'],
-        })
+        }).resource()
         user_voicemail_action.associate(user_id, {'voicemail_id': voicemail['id']})
 
     if step is not None:
