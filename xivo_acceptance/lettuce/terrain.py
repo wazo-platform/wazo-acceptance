@@ -87,6 +87,8 @@ def initialize():
     setup.setup_auth_token()
     logger.debug("setup agentd client...")
     setup.setup_agentd_client()
+    logger.debug("setup confd client...")
+    setup.setup_confd_client()
     logger.debug("setup consul...")
     setup.setup_consul()
     world.logged_agents = []
