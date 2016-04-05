@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,14 +44,6 @@ def device_list(parameters=None):
 
 def reset_to_autoprov(device_id):
     return world.confd_utils_1_1.rest_get('%s/%s/autoprov' % (DEVICES_URL, device_id))
-
-
-def associate_line_to_device(device_id, line_id):
-    return world.confd_utils_1_1.rest_get('%s/%s/associate_line/%s' % (DEVICES_URL, device_id, line_id))
-
-
-def remove_line_from_device(device_id, line_id):
-    return world.confd_utils_1_1.rest_get('%s/%s/remove_line/%s' % (DEVICES_URL, device_id, line_id))
 
 
 def edit_device(device_id, parameters):
