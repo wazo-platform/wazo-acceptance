@@ -36,7 +36,6 @@ from xivo_acceptance.action.confd import line_endpoint_action_confd as line_endp
 from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 from xivo_acceptance.action.confd import user_action_confd as user_action
 from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
-from xivo_acceptance.action.confd import user_voicemail_action_confd as user_voicemail_action
 from xivo_acceptance.action.confd import voicemail_action_confd as voicemail_action
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_ws import User
@@ -318,7 +317,7 @@ def add_user(data_dict, step=None):
             'number': data_dict['voicemail_number'],
             'context': data_dict['voicemail_context'],
         }).resource()
-        user_voicemail_action.associate(user_id, {'voicemail_id': voicemail['id']})
+        world.confd_client.users.relations(user_id).add_voicemail(voicemail)
 
     if step is not None:
         _register_and_track_phone(step.scenario, data_dict)
