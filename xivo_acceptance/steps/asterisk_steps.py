@@ -258,13 +258,10 @@ def then_the_user_has_the_funckey_hint_enabled(step, username, funckey, expected
     firstname, lastname = username.split()
     user = world.confd_client.users.list(firstname=firstname, lastname=lastname)['items'][0]
     prefix_exten = _get_funckey_prefix_exten(user['id'], funckey)
-    state_mapping = {'enabled': 'InUse',
-                     'disabled': 'Idle'}
-
-    hints_state = _get_hints_state(prefix_exten)
-    assert_that(hints_state, not_(empty()))
-    for state in hints_state:
-        assert_that(state, equal_to(state_mapping[expected_state]))
+    if expected_state == 'enabled':
+        common.wait_until(_assert_inuse_hints_state, prefix_exten, tries=10)
+    else:
+        common.wait_until(_assert_idle_hints_state, prefix_exten, tries=10)
 
 
 def _get_funckey_prefix_exten(user_id, funckey):
@@ -285,17 +282,30 @@ def _get_hints_state(prefix_exten):
     return [line[50:66].strip() for line in output]
 
 
+def _assert_inuse_hints_state(prefix_exten):
+    hints_state = _get_hints_state(prefix_exten)
+    assert_that(hints_state, not_(empty()))
+    for state in hints_state:
+        if state != 'InUse':
+            return False
+    return True
+
+
+def _assert_idle_hints_state(prefix_exten):
+    hints_state = _get_hints_state(prefix_exten)
+    assert_that(hints_state, not_(empty()))
+    for state in hints_state:
+        if state != 'Idle':
+            return False
+    return True
+
+
 @step('Then the user "([^"]*)" has all forwards hints disabled')
 def then_the_user_has_all_forwards_hints_disabled(step, username):
     firstname, lastname = username.split()
     user = world.confd_client.users.list(firstname=firstname, lastname=lastname)['items'][0]
 
     forwards = ('unconditional' 'busy', 'noanswer')
-    hints_state = []
     for forward in forwards:
         prefix_exten = _get_funckey_prefix_exten(user['id'], forward)
-        hints_state += _get_hints_state(prefix_exten)
-
-    assert_that(hints_state, not_(empty()))
-    for state in hints_state:
-        assert_that(state, equal_to('Idle'))
+        common.wait_until(_assert_idle_hints_state, prefix_exten, tries=10)

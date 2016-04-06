@@ -300,7 +300,6 @@ def dial(extension):
 def set_dnd(enabled):
     response = xivoclient.exec_command('set_dnd', enabled)
     assert_that(response['test_result'], equal_to('passed'))
-    time.sleep(world.config['xivo_client']['login_timeout'])
     return response
 
 
@@ -313,7 +312,6 @@ def get_dnd():
 def set_incallfilter(enabled):
     response = xivoclient.exec_command('set_incallfilter', enabled)
     assert_that(response['test_result'], equal_to('passed'))
-    time.sleep(world.config['xivo_client']['login_timeout'])
     return response
 
 
@@ -326,7 +324,6 @@ def get_incallfilter():
 def set_noanswer(enabled, destination=''):
     response = xivoclient.exec_command('set_noanswer', enabled, destination)
     assert_that(response['test_result'], equal_to('passed'))
-    time.sleep(world.config['xivo_client']['login_timeout'])
     return response
 
 
@@ -339,7 +336,6 @@ def get_noanswer():
 def set_busy(enabled, destination=''):
     response = xivoclient.exec_command('set_busy', enabled, destination)
     assert_that(response['test_result'], equal_to('passed'))
-    time.sleep(world.config['xivo_client']['login_timeout'])
     return response
 
 
@@ -352,7 +348,6 @@ def get_busy():
 def set_unconditional(enabled, destination=''):
     response = xivoclient.exec_command('set_unconditional', enabled, destination)
     assert_that(response['test_result'], equal_to('passed'))
-    time.sleep(world.config['xivo_client']['login_timeout'])
     return response
 
 
@@ -365,7 +360,6 @@ def get_unconditional():
 def disable_all_forwards():
     response = xivoclient.exec_command('disable_all_forwards')
     assert_that(response['test_result'], equal_to('passed'))
-    time.sleep(world.config['xivo_client']['login_timeout'])
     return response
 
 
