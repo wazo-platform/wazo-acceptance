@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -70,11 +70,6 @@ def find_devices_with(key, value):
                for device in response.items()
                if device[key] == value]
     return devices
-
-
-def find_device_with(key, value):
-    devices = find_devices_with(key, value)
-    return devices[0] if devices else None
 
 
 def _delete_device(device_id):

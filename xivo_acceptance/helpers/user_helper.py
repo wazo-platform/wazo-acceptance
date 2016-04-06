@@ -19,7 +19,6 @@ from lettuce import world
 from hamcrest import assert_that, is_not, none
 
 from xivo_acceptance import helpers
-from xivo_acceptance.helpers import device_helper
 from xivo_acceptance.helpers import group_helper
 from xivo_acceptance.helpers import line_write_helper
 from xivo_acceptance.helpers import line_sip_helper
@@ -307,8 +306,9 @@ def add_user(data_dict, step=None):
         line_extension_action.associate(line['id'], extension['id'])
         user_line_action.create_user_line(user_id, {'line_id': line['id']})
 
-        if 'device' in data_dict:
-            device = device_helper.find_device_with('mac', data_dict['device'])
+        mac = data_dict.get('device')
+        if mac:
+            device = world.confd_client.devices.list(mac=mac)['items'][0]
             line_device_action.associate_device(line['id'], device['id'])
 
     if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(data_dict):
