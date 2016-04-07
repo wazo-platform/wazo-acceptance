@@ -305,7 +305,7 @@ def then_the_user_has_all_forwards_hints_disabled(step, username):
     firstname, lastname = username.split()
     user = world.confd_client.users.list(firstname=firstname, lastname=lastname)['items'][0]
 
-    forwards = ('unconditional' 'busy', 'noanswer')
+    forwards = ('unconditional', 'busy', 'noanswer')
     for forward in forwards:
         prefix_exten = _get_funckey_prefix_exten(user['id'], forward)
         common.wait_until(_assert_idle_hints_state, prefix_exten, tries=10)
