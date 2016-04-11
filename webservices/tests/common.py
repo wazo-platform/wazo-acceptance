@@ -31,12 +31,6 @@ xivo_server_ws = xivo_ws.XivoServer(host=XIVO_HOST,
                                     password=XIVO_CONFD_PASSWORD)
 
 
-def delete_with_id(obj, id_to_delete):
-    obj_ws = getattr(xivo_server_ws, obj)
-    for element in find_with_id(obj, id_to_delete):
-        obj_ws.delete(element.id)
-
-
 def delete_with_name(obj, name_to_delete):
     obj_ws = getattr(xivo_server_ws, obj)
     for element in find_with_name(obj, name_to_delete):
