@@ -55,13 +55,6 @@ def given_i_set_the_following_options_in_line_1(step, line_number, line_context)
             if key == 'NAT':
                 common.go_to_tab('General')
                 form.select.set_select_field_with_label('NAT', value)
-            elif key == 'IP addressing type':
-                common.go_to_tab('Advanced')
-                form.select.set_select_field_with_label('IP Addressing type', value)
-            elif key == 'IP address':
-                common.go_to_tab('Advanced')
-                form.select.set_select_field_with_label('IP Addressing type', 'Static')
-                form.input.set_text_field_with_label('IP address', value)
             elif key == 'username':
                 form.input.set_text_field_with_label('Username', value)
             else:
@@ -263,16 +256,6 @@ def then_the_line_1_has_the_following_line_options(step, line_number):
                 nat_select = world.browser.find_element_by_label('NAT')
                 nat_value = Select(nat_select).first_selected_option.text
                 assert nat_value == value
-            elif key == 'IP addressing type':
-                common.go_to_tab('Advanced')
-                ip_addressing_type_select = world.browser.find_element_by_label('IP Addressing type')
-                ip_addressing_type_value = Select(ip_addressing_type_select).first_selected_option.text
-                assert ip_addressing_type_value == value
-            elif key == 'IP address':
-                common.go_to_tab('Advanced')
-                ip_address_input = world.browser.find_element_by_label('IP address')
-                ip_address_value = ip_address_input.get_attribute('value')
-                assert ip_address_value == value
             elif key == 'Caller ID':
                 common.go_to_tab('IPBX Infos')
                 assert line_action_webi.get_value_from_ipbx_infos_tab('callerid') == value
@@ -310,7 +293,7 @@ def _add_codec_list_to_line(codecs, exten):
 
 def _open_codec_page():
     try:
-        common.go_to_tab('Signalling')
+        common.go_to_tab('General')
     except NoSuchElementException:
         # SCCP line has no Signalling tab
         return
