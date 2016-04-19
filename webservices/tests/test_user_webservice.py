@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2012-2014 Avencall
+# Copyright (C) 2012-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -57,15 +57,3 @@ class TestUserWebServices(unittest.TestCase):
         self._xivo_ws.users.add(user)
         user = common.find_with_firstname_lastname('users', firstname, lastname)[0]
         return user.id
-
-    def _add_sip_line(self, name, secret, context='default'):
-        common.delete_with_name('lines', name)
-        line = xivo_ws.Line()
-        line.protocol = line.PROTOCOL_SIP
-        line.name = name
-        line.secret = secret
-        line.context = context
-        common.delete_with_name('lines', name)
-        self._xivo_ws.lines.add(line)
-        line = common.find_with_name('lines', name)[0]
-        return line.id

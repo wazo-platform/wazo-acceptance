@@ -121,15 +121,15 @@ Feature: User
           | firstname | lastname | number | context | entity_name |
           | Tom       | Sawyer   |   1405 | default | xivo_entity |
         Given I set the following options in line "1405@default":
-          | NAT | IP addressing type | IP address |
-          | No  | Static             | 10.0.0.1   |
+          | NAT |
+          | No  |
         Then the line "1405" has the following line options:
           | Call limit |
           |         10 |
         When I edit the user "Tom" "Sawyer" without changing anything
         Then the line "1405" has the following line options:
-          | NAT | IP addressing type | IP address | Call limit |
-          | No  | Static             |   10.0.0.1 |         10 |
+          | NAT | Call limit |
+          | No  |         10 |
 
     Scenario: Delete user
         Given there are users with infos:
