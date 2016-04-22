@@ -286,18 +286,18 @@ def _assert_inuse_hints_state(prefix_exten):
     hints_state = _get_hints_state(prefix_exten)
     assert_that(hints_state, not_(empty()))
     for state in hints_state:
-        if state != 'InUse':
-            return False
-    return True
+        if state == 'InUse':
+            return True
+    return False
 
 
 def _assert_idle_hints_state(prefix_exten):
     hints_state = _get_hints_state(prefix_exten)
     assert_that(hints_state, not_(empty()))
     for state in hints_state:
-        if state != 'Idle':
-            return False
-    return True
+        if state == 'Idle':
+            return True
+    return False
 
 
 @step('Then the user "([^"]*)" has all forwards hints disabled')
