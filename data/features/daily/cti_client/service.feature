@@ -20,6 +20,7 @@ Feature: Service
         Given I enable forwarding on no-answer with destination "1234" on XiVO Client
         Given I enable forwarding on busy with destination "5678" on XiVO Client
         Given I enable unconditional forwarding with destination "0912" on XiVO Client
+        When I wait 1 seconds
         When I disable all forwards on XiVO Client
         Then the user "BLFMan Forward" has all forwards hints disabled
         Then the disable all forwards is enabled on XiVO Client
