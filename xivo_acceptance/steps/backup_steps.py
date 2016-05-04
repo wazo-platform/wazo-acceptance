@@ -47,10 +47,15 @@ def when_i_execute_database_backup_command(step):
     world.ssh_client_xivo.call([command])
 
 
+@step(u'Then executing "([^"]*)" should complete without errors')
+def when_i_execute_without_error(step, command):
+    world.ssh_client_xivo.call([command])
+
+
 @step(u'When I execute a data backup command')
 def when_i_execute_a_data_backup_command(step):
     command = 'bash /tmp/xivo-backup-manager backup data'
-    world.ssh_client_xivo.call([command])
+    world.ssh_client_xivo.check_call([command])
 
 
 @step(u'When I execute database restore command')
