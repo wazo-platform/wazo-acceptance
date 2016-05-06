@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ from xivo_acceptance.lettuce.form.checkbox import Checkbox
 
 @step(u'When I wizard correctly executed')
 def when_i_wizard_correctly_executed(step):
-    assert world.xivo_acceptance_config.xivo_configured
+    assert world.xivo_configured
 
 
 @step(u'When I activate dhcpd server')

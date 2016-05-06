@@ -120,3 +120,10 @@ def teardown_browser():
     if world.config['browser']['enable']:
         world.browser.quit()
         world.display.stop()
+
+
+def setup_xivo_configured():
+    try:
+        world.xivo_configured = world.confd_client.wizard.get()['configured']
+    except Exception:
+        world.xivo_configured = False

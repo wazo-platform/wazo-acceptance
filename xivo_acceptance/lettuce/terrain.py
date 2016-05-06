@@ -91,13 +91,15 @@ def initialize():
     setup.setup_confd_client()
     logger.debug("setup consul...")
     setup.setup_consul()
+    logger.debug("setup xivo configured...")
+    setup.setup_xivo_configured()
     world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
 
 
 @debug.logcall
 def _check_webi_login_root():
-    if world.config['browser']['enable'] and world.xivo_acceptance_config.xivo_configured:
+    if world.config['browser']['enable'] and world.xivo_configured:
         try:
             element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
             username = element.text

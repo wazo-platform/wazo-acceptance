@@ -174,8 +174,6 @@ class XivoAcceptanceConfig(object):
         self._setup_rest_api()
         logger.debug("_setup_provd...")
         self._setup_provd()
-        logger.debug("_setup_webi...")
-        self._setup_webi()
 
     def _setup_dao(self):
         xivo_dao.init_db(self._config['db_uri'])
@@ -211,12 +209,3 @@ class XivoAcceptanceConfig(object):
         provd_url = "http://{host}:{port}/provd".format(host=self._config['xivo_host'],
                                                         port=self._config['provd']['rest_port'])
         self.provd_client = new_provisioning_client(provd_url)
-
-    def _setup_webi(self):
-        try:
-            command = ['test', '-e', '/var/lib/xivo/configured']
-            self.ssh_client_xivo.check_call(command)
-        except Exception:
-            self.xivo_configured = False
-        else:
-            self.xivo_configured = True
