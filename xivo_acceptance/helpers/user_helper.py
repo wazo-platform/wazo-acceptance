@@ -176,7 +176,7 @@ def add_user_with_infos(user_data, step=None):
     user_ws_data['lastname'] = user_data['lastname']
 
     if user_data.get('entity_name'):
-        user_ws_data['entity_name'] = user_data.get('entity_name', 'xivo_entity')
+        user_ws_data['entity_name'] = user_data.get('entity_name', 'xivoentity')
 
     if user_data.get('number') and user_data.get('context'):
         user_ws_data['line_number'] = user_data['number']

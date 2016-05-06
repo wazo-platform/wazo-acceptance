@@ -25,7 +25,7 @@ Feature: SCCP Line
           | 11:11:11:11:11:11 | xivo-cisco-sccp-legacy |
         Given there are users with infos:
           | firstname | lastname | number | context | protocol | device            | entity_name |
-          | Albert    |  qwerty  | 1111   | default | sccp     | 11:11:11:11:11:11 | xivo_entity |
+          | Albert    |  qwerty  | 1111   | default | sccp     | 11:11:11:11:11:11 | xivoentity  |
         When I remove line from user "Albert" "qwerty"
         Then I see devices with infos:
           |               mac | configured |
@@ -38,7 +38,7 @@ Feature: SCCP Line
           | 11:11:11:11:11:12 | xivo-cisco-sccp-legacy |
         Given there are users with infos:
           | firstname | lastname | number | context | protocol | device            | entity_name |
-          | Albert    |  qwerty  | 1112   | default | sccp     | 11:11:11:11:11:12 | xivo_entity |
+          | Albert    |  qwerty  | 1112   | default | sccp     | 11:11:11:11:11:12 | xivoentity  |
         When I remove user "Albert" "qwerty"
         Then I see devices with infos:
           |               mac | configured |
@@ -51,7 +51,7 @@ Feature: SCCP Line
           | 11:11:11:11:11:13 | xivo-cisco-sccp-legacy |
         Given there are users with infos:
           | firstname | lastname | number | context | protocol | device            | entity_name |
-          | Albert    |  qwerty  |   1113 | default | sccp     | 11:11:11:11:11:13 | xivo_entity |
+          | Albert    |  qwerty  |   1113 | default | sccp     | 11:11:11:11:11:13 | xivoentity  |
         When I modify the device of user "Albert" "qwerty" to ""
         Then I see devices with infos:
           |               mac | configured |
@@ -65,7 +65,7 @@ Feature: SCCP Line
           | 11:11:11:11:11:15 | xivo-cisco-sccp-legacy |
         Given there are users with infos:
           | firstname | lastname | number | context | protocol | device            | entity_name |
-          | Albert    |  qwerty  |   1113 | default | sccp     | 11:11:11:11:11:14 | xivo_entity |
+          | Albert    |  qwerty  |   1113 | default | sccp     | 11:11:11:11:11:14 | xivoentity  |
         When I modify the device of user "Albert" "qwerty" to "11:11:11:11:11:15"
         Then I see devices with infos:
           |               mac | configured |
@@ -80,10 +80,10 @@ Feature: SCCP Line
 #          | 11:11:11:11:11:17 | xivo-aastra            |
 #        Given there are users with infos:
 #          | firstname | lastname | number | context | protocol | device            | entity_name |
-#          | Albert    |  qwerty  |   1113 | default | sccp     | 11:11:11:11:11:16 | xivo_entity |
+#          | Albert    |  qwerty  |   1113 | default | sccp     | 11:11:11:11:11:16 | xivoentity  |
 #        When I add a new line to user "Albert" "qwerty" with infos:
 #          | number | context | protocol | device            | entity_displayname |
-#          | 1113   | default | SIP      | 11:11:11:11:11:17 | xivo_entity        |
+#          | 1113   | default | SIP      | 11:11:11:11:11:17 | xivoentity         |
 #        Then I see devices with infos:
 #          |               mac | configured |
 #          | 11:11:11:11:11:16 | False      |
