@@ -38,6 +38,8 @@ def run():
     setup.setup_xivo_acceptance_config()
     setup.setup_ssh_client()
     setup.setup_ws()
+    setup.setup_confd_client()
+    setup.setup_xivo_configured()
 
     setup.setup_browser()
     try:

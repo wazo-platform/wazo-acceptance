@@ -37,7 +37,7 @@ def setup_agentd_client():
 
 def setup_confd_client():
     world.confd_client = ConfdClient(**world.config['confd'])
-    world.confd_client.set_token(world.config['auth_token'])
+    world.confd_client.set_token(world.config.get('auth_token'))
 
 
 def setup_auth_token():
