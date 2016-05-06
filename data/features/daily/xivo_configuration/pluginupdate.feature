@@ -5,6 +5,7 @@ Feature: ProvdPluginUpdate
     Scenario: Update plugins in provd
         Given a update plugins provd with good url
         Then plugins list successfully updated
+        Then directory of the dhcpd update not empty
         Given a update plugins provd with bad url
         Then plugins list has a error during update
 
