@@ -25,7 +25,7 @@ Feature: User
         Given I have no extension with exten "1632@default"
         When I create a user with infos:
         | firstname | lastname | protocol | number | context | entity_displayname |
-        | Bill      | Bush     | SIP      |  1632  | Default | xivoentity         |
+        | Bill      | Bush     | SIP      |  1632  | Default | xivo_entity         |
         Then I see a user with infos:
         | fullname  | number | protocol |
         | Bill Bush |   1632 | sip      |
@@ -37,7 +37,7 @@ Feature: User
         Given I have no extension with exten "1632@default"
         When I create a user with infos:
         | firstname | lastname | protocol | number | context | entity_displayname |
-        | Bill      | Bush     | SCCP     |  1632  | Default | xivoentity         |
+        | Bill      | Bush     | SCCP     |  1632  | Default | xivo_entity         |
         Then I see a user with infos:
         | fullname  | number | provisioning_code | protocol |
         | Bill Bush |   1632 |                 - | sccp     |
@@ -55,7 +55,7 @@ Feature: User
         Given there is no user "Bill" "Bush"
         When I create a user with infos:
         | firstname | lastname | protocol | number | context | device            | entity_displayname |
-        | Bill      | Bush     | SIP      |   1632 | Default | 00:de:ad:be:ef:00 | xivoentity         |
+        | Bill      | Bush     | SIP      |   1632 | Default | 00:de:ad:be:ef:00 | xivo_entity         |
         Then I see a user with infos:
         | fullname  | number | protocol |
         | Bill Bush |   1632 | sip      |
@@ -79,7 +79,7 @@ Feature: User
       Given I have no extension with exten "1677@default"
       When I create a user with infos:
           | firstname | lastname | protocol | number | context | device            | entity_displayname |
-          | Abarai    | Renji    | SIP      | 1677   | Default | dd:11:22:33:44:55 | xivoentity         |
+          | Abarai    | Renji    | SIP      | 1677   | Default | dd:11:22:33:44:55 | xivo_entity         |
       Then I see a user with infos:
           | fullname     | protocol | number |
           | Abarai Renji | sip      | 1677   |

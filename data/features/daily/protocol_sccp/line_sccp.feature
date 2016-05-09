@@ -83,7 +83,7 @@ Feature: SCCP Line
 #          | Albert    |  qwerty  |   1113 | default | sccp     | 11:11:11:11:11:16 | xivoentity  |
 #        When I add a new line to user "Albert" "qwerty" with infos:
 #          | number | context | protocol | device            | entity_displayname |
-#          | 1113   | default | SIP      | 11:11:11:11:11:17 | xivoentity         |
+#          | 1113   | default | SIP      | 11:11:11:11:11:17 | xivo_entity         |
 #        Then I see devices with infos:
 #          |               mac | configured |
 #          | 11:11:11:11:11:16 | False      |
