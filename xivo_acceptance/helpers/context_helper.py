@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ from xivo_acceptance.helpers import outcall_helper
 from xivo_ws import Context, ContextRange, WebServiceRequestError
 
 
-def update_contextnumbers_user(name, numberbeg, numberend, entity_name='xivo_entity'):
+def update_contextnumbers_user(name, numberbeg, numberend, entity_name='xivoentity'):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
@@ -33,7 +33,7 @@ def update_contextnumbers_user(name, numberbeg, numberend, entity_name='xivo_ent
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_group(name, numberbeg, numberend, entity_name='xivo_entity'):
+def update_contextnumbers_group(name, numberbeg, numberend, entity_name='xivoentity'):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
@@ -43,7 +43,7 @@ def update_contextnumbers_group(name, numberbeg, numberend, entity_name='xivo_en
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_queue(name, numberbeg, numberend, entity_name='xivo_entity'):
+def update_contextnumbers_queue(name, numberbeg, numberend, entity_name='xivoentity'):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
@@ -53,7 +53,7 @@ def update_contextnumbers_queue(name, numberbeg, numberend, entity_name='xivo_en
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_meetme(name, numberbeg, numberend, entity_name='xivo_entity'):
+def update_contextnumbers_meetme(name, numberbeg, numberend, entity_name='xivoentity'):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
@@ -63,7 +63,7 @@ def update_contextnumbers_meetme(name, numberbeg, numberend, entity_name='xivo_e
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_incall(name, numberbeg, numberend, didlength, entity_name='xivo_entity'):
+def update_contextnumbers_incall(name, numberbeg, numberend, didlength, entity_name='xivoentity'):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend), did_length=didlength)
     if not context:
@@ -82,7 +82,7 @@ def add_context(name,
                 contextnumbers_meetme='',
                 contextnumbers_queue='',
                 contextnumbers_incall='',
-                entity_name='xivo_entity'):
+                entity_name='xivoentity'):
 
     context = Context()
     context.name = name
