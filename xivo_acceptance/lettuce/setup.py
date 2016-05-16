@@ -55,19 +55,7 @@ def setup_auth_token():
 
 @debug.logcall
 def setup_browser():
-    if not world.config['browser']['enable']:
-        return
-
-    if hasattr(world, 'display') and hasattr(world, 'browser'):
-        _stop_browser()
-
-    from pyvirtualdisplay import Display
-    browser_size = width, height = tuple(world.config['browser']['resolution'].split('x', 1))
-    world.display = Display(visible=world.config['browser']['visible'], size=browser_size)
-    world.display.start()
     world.browser = XiVOBrowser(world.config['debug']['selenium'])
-    world.browser.set_window_size(width, height)
-    world.timeout = float(world.config['browser']['timeout'])
 
 
 @debug.logcall
@@ -76,7 +64,8 @@ def _stop_browser():
         return
 
     world.browser.quit()
-    world.display.stop()
+    if hasattr(world, 'display'):
+        world.display.stop()
 
 
 def setup_config():
@@ -119,7 +108,8 @@ def setup_ws():
 def teardown_browser():
     if world.config['browser']['enable']:
         world.browser.quit()
-        world.display.stop()
+        if hasattr(world, 'display'):
+            world.display.stop()
 
 
 def setup_xivo_configured():

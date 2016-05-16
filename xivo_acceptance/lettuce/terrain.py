@@ -21,10 +21,8 @@ import tempfile
 import sys
 
 from lettuce import before, after, world
-from selenium.common.exceptions import NoSuchElementException
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.lettuce import asterisk
-from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import debug
 from xivo_acceptance.lettuce import setup
 from xivo_acceptance.lettuce.phone_register import PhoneRegister
@@ -42,7 +40,6 @@ def xivo_acceptance_lettuce_before_all():
 def xivo_acceptance_lettuce_before_each_scenario(scenario):
     scenario.phone_register = PhoneRegister()
     setup.setup_browser()
-    _check_webi_login_root()
     world.deleted_device = None
 
 
@@ -95,20 +92,6 @@ def initialize():
     setup.setup_xivo_configured()
     world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
-
-
-@debug.logcall
-def _check_webi_login_root():
-    if world.config['browser']['enable'] and world.xivo_configured:
-        try:
-            element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
-            username = element.text
-        except NoSuchElementException:
-            common.webi_login_as_default()
-        else:
-            if username != "root":
-                common.webi_logout()
-                common.webi_login_as_default()
 
 
 @debug.logcall

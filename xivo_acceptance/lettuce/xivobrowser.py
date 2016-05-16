@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,10 +27,46 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 
+from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce.exception import MissingTranslationException
 
 
-class XiVOBrowser(webdriver.Firefox):
+class XiVOBrowser(object):
+
+    def __init__(self, debug=False):
+        self._debug = debug
+        self._instance = None
+
+    def __getattr__(self, name):
+        if not self._instance:
+            if name == 'quit':
+                return lambda: None
+            self._start_client()
+
+        return getattr(self._instance, name)
+
+    def _start_client(self):
+        from pyvirtualdisplay import Display
+        browser_size = width, height = tuple(world.config['browser']['resolution'].split('x', 1))
+        world.display = Display(visible=world.config['browser']['visible'], size=browser_size)
+        world.display.start()
+        self._instance = _XiVOBrowserImplementation(self._debug)
+        self._instance.set_window_size(width, height)
+        world.timeout = float(world.config['browser']['timeout'])
+
+        if world.config['browser']['enable'] and world.xivo_configured:
+            try:
+                element = self._instance.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
+                username = element.text
+            except NoSuchElementException:
+                common.webi_login_as_default()
+            else:
+                if username != "root":
+                    common.webi_logout()
+                    common.webi_login_as_default()
+
+
+class _XiVOBrowserImplementation(webdriver.Firefox):
 
     DOWNLOAD_DIR = '/tmp'
 
