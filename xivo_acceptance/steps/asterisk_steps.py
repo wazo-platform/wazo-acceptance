@@ -297,7 +297,6 @@ def _assert_idle_hints_state(prefix_exten):
     for state in hints_state:
         if state != 'Idle':
             return False
-    print 'HINTS STATE: {}, PREFIX_EXTEN: {}'.format(hints_state, prefix_exten)
     return True
 
 
