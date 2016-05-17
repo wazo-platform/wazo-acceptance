@@ -49,12 +49,12 @@ _FEATURES_DIRS = [
     os.path.join(_ROOT_DIR, 'data', 'features')
 ]
 
+DEFAULT_XIVO_HOST = 'daily-xivo-pxe.lan.proformatique.com'
 
-def load_config(old_config=True):
-    XIVO_HOST = os.environ.get('XIVO_HOST', 'daily-xivo-pxe.lan.proformatique.com')
 
-    default_config = {
-        'xivo_host': XIVO_HOST,
+def load_config(extra_config):
+    config = {
+        'xivo_host': DEFAULT_XIVO_HOST,
         'log_file': '/tmp/xivo-acceptance.log',
         'assets_dir': _find_first_existing_path(_ASSETS_DIRS),
         'features_dir': _find_first_existing_path(_FEATURES_DIRS),
@@ -71,7 +71,7 @@ def load_config(old_config=True):
             'passwd': 'proformatique'
         },
         'confd': {
-            'host': XIVO_HOST,
+            'host': DEFAULT_XIVO_HOST,
             'port': 9486,
             'https': True,
             'verify_certificate': False
@@ -107,7 +107,7 @@ def load_config(old_config=True):
             'exchange_name': 'xivo',
             'exchange_type': 'topic',
             'exchange_durable': True,
-            'host': 'localhost',
+            'host': DEFAULT_XIVO_HOST,
             'port': 5672,
             'username': 'guest',
             'password': 'guest',
@@ -120,17 +120,22 @@ def load_config(old_config=True):
         }
     }
 
-    if old_config:
+    if extra_config:
         try:
-            extra_config_file_path = _find_first_existing_path(_CONFIG_DIRS, suffix='default')
+            extra_config_file_path = _find_first_existing_path(_CONFIG_DIRS, file_name=extra_config)
             print('Using extra configuration file {}'.format(extra_config_file_path))
-            default_config.update(_parse_config_file(extra_config_file_path))
+            config.update(_parse_config_file(extra_config_file_path))
         except Exception as e:
             print(e)
 
-    _config_post_processor(default_config)
+    host_from_env = os.environ.get('XIVO_HOST')
+    if host_from_env:
+        config['xivo_host'] = host_from_env
 
-    return default_config
+    _config_update_host(config)
+    _config_post_processor(config)
+
+    return config
 
 
 def _config_post_processor(config):
@@ -138,10 +143,15 @@ def _config_post_processor(config):
         config['db_uri'] = 'postgresql://asterisk:proformatique@{}/asterisk'.format(config['xivo_host'])
     if 'url' not in config['frontend']:
         config['frontend']['url'] = 'https://{}'.format(config['xivo_host'])
-    config['bus_url'] = 'amqp://{username}:{password}@{host}:{port}//'.format(username=config['bus']['username'],
-                                                                              password=config['bus']['password'],
-                                                                              host=config['xivo_host'],
-                                                                              port=config['bus']['port'])
+    config['bus_url'] = 'amqp://{username}:{password}@{host}:{port}//'.format(**config['bus'])
+
+
+def _config_update_host(config):
+    if config['confd']['host'] == DEFAULT_XIVO_HOST:
+        config['confd']['host'] = config['xivo_host']
+
+    if config['bus']['host'] == DEFAULT_XIVO_HOST:
+        config['bus']['host'] = config['xivo_host']
 
 
 def _parse_config_file(config_file_name):
@@ -153,10 +163,10 @@ def _parse_config_file(config_file_name):
         return {}
 
 
-def _find_first_existing_path(paths, suffix=None):
+def _find_first_existing_path(paths, file_name=None):
     for path in paths:
-        if suffix:
-            path = os.path.join(path, suffix)
+        if file_name:
+            path = os.path.join(path, file_name)
         if os.path.exists(path):
             return path
     raise Exception('Path does not exist: %s' % ' '.join(paths))

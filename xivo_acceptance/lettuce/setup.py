@@ -58,8 +58,8 @@ def setup_browser():
     world.browser = XiVOBrowser(world.config['debug']['selenium'])
 
 
-def setup_config():
-    world.config = load_config()
+def setup_config(extra_config):
+    world.config = load_config(extra_config)
 
 
 def setup_consul():

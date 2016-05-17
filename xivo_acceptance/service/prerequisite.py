@@ -30,9 +30,9 @@ from xivo_dao.helpers.db_utils import session_scope
 logger = logging.getLogger(__name__)
 
 
-def run():
+def run(extra_config):
     logger.debug('Initializing ...')
-    setup.setup_config()
+    setup.setup_config(extra_config)
     setup.setup_logging()
     setup.setup_xivo_acceptance_config()
     setup.setup_ssh_client()

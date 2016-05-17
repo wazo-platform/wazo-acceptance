@@ -33,7 +33,7 @@ logger = logging.getLogger('acceptance')
 
 @before.all
 def xivo_acceptance_lettuce_before_all():
-    initialize()
+    initialize(extra_config='default')
 
 
 @before.each_scenario
@@ -65,8 +65,8 @@ def xivo_acceptance_lettuce_after_all(total):
         world.display.stop()
 
 
-def initialize():
-    setup.setup_config()
+def initialize(extra_config):
+    setup.setup_config(extra_config)
     setup.setup_logging()
 
     logger.info("Initializing acceptance tests...")

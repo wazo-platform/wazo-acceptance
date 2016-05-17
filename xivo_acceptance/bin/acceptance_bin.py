@@ -34,7 +34,7 @@ def main():
     _disable_ssl_cert_verification()
     parsed_args = _parse_args()
 
-    config = load_config(old_config=False)
+    config = load_config(extra_config=parsed_args.config)
     setup_logging(log_file=config['log_file'], foreground=True, debug=parsed_args.verbose)
 
     feature_manager = FeatureManager(config)
@@ -42,7 +42,7 @@ def main():
     controller = XiVOAcceptanceController(feature_manager=feature_manager)
 
     if parsed_args.prerequisite:
-        controller.exec_prerequisite()
+        controller.exec_prerequisite(extra_config=parsed_args.config)
 
     if parsed_args.internal_features:
         controller.internal_features(internal_features=parsed_args.internal_features)
@@ -56,6 +56,8 @@ def _parse_args():
                         help='execute prerequisite')
     parser.add_argument('-v', '--verbose', action='store_true',
                         help="verbose mode")
+    parser.add_argument('-c', '--config',
+                        help='config file name (not the path)')
     return parser.parse_args()
 
 
