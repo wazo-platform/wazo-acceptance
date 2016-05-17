@@ -58,16 +58,6 @@ def setup_browser():
     world.browser = XiVOBrowser(world.config['debug']['selenium'])
 
 
-@debug.logcall
-def _stop_browser():
-    if not world.config['browser']['enable']:
-        return
-
-    world.browser.quit()
-    if hasattr(world, 'display'):
-        world.display.stop()
-
-
 def setup_config():
     world.config = load_config()
 
@@ -106,10 +96,9 @@ def setup_ws():
 
 @debug.logcall
 def teardown_browser():
-    if world.config['browser']['enable']:
-        world.browser.quit()
-        if hasattr(world, 'display'):
-            world.display.stop()
+    world.browser.quit()
+    if hasattr(world, 'display'):
+        world.display.stop()
 
 
 def setup_xivo_configured():

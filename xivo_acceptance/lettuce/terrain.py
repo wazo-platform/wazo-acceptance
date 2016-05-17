@@ -56,11 +56,13 @@ def xivo_acceptance_lettuce_after_each_scenario(scenario):
     if xc:
         xc.stop()
     _logout_agents()
+    world.browser.quit()
 
 
 @after.all
 def xivo_acceptance_lettuce_after_all(total):
-    deinitialize()
+    if hasattr(world, 'display'):
+        world.display.stop()
 
 
 def initialize():
@@ -78,8 +80,6 @@ def initialize():
     setup.setup_ws()
     logger.debug("setup provd...")
     setup.setup_provd()
-    logger.debug("setup browser...")
-    setup.setup_browser()
     logger.debug("setup auth token...")
     setup.setup_auth_token()
     logger.debug("setup agentd client...")
@@ -98,11 +98,6 @@ def initialize():
 def _logout_agents():
     asterisk_helper.logoff_agents(world.logged_agents)
     world.logged_agents = []
-
-
-@debug.logcall
-def deinitialize():
-    setup.teardown_browser()
 
 
 @debug.logcall
