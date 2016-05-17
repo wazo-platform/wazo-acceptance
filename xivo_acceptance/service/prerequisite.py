@@ -23,7 +23,6 @@ from xivo_acceptance.helpers import context_helper
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import setup
 from xivo_acceptance.lettuce.assets import copy_asset_to_server
-from xivo_acceptance.lettuce.terrain import _check_webi_login_root
 from xivo_dao.helpers import db_manager
 from xivo_dao.helpers.db_utils import session_scope
 
@@ -43,8 +42,6 @@ def run():
 
     setup.setup_browser()
     try:
-        _check_webi_login_root()
-
         logger.debug('Configuring WebService Access on XiVO')
         _create_webservices_access()
 
