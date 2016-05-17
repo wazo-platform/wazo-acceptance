@@ -50,9 +50,9 @@ class XiVOBrowser(object):
         self._instance = None
 
     def _start_client(self):
+        browser_size = width, height = tuple(world.config['browser']['resolution'].split('x', 1))
         if not hasattr(world, 'display'):
             from pyvirtualdisplay import Display
-            browser_size = width, height = tuple(world.config['browser']['resolution'].split('x', 1))
             world.display = Display(visible=world.config['browser']['visible'], size=browser_size)
             world.display.start()
 
