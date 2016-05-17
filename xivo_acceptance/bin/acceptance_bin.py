@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 #
-# Copyright (C) 2014 Avencall
+# Copyright (C) 2014-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 
 import argparse
 import logging
-import os
 import signal
 import ssl
 
@@ -34,9 +33,6 @@ def main():
     _init_signal()
     _disable_ssl_cert_verification()
     parsed_args = _parse_args()
-
-    if parsed_args.xivo_host:
-        os.environ["XIVO_HOST"] = parsed_args.xivo_host
 
     config = load_config(old_config=False)
     setup_logging(log_file=config['log_file'], foreground=True, debug=parsed_args.verbose)
@@ -60,8 +56,6 @@ def _parse_args():
                         help='execute prerequisite')
     parser.add_argument('-v', '--verbose', action='store_true',
                         help="verbose mode")
-    parser.add_argument('-x', '--xivo-host',
-                        help='xivo host')
     return parser.parse_args()
 
 
