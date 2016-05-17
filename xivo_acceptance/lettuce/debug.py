@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2015 Avencall
+# Copyright (C) 2015-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@
 import logging
 import requests
 
-from xivo.xivo_logging import setup_logging as xivo_setup_logging
-
 
 loggers = {
     'selenium': logging.getLogger('selenium'),
@@ -32,12 +30,12 @@ loggers = {
 
 
 def setup_logging(config):
-    debug = config.get('debug', {}).get('global', True)
-    xivo_setup_logging(log_file=config['log_file'], foreground=True, debug=debug)
     file_handler = logging.FileHandler(config['log_file'])
 
     for name, logger in loggers.iteritems():
         logger.setLevel(logging.INFO)
+        for handler in logger.handlers:
+            logger.removeHandler(handler)
         logger.addHandler(file_handler)
         if config['debug'].get(name):
             logger.setLevel(logging.DEBUG)

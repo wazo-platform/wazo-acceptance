@@ -24,13 +24,13 @@ from xivo_acceptance.lettuce import terrain
 
 @step(u'I switch to the XiVO master')
 def i_switch_to_the_xivo_master(step):
-    terrain.initialize(extra_config='master')
+    terrain.set_xivo_target(extra_config='master')
     terrain._check_webi_login_root()
 
 
 @step(u'I switch to the XiVO slave')
 def i_switch_to_the_xivo_slave(step):
-    terrain.initialize(extra_config='slave')
+    terrain.set_xivo_target(extra_config='slave')
     terrain._check_webi_login_root()
 
 

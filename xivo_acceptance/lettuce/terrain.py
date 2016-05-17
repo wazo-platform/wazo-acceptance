@@ -21,19 +21,20 @@ import tempfile
 import sys
 
 from lettuce import before, after, world
+from xivo_acceptance.config import load_config
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.lettuce import asterisk
 from xivo_acceptance.lettuce import debug
 from xivo_acceptance.lettuce import setup
 from xivo_acceptance.lettuce.phone_register import PhoneRegister
-
+from xivo.xivo_logging import setup_logging as xivo_setup_logging
 
 logger = logging.getLogger('acceptance')
 
 
 @before.all
 def xivo_acceptance_lettuce_before_all():
-    initialize(extra_config='default')
+    initialize()
 
 
 @before.each_scenario
@@ -65,7 +66,14 @@ def xivo_acceptance_lettuce_after_all(total):
         world.display.stop()
 
 
-def initialize(extra_config):
+def initialize(extra_config='default'):
+    config = load_config(extra_config)
+    debug = config.get('debug', {}).get('global', True)
+    xivo_setup_logging(log_file=config['log_file'], foreground=True, debug=debug)
+    set_xivo_target(extra_config)
+
+
+def set_xivo_target(extra_config):
     setup.setup_config(extra_config)
     setup.setup_logging()
 
