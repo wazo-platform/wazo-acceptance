@@ -22,6 +22,7 @@ from lettuce import world
 from xivo_acceptance.helpers import context_helper
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import setup
+from xivo_acceptance.lettuce import sysutils
 from xivo_acceptance.lettuce.assets import copy_asset_to_server
 from xivo_dao.helpers import db_manager
 from xivo_dao.helpers.db_utils import session_scope
@@ -158,8 +159,10 @@ def _configure_ca_certificates():
 
 def _configure_consul():
     copy_asset_to_server('public_consul.json', '/etc/consul/xivo/public_consul.json')
-    command = 'service consul restart'.split()
-    world.ssh_client_xivo.check_call(command)
+    consul_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('consul'))
+    if consul_is_running:
+        command = 'service consul restart'.split()
+        world.ssh_client_xivo.check_call(command)
 
 
 def _configure_xivo_auth():

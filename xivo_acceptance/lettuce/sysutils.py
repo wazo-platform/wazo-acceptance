@@ -24,6 +24,7 @@ from lettuce import world
 
 SERVICE_PIDFILES = {
     'asterisk': '/var/run/asterisk/asterisk.pid',
+    'consul': '/var/run/consul/consul.pid',
     'xivo-ctid': '/var/run/xivo-ctid.pid',
     'xivo-agent': '/var/run/xivo-agentd.pid',
 }
