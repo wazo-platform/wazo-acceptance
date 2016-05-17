@@ -1,12 +1,14 @@
 Feature: Synchronization master - slave
 
   Scenario: Database synchronisation
-
-    Given there is no user on the slave "Test" "HA replication"
-    Given there are users on the master with infos:
+    Given I switch to the XiVO slave
+    Given there is no user "Test" "HA replication"
+    Given I switch to the XiVO master
+    Given there are users with infos:
     | firstname | lastname       |
     | Test      | HA replication |
     When I start the replication between master and slave
-    Then I see a user on the slave with infos:
+    When I switch to the XiVO slave
+    Then I see a user with infos:
     | fullname             |
     | Test HA replication  |
