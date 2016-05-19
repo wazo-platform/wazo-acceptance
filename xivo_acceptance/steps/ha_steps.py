@@ -25,13 +25,11 @@ from xivo_acceptance.lettuce import terrain
 @step(u'I switch to the XiVO master')
 def i_switch_to_the_xivo_master(step):
     terrain.set_xivo_target(extra_config='master')
-    terrain._check_webi_login_root()
 
 
 @step(u'I switch to the XiVO slave')
 def i_switch_to_the_xivo_slave(step):
     terrain.set_xivo_target(extra_config='slave')
-    terrain._check_webi_login_root()
 
 
 @step(u'When I start the replication between master and slave')
