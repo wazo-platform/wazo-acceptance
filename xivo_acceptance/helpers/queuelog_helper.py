@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,6 +60,12 @@ def get_event_count_agent(event, agent_number):
         '"event"': '\'%s\'' % event
     }
     return postgres.exec_count_request('queue_log', **cond)
+
+
+def get_agent_last_login_duration(agent_number):
+    query = "SELECT cast(data2 as int) FROM queue_log WHERE event = 'AGENTCALLBACKLOGOFF' AND agent = :agent ORDER BY time DESC LIMIT 1"
+    agent = _build_agent_db_tag_from_number(agent_number)
+    return postgres.exec_sql_request(query, agent=agent).fetchone()[0]
 
 
 def get_last_callid(event, agent_number):

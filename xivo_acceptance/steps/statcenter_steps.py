@@ -17,6 +17,7 @@
 
 from datetime import date, datetime, timedelta
 from hamcrest import assert_that
+from hamcrest import close_to
 from hamcrest import equal_to
 from lettuce import step, world
 
@@ -173,3 +174,9 @@ def then_i_should_have_group1_minutes_login_in_the_last_hour_on_agent_group2_on_
     stat_action_webi.open_agent_stat_page_on_day(agent_number, day_of_last_hour, config_name)
 
     stat_action_webi.check_agent_login_time(login_time, world.beginning_of_last_hour)
+
+
+@step(u'Then the queue_log table shows that agent "([^"]*)" has been logged for (\d+) seconds')
+def then_the_queue_log_table_shows_that_agent_group1_has_been_logged_for_1_seconds(step, agent_number, expected_duration):
+    login_duration = queuelog_helper.get_agent_last_login_duration(agent_number)
+    assert_that(login_duration, close_to(int(expected_duration), 5))
