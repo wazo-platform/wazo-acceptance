@@ -362,3 +362,13 @@ Feature: WEBI Agent Stats
             | 10h-11h |        1 |
             | 11h-12h |        0 |
             | Total   |        1 |
+
+    Scenario: Agent login time in queue_log
+        Given there is no agents logged
+        Given there are users with infos:
+        | firstname | lastname | number | context     | agent_number | protocol |
+        | User      |      003 |   1003 | statscenter |         1003 | sip      |
+        When I log agent "1003"
+        When I wait 1 seconds
+        When I unlog agent "1003"
+        Then the queue_log table shows that agent "1003" has been logged for 1 seconds
