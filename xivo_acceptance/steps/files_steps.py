@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -91,11 +91,9 @@ def then_moh_files_owned_by_asterisk_www_data(step):
 @step(u'Then backup files successfully rotated')
 def then_backup_files_successfully_rotated(step):
     backuped_files = [os.path.join(BACKUP_DIR, 'data.tgz'),
-                      os.path.join(BACKUP_DIR, 'db.tgz'),
-                      os.path.join(BACKUP_DIR, 'consul-kv.json')]
+                      os.path.join(BACKUP_DIR, 'db.tgz')]
     rotated_files = [os.path.join(BACKUP_DIR, 'data.tgz.{num}'),
-                     os.path.join(BACKUP_DIR, 'db.tgz.{num}'),
-                     os.path.join(BACKUP_DIR, 'consul-kv.json.{num}.gz')]
+                     os.path.join(BACKUP_DIR, 'db.tgz.{num}'))]
     for file_ in backuped_files:
         sysutils.send_command(['rm', '-f', '{file_}*'.format(file_=file_)])
         sysutils.send_command(['touch', file_])
