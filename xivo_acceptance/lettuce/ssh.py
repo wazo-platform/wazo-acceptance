@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import logging
 import os
 import subprocess
 from subprocess import PIPE, STDOUT
@@ -24,6 +25,7 @@ SSH_OPTIONS = [
     '-o', 'StrictHostKeyChecking=no',
     '-o', 'UserKnownHostsFile=/dev/null',
 ]
+logger = logging.getLogger(__name__)
 
 
 class SSHClient(object):
@@ -49,20 +51,25 @@ class SSHClient(object):
                                close_fds=True)
 
     def call(self, remote_command):
-        return self._exec_ssh_command(remote_command)
+        command_result = self._exec_ssh_command(remote_command)
+        return command_result.returncode
 
     def check_call(self, remote_command):
-        retcode = self._exec_ssh_command(remote_command)
-        if retcode != 0:
+        command_result = self._exec_ssh_command(remote_command, err_in_out=True)
+        if command_result.returncode != 0:
             raise Exception('Remote command %r returned non-zero exit status %r' %
-                            (remote_command, retcode))
-        return retcode
+                            (remote_command, command_result.returncode))
+        return command_result.returncode
 
     def out_call(self, remote_command):
-        return self._exec_ssh_command_with_return_stdout(remote_command)
+        command_result = self._exec_ssh_command(remote_command)
+        if command_result.returncode != 0:
+            print command_result.stderr_result
+        return command_result.stdout_result
 
     def out_err_call(self, remote_command):
-        return self._exec_ssh_command_with_return_stdout_stderr(remote_command)
+        command_result = self._exec_ssh_command(remote_command, err_in_out=True)
+        return command_result.stdout_result
 
     def new_process(self, remote_command, *args, **kwargs):
         kwargs.setdefault('close_fds', True)
@@ -70,42 +77,16 @@ class SSHClient(object):
 
         return subprocess.Popen(command, *args, **kwargs)
 
-    def _exec_ssh_command(self, remote_command):
+    def _exec_ssh_command(self, remote_command, err_in_out=False):
         command = self._format_ssh_command(remote_command)
-
-        return subprocess.call(command,
-                               stdout=self._fobj_devnull,
-                               stderr=self._fobj_devnull,
-                               close_fds=True)
-
-    def _exec_ssh_command_with_return_stdout(self, remote_command):
-        command = self._format_ssh_command(remote_command)
-
+        stderr = STDOUT if err_in_out else PIPE
         p = subprocess.Popen(command,
                              stdin=PIPE,
                              stdout=PIPE,
-                             stderr=PIPE,
+                             stderr=stderr,
                              close_fds=True)
-
-        (stdoutdata, stderrdata) = p.communicate()
-
-        if p.returncode != 0:
-            print stderrdata
-
-        return stdoutdata
-
-    def _exec_ssh_command_with_return_stdout_stderr(self, remote_command):
-        command = self._format_ssh_command(remote_command)
-
-        p = subprocess.Popen(command,
-                             stdin=PIPE,
-                             stdout=PIPE,
-                             stderr=STDOUT,
-                             close_fds=True)
-
-        (stdoutdata, stderrdata) = p.communicate()
-
-        return stdoutdata
+        (p.stdout_result, p.stderr_result) = p.communicate()
+        return p
 
     def _format_ssh_command(self, remote_command):
         ssh_command = ['ssh']
