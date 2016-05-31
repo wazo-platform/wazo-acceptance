@@ -57,6 +57,7 @@ class SSHClient(object):
     def check_call(self, remote_command):
         command_result = self._exec_ssh_command(remote_command, err_in_out=True)
         if command_result.returncode != 0:
+            logger.error(command_result.stdout_result)
             raise Exception('Remote command %r returned non-zero exit status %r' %
                             (remote_command, command_result.returncode))
         return command_result.returncode
