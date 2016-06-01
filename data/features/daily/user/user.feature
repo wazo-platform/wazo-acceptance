@@ -11,6 +11,18 @@ Feature: User
         When I search for user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
+    Scenario: Bus notification on user deleted
+        Given there are users with infos:
+        | firstname | lastname |
+        | Walt      | Longmire |
+        Given I listen on the bus for messages:
+        | queue        | routing_key         |
+        | deleted_user | config.user.deleted |
+        When I remove user "Walt" "Longmire"
+        Then I receive a "user_deleted" on the queue "deleted_user" with data:
+        | id  | uuid | origin_uuid |
+        | ANY | ANY  | yes         |
+
     Scenario: Add a user in a group
         Given there are users with infos:
         | firstname | lastname | number | context | group_name  | entity_name |

@@ -26,6 +26,7 @@ from hamcrest import has_entry
 from hamcrest import has_entries
 from hamcrest import has_item
 from hamcrest import matches_regexp
+from mock import ANY
 from lettuce import step
 from lettuce.registry import world
 from xivo_acceptance.helpers import agent_helper
@@ -122,6 +123,12 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
             user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
                                                          expected_event['lastname'])
             raw_expected_event['data']['user_id'] = user['id']
+
+        if expected_event.get('id', 'no') == 'ANY':
+            raw_expected_event['data']['id'] = ANY
+
+        if expected_event.get('uuid', 'no') == 'ANY':
+            raw_expected_event['data']['uuid'] = ANY
 
         if expected_event.get('endpoint_id', 'no') == 'yes':
             line = line_read_helper.get_with_exten_context(expected_event['number'],
