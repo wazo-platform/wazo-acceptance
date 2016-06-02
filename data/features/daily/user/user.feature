@@ -20,8 +20,8 @@ Feature: User
         | deleted_user | config.user.deleted |
         When I remove user "Walt" "Longmire"
         Then I receive a "user_deleted" on the queue "deleted_user" with data:
-        | id  | uuid | origin_uuid |
-        | ANY | ANY  | yes         |
+        | id  | uuid |
+        | ANY | ANY  |
 
     Scenario: Add a user in a group
         Given there are users with infos:
