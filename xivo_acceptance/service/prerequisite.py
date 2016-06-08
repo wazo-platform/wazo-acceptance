@@ -53,11 +53,10 @@ def run(extra_config):
         _configure_consul()
 
         logger.debug('Configuring PostgreSQL on XiVO')
-        _create_pgpass_on_remote_host()
-        _allow_remote_access_to_pgsql()
+        _configure_postgresql()
 
         logger.debug('Configuring RabbitMQ on XiVO')
-        copy_asset_to_server('rabbitmq.config', '/etc/rabbitmq/rabbitmq.config')
+        _configure_rabbitmq()
 
         logger.debug('Configuring xivo-agid on XiVO')
         _allow_agid_listen_on_all_interfaces()
@@ -88,11 +87,33 @@ def run(extra_config):
 
         logger.debug('Allowing SIP usernames to change')
         _set_sip_usernames_read_write()
-
-        logger.debug('Restarting All XiVO Services')
-        _xivo_service_restart_all()
     finally:
         setup.teardown_browser()
+
+
+def _configure_postgresql():
+
+    cmd = ['echo', '*:*:asterisk:asterisk:proformatique', '>', '.pgpass']
+    world.ssh_client_xivo.check_call(cmd)
+    cmd = ['chmod', '600', '.pgpass']
+    world.ssh_client_xivo.check_call(cmd)
+
+    hba_file = '/etc/postgresql/9.4/main/pg_hba.conf'
+    postgres_conf_file = '/etc/postgresql/9.4/main/postgresql.conf'
+
+    subnet_line = 'host all all {subnet} md5'
+    for subnet in world.config['prerequisites']['subnets']:
+        _add_line_to_remote_file(subnet_line.format(subnet=subnet), hba_file)
+
+    _add_line_to_remote_file("listen_addresses = '*'", postgres_conf_file)
+
+    _restart_service('postgresql')
+    db_manager.init_db(world.config['db_uri'])
+
+
+def _configure_rabbitmq():
+    copy_asset_to_server('rabbitmq.config', '/etc/rabbitmq/rabbitmq.config')
+    _restart_service('rabbitmq-server')
 
 
 def _create_webservices_access():
@@ -103,35 +124,8 @@ def _create_webservices_access():
     world.ssh_client_xivo.check_call(cmd)
 
 
-def _create_pgpass_on_remote_host():
-    cmd = ['echo', '*:*:asterisk:asterisk:proformatique', '>', '.pgpass']
-    world.ssh_client_xivo.check_call(cmd)
-    cmd = ['chmod', '600', '.pgpass']
-    world.ssh_client_xivo.check_call(cmd)
-
-
-def _allow_remote_access_to_pgsql():
-    hba_file = '/etc/postgresql/9.4/main/pg_hba.conf'
-    postgres_conf_file = '/etc/postgresql/9.4/main/postgresql.conf'
-
-    subnet_line = 'host all all {subnet} md5'
-    for subnet in world.config['prerequisites']['subnets']:
-        _add_line_to_remote_file(subnet_line.format(subnet=subnet), hba_file)
-
-    _add_line_to_remote_file("listen_addresses = '*'", postgres_conf_file)
-
-    command = ['service', 'postgresql', 'restart']
-    world.ssh_client_xivo.check_call(command)
-    db_manager.init_db(world.config['db_uri'])
-
-
 def _add_line_to_remote_file(line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
-    world.ssh_client_xivo.check_call(command)
-
-
-def _xivo_service_restart_all():
-    command = ['xivo-service', 'restart', 'all']
     world.ssh_client_xivo.check_call(command)
 
 
@@ -161,16 +155,17 @@ def _configure_consul():
     copy_asset_to_server('public_consul.json', '/etc/consul/xivo/public_consul.json')
     consul_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('consul'))
     if consul_is_running:
-        command = 'service consul restart'.split()
-        world.ssh_client_xivo.check_call(command)
+        _restart_service('consul')
 
 
 def _configure_xivo_auth():
     _copy_daemon_config_file('xivo-auth')
+    _restart_service('xivo-auth')
 
 
 def _configure_xivo_ctid():
     _copy_daemon_config_file('xivo-ctid')
+    _restart_service('xivo-ctid')
 
 
 def _set_sip_usernames_read_write():
@@ -184,3 +179,8 @@ def _copy_daemon_config_file(daemon_name):
     asset_filename = '{}-acceptance.yml'.format(daemon_name)
     remote_path = '/etc/{}/conf.d'.format(daemon_name)
     copy_asset_to_server(asset_filename, remote_path)
+
+
+def _restart_service(service_name):
+    command = ['systemctl', 'restart', service_name]
+    world.ssh_client_xivo.check_call(command)
