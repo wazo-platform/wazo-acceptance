@@ -224,7 +224,7 @@ def then_i_should_see_the_following_caller_id(step):
 
 @step(u'Then "([^"]*)" call "([^"]*)" is "([^"]*)"')
 def then_name_call_field_is_value(step, name, field, value):
-    user_uuid = user_helper.find_by_firstname_lastname(*name.split(' ', 1))['uuid']
+    user_uuid = user_helper.get_user_by_name(name)['uuid']
 
     def assertion():
         calls = world.ctid_ng_client.calls.list_calls(token=world.config.get('auth_token'))
