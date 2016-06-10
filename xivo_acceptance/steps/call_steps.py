@@ -231,6 +231,9 @@ def then_name_call_field_is_value(step, name, field, value):
         for call in calls['items']:
             if call['user_uuid'] == user_uuid:
                 assert_that(call[field], equal_to(eval(value)))
+                break
+        else:
+            assert False, 'Found no call for {}'.format(name)
 
     common.wait_until_assert(assertion, tries=3)
 
