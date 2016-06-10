@@ -65,3 +65,13 @@ Feature: Callgen
         When "James Bond" hangs up
         When I wait 2 seconds
         Then "Sylvia Trench" is ringing
+
+    Scenario: Call on hold are marked as on_hold when GETTING calls
+        Given there are users with infos:
+        | firstname | lastname | number | context | protocol |
+        | Bruce     | Wayne    |   1001 | default | sip      |
+        | Clark     | Kent     |   1002 | default | sip      |
+        Given "Bruce Wayne" calls "1002"
+        Given "Clark Kent" answers
+        When "Clark Kent" puts his call on hold
+        Then "Clark Kent" call "on_hold" is "True"

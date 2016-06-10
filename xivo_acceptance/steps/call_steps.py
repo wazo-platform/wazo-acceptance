@@ -18,6 +18,7 @@
 import time
 
 from hamcrest import assert_that
+from hamcrest import equal_to
 from hamcrest import has_items
 from hamcrest import is_
 from hamcrest import not_
@@ -29,6 +30,7 @@ from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.helpers import line_sip_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
+from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import form, func
 from xivo_acceptance.lettuce.form.checkbox import Checkbox
@@ -127,13 +129,13 @@ def when_a_hangs_up(step, name):
     phone.hangup()
 
 
-@step(u'When "([^"]*)" puts his call on hold')
+@step(u'When "([^"]*)" puts (?:his|her) call on hold')
 def when_a_puts_his_call_on_hold(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)
     phone.hold()
 
 
-@step(u'When "([^"]*)" resumes his call')
+@step(u'When "([^"]*)" resumes (?:his|her) call')
 def when_a_resumes_his_call(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)
     phone.resume()
@@ -218,6 +220,19 @@ def then_i_should_see_the_following_caller_id(step):
         assert_that(cti_helper.get_sheet_infos(), has_items(*expected))
 
     common.wait_until_assert(assertion, tries=4)
+
+
+@step(u'Then "([^"]*)" call "([^"]*)" is "([^"]*)"')
+def then_name_call_field_is_value(step, name, field, value):
+    user_uuid = user_helper.find_by_firstname_lastname(*name.split(' ', 1))['uuid']
+
+    def assertion():
+        calls = world.ctid_ng_client.calls.list_calls(token=world.config.get('auth_token'))
+        for call in calls['items']:
+            if call['user_uuid'] == user_uuid:
+                assert_that(call[field], equal_to(eval(value)))
+
+    common.wait_until_assert(assertion, tries=3)
 
 
 def _sleep(seconds):
