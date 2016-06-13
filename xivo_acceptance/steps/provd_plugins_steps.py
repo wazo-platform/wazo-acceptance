@@ -53,10 +53,12 @@ def given_the_latest_plugin_group1_is_installed(step, plugin):
     provdp_action_webi.update_plugin_list(STABLE_URL)
     provdp_action_webi.install_latest_plugin(plugin)
 
+
 @step(u'Given the latest plugin "([^"]*)" for "([^"]*)" is installed')
-def given_the_latest_plugin_group1_is_installed(step, plugin, model):
+def given_the_latest_plugin_group1_for_group2_is_installed(step, plugin, model):
     provdp_action_webi.update_plugin_list(STABLE_URL)
     provdp_action_webi.install_latest_plugin(plugin, model)
+
 
 @step(u'Given the provisioning plugin cache has been cleared')
 def given_the_provisioning_plugin_cache_has_been_cleared(step):
