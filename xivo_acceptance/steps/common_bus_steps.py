@@ -146,4 +146,7 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
             from_ = [local_xivo_uuid, user['uuid']]
             raw_expected_event['data']['from'] = from_
 
+        if expected_event.get('call_id') == 'ANY':
+            raw_expected_event['data']['call_id'] = ANY
+
         assert_that(events, has_item(has_entries(raw_expected_event)))

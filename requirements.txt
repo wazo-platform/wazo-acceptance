@@ -17,6 +17,7 @@ git+git://github.com/xivo-pbx/pylinphonelib.git@master
 git+git://github.com/xivo-pbx/xivo-ws.git
 git+https://github.com/xivo-pbx/xivo-auth-client.git
 git+https://github.com/xivo-pbx/xivo-confd-client.git
+git+https://github.com/xivo-pbx/xivo-ctid-ng-client.git
 git+https://github.com/xivo-pbx/xivo-dao.git
 git+https://github.com/xivo-pbx/xivo-provd-client.git
 git+https://github.com/xivo-pbx/xivo-bus.git

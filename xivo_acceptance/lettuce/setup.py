@@ -24,6 +24,7 @@ from xivo_acceptance.lettuce import debug
 from xivo_agentd_client import Client as AgentdClient
 from xivo_auth_client import Client as AuthClient
 from xivo_confd_client import Client as ConfdClient
+from xivo_ctid_ng_client import Client as CtidNgClient
 from xivobrowser import XiVOBrowser
 
 logger = logging.getLogger('acceptance')
@@ -38,6 +39,10 @@ def setup_agentd_client():
 def setup_confd_client():
     world.confd_client = ConfdClient(**world.config['confd'])
     world.confd_client.set_token(world.config.get('auth_token'))
+
+
+def setup_ctid_ng_client():
+    world.ctid_ng_client = CtidNgClient(**world.config['ctid_ng'])
 
 
 def setup_auth_token():

@@ -77,6 +77,12 @@ def load_config(extra_config):
             'https': True,
             'verify_certificate': False
         },
+        'ctid_ng': {
+            'host': DEFAULT_XIVO_HOST,
+            'port': 9500,
+            'https': True,
+            'verify_certificate': False
+        },
         'provd': {
             'rest_port': 8666,
             'rest_protocol': 'http',
@@ -150,6 +156,9 @@ def _config_post_processor(config):
 def _config_update_host(config):
     if config['confd']['host'] == DEFAULT_XIVO_HOST:
         config['confd']['host'] = config['xivo_host']
+
+    if config['ctid_ng']['host'] == DEFAULT_XIVO_HOST:
+        config['ctid_ng']['host'] = config['xivo_host']
 
     if config['bus']['host'] == DEFAULT_XIVO_HOST:
         config['bus']['host'] = config['xivo_host']

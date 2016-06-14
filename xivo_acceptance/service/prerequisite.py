@@ -85,6 +85,9 @@ def run(extra_config):
         logger.debug('Configuring xivo-ctid')
         _configure_xivo_ctid()
 
+        logger.debug('Configuring xivo-ctid-ng')
+        _configure_xivo_ctid_ng()
+
         logger.debug('Allowing SIP usernames to change')
         _set_sip_usernames_read_write()
     finally:
@@ -166,6 +169,11 @@ def _configure_xivo_auth():
 def _configure_xivo_ctid():
     _copy_daemon_config_file('xivo-ctid')
     _restart_service('xivo-ctid')
+
+
+def _configure_xivo_ctid_ng():
+    _copy_daemon_config_file('xivo-ctid-ng')
+    _restart_service('xivo-ctid-ng')
 
 
 def _set_sip_usernames_read_write():
