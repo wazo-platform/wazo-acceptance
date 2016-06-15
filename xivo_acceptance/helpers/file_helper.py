@@ -42,6 +42,11 @@ def create_recordings_meetme_file(filename):
     _touch_remote_file(os.path.join(SOUND_REC_MEETME_PATH, filename))
 
 
+def create_empty_file(path):
+    # if the file already exist on the fs, it will be truncated to 0
+    world.ssh_client_xivo.check_call(['truncate', '-s0', path])
+
+
 def remove_remote_file(filename):
     world.ssh_client_xivo.call(['rm', '-f', filename])
 

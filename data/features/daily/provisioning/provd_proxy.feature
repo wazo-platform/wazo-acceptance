@@ -9,4 +9,3 @@ Feature: Provd Proxy
         When I remove all proxy configurations
         When I reload the provisioning general settings page
         Then there are no proxies configured
-

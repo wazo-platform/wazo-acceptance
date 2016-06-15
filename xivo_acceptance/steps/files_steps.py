@@ -55,6 +55,11 @@ def given_a_recording_meetme_file_with_name(step, filename):
     file_helper.create_recordings_meetme_file(filename)
 
 
+@step(u'Given the file "([^"]*)" is empty')
+def given_the_file_is_empty(step, path):
+    file_helper.create_empty_file(path)
+
+
 @step(u'Then directory of the Asterisk voicemail is empty')
 def then_directory_of_the_asterisk_voicemail_is_empty(step):
     assert sysutils.dir_is_empty(ASTERISK_VM_PATH)
