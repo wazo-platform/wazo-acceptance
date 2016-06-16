@@ -19,7 +19,7 @@ from lettuce import step, world
 from hamcrest import assert_that, equal_to
 
 _FAIL2BAN_REGEX_ARGS = {
-    'xivo-prod': {
+    'xivo-provd': {
         'log': '/var/log/xivo-provd-fail2ban.log',
         'regex': '/etc/fail2ban/filter.d/xivo-provd.conf',
     },

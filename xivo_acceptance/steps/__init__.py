@@ -46,6 +46,7 @@ from .dhcpd_steps import *
 from .directory_steps import *
 from .entity_steps import *
 from .extensions_steps import *
+from .fail2ban_steps import *
 from .files_steps import *
 from .funckeys_steps import *
 from .general_settings_iax_steps import *
