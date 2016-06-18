@@ -227,7 +227,7 @@ def then_name_call_field_is_value(step, name, field, value):
     user_uuid = user_helper.get_user_by_name(name)['uuid']
 
     def assertion():
-        calls = world.ctid_ng_client.calls.list_calls(token=world.config.get('auth_token'))
+        calls = world.ctid_ng_client.calls.list_calls()
         for call in calls['items']:
             if call['user_uuid'] == user_uuid:
                 assert_that(call[field], equal_to(eval(value)))

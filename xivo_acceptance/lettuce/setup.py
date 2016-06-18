@@ -42,7 +42,8 @@ def setup_confd_client():
 
 
 def setup_ctid_ng_client():
-    world.ctid_ng_client = CtidNgClient(**world.config['ctid_ng'])
+    world.ctid_ng_client = CtidNgClient(**world.config['ctid_ng']
+                                        token=world.config.get('auth_token'))
 
 
 def setup_auth_token():
