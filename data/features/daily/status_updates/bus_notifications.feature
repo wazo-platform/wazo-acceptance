@@ -27,8 +27,8 @@ Feature: Status notifications
         Given I log in the XiVO client as "donald", pass "macronald"
         When I change my presence to "away"
         Then I receive a "user_status_update" on the queue "test_status_user" with data:
-        | user_id | firstname | lastname  | status |
-        | yes     | Donald    | MacRonald | away   |
+        | user_uuid | firstname | lastname  | status |
+        | yes       | Donald    | MacRonald | away   |
 
     Scenario: Bus notification on phone status change
         Given I listen on the bus for messages:

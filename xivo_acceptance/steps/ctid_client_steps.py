@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2015 Avencall
+# Copyright (C) 2015-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,6 +30,10 @@ def _find_user_id(info):
     return user_helper.get_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
 
 
+def _find_user_uuid(info):
+    return user_helper.get_by_firstname_lastname(info['firstname'], info['lastname'])['uuid']
+
+
 def _find_line_id(info):
     exten = info['number']
     context = info['context']
@@ -43,9 +47,11 @@ def then_i_should_have_have_the_following_user_status_when_i_query_the_cti(step)
     uuid = xivo_helper.get_uuid()
     for info in step.hashes:
         user_id = _find_user_id(info)
+        user_uuid = _find_user_uuid(info)
         expected = {
             u'origin_uuid': uuid,
             u'id': user_id,
+            u'user_uuid': user_uuid,
             u'presence': info['presence'],
         }
 

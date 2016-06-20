@@ -124,6 +124,11 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
                                                          expected_event['lastname'])
             raw_expected_event['data']['user_id'] = user['id']
 
+        if expected_event.get('user_uuid', 'no') == 'yes':
+            user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
+                                                         expected_event['lastname'])
+            raw_expected_event['data']['user_uuid'] = user['uuid']
+
         if expected_event.get('id', 'no') == 'ANY':
             raw_expected_event['data']['id'] = ANY
 
