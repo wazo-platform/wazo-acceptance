@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,6 +24,12 @@ from xivo_acceptance.helpers import schedule_helper
 @step(u'Given I have a schedule "([^"]*)" in "([^"]*)" with the following schedules:')
 def given_i_have_a_schedule_group1_in_group2_with_the_following_schedules(step, name, timezone):
     schedule_helper.add_schedule(name, timezone, step.hashes)
+
+
+@step(u'Given I have a schedule "([^"]*)" in "([^"]*)" towards user "([^"]*)" "([^"]*)" with the following schedules:')
+def given_i_have_a_schedule_group1_in_group2_towards_user_group3_group4_with_the_following_schedules(step, name, timezone, firstname, lastname):
+    destination = schedule_helper.ScheduleDestinationUser.from_name(firstname, lastname)
+    schedule_helper.add_schedule(name, timezone, step.hashes, destination)
 
 
 @step(u'Given there are schedules:')

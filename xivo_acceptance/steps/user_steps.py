@@ -142,6 +142,11 @@ def _edit_user(firstname, lastname):
     common.open_url('user', 'edit', qry={'id': user_id})
 
 
+@step(u'Given user "([^"]*)" has schedule "([^"]*)"')
+def given_user_1_has_schedule_2(step, fullname, schedule):
+    user_action_webi.add_schedule(fullname, schedule)
+
+
 @step(u'When I create users with the following parameters:$')
 def when_i_create_users_with_the_following_parameters(step):
     for userinfo in step.hashes:

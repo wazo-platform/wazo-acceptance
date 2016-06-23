@@ -25,14 +25,3 @@ Feature: Schedule
     | Status | Months | Days of month | Days of week | Start hour | End hour |
     | Opened |   1-12 |          1-31 |          1-3 |      09:00 |    17:00 |
     | Opened |   1-12 |          1-31 |          6-7 |      10:00 |    18:00 |
-
-  Scenario: Call distribution when the schedule is opened:
-    Given I have a schedule "open" in "America/Montreal" with the following schedules:
-    | Status | Months | Days of month | Days of week | Start hour | End hour |
-    | Opened |   1-12 |          1-31 |          1-7 |      00:00 |    23:59 |
-    Given there are users with infos:
-    | firstname | lastname | number | context | protocol | schedule |
-    | Peter     | Parker   |   1001 | default | sip      |          |
-    | Clark     | Kent     |   1002 | default | sip      | open     |
-    When "Peter Parker" calls "1002"
-    Then "Clark Kent" is ringing
