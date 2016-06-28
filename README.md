@@ -131,3 +131,17 @@ Tests can be found in the ```features``` directory. You can run all tests:
 Or only a single test file:
 
     PYTHONPATH=path/to/xivo_acceptance XC_PATH=/path/to/xivo-client-qt/bin lettuce data/features/group/group.feature
+
+
+If you're using firefox 47 or greater you can use the selenium/standalone-firefox docker image
+to run your browser.
+
+To start the browser:
+
+    docker run -d -p "4444:4444" selenium/standalone-firefox
+
+
+To configure xivo-acceptance to use the Remote webdriver modify your xivo-acceptance configuration:
+
+    browser:
+        docker: True
