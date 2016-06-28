@@ -48,7 +48,7 @@ def given_i_send_a_cti_message(step):
 @step(u'Then I should receive the following cti command:')
 def then_i_should_receive_the_following_cti_command(step):
     events = step.scenario._pseudo_xivo_client.events
-    assert_that(_has_received_event_before_timeout(events, step.multiline, 5),
+    assert_that(_has_received_event_before_timeout(events, step.multiline, 10),
                 'CTI event {} was not received'.format(step.multiline))
 
 

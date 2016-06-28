@@ -12,39 +12,39 @@ Feature: Status notifications to cti client
          Given I send a cti message:
          """
          " {"class": "register_user_status_update",
-         "  "user_ids": [["my-uuid", 42]]}
+         "  "user_ids": [["my-uuid", "0e3e8600-cb9f-4f7d-b509-35abe5df9607"]]}
          """
          When I publish the following message on "status.user":
          """
          " {"name": "user_status_update",
          "  "origin_uuid": "my-uuid",
-         "  "data": {"user_id": 42,
+         "  "data": {"user_uuid": "0e3e8600-cb9f-4f7d-b509-35abe5df9607",
          "           "status": "some-new-status"}}
          """
          Then I should receive the following cti command:
          """
          " {"class": "user_status_update",
          "  "data": {"status": "some-new-status",
-         "           "user_id": 42,
+         "           "user_uuid": "0e3e8600-cb9f-4f7d-b509-35abe5df9607",
          "           "xivo_uuid": "my-uuid"}}
          """
          Given I send a cti message:
          """
          " {"class": "unregister_user_status_update",
-         "  "user_ids": [["my-uuid", 42]]}
+         "  "user_ids": [["my-uuid", "0e3e8600-cb9f-4f7d-b509-35abe5df9607"]]}
          """
          When I publish the following message on "status.user":
          """
          " {"name": "user_status_update",
          "  "origin_uuid": "my-uuid",
-         "  "data": {"user_id": 42,
+         "  "data": {"user_uuid": "0e3e8600-cb9f-4f7d-b509-35abe5df9607",
          "           "status": "some-new-status"}}
          """
          Then I should NOT receive the following cti command:
          """
          " {"class": "user_status_update",
          "  "data": {"status": "some-new-status",
-         "           "user_id": 42,
+         "           "user_uuid": "0e3e8600-cb9f-4f7d-b509-35abe5df9607",
          "           "xivo_uuid": "my-uuid"}}
          """
 
