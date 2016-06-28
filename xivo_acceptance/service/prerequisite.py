@@ -163,17 +163,23 @@ def _configure_consul():
 
 def _configure_xivo_auth():
     _copy_daemon_config_file('xivo-auth')
-    _restart_service('xivo-auth')
+    xivo_auth_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('xivo-auth'))
+    if xivo_auth_is_running:
+        _restart_service('xivo-auth')
 
 
 def _configure_xivo_ctid():
     _copy_daemon_config_file('xivo-ctid')
-    _restart_service('xivo-ctid')
+    xivo_ctid_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('xivo-ctid'))
+    if xivo_ctid_is_running:
+        _restart_service('xivo-ctid')
 
 
 def _configure_xivo_ctid_ng():
     _copy_daemon_config_file('xivo-ctid-ng')
-    _restart_service('xivo-ctid-ng')
+    xivo_ctid_ng_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('xivo-ctid-ng'))
+    if xivo_ctid_ng_is_running:
+        _restart_service('xivo-ctid-ng')
 
 
 def _set_sip_usernames_read_write():

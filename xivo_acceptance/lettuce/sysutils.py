@@ -25,8 +25,10 @@ from lettuce import world
 SERVICE_PIDFILES = {
     'asterisk': '/var/run/asterisk/asterisk.pid',
     'consul': '/var/run/consul/consul.pid',
-    'xivo-ctid': '/var/run/xivo-ctid.pid',
     'xivo-agent': '/var/run/xivo-agentd.pid',
+    'xivo-auth': '/var/run/xivo-auth/xivo-auth.pid',
+    'xivo-ctid': '/var/run/xivo-ctid.pid',
+    'xivo-ctid-ng': '/var/run/xivo-ctid-ng/xivo-ctid-ng.pid',
 }
 
 
@@ -114,10 +116,9 @@ def _wait_for_the_service_state(pidfile, status, maxtries, wait_secs):
 
 
 def get_pidfile_for_service_name(service):
-    pidfile = SERVICE_PIDFILES.get(service, None)
-    if not pidfile:
+    if service not in SERVICE_PIDFILES:
         assert False, 'Service %s must be implemented' % service
-    return pidfile
+    return SERVICE_PIDFILES[service]
 
 
 def restart_service(service_name):
