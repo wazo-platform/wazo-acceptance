@@ -21,21 +21,53 @@ from lettuce import world
 
 from xivo_ws import Schedule
 from xivo_acceptance.helpers import entity_helper
+from xivo_acceptance.helpers import user_helper
 
 
-def add_schedule(name, timezone, times):
+class ScheduleDestination(object):
+    pass
+
+
+class ScheduleDestinationNone(ScheduleDestination):
+    def to_ws_action(self):
+        return 'none'
+
+    def to_ws_action_id(self):
+        return ''
+
+    def to_ws_action_args(self):
+        return ''
+
+
+class ScheduleDestinationUser(ScheduleDestination):
+    def __init__(self, user_id):
+        self.user_id = user_id
+
+    def to_ws_action(self):
+        return 'user'
+
+    def to_ws_action_id(self):
+        return str(self.user_id)
+
+    def to_ws_action_args(self):
+        return ''
+
+    @classmethod
+    def from_name(cls, firstname, lastname):
+        user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
+        return cls(user_id)
+
+
+def add_schedule(name, timezone, times, destination=ScheduleDestinationNone()):
     delete_schedules_with_name(name)
-    schedule = _create_schedule(name, timezone, times)
+    schedule = _create_schedule(name, timezone, times, destination)
     world.ws.schedules.add(schedule)
 
 
 def add_or_replace_schedule(data):
     delete_schedules_with_name(data['name'])
     entity = entity_helper.get_entity_with_name(data['entity'])
-    if entity:
-        entity_id = entity.id
-    else:
-        entity_id = entity_helper.default_entity_id()
+    entity_id = entity.id if entity else entity_helper.default_entity_id()
     schedule = Schedule(
         entity_id=entity_id,
         name=data['name'],
@@ -51,11 +83,14 @@ def assert_schedule_exists(name, timezone, times):
     assert_that(result_schedule, equal_to(expected_schedule))
 
 
-def _create_schedule(name, timezone, times):
+def _create_schedule(name, timezone, times, fallback_destination):
     schedule = Schedule(
         entity_id=entity_helper.default_entity_id(),
         name=name,
         timezone=timezone,
+        fallback_action=fallback_destination.to_ws_action(),
+        fallback_action_destination_id=fallback_destination.to_ws_action_id(),
+        fallback_action_destination_args=fallback_destination.to_ws_action_args(),
     )
     opened, closed = [], []
     for time in times:
@@ -65,6 +100,13 @@ def _create_schedule(name, timezone, times):
             'monthdays': time['Days of month'],
             'months': time['Months'],
         }
+        destination = ScheduleDestinationNone()
+        if time.get('Destination firstname') and time.get('Destination lastname'):
+            destination = ScheduleDestinationUser.from_name(time['Destination firstname'], time['Destination lastname'])
+        formatted_time['dialaction'] = {}
+        formatted_time['dialaction']['actiontype'] = destination.to_ws_action()
+        formatted_time['dialaction']['actionarg1'] = destination.to_ws_action_id()
+        formatted_time['dialaction']['actionarg2'] = destination.to_ws_action_args()
         if time['Status'] == 'Opened':
             opened.append(formatted_time)
         elif time['Status'] == 'Closed':
