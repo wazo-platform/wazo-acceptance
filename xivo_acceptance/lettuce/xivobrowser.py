@@ -26,6 +26,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce.exception import MissingTranslationException
@@ -56,7 +57,10 @@ class XiVOBrowser(object):
             world.display = Display(visible=world.config['browser']['visible'], size=browser_size)
             world.display.start()
 
-        self._instance = _XiVOBrowserImplementation(self._debug)
+        if world.config['browser'].get('docker', False):
+            self._instance = _XiVORemoteBrowserImplementation(self._debug)
+        else:
+            self._instance = _XiVOLocalBrowserImplementation(self._debug)
         self._instance.set_window_size(width, height)
         world.timeout = float(world.config['browser']['timeout'])
 
@@ -72,14 +76,9 @@ class XiVOBrowser(object):
                     common.webi_login_as_default()
 
 
-class _XiVOBrowserImplementation(webdriver.Firefox):
+class _XiVOBrowserMixin(object):
 
     DOWNLOAD_DIR = '/tmp'
-
-    def __init__(self, debug=False):
-        self._debug = debug
-        profile = self._setup_browser_profile()
-        webdriver.Firefox.__init__(self, firefox_profile=profile)
 
     def _setup_browser_profile(self):
         fp = FirefoxProfile()
@@ -100,9 +99,9 @@ class _XiVOBrowserImplementation(webdriver.Firefox):
         The missing_translation tag is added in the Webi i18n bbf function."""
 
         # Get the page
-        webdriver.Firefox.get(self, url)
+        super(_XiVOBrowserMixin, self).get(url)
 
-        WebDriverWait(self, world.timeout).until(lambda browser: webdriver.Firefox.page_source)
+        WebDriverWait(self, world.timeout).until(lambda _: super(_XiVOBrowserMixin, self).page_source)
         source = self.page_source
         # Remove newline, to allow regexp substitution
         source = source.replace('\n', ' ')
@@ -139,15 +138,15 @@ class _XiVOBrowserImplementation(webdriver.Firefox):
 
         try:
             WebDriverWait(self, timeout).until(
-                lambda browser: webdriver.Firefox.find_element(self, by, value))
+                lambda browser: super(_XiVOBrowserMixin, self).find_element(by, value))
         except TimeoutException:
             raise NoSuchElementException('%s: %s' % (value, message))
 
-        element = webdriver.Firefox.find_element(self, by, value)
+        element = super(_XiVOBrowserMixin, self).find_element(by, value)
 
         try:
             WebDriverWait(self, timeout).until(
-                lambda browser: webdriver.Firefox.find_element(self, by, value).is_displayed())
+                lambda browser: super(_XiVOBrowserMixin, self).find_element(by, value).is_displayed())
         except TimeoutException:
             raise ElementNotVisibleException('%s: %s' % (value, message))
 
@@ -185,11 +184,11 @@ class _XiVOBrowserImplementation(webdriver.Firefox):
 
         try:
             WebDriverWait(self, timeout).until(
-                lambda browser: webdriver.Firefox.find_elements(self, by, value))
+                lambda browser: super(_XiVOBrowserMixin, self).find_elements(by, value))
         except TimeoutException:
             raise NoSuchElementException('%s: %s' % (value, message))
 
-        return webdriver.Firefox.find_elements(self, by, value)
+        return super(_XiVOBrowserMixin, self).find_elements(by, value)
 
     def find_elements_by_id(self, xpath, message='', timeout=None):
         return self.find_elements(By.ID, xpath, message, timeout)
@@ -217,9 +216,25 @@ class _XiVOBrowserImplementation(webdriver.Firefox):
         """Adds wait time for alert."""
         count = 0
         while count < timeout:
-            alert = webdriver.Firefox.switch_to_alert(self)
+            alert = super(_XiVOBrowserMixin, self).switch_to_alert()
             time.sleep(1)
             if alert:
                 return alert
             count += 1
         raise Exception(message)
+
+
+class _XiVORemoteBrowserImplementation(_XiVOBrowserMixin, webdriver.Remote):
+
+    def __init__(self, debug=False):
+        self._debug = debug
+        super(_XiVORemoteBrowserImplementation, self).__init__(command_executor='http://localhost:4444/wd/hub',
+                                                               desired_capabilities=DesiredCapabilities.FIREFOX,
+                                                               browser_profile=self._setup_browser_profile())
+
+
+class _XiVOLocalBrowserImplementation(_XiVOBrowserMixin, webdriver.Firefox):
+
+    def __init__(self, debug=False):
+        self._debug = debug
+        super(_XiVOLocalBrowserImplementation, self).__init__(firefox_profile=self._setup_browser_profile())
