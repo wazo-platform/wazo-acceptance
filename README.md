@@ -145,3 +145,8 @@ To configure xivo-acceptance to use the Remote webdriver modify your xivo-accept
 
     browser:
         docker: True
+
+
+If you need to see what is going on in the browser, use the `selenium/standalone-firefox-debug` image, which runs a VNC server (the password is "secret"):
+
+    docker run -d -p 4444:4444 -p 5901:5900 selenium/standalone-firefox-debug
