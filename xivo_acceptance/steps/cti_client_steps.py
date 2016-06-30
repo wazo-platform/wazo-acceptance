@@ -198,6 +198,10 @@ class _Client(object):
         self._send_message(login_capas_message)
 
     def _on_login_id(self, message):
+        error = message.get('error_string')
+        if error:
+            raise Exception('Connection failed: {}'.format(error))
+
         self._send_login_pass(message['sessionid'])
 
     def _on_login_pass(self, message):
