@@ -76,8 +76,8 @@ def add_or_replace_schedule(data):
     world.ws.schedules.add(schedule)
 
 
-def assert_schedule_exists(name, timezone, times):
-    expected_schedule = _create_schedule(name, timezone, times)
+def assert_schedule_exists(name, timezone, times, destination=ScheduleDestinationNone()):
+    expected_schedule = _create_schedule(name, timezone, times, destination)
     result_schedule = view_schedule(find_schedule_id_with_name(name))
 
     assert_that(result_schedule, equal_to(expected_schedule))
