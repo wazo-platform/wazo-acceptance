@@ -29,7 +29,7 @@ class ScheduleDestination(object):
 
 
 class ScheduleDestinationNone(ScheduleDestination):
-    def to_ws_action(self):
+    def to_ws_actiontype(self):
         return 'none'
 
     def to_ws_action_id(self):
@@ -43,7 +43,7 @@ class ScheduleDestinationUser(ScheduleDestination):
     def __init__(self, user_id):
         self.user_id = user_id
 
-    def to_ws_action(self):
+    def to_ws_actiontype(self):
         return 'user'
 
     def to_ws_action_id(self):
@@ -88,7 +88,7 @@ def _create_schedule(name, timezone, times, fallback_destination):
         entity_id=entity_helper.default_entity_id(),
         name=name,
         timezone=timezone,
-        fallback_action=fallback_destination.to_ws_action(),
+        fallback_actiontype=fallback_destination.to_ws_actiontype(),
         fallback_action_destination_id=fallback_destination.to_ws_action_id(),
         fallback_action_destination_args=fallback_destination.to_ws_action_args(),
     )
@@ -104,7 +104,7 @@ def _create_schedule(name, timezone, times, fallback_destination):
         if time.get('Destination firstname') and time.get('Destination lastname'):
             destination = ScheduleDestinationUser.from_name(time['Destination firstname'], time['Destination lastname'])
         formatted_time['dialaction'] = {}
-        formatted_time['dialaction']['actiontype'] = destination.to_ws_action()
+        formatted_time['dialaction']['actiontype'] = destination.to_ws_actiontype()
         formatted_time['dialaction']['actionarg1'] = destination.to_ws_action_id()
         formatted_time['dialaction']['actionarg2'] = destination.to_ws_action_args()
         if time['Status'] == 'Opened':
