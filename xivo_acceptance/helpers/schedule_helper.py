@@ -67,7 +67,7 @@ def add_schedule(name, timezone, times, destination=ScheduleDestinationNone()):
 def add_or_replace_schedule(data):
     delete_schedules_with_name(data['name'])
     entity = entity_helper.get_entity_with_name(data['entity'])
-    entity_id = entity.id if entity else entity_helper.default_entity_id()
+    entity_id = entity['id'] if entity else entity_helper.default_entity_id()
     schedule = Schedule(
         entity_id=entity_id,
         name=data['name'],

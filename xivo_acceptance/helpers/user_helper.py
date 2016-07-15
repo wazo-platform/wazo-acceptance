@@ -265,7 +265,7 @@ def add_user(data_dict, step=None):
     if 'entity_name' in data_dict:
         entity = entity_helper.get_entity_with_name(data_dict['entity_name'])
         if entity:
-            user.entity_id = entity.id
+            user.entity_id = entity['id']
     else:
         user.entity_id = entity_helper.default_entity_id()
 
