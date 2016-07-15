@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -83,15 +83,6 @@ def when_i_get_the_list_of_call_logs_with_arguments(step):
 def when_i_generate_call_logs(step):
     command = ['xivo-call-logs']
     sysutils.send_command(command)
-
-
-@step(u'When I request call logs in the webi with dates:')
-def when_i_request_call_logs_in_the_webi_with_dates(step):
-    common.open_url('cel')
-    form_info = step.hashes[0]
-    call_logs_action_webi.type_dates(form_info['start'], form_info['end'])
-    common_action_webi.reset_focus()
-    form.submit.submit_form()
 
 
 @step(u'When I generate call logs using the last (\d+) unprocessed CEL entries$')
