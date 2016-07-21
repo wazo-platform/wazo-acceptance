@@ -28,6 +28,8 @@ from xivo_acceptance.action.confd import endpoint_action_confd
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import line_sip_helper
 from xivo_acceptance.helpers import line_write_helper
+from xivo_acceptance.helpers import sip_config
+from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import common, form
 from xivo_acceptance.lettuce.form.checkbox import Checkbox
 from xivo_acceptance.lettuce.widget.codec import CodecWidget
@@ -96,6 +98,20 @@ def _delete_line(lineinfo):
         line = line_sip_helper.find_by_username(lineinfo['username'])
         if line:
             line_write_helper.delete_line(line['id'])
+
+
+@step(u'Given SIP line "([^"]*)" register to softphone')
+def given_sip_line_register_to_softphone(step, name):
+    lines = world.confd_client.lines.list(name=name)
+    line = [line for line in lines['items'] if line['name'] == name][0]
+    line_endpoint = world.confd_client.lines(line['id']).get_endpoint_sip()
+    endpoint = world.confd_client.endpoints_sip.get(line_endpoint['endpoint_id'])
+
+
+    phone_config = sip_config.create_config(world.config, step.scenario.phone_register, endpoint)
+    phone = sip_phone.register_line(phone_config)
+    if phone:
+        step.scenario.phone_register.add_registered_phone(phone, name)
 
 
 @step(u'When I customize line "([^"]*)" codecs to:')
