@@ -25,7 +25,8 @@ from xivo_agentd_client import Client as AgentdClient
 from xivo_auth_client import Client as AuthClient
 from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
-from xivobrowser import XiVOBrowser
+from .xivobrowser import XiVOBrowser
+from .display import XiVODisplay
 
 logger = logging.getLogger('acceptance')
 
@@ -62,6 +63,10 @@ def setup_auth_token():
 @debug.logcall
 def setup_browser():
     world.browser = XiVOBrowser(world.config['debug']['selenium'])
+
+
+def setup_display():
+    world.display = XiVODisplay()
 
 
 def setup_config(extra_config):
@@ -104,7 +109,7 @@ def setup_ws():
 def teardown_browser():
     world.browser.quit()
     if hasattr(world, 'display'):
-        world.display.stop()
+        world.display.get_instance().stop()
 
 
 def setup_xivo_configured():

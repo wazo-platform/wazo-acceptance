@@ -63,7 +63,7 @@ def xivo_acceptance_lettuce_after_each_scenario(scenario):
 @after.all
 def xivo_acceptance_lettuce_after_all(total):
     if hasattr(world, 'display'):
-        world.display.stop()
+        world.display.get_instance().stop()
 
 
 def initialize(extra_config='default'):
@@ -98,6 +98,8 @@ def set_xivo_target(extra_config):
     setup.setup_ctid_ng_client()
     logger.debug("setup consul...")
     setup.setup_consul()
+    logger.debug("setup display...")
+    setup.setup_display()
     logger.debug("setup xivo configured...")
     setup.setup_xivo_configured()
     world.logged_agents = []

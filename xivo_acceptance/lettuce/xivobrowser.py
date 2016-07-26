@@ -51,16 +51,12 @@ class XiVOBrowser(object):
         self._instance = None
 
     def _start_client(self):
-        browser_size = width, height = tuple(world.config['browser']['resolution'].split('x', 1))
-        if not hasattr(world, 'display'):
-            from pyvirtualdisplay import Display
-            world.display = Display(visible=world.config['browser']['visible'], size=browser_size)
-            world.display.start()
-
+        display = world.display.get_instance()
         if world.config['browser'].get('docker', False):
             self._instance = _XiVORemoteBrowserImplementation(self._debug)
         else:
             self._instance = _XiVOLocalBrowserImplementation(self._debug)
+        width, height = display.size
         self._instance.set_window_size(width, height)
         world.timeout = float(world.config['browser']['timeout'])
 

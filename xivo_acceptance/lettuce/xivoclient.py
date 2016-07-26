@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ class XivoClient(object):
         self.debug = debug
 
     def start(self):
+        world.display.get_instance()
         self.launch()
         message = ('Error while connecting to the xivoclient socket: the socket {socket} does not exist. '
                    'The cause may be: XiVO Client multiples instance is disabled, or '
