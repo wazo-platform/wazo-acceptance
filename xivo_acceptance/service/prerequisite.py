@@ -41,6 +41,7 @@ def run(extra_config):
     setup.setup_confd_client()
     setup.setup_xivo_configured()
 
+    setup.setup_display()
     setup.setup_browser()
     try:
         logger.debug('Configuring WebService Access on XiVO')
