@@ -22,6 +22,7 @@ Feature: Asterisk
         When I stop "monit"
         When I stop "asterisk"
         Then the service "asterisk" is no longer running
+        When I wait for the service "xivo-ctid" to stop
         Then the service "xivo-ctid" is no longer running
         When I start "monit"
         When I wait for the service "asterisk" to restart
