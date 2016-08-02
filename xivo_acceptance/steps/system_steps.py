@@ -23,6 +23,11 @@ from xivo_acceptance.lettuce import sysutils, assets
 from xivo_acceptance.helpers import cti_helper
 
 
+@step(u'I start "([^"]*)"$')
+def i_start_service(step, service_name):
+    sysutils.start_service(service_name)
+
+
 @step(u'I stop "([^"]*)"$')
 def i_stop_service(step, service_name):
     sysutils.stop_service(service_name)
