@@ -121,6 +121,16 @@ def get_pidfile_for_service_name(service):
     return SERVICE_PIDFILES[service]
 
 
+def start_service(service_name):
+    command = ['systemctl', 'start', service_name]
+    world.ssh_client_xivo.check_call(command)
+
+
+def stop_service(service_name):
+    command = ['systemctl', 'stop', service_name]
+    world.ssh_client_xivo.check_call(command)
+
+
 def restart_service(service_name):
     command = ['systemctl', 'restart', service_name]
     world.ssh_client_xivo.check_call(command)
