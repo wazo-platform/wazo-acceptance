@@ -19,7 +19,7 @@ Feature: Asterisk
         Asterisk command "core reload" return no error
 
     Scenario: Restart
-        When I stop Asterisk
+        When I stop "asterisk"
         When I wait for the service "asterisk" to stop
         Then the service "asterisk" is no longer running
         Then the service "xivo-ctid" is no longer running

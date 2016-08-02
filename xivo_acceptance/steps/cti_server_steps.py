@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,22 +23,12 @@ from hamcrest import assert_that, equal_to
 from xivo_acceptance.action.webi import profile as profile_action_webi
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import logs
-from xivo_acceptance.lettuce import sysutils
 
 
 @step(u'Given there is no CTI profile "([^"]*)"$')
 def given_there_is_no_cti_profile(step, search):
     common.remove_element_if_exist('CTI profile', search)
 
-@step(u'When I stop the CTI server')
-def when_i_stop_the_cti_server(step):
-    command = ['service', 'xivo-ctid', 'stop']
-    assert sysutils.send_command(command)
-
-@step(u'When I start the CTI server')
-def when_i_start_the_cti_server(step):
-    command = ['service', 'xivo-ctid', 'start']
-    assert sysutils.send_command(command)
 
 @step(u'Then the profile "([^"]*)" has default services activated')
 def then_the_profile_1_has_default_services_activated(step, profile_name):

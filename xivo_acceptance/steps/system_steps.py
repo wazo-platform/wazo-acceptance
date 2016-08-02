@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,11 +17,15 @@
 
 import re
 
-from lettuce import step
-from lettuce.registry import world
+from lettuce import step, world
 
 from xivo_acceptance.lettuce import sysutils, assets
 from xivo_acceptance.helpers import cti_helper
+
+
+@step(u'I stop "([^"]*)"$')
+def i_stop_service(step, service_name):
+    sysutils.stop_service(service_name)
 
 
 @step(u'I restart "([^"]*)"$')

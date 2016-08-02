@@ -46,18 +46,6 @@ def then_asterisk_command_group1_return_no_error(step, ast_cmd):
     assert sysutils.send_command(command)
 
 
-@step(u'When I stop Asterisk')
-def when_i_stop_asterisk(step):
-    command = ['service', 'asterisk', 'stop']
-    assert sysutils.send_command(command)
-
-
-@step(u'When I start Asterisk')
-def when_i_start_asterisk(step):
-    command = ['service', 'asterisk', 'start']
-    assert sysutils.send_command(command)
-
-
 @step(u'When I wait for the service "([^"]*)" to stop')
 def when_i_wait_for_the_service_group1_to_stop(step, service):
     pidfile = sysutils.get_pidfile_for_service_name(service)
