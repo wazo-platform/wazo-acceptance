@@ -1,6 +1,6 @@
 Feature: User multi lines
 
-    Scenario: Do ringing all lines of a user
+    Scenario: Ring all lines of a user
         Given there are users with infos:
         | firstname | lastname | protocol | number | context |
         | Multi     | Lines    |          |        |         |
@@ -16,8 +16,8 @@ Feature: User multi lines
         Given SIP line "line2" is associated to extension "1801@default"
         Given SIP line "line1" is associated to user "Multi" "Lines"
         Given SIP line "line2" is associated to user "Multi" "Lines"
-        Given SIP Line "line1" register to softphone
-        Given SIP Line "line2" register to softphone
+        Given a softphone is registered on SIP line "line1"
+        Given a softphone is registered on SIP line "line2"
 
         When "Bob Field" calls "1801"
         Then "line1" is ringing
@@ -40,8 +40,8 @@ Feature: User multi lines
         Given SIP line "line2" is associated to extension "1802@default"
         Given SIP line "line1" is associated to user "Multi" "Lines"
         Given SIP line "line2" is associated to user "Multi" "Lines"
-        Given SIP Line "line1" register to softphone
-        Given SIP Line "line2" register to softphone
+        Given a softphone is registered on SIP line "line1"
+        Given a softphone is registered on SIP line "line2"
 
         When "Bob Field" calls "1801"
         Then "line1" is ringing
@@ -65,8 +65,8 @@ Feature: User multi lines
         Given SIP line "line2" is associated to extension "1801@default"
         Given SIP line "line1" is associated to user "Multi" "Lines"
         Given SIP line "line2" is associated to user "Multi" "Lines"
-        Given SIP Line "line1" register to softphone
-        Given SIP Line "line2" register to softphone
+        Given a softphone is registered on SIP line "line1"
+        Given a softphone is registered on SIP line "line2"
         Given user "Multi Lines" has enabled "unconditional" forward to "1803"
 
         When "Bob Field" calls "1801"
@@ -91,8 +91,8 @@ Feature: User multi lines
         Given SIP line "line2" is associated to extension "1801@default"
         Given SIP line "line1" is associated to user "Multi" "Lines"
         Given SIP line "line2" is associated to user "Multi" "Lines"
-        Given SIP Line "line1" register to softphone
-        Given SIP Line "line2" register to softphone
+        Given a softphone is registered on SIP line "line1"
+        Given a softphone is registered on SIP line "line2"
         Given user "Multi Lines" has enabled "dnd" service
 
         When "Bob Field" calls "1801"
@@ -116,8 +116,8 @@ Feature: User multi lines
         Given SIP line "line2" is associated to extension "1801@default"
         Given SIP line "line1" is associated to user "Multi" "Lines"
         Given SIP line "line2" is associated to user "Multi" "Lines"
-        Given SIP Line "line1" register to softphone
-        Given SIP Line "line2" register to softphone
+        Given a softphone is registered on SIP line "line1"
+        Given a softphone is registered on SIP line "line2"
         Given "Multi Lines" has a "5 seconds" ringing time
 
         When "Bob Field" calls "1801"
@@ -125,7 +125,7 @@ Feature: User multi lines
         Then "line2" is ringing
 
         When I wait 5 seconds for the end of ringing time
-        When I wait 5 seconds for the calls processing
-        Then "Bob Field" is hungup
         Then "line1" is hungup
         Then "line2" is hungup
+        When I wait 5 seconds for the calls processing
+        Then "Bob Field" is hungup
