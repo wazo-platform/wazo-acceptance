@@ -50,6 +50,24 @@ def when_i_wait_for_the_service_group1_to_stop(step, service):
     sysutils.wait_service_successfully_stopped(pidfile)
 
 
+@step(u'When I wait for the service "([^"]*)" to restart')
+def when_i_wait_for_the_service_group1_to_restart(step, service):
+    pidfile = sysutils.get_pidfile_for_service_name(service)
+    assert sysutils.wait_service_successfully_started(pidfile)
+
+
+@step(u'Then the service "([^"]*)" is running')
+def then_the_service_group1_is_running(step, service):
+    pidfile = sysutils.get_pidfile_for_service_name(service)
+    assert sysutils.is_process_running(pidfile)
+
+
+@step(u'Then the service "([^"]*)" is no longer running')
+def then_the_service_group1_is_no_longer_running(step, service):
+    pidfile = sysutils.get_pidfile_for_service_name(service)
+    assert not sysutils.is_process_running(pidfile)
+
+
 @step(u'When I generate a core dump and remember the pid as "([^"]*)" and the epoch as "([^"]*)"')
 def when_i_generate_a_core_dump_and_remember_the_pid_as_group1_and_the_epoch_as_group2(step, pid_var_name, epoch_var_name):
     assets.copy_asset_to_server('core_dump', '/tmp')
