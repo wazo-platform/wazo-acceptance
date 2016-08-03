@@ -74,7 +74,7 @@ Feature: User multi lines
         Given user "Multi Lines" has enabled "unconditional" forward to "1803"
 
         When "Bob Field" calls "1801"
-        When I wait 2 seconds for the calls processing
+        When I wait 4 seconds for the calls processing
 
         Then "Forward Unc" is ringing
 
