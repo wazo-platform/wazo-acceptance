@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step, world
-from hamcrest import assert_that, equal_to, calling, raises
+from hamcrest import (all_of, assert_that, equal_to, has_entry, has_key, calling, raises)
 from requests.exceptions import HTTPError
 
 from xivo_ctid_client import Client
@@ -98,4 +98,5 @@ def when_i_query_the_infos_url_on_the_cti_http_interface_i_receive_the_uuid(step
 
     uuid = xivo_helper.get_uuid()
 
-    assert_that(c.infos.get(), equal_to({'uuid': uuid}))
+    assert_that(c.infos.get(), all_of(has_entry('uuid', uuid),
+                                      has_key('cti_protocol_version')))
