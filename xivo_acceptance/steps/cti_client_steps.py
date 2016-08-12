@@ -96,16 +96,27 @@ def _has_received_event_before_timeout(events, expected_raw, timeout):
         if event['class'] != expected_msg['class']:
             continue
 
-        if _message_matches_ignore_timenow(event, expected_msg):
+        if _dict_matches_at_least(event, expected_msg):
             return True
 
     return False
 
 
-def _message_matches_ignore_timenow(msg, expected_msg):
-    msg.pop('timenow', None)
+def _dict_matches_at_least(msg, expected_msg):
+    # Compare 2 dict if expected is completely included in msg return True else False
+    # {'foo': 'bar'} {'foo': 'bar', 'time': '123', 'data': []} returns True
+    if msg == expected_msg:
+        return True
 
-    return expected_msg == msg
+    sentinel = object()
+    for key, value in expected_msg.iteritems():
+        if not isinstance(value, dict):
+            if value != msg.get(key, sentinel):
+                return False
+        else:
+            return _dict_matches_at_least(expected_msg[key], value)
+
+    return True
 
 
 class _Client(object):
