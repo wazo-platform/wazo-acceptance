@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,12 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from lettuce import world
+
 from hamcrest import assert_that
 from hamcrest import is_not
 from hamcrest import none
+from requests.exceptions import HTTPError
 
 from xivo_acceptance.lettuce import func
-from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 from xivo_acceptance.action.confd import line_action_confd as line_action
 
@@ -38,21 +40,19 @@ def get_by_id(line_id):
 
 
 def find_with_exten_context(exten, context='default'):
-    query = """
-    SELECT
-        user_line.line_id
-    FROM
-        user_line
-        INNER JOIN extensions
-            ON user_line.extension_id = extensions.id
-    WHERE
-        extensions.exten = :exten
-        AND extensions.context = :context
-    """
+    response = world.confd_client.extensions.list(exten=exten, context=context)
+    if response['total'] < 1:
+        return None
+    extension_id = response['items'][0]['id']
 
-    result = postgres.exec_sql_request(query, exten=exten, context=context)
-    line_id = result.scalar()
-    return get_by_id(line_id) if line_id else None
+    try:
+        response = world.confd_client.extensions(extension_id).get_line()
+    except HTTPError:
+        return None
+
+    line_id = response['line_id']
+
+    return get_by_id(line_id)
 
 
 def get_with_exten_context(exten, context='default'):
