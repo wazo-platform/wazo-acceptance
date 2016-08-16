@@ -23,10 +23,12 @@ from lettuce import world
 
 _queues = {}
 
+COLLECTD_EXCHANGE = Exchange('collectd', type='topic', durable=False, arguments={'auto_delete': True})
 
-def add_binding(queue_name, routing_key, exchange_name=None):
-    exchange_name = exchange_name or world.config['bus']['exchange_name']
-    exchange = Exchange(exchange_name, type=world.config['bus']['exchange_type'])
+
+def add_binding(queue_name, routing_key, exchange=None):
+    exchange = exchange or Exchange(world.config['bus']['exchange_name'],
+                                    type=world.config['bus']['exchange_type'])
     with Connection(world.config['bus_url']) as conn:
         queue = Queue(queue_name, exchange=exchange, routing_key=routing_key,
                       channel=conn.channel())

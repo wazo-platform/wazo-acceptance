@@ -71,7 +71,7 @@ def given_a_configured_switchboard_with_an_operator_with_infos(step):
         phone.call('*31{}'.format(agent_number))
         common.wait_until(phone.is_hungup, tries=20)
 
-    bus_helper.add_binding('switchboard_stats', 'collectd.switchboard', 'collectd')
+    bus_helper.add_binding('switchboard_stats', 'collectd.switchboard', bus_helper.COLLECTD_EXCHANGE)
 
 
 @step(u'Given the switchboard is configured to receive a maxium of "([^"]*)" call')
