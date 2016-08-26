@@ -24,19 +24,17 @@ from requests.exceptions import HTTPError
 
 from xivo_acceptance.lettuce import func
 from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
-from xivo_acceptance.action.confd import line_action_confd as line_action
 
 
 def find_by_id(line_id):
-    response = line_action.get(line_id)
-    return response.resource() if response.status_ok() else None
+    try:
+        return get_by_id(line_id)
+    except HTTPError:
+        return None
 
 
 def get_by_id(line_id):
-    line = find_by_id(line_id)
-    assert_that(line, is_not(none()),
-                "line with id %s not found" % line_id)
-    return line
+    return world.confd_client.lines.get(line_id)
 
 
 def find_with_exten_context(exten, context='default'):
@@ -65,13 +63,6 @@ def get_with_exten_context(exten, context='default'):
 def find_with_extension(extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     return find_with_exten_context(number, context)
-
-
-def find_with_name(name):
-    response = line_action.all_lines()
-    found = [line for line in response.items()
-             if line['name'] == name]
-    return found[0] if found else None
 
 
 def find_line_id_with_exten_context(exten, context='default'):
