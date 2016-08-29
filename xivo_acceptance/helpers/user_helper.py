@@ -29,7 +29,6 @@ from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.action.confd import endpoint_action_confd as endpoint_action
 from xivo_acceptance.action.confd import extension_action_confd as extension_action
-from xivo_acceptance.action.confd import line_action_confd as line_action
 from xivo_acceptance.action.confd import line_device_action_confd as line_device_action
 from xivo_acceptance.action.confd import line_endpoint_action_confd as line_endpoint_action
 from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
@@ -290,7 +289,7 @@ def add_user(data_dict, step=None):
         }
         if 'device_slot' in data_dict:
             line_data['device_slot'] = data_dict['device_slot']
-        line = line_action.create(line_data).resource()
+        line = world.confd_client.lines.create(line_data)
 
         protocol = data_dict.get('protocol', 'sip')
         if protocol == 'sip':
