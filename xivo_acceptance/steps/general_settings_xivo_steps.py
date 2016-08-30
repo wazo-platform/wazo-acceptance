@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,24 +19,7 @@ from hamcrest import assert_that, contains_string, has_item, is_not
 from lettuce import step
 
 from xivo_acceptance.action.webi import general_settings_xivo as general_settings_xivo_action_webi
-from xivo_acceptance.lettuce import common, form
 from xivo_acceptance.lettuce import logs
-
-
-@step(u'Given a live reload configuration is enable')
-def given_a_live_reload_configuration_is_enable(step):
-    general_settings_xivo_action_webi.enable_live_reload()
-
-
-@step(u'When i edit extenfeatures page')
-def when_i_edit_extenfeatures_page(step):
-    common.open_url('extenfeatures')
-    form.submit.submit_form()
-
-
-@step(u'When i disable live reload configuration')
-def when_i_enable_live_reload_configuration(step):
-    general_settings_xivo_action_webi.disable_live_reload()
 
 
 @step(u'Then i see live reload request in sysconfd log file')
