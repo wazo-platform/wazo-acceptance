@@ -16,14 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from hamcrest import assert_that
-from hamcrest import equal_to
 from hamcrest import has_entries
 from hamcrest import has_key
 from hamcrest import has_items
 from hamcrest import is_not
 from lettuce import step, world
 
-from xivo_acceptance.action.confd import extension_action_confd
 from xivo_acceptance.helpers import extension_helper
 
 
@@ -40,45 +38,6 @@ def given_i_have_the_following_extensions(step):
     for exteninfo in step.hashes:
         extension = _extract_extension_parameters(exteninfo)
         extension_helper.add_or_replace_extension(extension)
-
-
-@step(u'When I access the list of extensions$')
-def when_i_access_the_list_of_extensions(step):
-    world.response = extension_action_confd.all_extensions()
-
-
-@step(u'When I access the list of extensions using the following parameters:')
-def when_i_access_the_list_of_extensions_using_the_following_parameters(step):
-    parameters = {h['name']: h['value'] for h in step.hashes}
-    world.response = extension_action_confd.all_extensions(parameters)
-
-
-@step(u'When I access the extension with id "([^"]*)"')
-def when_i_access_the_extension_with_id_group1(step, extension_id):
-    world.response = extension_action_confd.get_extension(extension_id)
-
-
-@step(u'When I create an extension with the following parameters:')
-def when_i_create_an_extension_with_the_following_parameters(step):
-    parameters = _extract_extension_parameters(step.hashes[0])
-    world.response = extension_action_confd.create_extension(parameters)
-
-
-@step(u'When I update the extension with id "([^"]*)" using the following parameters:')
-def when_i_update_the_extension_with_id_group1_using_the_following_parameters(step, extensionid):
-    extensioninfo = _extract_extension_parameters(step.hashes[0])
-    world.response = extension_action_confd.update(extensionid, extensioninfo)
-
-
-@step(u'When I delete extension with id "([^"]*)"')
-def when_i_delete_extension_with_id(step, extension_id):
-    world.response = extension_action_confd.delete_extension(extension_id)
-
-
-@step(u'When I delete extension "(\d+)@([\w_-]+)"')
-def when_i_delete_extension_group1(step, exten, context):
-    extension = extension_helper.get_by_exten_context(exten, context)
-    world.response = extension_action_confd.delete_extension(extension['id'])
 
 
 @step(u'Then I get a list containing the following extensions:')
@@ -105,12 +64,6 @@ def then_i_have_an_extension_with_the_following_parameters(step):
     extension = world.response.data
 
     assert_that(extension, has_entries(parameters))
-
-
-@step(u'Then the extension "([^"]*)" no longer exists')
-def then_the_extension_group1_no_longer_exists(step, extension_id):
-    response = extension_action_confd.get_extension(extension_id)
-    assert_that(response.status, equal_to(404))
 
 
 def _filter_out_default_extensions():

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 from lettuce import world
 
 from xivo_acceptance.helpers import user_helper, group_helper, queue_helper, voicemail_helper
-from xivo_acceptance.action.confd import extension_action_confd as extension_action
 from xivo_ws import Incall, OverwriteCallerIDMode
 from xivo_ws import GroupDestination, QueueDestination, UserDestination, VoicemailDestination
 
@@ -87,8 +86,6 @@ def find_incalls_with_did(incall_did, context='from-extern'):
 
 
 def _delete_extensions_with_did(did, context):
-    response = extension_action.all_extensions({'search': did})
-    extensions = [e for e in response.items()
-                  if e['exten'] == did and e['context'] == context]
+    extensions = world.confd_client.extensions.list(exten=did, context=context)['items']
     for extension in extensions:
-        extension_action.delete_extension(extension['id'])
+        world.confd_client.extensions.delete(extension['id'])
