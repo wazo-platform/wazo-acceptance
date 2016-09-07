@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that, is_not, none
+from lettuce import world
 
+from requests.exceptions import HTTPError
 
 from xivo_acceptance.helpers import dialpattern_helper
 from xivo_acceptance.helpers import user_helper
@@ -25,17 +26,16 @@ from xivo_acceptance.helpers import incall_helper
 from xivo_acceptance.helpers import meetme_helper
 from xivo_acceptance.helpers import queue_helper
 from xivo_acceptance.helpers import line_write_helper
-from xivo_acceptance.action.confd import extension_action_confd as extension_action
 from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 
 from xivo_acceptance.lettuce.postgres import exec_sql_request
 
 
 def find_extension_by_exten_context(exten, context='default'):
-    response = extension_action.all_extensions({'search': exten})
-    found = [extension for extension in response.items()
-             if extension['exten'] == exten and extension['context'] == context]
-    return found[0] if found else None
+    try:
+        return get_by_exten_context(exten, context)
+    except IndexError:
+        return None
 
 
 def find_line_id_for_extension(extension_id):
@@ -44,15 +44,11 @@ def find_line_id_for_extension(extension_id):
 
 
 def get_by_exten_context(exten, context='default'):
-    extension = find_extension_by_exten_context(exten, context)
-    assert_that(extension, is_not(none()),
-                "extension %s@%s not found" % (exten, context))
-    return extension
+    return world.confd_client.extensions.list(exten=exten, context=context)['items'][0]
 
 
 def get_by_id(extension_id):
-    response = extension_action.get_extension(extension_id)
-    return response.resource()
+    return world.confd_client.extensions.get(extension_id)
 
 
 def add_or_replace_extension(extension):
@@ -61,11 +57,7 @@ def add_or_replace_extension(extension):
 
 
 def create_extension(exteninfo):
-    extension = dict(exteninfo)
-    if 'id' in extension:
-        extension['id'] = int(extension['id'])
-    response = extension_action.create_extension(extension)
-    return response.resource()
+    return world.confd_client.extensions.create(exteninfo)
 
 
 def delete_similar_extensions(extension):
@@ -114,7 +106,10 @@ def _delete_extension(extension_id):
     # response status isn't checked because a few helpers in
     # _delete_extension_type will implicitly delete the extension and
     # until we get rid of the webi, refactoring them isn't worth it
-    extension_action.delete_extension(extension_id)
+    try:
+        world.confd_client.extensions.delete(extension_id)
+    except HTTPError:
+        pass
 
 
 def _get_exten_info(extension_id):

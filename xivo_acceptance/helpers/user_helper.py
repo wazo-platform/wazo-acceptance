@@ -28,7 +28,6 @@ from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.action.confd import endpoint_action_confd as endpoint_action
-from xivo_acceptance.action.confd import extension_action_confd as extension_action
 from xivo_acceptance.action.confd import line_device_action_confd as line_device_action
 from xivo_acceptance.action.confd import line_endpoint_action_confd as line_endpoint_action
 from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
@@ -279,11 +278,9 @@ def add_user(data_dict, step=None):
         return False
 
     if 'line_number' in data_dict and 'line_context' in data_dict:
-        extension = extension_action.create_extension({
-            'context': data_dict['line_context'],
-            'exten': data_dict['line_number'],
-        }).resource()
-
+        extension_data = {'context': data_dict['line_context'],
+                          'exten': data_dict['line_number']}
+        extension = world.confd_client.extensions.create(extension_data)
         line_data = {
             'context': data_dict['line_context'],
         }
