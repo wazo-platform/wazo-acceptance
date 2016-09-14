@@ -29,8 +29,8 @@ from hamcrest import has_entries
 from hamcrest import has_item
 from hamcrest import has_items
 from hamcrest import not_
-from lettuce import step, registry, world
-from xivo_acceptance.helpers import asterisk_helper, file_helper
+from lettuce import step, world
+from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.lettuce import asterisk, sysutils, logs, common
 
@@ -85,33 +85,6 @@ def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, exten
         assert_that(ami_lines, has_items(*lines))
 
     common.wait_until_assert(_assert, tries=3)
-
-
-@step(u'Given I change the "([^"]*)" AMI password to "([^"]*)"')
-def given_i_change_the_user_ami_password_to_passwd(step, user, passwd):
-    content = '''\
-[{user}]
-secret = {password}
-deny=0.0.0.0/0.0.0.0
-permit=127.0.0.1/255.255.255.0
-write = system
-'''.format(user=user, password=passwd)
-    filename = '/etc/asterisk/manager.d/monit.conf'
-
-    temp_filename = file_helper.write_remote_file(filename, content, user='asterisk')
-    asterisk_helper.send_to_asterisk_cli('manager reload')
-
-    def cleanup(*args, **kwargs):
-        registry.CALLBACK_REGISTRY['scenario']['after_each'].pop(-1)
-        file_helper.remove_remote_file(filename)
-        try:
-            os.unlink(temp_filename)
-        except OSError:
-            # file does not exists
-            pass
-        asterisk_helper.send_to_asterisk_cli('manager reload')
-
-    registry.CALLBACK_REGISTRY['scenario']['after_each'].append(cleanup)
 
 
 @step(u'Then asterisk should be restarted in the following "([^"]*)" minutes')
