@@ -52,21 +52,9 @@ def when_i_execute_without_error(step, command):
     world.ssh_client_xivo.call([command])
 
 
-@step(u'When I execute a data backup command')
-def when_i_execute_a_data_backup_command(step):
-    command = 'bash /tmp/xivo-backup-manager backup data'
-    world.ssh_client_xivo.check_call([command])
-
-
 @step(u'When I execute database restore command')
 def when_i_execute_database_restore_command(step):
     command = 'bash /tmp/xivo-backup-manager restore db'
-    world.ssh_client_xivo.call([command])
-
-
-@step(u'When I execute a data restore command')
-def when_i_execute_data_restore_command(step):
-    command = 'bash /tmp/xivo-backup-manager restore data'
     world.ssh_client_xivo.call([command])
 
 

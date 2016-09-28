@@ -22,7 +22,7 @@ from hamcrest import assert_that
 from hamcrest import equal_to
 from hamcrest import is_not
 from hamcrest import none
-from lettuce import step, world
+from lettuce import step
 
 from xivo_acceptance.helpers import file_helper
 from xivo_acceptance.lettuce import sysutils
@@ -144,9 +144,3 @@ def then_the_mirror_list_does_not_contain_a_line_matching_group1(step, regex):
 def _match_on_mirror_list(regex):
     output = sysutils.output_command(['apt-cache', 'policy'])
     return re.search(regex, output)
-
-
-@step(u'When I remove the directory "([^"]*)"')
-def when_i_remove_the_directory_group1(step, path):
-    command = ['rm', '-rf', path]
-    world.ssh_client_xivo.check_call(command)
