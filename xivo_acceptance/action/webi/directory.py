@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2013-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -43,16 +43,16 @@ def _create_directory_config(directory):
 def add_directory_definition(directory):
     _add_directory(
         directory['name'],
-        directory['URI'],
+        directory['directory'],
         directory.get('direct match', ''),
         directory.get('delimiter', ''),
         directory.get('reverse match', ''),
     )
 
 
-def add_or_replace_directory(name, uri, direct_match, reverse_match, fields):
+def add_or_replace_directory(name, directory, direct_match, reverse_match, fields):
     remove_directory(name)
-    _add_directory(name, uri, direct_match, None, reverse_match)
+    _add_directory(name, directory, direct_match, None, reverse_match)
     _add_directory_fields(fields)
     submit.submit_form()
 
@@ -92,7 +92,7 @@ def _add_directory_fields(fields):
         add_field(field_name, value)
 
 
-def _add_directory(name, uri, direct_match, delimiter=None, reverse_match=None):
+def _add_directory(name, directory, direct_match, delimiter=None, reverse_match=None):
     common.open_url('cti_directory', 'add')
     input.set_text_field_with_label("Name", name)
     if delimiter:
@@ -100,7 +100,7 @@ def _add_directory(name, uri, direct_match, delimiter=None, reverse_match=None):
     input.set_text_field_with_label("Direct match", direct_match)
     if reverse_match:
         input.set_text_field_with_label("Match reverse directories", reverse_match)
-    select.set_select_field_with_label("URI", uri)
+    select.set_select_field_with_label("Directory", directory)
 
 
 def add_field(fieldname, value):

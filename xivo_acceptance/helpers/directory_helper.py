@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2014-2015 Avencall
+# Copyright (C) 2014-2016 Avencall
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ from xivo_acceptance.action.webi import directory as directory_action_webi
 def configure_internal_directory():
     directory_action_webi.add_or_replace_directory(
         name='internal',
-        uri='http://localhost:9487',
+        directory='http://localhost:9487',
         direct_match='firstname,lastname',
         reverse_match='',
         fields={'firstname': '{firstname}',

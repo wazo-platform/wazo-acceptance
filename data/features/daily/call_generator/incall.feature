@@ -29,8 +29,8 @@ Feature: Incoming calls
         | El         | Diablo    |   666 | diablo@hell.org | Hell Inc. | 666 Hell |
         Given the directory definition "xivodirreverse" does not exist
         Given I add the following CTI directory definition:
-        | name           | URI                                                                   | reverse match                 |
-        | xivodirreverse | http://localhost/service/ipbx/json.php/private/pbx_services/phonebook | phonebooknumber.office.number |
+        | name           | directory | reverse match                 |
+        | xivodirreverse | xivodir   | phonebooknumber.office.number |
         Given I map the following fields and save the directory definition:
         | field name | value                              |
         | firstname  | {phonebook.firstname}              |
