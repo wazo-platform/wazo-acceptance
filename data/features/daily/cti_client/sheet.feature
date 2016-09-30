@@ -494,8 +494,8 @@ Feature: Sheet
           | phonebook-dbvars | CSV file | /tmp/phonebook-dbvars.csv |
         Given the directory definition "dbvars" does not exist
         Given I add the following CTI directory definition:
-          | name   | URI                              | delimiter | direct match   | reverse match |
-          | dbvars | file:///tmp/phonebook-dbvars.csv | ;         | nom,prenom,tel | tel           |
+          | name   | directory        | delimiter | direct match   | reverse match |
+          | dbvars | phonebook-dbvars | ;         | nom,prenom,tel | tel           |
         Given I map the following fields and save the directory definition:
           | field name | value     |
           | firstname  | {prenom}  |

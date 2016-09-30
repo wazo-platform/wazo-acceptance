@@ -19,8 +19,8 @@ Feature: CTI Directories
           | phonebook-unicode | CSV file | /tmp/phonebook-unicode.csv |
         Given the directory definition "phonebookunicode" does not exist
         Given I add the following CTI directory definition:
-          | name             | URI                               | delimiter | direct match   | reverse match |
-          | phonebookunicode | file:///tmp/phonebook-unicode.csv | ;         | nom,prenom,tel | tel           |
+          | name             | directory         | delimiter | direct match   | reverse match |
+          | phonebookunicode | phonebook-unicode | ;         | nom,prenom,tel | tel           |
         Given I map the following fields and save the directory definition:
           | field name | value    |
           | firstname  | {prenom} |
