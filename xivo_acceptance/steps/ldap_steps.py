@@ -20,9 +20,7 @@ from lettuce import step
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.action.webi import ldap as ldap_action_webi
 from xivo_acceptance.helpers import cti_helper
-from xivo_acceptance.lettuce import assets
 from xivo_acceptance.lettuce import common
-from xivo_acceptance.lettuce import sysutils
 
 
 @step(u'Given there is no LDAP server "([^"]*)"$')
@@ -88,9 +86,14 @@ def _configure_display_filter():
 
 
 def _configure_ldap_directory(ldap_filter):
+    directory_action_webi.add_or_replace_directory_config({
+        'name': ldap_filter,
+        'type': 'LDAP filter',
+        'ldap_filter': ldap_filter,
+    })
     directory_action_webi.add_or_replace_directory(
         name='ldapdirectory',
-        uri='ldapfilter://%s' % ldap_filter,
+        directory=ldap_filter,
         direct_match='sn,givenName,telephoneNumber',
         reverse_match='telephoneNumber',
         fields={

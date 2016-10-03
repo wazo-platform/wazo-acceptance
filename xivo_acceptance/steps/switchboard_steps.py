@@ -100,7 +100,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
     context_helper.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
     directory_action_webi.add_or_replace_directory(
         'xivodirswitchboard',
-        'http://localhost/service/ipbx/json.php/private/pbx_services/phonebook',
+        'phonebook',
         'phonebook.firstname,phonebook.lastname,phonebook.displayname,phonebook.society,phonebooknumber.office.number',
         '',
         {'name': '{phonebook.displayname}',

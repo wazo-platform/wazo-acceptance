@@ -30,7 +30,7 @@ Feature: Incoming calls
         Given the directory definition "xivodirreverse" does not exist
         Given I add the following CTI directory definition:
         | name           | directory | reverse match                 |
-        | xivodirreverse | xivodir   | phonebooknumber.office.number |
+        | xivodirreverse | phonebook | phonebooknumber.office.number |
         Given I map the following fields and save the directory definition:
         | field name | value                              |
         | firstname  | {phonebook.firstname}              |

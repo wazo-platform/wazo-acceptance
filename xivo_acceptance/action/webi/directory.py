@@ -35,8 +35,11 @@ def _remove_directory_config(directory):
 def _create_directory_config(directory):
     common.open_url('directory_config', 'add')
     input.set_text_field_with_label("Directory name", directory['name'])
-    input.set_text_field_with_label("URI", directory['URI'])
     select.set_select_field_with_label("Type", directory['type'])
+    if 'URI' in directory:
+        input.set_text_field_with_label('URI', directory['URI'])
+    if 'ldap_filter' in directory:
+        select.set_select_field_with_label('LDAP filter name', directory['ldap_filter'])
     submit.submit_form()
 
 

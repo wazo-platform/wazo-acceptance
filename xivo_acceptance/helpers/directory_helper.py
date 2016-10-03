@@ -21,7 +21,7 @@ from xivo_acceptance.action.webi import directory as directory_action_webi
 def configure_internal_directory():
     directory_action_webi.add_or_replace_directory(
         name='internal',
-        directory='http://localhost:9487',
+        directory='xivo',
         direct_match='firstname,lastname',
         reverse_match='',
         fields={'firstname': '{firstname}',
