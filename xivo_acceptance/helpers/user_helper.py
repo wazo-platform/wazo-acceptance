@@ -28,7 +28,6 @@ from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.action.confd import endpoint_action_confd as endpoint_action
-from xivo_acceptance.action.confd import line_device_action_confd as line_device_action
 from xivo_acceptance.action.confd import line_endpoint_action_confd as line_endpoint_action
 from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 from xivo_acceptance.action.confd import user_action_confd as user_action
@@ -305,7 +304,8 @@ def add_user(data_dict, step=None):
         mac = data_dict.get('device')
         if mac:
             device = world.confd_client.devices.list(mac=mac)['items'][0]
-            line_device_action.associate_device(line['id'], device['id'])
+            world.confd_client.devices.list(mac=mac)['items'][0]
+            world.confd_client.lines(line['id']).add_device(device['id'])
 
     if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(data_dict):
         voicemail = voicemail_action.create_voicemail({
