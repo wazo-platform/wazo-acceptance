@@ -26,7 +26,6 @@ from xivo_acceptance.helpers import incall_helper
 from xivo_acceptance.helpers import meetme_helper
 from xivo_acceptance.helpers import queue_helper
 from xivo_acceptance.helpers import line_write_helper
-from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 
 from xivo_acceptance.lettuce.postgres import exec_sql_request
 
@@ -39,8 +38,11 @@ def find_extension_by_exten_context(exten, context='default'):
 
 
 def find_line_id_for_extension(extension_id):
-    response = line_extension_action.get_from_extension(extension_id)
-    return response.resource()['line_id'] if response.status_ok() else None
+    try:
+        response = world.confd_client.extensions(extension_id).get_line()
+        return response['line_id']
+    except HTTPError:
+        return None
 
 
 def get_by_exten_context(exten, context='default'):

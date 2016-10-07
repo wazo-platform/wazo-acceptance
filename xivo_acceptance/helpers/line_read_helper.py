@@ -23,7 +23,6 @@ from hamcrest import none
 from requests.exceptions import HTTPError
 
 from xivo_acceptance.lettuce import func
-from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 
 
 def find_by_id(line_id):
@@ -78,12 +77,12 @@ def get_line_id_with_exten_context(exten, context='default'):
 
 
 def find_extension_id_for_line(line_id):
-    response = line_extension_action.get(line_id)
-    return response.resource()['extension_id'] if response.status_ok() else None
+    try:
+        return get_extension_id_for_line(line_id)
+    except IndexError:
+        return None
 
 
 def get_extension_id_for_line(line_id):
-    extension_id = find_extension_id_for_line(line_id)
-    assert_that(extension_id, is_not(none()),
-                "Line %s has no extension" % line_id)
-    return extension_id
+    response = world.confd_client.lines(line_id).list_extensions()
+    return response['items'][0]['extension_id']
