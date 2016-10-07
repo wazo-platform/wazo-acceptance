@@ -27,7 +27,6 @@ from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
-from xivo_acceptance.action.confd import endpoint_action_confd as endpoint_action
 from xivo_acceptance.action.confd import line_endpoint_action_confd as line_endpoint_action
 from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 from xivo_acceptance.action.confd import user_action_confd as user_action
@@ -289,13 +288,13 @@ def add_user(data_dict, step=None):
 
         protocol = data_dict.get('protocol', 'sip')
         if protocol == 'sip':
-            endpoint = endpoint_action.create_sip().resource()
+            endpoint = world.confd_client.endpoints_sip.create({})
             line_endpoint_action.associate_sip(line['id'], endpoint['id'])
         elif protocol == 'sccp':
-            endpoint = endpoint_action.create_sccp().resource()
+            endpoint = world.confd_client.endpoints_sccp.create({})
             line_endpoint_action.associate_sccp(line['id'], endpoint['id'])
         elif protocol == 'custom':
-            endpoint = endpoint_action.create_custom().resource()
+            endpoint = world.confd_client.endpoints_custom.create({})
             line_endpoint_action.associate_custom(line['id'], endpoint['id'])
 
         line_extension_action.associate(line['id'], extension['id'])

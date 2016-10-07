@@ -24,7 +24,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import line as line_action_webi
-from xivo_acceptance.action.confd import endpoint_action_confd
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import line_sip_helper
 from xivo_acceptance.helpers import line_write_helper
@@ -42,9 +41,9 @@ def given_there_are_no_custom_lines_with_interface_beginning_with_1(step, interf
 
 @step(u'Given there are no SIP lines with username "([^"]*)"')
 def given_there_are_no_sip_lines_with_infos(step, username):
-    lines = [line for line in endpoint_action_confd.search(username).items() if line['username'] == username]
-    for line in lines:
-        endpoint_action_confd.delete(line['id'])
+    endpoints_sip = world.confd_client.endpoints_sip.list(username=username)['items']
+    for endpoint_sip in endpoints_sip:
+        world.confd_client.endpoints_sip.delete(endpoint_sip['id'])
 
 
 @step(u'(?:Given|When) I set the following options in line "(\d+)@(\w+)":')
