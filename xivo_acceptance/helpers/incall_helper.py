@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,74 +19,68 @@
 from lettuce import world
 
 from xivo_acceptance.helpers import user_helper, group_helper, queue_helper, voicemail_helper
-from xivo_ws import Incall, OverwriteCallerIDMode
-from xivo_ws import GroupDestination, QueueDestination, UserDestination, VoicemailDestination
 
 
-def add_incall(number, context, dst_type, dst_name, caller_id=None):
-    incall = Incall()
-    incall.number = number
-    incall.context = context
-    incall.destination = _new_destination(dst_type, dst_name)
-    if caller_id:
-        incall.caller_id_mode = OverwriteCallerIDMode(caller_id)
-    world.ws.incalls.add(incall)
+def add_or_replace_incall(exten, context, dst_type, dst_name, caller_id=None):
+    delete_incalls_with_did(exten, context)
+    add_incall(exten, context, dst_type, dst_name, caller_id)
 
 
-def add_or_replace_incall(number, context, dst_type, dst_name, caller_id=None):
-    delete_incalls_with_did(number, context)
-    add_incall(number, context, dst_type, dst_name, caller_id)
+def add_incall(exten, context, dst_type, dst_name, caller_id=None):
+    destination = _build_destination(dst_type, dst_name)
+    incall = {'destination': destination,
+              'caller_id_mode': 'overwrite',
+              'caller_id_name': caller_id}
+    extension = {'exten': exten,
+                 'context': context}
+
+    incall = world.confd_client.incalls.create(incall)
+    extension = world.confd_client.extensions.create(extension)
+    world.confd_client.incalls(incall['id']).add_extension(extension)
 
 
-def _new_destination(dst_type, dst_name):
-    dst_type = dst_type.lower()
-    if dst_type == 'user':
-        return _new_user_destination(dst_name)
-    elif dst_type == 'queue':
-        return _new_queue_destination(dst_name)
-    elif dst_type == 'group':
-        return _new_group_destination(dst_name)
-    elif dst_type == 'voicemail':
-        return _new_voicemail_destination(dst_name)
-    else:
-        raise Exception('unknown destination type %r' % dst_type)
+def _build_destination(type_, args):
+    type_ = type_.lower()
+    key_id = {}
+    if type_ == 'user':
+        key_id = _build_user_destination(args)
+    elif type_ == 'queue':
+        key_id = _build_queue_destination(args)
+    elif type_ == 'group':
+        key_id = _build_group_destination(args)
+    elif type_ == 'voicemail':
+        key_id = _build_voicemail_destination(args)
+
+    result = {'type': type_}
+    result.update(key_id)
+    return result
 
 
-def _new_user_destination(fullname):
+def _build_user_destination(fullname):
     firstname, lastname = fullname.split()
     user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
-    return UserDestination(user_id)
+    return {'user_id': user_id}
 
 
-def _new_queue_destination(queue_name):
+def _build_queue_destination(queue_name):
     queue_id = queue_helper.find_queue_id_with_name(queue_name)
-    return QueueDestination(queue_id)
+    return {'queue_id': queue_id}
 
 
-def _new_group_destination(group_name):
+def _build_group_destination(group_name):
     group_id = group_helper.find_group_id_with_name(group_name)
-    return GroupDestination(group_id)
+    return {'group_id': group_id}
 
 
-def _new_voicemail_destination(number_context):
+def _build_voicemail_destination(number_context):
     number, _, context = number_context.partition('@')
     voicemail = voicemail_helper.get_voicemail_by_number(number, context)
-    return VoicemailDestination(voicemail['id'])
+    return {'voicemail_id': voicemail['id']}
 
 
 def delete_incalls_with_did(incall_did, context='from-extern'):
-    incalls = find_incalls_with_did(incall_did, context)
-    for incall in incalls:
-        world.ws.incalls.delete(incall.id)
-    _delete_extensions_with_did(incall_did, context)
-
-
-def find_incalls_with_did(incall_did, context='from-extern'):
-    return [incall for incall in world.ws.incalls.search_by_number(incall_did)
-            if incall.context == context]
-
-
-def _delete_extensions_with_did(did, context):
-    extensions = world.confd_client.extensions.list(exten=did, context=context)['items']
-    for extension in extensions:
+    extensions = world.confd_client.extensions.list(exten=incall_did, context=context)
+    for extension in extensions['items']:
+        if extension['incall']:
+            world.confd_client.incalls.delete(extension['incall']['id'])
         world.confd_client.extensions.delete(extension['id'])

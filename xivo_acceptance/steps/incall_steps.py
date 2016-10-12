@@ -44,15 +44,13 @@ def when_i_group1_incall_group2(step, enable_disable, did):
 
 @step(u'Given there is an incall "([^"]*)" in context "([^"]*)" to the "([^"]*)" "([^"]*)"$')
 def given_there_is_an_incall_group1_in_context_group2_to(step, did, context, dst_type, dst_name):
-    incall_helper.delete_incalls_with_did(did)
-    incall_helper.add_incall(did, context, dst_type, dst_name)
+    incall_helper.add_or_replace_incall(did, context, dst_type, dst_name)
 
 
 @step(u'Given there is an incall "([^"]*)" in context "([^"]*)" to the "([^"]*)" "([^"]*)" with caller id name "([^"]*)" number "([^"]*)"')
 def given_there_is_an_incall_group1_in_context_group2_to_the_queue_group3(step, did, context, dst_type, dst_name, cid_name, cid_num):
     caller_id = '"%s" <%s>' % (cid_name, cid_num)
-    incall_helper.delete_incalls_with_did(did)
-    incall_helper.add_incall(did, context, dst_type, dst_name, caller_id)
+    incall_helper.add_or_replace_incall(did, context, dst_type, dst_name, caller_id)
 
 
 @step(u'When incall "([^"]*)" is removed')
