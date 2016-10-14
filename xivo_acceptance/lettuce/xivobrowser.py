@@ -233,4 +233,5 @@ class _XiVOLocalBrowserImplementation(_XiVOBrowserMixin, webdriver.Firefox):
 
     def __init__(self, debug=False):
         self._debug = debug
-        super(_XiVOLocalBrowserImplementation, self).__init__(firefox_profile=self._setup_browser_profile())
+        super(_XiVOLocalBrowserImplementation, self).__init__(firefox_profile=self._setup_browser_profile(),
+                                                              capabilities={'marionette': False})
