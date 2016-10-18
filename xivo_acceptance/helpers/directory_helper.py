@@ -15,7 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from lettuce import world
+
+from requests import ConnectionError
+from requests import HTTPError
+
 from xivo_acceptance.action.webi import directory as directory_action_webi
+from xivo_acceptance.lettuce import common
+from xivo_acceptance.lettuce import sysutils
 
 
 def configure_internal_directory():
@@ -29,3 +36,18 @@ def configure_internal_directory():
                 'display_name': '{firstname} {lastname}',
                 'phone': '{exten}'}
     )
+
+
+def restart_dird():
+    sysutils.restart_service('xivo-dird')
+    wait_for_dird_http()
+
+
+def wait_for_dird_http():
+    try:
+        common.wait_until_no_except(world.dird_client.phonebook.list,
+                                    tenant='some-tenant',
+                                    tries=10,
+                                    exceptions=[ConnectionError])
+    except HTTPError:
+        return

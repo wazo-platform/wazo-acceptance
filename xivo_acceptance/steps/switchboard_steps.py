@@ -23,14 +23,16 @@ from lettuce import step, world
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.action.webi import queue as queue_action_webi
 from xivo_acceptance.action.webi import user as user_action_webi
+from xivo_acceptance.action.webi import phonebook as phonebook_action_webi
 from xivo_acceptance.helpers import (asterisk_helper,
                                      bus_helper,
                                      user_helper,
                                      context_helper,
                                      cti_helper,
                                      incall_helper,
-                                     queue_helper)
-from xivo_acceptance.lettuce import func, common, sysutils
+                                     queue_helper,
+                                     directory_helper)
+from xivo_acceptance.lettuce import func, common
 
 
 _switchboard_events = {
@@ -98,14 +100,18 @@ def then_i_should_receive_the_following_switchboard_statistics(step):
 @step(u'Given the switchboard is configured for internal directory lookup')
 def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
     context_helper.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
+    phonebook_action_webi.remove_directory_if_exists('acceptance-switchboard-phonebook')
+    phonebook_action_webi.create_local_dird_directory('acceptance-switchboard-phonebook',
+                                                      'xivo',
+                                                      'xivo_entity')
     directory_action_webi.add_or_replace_directory(
         'xivodirswitchboard',
-        'phonebook',
-        'phonebook.firstname,phonebook.lastname,phonebook.displayname,phonebook.society,phonebooknumber.office.number',
+        'acceptance-switchboard-phonebook',
+        'firstname,lastname,displayname,society,number_office',
         '',
-        {'name': '{phonebook.displayname}',
-         'number': '{phonebooknumber.office.number}',
-         'mobile': '{phonebooknumber.mobile.number}'}
+        {'name': '{displayname}',
+         'number': '{number_office}',
+         'mobile': '{number_mobile}'}
     )
     directory_action_webi.add_or_replace_display(
         'switchboard',
@@ -119,7 +125,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
         'switchboard',
         ['xivodirswitchboard']
     )
-    sysutils.restart_service('xivo-dird')
+    directory_helper.restart_dird()
 
 
 @step(u'Given the user "([^"]*)" is configured for switchboard use')

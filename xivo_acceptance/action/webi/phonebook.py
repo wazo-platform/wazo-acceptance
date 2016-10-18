@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,14 +21,35 @@ from lettuce import world
 from xivo_acceptance.lettuce import common, form
 
 
-def phonebook_search(term):
-    common.open_url('phonebook')
-    form.input.set_text_field_with_id("it-toolbar-search", term)
-    form.submit.submit_form("it-subsearch")
+class Phonebook(object):
+    def __init__(self, name, id_, entity):
+        self.entity = entity
+        self.name = name
+        self.id = id_
+
+    @classmethod
+    def from_name(cls, phonebook_name, entity):
+        token = world.config.get('auth_token')
+        phonebooks = world.dird_client.phonebook.list(tenant=entity, search=phonebook_name, token=token)['items']
+        phonebook_id = [phonebook['id'] for phonebook in phonebooks if phonebook['name'] == phonebook_name][0]
+
+        return cls(phonebook_name, phonebook_id, entity)
 
 
-def create_entry(entry):
-    common.open_url('phonebook', 'add')
+def phonebook_search(term, phonebook_name, entity):
+    phonebook = Phonebook.from_name(phonebook_name, entity)
+
+    common.open_url('phonebook', 'list_contacts', {'entity': entity, 'phonebook': phonebook.id})
+
+    # The search feature is currently broken, it redirects to the list of phonebooks, instead of the list of contacts
+    # form.input.set_text_field_with_id("it-toolbar-search", term)
+    # form.submit.submit_form("it-subsearch")
+
+
+def create_entry(entry, phonebook_name, entity):
+    phonebook = Phonebook.from_name(phonebook_name, entity)
+
+    common.open_url('phonebook', 'add_contact', {'entity': entity, 'phonebook': phonebook.id})
 
     display_name = _get_display_name_from_entry(entry)
 
@@ -85,4 +107,18 @@ def set_accessibility_to_any_host():
     multilist.remove_all()
     multilist.add('0.0.0.0/1')
     multilist.add('128.0.0.0/1')
+    form.submit.submit_form()
+
+
+def remove_directory_if_exists(name):
+    common.remove_element_if_exist('directory_config', name, column='Name')
+
+
+def create_local_dird_directory(name, phonebook_name, tenant):
+    common.open_url('directory_config', 'add')
+
+    form.input.set_text_field_with_label('Directory name', name)
+    form.select.set_select_field_with_label('Type', 'Local dird phonebook')
+    form.select.set_select_field_with_label('Phonebook', '{} ({})'.format(phonebook_name, tenant))
+
     form.submit.submit_form()

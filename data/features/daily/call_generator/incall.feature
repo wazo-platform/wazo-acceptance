@@ -24,27 +24,27 @@ Feature: Incoming calls
         | Plume     | Wilde    |   1868 | default | sip      |
         | Anthony   | Smith    |   1869 | default | sip      |  # not necessary, workaround for linphone bug
         Given there is an incall "1868" in context "from-extern" to the "user" "Plume Wilde"
-        Given there are entries in the phonebook:
+        Given there are entries in the phonebook "xivo" of entity "xivo_entity":
         | first name | last name | phone | email           | company   | address1 |
         | El         | Diablo    |   666 | diablo@hell.org | Hell Inc. | 666 Hell |
+        Given there are local dird phonebooks:
+        | name                 | entity      | phonebook name |
+        | acceptance-phonebook | xivo_entity | xivo           |
         Given the directory definition "xivodirreverse" does not exist
         Given I add the following CTI directory definition:
-        | name           | directory | reverse match                 |
-        | xivodirreverse | phonebook | phonebooknumber.office.number |
+        | name           | directory            | reverse match |
+        | xivodirreverse | acceptance-phonebook | number_office |
         Given I map the following fields and save the directory definition:
-        | field name | value                              |
-        | firstname  | {phonebook.firstname}              |
-        | lastname   | {phonebook.lastname}               |
-        | fullname   | {phonebook.fullname}               |
-        | phone      | {phonebooknumber.office.number}    |
-        | mail       | {phonebook.email}                  |
-        | reverse    | {phonebook.fullname}               |
-        | address1   | {phonebookaddress.office.address1} |
-        | company    | {phonebook.society}                |
+        | field name | value                     |
+        | phone      | {number_office}           |
+        | reverse    | {firstname} {lastname}    |
+        | address1   | {address_office_address1} |
+        | company    | {society}                 |
+        | fullname   | {firstname} {lastname}    |
         Given the following directories are used in reverse lookup:
         | directory       |
         | xivodirreverse  |
-        Given I restart "xivo-dird"
+        Given I restart xivo-dird
         Given I listen on the bus for messages:
         | queue                     | routing_key   |
         | test_incall_reverselookup | ami.UserEvent |
@@ -62,5 +62,5 @@ Feature: Incoming calls
         | db-firstname | El              |
         | db-fullname  | El Diablo       |
         | db-address1  | 666 Hell        |
-        | db-mail      | diablo@hell.org |
+        | db-email     | diablo@hell.org |
         | db-company   | Hell Inc.       |

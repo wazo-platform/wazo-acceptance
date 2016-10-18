@@ -437,6 +437,33 @@ def wait_until_assert(assert_function, *args, **kwargs):
         raise NoMoreTries('\n'.join(errors))
 
 
+def wait_until_no_except(function, *args, **kwargs):
+    """Run <function> <tries> times, spaced with 1 second. Stops when
+    <function> does not raise any exception.
+
+    Useful for waiting until some service comes up, using the client lib.
+
+    Arguments:
+
+        - function: the function making the assertion
+        - tries: the number of times to run <function>
+        - exceptions: types of exceptions to ignore
+    """
+    tries = kwargs.pop('tries', 1)
+    exceptions = kwargs.pop('exceptions', [Exception])
+    last_exception = None
+
+    for _ in xrange(tries):
+        try:
+            function(*args, **kwargs)
+            return
+        except tuple(exceptions) as e:
+            last_exception = e
+            time.sleep(1)
+    else:
+        raise NoMoreTries(last_exception)
+
+
 def assert_over_time(assert_function, *args, **kwargs):
     """Run <assert_function> <tries> times, spaced with 1 second. Stops if
     <function> throws AssertionError.

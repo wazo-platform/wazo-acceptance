@@ -25,6 +25,7 @@ from xivo_agentd_client import Client as AgentdClient
 from xivo_auth_client import Client as AuthClient
 from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
+from xivo_dird_client import Client as DirdClient
 from .xivobrowser import XiVOBrowser
 from .display import XiVODisplay
 
@@ -45,6 +46,11 @@ def setup_confd_client():
 def setup_ctid_ng_client():
     world.ctid_ng_client = CtidNgClient(**world.config['ctid_ng'])
     world.ctid_ng_client.set_token(world.config.get('auth_token'))
+
+
+def setup_dird_client():
+    world.dird_client = DirdClient(**world.config['dird'])
+    world.dird_client.set_token(world.config.get('auth_token'))
 
 
 def setup_auth_token():

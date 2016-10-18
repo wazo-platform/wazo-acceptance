@@ -96,6 +96,8 @@ def set_xivo_target(extra_config):
     setup.setup_confd_client()
     logger.debug("setup ctid-ng client...")
     setup.setup_ctid_ng_client()
+    logger.debug("setup dird client...")
+    setup.setup_dird_client()
     logger.debug("setup consul...")
     setup.setup_consul()
     logger.debug("setup display...")

@@ -19,8 +19,10 @@ import re
 
 from lettuce import step, world
 
-from xivo_acceptance.lettuce import sysutils, assets
 from xivo_acceptance.helpers import cti_helper
+from xivo_acceptance.helpers import directory_helper
+from xivo_acceptance.lettuce import assets
+from xivo_acceptance.lettuce import sysutils
 
 
 @step(u'I start "([^"]*)"$')
@@ -42,6 +44,11 @@ def i_restart_service(step, service_name):
         cti_helper.restart_server()
     else:
         sysutils.restart_service(service_name)
+
+
+@step(u'I restart xivo-dird$')
+def i_restart_xivo_dird(step):
+    directory_helper.restart_dird()
 
 
 @step(u'When I wait for the service "([^"]*)" to stop')

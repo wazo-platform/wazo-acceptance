@@ -79,7 +79,7 @@ class SipPhone(object):
         self.sip_port = config.sip_port
         self.rtp_port = config.rtp_port
 
-    def answer(self, timeout=2):
+    def answer(self, timeout=5):
         start = time.time()
         exception = None
         while time.time() - start < timeout:

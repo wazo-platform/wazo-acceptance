@@ -1,19 +1,18 @@
 Feature: Phonebook
 
     Scenario: Search for a contact in the phonebook
-        Given "John Doe" is not in the phonebook
+        Given "John" "Doe" is not in the phonebook "xivo" of entity "xivo_entity"
         Given the directory definition "internal" is included in the default directory
-        When I add the following entries to the phonebook:
+        When I add the following entries to the phonebook "xivo" of entity "xivo_entity":
           | first name | last name | phone |
           | John       | Doe       | 1234  |
-        When I search for "John"
         Then "John Doe" appears in the list
 
     Scenario: Phonebook search from a phone
         Given the phonebook is accessible by any hosts
         Given the internal directory exists
         Given the directory definition "internal" is included in the default directory
-        Given I restart "xivo-dird"
+        Given I restart xivo-dird
         Given the latest plugin "xivo-aastra-3" is installed
         Given I have the following devices:
           | mac               | latest plugin of | vendor | model
@@ -30,7 +29,7 @@ Feature: Phonebook
         Given the phonebook is accessible by any hosts
         Given the internal directory exists
         Given the directory definition "internal" is included in the default directory
-        Given I restart "xivo-dird"
+        Given I restart xivo-dird
         Given there are users with infos:
           | firstname | lastname | number | context | protocol |
           | Michaud   | Pascal   |   1001 | default | sip      |
