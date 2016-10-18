@@ -18,7 +18,6 @@
 from hamcrest import assert_that, is_not, none
 
 from lettuce import step, world
-from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 from xivo_acceptance.action.confd import line_extension_collection_action_confd as action
 from xivo_acceptance.helpers import extension_helper
 from xivo_acceptance.helpers import line_sip_helper
@@ -30,7 +29,7 @@ def given_line_with_username_group1_is_associated_to_extension_group2(step, user
     assert_that(line, is_not(none()), "Line with username {} not found".format(username))
     extension = extension_helper.find_extension_by_exten_context(exten, context)
     assert_that(extension, is_not(none()), "Extension {}@{} not found".format(exten, context))
-    world.response = line_extension_action.associate(line['id'], extension['id'])
+    world.confd_client.lines(line['id']).add_extension(extension)
 
 
 @step(u'When I associate extension "(\d+)@([\w-]+)" to SIP line "([^"]*)"')

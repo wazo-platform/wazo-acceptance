@@ -19,7 +19,6 @@ import json
 import requests
 
 from lettuce.registry import world
-from xivo_acceptance.action.confd import device_action_confd as device_action
 
 
 AUTOPROV_URL = 'https://%s/xivo/configuration/json.php/restricted/provisioning/autoprov?act=configure'
@@ -37,19 +36,9 @@ def provision_device_using_webi(provcode, device_ip):
                   verify=False)
 
 
-def create_dummy_devices(nb_devices):
-    for i in range(nb_devices):
-        create_dummy_device()
-
-
-def create_dummy_device():
-    return device_action.create_device({})
-
-
 def add_or_replace_device(device):
     delete_similar_devices(device)
-    response = device_action.create_device(device)
-    return response.resource()
+    return world.confd_client.devices.create(device)
 
 
 def delete_similar_devices(device):
@@ -65,13 +54,10 @@ def delete_device_with(key, value):
 
 
 def find_devices_with(key, value):
-    response = device_action.device_list({key: value})
-    devices = [device
-               for device in response.items()
-               if device[key] == value]
-    return devices
+    response = world.confd_client.devices.list(key=value)
+    return response['items']
 
 
 def _delete_device(device_id):
-    device_action.reset_to_autoprov(device_id)
-    device_action.delete_device(device_id)
+    world.confd_client.devices.autoprov(device_id)
+    world.confd_client.devices.delete(device_id)

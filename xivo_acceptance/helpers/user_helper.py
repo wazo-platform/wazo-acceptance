@@ -27,10 +27,6 @@ from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
-from xivo_acceptance.action.confd import endpoint_action_confd as endpoint_action
-from xivo_acceptance.action.confd import line_device_action_confd as line_device_action
-from xivo_acceptance.action.confd import line_endpoint_action_confd as line_endpoint_action
-from xivo_acceptance.action.confd import line_extension_action_confd as line_extension_action
 from xivo_acceptance.action.confd import user_action_confd as user_action
 from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
 from xivo_acceptance.action.confd import voicemail_action_confd as voicemail_action
@@ -290,22 +286,23 @@ def add_user(data_dict, step=None):
 
         protocol = data_dict.get('protocol', 'sip')
         if protocol == 'sip':
-            endpoint = endpoint_action.create_sip().resource()
-            line_endpoint_action.associate_sip(line['id'], endpoint['id'])
+            endpoint = world.confd_client.endpoints_sip.create({})
+            world.confd_client.lines(line['id']).add_endpoint_sip(endpoint)
         elif protocol == 'sccp':
-            endpoint = endpoint_action.create_sccp().resource()
-            line_endpoint_action.associate_sccp(line['id'], endpoint['id'])
+            endpoint = world.confd_client.endpoints_sccp.create({})
+            world.confd_client.lines(line['id']).add_endpoint_sccp(endpoint)
         elif protocol == 'custom':
-            endpoint = endpoint_action.create_custom().resource()
-            line_endpoint_action.associate_custom(line['id'], endpoint['id'])
+            endpoint = world.confd_client.endpoints_custom.create({})
+            world.confd_client.lines(line['id']).add_endpoint_custom(endpoint)
 
-        line_extension_action.associate(line['id'], extension['id'])
+        world.confd_client.lines(line['id']).add_extension(extension)
         user_line_action.create_user_line(user_id, {'line_id': line['id']})
 
         mac = data_dict.get('device')
         if mac:
             device = world.confd_client.devices.list(mac=mac)['items'][0]
-            line_device_action.associate_device(line['id'], device['id'])
+            world.confd_client.devices.list(mac=mac)['items'][0]
+            world.confd_client.lines(line['id']).add_device(device['id'])
 
     if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(data_dict):
         voicemail = voicemail_action.create_voicemail({

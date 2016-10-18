@@ -22,9 +22,8 @@ from hamcrest import has_item
 from hamcrest import is_
 from hamcrest import is_not
 from hamcrest import none
-from lettuce import step
+from lettuce import step, world
 from xivo_acceptance.action.webi import provd_plugins
-from xivo_acceptance.action.confd import device_action_confd
 from xivo_acceptance.action.webi import device as device_action_webi
 from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
 from xivo_acceptance.lettuce import form, common
@@ -43,7 +42,7 @@ def given_i_have_the_following_devices(step):
             deviceinfo['plugin'] = provd_plugins.get_latest_plugin_name(deviceinfo['latest plugin of'])
             del deviceinfo['latest plugin of']
         device = device_helper.add_or_replace_device(deviceinfo)
-        device_action_confd.reset_to_autoprov(device['id'])
+        world.confd_client.devices.autoprov(device['id'])
 
 
 @step(u'Given the provisioning server has received the following HTTP requests:')
