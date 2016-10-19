@@ -19,8 +19,7 @@ from lettuce import world
 
 
 def create_entry(entry, phonebook_name, entity_name):
-    token = world.config.get('auth_token')
-    phonebooks = world.dird_client.phonebook.list(tenant=entity_name, search=phonebook_name, token=token)['items']
+    phonebooks = world.dird_client.phonebook.list(tenant=entity_name, search=phonebook_name)['items']
     phonebook_id = [phonebook['id'] for phonebook in phonebooks if phonebook['name'] == phonebook_name][0]
     contact = {
         'firstname': entry['first name'],
@@ -41,25 +40,21 @@ def create_entry(entry, phonebook_name, entity_name):
     }
     world.dird_client.phonebook.create_contact(contact_body=contact,
                                                phonebook_id=phonebook_id,
-                                               tenant=entity_name,
-                                               token=token)
+                                               tenant=entity_name)
 
 
 def remove_entry_if_exists(entry, phonebook_name, entity_name):
-    token = world.config.get('auth_token')
-    phonebooks = world.dird_client.phonebook.list(tenant=entity_name, search=phonebook_name, token=token)['items']
+    phonebooks = world.dird_client.phonebook.list(tenant=entity_name, search=phonebook_name)['items']
     phonebook_ids = [phonebook['id'] for phonebook in phonebooks if phonebook['name'] == phonebook_name]
     if not phonebook_ids:
         return
     phonebook_id = phonebook_ids[0]
     contacts = world.dird_client.phonebook.list_contacts(search=entry['first name'],
                                                          phonebook_id=phonebook_id,
-                                                         tenant=entity_name,
-                                                         token=token)['items']
+                                                         tenant=entity_name)['items']
     matching_contact_ids = [contact['id'] for contact in contacts if (contact['firstname'] == entry['first name'] and
                                                                       contact['lastname'] == entry['last name'])]
     for contact_id in matching_contact_ids:
         world.dird_client.phonebook.delete_contact(contact_uuid=contact_id,
                                                    phonebook_id=phonebook_id,
-                                                   tenant=entity_name,
-                                                   token=token)
+                                                   tenant=entity_name)
