@@ -24,6 +24,7 @@ git+https://github.com/xivo-pbx/xivo-bus.git
 git+https://github.com/xivo-pbx/xivo-lib-python.git
 git+https://github.com/xivo-pbx/xivo-agentd-client.git
 git+https://github.com/xivo-pbx/xivo-ctid-client.git
+git+https://github.com/xivo-pbx/xivo-dird-client.git
 git+https://github.com/xivo-pbx/xivo-lib-rest-client.git
 pyyaml==3.11
 kombu==3.0.34
