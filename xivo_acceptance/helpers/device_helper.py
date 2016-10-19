@@ -54,7 +54,7 @@ def delete_device_with(key, value):
 
 
 def find_devices_with(key, value):
-    response = world.confd_client.devices.list(key=value)
+    response = world.confd_client.devices.list(**{key: value})
     return response['items']
 
 
