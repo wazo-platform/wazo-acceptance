@@ -124,12 +124,10 @@ def given_user_has_a_dialaction(step, fullname, event, dialaction, destination):
     form.submit.submit_form()
 
 
-@step(u'Given "([^"]*)" has a "([^"]*)" ringing time')
-def given_user_has_a_n_ringing_time(step, fullname, delay_string):
+@step(u'Given "([^"]*)" has a "([^"]*)" seconds ringing time')
+def given_user_has_a_n_ringing_time(step, fullname, ring_seconds):
     _edit_user(*fullname.split(' ', 1))
-
-    _select('it-userfeatures-ringseconds', delay_string)
-
+    user_action_webi.type_ring_seconds(ring_seconds)
     form.submit.submit_form()
 
 

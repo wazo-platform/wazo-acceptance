@@ -46,7 +46,7 @@ Feature: Callgen
         | James     | Bond     |   1101 | default | sip      |
         | Tiffany   | Case     |   1102 | default | sip      |
         | Pussy     | Galore   |   1103 | default | sip      |
-        Given "James Bond" has a "5 seconds" ringing time
+        Given "James Bond" has a "5" seconds ringing time
         Given "James Bond" has a dialaction on "No answer" to "User" "Pussy Galore"
         When "Tiffany Case" calls "1101"
         Then "James Bond" is ringing

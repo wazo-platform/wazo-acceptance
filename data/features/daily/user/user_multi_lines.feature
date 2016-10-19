@@ -122,7 +122,7 @@ Feature: User multi lines
         Given SIP line "line2" is associated to user "Multi" "Lines"
         Given a softphone is registered on SIP line "line1"
         Given a softphone is registered on SIP line "line2"
-        Given "Multi Lines" has a "5 seconds" ringing time
+        Given "Multi Lines" has a "5" seconds ringing time
 
         When "Bob Field" calls "1801"
         Then "line1" is ringing

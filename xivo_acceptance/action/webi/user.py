@@ -321,3 +321,9 @@ def _get_chantype_select_of_group(group_name):
     select_name = 'group[%s][chantype]' % group_name
     select_element = world.browser.find_element_by_name(select_name)
     return Select(select_element)
+
+
+def type_ring_seconds(ring_seconds):
+    input_ring_seconds = world.browser.find_element_by_id('it-userfeatures-ringseconds')
+    input_ring_seconds.clear()
+    input_ring_seconds.send_keys(ring_seconds)
