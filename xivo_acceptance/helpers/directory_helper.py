@@ -17,9 +17,6 @@
 
 from lettuce import world
 
-from requests import ConnectionError
-from requests import HTTPError
-
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import sysutils
@@ -44,10 +41,4 @@ def restart_dird():
 
 
 def wait_for_dird_http():
-    try:
-        common.wait_until_no_except(world.dird_client.phonebook.list,
-                                    tenant='some-tenant',
-                                    tries=10,
-                                    exceptions=[ConnectionError])
-    except HTTPError:
-        return
+    common.wait_until(world.dird_client.is_server_reachable, tries=10)
