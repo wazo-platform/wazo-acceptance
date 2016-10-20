@@ -281,7 +281,7 @@ def add_user(data_dict, step=None):
             'context': data_dict['line_context'],
         }
         if 'device_slot' in data_dict:
-            line_data['device_slot'] = data_dict['device_slot']
+            line_data['position'] = data_dict['device_slot']
         line = world.confd_client.lines.create(line_data)
 
         protocol = data_dict.get('protocol', 'sip')
