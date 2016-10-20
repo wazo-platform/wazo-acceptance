@@ -301,7 +301,6 @@ def add_user(data_dict, step=None):
         mac = data_dict.get('device')
         if mac:
             device = world.confd_client.devices.list(mac=mac)['items'][0]
-            world.confd_client.devices.list(mac=mac)['items'][0]
             world.confd_client.lines(line['id']).add_device(device['id'])
 
     if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(data_dict):
