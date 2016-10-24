@@ -325,7 +325,7 @@ Feature: WEBI Agent Stats
           | Total   |        1 | 00:00:15 |
 
 
-    Scenario: Generate stats for answered calls tranfered by an agent to an another queue
+    Scenario: Generate stats for answered calls transfered by an agent to an another queue
         Given there is no entries in queue_log between "2013-11-08 08:00:00" and "2013-11-08 11:59:59"
         Given I clear the statistics cache
         Given there are queues with infos:
