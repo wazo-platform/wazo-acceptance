@@ -40,6 +40,7 @@ def add_or_replace_trunksip(host, name, context='default', type='friend'):
 def delete_trunksips_with_name(name):
     endpoints_sip = world.confd_client.endpoints_sip.list(username=name)['items']
     for endpoint_sip in endpoints_sip:
+        world.confd_client.endpoints_sip.delete(endpoint_sip['id'])
         if endpoint_sip['trunk']:
             world.confd_client.trunks.delete(endpoint_sip['trunk']['id'])
 
