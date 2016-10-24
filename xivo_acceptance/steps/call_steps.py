@@ -182,6 +182,31 @@ def user_is_ringing(step, user):
     common.wait_until(phone.is_ringing, tries=3)
 
 
+@step(u'When "([^"]*)" transfers "([^"]*)" to "([^"]*)" with timeout "([^"]*)" via xivo-ctid-ng')
+def when_1_transfers_2_to_3_with_timeout_4_via_xivo_ctid_ng(self, initiator, transferred, recipient_exten, timeout):
+    transferred_uuid = user_helper.get_user_by_name(transferred)['uuid']
+    initiator_uuid = user_helper.get_user_by_name(initiator)['uuid']
+
+    calls = world.ctid_ng_client.calls.list_calls()['items']
+
+    transferred_calls = [call for call in calls if call['user_uuid'] == transferred_uuid]
+    try:
+        transferred_call_id = transferred_calls[0]['call_id']
+    except KeyError:
+        raise Exception('No call found for user {} with UUID {}'.format(transferred, transferred_uuid))
+    initiator_calls = [call for call in calls if call['user_uuid'] == initiator_uuid]
+    try:
+        initiator_call_id = initiator_calls[0]['call_id']
+    except KeyError:
+        raise Exception('No call found for user {} with UUID {}'.format(initiator, initiator_uuid))
+
+    world.ctid_ng_client.transfers.make_transfer(transferred=transferred_call_id,
+                                                 initiator=initiator_call_id,
+                                                 context='default',
+                                                 exten=recipient_exten,
+                                                 timeout=int(timeout))
+
+
 @step(u'Then "([^"]*)" is hungup')
 def then_group1_is_hungup(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
