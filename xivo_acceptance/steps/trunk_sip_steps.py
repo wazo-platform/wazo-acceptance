@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,8 +29,7 @@ def given_there_is_no_trunksip(step, name):
 
 @step(u'Given there is a trunksip "([^"]*)"')
 def given_there_is_a_trunksip(step, name):
-    trunksip_helper.delete_trunksips_with_name(name)
-    trunksip_helper.add_trunksip('192.168.32.1', name)
+    trunksip_helper.add_or_replace_trunksip('192.168.32.1', name)
 
 
 @step(u'When I create a trunksip with name "([^"]*)"')
