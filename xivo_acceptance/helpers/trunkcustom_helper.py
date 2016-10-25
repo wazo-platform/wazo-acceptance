@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,39 +17,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
-from xivo_ws import CustomTrunk
 
 
-def add_trunkcustom(data):
-    customtrunk = CustomTrunk()
-    customtrunk.name = data['name']
-    customtrunk.interface = data['interface']
-    world.ws.custom_trunks.add(customtrunk)
+def add_or_replace_trunkcustom(interface):
+    delete_trunkcustoms_with_interface(interface)
+    add_trunkcustom(interface)
 
 
-def add_or_replace_trunkcustom(data):
-    delete_trunkcustoms_with_name(data['name'])
-    add_trunkcustom(data)
+def add_trunkcustom(interface):
+    trunk = world.confd_client.trunks.create({})
+    endpoint_custom = world.confd_client.endpoints_custom.create({'interface': interface})
+    world.confd_client.trunks(trunk).add_endpoint_custom(endpoint_custom)
 
 
-def delete_trunkcustoms_with_name(name):
-    custom_trunks = _search_trunkcustom_with_name(name)
-    for custom_trunk in custom_trunks:
-        world.ws.custom_trunks.delete(custom_trunk.id)
-
-
-def find_trunkcustom_id_with_name(name):
-    custom_trunk = _find_trunkcustom_with_name(name)
-    return custom_trunk.id
-
-
-def _find_trunkcustom_with_name(name):
-    custom_trunks = _search_trunkcustom_with_name(name)
-    if len(custom_trunks) != 1:
-        raise Exception('expecting 1 custom trunk with name %r; found %s' %
-                        (name, len(custom_trunks)))
-    return custom_trunks[0]
-
-
-def _search_trunkcustom_with_name(name):
-    return world.ws.custom_trunks.search_by_name(name)
+def delete_trunkcustoms_with_interface(interface):
+    endpoints_custom = world.confd_client.endpoints_custom.list(interface=interface)['items']
+    for endpoint_custom in endpoints_custom:
+        world.confd_client.endpoints_custom.delete(endpoint_custom['id'])
+        if endpoint_custom['trunk']:
+            world.confd_client.trunks.delete(endpoint_custom['trunk']['id'])
