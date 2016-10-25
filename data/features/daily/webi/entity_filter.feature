@@ -62,7 +62,7 @@ Feature: Entity Filter
           | entity_filter |  4234  | foo     |
           | mm001         |  4321  | default |
 
-        Given there are incalls with infos:
+        Given there are incalls with infos in the webi:
           | extension | context     |
           |      4234 | alberta     |
           |      4321 | from-extern |
@@ -115,8 +115,8 @@ Feature: Entity Filter
         Then I see the conference room "entity_filter" exists
         Then I see the conference room "mm001" not exists
 
-        Then I see the incall "4234" exists
-        Then I see the incall "4321" not exists
+        Then I see the incall "4234" exists in the webi
+        Then I see the incall "4321" not exists in the webi
 
         Then agent "entity_filter" is displayed in the list of "default" agent group
         Then agent "agent02" is not displayed in the list of "default" agent group

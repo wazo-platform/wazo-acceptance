@@ -22,7 +22,7 @@ from xivo_acceptance.helpers import incall_helper
 from xivo_acceptance.lettuce import form, common
 
 
-@step(u'Given there are incalls with infos:')
+@step(u'Given there are incalls with infos in the webi:')
 def given_there_are_incalls_with_infos(step):
     for incall in step.hashes:
         did = incall['extension']
@@ -31,7 +31,7 @@ def given_there_are_incalls_with_infos(step):
         _add_incall(did, context)
 
 
-@step(u'When I "([^"]*)" incall "([^"]*)"')
+@step(u'When I "([^"]*)" incall "([^"]*)" in the webi')
 def when_i_group1_incall_group2(step, enable_disable, did):
     enable = enable_disable == 'enable'
     incall_action_webi.search_incall_number(did)
@@ -44,30 +44,28 @@ def when_i_group1_incall_group2(step, enable_disable, did):
 
 @step(u'Given there is an incall "([^"]*)" in context "([^"]*)" to the "([^"]*)" "([^"]*)"$')
 def given_there_is_an_incall_group1_in_context_group2_to(step, did, context, dst_type, dst_name):
-    incall_helper.delete_incalls_with_did(did)
-    incall_helper.add_incall(did, context, dst_type, dst_name)
+    incall_helper.add_or_replace_incall(did, context, dst_type, dst_name)
 
 
 @step(u'Given there is an incall "([^"]*)" in context "([^"]*)" to the "([^"]*)" "([^"]*)" with caller id name "([^"]*)" number "([^"]*)"')
 def given_there_is_an_incall_group1_in_context_group2_to_the_queue_group3(step, did, context, dst_type, dst_name, cid_name, cid_num):
     caller_id = '"%s" <%s>' % (cid_name, cid_num)
-    incall_helper.delete_incalls_with_did(did)
-    incall_helper.add_incall(did, context, dst_type, dst_name, caller_id)
+    incall_helper.add_or_replace_incall(did, context, dst_type, dst_name, caller_id)
 
 
-@step(u'When incall "([^"]*)" is removed')
+@step(u'When incall "([^"]*)" is removed in the webi')
 def when_incall_is_removed(step, incall_did):
     incall_action_webi.remove_incall_with_did(incall_did)
 
 
-@step(u'Then I see the incall "([^"]*)" exists$')
+@step(u'Then I see the incall "([^"]*)" exists in the webi')
 def then_i_see_the_element_exists(step, name):
     common.open_url('incall')
     line = common.find_line(name)
     assert line is not None, 'incall: %s does not exist' % name
 
 
-@step(u'Then I see the incall "([^"]*)" not exists$')
+@step(u'Then I see the incall "([^"]*)" not exists in the webi')
 def then_i_see_the_element_not_exists(step, name):
     common.open_url('incall')
     line = common.find_line(name)
