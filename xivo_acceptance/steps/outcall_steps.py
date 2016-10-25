@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,15 +18,16 @@
 
 import time
 
-from hamcrest import *
+from hamcrest import (assert_that,
+                      empty,
+                      is_not,
+                      not_none)
 from lettuce.decorators import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import outcall as outcall_action_webi
-from xivo_acceptance.helpers import context_helper, outcall_helper, \
-    trunksip_helper
+from xivo_acceptance.helpers import outcall_helper, trunksip_helper
 from xivo_acceptance.lettuce import common, form
 
 
@@ -38,10 +40,10 @@ def given_there_is_no_outcall(step, name):
 def given_there_is_an_outcall_with_trunk_and_no_extensions_matched(step, outcall_name, trunk_name):
     trunksip_helper.add_or_replace_trunksip(world.dummy_ip_address, trunk_name)
     trunk_id = trunksip_helper.find_trunksip_id_with_name(trunk_name)
-    data = {'name': outcall_name,
-            'context': 'to-extern',
-            'trunks': [trunk_id]}
-    outcall_helper.add_or_replace_outcall(data)
+
+    outcall = {'name': outcall_name,
+               'trunks': [{'id': trunk_id}]}
+    outcall_helper.add_or_replace_outcall(outcall)
 
 
 @step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)" with extension patterns')
@@ -51,32 +53,37 @@ def given_there_is_an_outcall_with_trunk_with_extension_patterns(step, outcall_n
 
     extensions = []
     for outcall_extension in step.hashes:
-        new_extension = {}
-        new_extension['exten'] = outcall_extension['extension_pattern']
-        new_extension['stripnum'] = outcall_extension.get('stripnum', 0)
-        new_extension['caller_id'] = outcall_extension.get('caller_id', '')
-        extensions.append(new_extension)
+        extension = {}
+        extension['context'] = 'to-extern'
+        extension['exten'] = outcall_extension['extension_pattern']
+        extension['stripnum'] = outcall_extension.get('stripnum', 0)
+        extension['caller_id'] = outcall_extension.get('caller_id', '')
+        extensions.append(extension)
 
-    data = {'name': outcall_name,
-            'context': 'to-extern',
-            'trunks': [trunk_id],
-            'extens': extensions}
-    outcall_helper.add_or_replace_outcall(data)
+    outcall = {'name': outcall_name,
+               'trunks': [trunk_id],
+               'extensions': extensions}
+    outcall_helper.add_or_replace_outcall(outcall)
 
 
-@step(u'Given there is an outcall "([^"]*)" in context "([^"]*)" with trunk "([^"]*)"')
-def given_there_is_an_outcall_in_context_with_trunk(step, outcall_name, outcall_context, trunk_name):
-    context_helper.add_or_replace_context(outcall_context, outcall_context, 'outcall')
+@step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
+def given_there_is_an_outcall_with_trunk(step, outcall_name, trunk_name):
     trunksip_helper.add_or_replace_trunksip(world.dummy_ip_address, trunk_name)
     trunk_id = trunksip_helper.find_trunksip_id_with_name(trunk_name)
-    data = {'name': outcall_name,
-            'context': outcall_context,
-            'trunks': [trunk_id]}
-    outcall_helper.add_or_replace_outcall(data)
+
+    outcall = {'name': outcall_name,
+               'trunks': [{'id': trunk_id}]}
+    outcall_helper.add_or_replace_outcall(outcall)
 
 
-@step(u'When I create an outcall with name "([^"]*)" and trunk "([^"]*)"')
-def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
+@step(u'Then there are an outcall "([^"]*)" with preprocess subroutine "([^"]*)"')
+def then_there_are_an_outcall(step, name, preprocess_subroutine):
+    outcalls = world.confd_client.outcalls.list(name=name, preprocess_subroutine=preprocess_subroutine)
+    assert_that(outcalls['items'], is_not(empty()))
+
+
+@step(u'When I create an outcall with name "([^"]*)" and trunk "([^"]*)" in the webi')
+def when_i_create_an_outcall_with_name_and_trunk_in_the_webi(step, name, trunk):
     common.open_url('outcall', 'add')
     input_name = world.browser.find_element_by_id('it-outcall-name', 'Outcall form not loaded')
     input_name.send_keys(name)
@@ -92,23 +99,24 @@ def when_i_create_an_outcall_with_name_and_trunk(step, name, trunk):
     form.submit.submit_form()
 
 
-@step(u'When i edit the outcall "([^"]*)" and set context to "([^"]*)"')
-def when_i_edit_the_outcall_and_set_context(step, name, context):
+@step(u'When i edit the outcall "([^"]*)" and set preprocess subroutine to "([^"]*)" in the webi')
+def when_i_edit_the_outcall_and_set_preprocess_subroutine_in_the_webi(step, name, preprocess_subroutine):
     common.open_url('outcall', 'list')
     common.edit_line(name)
-    type_field = Select(world.browser.find_element_by_id('it-outcall-context', 'Outcall form not loaded'))
-    type_field.select_by_value(context)
+    input_field = world.browser.find_element_by_id('it-outcall-preprocess-subroutine', 'Outcall form not loaded')
+    input_field.clear()
+    input_field.send_keys(preprocess_subroutine)
     form.submit.submit_form()
 
 
-@step(u'When I remove the outcall "([^"]*)"')
-def when_i_remove_the_outcall(step, name):
+@step(u'When I remove the outcall "([^"]*)" in the webi')
+def when_i_remove_the_outcall_in_the_webi(step, name):
     common.open_url('outcall', 'list')
     common.remove_line(name)
 
 
-@step(u'When I remove extension patterns from outcall "([^"]*)":')
-def when_i_remove_extension_patterns_from_outcall_1(step, outcall_name):
+@step(u'When I remove extension patterns from outcall "([^"]*)" in the webi:')
+def when_i_remove_extension_patterns_from_outcall_1_in_the_webi(step, outcall_name):
     common.open_url('outcall', 'list')
     common.edit_line(outcall_name)
     common.go_to_tab('Exten')
@@ -122,8 +130,8 @@ def when_i_remove_extension_patterns_from_outcall_1(step, outcall_name):
     form.submit.submit_form()
 
 
-@step(u'When I add the following extension patterns to the outcall "([^"]*)":')
-def when_i_add_the_following_extension_patterns_to_the_outcall_1(step, outcall_name):
+@step(u'When I add the following extension patterns to the outcall "([^"]*)" in the webi:')
+def when_i_add_the_following_extension_patterns_to_the_outcall_1_in_the_webi(step, outcall_name):
     common.open_url('outcall', 'list')
     common.edit_line(outcall_name)
     common.go_to_tab('Exten')
@@ -138,20 +146,22 @@ def when_i_add_the_following_extension_patterns_to_the_outcall_1(step, outcall_n
     form.submit.submit_form()
 
 
-@step(u'Then the outcall "([^"]*)" has the extension patterns:')
-def then_the_outcall_1_has_the_extension_patterns(step, outcall_name):
+@step(u'Then the outcall "([^"]*)" has the extension patterns in the webi:')
+def then_the_outcall_1_has_the_extension_patterns_in_the_webi(step, outcall_name):
     common.open_url('outcall', 'list')
     common.edit_line(outcall_name)
     common.go_to_tab('Exten')
 
     for outcall_extension in step.hashes:
         extension_pattern = outcall_extension['extension_pattern']
-        extension_pattern_input = outcall_action_webi.exten_line(extension_pattern).find_element_by_xpath(".//input[@name='dialpattern[exten][]']")
+        extension_pattern_input = outcall_action_webi.exten_line(extension_pattern).find_element_by_xpath(
+            ".//input[@name='dialpattern[exten][]']"
+        )
         assert_that(extension_pattern_input, not_none())
 
 
-@step(u'Then the outcall "([^"]*)" does not have extension patterns:')
-def then_the_outcall_1_does_not_have_extension_patterns(step, outcall_name):
+@step(u'Then the outcall "([^"]*)" does not have extension patterns in the webi:')
+def then_the_outcall_1_does_not_have_extension_patterns_in_the_webi(step, outcall_name):
     common.open_url('outcall', 'list')
     common.edit_line(outcall_name)
     common.go_to_tab('Exten')
@@ -167,16 +177,7 @@ def then_the_outcall_1_does_not_have_extension_patterns(step, outcall_name):
                             (outcall_extension, outcall_name))
 
 
-@step(u'Then there is no outcall "([^"]*)"')
-def then_there_is_no_outcall(step, name):
+@step(u'Then there is no outcall "([^"]*)" in the webi')
+def then_there_is_no_outcall_in_the_webi(step, name):
     common.open_url('outcall', 'list')
     assert common.find_line(name) is None
-
-
-@step(u'Then there are outcalls with infos:')
-def then_there_are_outcalls_with_infos(step):
-    outcalls = [{u'name': outcall.name,
-                 u'context': outcall.context}
-                for outcall in outcall_helper.list_outcalls()]
-    for expected_outcall_attributes in step.hashes:
-        assert_that(outcalls, has_item(has_entries(expected_outcall_attributes)))
