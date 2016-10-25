@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,8 +18,8 @@
 
 from hamcrest import assert_that, is_in, equal_to
 
+from lettuce import world
 from xivo_acceptance.lettuce import postgres
-from xivo_acceptance.action.confd import line_extension_collection_action_confd as collection_action
 from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import line_sip_helper
@@ -119,11 +120,9 @@ def dissociate_device(line_id):
 
 
 def dissociate_extensions(line_id):
-    response = collection_action.extensions_for_line(line_id)
-    for line_extension in response.items():
-        dissociation = collection_action.dissociate_extension(line_id,
-                                                              line_extension['extension_id'])
-        dissociation.check_status()
+    line = world.confd_client.lines.get(line_id)
+    for extension in line['extensions']:
+        world.confd_client.lines(line_id).remove_extension(extension)
 
 
 def dissociate_users(line_id):
