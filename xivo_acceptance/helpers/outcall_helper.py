@@ -27,9 +27,9 @@ def add_or_replace_outcall(data):
 def add_outcall(data):
     outcall = world.confd_client.outcalls.create({'name': data['name']})
     for extension in data.get('extensions', []):
-        world.confd_client.extensions.create({'exten': extension['exten'],
-                                              'context': extension['context']})
-        world.confd_client.outcalls(outcall['id']).add_extension(extension,
+        extension_confd = world.confd_client.extensions.create({'exten': extension['exten'],
+                                                                'context': extension['context']})
+        world.confd_client.outcalls(outcall['id']).add_extension(extension_confd,
                                                                  strip_digits=int(extension['stripnum']),
                                                                  caller_id=extension['caller_id'])
     world.confd_client.outcalls(outcall['id']).update_trunks(data['trunks'])
@@ -38,13 +38,19 @@ def add_outcall(data):
 def delete_outcalls_with_name(name):
     outcalls = world.confd_client.outcalls.list(name=name)['items']
     for outcall in outcalls:
-        world.confd_client.outcalls.delete(outcall['id'])
+        _delete_outcall(outcall)
 
 
 def delete_outcalls_with_context(context):
-    outcalls = world.confd_client.outcalls.list()
+    outcalls = world.confd_client.outcalls.list()['items']
     for outcall in outcalls:
         for extension in outcall['extensions']:
             if extension['context'] == context:
-                world.confd_client.outcalls(outcall['id']).delete()
-                world.confd_client.extensions(extension['id']).delete()
+                _delete_outcall(outcall)
+                break
+
+
+def _delete_outcall(outcall):
+    world.confd_client.outcalls.delete(outcall['id'])
+    for extension in outcall['extensions']:
+        world.confd_client.extensions.delete(extension['id'])

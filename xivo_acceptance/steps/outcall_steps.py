@@ -61,12 +61,12 @@ def given_there_is_an_outcall_with_trunk_with_extension_patterns(step, outcall_n
         extensions.append(extension)
 
     outcall = {'name': outcall_name,
-               'trunks': [trunk_id],
+               'trunks': [{'id': trunk_id}],
                'extensions': extensions}
     outcall_helper.add_or_replace_outcall(outcall)
 
 
-@step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"')
+@step(u'Given there is an outcall "([^"]*)" with trunk "([^"]*)"$')
 def given_there_is_an_outcall_with_trunk(step, outcall_name, trunk_name):
     trunksip_helper.add_or_replace_trunksip(world.dummy_ip_address, trunk_name)
     trunk_id = trunksip_helper.find_trunksip_id_with_name(trunk_name)
