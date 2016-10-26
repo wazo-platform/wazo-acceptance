@@ -147,7 +147,7 @@ def given_there_is_a_switchboard_configured_as(step):
             config['hold calls queue number'],
             config['hold calls queue context'])
 
-        incall_helper.add_or_replace_incall(number=config['incalls queue number'],
+        incall_helper.add_or_replace_incall(exten=config['incalls queue number'],
                                             context='from-extern',
                                             dst_type='queue',
                                             dst_name=config['incalls queue name'])
