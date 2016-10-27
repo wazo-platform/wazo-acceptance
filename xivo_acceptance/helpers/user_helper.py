@@ -18,6 +18,7 @@
 
 from lettuce import world
 from hamcrest import assert_that, is_not, none
+from requests.exceptions import HTTPError
 
 from xivo_acceptance import helpers
 from xivo_acceptance.helpers import group_helper
@@ -28,7 +29,6 @@ from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
-from xivo_acceptance.action.confd import user_action_confd as user_action
 from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
 from xivo_acceptance.action.confd import voicemail_action_confd as voicemail_action
 from xivo_acceptance.action.webi import user as user_action_webi
@@ -38,12 +38,14 @@ from xivo_ws.exception import WebServiceRequestError
 
 def add_or_replace_user(userinfo):
     delete_similar_users(userinfo)
-    return create_user(userinfo)
+    world.confd_client.users.create(userinfo)
 
 
 def find_by_user_id(user_id):
-    response = user_action.get_user(user_id)
-    return response.resource() if response.status_ok() else None
+    try:
+        return world.confd_client.users.get(user_id)
+    except HTTPError:
+        return None
 
 
 def get_by_exten_context(exten, context):
@@ -72,12 +74,10 @@ def find_by_exten_context(exten, context):
 
 
 def find_by_firstname_lastname(firstname, lastname):
-    fullname = u'{} {}'.format(firstname, lastname or '').strip()
-    response = user_action.user_search(fullname)
-    users = [user
-             for user in response.items()
-             if user['firstname'] == firstname and user['lastname'] == lastname]
-    return users[0] if users else None
+    users = world.confd_client.users.list(firstname=firstname, lastname=lastname)['items']
+    if not users:
+        return None
+    return users[0]
 
 
 def get_by_firstname_lastname(firstname, lastname):
@@ -120,14 +120,6 @@ def find_agent_id_for_user(user_id):
     return postgres.exec_sql_request(query).scalar()
 
 
-def create_user(userinfo):
-    user = dict(userinfo)
-    if 'id' in user:
-        user['id'] = int(user['id'])
-    response = user_action.create_user(user)
-    return response.resource()
-
-
 def delete_similar_users(userinfo):
     if 'id' in userinfo:
         delete_user(userinfo['id'])
@@ -161,8 +153,7 @@ def _delete_voicemail_associations(user_id):
 
 
 def _delete_user(user_id):
-    response = user_action.delete_user(user_id)
-    response.check_status()
+    world.confd_client.users.delete(user_id)
 
 
 def add_user_with_infos(user_data, step=None):

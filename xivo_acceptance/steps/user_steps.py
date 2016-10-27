@@ -22,7 +22,6 @@ from lettuce import step
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
 
-from xivo_acceptance.action.confd import user_action_confd
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
@@ -148,14 +147,15 @@ def given_user_1_has_schedule_2(step, fullname, schedule):
 @step(u'When I create users with the following parameters:$')
 def when_i_create_users_with_the_following_parameters(step):
     for userinfo in step.hashes:
-        world.response = user_action_confd.create_user(userinfo)
+        world.confd_client.users.create(userinfo)
 
 
 @step(u'When I update user "([^"]*)" "([^"]*)" with the following parameters:')
 def when_i_update_user_group1_group2_with_the_following_parameters(step, firstname, lastname):
     user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    userinfo = _get_user_info(step.hashes)
-    world.response = user_action_confd.update_user(user['id'], userinfo)
+    updated_user = step.hashes[0]
+    updated_user['id'] = user['id']
+    world.confd_client.users.update(updated_user)
 
 
 @step(u'When I reorder "([^"]*)" "([^"]*)"s function keys such that:')
@@ -399,12 +399,3 @@ def then_user_has_an_unconditional_forward_set_to_group2(step, fullname, expecte
 def then_user_has_no_unconditional_forward(step, fullname):
     enabled, _ = user_helper.get_unconditional_forward(fullname)
     assert_that(enabled, is_(False))
-
-
-def _get_user_info(hashes):
-    userinfo = hashes[0]
-
-    if 'id' in userinfo:
-        userinfo['id'] = int(userinfo['id'])
-
-    return userinfo
