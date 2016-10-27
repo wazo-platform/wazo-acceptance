@@ -22,8 +22,6 @@ from hamcrest import is_not
 from hamcrest import none
 from requests.exceptions import HTTPError
 
-from xivo_acceptance.lettuce import func
-
 
 def find_by_id(line_id):
     try:
@@ -50,11 +48,6 @@ def get_with_exten_context(exten, context='default'):
     assert_that(line, is_not(none()),
                 "line with extension %s@%s not found" % (exten, context))
     return line
-
-
-def find_with_extension(extension):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    return find_with_exten_context(number, context)
 
 
 def find_line_id_with_exten_context(exten, context='default'):
