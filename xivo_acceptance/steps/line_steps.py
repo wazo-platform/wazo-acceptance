@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +26,6 @@ from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import line_read_helper
-from xivo_acceptance.helpers import line_sip_helper
 from xivo_acceptance.helpers import line_write_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
@@ -94,7 +94,7 @@ def _delete_line(lineinfo):
     if 'id' in lineinfo:
         line_write_helper.delete_line(int(lineinfo['id']))
     if 'username' in lineinfo:
-        line = line_sip_helper.find_by_username(lineinfo['username'])
+        line = line_read_helper.find_by_sip_username(lineinfo['username'])
         if line:
             line_write_helper.delete_line(line['id'])
 

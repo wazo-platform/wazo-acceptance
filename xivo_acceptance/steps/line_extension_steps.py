@@ -20,12 +20,12 @@ from hamcrest import assert_that, is_not, none
 
 from lettuce import step, world
 from xivo_acceptance.helpers import extension_helper
-from xivo_acceptance.helpers import line_sip_helper
+from xivo_acceptance.helpers import line_read_helper
 
 
 @step(u'Given SIP line "([^"]*)" is associated to extension "(\d+)@([\w_-]+)"')
 def given_line_with_username_group1_is_associated_to_extension_group2(step, username, exten, context):
-    line = line_sip_helper.find_by_username(username)
+    line = line_read_helper.find_by_sip_username(username)
     assert_that(line, is_not(none()), "Line with username {} not found".format(username))
     extension = extension_helper.find_extension_by_exten_context(exten, context)
     assert_that(extension, is_not(none()), "Extension {}@{} not found".format(exten, context))

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,12 +20,12 @@ from hamcrest import assert_that, equal_to, is_not, none
 from lettuce import step, world
 
 from xivo_acceptance.action.confd import user_line_action_confd
-from xivo_acceptance.helpers import user_helper, line_sip_helper
+from xivo_acceptance.helpers import user_helper, line_read_helper
 
 
 @step(u'Given SIP line "([^"]*)" is associated to user "([^"]*)" "([^"]*)"')
 def given_sip_line_group1_is_associated_to_user_group2_group3(step, sip_username, firstname, lastname):
-    line = line_sip_helper.find_by_username(sip_username)
+    line = line_read_helper.find_by_sip_username(sip_username)
     assert_that(line, is_not(none()), "Line with username {} not found".format(sip_username))
     user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
     world.response = user_line_action_confd.create_user_line(user_id, {'line_id': line['id']})

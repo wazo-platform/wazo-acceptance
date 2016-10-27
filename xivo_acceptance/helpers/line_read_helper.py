@@ -49,3 +49,16 @@ def get_with_exten_context(exten, context='default'):
     assert_that(line, is_not(none()),
                 "line with extension %s@%s not found" % (exten, context))
     return line
+
+
+def find_by_sip_username(username):
+    try:
+        return get_by_sip_username(username)
+    except HTTPError:
+        return None
+
+
+def get_by_sip_username(username):
+    endpoint_sip = world.confd_client.endpoints_sip.get(username=username)
+    line_id = endpoint_sip['line']['id']
+    return world.confd_client.lines.get(line_id)
