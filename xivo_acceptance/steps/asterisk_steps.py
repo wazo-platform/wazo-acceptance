@@ -178,7 +178,7 @@ def _list_hints():
     command = ['asterisk', '-rx', '"{}"'.format(asterisk_cmd)]
 
     output = sysutils.output_command(command).split('\n')
-    output = output[2:-5]  # strip header and footer
+    output = output[2:-3]  # strip header and footer
     return [_parse_hint(line) for line in output]
 
 
@@ -215,7 +215,7 @@ def _get_hints_state(prefix_exten):
     command = ['asterisk', '-rx', '"{}"'.format(asterisk_cmd)]
 
     output = sysutils.output_command(command).split('\n')
-    output = output[:-4]  # strip footer
+    output = output[:-2]  # strip footer
     return [line[50:66].strip() for line in output]
 
 
