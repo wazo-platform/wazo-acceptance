@@ -20,7 +20,6 @@ from hamcrest import assert_that, is_not, none
 from lettuce import world
 from requests.exceptions import HTTPError
 
-from xivo_acceptance.action.confd import voicemail_action_confd as voicemail_action
 from xivo_acceptance.lettuce import postgres
 
 
@@ -39,9 +38,7 @@ def delete_similar_voicemails(parameters):
 
 
 def create_voicemail(parameters):
-    parameters = dict(parameters)
-    response = voicemail_action.create_voicemail(parameters)
-    return response.resource()
+    return world.confd_client.voicemails.create(parameters)
 
 
 def delete_voicemail(voicemail_id):
@@ -56,7 +53,7 @@ def _delete_associations(voicemail_id):
 
 
 def _delete_voicemail(voicemail_id):
-    voicemail_action.delete_voicemail(voicemail_id)
+    world.confd_client.voicemails.delete(voicemail_id)
 
 
 def find_user_id_for_voicemail(voicemail_id):
@@ -81,10 +78,8 @@ def find_voicemail_by_user_id(user_id):
 
 
 def find_voicemail_by_number(number, context='default'):
-    response = voicemail_action.voicemail_list({'search': number})
-    found = [item for item in response.items()
-             if item['number'] == number and item['context'] == context]
-    return found[0] if found else None
+    voicemails = world.confd_client.voicemails.list(number=number, context=context)['items']
+    return voicemails[0] if voicemails else None
 
 
 def get_voicemail_by_number(number, context='default'):
@@ -92,13 +87,3 @@ def get_voicemail_by_number(number, context='default'):
     assert_that(voicemail, is_not(none()),
                 "voicemail %s@%s not found" % (number, context))
     return voicemail
-
-
-def find_voicemail_id_by_number(number, context='default'):
-    voicemail = find_voicemail_by_number(number, context)
-    return voicemail['id'] if voicemail else None
-
-
-def get_by_id(voicemail_id):
-    response = voicemail_action.get_voicemail(voicemail_id)
-    return response.resource()

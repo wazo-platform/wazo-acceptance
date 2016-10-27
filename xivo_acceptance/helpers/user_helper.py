@@ -29,7 +29,6 @@ from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
-from xivo_acceptance.action.confd import voicemail_action_confd as voicemail_action
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_ws import User
 from xivo_ws.exception import WebServiceRequestError
@@ -268,11 +267,11 @@ def add_user(data_dict, step=None):
             world.confd_client.lines(line['id']).add_device(device['id'])
 
     if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(data_dict):
-        voicemail = voicemail_action.create_voicemail({
+        voicemail = world.confd_client.voicemails.create({
             'name': data_dict['voicemail_name'],
             'number': data_dict['voicemail_number'],
             'context': data_dict['voicemail_context'],
-        }).resource()
+        })
         world.confd_client.users.relations(user_id).add_voicemail(voicemail)
 
     if step is not None:
