@@ -48,7 +48,7 @@ def given_there_are_no_sip_lines_with_infos(step, username):
 
 @step(u'(?:Given|When) I set the following options in line "(\d+)@(\w+)":')
 def given_i_set_the_following_options_in_line_1(step, line_number, line_context):
-    line = line_read_helper.find_line_with_exten_context(line_number, line_context)
+    line = line_read_helper.find_with_exten_context(line_number, line_context)
     common.open_url('line', 'edit', {'id': line['id']})
 
     for line_data in step.hashes:
@@ -120,7 +120,7 @@ def when_i_customize_line_codecs_to(step, number):
 
 @step(u'When I disable line codecs customization for line "([^"]*)"')
 def when_i_disable_line_codecs_customization_for_line(step, number):
-    line = line_read_helper.find_line_with_exten_context(number, 'default')
+    line = line_read_helper.find_with_exten_context(number, 'default')
     common.open_url('line', 'edit', {'id': line['id']})
     _open_codec_page()
     Checkbox.from_label("Customize codecs:").uncheck()
@@ -183,13 +183,13 @@ def when_i_remove_this_line(step):
 
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
-    line = line_read_helper.find_line_with_exten_context(linenumber, 'default')
+    line = line_read_helper.find_with_exten_context(linenumber, 'default')
     common.open_url('line', 'edit', {'id': line['id']})
 
 
 @step(u'When I remove the codec "([^"]*)" from the line with number "([^"]*)"')
 def when_i_remove_the_codec_from_the_line_with_number(step, codec, linenumber):
-    line = line_read_helper.find_line_with_exten_context(linenumber, 'default')
+    line = line_read_helper.find_with_exten_context(linenumber, 'default')
     common.open_url('line', 'edit', {'id': line['id']})
     _open_codec_page()
     codec_widget = CodecWidget()

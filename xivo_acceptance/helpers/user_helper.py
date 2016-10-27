@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +22,7 @@ from hamcrest import assert_that, is_not, none
 from xivo_acceptance import helpers
 from xivo_acceptance.helpers import group_helper
 from xivo_acceptance.helpers import line_write_helper
-from xivo_acceptance.helpers import line_sip_helper
+from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import voicemail_helper
 from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import sip_config
@@ -324,14 +325,15 @@ def _register_and_track_phone(scenario, user_data):
 
     number = user_data['line_number']
     context = user_data.get('line_context', 'default')
-    line = line_sip_helper.find_with_exten_context(number, context)
-    if not line:
+    line = line_read_helper.find_with_exten_context(number, context)
+    if not line or not line['endpoint_sip']:
         return
 
     name = ('%s %s' % (user_data.get('firstname', ''),
                        user_data.get('lastname', ''))).strip()
 
-    phone_config = sip_config.create_config(world.config, scenario.phone_register, line)
+    endpoint_sip = world.confd_client.endpoints_sip.get(line['endpoint_sip']['id'])
+    phone_config = sip_config.create_config(world.config, scenario.phone_register, endpoint_sip)
     phone = sip_phone.register_line(phone_config)
     if phone:
         scenario.phone_register.add_registered_phone(phone, name)

@@ -22,14 +22,15 @@ from lettuce import world
 from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
 from xivo_acceptance.helpers import line_read_helper
-from xivo_acceptance.helpers import line_sip_helper
 from xivo_acceptance.helpers import line_sccp_helper
 from xivo_acceptance.helpers import provd_helper
 
 
 def add_line(parameters):
     line_params = _extract_line_params(parameters)
-    line = line_sip_helper.create_line(line_params)
+    endpoint_sip = world.confd_client.endpoints_sip.create({})
+    line = world.confd_client.lines.create(line_params)
+    world.confd_client.lines(line).add_endpoint_sip(endpoint_sip)
     _manage_device(line, parameters)
 
 
@@ -40,16 +41,8 @@ def _extract_line_params(parameters):
     assert_that(protocol, equal_to("sip"),
                 "Line helper can only create sip lines")
 
-    for key in ['device_id', 'device_mac']:
-        try:
-            parameters.pop(key)
-        except KeyError:
-            pass
-
-    if 'id' in parameters:
-        parameters['id'] = int(parameters['id'])
     if 'device_slot' in parameters:
-        parameters['device_slot'] = int(parameters['device_slot'])
+        parameters['position'] = int(parameters['device_slot'])
 
     return parameters
 
@@ -152,4 +145,6 @@ def _delete_line(line):
     if line['protocol'] == 'sccp':
         line_sccp_helper.delete_line(line['id'])
     elif line['protocol'] == 'sip':
-        line_sip_helper.delete_line(line['id'])
+        if line['endpoint_sip']:
+            world.confd_client.endpoints_sip.delete(line['endpoint_sip']['id'])
+        world.confd_client.lines.delete(line['id'])
