@@ -19,8 +19,9 @@
 from hamcrest import assert_that, is_in, equal_to
 
 from lettuce import world
+from requests.exceptions import HTTPError
+
 from xivo_acceptance.lettuce import postgres
-from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import line_sccp_helper
 from xivo_acceptance.helpers import provd_helper
@@ -88,57 +89,31 @@ def delete_line(line_id):
     assert_that(line['protocol'], is_in(['sip', 'sccp']),
                 "Acceptance cannot delete line with protocol '%s'" % line['protocol'])
 
-    _delete_line_associations(line_id)
+    _delete_line_associations(line)
     _delete_line(line)
 
 
-def _delete_line_associations(line_id):
-    dissociate_device(line_id)
-    dissociate_extensions(line_id)
-    dissociate_users(line_id)
+def _delete_line_associations(line):
+    dissociate_device(line)
+    dissociate_extensions(line)
+    dissociate_users(line)
 
 
-def dissociate_device(line_id):
-    query = """
-    UPDATE
-        linefeatures
-    SET
-        device = NULL,
-        num = 1
-    WHERE
-        id = :line_id
-    """
-
-    postgres.exec_sql_request(query, line_id=line_id)
+def dissociate_device(line):
+    try:
+        world.confd_client.lines(line).remove_device(line['device_id'])
+    except HTTPError:
+        pass
 
 
-def dissociate_extensions(line_id):
-    line = world.confd_client.lines.get(line_id)
+def dissociate_extensions(line):
     for extension in line['extensions']:
-        world.confd_client.lines(line_id).remove_extension(extension)
+        world.confd_client.lines(line).remove_extension(extension)
 
 
-def dissociate_users(line_id):
-    user_ids = _find_user_ids_for_line(line_id)
-    for user_id in user_ids:
-        response = user_line_action.delete_user_line(user_id, line_id)
-        response.check_status()
-
-
-def _find_user_ids_for_line(line_id):
-    query = """
-    SELECT
-        user_line.user_id
-    FROM
-        user_line
-    WHERE
-        user_line.line_id = :line_id
-    ORDER BY
-        user_line.main_user ASC
-    """
-
-    result = postgres.exec_sql_request(query, line_id=line_id)
-    return [row['user_id'] for row in result]
+def dissociate_users(line):
+    for user in line['users']:
+        world.confd_client.users(user['uuid']).remove_line(line)
 
 
 def _delete_line(line):

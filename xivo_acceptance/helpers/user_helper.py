@@ -29,7 +29,6 @@ from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.lettuce import postgres
-from xivo_acceptance.action.confd import user_line_action_confd as user_line_action
 from xivo_acceptance.action.confd import voicemail_action_confd as voicemail_action
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_ws import User
@@ -87,19 +86,9 @@ def get_by_firstname_lastname(firstname, lastname):
     return user
 
 
-def get_user_id_with_firstname_lastname(firstname, lastname):
-    user = get_by_firstname_lastname(firstname, lastname)
-    return user['id']
-
-
 def get_user_by_name(name):
     firstname, lastname = name.split(" ", 1)
     return get_by_firstname_lastname(firstname, lastname)
-
-
-def user_lines_for_user(user_id):
-    response = user_line_action.get_user_line(user_id)
-    return response.items()
 
 
 def find_agent_id_for_user(user_id):
@@ -116,29 +105,27 @@ def delete_similar_users(userinfo):
 
 
 def delete_user(user_id):
-    if find_by_user_id(user_id):
-        _delete_voicemail_associations(user_id)
-        _delete_line_associations(user_id)
-        _delete_user(user_id)
+    user = world.confd_client.users.get(user_id)
+    _delete_voicemail(user)
+    _delete_line_associations(user)
+    _delete_user(user)
 
 
-def _delete_line_associations(user_id):
-    user_lines = user_lines_for_user(user_id)
-    main = [ul for ul in user_lines if ul['main_user']]
-    secondary = [ul for ul in user_lines if not ul['main_user']]
-    for ul in (secondary + main):
-        line_write_helper.dissociate_device(ul['line_id'])
-        line_write_helper.dissociate_users(ul['line_id'])
+def _delete_line_associations(user):
+    for line in user['lines']:
+        line = world.confd_client.lines.get(line['id'])
+        line_write_helper.dissociate_device(line)
+        line_write_helper.dissociate_users(line)
 
 
-def _delete_voicemail_associations(user_id):
-    voicemail = voicemail_helper.find_voicemail_by_user_id(user_id)
+def _delete_voicemail(user):
+    voicemail = voicemail_helper.find_voicemail_by_user_id(user['id'])
     if voicemail:
         voicemail_helper.delete_voicemail(voicemail['id'])
 
 
-def _delete_user(user_id):
-    world.confd_client.users.delete(user_id)
+def _delete_user(user):
+    world.confd_client.users.delete(user['id'])
 
 
 def add_user_with_infos(user_data, step=None):
@@ -273,7 +260,7 @@ def add_user(data_dict, step=None):
             world.confd_client.lines(line['id']).add_endpoint_custom(endpoint)
 
         world.confd_client.lines(line['id']).add_extension(extension)
-        user_line_action.create_user_line(user_id, {'line_id': line['id']})
+        world.confd_client.users(user_id).add_line(line['id'])
 
         mac = data_dict.get('device')
         if mac:

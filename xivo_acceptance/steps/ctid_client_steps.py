@@ -28,11 +28,13 @@ from xivo_acceptance.helpers import xivo_helper
 
 
 def _find_user_id(info):
-    return user_helper.get_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
+    user = user_helper.get_by_firstname_lastname(info['firstname'], info['lastname'])
+    return user['id']
 
 
 def _find_user_uuid(info):
-    return user_helper.get_by_firstname_lastname(info['firstname'], info['lastname'])['uuid']
+    user = user_helper.get_by_firstname_lastname(info['firstname'], info['lastname'])
+    return user['uuid']
 
 
 def _find_line_id(info):

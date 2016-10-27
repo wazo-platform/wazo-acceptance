@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,8 +55,8 @@ class ScheduleDestinationUser(ScheduleDestination):
 
     @classmethod
     def from_name(cls, firstname, lastname):
-        user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
-        return cls(user_id)
+        user = user_helper.get_by_firstname_lastname(firstname, lastname)
+        return cls(user['id'])
 
 
 def add_schedule(name, timezone, times, destination=ScheduleDestinationNone()):

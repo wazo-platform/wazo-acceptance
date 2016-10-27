@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,10 +25,10 @@ from xivo_acceptance.helpers import user_helper, asterisk_helper
 
 @step(u'Then the sccp.conf file should contain "([^"]*)" function keys for "([^"]*)" "([^"]*)" sorted by key number')
 def then_the_sccp_conf_file_should_contain_function_keys_sorted_by_key_number(step, count, firstname, lastname):
-    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
-    expected_speeddials = ['speeddial = %s-%s' % (user_id, n) for n in xrange(1, int(count) + 1)]
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+    expected_speeddials = ['speeddial = %s-%s' % (user['id'], n) for n in xrange(1, int(count) + 1)]
     sccp_conf_content = asterisk_helper.get_confgen_file('sccp.conf')
-    pattern = 'speeddial = %s-' % user_id
+    pattern = 'speeddial = %s-' % user['id']
     users_speeddial = ifilter(lambda line: pattern in line, sccp_conf_content.split('\n'))
     assert_that(users_speeddial, contains(*expected_speeddials), 'Configured speeddials')
 

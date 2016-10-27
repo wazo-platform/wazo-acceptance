@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,11 +55,9 @@ def delete_lines(exten):
 
 
 def delete_lines_for_user(user_id):
-    user_lines = user_helper.user_lines_for_user(user_id)
-    main = [ul for ul in user_lines if ul['main_user']]
-    secondary = [ul for ul in user_lines if not ul['main_user']]
-    for user_line in (secondary + main):
-        line_write_helper.delete_line(user_line['line_id'])
+    user = world.confd_client.users.get(user_id)
+    for line in user['lines']:
+        line_write_helper.delete_line(line['id'])
 
 
 def delete_user(user_id):
