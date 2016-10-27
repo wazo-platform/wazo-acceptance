@@ -37,19 +37,12 @@ def get_by_id(line_id):
 
 
 def find_with_exten_context(exten, context='default'):
-    response = world.confd_client.extensions.list(exten=exten, context=context)
-    if response['total'] < 1:
-        return None
-    extension_id = response['items'][0]['id']
-
-    try:
-        response = world.confd_client.extensions(extension_id).get_line()
-    except HTTPError:
+    extensions = world.confd_client.extensions.list(exten=exten, context=context)['items']
+    if not extensions or not extensions[0]['lines']:
         return None
 
-    line_id = response['line_id']
-
-    return get_by_id(line_id)
+    line_id = extensions[0]['lines'][0]['id']
+    return world.confd_client.lines.get(line_id)
 
 
 def get_with_exten_context(exten, context='default'):
