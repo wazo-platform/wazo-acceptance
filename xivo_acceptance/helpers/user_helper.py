@@ -97,19 +97,6 @@ def get_user_by_name(name):
     return get_by_firstname_lastname(firstname, lastname)
 
 
-def find_line_id_for_user(user_id):
-    response = user_line_action.get_user_line(user_id)
-    items = response.items()
-    return items[0]['line_id'] if items else None
-
-
-def get_line_id_for_user(user_id):
-    line_id = find_line_id_for_user(user_id)
-    assert_that(line_id, is_not(none()),
-                "User %s has no lines" % user_id)
-    return line_id
-
-
 def user_lines_for_user(user_id):
     response = user_line_action.get_user_line(user_id)
     return response.items()
@@ -121,8 +108,6 @@ def find_agent_id_for_user(user_id):
 
 
 def delete_similar_users(userinfo):
-    if 'id' in userinfo:
-        delete_user(userinfo['id'])
     if 'firstname' in userinfo and 'lastname' in userinfo:
         user = find_by_firstname_lastname(userinfo['firstname'],
                                           userinfo['lastname'])
