@@ -48,8 +48,8 @@ def given_there_are_no_sip_lines_with_infos(step, username):
 
 @step(u'(?:Given|When) I set the following options in line "(\d+)@(\w+)":')
 def given_i_set_the_following_options_in_line_1(step, line_number, line_context):
-    line_id = line_read_helper.find_line_id_with_exten_context(line_number, line_context)
-    common.open_url('line', 'edit', {'id': line_id})
+    line = line_read_helper.find_line_with_exten_context(line_number, line_context)
+    common.open_url('line', 'edit', {'id': line['id']})
 
     for line_data in step.hashes:
         for key, value in line_data.iteritems():
@@ -120,8 +120,8 @@ def when_i_customize_line_codecs_to(step, number):
 
 @step(u'When I disable line codecs customization for line "([^"]*)"')
 def when_i_disable_line_codecs_customization_for_line(step, number):
-    line_id = line_read_helper.find_line_id_with_exten_context(number, 'default')
-    common.open_url('line', 'edit', {'id': line_id})
+    line = line_read_helper.find_line_with_exten_context(number, 'default')
+    common.open_url('line', 'edit', {'id': line['id']})
     _open_codec_page()
     Checkbox.from_label("Customize codecs:").uncheck()
     form.submit.submit_form()
@@ -183,14 +183,14 @@ def when_i_remove_this_line(step):
 
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
-    line_id = line_read_helper.find_line_id_with_exten_context(linenumber, 'default')
-    common.open_url('line', 'edit', {'id': line_id})
+    line = line_read_helper.find_line_with_exten_context(linenumber, 'default')
+    common.open_url('line', 'edit', {'id': line['id']})
 
 
 @step(u'When I remove the codec "([^"]*)" from the line with number "([^"]*)"')
 def when_i_remove_the_codec_from_the_line_with_number(step, codec, linenumber):
-    line_id = line_read_helper.find_line_id_with_exten_context(linenumber, 'default')
-    common.open_url('line', 'edit', {'id': line_id})
+    line = line_read_helper.find_line_with_exten_context(linenumber, 'default')
+    common.open_url('line', 'edit', {'id': line['id']})
     _open_codec_page()
     codec_widget = CodecWidget()
     codec_widget.remove(codec)
@@ -257,9 +257,9 @@ def then_this_line_is_not_displayed_in_the_list(step):
 
 @step(u'Then the line "([^"]*)" has the following line options:')
 def then_the_line_1_has_the_following_line_options(step, line_number):
-    line_id = line_read_helper.get_line_id_with_exten_context(line_number, 'default')
+    line = line_read_helper.get_with_exten_context(line_number, 'default')
     time.sleep(world.timeout)
-    common.open_url('line', 'edit', {'id': line_id})
+    common.open_url('line', 'edit', {'id': line['id']})
     for line_data in step.hashes:
         for key, value in line_data.iteritems():
             if key == 'Call limit':
@@ -298,8 +298,8 @@ def _add_codec_to_line(codec, exten):
 
 
 def _add_codec_list_to_line(codecs, exten):
-    line_id = line_read_helper.get_line_id_with_exten_context(exten, 'default')
-    common.open_url('line', 'edit', {'id': line_id})
+    line = line_read_helper.get_with_exten_context(exten, 'default')
+    common.open_url('line', 'edit', {'id': line['id']})
     for codec in codecs:
         _add_custom_codec(codec)
     form.submit.submit_form()

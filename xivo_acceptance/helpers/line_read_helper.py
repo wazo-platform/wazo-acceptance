@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -48,27 +49,3 @@ def get_with_exten_context(exten, context='default'):
     assert_that(line, is_not(none()),
                 "line with extension %s@%s not found" % (exten, context))
     return line
-
-
-def find_line_id_with_exten_context(exten, context='default'):
-    line = find_with_exten_context(exten, context)
-    return line['id'] if line else None
-
-
-def get_line_id_with_exten_context(exten, context='default'):
-    line_id = find_line_id_with_exten_context(exten, context)
-    assert_that(line_id, is_not(none()),
-                "line with extension %s@%s not found" % (exten, context))
-    return line_id
-
-
-def find_extension_id_for_line(line_id):
-    try:
-        return get_extension_id_for_line(line_id)
-    except IndexError:
-        return None
-
-
-def get_extension_id_for_line(line_id):
-    response = world.confd_client.lines(line_id).list_extensions()
-    return response['items'][0]['extension_id']
