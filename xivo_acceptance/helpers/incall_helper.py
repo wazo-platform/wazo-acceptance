@@ -50,6 +50,8 @@ def _build_destination(type_, args):
         key_id = _build_group_destination(args)
     elif type_ == 'voicemail':
         key_id = _build_voicemail_destination(args)
+    elif type_ == 'ivr':
+        key_id = _build_ivr_destination(args)
 
     result = {'type': type_}
     result.update(key_id)
@@ -76,6 +78,11 @@ def _build_voicemail_destination(number_context):
     number, _, context = number_context.partition('@')
     voicemail = voicemail_helper.get_voicemail_by_number(number, context)
     return {'voicemail_id': voicemail['id']}
+
+
+def _build_ivr_destination(ivr_name):
+    ivr_id = world.confd_client.ivr.list(name=ivr_name)['items'][0]['id']
+    return {'ivr_id': ivr_id}
 
 
 def delete_incalls_with_did(incall_did, context='from-extern'):

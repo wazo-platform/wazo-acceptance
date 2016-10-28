@@ -86,6 +86,12 @@ def when_chan_test_calls_with_id_calleridname_calleridnum(step, extension, chann
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 
+@step(u'chan_test queues DTMF (\w) on channel with id "([^"]*)"$')
+def when_chan_test_queues_dtmf(step, digit, channelid):
+    cmd = 'test dtmf SIP/auto-%s %s' % (channelid, digit)
+    asterisk_helper.send_to_asterisk_cli(cmd)
+
+
 @step(u'chan_test hangs up "([^"]*)"$')
 def when_chan_test_hangs_up(step, channelid):
     cmd = 'channel request hangup SIP/auto-%s' % channelid
