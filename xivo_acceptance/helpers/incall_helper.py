@@ -58,8 +58,8 @@ def _build_destination(type_, args):
 
 def _build_user_destination(fullname):
     firstname, lastname = fullname.split()
-    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
-    return {'user_id': user_id}
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+    return {'user_id': user['id']}
 
 
 def _build_queue_destination(queue_name):

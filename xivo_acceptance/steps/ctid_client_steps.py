@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2015-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,17 +28,20 @@ from xivo_acceptance.helpers import xivo_helper
 
 
 def _find_user_id(info):
-    return user_helper.get_user_id_with_firstname_lastname(info['firstname'], info['lastname'])
+    user = user_helper.get_by_firstname_lastname(info['firstname'], info['lastname'])
+    return user['id']
 
 
 def _find_user_uuid(info):
-    return user_helper.get_by_firstname_lastname(info['firstname'], info['lastname'])['uuid']
+    user = user_helper.get_by_firstname_lastname(info['firstname'], info['lastname'])
+    return user['uuid']
 
 
 def _find_line_id(info):
     exten = info['number']
     context = info['context']
-    return int(line_read_helper.find_line_id_with_exten_context(exten, context))
+    line = line_read_helper.find_with_exten_context(exten, context)
+    return line['id'] if line else 0
 
 
 @step(u'Then I should have the following user status when I query the cti:')

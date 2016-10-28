@@ -25,7 +25,7 @@ from hamcrest import none
 from lettuce import step, world
 from xivo_acceptance.action.webi import provd_plugins
 from xivo_acceptance.action.webi import device as device_action_webi
-from xivo_acceptance.helpers import device_helper, provd_helper, line_sip_helper
+from xivo_acceptance.helpers import device_helper, provd_helper, line_read_helper
 from xivo_acceptance.lettuce import form, common
 
 
@@ -128,7 +128,7 @@ def when_i_delete_device(step, mac):
 
 @step(u'When I provision device having ip "([^"]*)" with line having username "([^"]*)"')
 def when_i_provision_device_having_ip_group1_with_line_having_username_group2(step, device_ip, sip_username):
-    line = line_sip_helper.find_by_username(sip_username)
+    line = line_read_helper.find_by_sip_username(sip_username)
     assert_that(line, is_not(none()), "Line with username {} not found".format(sip_username))
     device_helper.provision_device_using_webi(line['provisioning_extension'], device_ip)
 

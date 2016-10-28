@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,7 +28,7 @@ from lettuce import world
 
 from xivo_acceptance.helpers import cti_helper
 from xivo_acceptance.helpers import asterisk_helper
-from xivo_acceptance.helpers import line_sip_helper
+from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.helpers import user_helper
@@ -154,8 +155,9 @@ def when_a_waits_for_n_seconds(step, _waiter, seconds):
 @step(u'When I reconfigure the phone "([^"]*)" on line (\d+)@(\w+)')
 def when_i_reconfigure_the_phone_1_on_line_2_3(step, name, exten, context):
     step.scenario.phone_register.remove(name)
-    line = line_sip_helper.find_with_exten_context(exten, context)
-    phone_config = sip_config.create_config(world.config, step.scenario.phone_register, line)
+    line = line_read_helper.find_with_exten_context(exten, context)
+    endpoint_sip = world.confd_client.endpoints_sip.get(line['endpoint_sip']['id'])
+    phone_config = sip_config.create_config(world.config, step.scenario.phone_register, endpoint_sip)
 
     def phone_is_registered():
         return sip_phone.register_line(phone_config)

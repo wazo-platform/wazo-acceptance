@@ -62,12 +62,12 @@ class _AvailableRTPPortFinder(_AbstractAvailablePortFinder):
             return False
 
 
-def create_config(world_config, phone_register, line_config):
+def create_config(world_config, phone_register, endpoint_sip_config):
     existing_phones = phone_register.phones().values()
     sip_port = _AvailableSipPortFinder(world_config).get_available_port(existing_phones)
     rtp_port = _AvailableRTPPortFinder(world_config).get_available_port(existing_phones)
-    sip_name = line_config['username']
-    sip_passwd = line_config['secret']
+    sip_name = endpoint_sip_config['username']
+    sip_passwd = endpoint_sip_config['secret']
     sip_host = world_config['xivo_host']
 
     return SIPConfig(sip_port, rtp_port, sip_name, sip_passwd, sip_host)

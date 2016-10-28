@@ -22,7 +22,6 @@ from lettuce import step
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
 
-from xivo_acceptance.action.confd import user_action_confd
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
@@ -136,8 +135,8 @@ def _select(id_, text):
 
 
 def _edit_user(firstname, lastname):
-    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
-    common.open_url('user', 'edit', qry={'id': user_id})
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+    common.open_url('user', 'edit', qry={'id': user['id']})
 
 
 @step(u'Given user "([^"]*)" has schedule "([^"]*)"')
@@ -148,14 +147,15 @@ def given_user_1_has_schedule_2(step, fullname, schedule):
 @step(u'When I create users with the following parameters:$')
 def when_i_create_users_with_the_following_parameters(step):
     for userinfo in step.hashes:
-        world.response = user_action_confd.create_user(userinfo)
+        world.confd_client.users.create(userinfo)
 
 
 @step(u'When I update user "([^"]*)" "([^"]*)" with the following parameters:')
 def when_i_update_user_group1_group2_with_the_following_parameters(step, firstname, lastname):
     user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    userinfo = _get_user_info(step.hashes)
-    world.response = user_action_confd.update_user(user['id'], userinfo)
+    updated_user = step.hashes[0]
+    updated_user['id'] = user['id']
+    world.confd_client.users.update(updated_user)
 
 
 @step(u'When I reorder "([^"]*)" "([^"]*)"s function keys such that:')
@@ -201,16 +201,16 @@ def when_i_add_a_new_line_to_a_user(step, firstname, lastname):
 
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"$')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
-    user_id = user_helper.get_user_id_with_firstname_lastname(orig_firstname, orig_lastname)
+    user = user_helper.get_by_firstname_lastname(orig_firstname, orig_lastname)
     ule_helper.delete_user_line_extension_voicemail(dest_firstname, dest_lastname)
-    common.open_url('user', 'edit', {'id': user_id})
+    common.open_url('user', 'edit', {'id': user['id']})
     user_action_webi.type_user_names(dest_firstname, dest_lastname)
     form.submit.submit_form()
 
 
 @step(u'When I remove user "([^"]*)" "([^"]*)"$')
 def remove_user(step, firstname, lastname):
-    world.user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
+    world.user_id = user_helper.get_by_firstname_lastname(firstname, lastname)['id']
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
     common.remove_line('%s %s' % (firstname, lastname))
     common.open_url('user', 'search', {'search': ''})
@@ -306,8 +306,8 @@ def when_i_remove_the_device_of_user_group1_group2(step, firstname, lastname):
 
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"$')
 def then_user_is_in_group(step, firstname, lastname, group_name):
-    user_id = user_helper.get_user_id_with_firstname_lastname(firstname, lastname)
-    assert user_helper.user_id_is_in_group_name(group_name, user_id)
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+    assert user_helper.user_id_is_in_group_name(group_name, user['id'])
 
 
 @step(u'Then I should be at the user list page$')
@@ -399,12 +399,3 @@ def then_user_has_an_unconditional_forward_set_to_group2(step, fullname, expecte
 def then_user_has_no_unconditional_forward(step, fullname):
     enabled, _ = user_helper.get_unconditional_forward(fullname)
     assert_that(enabled, is_(False))
-
-
-def _get_user_info(hashes):
-    userinfo = hashes[0]
-
-    if 'id' in userinfo:
-        userinfo['id'] = int(userinfo['id'])
-
-    return userinfo

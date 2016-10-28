@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,20 +18,21 @@
 from hamcrest import assert_that, has_entries
 from lettuce import step, world
 
-from xivo_acceptance.action.confd import queue_members_action_confd
 from xivo_acceptance.helpers import queue_helper, agent_helper
 
 
 @step(u'When I request the following queue member:')
 def when_i_request_the_following_queue_member(step):
     infos = complete_queue_member_infos(step.hashes[0])
-    world.response = queue_members_action_confd.get_agent_queue_association(infos)
+    world.response = world.confd_client.queues.get_membership(infos['queue_id'], infos['agent_id'])
 
 
 @step(u'When I edit the following queue member:')
 def when_i_edit_the_following_queue_member(step):
     infos = complete_queue_member_infos(step.hashes[0])
-    world.response = queue_members_action_confd.edit_agent_queue_association(infos)
+    world.response = world.confd_client.queues.edit_membership(infos['queue_id'],
+                                                               infos['agent_id'],
+                                                               infos['penalty'])
 
 
 @step(u'Then I get a queue membership with the following parameters:')
@@ -43,13 +45,15 @@ def then_i_get_a_queue_membership_with_the_following_parameters(step):
 @step(u'When I associate the following agent:')
 def when_i_associate_the_following_agent(step):
     infos = complete_queue_member_infos(step.hashes[0])
-    world.response = queue_members_action_confd.add_agent_queue_association(infos)
+    world.response = world.confd_client.queues.add_agent(infos['queue_id'],
+                                                         infos['agent_id'],
+                                                         infos['penalty'])
 
 
 @step(u'When I remove the following agent from a queue:')
 def when_i_remove_the_following_agent_from_a_queue(step):
     infos = complete_queue_member_infos(step.hashes[0])
-    world.response = queue_members_action_confd.remove_agent_queue_association(infos)
+    world.response = world.confd_client.queues.remove_agent(infos['queue_id'], infos['agent_id'])
 
 
 def extract_queue_member(orig):

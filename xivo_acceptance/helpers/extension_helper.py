@@ -37,10 +37,9 @@ def find_extension_by_exten_context(exten, context='default'):
         return None
 
 
-def find_line_id_for_extension(extension_id):
+def find_by_id(extension_id):
     try:
-        response = world.confd_client.extensions(extension_id).get_line()
-        return response['line_id']
+        return get_by_id(extension_id)
     except HTTPError:
         return None
 
@@ -83,14 +82,15 @@ def delete_extension(extension_id):
 
 
 def _delete_extension_associations(extension_id):
-    line_id = find_line_id_for_extension(extension_id)
-    if line_id:
-        line_write_helper.dissociate_device(line_id)
-        line_write_helper.dissociate_extensions(line_id)
+    lines = get_by_id(extension_id)['lines']
+    for line in lines:
+        line = world.confd_client.lines.get(line['id'])
+        line_write_helper.dissociate_device(line)
+        line_write_helper.dissociate_extensions(line)
 
 
 def _delete_extension_type(exten, extension_type, typeval):
-    if extension_type == 'user':
+    if extension_type == 'user' and typeval != '0':
         user_helper.delete_user(int(typeval))
     elif extension_type == 'queue':
         queue_helper.delete_queues_with_number(exten)

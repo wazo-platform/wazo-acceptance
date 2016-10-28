@@ -64,8 +64,8 @@ def given_there_is_a_group_with_extension_and_users(step, name, extension):
 
     user_ids = []
     for info in step.hashes:
-        user_id = user_helper.get_user_id_with_firstname_lastname(info['firstname'], info.get('lastname'))
-        user_ids.append(user_id)
+        user = user_helper.get_by_firstname_lastname(info['firstname'], info.get('lastname'))
+        user_ids.append(user['id'])
 
     group_helper.add_group(name, number, context, user_ids)
 

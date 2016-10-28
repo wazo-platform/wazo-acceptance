@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import os
 import re
 import time
 
@@ -70,9 +70,9 @@ def then_the_group1_section_of_group2_does_not_contain_the_options(step, section
     assert_that(options, equal_to([]))
 
 
-@step(u'Then I see in the AMI that the line "([^"]*)" has been synchronized')
-def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, extension):
-    line = line_read_helper.find_with_extension(extension)
+@step(u'Then I see in the AMI that the line "([^"]*)@(\w+)" has been synchronized')
+def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, extension, context):
+    line = line_read_helper.find_with_extension_context(extension, context)
     line_name = line['name']
     lines = [
         'Action: SIPnotify',
