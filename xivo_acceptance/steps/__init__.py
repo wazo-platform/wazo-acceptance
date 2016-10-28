@@ -55,6 +55,7 @@ from .general_settings_xivo_steps import *
 from .group_steps import *
 from .ha_steps import *
 from .incall_steps import *
+from .ivr_steps import *
 from .ipbx_count_steps import *
 from .ldap_steps import *
 from .line_extension_steps import *
