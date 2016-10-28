@@ -52,13 +52,15 @@ def get_with_exten_context(exten, context='default'):
 
 
 def find_by_sip_username(username):
-    try:
-        return get_by_sip_username(username)
-    except HTTPError:
+    endpoints_sip = world.confd_client.endpoints_sip.list(username=username)
+    if not endpoints_sip or not endpoints_sip[0]['line']:
         return None
+    line_id = endpoints_sip[0]['line']['id']
+    return world.confd_client.lines.get(line_id)
 
 
 def get_by_sip_username(username):
-    endpoint_sip = world.confd_client.endpoints_sip.get(username=username)
-    line_id = endpoint_sip['line']['id']
-    return world.confd_client.lines.get(line_id)
+    line = find_by_sip_username(username)
+    assert_that(line, is_not(none()),
+                "line with sip username %s not found" % (username))
+    return line
