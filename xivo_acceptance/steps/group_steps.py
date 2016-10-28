@@ -32,11 +32,19 @@ def given_there_is_no_group(step, search):
 def given_there_are_groups(step):
     for group in step.hashes:
         group_helper.delete_groups_with_number(group['exten'])
+
+        if 'users' in group:
+            user_ids = [user_helper.get_user_by_name(user)['id'] for user in group['users'].split(',')]
+        else:
+            user_ids = []
+
         group_helper.add_group(
             group['name'],
             group['exten'],
-            group['context']
+            group['context'],
+            user_ids,
         )
+
         common.open_url('group', 'list', {'search': group['name']})
         common.edit_line(group['name'])
         if 'ring seconds' in group:
@@ -47,6 +55,9 @@ def given_there_are_groups(step):
             if forward_dest_type == 'group':
                 form.select.set_select_field_with_id('it-dialaction-noanswer-actiontype', 'Group')
                 form.select.set_select_field_with_id_containing('it-dialaction-noanswer-group-actionarg1', forward_dest_name)
+        if 'schedule' in group:
+            common.go_to_tab('Schedules')
+            form.select.set_select_field_with_id('it-schedule_id', group['schedule'])
         form.submit.submit_form()
         common.open_url('group', 'list', {'search': ''})
 
