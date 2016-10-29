@@ -29,7 +29,7 @@ from xivo_acceptance.helpers import provd_helper
 
 def add_line(parameters):
     line_params = _extract_line_params(parameters)
-    endpoint_sip = world.confd_client.endpoints_sip.create({})
+    endpoint_sip = world.confd_client.endpoints_sip.create(line_params)
     line = world.confd_client.lines.create(line_params)
     world.confd_client.lines(line).add_endpoint_sip(endpoint_sip)
     _manage_device(line, parameters)

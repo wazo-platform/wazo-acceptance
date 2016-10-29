@@ -52,7 +52,7 @@ def get_with_exten_context(exten, context='default'):
 
 
 def find_by_sip_username(username):
-    endpoints_sip = world.confd_client.endpoints_sip.list(username=username)
+    endpoints_sip = world.confd_client.endpoints_sip.list(username=username)['items']
     if not endpoints_sip or not endpoints_sip[0]['line']:
         return None
     line_id = endpoints_sip[0]['line']['id']

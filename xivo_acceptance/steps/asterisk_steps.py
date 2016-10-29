@@ -72,7 +72,7 @@ def then_the_group1_section_of_group2_does_not_contain_the_options(step, section
 
 @step(u'Then I see in the AMI that the line "([^"]*)@(\w+)" has been synchronized')
 def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, extension, context):
-    line = line_read_helper.find_with_extension_context(extension, context)
+    line = line_read_helper.find_with_exten_context(extension, context)
     line_name = line['name']
     lines = [
         'Action: SIPnotify',
