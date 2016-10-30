@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -69,7 +70,6 @@ from .profile_steps import *
 from .provd_plugins_steps import *
 from .provd_proxy_steps import *
 from .queue_steps import *
-from .queue_members_steps import *
 from .resource_steps import *
 from .result_steps import *
 from .schedule_steps import *
