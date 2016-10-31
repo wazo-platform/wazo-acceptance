@@ -49,8 +49,10 @@ Feature: Entity Filter
           | boss           | 2        | 1406   | default |               | boss      |                   |
           | secretary      | 2        | 1411   | default |               | secretary |                   |
 
-        Given there is a group "groupe" with extension "2222@default"
-        Given there is a group "entity_filter" with extension "2555@foo"
+        Given there are groups:
+          | name          | exten | context |
+          | groupe        |  2222 | default |
+          | entity_filter |  2555 | foo     |
 
         Given I have the following voicemails:
           | name          | number | context |

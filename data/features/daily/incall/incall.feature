@@ -8,4 +8,3 @@ Feature: Incalls
         Given there is an incall "1801" in context "from-extern" to the "User" "Incall User"
         When chan_test calls "1801@from-extern"
         Then "Incall User" is ringing
-

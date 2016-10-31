@@ -39,3 +39,34 @@ Feature: Schedule call distribution
     When "Peter Parker" calls "1002"
     When I wait 3 seconds
     Then "Bruce Wayne" is ringing
+
+  Scenario: Call distribution on group schedule
+    Given there are users with infos:
+    | firstname | lastname | number | context | protocol |
+    | Peter     | Parker   |   1001 | default | sip      |
+    | Clark     | Kent     |   1002 | default | sip      |
+    | Bruce     | Wayne    |   1003 | default | sip      |
+    Given I have a schedule "group-closed" in "America/Montreal" towards user "Bruce" "Wayne" with the following schedules:
+    | Status | Months | Days of month | Days of week | Start hour | End hour |
+    | Opened |      1 |             1 |            1 |      00:00 |    00:01 |
+    Given there are groups:
+    | name   | exten | context | users      | schedule     |
+    | league |  2666 | default | Clark Kent | group-closed |
+    When "Peter Parker" calls "2666"
+    When I wait 3 seconds
+    Then "Bruce Wayne" is ringing
+
+  Scenario: Call distribution on incall schedule
+    Given there are users with infos:
+    | firstname | lastname | number | context | protocol |
+    | Clark     | Kent     |   1002 | default | sip      |
+    | Bruce     | Wayne    |   1003 | default | sip      |
+    Given I have a schedule "incall-closed" in "America/Montreal" towards user "Bruce" "Wayne" with the following schedules:
+    | Status | Months | Days of month | Days of week | Start hour | End hour |
+    | Opened |      1 |             1 |            1 |      00:00 |    00:01 |
+    Given there are incalls with infos in the webi:
+    | extension | context     | destination_type | destination | schedule      |
+    |      1002 | from-extern | User             | Clark Kent  | incall-closed |
+    When chan_test calls "1002@from-extern"
+    When I wait 3 seconds
+    Then "Bruce Wayne" is ringing
