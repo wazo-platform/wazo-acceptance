@@ -54,6 +54,12 @@ def type_incall_caller_id(caller_id):
     caller_id_field.send_keys(caller_id)
 
 
+def type_incall_schedule(schedule):
+    common.go_to_tab('Schedules')
+    schedule_select = Select(world.browser.find_element_by_id('it-schedule_id'))
+    schedule_select.select_by_visible_text(schedule)
+
+
 def remove_incall_with_did(incall_did):
     common.remove_element_if_exist('incall', incall_did)
 

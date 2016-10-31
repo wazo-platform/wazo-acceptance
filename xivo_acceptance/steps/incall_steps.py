@@ -28,7 +28,15 @@ def given_there_are_incalls_with_infos(step):
         did = incall['extension']
         context = incall['context']
         incall_helper.delete_incalls_with_did(did, context)
-        _add_incall(did, context)
+
+        common.open_url('incall', 'add')
+        incall_action_webi.type_incall_did(did)
+        incall_action_webi.type_incall_context(context)
+        if 'destination type' and 'destination' in incall:
+            incall_action_webi.type_incall_destination(incall['destination_type'], incall['destination'])
+        if 'schedule' in incall:
+            incall_action_webi.type_incall_schedule(incall['schedule'])
+        form.submit.submit_form()
 
 
 @step(u'When I "([^"]*)" incall "([^"]*)" in the webi')
@@ -70,10 +78,3 @@ def then_i_see_the_element_not_exists(step, name):
     common.open_url('incall')
     line = common.find_line(name)
     assert line is None, 'incall: %s exist' % name
-
-
-def _add_incall(did, context):
-    common.open_url('incall', 'add')
-    incall_action_webi.type_incall_did(did)
-    incall_action_webi.type_incall_context(context)
-    form.submit.submit_form()
