@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +23,6 @@ import sys
 
 from lettuce import before, after, world
 from xivo_acceptance.config import load_config
-from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.lettuce import asterisk
 from xivo_acceptance.lettuce import debug
 from xivo_acceptance.lettuce import setup
@@ -56,7 +56,6 @@ def xivo_acceptance_lettuce_after_each_scenario(scenario):
     xc = getattr(scenario, '_pseudo_xivo_client', None)
     if xc:
         xc.stop()
-    _logout_agents()
     world.browser.quit()
 
 
@@ -104,14 +103,7 @@ def set_xivo_target(extra_config):
     setup.setup_display()
     logger.debug("setup xivo configured...")
     setup.setup_xivo_configured()
-    world.logged_agents = []
     world.dummy_ip_address = '10.99.99.99'
-
-
-@debug.logcall
-def _logout_agents():
-    asterisk_helper.logoff_agents(world.logged_agents)
-    world.logged_agents = []
 
 
 @debug.logcall

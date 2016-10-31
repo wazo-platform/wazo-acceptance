@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -85,16 +86,6 @@ class _AsteriskConfHelper(object):
         option_name = option_name.rstrip()
         option_value = option_value.lstrip()
         return option_name, option_value
-
-
-def logoff_agents(agent_numbers):
-    for agent_number in agent_numbers:
-        logoff_agent(agent_number)
-
-
-def logoff_agent(agent_number):
-    asterisk_command = 'agent logoff Agent/%s' % (agent_number)
-    send_to_asterisk_cli(asterisk_command)
 
 
 def send_to_asterisk_cli(asterisk_command):
