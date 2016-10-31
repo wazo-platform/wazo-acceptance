@@ -23,6 +23,7 @@ import sys
 
 from lettuce import before, after, world
 from xivo_acceptance.config import load_config
+from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.lettuce import asterisk
 from xivo_acceptance.lettuce import debug
 from xivo_acceptance.lettuce import setup
@@ -56,6 +57,7 @@ def xivo_acceptance_lettuce_after_each_scenario(scenario):
     xc = getattr(scenario, '_pseudo_xivo_client', None)
     if xc:
         xc.stop()
+    asterisk_helper.send_to_asterisk_cli('channel request hangup all')
     world.browser.quit()
 
 

@@ -89,10 +89,13 @@ class _AsteriskConfHelper(object):
 
 
 def send_to_asterisk_cli(asterisk_command):
-    check_output_asterisk_cli(asterisk_command)
+    world.ssh_client_xivo.call(_format_command(asterisk_command))
 
 
 def check_output_asterisk_cli(asterisk_command):
-    shell_command = ['asterisk', '-rx', '"%s"' % asterisk_command]
-    output = world.ssh_client_xivo.out_call(shell_command)
+    output = world.ssh_client_xivo.out_call(_format_command(asterisk_command))
     return output.decode('utf-8')
+
+
+def _format_command(asterisk_command):
+    return ['asterisk', '-rx', '"{}"'.format(asterisk_command)]
