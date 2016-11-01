@@ -98,4 +98,6 @@ def check_output_asterisk_cli(asterisk_command):
 
 
 def _format_command(asterisk_command):
+    if isinstance(asterisk_command, unicode):
+        asterisk_command = asterisk_command.encode('utf-8')
     return ['asterisk', '-rx', '"{}"'.format(asterisk_command)]
