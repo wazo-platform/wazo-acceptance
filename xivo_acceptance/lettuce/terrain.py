@@ -57,7 +57,7 @@ def xivo_acceptance_lettuce_after_each_scenario(scenario):
     xc = getattr(scenario, '_pseudo_xivo_client', None)
     if xc:
         xc.stop()
-    asterisk_helper.send_to_asterisk_cli('channel request hangup all')
+    asterisk_helper.send_to_asterisk_cli(u'channel request hangup all')
     world.browser.quit()
 
 

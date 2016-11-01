@@ -81,7 +81,7 @@ def given_the_switchboard_is_configured_to_receive_a_maxium_of_n_call(step, n):
     switchboard_queue = queue_helper.get_queue_with_name('__switchboard')
     switchboard_queue.maxlen = n
     world.ws.queues.edit(switchboard_queue)
-    asterisk_helper.send_to_asterisk_cli('queue reload')
+    asterisk_helper.send_to_asterisk_cli(u'queue reload')
 
 
 @step(u'Then I should receive the following switchboard statistics:')

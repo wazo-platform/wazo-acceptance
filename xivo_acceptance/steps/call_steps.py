@@ -68,33 +68,33 @@ def when_a_call_is_started(step):
 @step(u'When chan_test calls "([^"]*)"$')
 def when_chan_test_calls(step, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    cmd = 'test new %s %s chan-test-num chan-test-name SIP' % (number, context)
+    cmd = u'test new %s %s chan-test-num chan-test-name SIP' % (number, context)
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 
 @step(u'When chan_test calls "([^"]*)" with id "([^"]*)"$')
 def when_chan_test_calls_with_id(step, extension, channelid):
     number, context = func.extract_number_and_context_from_extension(extension)
-    cmd = 'test newid %s %s %s chan-test-num chan-test-name SIP' % (channelid, number, context)
+    cmd = u'test newid %s %s %s chan-test-num chan-test-name SIP' % (channelid, number, context)
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 
 @step(u'When chan_test calls "([^"]*)" with id "([^"]*)" and calleridname "([^"]*)" and calleridnum "([^"]*)"$')
 def when_chan_test_calls_with_id_calleridname_calleridnum(step, extension, channelid, calleridname, calleridnum):
     number, context = func.extract_number_and_context_from_extension(extension)
-    cmd = 'test newid %s %s %s %s %s SIP' % (channelid, number, context, calleridnum, calleridname)
+    cmd = u'test newid %s %s %s %s %s SIP' % (channelid, number, context, calleridnum, calleridname)
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 
 @step(u'chan_test queues DTMF (\w) on channel with id "([^"]*)"$')
 def when_chan_test_queues_dtmf(step, digit, channelid):
-    cmd = 'test dtmf SIP/auto-%s %s' % (channelid, digit)
+    cmd = u'test dtmf SIP/auto-%s %s' % (channelid, digit)
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 
 @step(u'chan_test hangs up "([^"]*)"$')
 def when_chan_test_hangs_up(step, channelid):
-    cmd = 'channel request hangup SIP/auto-%s' % channelid
+    cmd = u'channel request hangup SIP/auto-%s' % channelid
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 

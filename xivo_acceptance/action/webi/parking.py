@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -42,7 +43,7 @@ def set_parking_config(config_map):
 
 
 def check_parking_info(expected_parking_info):
-    output = asterisk_helper.check_output_asterisk_cli('parking show')
+    output = asterisk_helper.check_output_asterisk_cli(u'parking show')
     parking_info = _parse_parking_info(output)
 
     assert_that(parking_info, has_entries(expected_parking_info))

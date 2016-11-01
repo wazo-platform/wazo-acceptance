@@ -116,7 +116,7 @@ def then_extension_is_in_context(step, extension, context):
 
 
 def _get_asterisk_uptime():
-    output = asterisk_helper.check_output_asterisk_cli('core show uptime')
+    output = asterisk_helper.check_output_asterisk_cli(u'core show uptime')
 
     pattern_week = re.compile(r'System uptime: (\d)+ week[s]?, (\d+) hour[s]?, (\d+) minute[s]?, (\d+) second[s]?')
     values = pattern_week.match(output)

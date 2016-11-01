@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -116,5 +117,5 @@ def then_sip_tls_connections_use_the_group1_certificate_for_encryption(step, cer
 
 @step(u'Then there are no warnings when reloading sip configuration')
 def then_there_are_no_warnings_when_reloading_sip_configuration(step):
-    asterisk_helper.send_to_asterisk_cli("sip reload")
+    asterisk_helper.send_to_asterisk_cli(u'sip reload')
     assert not logs.search_str_in_asterisk_log('WARNING')
