@@ -111,12 +111,12 @@ Feature: Callgen
         Given "George McFly" answers
         When "George McFly" puts his call on hold
         Then I receive a "call_held" on the queue "test" with data:
-        | call_id | origin_uuid |
-        | ANY     | yes         |
+        | call_id | origin_uuid | user_uuid |
+        | ANY     | yes         | ANY       |
         When "George McFly" resumes his call
         Then I receive a "call_resumed" on the queue "test" with data:
-        | call_id | origin_uuid |
-        | ANY     | yes         |
+        | call_id | origin_uuid | user_uuid |
+        | ANY     | yes         | ANY       |
 
     Scenario: Transfer timeout is respected
         Given there are users with infos:

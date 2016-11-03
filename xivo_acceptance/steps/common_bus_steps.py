@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -128,6 +129,9 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
             user = user_helper.get_by_firstname_lastname(expected_event['firstname'],
                                                          expected_event['lastname'])
             raw_expected_event['data']['user_uuid'] = user['uuid']
+
+        if expected_event.get('user_uuid', 'no') == 'ANY':
+            raw_expected_event['data']['user_uuid'] = ANY
 
         if expected_event.get('id', 'no') == 'ANY':
             raw_expected_event['data']['id'] = ANY
