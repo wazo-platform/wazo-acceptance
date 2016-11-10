@@ -28,7 +28,7 @@ def then_consul_returns_a_running_service(step, service_name):
                      'host': world.config['xivo_host'],
                      'port': 8500,
                      'verify': False}
-    finder = ServiceFinder(consul_config, {})
+    finder = ServiceFinder(consul_config)
 
     healthy_services = finder.list_healthy_services(service_name)
     assert_that(healthy_services, not_(empty()))
