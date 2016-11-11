@@ -1,4 +1,12 @@
 Feature: Service discovery
 
-    Scenario: Get xivo-ctid-ng from consul
-        Then consul returns a running "xivo-ctid-ng" service
+    Scenario Outline: Get services from consul
+        Then consul returns a running "<service>" service
+
+    Examples:
+        | service      |
+        | xivo-agentd  |
+        | xivo-auth    |
+        | xivo-ctid    |
+        | xivo-ctid-ng |
+        | xivo-dird    |
