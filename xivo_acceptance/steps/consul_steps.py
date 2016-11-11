@@ -18,6 +18,7 @@
 from hamcrest import assert_that, empty, not_
 from lettuce import step, world
 
+from xivo_test_helpers import until
 from xivo.consul_helpers import ServiceFinder
 
 
@@ -30,5 +31,8 @@ def then_consul_returns_a_running_service(step, service_name):
                      'verify': False}
     finder = ServiceFinder(consul_config)
 
-    healthy_services = finder.list_healthy_services(service_name)
-    assert_that(healthy_services, not_(empty()))
+    def test():
+        healthy_services = finder.list_healthy_services(service_name)
+        assert_that(healthy_services, not_(empty()))
+
+    until.assert_(test, tries=5)
