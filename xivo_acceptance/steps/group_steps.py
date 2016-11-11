@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step
+from lettuce import world
 
 from xivo_acceptance.action.webi import group as group_action_webi
 from xivo_acceptance.helpers import user_helper, group_helper
@@ -33,16 +35,15 @@ def given_there_are_groups(step):
     for group in step.hashes:
         group_helper.delete_groups_with_number(group['exten'])
 
+        users = []
         if 'users' in group:
-            user_ids = [user_helper.get_user_by_name(user)['id'] for user in group['users'].split(',')]
-        else:
-            user_ids = []
+            users = [user_helper.get_user_by_name(user) for user in group['users'].split(',')]
 
-        group_helper.add_group(
+        group_helper.add_or_replace_group(
             group['name'],
             group['exten'],
             group['context'],
-            user_ids,
+            users,
         )
 
         common.open_url('group', 'list', {'search': group['name']})
@@ -67,12 +68,12 @@ def given_there_is_a_group_with_extension_and_users(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
     group_helper.delete_groups_with_number(number)
 
-    user_ids = []
+    users = []
     for info in step.hashes:
         user = user_helper.get_by_firstname_lastname(info['firstname'], info.get('lastname'))
-        user_ids.append(user['id'])
+        users.append(user)
 
-    group_helper.add_group(name, number, context, user_ids)
+    group_helper.add_or_replace_group(name, number, context, users)
 
 
 @step(u'Given the group named "([^"]*)" does not exist')
@@ -90,9 +91,10 @@ def given_there_is_a_group_with_n_users(step, group_size):
              'lastname': str(i),
              'line_number': str(1100 + i),
              'line_context': 'default'}, step=step)
-        group_members.append(user_id)
+        user = world.confd_client.users.get(user_id)
+        group_members.append(user)
 
-    group_helper.add_or_replace_group(group_name, user_ids=group_members)
+    group_helper.add_or_replace_group(group_name, users=group_members)
 
 
 @step(u'When I create a group "([^"]*)" with number "([^"]*)"$')

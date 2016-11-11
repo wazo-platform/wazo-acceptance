@@ -191,7 +191,8 @@ def add_user_with_infos(user_data, step=None):
         helpers.agent_helper.add_agent(agent_data)
 
     if user_data.get('group_name'):
-        group_helper.add_or_replace_group(user_data['group_name'], user_ids=[user_id])
+        user = world.confd_client.users.get(user_id)
+        group_helper.add_or_replace_group(user_data['group_name'], users=[user])
 
 
 def add_user(data_dict, step=None):
@@ -301,10 +302,9 @@ def _register_and_track_phone(scenario, user_data):
         scenario.phone_register.add_registered_phone(phone, name)
 
 
-def user_id_is_in_group_name(group_name, user_id):
-    group = group_helper.get_group_with_name(group_name)
-    for id in group.user_ids:
-        if id == user_id:
+def user_is_in_group(user, group):
+    for group_user in group['members']['users']:
+        if user == group_user['uuid']:
             return True
     return False
 

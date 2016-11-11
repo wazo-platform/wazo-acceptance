@@ -24,6 +24,7 @@ from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import user_helper
+from xivo_acceptance.helpers import group_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
 from xivo_acceptance.lettuce import common, form
 
@@ -307,7 +308,8 @@ def when_i_remove_the_device_of_user_group1_group2(step, firstname, lastname):
 @step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"$')
 def then_user_is_in_group(step, firstname, lastname, group_name):
     user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    assert user_helper.user_id_is_in_group_name(group_name, user['id'])
+    group = group_helper.get_group_by_name(group_name)
+    assert user_helper.user_is_in_group(user, group)
 
 
 @step(u'Then I should be at the user list page$')

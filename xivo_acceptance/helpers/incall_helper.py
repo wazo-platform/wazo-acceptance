@@ -70,8 +70,8 @@ def _build_queue_destination(queue_name):
 
 
 def _build_group_destination(group_name):
-    group_id = group_helper.find_group_id_with_name(group_name)
-    return {'group_id': group_id}
+    group = group_helper.get_group_by_name(group_name)
+    return {'group_id': group['id']}
 
 
 def _build_voicemail_destination(number_context):
