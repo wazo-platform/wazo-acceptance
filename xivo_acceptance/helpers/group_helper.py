@@ -20,6 +20,7 @@ from lettuce import world
 
 
 def add_or_replace_group(name, exten='2000', context='default', users=None):
+    delete_groups_with_number(exten)
     delete_groups_with_name(name)
     add_group(name, exten, context, users)
 
@@ -55,7 +56,7 @@ def delete_groups_with_name(name):
 
 def get_group_by_name(name):
     groups = world.confd_client.groups.list(name=name)['items']
-    if groups['total'] != 1:
+    if len(groups) != 1:
         raise Exception('expecting 1 group with name %r; found %s' %
-                        (name, groups['total']))
+                        (name, len(groups)))
     return groups[0]
