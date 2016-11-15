@@ -33,8 +33,6 @@ def given_there_is_no_group(step, search):
 @step(u'Given there are groups:')
 def given_there_are_groups(step):
     for group in step.hashes:
-        group_helper.delete_groups_with_number(group['exten'])
-
         users = []
         if 'users' in group:
             users = [user_helper.get_user_by_name(user) for user in group['users'].split(',')]
@@ -55,7 +53,8 @@ def given_there_are_groups(step):
             forward_dest_type, forward_dest_name = group['noanswer'].split(':', 1)
             if forward_dest_type == 'group':
                 form.select.set_select_field_with_id('it-dialaction-noanswer-actiontype', 'Group')
-                form.select.set_select_field_with_id_containing('it-dialaction-noanswer-group-actionarg1', forward_dest_name)
+                form.select.set_select_field_with_id_containing('it-dialaction-noanswer-group-actionarg1',
+                                                                forward_dest_name)
         if 'schedule' in group:
             common.go_to_tab('Schedules')
             form.select.set_select_field_with_id('it-schedule_id', group['schedule'])
@@ -66,7 +65,6 @@ def given_there_are_groups(step):
 @step(u'Given there is a group "([^"]*)" with extension "([^"]*)" and users:$')
 def given_there_is_a_group_with_extension_and_users(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)
-    group_helper.delete_groups_with_number(number)
 
     users = []
     for info in step.hashes:

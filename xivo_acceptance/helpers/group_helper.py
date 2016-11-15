@@ -20,7 +20,7 @@ from lettuce import world
 
 
 def add_or_replace_group(name, exten='2000', context='default', users=None):
-    delete_groups_with_number(exten)
+    delete_groups_with_number(exten, context)
     delete_groups_with_name(name)
     add_group(name, exten, context, users)
 
@@ -38,8 +38,9 @@ def add_group(name, exten, context='default', users=None):
         world.confd_client.groups(group).update_user_members(users)
 
 
-def delete_groups_with_number(exten):
-    extensions = world.confd_client.extensions.list(exten=exten)['items']
+def delete_groups_with_number(exten, context='default'):
+    extensions = world.confd_client.extensions.list(exten=exten,
+                                                    context=context)['items']
     for extension in extensions:
         if extension['group']:
             world.confd_client.groups.delete(extension['group']['id'])
