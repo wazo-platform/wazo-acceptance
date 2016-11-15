@@ -304,7 +304,7 @@ def _register_and_track_phone(scenario, user_data):
 
 def user_is_in_group(user, group):
     for group_user in group['members']['users']:
-        if user == group_user['uuid']:
+        if user['uuid'] == group_user['uuid']:
             return True
     return False
 
