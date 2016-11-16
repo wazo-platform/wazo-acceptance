@@ -25,7 +25,7 @@ from xivo_acceptance.lettuce import postgres
 
 def add_or_replace_voicemail(parameters):
     delete_similar_voicemails(parameters)
-    create_voicemail(parameters)
+    return create_voicemail(parameters)
 
 
 def delete_similar_voicemails(parameters):
