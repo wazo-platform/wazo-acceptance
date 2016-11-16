@@ -268,7 +268,7 @@ def add_user(data_dict, step=None):
             world.confd_client.lines(line['id']).add_device(device['id'])
 
     if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(data_dict):
-        voicemail = world.confd_client.voicemails.create({
+        voicemail = voicemail_helper.add_or_replace_voicemail({
             'name': data_dict['voicemail_name'],
             'number': data_dict['voicemail_number'],
             'context': data_dict['voicemail_context'],
