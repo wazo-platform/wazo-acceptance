@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +21,6 @@ from hamcrest import equal_to
 from hamcrest import is_
 from lettuce import step
 from lettuce.registry import world
-from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import user_helper
@@ -184,22 +184,6 @@ def when_i_create_a_user(step):
     form.submit.submit_form()
 
 
-@step(u'When I add a new line to user "([^"]*)" "([^"]*)" with infos:$')
-def when_i_add_a_new_line_to_a_user(step, firstname, lastname):
-    _edit_user(firstname, lastname)
-    user_properties = step.hashes[0]
-    common.go_to_tab('Lines')
-    user_action_webi.remove_line()
-    user_action_webi.user_form_add_line(
-        linenumber=user_properties['number'],
-        context=user_properties['context'],
-        protocol=user_properties['protocol'].upper(),
-        device=user_properties.get('device', None),
-        entity_displayname=user_properties.get('entity_displayname', None),
-    )
-    form.submit.submit_form()
-
-
 @step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"$')
 def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
     user = user_helper.get_by_firstname_lastname(orig_firstname, orig_lastname)
@@ -231,14 +215,6 @@ def when_i_search_for_user_with_number_group1(step, number):
 def when_i_delete_agent_number_1(step, agent_number):
     agent = world.ws.agents.search(agent_number)[0]
     world.ws.agents.delete(agent.id)
-
-
-@step(u'When I add a user "([^"]*)" "([^"]*)" with a function key with type Customized and extension "([^"]*)"$')
-def when_i_add_a_user_group1_group2_with_a_function_key(step, firstname, lastname, extension):
-    common.open_url('user', 'add')
-    user_action_webi.type_user_names(firstname, lastname)
-    user_action_webi.type_func_key('Customized', extension)
-    form.submit.submit_form()
 
 
 @step(u'When I remove line from user "([^"]*)" "([^"]*)"$')
@@ -324,14 +300,6 @@ def when_i_edit_the_user_1_2_without_changing_anything(step, firstname, lastname
     form.submit.submit_form()
 
 
-@step(u'Then I see the user "([^"]*)" "([^"]*)" exists$')
-def then_i_see_the_user_group1_group2_exists(step, firstname, lastname):
-    common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
-    user_line = common.find_line("%s %s" % (firstname, lastname))
-    assert user_line is not None, 'User: %s %s does not exist' % (firstname, lastname)
-    common.open_url('user', 'search', {'search': ''})
-
-
 @step(u'Then the user "([^"]*)" "([^"]*)" not exist')
 def then_the_user_not_exist(step, firstname, lastname):
     common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
@@ -349,18 +317,6 @@ def then_i_see_a_user_with_infos(step):
     assert_that(fullname, equal_to(user_expected_properties['fullname']))
     for user_field, user_value in user_expected_properties.iteritems():
         assert_that(user_actual_properties[user_field], equal_to(user_value))
-    common.open_url('user', 'search', {'search': ''})
-
-
-@step(u'Then i see user with username "([^"]*)" "([^"]*)" has a function key with type Customized and extension "([^"]*)"$')
-def then_i_see_user_with_username_group1_group2_has_a_function_key(step, firstname, lastname, extension):
-    common.open_url('user', 'search', {'search': '%s %s' % (firstname, lastname)})
-    common.edit_line("%s %s" % (firstname, lastname))
-    common.go_to_tab('Func Keys')
-    destination_field = world.browser.find_element_by_id('phonefunckey[typevalidentity][]')
-    assert destination_field.get_attribute('value') == extension
-    type_field = Select(world.browser.find_element_by_id('phonefunckey[type][]'))
-    assert type_field.first_selected_option.text == "Customized"
     common.open_url('user', 'search', {'search': ''})
 
 

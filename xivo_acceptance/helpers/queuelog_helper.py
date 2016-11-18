@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,11 +30,6 @@ def delete_event_by_agent_number(event, agent_number):
     agent_number = _build_agent_db_tag_from_number(agent_number)
     pg_command = 'DELETE FROM queue_log WHERE agent = \'%s\' and event = \'%s\'' % (agent_number, event)
     postgres.exec_sql_request(pg_command)
-
-
-def delete_event_by_queue_between(event, queuename, start, end):
-    with session_scope():
-        queue_log_dao.delete_event_by_queue_between(event, queuename, start, end)
 
 
 def delete_event_between(start, end):
@@ -66,15 +62,6 @@ def get_agent_last_login_duration(agent_number):
     query = "SELECT cast(data2 as int) FROM queue_log WHERE event = 'AGENTCALLBACKLOGOFF' AND agent = :agent ORDER BY time DESC LIMIT 1"
     agent = _build_agent_db_tag_from_number(agent_number)
     return postgres.exec_sql_request(query, agent=agent).fetchone()[0]
-
-
-def get_last_callid(event, agent_number):
-    with session_scope():
-        callid = queue_log_dao.get_last_callid_with_event_for_agent(
-            event,
-            _build_agent_db_tag_from_number(agent_number)
-        )
-    return callid
 
 
 def _build_agent_db_tag_from_number(agent_number):

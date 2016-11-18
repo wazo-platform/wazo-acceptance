@@ -71,20 +71,3 @@ Feature: SCCP Line
           |               mac | configured |
           | 11:11:11:11:11:14 | False      |
           | 11:11:11:11:11:15 | True       |
-
-#    Scenario: Replace SCCP line with SIP line resetting SCCP device to autoprov
-#        Given the latest plugin "xivo-cisco-sccp-legacy" is installed
-#        Given I have the following devices:
-#          | mac               | latest plugin of       |
-#          | 11:11:11:11:11:16 | xivo-cisco-sccp-legacy |
-#          | 11:11:11:11:11:17 | xivo-aastra            |
-#        Given there are users with infos:
-#          | firstname | lastname | number | context | protocol | device            | entity_name |
-#          | Albert    |  qwerty  |   1113 | default | sccp     | 11:11:11:11:11:16 | xivoentity  |
-#        When I add a new line to user "Albert" "qwerty" with infos:
-#          | number | context | protocol | device            | entity_displayname |
-#          | 1113   | default | SIP      | 11:11:11:11:11:17 | xivo_entity         |
-#        Then I see devices with infos:
-#          |               mac | configured |
-#          | 11:11:11:11:11:16 | False      |
-#          | 11:11:11:11:11:17 | True       |

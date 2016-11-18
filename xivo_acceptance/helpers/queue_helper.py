@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +20,6 @@ from lettuce import world
 
 from xivo_ws import Queue
 from xivo_acceptance.lettuce import sysutils
-from xivo_acceptance.lettuce.postgres import exec_sql_request
 
 
 def add_queue(data):
@@ -89,23 +89,11 @@ def find_queue_id_with_name(name):
     return queue.id
 
 
-def find_queue_with_id(queue_id):
-    return world.ws.queues.view(queue_id)
-
-
 def _find_queue_with_name(name):
     queues = _search_queues_with_name(name)
     if len(queues) != 1:
         raise Exception('expecting 1 queue with name %r: found %s' %
                         (name, len(queues)))
-    return queues[0]
-
-
-def _find_queue_with_number(number):
-    queues = _search_queues_with_number(number)
-    if len(queues) != 1:
-        raise Exception('expecting 1 queue with number %r: found %s' %
-                        (number, len(queues)))
     return queues[0]
 
 
@@ -163,27 +151,3 @@ def _parse_member_line(member_line):
     if membertype != "Agent":
         raise Exception("membertype %s different from Agent" % membertype)
     return int(number)
-
-
-def set_penalty_for_agent(queue_name, agent_id, penalty):
-    query = 'UPDATE queuemember SET penalty = :penalty WHERE queue_name = :queue_name AND userid = :userid AND usertype = \'agent\''
-    exec_sql_request(query, queue_name=queue_name, userid=agent_id, penalty=penalty)
-
-
-def delete_queue_with_id(queue_id):
-    try:
-        find_queue_with_id(queue_id)
-    except ValueError:
-        return
-    world.ws.queues.delete(queue_id)
-
-
-def get_penalty_for_agent(queue_name, agent_id):
-    query = 'SELECT penalty FROM queuemember WHERE queue_name = :queue_name AND userid = :userid AND usertype = \'agent\''
-    return exec_sql_request(query, queue_name=queue_name, userid=agent_id).first()['penalty']
-
-
-def get_queue_member(queue_name, agent_id):
-    query = 'SELECT * FROM queuemember WHERE queue_name = :queue_name AND userid = :userid AND usertype = \'agent\''
-    row = exec_sql_request(query, queue_name=queue_name, userid=agent_id).first()
-    return row

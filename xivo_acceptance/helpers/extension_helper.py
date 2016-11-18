@@ -37,13 +37,6 @@ def find_extension_by_exten_context(exten, context='default'):
         return None
 
 
-def find_by_id(extension_id):
-    try:
-        return get_by_id(extension_id)
-    except HTTPError:
-        return None
-
-
 def get_by_exten_context(exten, context='default'):
     return world.confd_client.extensions.list(exten=exten, context=context)['items'][0]
 
@@ -127,9 +120,3 @@ def _get_exten_info(extension_id):
     """
     result = exec_sql_request(query, extension_id=extension_id)
     return result.first()
-
-
-def get_extension_typeval(extension_id):
-    query = "SELECT typeval FROM extensions WHERE id = :extension_id"
-    cursor = exec_sql_request(query, extension_id=extension_id)
-    return cursor.scalar()

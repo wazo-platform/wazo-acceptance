@@ -47,13 +47,6 @@ def type_incall_destination(destination_type, destination_name):
             destination_select.select_by_visible_text(option.text)
 
 
-def type_incall_caller_id(caller_id):
-    mode_select = Select(world.browser.find_element_by_id('it-callerid-mode'))
-    mode_select.select_by_visible_text('Overwrite')
-    caller_id_field = world.browser.find_element_by_id('it-callerid-callerdisplay')
-    caller_id_field.send_keys(caller_id)
-
-
 def type_incall_schedule(schedule):
     common.go_to_tab('Schedules')
     schedule_select = Select(world.browser.find_element_by_id('it-schedule_id'))

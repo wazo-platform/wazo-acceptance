@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -86,12 +87,6 @@ def find_key_supervision_field(line):
 def add_funckey_line():
     add_button = world.browser.find_element_by_xpath("//div[@id='sb-part-funckeys']//a[@id='add_funckey_button']")
     add_button.click()
-
-
-def get_line_number(line):
-    element = line.find_element_by_name('phonefunckey[type][]')
-    _, _, line_number = element.get_attribute('id').rpartition('-')
-    return int(line_number)
 
 
 def find_key_destination_field(key_type, line):
@@ -236,14 +231,6 @@ def select_device_slot(device_slot):
     input_linenum.select_by_visible_text(device_slot)
 
 
-def type_voicemail(voicemail_number):
-    common.go_to_tab('General')
-    form.select.set_select_field_with_label('Language', 'en_US')
-    common.go_to_tab('Voicemail')
-    form.select.set_select_field_with_label('Voice Mail', 'Asterisk')
-    form.input.set_text_field_with_label('Voicemail', voicemail_number)
-
-
 def type_mobile_number(mobile_number):
     common.go_to_tab('General')
     form.input.set_text_field_with_label('Mobile phone number', mobile_number)
@@ -297,13 +284,6 @@ def add_schedule(user, schedule):
 def edit_user(user):
     common.open_url('user', 'search', {'search': user})
     common.edit_line(user)
-
-
-def deactivate_bsfilter(user):
-    edit_user(user)
-    common.go_to_tab('Services')
-    form.select.set_select_field_with_id('it-userfeatures-bsfilter', 'No')
-    form.submit.submit_form()
 
 
 def get_chantype_of_group(group_name):

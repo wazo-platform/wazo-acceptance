@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,15 +26,6 @@ def search_line_number(line_number):
     text_input = world.browser.find_element_by_id(searchbox_id)
     text_input.clear()
     text_input.send_keys(line_number)
-    submit_button = world.browser.find_element_by_id('it-toolbar-subsearch')
-    submit_button.click()
-
-
-def unsearch_line():
-    common.open_url('line')
-    searchbox_id = 'it-toolbar-search'
-    text_input = world.browser.find_element_by_id(searchbox_id)
-    text_input.clear()
     submit_button = world.browser.find_element_by_id('it-toolbar-subsearch')
     submit_button.click()
 

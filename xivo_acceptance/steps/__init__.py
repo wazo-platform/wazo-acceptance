@@ -71,8 +71,6 @@ from .profile_steps import *
 from .provd_plugins_steps import *
 from .provd_proxy_steps import *
 from .queue_steps import *
-from .resource_steps import *
-from .result_steps import *
 from .schedule_steps import *
 from .service_extensions import *
 from .sheet_steps import *
