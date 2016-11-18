@@ -108,7 +108,6 @@ def setup_ws():
     # Prerequisite:
     # - setup_xivo_acceptance_config
     world.ws = world.xivo_acceptance_config.ws_utils
-    world.confd_utils_1_1 = world.xivo_acceptance_config.confd_utils_1_1
 
 
 @debug.logcall

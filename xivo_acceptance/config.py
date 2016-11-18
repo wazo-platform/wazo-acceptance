@@ -66,8 +66,6 @@ def load_config(extra_config):
             'passwd': 'superpass'
         },
         'rest_api': {
-            'protocol': 'https',
-            'port': 9486,
             'username': 'admin',
             'passwd': 'proformatique'
         },
@@ -199,8 +197,8 @@ class XivoAcceptanceConfig(object):
         self._setup_dao()
         logger.debug("_setup_ssh_client...")
         self._setup_ssh_client()
-        logger.debug("_setup_rest_api...")
-        self._setup_rest_api()
+        logger.debug("_setup_ws...")
+        self._setup_ws()
         logger.debug("_setup_provd...")
         self._setup_provd()
 
@@ -211,22 +209,16 @@ class XivoAcceptanceConfig(object):
         self.ssh_client_xivo = ssh.SSHClient(hostname=self._config['xivo_host'],
                                              login=self._config['ssh_login'])
 
-    def _setup_rest_api(self):
+    def _setup_ws(self):
         rest_config_dict = {
-            'protocol': self._config['rest_api']['protocol'],
             'hostname': self._config['xivo_host'],
-            'port': self._config['rest_api']['port'],
             'auth_username': self._config['rest_api']['username'],
             'auth_passwd': self._config['rest_api']['passwd']
         }
 
-        rest_config_dict.update({'api_version': '1.1'})
-        self.confd_config_1_1 = RestConfiguration(**rest_config_dict)
-
         self.ws_utils = xivo_ws.XivoServer(host=rest_config_dict['hostname'],
                                            username=rest_config_dict['auth_username'],
                                            password=rest_config_dict['auth_passwd'])
-        self.confd_utils_1_1 = WsUtils(self.confd_config_1_1)
 
     def _setup_provd(self):
         provd_config_obj = RestConfiguration(protocol=self._config['provd']['rest_protocol'],
