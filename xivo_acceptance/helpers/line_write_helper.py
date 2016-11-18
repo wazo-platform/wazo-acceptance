@@ -21,10 +21,8 @@ from hamcrest import assert_that, is_in, equal_to
 from lettuce import world
 from requests.exceptions import HTTPError
 
-from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import line_sccp_helper
-from xivo_acceptance.helpers import provd_helper
 
 
 def add_line(parameters):
@@ -32,7 +30,6 @@ def add_line(parameters):
     endpoint_sip = world.confd_client.endpoints_sip.create(line_params)
     line = world.confd_client.lines.create(line_params)
     world.confd_client.lines(line).add_endpoint_sip(endpoint_sip)
-    _manage_device(line, parameters)
 
 
 def _extract_line_params(parameters):
@@ -46,33 +43,6 @@ def _extract_line_params(parameters):
         parameters['position'] = int(parameters['device_slot'])
 
     return parameters
-
-
-def _manage_device(line, parameters):
-    device_slot = int(parameters.get('device_slot', 1))
-
-    if 'device_mac' in parameters:
-        device = provd_helper.get_by_mac(parameters['device_mac'])
-        _associate_device(line, device['mac'], device_slot)
-    elif 'device_id' in parameters:
-        _associate_device(line, parameters['device_id'], device_slot)
-
-
-def _associate_device(line, device_id, device_slot):
-    query = """
-    UPDATE
-        linefeatures
-    SET
-        device = :device_id,
-        num = :device_slot
-    WHERE
-        id = :line_id
-    """
-
-    postgres.exec_sql_request(query,
-                              line_id=line['id'],
-                              device_id=device_id,
-                              device_slot=device_slot)
 
 
 def delete_similar_lines(exten):

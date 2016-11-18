@@ -44,17 +44,6 @@ def add_agent(data_dict):
     return int(agent.id)
 
 
-def add_or_replace_agent(data_dict):
-    agent_number = data_dict['number']
-    delete_agents_with_number(agent_number)
-
-    return add_agent(data_dict)
-
-
-def delete_agent_with_id(agent_id):
-    world.ws.agents.delete(agent_id)
-
-
 def delete_agents_with_number(number):
     for agent in _search_agents_with_number(number):
         world.ws.agents.delete(agent.id)

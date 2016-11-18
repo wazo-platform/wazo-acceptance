@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2015 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +19,6 @@
 from hamcrest import assert_that, equal_to, instance_of
 from lettuce import step, world
 from selenium.webdriver.common.action_chains import ActionChains
-from xivo_ws.exception import WebServiceRequestError
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
 from xivo_acceptance.helpers import agent_helper, auth_helper
@@ -48,15 +48,6 @@ def given_there_is_no_agents_logged(step):
 @step(u'Given I log agent "([^"]*)" on extension "([^"]*)"')
 def given_i_log_the_phone(step, agent_number, extension):
     agent_helper.login_agent(agent_number, extension)
-
-
-@step(u'Given there is no agent with id "([^"]*)"')
-def given_there_is_no_agent_with_id(step, agent_id):
-    try:
-        agent_helper.delete_agent_with_id(agent_id)
-    except WebServiceRequestError as e:
-        if e.code != 404:
-            raise
 
 
 @step(u'When I log agent "([^"]*)"$')

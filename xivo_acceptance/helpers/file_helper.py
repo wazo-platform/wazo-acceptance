@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +17,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import os
-import tempfile
 
 from lettuce import world
 
@@ -45,22 +45,6 @@ def create_recordings_meetme_file(filename):
 def create_empty_file(path):
     # if the file already exist on the fs, it will be truncated to 0
     world.ssh_client_xivo.check_call(['truncate', '-s0', path])
-
-
-def remove_remote_file(filename):
-    world.ssh_client_xivo.call(['rm', '-f', filename])
-
-
-def write_remote_file(filename, content, user=None):
-    with tempfile.NamedTemporaryFile(delete=False) as f:
-        local_filename = f.name
-        f.write(content)
-        f.close()
-        world.ssh_client_xivo.send_files(local_filename, filename)
-        if user:
-            world.ssh_client_xivo.call(['chown', user, filename])
-
-    return local_filename
 
 
 def _touch_remote_file(abs_filename):

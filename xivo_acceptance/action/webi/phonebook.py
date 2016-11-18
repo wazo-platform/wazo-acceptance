@@ -36,16 +36,6 @@ class Phonebook(object):
         return cls(phonebook_name, phonebook_id, entity)
 
 
-def phonebook_search(term, phonebook_name, entity):
-    phonebook = Phonebook.from_name(phonebook_name, entity)
-
-    common.open_url('phonebook', 'list_contacts', {'entity': entity, 'phonebook': phonebook.id})
-
-    # The search feature is currently broken, it redirects to the list of phonebooks, instead of the list of contacts
-    # form.input.set_text_field_with_id("it-toolbar-search", term)
-    # form.submit.submit_form("it-subsearch")
-
-
 def create_entry(entry, phonebook_name, entity):
     phonebook = Phonebook.from_name(phonebook_name, entity)
 
@@ -74,30 +64,12 @@ def create_entry(entry, phonebook_name, entity):
     form.submit.submit_form()
 
 
-def remove_entry_if_exists(entry):
-    display_name = _get_display_name_from_entry(entry)
-    remove_entry_matching(display_name)
-
-
 def _get_display_name_from_entry(entry):
     if 'display name' in entry:
         display_name = entry['display name']
     else:
         display_name = "%(first name)s %(last name)s" % entry
     return display_name
-
-
-def remove_entry_matching(search):
-    phonebook_search(search)
-    common.remove_element_if_exist("phonebook", search)
-    phonebook_search('')
-
-
-def import_csv_file(path):
-    common.open_url('phonebook', 'import')
-    element = world.browser.find_element_by_id("it-import")
-    element.send_keys(path)
-    form.submit.submit_form()
 
 
 # phonebook settings

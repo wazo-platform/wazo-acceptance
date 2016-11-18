@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,11 +30,6 @@ from selenium.webdriver.support.expected_conditions import staleness_of
 from form.checkbox import Checkbox
 from xivo_acceptance.action.webi import common as common_action_webi
 from xivo_acceptance.lettuce import urls
-
-
-def get_value_with_label(field_label):
-    element = world.browser.find_element_by_label(field_label)
-    return element.get_attribute('value')
 
 
 def webi_login(login, password, language):

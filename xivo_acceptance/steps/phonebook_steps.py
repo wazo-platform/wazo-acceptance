@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -56,11 +57,6 @@ def given_there_are_local_dird_phonebooks(step):
 def when_i_add_the_following_entries_to_the_phonebook(step, phonebook_name, entity):
     for entry in step.hashes:
         phonebook_action_webi.create_entry(entry, phonebook_name, entity)
-
-
-@step(u'When I search for "([^"]*)" in the phonebook "([^"]*)" of entity "([^"]*)"$')
-def when_i_search_for_term(step, term, phonebook_name, entity):
-    phonebook_action_webi.phonebook_search(term, phonebook_name, entity)
 
 
 @step(u'When I search the phonebook for "([^"]*)" on my Aastra "([^"]*)"$')

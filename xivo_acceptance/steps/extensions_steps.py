@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,12 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from hamcrest import assert_that
-from hamcrest import has_entries
-from hamcrest import has_key
-from hamcrest import has_items
-from hamcrest import is_not
-from lettuce import step, world
+from lettuce import step
 
 from xivo_acceptance.helpers import extension_helper
 
@@ -38,38 +34,6 @@ def given_i_have_the_following_extensions(step):
     for exteninfo in step.hashes:
         extension = _extract_extension_parameters(exteninfo)
         extension_helper.add_or_replace_extension(extension)
-
-
-@step(u'Then I get a list containing the following extensions:')
-def then_i_get_a_list_containing_the_following_extensions(step):
-    expected_extensions = step.hashes
-    extensions = _filter_out_default_extensions()
-
-    entries = [has_entries(e) for e in expected_extensions]
-    assert_that(extensions, has_items(*entries))
-
-
-@step(u'Then I get a list that does not contain the following extensions:')
-def then_i_get_a_list_that_does_not_contain_the_following_extensions(step):
-    expected_extensions = step.hashes
-    extensions = _filter_out_default_extensions()
-
-    entries = [has_entries(e) for e in expected_extensions]
-    assert_that(extensions, is_not(has_items(*entries)))
-
-
-@step(u'Then I have an extension with the following parameters:')
-def then_i_have_an_extension_with_the_following_parameters(step):
-    parameters = _extract_extension_parameters(step.hashes[0])
-    extension = world.response.data
-
-    assert_that(extension, has_entries(parameters))
-
-
-def _filter_out_default_extensions():
-    assert_that(world.response.data, has_key('items'))
-    extensions = [e for e in world.response.data['items'] if e['context'] != 'xivo-features']
-    return extensions
 
 
 def _extract_extension_parameters(parameters):

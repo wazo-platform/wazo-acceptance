@@ -90,11 +90,6 @@ def get_user_by_name(name):
     return get_by_firstname_lastname(firstname, lastname)
 
 
-def find_agent_id_for_user(user_id):
-    query = 'select agentid from userfeatures where id = {user_id}'.format(user_id=user_id)
-    return postgres.exec_sql_request(query).scalar()
-
-
 def delete_similar_users(userinfo):
     if 'firstname' in userinfo and 'lastname' in userinfo:
         user = find_by_firstname_lastname(userinfo['firstname'],
@@ -321,12 +316,6 @@ def enable_cti_client(firstname, lastname):
     for user in users:
         user.enable_client = True
         world.ws.users.edit(user)
-
-
-def has_enabled_transfer(firstname, lastname):
-    for user in _search_users_with_firstname_lastname(firstname, lastname):
-        return user.enable_transfer
-    return False
 
 
 def _search_users_with_firstname_lastname(firstname, lastname):

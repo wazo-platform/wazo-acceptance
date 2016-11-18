@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,14 +20,6 @@ from lettuce import world
 from xivo_acceptance.lettuce import common, form
 from xivo_acceptance.lettuce.form.checkbox import Checkbox
 from selenium.common.exceptions import NoSuchElementException
-
-
-def delete_device(info):
-    search_device(info['mac'])
-    try:
-        common.remove_line(info['mac'])
-    except NoSuchElementException:
-        pass
 
 
 def search_device(search, by_number=False):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,19 +19,9 @@
 from lettuce import world
 
 
-def delete_all_meetmes():
-    confrooms = world.ws.confrooms.list()
-    for confroom in confrooms:
-        world.ws.confrooms.delete(confroom.id)
-
-
 def delete_meetme_with_confno(confno):
     for meetme in _search_meetmes_by_confno(confno):
         world.ws.confrooms.delete(meetme.id)
-
-
-def find_meetme_with_id(meetme_id):
-    return world.ws.confrooms.view(meetme_id)
 
 
 def _search_meetmes_by_confno(confno):

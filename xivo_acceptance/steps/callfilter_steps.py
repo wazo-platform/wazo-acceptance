@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +19,6 @@
 from lettuce import step
 
 from xivo_acceptance.action.webi import callfilter as callfilter_action_webi
-from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.lettuce import common
 
 
@@ -38,8 +38,3 @@ def given_there_are_users_with_infos(step, callfilter_name, boss, secretary):
     callfilter_action_webi.add_boss_secretary_filter(name=callfilter_name,
                                                      boss=boss,
                                                      secretary=secretary)
-
-
-@step(u'When I deactivate boss secretary filtering for user "([^"]*)"')
-def when_i_deactivate_boss_secretary_filtering_for_user_group1(step, user):
-    user_action_webi.deactivate_bsfilter(user)

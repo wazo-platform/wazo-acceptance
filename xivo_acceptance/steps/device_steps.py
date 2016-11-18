@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,9 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from hamcrest import assert_that
-from hamcrest import contains_string
 from hamcrest import equal_to
-from hamcrest import has_item
 from hamcrest import is_
 from hamcrest import is_not
 from hamcrest import none
@@ -175,11 +174,6 @@ def then_i_see_devices_with_infos(step):
         common.wait_until_assert(assert_device_infos, expected_device, tries=3)
 
 
-def _assert_all_lines_in_log(actual_log, expected_lines):
-    for expected_line in expected_lines:
-        assert_that(actual_log, has_item(contains_string(expected_line)))
-
-
 @step(u'Then the web interfaces shows a device with:')
 def then_the_web_interfaces_shows_a_device_with(step):
     device_infos = step.hashes[0]
@@ -189,10 +183,3 @@ def then_the_web_interfaces_shows_a_device_with(step):
     if 'switchboard_checked' in device_infos:
         expected = eval(device_infos['switchboard_checked'])
         assert_that(device_action_webi.is_switchboard_checked(), is_(expected))
-
-
-def _update_device_from_step_hash(device):
-    if 'options' in device:
-        device['options'] = eval(device['options'])
-    if 'template_id' in device and device['template_id'] == u'None':
-        device['template_id'] = None

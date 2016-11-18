@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,11 +22,6 @@ from xivo_acceptance.lettuce import postgres
 def delete_all():
     query = "DELETE FROM cel"
     postgres.exec_sql_request(query)
-
-
-def delete_entries_between(start, end):
-    query = "DELETE FROM cel WHERE eventtime BETWEEN :start AND :end"
-    postgres.exec_sql_request(query, start=start, end=end)
 
 
 def insert_entries(entries):
