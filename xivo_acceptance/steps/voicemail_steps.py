@@ -23,9 +23,7 @@ from hamcrest import contains
 from hamcrest import contains_inanyorder
 from hamcrest import empty
 from hamcrest import has_entries
-from hamcrest import has_entry
 from hamcrest import has_key
-from hamcrest import has_length
 from lettuce import step, world
 
 from xivo_acceptance.helpers import asterisk_helper
@@ -41,12 +39,6 @@ def given_have_the_following_voicemails(step):
     for row in step.hashes:
         voicemail_info = _extract_voicemail_info_to_confd(row)
         voicemail_helper.add_or_replace_voicemail(voicemail_info)
-
-
-@step(u'Then I have a list with (\d+) results$')
-def then_i_have_a_list_with_n_results(step, nb_list):
-    nb_list = int(nb_list)
-    assert_that(world.response.data, has_entry('items', has_length(nb_list)))
 
 
 @step(u'Then I see the voicemail "([^"]*)" exists$')
