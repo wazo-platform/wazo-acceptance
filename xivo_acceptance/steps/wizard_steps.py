@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from hamcrest import assert_that, is_not, none
 from lettuce import step, world
 from xivo_acceptance.lettuce import common
 
@@ -100,3 +102,8 @@ def when_i_fill_the_entity_context_page(step, entity, start, end):
 def then_i_should_be_redirected_to_the_login_page(step):
     common.waitForLoginPage()
     assert world.browser.find_element_by_id('it-login') is not None
+
+
+@step(u'Then server has uuid')
+def then_server_has_uuid(step):
+    assert_that(world.confd_client.infos.get()['uuid'], is_not(none()))
