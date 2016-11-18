@@ -32,7 +32,7 @@ XIVO_CONFD_LOGFILE = '/var/log/xivo-confd.log'
 XIVO_SYSCONFD_LOGFILE = '/var/log/xivo-sysconfd.log'
 
 DAEMON_DATE_FORMAT = "%b %d %H:%M:%S"
-DAEMON_DATE_PATTERN = "([\w]{3} [\d ]{2} [\d]{2}:[\d]{2}:[\d]{2})"
+DAEMON_DATE_PATTERN = r"([\w]{3} [\d ]{2} [\d]{2}:[\d]{2}:[\d]{2})"
 
 PYTHON_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 PYTHON_DATE_PATTERN = r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})"
@@ -67,8 +67,8 @@ XIVO_PROVD_LOG_INFO = LogfileInfo(logfile=XIVO_PROVD_LOGFILE,
                                   date_pattern=PYTHON_DATE_PATTERN)
 
 XIVO_CONFD_LOG_INFO = LogfileInfo(logfile=XIVO_CONFD_LOGFILE,
-                                    date_format=CONFD_DATE_FORMAT,
-                                    date_pattern=CONFD_DATE_PATTERN)
+                                  date_format=CONFD_DATE_FORMAT,
+                                  date_pattern=CONFD_DATE_PATTERN)
 
 XIVO_SYSCONFD_LOG_INFO = LogfileInfo(logfile=XIVO_SYSCONFD_LOGFILE,
                                      date_format=PYTHON_DATE_FORMAT,
