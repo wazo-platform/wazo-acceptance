@@ -17,6 +17,8 @@
 
 import re
 
+from hamcrest import assert_that
+from hamcrest import is_
 from lettuce import step, world
 
 from xivo_acceptance.helpers import cti_helper
@@ -97,6 +99,11 @@ def then_there_should_be_a_file_name_group1(step, filename_pattern):
     path = '~/%s' % filename
 
     assert sysutils.path_exists(path), 'No such file or directory %s' % path
+
+
+@step(u'Then the file "([^"]*)" does not exist')
+def then_the_file_1_does_not_exist(step, file_name):
+    assert_that(sysutils.path_exists(file_name), is_(False))
 
 
 def _replace_variables(raw_string):

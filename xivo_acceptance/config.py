@@ -55,6 +55,7 @@ DEFAULT_XIVO_HOST = 'daily-xivo-pxe.lan.proformatique.com'
 def load_config(extra_config):
     config = {
         'xivo_host': DEFAULT_XIVO_HOST,
+        'master_host': None,
         'slave_host': None,
         'log_file': '/tmp/xivo-acceptance.log',
         'assets_dir': _find_first_existing_path(_ASSETS_DIRS),

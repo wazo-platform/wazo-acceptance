@@ -19,10 +19,11 @@ import os
 import re
 
 from hamcrest import assert_that
+from hamcrest import contains_string
 from hamcrest import equal_to
 from hamcrest import is_not
 from hamcrest import none
-from lettuce import step
+from lettuce import step, world
 
 from xivo_acceptance.helpers import file_helper
 from xivo_acceptance.lettuce import sysutils
@@ -144,3 +145,13 @@ def then_the_mirror_list_does_not_contain_a_line_matching_group1(step, regex):
 def _match_on_mirror_list(regex):
     output = sysutils.output_command(['apt-cache', 'policy'])
     return re.search(regex, output)
+
+
+@step(u'Then there are cron jobs in "([^"]*)":')
+def then_there_are_cron_jobs_in_1(step, file_name):
+    file_content = sysutils.get_content_file(file_name)
+    for info in step.hashes:
+        expected_line = info['cron job']
+        expected_line = expected_line.replace('{{ slave_voip_ip_address }}', world.config.get('slave_host') or '<unknown>')
+        expected_line = expected_line.replace('{{ master_voip_ip_address }}', world.config.get('master_host') or'<unknown>')
+        assert_that(file_content, contains_string(expected_line))
