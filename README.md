@@ -156,6 +156,6 @@ If you need to see what is going on in the browser, use the `selenium/standalone
 
 To get code coverage of xivo_acceptance:
 
-pip install coverage
-coverage run --source=xivo_acceptance $(which lettuce) ...
-coverage html
+    pip install coverage
+    coverage run --source=xivo_acceptance $(which lettuce) ...
+    coverage html
