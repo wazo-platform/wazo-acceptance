@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2013-2014 Avencall
+# Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,6 +32,10 @@ def submit_form_with_errors(input_id='it-submit'):
 def submit_form(input_id='it-submit'):
     _do_submit(input_id)
     assert_no_form_errors(dump_current_page=True)
+
+
+def submit_form_ignore_errors(input_id='it-submit'):
+    _do_submit(input_id)
 
 
 def _do_submit(input_id):
