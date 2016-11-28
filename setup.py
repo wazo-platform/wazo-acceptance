@@ -38,7 +38,7 @@ setup(
     description='XiVO Acceptance',
     author='Avencall',
     author_email='dev@avencall.com',
-    url='https://github.com/xivo-pbx/xivo-acceptance',
+    url='https://github.com/wazo-pbx/xivo-acceptance',
     license='GPLv3',
     packages=packages,
     scripts=[
