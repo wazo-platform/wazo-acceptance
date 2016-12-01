@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2014-2016 Avencall
+# Copyright 2014-2016 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ from xivo_acceptance.lettuce import sysutils
 def configure_internal_directory():
     directory_action_webi.add_or_replace_directory(
         name='internal',
-        directory='xivo',
+        directory='wazo',
         direct_match='firstname,lastname',
         reverse_match='',
         fields={'firstname': '{firstname}',
