@@ -22,7 +22,7 @@ from xivo_acceptance.action.webi import provd_general as provdg_action_webi
 from xivo_acceptance.action.webi import provd_plugins as provdp_action_webi
 from xivo_acceptance.lettuce import sysutils
 
-STABLE_URL = 'http://provd.xivo.io/plugins/1/stable/'
+STABLE_URL = 'http://provd.wazo.community/plugins/1/stable/'
 
 
 @step(u'Given a update plugins provd with good url')
@@ -33,7 +33,7 @@ def given_a_update_plugins_provd(step):
 
 @step(u'Given a update plugins provd with bad url')
 def given_a_update_plugins_provd_with_bad_url(step):
-    provdp_action_webi.update_plugin_list('http://provd.xivo.io/plugins/1/lol/',
+    provdp_action_webi.update_plugin_list('http://provd.wazo.community/plugins/1/lol/',
                                           check_confirmation=False)
 
 
