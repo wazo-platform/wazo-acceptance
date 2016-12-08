@@ -7,7 +7,7 @@ Feature: Wizard
         When I start the wizard
         Then I should be on the welcome page
         When I select language en
-        Then I should see the welcome message Welcome into the XiVO installer.
+        Then I should see the welcome message Welcome into the Wazo installer.
         When I click next
         Then I should be on the license page
         Then I see the license
