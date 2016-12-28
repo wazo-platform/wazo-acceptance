@@ -33,7 +33,7 @@ def update_auth_token():
     world.config['auth_token'] = token_id
 
 
-def update_auth_token_and_clients():
+def renew_auth_token():
     update_auth_token()
     for renewal_callback in token_renewal_callbacks:
         renewal_callback(world.config['auth_token'])

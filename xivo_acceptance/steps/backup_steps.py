@@ -56,7 +56,7 @@ def when_i_execute_without_error(step, command):
 def when_i_execute_database_restore_command(step):
     command = 'bash /tmp/xivo-backup-manager restore db'
     world.ssh_client_xivo.call([command])
-    auth.update_auth_token_and_clients()
+    auth.renew_auth_token()
 
 
 @step(u'Then a non-empty file "([^"]*)" is present on disk')
