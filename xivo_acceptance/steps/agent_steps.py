@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2016 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +20,8 @@ from lettuce import step, world
 from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
-from xivo_acceptance.helpers import agent_helper, auth_helper
-from xivo_acceptance.lettuce import common, form, func
+from xivo_acceptance.helpers import agent_helper
+from xivo_acceptance.lettuce import auth, common, form, func
 from xivo_agentd_client import Client as AgentdClient
 from xivo_agentd_client.error import AgentdClientError
 
@@ -161,9 +160,8 @@ def when_i_select_an_agent_group(step, agent_group_list):
 
 @step(u'When I request the agent statuses with an invalid token')
 def when_i_request_the_agent_statuses_with_an_invalid_token(step):
-    token = auth_helper.new_invalid_token_id()
     agentd_client = AgentdClient(world.config['xivo_host'],
-                                 token=token,
+                                 token=auth.invalid_auth_token(),
                                  verify_certificate=False)
     _agentd_request(agentd_client.agents.get_agent_statuses)
 
