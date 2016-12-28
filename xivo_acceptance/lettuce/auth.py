@@ -20,7 +20,9 @@ import logging
 from lettuce import world
 
 logger = logging.getLogger('acceptance')
+token_renewal_callbacks = []
 ONE_HOUR = 3600
+
 
 def update_auth_token():
     try:
@@ -33,7 +35,12 @@ def update_auth_token():
 
 def update_auth_token_and_clients():
     update_auth_token()
-    world.agentd_client.set_token(world.config['auth_token'])
-    world.confd_client.set_token(world.config['auth_token'])
-    world.ctid_ng_client.set_token(world.config['auth_token'])
-    world.dird_client.set_token(world.config['auth_token'])
+    for renewal_callback in token_renewal_callbacks:
+        renewal_callback(world.config['auth_token'])
+
+
+def register_for_token_renewal(callback):
+    '''callbacks signature: my_callback(new_token)'''
+
+    global token_renewal_callbacks
+    token_renewal_callbacks.append(callback)

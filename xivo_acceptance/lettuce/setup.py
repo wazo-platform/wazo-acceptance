@@ -24,7 +24,7 @@ from xivo_auth_client import Client as AuthClient
 from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
 from xivo_dird_client import Client as DirdClient
-from .auth import update_auth_token
+from . import auth
 from .display import XiVODisplay
 from .xivobrowser import XiVOBrowser
 
@@ -33,21 +33,25 @@ def setup_agentd_client():
     world.agentd_client = AgentdClient(world.config['xivo_host'],
                                        token=world.config['auth_token'],
                                        verify_certificate=False)
+    auth.register_for_token_renewal(world.agentd_client.set_token)
 
 
 def setup_confd_client():
     world.confd_client = ConfdClient(**world.config['confd'])
     world.confd_client.set_token(world.config.get('auth_token'))
+    auth.register_for_token_renewal(world.confd_client.set_token)
 
 
 def setup_ctid_ng_client():
     world.ctid_ng_client = CtidNgClient(**world.config['ctid_ng'])
     world.ctid_ng_client.set_token(world.config.get('auth_token'))
+    auth.register_for_token_renewal(world.ctid_ng_client.set_token)
 
 
 def setup_dird_client():
     world.dird_client = DirdClient(**world.config['dird'])
     world.dird_client.set_token(world.config.get('auth_token'))
+    auth.register_for_token_renewal(world.dird_client.set_token)
 
 
 def setup_auth_token():
@@ -55,7 +59,7 @@ def setup_auth_token():
                                    username='xivo-acceptance',
                                    password='proformatique',
                                    verify_certificate=False)
-    update_auth_token()
+    auth.update_auth_token()
 
 
 @debug.logcall
