@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2015-2016 Avencall
+# Copyright 2015-2016 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import logging
-
 from lettuce import world
 
 from xivo_acceptance.config import load_config, XivoAcceptanceConfig
@@ -26,10 +24,9 @@ from xivo_auth_client import Client as AuthClient
 from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
 from xivo_dird_client import Client as DirdClient
-from .xivobrowser import XiVOBrowser
+from .auth import update_auth_token
 from .display import XiVODisplay
-
-logger = logging.getLogger('acceptance')
+from .xivobrowser import XiVOBrowser
 
 
 def setup_agentd_client():
@@ -54,16 +51,11 @@ def setup_dird_client():
 
 
 def setup_auth_token():
-    auth_client = AuthClient(world.config['xivo_host'],
-                             username='xivo-acceptance',
-                             password='proformatique',
-                             verify_certificate=False)
-    try:
-        token_id = auth_client.token.new('xivo_service', expiration=6*3600)['token']
-    except Exception as e:
-        logger.warning('creating auth token failed: %s', e)
-        token_id = None
-    world.config['auth_token'] = token_id
+    world.auth_client = AuthClient(world.config['xivo_host'],
+                                   username='xivo-acceptance',
+                                   password='proformatique',
+                                   verify_certificate=False)
+    update_auth_token()
 
 
 @debug.logcall

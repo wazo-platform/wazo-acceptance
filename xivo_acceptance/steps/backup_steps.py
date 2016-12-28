@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2016 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ import os
 import time
 from lettuce import step, world
 from hamcrest import assert_that, greater_than
-from xivo_acceptance.lettuce import assets, common
+from xivo_acceptance.lettuce import assets, auth, common
 
 
 @step(u'Given there is a backup file "([^"]*)"')
@@ -56,6 +56,7 @@ def when_i_execute_without_error(step, command):
 def when_i_execute_database_restore_command(step):
     command = 'bash /tmp/xivo-backup-manager restore db'
     world.ssh_client_xivo.call([command])
+    auth.update_auth_token_and_clients()
 
 
 @step(u'Then a non-empty file "([^"]*)" is present on disk')
