@@ -20,11 +20,11 @@ import logging
 from lettuce import world
 
 logger = logging.getLogger('acceptance')
-
+ONE_HOUR = 3600
 
 def update_auth_token():
     try:
-        token_id = world.auth_client.token.new('xivo_service', expiration=6*3600)['token']
+        token_id = world.auth_client.token.new('xivo_service', expiration=6*ONE_HOUR)['token']
     except Exception as e:
         logger.warning('creating auth token failed: %s', e)
         token_id = None
