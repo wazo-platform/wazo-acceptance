@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import logging
+import uuid
 
 from lettuce import world
 
@@ -31,6 +32,10 @@ def new_auth_token():
         logger.warning('creating auth token failed: %s', e)
         token_id = None
     return token_id
+
+
+def invalid_auth_token():
+    return str(uuid.uuid4())
 
 
 def renew_auth_token():
