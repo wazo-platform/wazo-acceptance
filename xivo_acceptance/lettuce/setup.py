@@ -59,7 +59,7 @@ def setup_auth_token():
                                    username='xivo-acceptance',
                                    password='proformatique',
                                    verify_certificate=False)
-    auth.update_auth_token()
+    world.config['auth_token'] = auth.new_auth_token()
 
 
 @debug.logcall

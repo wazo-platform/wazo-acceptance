@@ -24,19 +24,20 @@ token_renewal_callbacks = []
 ONE_HOUR = 3600
 
 
-def update_auth_token():
+def new_auth_token():
     try:
         token_id = world.auth_client.token.new('xivo_service', expiration=6*ONE_HOUR)['token']
     except Exception as e:
         logger.warning('creating auth token failed: %s', e)
         token_id = None
-    world.config['auth_token'] = token_id
+    return token_id
 
 
 def renew_auth_token():
-    update_auth_token()
+    token = world.config['auth_token'] = new_auth_token()
+
     for renewal_callback in token_renewal_callbacks:
-        renewal_callback(world.config['auth_token'])
+        renewal_callback(token)
 
 
 def register_for_token_renewal(callback):
