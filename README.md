@@ -1,8 +1,8 @@
 #XiVO Acceptance
 
-xivo-acceptance is a testing framework for running automated tests on a XiVO
+xivo-acceptance is a testing framework for running automated tests on a Wazo
 server. These tests are used for fixing regressions and testing features before
-releasing a new version of XiVO.
+releasing a new version of Wazo.
 
 
 #Prerequisites
@@ -19,7 +19,7 @@ redefine only options that need to be changed. Default options can be found in
 ```xivo_acceptance/config.py```. Usually, you will only need to change the IP
 addresses and subnets. For example:
 
-    ;IP address of the XIVO server
+    ;IP address of the Wazo server
     xivo_host: 192.168.0.10
 
     ;we need to allow access from the test machine to the server.
@@ -91,11 +91,11 @@ Once the requirements are installed, modify the configuration files and run the 
 
 ##XiVO Client
 
-Tests require a local copy of the [XiVO Client](http://github.com/xivo-pbx/xivo-client-qt)
+Tests require a local copy of the [XiVO Client](http://github.com/wazo-pbx/xivo-client-qt)
 on the test machine with FUNCTESTS enabled. Here is a quick example on how to
 install and compile the client:
 
-    git clone git://github.com/xivo-pbx/xivo-client-qt
+    git clone git://github.com/wazo-pbx/xivo-client-qt
     cd xivo-client-qt
     qmake
     make FUNCTESTS=yes
@@ -111,7 +111,7 @@ addresses and subnets. For example:
     browser:
         enable: True
 
-    ;IP address of the XIVO server
+    ;IP address of the Wazo server
     xivo_host: 192.168.0.10
 
     ;we need to allow access from the test machine to the server.
