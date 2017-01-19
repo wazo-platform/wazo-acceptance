@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -56,10 +56,9 @@ def add_or_replace_switchboard_queue(name, number, context, agents):
         'number': number,
         'context': context,
         'agents': agents,
-        'timeout': 5,
         CALLEE_TRANSFER: 'true',
         CALLER_HANGUP: 'true',
-        REACH_TIMEOUT: '5 seconds',
+        REACH_TIMEOUT: 'Disabled',
         CALL_RETRY: '1 second',
         REASSIGN_DELAY: 'Disabled',
         AUTOPAUSE_AGENTS: 'false',
