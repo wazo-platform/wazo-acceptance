@@ -25,11 +25,6 @@ ALIAS = {
         'module': 'sounds',
         'qry': {'dir': 'recordings-meetme'}
     },
-    'musiconhold file': {
-        'module': 'musiconhold',
-        'qry': {'act': 'listfile',
-                'cat': 'default'}
-    },
     'agent group': {
         'module': 'agent'
     },

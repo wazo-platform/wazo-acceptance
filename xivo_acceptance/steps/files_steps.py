@@ -26,6 +26,7 @@ from hamcrest import none
 from lettuce import step, world
 
 from xivo_acceptance.helpers import file_helper
+from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import sysutils
 
 
@@ -59,6 +60,12 @@ def given_a_recording_meetme_file_with_name(step, filename):
 @step(u'Given the file "([^"]*)" is empty')
 def given_the_file_is_empty(step, path):
     file_helper.create_empty_file(path)
+
+
+@step(u'^Then musiconhold file "([^"]*)" is displayed in the list of MOH "([^"]*)"$')
+def then_musiconhold_file_is_displayed(step, filename, category):
+    moh = world.confd_client.moh.list(name=category)['items'][0]
+    common.element_is_in_list('musiconhold', filename, {'uuid': moh['uuid']}, 'listfile')
 
 
 @step(u'Then directory of the Asterisk voicemail is empty')
