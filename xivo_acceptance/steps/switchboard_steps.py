@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
     context_helper.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
     phonebook_action_webi.remove_directory_if_exists('acceptance-switchboard-phonebook')
     phonebook_action_webi.create_local_dird_directory('acceptance-switchboard-phonebook',
-                                                      'xivo',
+                                                      'wazo',
                                                       'xivoentity')
     directory_action_webi.add_or_replace_directory(
         'xivodirswitchboard',

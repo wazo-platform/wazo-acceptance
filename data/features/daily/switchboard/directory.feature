@@ -5,7 +5,7 @@ Feature: Switchboard search
          | firstname | lastname | cti_profile | cti_login | cti_passwd |
          | Switch    | Board    | Switchboard | switch    | board      |
         Given the switchboard is configured for internal directory lookup
-        Given there are entries in the phonebook "xivo" of entity "xivoentity":
+        Given there are entries in the phonebook "wazo" of entity "xivoentity":
          | first name | last name |      phone |     mobile |
          | Uncle      | Bob       | 8197644444 | 8197621114 |
         When I start the XiVO Client
@@ -21,7 +21,7 @@ Feature: Switchboard search
          | firstname | lastname | cti_profile | cti_login | cti_passwd |
          | Switch    | Board    | Switchboard | switch    | board      |
         Given the switchboard is configured for internal directory lookup
-        Given there are entries in the phonebook "xivo" of entity "xivoentity":
+        Given there are entries in the phonebook "wazo" of entity "xivoentity":
          | first name | last name |      phone |     mobile |
          | Alice      | Wonder    |        555 |          1 |
          | Bob        | Gainey    |        555 |          2 |
