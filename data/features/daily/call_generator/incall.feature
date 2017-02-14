@@ -29,7 +29,7 @@ Feature: Incoming calls
         | El         | Diablo    |   666 | diablo@hell.org | Hell Inc. | 666 Hell |
         Given there are local dird phonebooks:
         | name                 | entity      | phonebook name |
-        | acceptance-phonebook | xivoentity  | xivo           |
+        | acceptance-phonebook | xivoentity  | wazo           |
         Given the directory definition "xivodirreverse" does not exist
         Given I add the following CTI directory definition:
         | name           | directory            | reverse match |
