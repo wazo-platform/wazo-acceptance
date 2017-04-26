@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +22,8 @@ from xivo_dao.helpers.db_utils import session_scope
 
 
 def delete_all():
-    with session_scope():
-        dao.delete_all()
+    query = 'DELETE FROM call_log'
+    postgres.exec_sql_request(query)
 
 
 def _format_condition(key, value):
