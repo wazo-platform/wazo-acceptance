@@ -10,3 +10,4 @@ Feature: Service discovery
         | xivo-ctid    |
         | xivo-ctid-ng |
         | xivo-dird    |
+        | wazo-plugind |
