@@ -17,7 +17,7 @@
 
 from xivo_acceptance.lettuce import postgres
 from xivo_dao.resources.call_log import dao
-from xivo_dao.resources.call_log.model import CallLog
+from xivo_dao.alchemy.call_log import CallLog
 from xivo_dao.helpers.db_utils import session_scope
 
 
