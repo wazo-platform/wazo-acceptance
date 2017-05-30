@@ -37,8 +37,8 @@ Feature: Call Log Generation for Calls from Mobile
 
         When I generate call logs
         Then I should have the following call logs:
-        | date                       | source_name | source_exten | destination_exten | destination_name |     duration | user_field | answered | source_line_identity | destination_line_identity |
-        | 2017-01-03 12:11:08.574072 |             | **9742309    |               103 | Charliez Chaplin | 00:00:02.390 |            | True     | sip/dev_32           | sip/rku3uo                |
+        | date                       | date_answer                | date_end                   | source_name | source_exten | destination_exten | destination_name | user_field | source_line_identity | destination_line_identity |
+        | 2017-01-03 12:11:08.574072 | 2017-01-03 12:11:17.256134 | 2017-01-03 12:11:19.518633 |             | **9742309    |               103 | Charliez Chaplin |            | sip/dev_32           | sip/rku3uo                |
 
     Scenario: Generation of non-answered internal call
         Given there are no call logs
@@ -70,8 +70,8 @@ Feature: Call Log Generation for Calls from Mobile
 
         When I generate call logs
         Then I should have the following call logs:
-            | date                       | source_name | source_exten | destination_exten | duration | answered | source_line_identity |
-            | 2017-01-03 12:12:36.702755 |             | **9742309    |               103 | 00:00:00 | False    | sip/dev_32           |
+        | date                       | date_answer | date_end                   | source_name | source_exten | destination_exten | source_line_identity |
+        | 2017-01-03 12:12:36.702755 | NULL        | 2017-01-03 12:12:45.830542 |             | **9742309    |               103 | sip/dev_32           |
 
     Scenario: Generation of answered outgoing call
         Given there are no call logs
@@ -111,5 +111,5 @@ Feature: Call Log Generation for Calls from Mobile
 
         When I generate call logs
         Then I should have the following call logs:
-            | date                       | source_name | source_exten | destination_exten | duration | user_field | answered | source_line_identity | destination_line_identity |
-            | 2017-01-03 12:13:51.476828 |             | **9742309    | **101             | 00:00:08  |            | True     | sip/dev_32           | sip/dev_32                |
+        | date                       | date_answer                | date_end                   | source_name | source_exten | destination_exten | user_field  | source_line_identity | destination_line_identity |
+        | 2017-01-03 12:13:51.476828 | 2017-01-03 12:13:55.977583 | 2017-01-03 12:14:03.856841 |             | **9742309    | **101             |             | sip/dev_32           | sip/dev_32                |

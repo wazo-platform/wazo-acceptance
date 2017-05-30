@@ -29,8 +29,6 @@ def delete_all():
 def _format_condition(key, value):
     if value == 'NULL':
         return '%s IS NULL' % key
-    elif key == 'duration':
-        return '%s BETWEEN :%s - interval \'1 second\' AND :%s + interval \'1 second\'' % (key, key, key)
     else:
         return '%s = :%s' % (key, key)
 
@@ -43,13 +41,13 @@ def has_call_log(entry):
 
 def find_last_call_log():
     query = '''SELECT date,
+                      date_answer,
+                      date_end,
                       source_name,
                       source_exten,
                       destination_name,
                       destination_exten,
-                      duration,
                       user_field,
-                      answered
                FROM call_log
                ORDER BY date DESC
                LIMIT 1'''
@@ -57,13 +55,13 @@ def find_last_call_log():
     call_log = postgres.exec_sql_request(query).fetchone()
 
     return {'date': call_log[0],
-            'source_name': call_log[1],
-            'source_exten': call_log[2],
-            'destination_name': call_log[3],
-            'destination_exten': call_log[4],
-            'duration': call_log[5],
-            'user_field': call_log[6],
-            'answered': str(call_log[7])} if call_log else None
+            'date_answer': call_log[1],
+            'date_end': call_log[2],
+            'source_name': call_log[3],
+            'source_exten': call_log[4],
+            'destination_name': call_log[5],
+            'destination_exten': call_log[6],
+            'user_field': call_log[8]} if call_log else None
 
 
 def _query_from_entry(entry):
