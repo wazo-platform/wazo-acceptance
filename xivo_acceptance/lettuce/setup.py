@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2015-2016 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ from xivo_acceptance.config import load_config, XivoAcceptanceConfig
 from xivo_acceptance.lettuce import debug
 from xivo_agentd_client import Client as AgentdClient
 from xivo_auth_client import Client as AuthClient
+from xivo_call_logs_client import Client as CallLogdClient
 from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
 from xivo_dird_client import Client as DirdClient
@@ -34,6 +35,12 @@ def setup_agentd_client():
                                        token=world.config['auth_token'],
                                        verify_certificate=False)
     auth.register_for_token_renewal(world.agentd_client.set_token)
+
+
+def setup_call_logd_client():
+    world.call_logd_client = CallLogdClient(**world.config['call_logd'])
+    world.call_logd_client.set_token(world.config.get('auth_token'))
+    auth.register_for_token_renewal(world.call_logd_client.set_token)
 
 
 def setup_confd_client():

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -93,6 +92,8 @@ def set_xivo_target(extra_config):
     setup.setup_auth_token()
     logger.debug("setup agentd client...")
     setup.setup_agentd_client()
+    logger.debug("setup call logd client...")
+    setup.setup_call_logd_client()
     logger.debug("setup confd client...")
     setup.setup_confd_client()
     logger.debug("setup ctid-ng client...")

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ def run(extra_config):
     setup.setup_xivo_acceptance_config()
     setup.setup_ssh_client()
     setup.setup_ws()
+    setup.setup_call_logd_client()
     setup.setup_confd_client()
     setup.setup_xivo_configured()
 

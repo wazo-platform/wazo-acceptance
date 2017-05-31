@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2014-2016 Avencall
+# Copyright 2014-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -69,6 +69,12 @@ def load_config(extra_config):
         'rest_api': {
             'username': 'admin',
             'passwd': 'proformatique'
+        },
+        'call_logd': {
+            'host': DEFAULT_XIVO_HOST,
+            'port': 9298,
+            'https': True,
+            'verify_certificate': False
         },
         'confd': {
             'host': DEFAULT_XIVO_HOST,
@@ -159,6 +165,9 @@ def _config_post_processor(config):
 
 
 def _config_update_host(config):
+    if config['call_logd']['host'] == DEFAULT_XIVO_HOST:
+        config['call_logd']['host'] = config['xivo_host']
+
     if config['confd']['host'] == DEFAULT_XIVO_HOST:
         config['confd']['host'] = config['xivo_host']
 
