@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,9 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-
-from datetime import timedelta
-from time import strptime
 
 from hamcrest import all_of
 from hamcrest import assert_that
@@ -109,17 +106,15 @@ def then_i_should_have_the_following_call_logs(step):
 @step(u'Then I have the last call log matching:')
 def then_i_have_the_last_call_log_matching(step):
     expected = dict(step.hashes[0])
-    expected_duration_str = expected.pop('duration', None)
+    expected_duration = int(expected.pop('duration', None))
+    if expected.get('answered'):
+        expected['answered'] = bool(expected['answered'])
 
     def _assert():
-        actual = call_logs_helper.find_last_call_log()
+        actual = world.call_logd_client.cdr.list(direction='desc', limit=1)['items'][0]
         assert_that(actual, has_entries(expected))
-        if expected_duration_str:
-            expected_time = strptime(expected_duration_str, "%H:%M:%S")
-            expected_duration = timedelta(hours=expected_time.tm_hour,
-                                          minutes=expected_time.tm_min,
-                                          seconds=expected_time.tm_sec)
-            assert_that(actual['duration'], close_to(expected_duration, timedelta(seconds=2)))
+        if expected_duration:
+            assert_that(actual['duration'], close_to(expected_duration, 2))
 
     common.wait_until_assert(_assert, tries=5)
 

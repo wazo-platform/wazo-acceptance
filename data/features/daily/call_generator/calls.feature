@@ -16,8 +16,8 @@ Feature: Callgen
          | caller | dial | callee | talk_time | hangup |
          | Alice  | 1101 | Bob    | 3         | callee |
         Then I have the last call log matching:
-         | destination_exten | duration | user_field | answered |
-         | 1101              | 0:00:03  |            | True     |
+         | destination_extension | duration | answered |
+         | 1101                  | 3        | True     |
 
     Scenario: Call with extension call recording activated
         Given there is "Call recording" activated in extenfeatures page
