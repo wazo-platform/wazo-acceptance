@@ -1,5 +1,5 @@
-Feature: xivo-service
+Feature: wazo-service
 
-  Scenario: Check that xivo-service works properly
-    Given the asset file "xivo-service-test.py" is copied on the server into "/tmp"
-    Then executing "/tmp/xivo-service-test.py" should complete without errors
+  Scenario: Check that wazo-service works properly
+    Given the asset file "wazo-service-test.py" is copied on the server into "/tmp"
+    Then executing "/tmp/wazo-service-test.py" should complete without errors

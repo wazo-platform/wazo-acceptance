@@ -33,14 +33,14 @@ xivo_restore() {
 }
 
 xivo_backup_db() {
-    xivo-service stop
+    wazo-service stop
     service postgresql restart
     xivo-backup db db
-    xivo-service start
+    wazo-service start
 }
 
 xivo_restore_db() {
-    xivo-service stop
+    wazo-service stop
     tar xvf db.tgz -C /tmp
     cd /tmp/pg-backup
     service postgresql restart
@@ -48,7 +48,7 @@ xivo_restore_db() {
     sudo -u postgres pg_restore -C -d postgres asterisk-*.dump
     sudo -u postgres dropdb xivo
     sudo -u postgres pg_restore -C -d postgres xivo-*.dump
-    xivo-service start
+    wazo-service start
 }
 
 case $action in

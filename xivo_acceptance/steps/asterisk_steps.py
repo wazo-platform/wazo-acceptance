@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -42,8 +41,8 @@ def then_asterisk_command_group1_return_no_error(step, ast_cmd):
 
 
 @step(u'Then I see in the log file service restarted by monit')
-def then_i_see_in_the_log_file_servce_restarted_by_monit(step):
-    logs.search_str_in_daemon_log('start: /usr/bin/xivo-service')
+def then_i_see_in_the_log_file_service_restarted_by_monit(step):
+    logs.search_str_in_daemon_log('start: /usr/bin/wazo-service')
 
 
 @step(u'Then the "([^"]*)" section of "([^"]*)" contains the options:')
