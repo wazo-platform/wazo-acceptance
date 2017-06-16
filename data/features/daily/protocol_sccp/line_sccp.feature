@@ -8,12 +8,12 @@ Feature: SCCP Line
           | codec               |
           | G.711 A-law (Audio) |
           | G.729A (Audio)      |
-        Then the "1762" section of "sccp.conf" contains the options:
+        Then the section of "sccp.conf" with extension "1762" contains the options:
           | name     | value      |
           | disallow | all        |
           | allow    | alaw,g729  |
         When I disable line codecs customization for line "1762"
-        Then the "1762" section of "sccp.conf" does not contain the options:
+        Then the section of "sccp.conf" with extension "1762" does not contain the options:
           | name     |
           | disallow |
           | allow    |
