@@ -45,8 +45,18 @@ def then_i_see_in_the_log_file_service_restarted_by_monit(step):
     logs.search_str_in_daemon_log('start: /usr/bin/wazo-service')
 
 
+@step(u'Then the "([^"]*)" section of "([^"]*)" contains the options:')
+def then_the_group1_section_of_group2_contains(step, section, filename):
+    option_names = [item['name'] for item in step.hashes]
+    expected_options = [(item['name'], item['value']) for item in step.hashes]
+
+    options = asterisk_helper.get_conf_options(filename, section, option_names)
+
+    assert_that(options, contains(*expected_options))
+
+
 @step(u'Then the section of "([^"]*)" with extension "([^"]*)" contains the options:')
-def then_the_group1_section_of_group2_contains(step, filename, extension):
+def then_the_section_of_group1_with_extension_group2_contains(step, filename, extension):
     extensions = world.confd_client.extensions.list(exten=extension)['items'][0]
     line = world.confd_client.lines.get(extensions['lines'][0]['id'])
     section = line['name']
@@ -59,8 +69,17 @@ def then_the_group1_section_of_group2_contains(step, filename, extension):
     assert_that(options, contains(*expected_options))
 
 
+@step(u'Then the "([^"]*)" section of "([^"]*)" does not contain the options:')
+def then_the_group1_section_of_group2_does_not_contain_the_options(step, section, filename):
+    option_names = [item['name'] for item in step.hashes]
+
+    options = asterisk_helper.get_conf_options(filename, section, option_names)
+
+    assert_that(options, equal_to([]))
+
+
 @step(u'Then the section of "([^"]*)" with extension "([^"]*)" does not contain the options:')
-def then_the_group1_section_of_group2_does_not_contain_the_options(step, filename, extension):
+def then_the_section_of_group1_with_extension_group2_does_not_contain_options(step, filename, extension):
     extensions = world.confd_client.extensions.list(exten=extension)['items'][0]
     line = world.confd_client.lines.get(extensions['lines'][0]['id'])
     section = line['name']
