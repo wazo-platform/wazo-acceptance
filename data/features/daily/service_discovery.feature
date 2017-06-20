@@ -4,10 +4,11 @@ Feature: Service discovery
         Then consul returns a running "<service>" service
 
     Examples:
-        | service      |
-        | xivo-agentd  |
-        | xivo-auth    |
-        | xivo-ctid    |
-        | xivo-ctid-ng |
-        | xivo-dird    |
-        | wazo-plugind |
+        | service       |
+        | xivo-agentd   |
+        | xivo-auth     |
+        | xivo-ctid     |
+        | xivo-ctid-ng  |
+        | xivo-dird     |
+        | wazo-plugind  |
+        | wazo-webhookd |
