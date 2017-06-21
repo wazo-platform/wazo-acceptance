@@ -20,6 +20,7 @@ import re
 
 BASE_SERVICES = [
     'dahdi',
+    'wazo-call-logd',
     'xivo-sysconfd',
     'xivo-confgend',
     'xivo-confd',
@@ -29,7 +30,6 @@ BASE_SERVICES = [
     'xivo-agid',
     'asterisk',
     'xivo-amid',
-    'xivo-call-logs',
     'xivo-agentd',
     'xivo-ctid',
     'xivo-dird',

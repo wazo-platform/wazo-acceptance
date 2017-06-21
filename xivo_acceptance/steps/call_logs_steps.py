@@ -58,19 +58,19 @@ def given_there_are_only_the_following_call_logs(step):
 
 @step(u'When I generate call logs$')
 def when_i_generate_call_logs(step):
-    command = ['xivo-call-logs']
+    command = ['wazo-call-logs']
     sysutils.send_command(command)
 
 
 @step(u'When I generate call logs using the last (\d+) unprocessed CEL entries$')
 def when_i_generate_call_logs_using_the_last_unprocessed_1_cel_entries(step, cel_count):
-    command = ['xivo-call-logs', '-c', cel_count]
+    command = ['wazo-call-logs', '-c', cel_count]
     sysutils.send_command(command)
 
 
 @step(u'When I generate call logs twice in parallel')
 def when_i_generate_call_logs_twice_in_parallel(step):
-    command = ['xivo-call-logs', '&', 'xivo-call-logs']
+    command = ['wazo-call-logs', '&', 'wazo-call-logs']
     world.command_output = world.ssh_client_xivo.out_err_call(command)
 
 
