@@ -21,7 +21,7 @@ from xivo_acceptance.config import load_config, XivoAcceptanceConfig
 from xivo_acceptance.lettuce import debug
 from xivo_agentd_client import Client as AgentdClient
 from xivo_auth_client import Client as AuthClient
-from xivo_call_logs_client import Client as CallLogdClient
+from wazo_call_logd_client import Client as CallLogdClient
 from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
 from xivo_dird_client import Client as DirdClient
