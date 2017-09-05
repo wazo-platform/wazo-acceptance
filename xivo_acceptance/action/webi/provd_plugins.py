@@ -160,7 +160,7 @@ def install_firmware(plugin, firmware):
     install_btn = firmware_line.find_element_by_xpath(".//a[@title='Install']")
     install_btn.click()
 
-    _check_for_confirmation_message(10)
+    _check_for_confirmation_message(15)
 
 
 def _find_firmware_line(firmware):
