@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,14 @@
 import time
 
 from lettuce import world
-from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import (
+    ElementNotVisibleException,
+    NoSuchElementException,
+    TimeoutException,
+)
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 
 from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
 from xivo_acceptance.lettuce import common
@@ -36,10 +43,11 @@ def update_plugin_list(url, check_confirmation=True):
 
 
 def _check_for_confirmation_message(secs):
-    time.sleep(secs)
     try:
-        world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-info')]]")
-    except NoSuchElementException:
+        WebDriverWait(world.browser, secs).until(
+            visibility_of_element_located((By.XPATH, "//div[@class[contains(.,'xivo-info')]]"))
+        )
+    except TimeoutException:
         errors = world.browser.find_element_by_xpath("//div[@class[contains(.,'xivo-error')]]").text
         raise Exception('Error during operation on plugins. Webi says:\n%s' % errors)
 
