@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ class XivoClient(object):
     def launch(self):
         logger.debug('-------------------- LAUNCHING CLIENT ---------------------')
         try:
-            args = ['./xivoclient']
+            args = ['./wazoclient']
             args.extend(self.arguments)
             args.append('socket:%s' % self.socket_path)
             self.process = subprocess.Popen(args,
