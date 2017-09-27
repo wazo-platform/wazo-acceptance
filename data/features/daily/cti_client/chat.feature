@@ -29,8 +29,8 @@ Feature: Chat
          | username  | password |
          | jamesbond | bond007  |
          When I publish a chat message:
-         | firstname | lastname | alias       | msg                     | from                                                      |
-         | Timothy   | Dalton   | Pam Bouvier | Sweet dreams, Mr. Bond. | ["some-uuid-007", "7f49ae32-24ab-478a-8b98-cd4ea01d7584"] |
+         | firstname | lastname | alias       | msg                     | from                                 |
+         | Timothy   | Dalton   | Pam Bouvier | Sweet dreams, Mr. Bond. | 7f49ae32-24ab-478a-8b98-cd4ea01d7584 |
          Then I should receive the following chat message:
-         | firstname | lastname | alias       | msg                     | from                                                      |
-         | Timothy   | Dalton   | Pam Bouvier | Sweet dreams, Mr. Bond. | ["some-uuid-007", "7f49ae32-24ab-478a-8b98-cd4ea01d7584"] |
+         | firstname | lastname | alias       | msg                     | from                                 |
+         | Timothy   | Dalton   | Pam Bouvier | Sweet dreams, Mr. Bond. | 7f49ae32-24ab-478a-8b98-cd4ea01d7584 |

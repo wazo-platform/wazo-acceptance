@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2015-2016 Avencall
+# Copyright 2015-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -64,11 +64,10 @@ def then_i_should_receive_the_following_chat_message(step):
     data = step.hashes[0]
     local_xivo_uuid = xivo_helper.get_uuid()
     user_uuid = user_helper.get_by_firstname_lastname(data['firstname'], data['lastname'])['uuid']
-    to = local_xivo_uuid, user_uuid
     expected_raw_event = {'class': 'chitchat',
                           'alias': data['alias'],
-                          'to': to,
-                          'from': json.loads(data['from']),
+                          'to': (local_xivo_uuid, user_uuid),
+                          'from': (local_xivo_uuid, data['from']),
                           'text': data['msg']}
     events = step.scenario._pseudo_xivo_client.events
     assert_that(_has_received_event_before_timeout(events, json.dumps(expected_raw_event), 5),
