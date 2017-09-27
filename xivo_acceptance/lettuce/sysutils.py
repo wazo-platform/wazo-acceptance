@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ SERVICE_PIDFILES = {
     'asterisk': '/var/run/asterisk/asterisk.pid',
     'consul': '/var/run/consul/consul.pid',
     'xivo-agent': '/var/run/xivo-agentd/xivo-agentd.pid',
-    'xivo-auth': '/var/run/xivo-auth/xivo-auth.pid',
+    'xivo-auth': '/var/run/wazo-auth/wazo-auth.pid',
     'xivo-ctid': '/var/run/xivo-ctid/xivo-ctid.pid',
     'xivo-ctid-ng': '/var/run/xivo-ctid-ng/xivo-ctid-ng.pid',
 }
