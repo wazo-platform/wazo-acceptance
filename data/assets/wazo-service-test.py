@@ -20,11 +20,11 @@ import re
 
 BASE_SERVICES = [
     'dahdi',
+    'wazo-auth',
     'wazo-call-logd',
     'xivo-sysconfd',
     'xivo-confgend',
     'xivo-confd',
-    'xivo-auth',
     'xivo-dxtora',
     'xivo-provd',
     'xivo-agid',
