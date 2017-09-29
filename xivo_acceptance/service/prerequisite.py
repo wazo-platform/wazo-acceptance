@@ -81,8 +81,8 @@ def run(extra_config):
         context_helper.update_contextnumbers_meetme('default', 4000, 4999)
         context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
-        logger.debug('Configuring xivo-auth')
-        _configure_xivo_auth()
+        logger.debug('Configuring wazo-auth')
+        _configure_wazo_auth()
 
         logger.debug('Configuring xivo-ctid')
         _configure_xivo_ctid()
@@ -163,11 +163,11 @@ def _configure_consul():
         _restart_service('consul')
 
 
-def _configure_xivo_auth():
-    _copy_daemon_config_file('xivo-auth')
-    xivo_auth_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('xivo-auth'))
-    if xivo_auth_is_running:
-        _restart_service('xivo-auth')
+def _configure_wazo_auth():
+    _copy_daemon_config_file('wazo-auth')
+    wazo_auth_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('wazo-auth'))
+    if wazo_auth_is_running:
+        _restart_service('wazo-auth')
 
 
 def _configure_xivo_ctid():

@@ -6,9 +6,9 @@ Feature: Service discovery
     Examples:
         | service       |
         | xivo-agentd   |
-        | xivo-auth     |
         | xivo-ctid     |
         | xivo-ctid-ng  |
         | xivo-dird     |
+        | wazo-auth     |
         | wazo-plugind  |
         | wazo-webhookd |
