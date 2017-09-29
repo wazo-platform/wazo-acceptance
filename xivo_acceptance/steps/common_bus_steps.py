@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 # Copyright (C) 2016 Proformatique, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -54,17 +54,6 @@ def _send_bus_msg(msg, routing_key):
 def when_i_publish_the_following_message_on_group1(step, routing_key):
     msg = json.dumps(json.loads(step.multiline))  # Clean white spaces
     _send_bus_msg(msg, routing_key)
-
-
-@step(u'When I publish a chat message:')
-def when_i_publish_a_chat_message(step):
-    data = step.hashes[0]
-    local_xivo_uuid = xivo_helper.get_uuid()
-    user_uuid = user_helper.get_by_firstname_lastname(data['firstname'], data['lastname'])['uuid']
-    to = local_xivo_uuid, user_uuid
-    event = ChatMessageEvent(json.loads(data['from']), to, data['alias'], data['msg'])
-    msg = Marshaler(local_xivo_uuid).marshal_message(event)
-    _send_bus_msg(msg, event.routing_key)
 
 
 @step(u'Given I listen on the bus for messages:')

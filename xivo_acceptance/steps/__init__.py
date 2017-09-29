@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 # Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -28,6 +28,7 @@ from .call_logs_steps import *
 from .call_steps import *
 from .callfilter_steps import *
 from .certificate_steps import *
+from .chat_steps import *
 from .common_webi_steps import *
 from .common_xivoclient_steps import *
 from .common_bus_steps import *
