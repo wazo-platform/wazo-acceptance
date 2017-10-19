@@ -38,9 +38,7 @@ def type_queue_ring_strategy(ring_strategy):
 
 
 def type_queue_exit_context(context_name):
-    context = context_helper.get_context_with_name(context_name)
-    context_field_value = '%s (%s)' % (context.display_name, context.name)
-    set_select_field_with_label('Exit context', context_field_value)
+    set_text_field_with_label('Exit context', context_name)
 
 
 def add_or_replace_queue(queue):

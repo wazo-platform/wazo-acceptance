@@ -155,9 +155,6 @@ Feature: Queues
         Then the agent "1108" is not a member of the queue "queue8" in asterisk
 
     Scenario: Add an exit context to an existing queue
-       Given there are contexts with infos:
-          | type | name       | range_start | range_end | entity_name | didlength |
-          | user | contextuel | 1000        | 1999      | default     |           |
         Given there are queues with infos:
           | name | display name | number | context |
           | help | Help         | 3107   | default |
