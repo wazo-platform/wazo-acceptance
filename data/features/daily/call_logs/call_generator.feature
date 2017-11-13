@@ -59,7 +59,7 @@ Feature: Call Log Generation
         When I generate call logs
         Then I should have the following call logs:
             | date                  | date_answer           | date_end              | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2013-01-01 11:02:38.0 | 2013-01-01 11:02:42.2 | 2013-01-01 11:02:45.4 |   612345678 |    612345678 |              1002 |            | sip/trunk            | sip/hg63xv                |
+            | 2013-01-01 11:02:38.0 | 2013-01-01 11:02:42.2 | 2013-01-01 11:02:45.4 |   612345678 |   0612345678 |              1002 |            | sip/trunk            | sip/hg63xv                |
 
 	Scenario: Generation of answered incoming call on s extension
         Given there are no call logs
@@ -81,7 +81,7 @@ Feature: Call Log Generation
         When I generate call logs
         Then I should have the following call logs:
             | date                  | date_answer           | date_end              | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2013-01-01 11:02:38.0 | 2013-01-01 11:02:42.2 | 2013-01-01 11:02:45.4 |   612345678 |    612345678 |              1002 |            | sip/trunk            | sip/hg63xv                |
+            | 2013-01-01 11:02:38.0 | 2013-01-01 11:02:42.2 | 2013-01-01 11:02:45.4 |   612345678 |   0612345678 |              1002 |            | sip/trunk            | sip/hg63xv                |
 
     Scenario: Generation of answered outgoing call
         Given there are no call logs
