@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -233,5 +233,4 @@ class _XiVOLocalBrowserImplementation(_XiVOBrowserMixin, webdriver.Firefox):
 
     def __init__(self, debug=False):
         self._debug = debug
-        super(_XiVOLocalBrowserImplementation, self).__init__(firefox_profile=self._setup_browser_profile(),
-                                                              capabilities={'marionette': False})
+        super(_XiVOLocalBrowserImplementation, self).__init__(firefox_profile=self._setup_browser_profile())

@@ -82,6 +82,11 @@ We recommend running tests on a dedicated debian machine. Run the following
 commands to install requirements:
 
     apt-get install libsasl2-dev xvfb xserver-xephyr linphone-nogtk python-dev postgresql-server-dev-all libldap2-dev lsof
+
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz
+    tar -xvf geckodriver-v0.19.1-linux64.tar.gz
+    cp geckodriver /usr/local/bin/geckodriver
+
     pip install -r requirements.txt
 
 Once the requirements are installed, modify the configuration files and run the prerequisite script:
