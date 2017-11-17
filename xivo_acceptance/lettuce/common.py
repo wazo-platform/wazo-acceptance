@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -325,7 +324,7 @@ def disable_selected_lines():
     ActionChains(world.browser).move_to_element(menu_button).perform()
 
     disable_button = world.browser.find_element_by_id("toolbar-advanced-menu-disable")
-    ActionChains(world.browser).click(disable_button).perform()
+    disable_button.click()
 
 
 def edit_line(line_substring, column=None):
@@ -346,7 +345,7 @@ def enable_selected_lines():
     ActionChains(world.browser).move_to_element(menu_button).perform()
 
     enable_button = world.browser.find_element_by_id("toolbar-advanced-menu-enable")
-    ActionChains(world.browser).click(enable_button).perform()
+    enable_button.click()
 
 
 def go_to_tab(tab_label, ss_tab_label=None):
@@ -360,11 +359,9 @@ def go_to_tab(tab_label, ss_tab_label=None):
     """
     tab_button = world.browser.find_element_by_xpath("//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
     if ss_tab_label:
-        hover = ActionChains(world.browser).move_to_element(tab_button)
+        ActionChains(world.browser).move_to_element(tab_button).perform()
         ss_tab_label = tab_button.find_element_by_xpath("//div[@class='stab']//a[contains(.,'%s')]" % ss_tab_label)
-        hover.move_to_element(ss_tab_label)
-        hover.click()
-        hover.perform()
+        ss_tab_label.click()
     else:
         tab_button.click()
     time.sleep(1)
