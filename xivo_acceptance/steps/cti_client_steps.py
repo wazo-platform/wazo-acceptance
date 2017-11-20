@@ -186,7 +186,7 @@ class _Client(object):
             'userlogin': self._username,
             'company': 'lol',
             'ident': 'python-client',
-            'xivoversion': '2.2',
+            'wazoversion': '2.3',
         }
         self._send_message(login_message)
 
