@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+import time
+
 from lettuce import world
 
 
@@ -23,20 +25,25 @@ class ListPane(object):
 
     def __init__(self, webelement):
         self.pane = webelement.find_element_by_css_selector(".ui-multiselect")
+        self.pane_search = self.pane.find_element_by_css_selector(".search")
 
-    def find_and_click(self, selector):
+    def find_and_click(self, selector, label=None):
         element = self.pane.find_element_by_css_selector(selector)
+        if label:
+            # To fix https://bugzilla.mozilla.org/show_bug.cgi?id=1295538
+            self.pane_search.send_keys(label)
+            time.sleep(0.2)
         element.click()
 
     def add(self, label):
         label = label.replace('"', '\"')
         selector = 'ul.available li[title="%s"] a' % label
-        self.find_and_click(selector)
+        self.find_and_click(selector, label)
 
     def add_contains(self, label):
         label = label.replace('"', '\"')
         selector = 'ul.available li[title*="%s"] a' % label
-        self.find_and_click(selector)
+        self.find_and_click(selector, label)
 
     def remove(self, label):
         label = label.replace('"', '\"')

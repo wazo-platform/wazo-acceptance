@@ -361,6 +361,7 @@ def go_to_tab(tab_label, ss_tab_label=None):
     if ss_tab_label:
         ActionChains(world.browser).move_to_element(tab_button).perform()
         ss_tab_label = tab_button.find_element_by_xpath("//div[@class='stab']//a[contains(.,'%s')]" % ss_tab_label)
+        time.sleep(0.5)
         ss_tab_label.click()
     else:
         tab_button.click()
