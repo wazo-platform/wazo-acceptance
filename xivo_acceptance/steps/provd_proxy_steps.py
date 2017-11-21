@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ def when_i_remove_all_proxy_configurations(step):
     for field in PROXY_FIELDS:
         element = world.browser.find_element_by_name(field)
         element.clear()
-        element.send_keys("\b")
+        element.send_keys(" ")
         time.sleep(3)
 
 
