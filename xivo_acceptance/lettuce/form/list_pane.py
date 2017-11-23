@@ -34,6 +34,7 @@ class ListPane(object):
             self.pane_search.send_keys(label)
             time.sleep(0.2)
         element.click()
+        self.pane_search.clear()
 
     def add(self, label):
         label = label.replace('"', '\"')
