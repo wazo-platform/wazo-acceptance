@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2016 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -126,11 +126,9 @@ def when_i_remove_agent_group(step, agent_group_name):
 @step(u'When I remove selected agent group')
 def when_i_remove_selected_agent_group(step):
     element_to_hover_over = world.browser.find_element_by_xpath("//img[@id='toolbar-bt-advanced']")
-    hover = ActionChains(world.browser).move_to_element(element_to_hover_over)
+    ActionChains(world.browser).move_to_element(element_to_hover_over).perform()
     delete_href = element_to_hover_over.find_element_by_xpath("//a[@id='toolbar-advanced-menu-delete']")
-    hover.move_to_element(delete_href)
-    hover.click()
-    hover.perform()
+    delete_href.click()
     alert = world.browser.switch_to_alert()
     alert.accept()
 
