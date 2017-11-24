@@ -72,7 +72,7 @@ Feature: Devices
         Then the web interfaces shows a device with:
           | switchboard_enabled | switchboard_checked |
           | False               | False               |
-        When I select a plugin "xivo-aastra"
+        When I select a plugin "xivo-aastra-3.3.1-SP4"
         Then the web interfaces shows a device with:
           | switchboard_enabled | switchboard_checked |
           | True                | False               |
