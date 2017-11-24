@@ -316,7 +316,7 @@ def click_on_line_with_alert(act, line_substring, column=None):
     delete_button.click()
     alert = world.browser.switch_to_alert()
     alert.accept()
-    WebDriverWait(world.browser, world.timeout).until(staleness_of(delete_button))
+    WebDriverWait(world.browser, 10).until(staleness_of(delete_button))
 
 
 def disable_selected_lines():
