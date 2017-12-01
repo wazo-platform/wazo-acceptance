@@ -74,7 +74,7 @@ class XiVOBrowser(object):
 
 class _XiVOBrowserMixin(object):
 
-    DOWNLOAD_DIR = '/tmp'
+    DOWNLOAD_DIR = '/tmp/downloads'
 
     def _setup_browser_profile(self):
         fp = FirefoxProfile()

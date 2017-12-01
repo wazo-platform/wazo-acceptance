@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2013-2016 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ def when_i_execute_database_restore_command(step):
 
 @step(u'Then a non-empty file "([^"]*)" is present on disk')
 def then_a_non_empty_file_is_present_on_disk(step, filename):
-    path = os.path.join('/', 'tmp', filename)
+    path = os.path.join('/', 'tmp', 'downloads', filename)
     filesize = 0
     for _ in range(30):
         time.sleep(1)
