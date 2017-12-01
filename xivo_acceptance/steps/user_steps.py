@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,10 +17,11 @@
 
 from hamcrest import assert_that
 from hamcrest import equal_to
+from hamcrest import has_items
 from hamcrest import is_
 from lettuce import step
 from lettuce.registry import world
-
+from xivo_auth_client import Client as AuthClient
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import group_helper
@@ -357,3 +357,21 @@ def then_user_has_an_unconditional_forward_set_to_group2(step, fullname, expecte
 def then_user_has_no_unconditional_forward(step, fullname):
     enabled, _ = user_helper.get_unconditional_forward(fullname)
     assert_that(enabled, is_(False))
+
+
+@step(u'When I create a token with infos:')
+def when_i_create_a_token_with_infos(step):
+    auth_data = {'verify_certificate': False}
+    for hash_ in step.hashes:
+        for key, value in hash_.iteritems():
+            auth_data[key] = value
+    client = AuthClient(world.config['xivo_host'], **auth_data)
+    step.scenario.token_data = client.token.new(backend=auth_data['backend'])
+
+
+@step(u'Then the token has the following ACLs:')
+def then_the_token_has_the_following_acls(step):
+    acls = step.scenario.token_data['acls']
+    for hash_ in step.hashes:
+        for acl in hash_.itervalues():
+            assert_that(acls, has_items(acl))

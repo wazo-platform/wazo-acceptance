@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -188,6 +187,19 @@ def add_user_with_infos(user_data, step=None):
     if user_data.get('group_name'):
         user = world.confd_client.users.get(user_id)
         group_helper.add_or_replace_group(user_data['group_name'], users=[user])
+
+    if user_data.get('wazo_auth'):
+        user = world.confd_client.users.get(user_id)
+        email = '{}@acceptance.wazo.community'.format(user_data['cti_login'])
+        user_args = {'uuid': user['uuid'],
+                     'username': user_data['cti_login'],
+                     'password': user_data['cti_passwd'],
+                     'email_address': email}
+        world.auth_client.set_token(world.config['auth_token'])
+        matching_users = world.auth_client.users.list(username=user_data['cti_login'])
+        for u in matching_users['items']:
+            world.auth_client.users.delete(u['uuid'])
+        world.auth_client.users.new(**user_args)
 
 
 def add_user(data_dict, step=None):

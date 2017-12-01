@@ -1,5 +1,16 @@
 Feature: User
 
+    Scenario: User ACL generation
+        Given there are users with infos:
+        | firstname | lastname | number | context | agent_number | wazo_auth | cti_login | cti_passwd |
+        | Bob       | Marley   |   1101 | default | 1101         | True      | bob       | secret     |
+        When I create a token with infos:
+        | username | password | backend   |
+        | bob      | secret   | wazo_user |
+        Then the token has the following ACLs:
+        | ACL                               |
+        | agentd.agents.by-number.1101.read |
+
     Scenario: Add a user with first name and last name and remove it
         Given there is no user "Bill" "Bush"
         When I create a user with infos:
