@@ -79,10 +79,6 @@ class _XiVOBrowserMixin(object):
     def _setup_browser_profile(self):
         fp = FirefoxProfile()
 
-        # disable multi-process Firefox that probably causing some crashes
-        fp.set_preference('browser.tabs.remote.autostart', False)
-        fp.set_preference('browser.tabs.remote.autostart.2', False)
-
         fp.set_preference("browser.download.folderList", 2)
         fp.set_preference("browser.download.manager.showWhenStarting", False)
         fp.set_preference("browser.download.dir", self.DOWNLOAD_DIR + '/')
