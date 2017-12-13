@@ -57,6 +57,7 @@ from .general_settings_sip_steps import *
 from .general_settings_xivo_steps import *
 from .group_steps import *
 from .ha_steps import *
+from .http_steps import *
 from .incall_steps import *
 from .ivr_steps import *
 from .ipbx_count_steps import *
