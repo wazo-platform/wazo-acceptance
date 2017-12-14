@@ -15,4 +15,4 @@ Feature: HTTP
     | GET    | /api/dird/0.1/config         |
     | GET    | /api/plugind/0.2/config      |
     | GET    | /api/webhookd/1.0/config     |
-    | GET    | /api/websocketd              |
+    | GET    | /api/websocketd/             |
