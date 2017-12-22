@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 # Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,8 +25,9 @@ from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce.aastra import AastraPhonebookBrowser
 
 
-@step(u'Given "([^"]*)" "([^"]*)" is not in the phonebook "([^"]*)" of entity "([^"]*)"')
-def given_entry_is_not_in_the_phonebook(step, firstname, lastname, phonebook_name, entity):
+@step(u'Given "([^"]*)" "([^"]*)" is not in the phonebook "([^"]*)"')
+def given_entry_is_not_in_the_phonebook(step, firstname, lastname, phonebook_name):
+    entity = world.config['default_entity'].replace('_', '')
     entry = {'first name': firstname,
              'last name': lastname}
     phonebook_action_dird.remove_entry_if_exists(entry, phonebook_name, entity)
@@ -37,8 +38,9 @@ def given_phone_is_accessible_by_any_hosts(step):
     phonebook_action_webi.set_accessibility_to_any_host()
 
 
-@step(u'Given there are entries in the phonebook "([^"]*)" of entity "([^"]*)":')
-def given_there_are_entries_in_the_phonebook_1(step, phonebook_name, entity):
+@step(u'Given there are entries in the phonebook "([^"]*)"')
+def given_there_are_entries_in_the_phonebook_1(step, phonebook_name):
+    entity = world.config['default_entity'].replace('_', '')
     for entry in step.hashes:
         phonebook_action_dird.remove_entry_if_exists(entry, phonebook_name, entity)
         phonebook_action_dird.create_entry(entry, phonebook_name, entity)
@@ -46,15 +48,17 @@ def given_there_are_entries_in_the_phonebook_1(step, phonebook_name, entity):
 
 @step(u'Given there are local dird phonebooks:')
 def given_there_are_local_dird_phonebooks(step):
+    default_entity = world.config['default_entity'].replace('_', '')
     for entry in step.hashes:
         phonebook_action_webi.remove_directory_if_exists(entry['name'])
         phonebook_action_webi.create_local_dird_directory(entry['name'],
                                                           entry['phonebook name'],
-                                                          entry['entity'])
+                                                          entry.get('entity', default_entity))
 
 
-@step(u'When I add the following entries to the phonebook "([^"]*)" of entity "([^"]*)":')
-def when_i_add_the_following_entries_to_the_phonebook(step, phonebook_name, entity):
+@step(u'When I add the following entries to the phonebook "([^"]*)"')
+def when_i_add_the_following_entries_to_the_phonebook(step, phonebook_name):
+    entity = world.config['default_entity'].replace('_', '')
     for entry in step.hashes:
         phonebook_action_webi.create_entry(entry, phonebook_name, entity)
 
