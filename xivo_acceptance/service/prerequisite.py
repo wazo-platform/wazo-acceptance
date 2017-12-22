@@ -70,7 +70,7 @@ def run(extra_config):
         _install_packages(['tcpflow'])
 
         logger.debug('Installing chan_test (module for asterisk)')
-        copy_asset_to_server('chan_test.so', '/usr/lib/asterisk/modules/chan_test.so')
+        _install_chan_test()
 
         logger.debug('Adding context')
         context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
@@ -148,6 +148,20 @@ def _allow_provd_listen_on_all_interfaces():
 def _install_packages(packages):
     command = ['apt-get', 'update', '&&', 'apt-get', 'install', '-y']
     command.extend(packages)
+    world.ssh_client_xivo.check_call(command)
+
+
+def _install_chan_test():
+    _install_packages(['make', 'asterisk-dev', 'gcc', 'libc6-dev', 'libssl-dev'])
+    command = ['rm', '-rf', '/usr/src/chan-test-master', '/usr/src/chan-test.zip']
+    world.ssh_client_xivo.check_call(command)
+    command = ['wget', 'https://github.com/wazo-pbx/chan-test/archive/master.zip', '-O', '/usr/src/chan-test.zip']
+    world.ssh_client_xivo.check_call(command)
+    command = ['unzip', '-d', '/usr/src', '/usr/src/chan-test.zip']
+    world.ssh_client_xivo.check_call(command)
+    command = ['make', '-C', '/usr/src/chan-test-master']
+    world.ssh_client_xivo.check_call(command)
+    command = ['make', '-C', '/usr/src/chan-test-master', 'install']
     world.ssh_client_xivo.check_call(command)
 
 
