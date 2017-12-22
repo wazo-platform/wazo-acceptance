@@ -24,12 +24,12 @@ Feature: Incoming calls
         | Plume     | Wilde    |   1868 | default | sip      |
         | Anthony   | Smith    |   1869 | default | sip      |  # not necessary, workaround for linphone bug
         Given there is an incall "1868" in context "from-extern" to the "user" "Plume Wilde"
-        Given there are entries in the phonebook "wazo" of entity "xivoentity":
+        Given there are entries in the phonebook "wazo"
         | first name | last name | phone | email           | company   | address1 |
         | El         | Diablo    |   666 | diablo@hell.org | Hell Inc. | 666 Hell |
         Given there are local dird phonebooks:
-        | name                 | entity      | phonebook name |
-        | acceptance-phonebook | xivoentity  | wazo           |
+        | name                 | phonebook name |
+        | acceptance-phonebook | wazo           |
         Given the directory definition "xivodirreverse" does not exist
         Given I add the following CTI directory definition:
         | name           | directory            | reverse match |
