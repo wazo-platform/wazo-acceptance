@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2016 Avencall
+# Copyright 2016-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import step, world
-from hamcrest import assert_that, equal_to
+from hamcrest import (
+    assert_that,
+    has_item,
+)
 
 _FAIL2BAN_REGEX_ARGS = {
     'xivo-provd': {
@@ -33,8 +36,8 @@ def given_a_update_plugins_provd(step, name, match_count):
     command = ['fail2ban-regex', args['log'], args['regex']]
 
     output = world.ssh_client_xivo.out_call(command)
-    last_line = output.splitlines()[-1]
+    last_lines = output.splitlines()[-5:]
 
-    expected_last_line = 'Lines: {0} lines, 0 ignored, {0} matched, 0 missed'.format(match_count)
-    assert_that(last_line, equal_to(expected_last_line),
+    expected_line = 'Lines: {0} lines, 0 ignored, {0} matched, 0 missed'.format(match_count)
+    assert_that(last_lines, has_item(expected_line),
                 'output did not match: command was {}'.format(command))
