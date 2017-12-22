@@ -1,6 +1,6 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 #
-# Copyright (C) 2014-2016 Avencall
+# Copyright 2014-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -57,7 +57,8 @@ def _parse_args():
     parser.add_argument('-v', '--verbose', action='store_true',
                         help="verbose mode")
     parser.add_argument('-c', '--config',
-                        help='config file name (not the path)')
+                        help='config file name (not the path)',
+                        default='default')
     return parser.parse_args()
 
 
