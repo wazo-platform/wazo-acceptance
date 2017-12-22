@@ -143,7 +143,8 @@ to run your browser.
 
 To start the browser:
 
-    docker run -d -p "4444:4444" selenium/standalone-firefox
+    install -dm 0777 /tmp/downloads
+    docker run -d -v /tmp/downloads:/tmp/downloads -p "4444:4444" selenium/standalone-firefox
 
 
 To configure xivo-acceptance to use the Remote webdriver modify your xivo-acceptance configuration:
@@ -154,7 +155,8 @@ To configure xivo-acceptance to use the Remote webdriver modify your xivo-accept
 
 If you need to see what is going on in the browser, use the `selenium/standalone-firefox-debug` image, which runs a VNC server (the password is "secret"):
 
-    docker run -d -p 4444:4444 -p 5901:5900 selenium/standalone-firefox-debug
+    install -dm 0777 /tmp/downloads
+    docker run -d -v /tmp/downloads:/tmp/downloads -p 4444:4444 -p 5901:5900 selenium/standalone-firefox-debug
 
 
 #Coverage
