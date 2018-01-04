@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,51 +23,71 @@ from xivo_acceptance.helpers import outcall_helper
 from xivo_ws import Context, ContextRange, WebServiceRequestError
 
 
-def update_contextnumbers_user(name, numberbeg, numberend, entity_name='xivoentity'):
+def update_contextnumbers_user(name, numberbeg, numberend, entity_name=None):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        add_context(name, name, 'internal', contextnumbers_user=contextnumbers, entity_name=entity_name)
+        add_context(name,
+                    name,
+                    'internal',
+                    contextnumbers_user=contextnumbers,
+                    entity_name=entity_name or world.config['default_entity'])
     else:
         context.users.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_group(name, numberbeg, numberend, entity_name='xivoentity'):
+def update_contextnumbers_group(name, numberbeg, numberend, entity_name=None):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        add_context(name, name, 'internal', contextnumbers_group=contextnumbers, entity_name=entity_name)
+        add_context(name,
+                    name,
+                    'internal',
+                    contextnumbers_group=contextnumbers,
+                    entity_name=entity_name or world.config['default_entity'])
     else:
         context.groups.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_queue(name, numberbeg, numberend, entity_name='xivoentity'):
+def update_contextnumbers_queue(name, numberbeg, numberend, entity_name=None):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        add_context(name, name, 'internal', contextnumbers_queue=contextnumbers, entity_name=entity_name)
+        add_context(name,
+                    name,
+                    'internal',
+                    contextnumbers_queue=contextnumbers,
+                    entity_name=entity_name or world.config['default_entity'])
     else:
         context.queues.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_meetme(name, numberbeg, numberend, entity_name='xivoentity'):
+def update_contextnumbers_meetme(name, numberbeg, numberend, entity_name=None):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend))
     if not context:
-        add_context(name, name, 'internal', contextnumbers_meetme=contextnumbers, entity_name=entity_name)
+        add_context(name,
+                    name,
+                    'internal',
+                    contextnumbers_meetme=contextnumbers,
+                    entity_name=entity_name or world.config['default_entity'])
     else:
         context.conf_rooms.append(contextnumbers)
         world.ws.contexts.edit(context)
 
 
-def update_contextnumbers_incall(name, numberbeg, numberend, didlength, entity_name='xivoentity'):
+def update_contextnumbers_incall(name, numberbeg, numberend, didlength, entity_name=None):
     context = get_context_with_name(name)
     contextnumbers = ContextRange(int(numberbeg), int(numberend), did_length=didlength)
     if not context:
-        add_context(name, name, 'incall', contextnumbers_incall=contextnumbers, entity_name=entity_name)
+        add_context(name,
+                    name,
+                    'incall',
+                    contextnumbers_incall=contextnumbers,
+                    entity_name=entity_name or world.config['default_entity'])
     else:
         context.incalls.append(contextnumbers)
         world.ws.contexts.edit(context)
@@ -82,13 +102,13 @@ def add_context(name,
                 contextnumbers_meetme='',
                 contextnumbers_queue='',
                 contextnumbers_incall='',
-                entity_name='xivoentity'):
+                entity_name=None):
 
     context = Context()
     context.name = name
     context.display_name = display_name
     context.type = context_type
-    context.entity = entity_name
+    context.entity = entity_name or world.config['default_entity']
 
     if context_include:
         context.context_include = [context_include]
