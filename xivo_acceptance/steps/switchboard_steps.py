@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 from hamcrest import assert_that
 from hamcrest import contains
 from hamcrest import equal_to
-from lettuce import step
+from lettuce import step, world
 
 from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.action.webi import queue as queue_action_webi
@@ -37,7 +37,7 @@ def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
     phonebook_action_webi.remove_directory_if_exists('acceptance-switchboard-phonebook')
     phonebook_action_webi.create_local_dird_directory('acceptance-switchboard-phonebook',
                                                       'wazo',
-                                                      'xivoentity')
+                                                      world.config['default_entity'])
     directory_action_webi.add_or_replace_directory(
         'xivodirswitchboard',
         'acceptance-switchboard-phonebook',
