@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -79,8 +79,7 @@ def then_the_service_group1_is_no_longer_running(step, service):
 
 @step(u'When I generate a core dump and remember the pid as "([^"]*)" and the epoch as "([^"]*)"')
 def when_i_generate_a_core_dump_and_remember_the_pid_as_group1_and_the_epoch_as_group2(step, pid_var_name, epoch_var_name):
-    assets.copy_asset_to_server('core_dump', '/tmp')
-    res = sysutils.output_command(['ulimit -c 1024 && /tmp/core_dump'])
+    res = sysutils.output_command(['ulimit -c 1024 && /usr/local/bin/core_dump'])
     separator = ': '
     for line in res.split('\n'):
         if separator not in line:

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -71,6 +71,9 @@ def run(extra_config):
 
         logger.debug('Installing chan_test (module for asterisk)')
         _install_chan_test()
+
+        logger.debug('Installing core_dump program')
+        _install_core_dump()
 
         logger.debug('Adding context')
         context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
@@ -162,6 +165,13 @@ def _install_chan_test():
     command = ['make', '-C', '/usr/src/chan-test-master']
     world.ssh_client_xivo.check_call(command)
     command = ['make', '-C', '/usr/src/chan-test-master', 'install']
+    world.ssh_client_xivo.check_call(command)
+
+
+def _install_core_dump():
+    copy_asset_to_server('core_dump.c', '/usr/src')
+    _install_packages(['gcc'])
+    command = ['gcc', '-o', '/usr/local/bin/core_dump', '/usr/src/core_dump.c']
     world.ssh_client_xivo.check_call(command)
 
 
