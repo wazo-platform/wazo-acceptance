@@ -1,18 +1,3 @@
-configobj
-EasyProcess
-PyHamcrest
-PyVirtualDisplay
-SQLAlchemy
-fuzzywuzzy
-jinja2
-lettuce<0.2.21  # lettuce 0.2.21 breaks the -s3 behavior
-psycopg2==2.5.4
-python-ldap==2.4.10
-requests==2.4.3
-selenium
-sure
-wsgiref
-pexpect
 git+git://github.com/wazo-pbx/pylinphonelib.git@master
 git+git://github.com/wazo-pbx/xivo-ws.git
 git+https://github.com/wazo-pbx/wazo-call-logd-client.git
@@ -28,8 +13,23 @@ git+https://github.com/wazo-pbx/xivo-ctid-client.git
 git+https://github.com/wazo-pbx/xivo-dird-client.git
 git+https://github.com/wazo-pbx/xivo-lib-rest-client.git
 git+https://github.com/wazo-pbx/xivo-test-helpers.git
-pyyaml==3.11
+EasyProcess
+PyHamcrest
+PyVirtualDisplay
+SQLAlchemy
+configobj
+fuzzywuzzy
+jinja2
 kombu==3.0.34
-stevedore==1.17.1
+lettuce<0.2.21  # lettuce 0.2.21 breaks the -s3 behavior
+pexpect
+psycopg2==2.5.4
 python-consul==0.4.7
+python-ldap==2.4.10
 python-levenshtein==0.11.2
+pyyaml==3.11
+requests==2.4.3
+selenium
+stevedore==1.17.1
+sure
+wsgiref
