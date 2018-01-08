@@ -20,15 +20,15 @@ SQLAlchemy
 configobj
 fuzzywuzzy
 jinja2
-kombu==3.0.34
+kombu==3.0.35
 lettuce<0.2.21  # lettuce 0.2.21 breaks the -s3 behavior
 pexpect
-psycopg2==2.5.4
-python-consul==0.4.7
-python-ldap==2.4.10
-python-levenshtein==0.11.2
-pyyaml==3.11
-requests==2.4.3
+psycopg2==2.6.2
+python-consul==0.7.0
+python-ldap==2.4.28
+python-levenshtein==0.12.0
+pyyaml==3.12
+requests==2.12.4
 selenium
 stevedore==1.17.1
 sure
