@@ -36,8 +36,8 @@ Feature: User
 
     Scenario: Add a user in a group
         Given there are users with infos:
-        | firstname | lastname | number | context | group_name  | entity_name |
-        | Bob       | Marley   |   1101 | default | rastafarien | xivoentity  |
+        | firstname | lastname | number | context | group_name  |
+        | Bob       | Marley   |   1101 | default | rastafarien |
         Given there is no user "Bob" "Dylan"
         When I rename "Bob" "Marley" to "Bob" "Dylan"
         Then I should be at the user list page
@@ -47,8 +47,8 @@ Feature: User
         Given there is no user "Bill" "Bush"
         Given I have no extension with exten "1632@default"
         When I create a user with infos:
-        | firstname | lastname | protocol | number | context | entity_displayname |
-        | Bill      | Bush     | SIP      |  1632  | Default | xivo_entity         |
+        | firstname | lastname | protocol | number | context |
+        | Bill      | Bush     | SIP      |  1632  | Default |
         Then I see a user with infos:
         | fullname  | number | protocol |
         | Bill Bush |   1632 | sip      |
@@ -59,8 +59,8 @@ Feature: User
         Given there is no user "Bill" "Bush"
         Given I have no extension with exten "1632@default"
         When I create a user with infos:
-        | firstname | lastname | protocol | number | context | entity_displayname |
-        | Bill      | Bush     | SCCP     |  1632  | Default | xivo_entity         |
+        | firstname | lastname | protocol | number | context |
+        | Bill      | Bush     | SCCP     |  1632  | Default |
         Then I see a user with infos:
         | fullname  | number | provisioning_code | protocol |
         | Bill Bush |   1632 |                 - | sccp     |
@@ -77,8 +77,8 @@ Feature: User
         When I search device ""
         Given there is no user "Bill" "Bush"
         When I create a user with infos:
-        | firstname | lastname | protocol | number | context | device            | entity_displayname |
-        | Bill      | Bush     | SIP      |   1632 | Default | 00:de:ad:be:ef:00 | xivo_entity         |
+        | firstname | lastname | protocol | number | context | device            |
+        | Bill      | Bush     | SIP      |   1632 | Default | 00:de:ad:be:ef:00 |
         Then I see a user with infos:
         | fullname  | number | protocol |
         | Bill Bush |   1632 | sip      |
@@ -101,8 +101,8 @@ Feature: User
       Given there is no user "Abarai" "Renji"
       Given I have no extension with exten "1677@default"
       When I create a user with infos:
-          | firstname | lastname | protocol | number | context | device            | entity_displayname |
-          | Abarai    | Renji    | SIP      | 1677   | Default | dd:11:22:33:44:55 | xivo_entity         |
+          | firstname | lastname | protocol | number | context | device            |
+          | Abarai    | Renji    | SIP      | 1677   | Default | dd:11:22:33:44:55 |
       Then I see a user with infos:
           | fullname     | protocol | number |
           | Abarai Renji | sip      | 1677   |
@@ -128,8 +128,8 @@ Feature: User
 
     Scenario: Update the group's channel type of a user
         Given there are users with infos:
-        | firstname | lastname | number | context | group_name  | entity_name |
-        | Bob       | Marley   |   1101 | default | rastafarien | xivoentity  |
+        | firstname | lastname | number | context | group_name  |
+        | Bob       | Marley   |   1101 | default | rastafarien |
         Then the channel type of group "rastafarien" of user "Bob Marley" is "default"
         When I modify the channel type of group "rastafarien" of user "Bob Marley" to "Local"
         Then the channel type of group "rastafarien" of user "Bob Marley" is "Local"
@@ -141,8 +141,8 @@ Feature: User
     # The problem is that saving the user form may erase values previously
     # set in the line form (bug #2918)
         Given there are users with infos:
-          | firstname | lastname | number | context | entity_name |
-          | Tom       | Sawyer   |   1405 | default | xivoentity  |
+          | firstname | lastname | number | context |
+          | Tom       | Sawyer   |   1405 | default |
         Given I set the following options in line "1405@default":
           | NAT |
           | No  |
@@ -180,12 +180,12 @@ Feature: User
 
     Scenario: Update user's extension to existing queue's extension
         Given there are contexts with infos:
-          | type   | name      | range_start | range_end | entity_name |
-          | user   | samerange | 1000        | 1999      | xivoentity  |
-          | queue  | samerange | 1000        | 1999      | xivoentity  |
+          | type   | name      | range_start | range_end |
+          | user   | samerange | 1000        | 1999      |
+          | queue  | samerange | 1000        | 1999      |
         Given there are users with infos:
-          | firstname | lastname | number | context   | entity_name |
-          | Fab       | Lab      | 1001   | samerange | xivoentity  |
+          | firstname | lastname | number | context   |
+          | Fab       | Lab      | 1001   | samerange |
         Given there are queues with infos:
           | name          | display name   | number | context   |
           | americandream | American Dream | 1002   | samerange |

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ def add_user_with_infos(user_data, step=None):
     user_ws_data['lastname'] = user_data['lastname']
 
     if user_data.get('entity_name'):
-        user_ws_data['entity_name'] = user_data.get('entity_name', 'xivoentity')
+        user_ws_data['entity_name'] = user_data.get('entity_name', world.config['default_entity'])
 
     if user_data.get('number') and user_data.get('context'):
         user_ws_data['line_number'] = user_data['number']

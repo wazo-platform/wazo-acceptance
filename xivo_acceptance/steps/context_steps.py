@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-from lettuce.decorators import step
+from lettuce import step, world
 
 from xivo_acceptance.helpers import context_helper
 from xivo_acceptance.lettuce import common
@@ -37,16 +37,17 @@ def given_i_have_the_following_extensions(step):
 @step(u'^Given there are contexts with infos:$')
 def given_there_are_contexts_with_infos(step):
     for context_data in step.hashes:
+        entity_name = context_data.get('entity_name', world.config['default_entity'])
         if context_data['type'] == 'user':
             context_helper.update_contextnumbers_user(context_data['name'],
                                                       context_data['range_start'],
                                                       context_data['range_end'],
-                                                      entity_name=context_data['entity_name'])
+                                                      entity_name=entity_name)
         elif context_data['type'] == 'group':
             context_helper.update_contextnumbers_group(context_data['name'],
                                                        context_data['range_start'],
                                                        context_data['range_end'],
-                                                       entity_name=context_data['entity_name'])
+                                                       entity_name=entity_name)
         elif context_data['type'] == 'meetme':
             context_helper.update_contextnumbers_meetme(context_data['name'],
                                                         context_data['range_start'],
@@ -55,13 +56,13 @@ def given_there_are_contexts_with_infos(step):
             context_helper.update_contextnumbers_incall(context_data['name'],
                                                         context_data['range_start'],
                                                         context_data['range_end'],
-                                                        entity_name=context_data['entity_name'],
+                                                        entity_name=entity_name,
                                                         didlength=context_data['didlength'])
         elif context_data['type'] == 'queue':
             context_helper.update_contextnumbers_queue(context_data['name'],
                                                        context_data['range_start'],
                                                        context_data['range_end'],
-                                                       entity_name=context_data['entity_name'])
+                                                       entity_name=entity_name)
 
 
 @step(u'Then I see the context "([^"]*)" exists$')
