@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 from lettuce import world
 
 from xivo_acceptance.lettuce import common, form
+from xivo_acceptance.helpers import entity_helper
 
 MODULE_MAP = {
     'Configuration': 'xivo-configuration',
@@ -54,7 +55,8 @@ SECTION_MAP = {
 }
 
 
-def create_admin_user(username, password, entity='xivo_entity'):
+def create_admin_user(username, password, entity=None):
+    entity = entity or entity_helper.get_entity_with_name(world.config['default_entity'])['display_name']
     common.open_url('admin_user', 'add')
     form.input.set_text_field_with_label("login", username)
     form.input.set_text_field_with_label("password", password)
