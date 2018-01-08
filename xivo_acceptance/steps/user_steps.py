@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ from lettuce import step
 from lettuce.registry import world
 from xivo_auth_client import Client as AuthClient
 from xivo_acceptance.action.webi import user as user_action_webi
+from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import group_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
@@ -174,6 +175,8 @@ def when_i_create_a_user(step):
     user_properties = step.hashes[0]
     user_action_webi.type_user_names(user_properties['firstname'], user_properties.get('lastname', ''))
     if 'number' in user_properties and 'context' in user_properties and 'protocol' in user_properties:
+        entity_displayname = user_properties.get('entity_displayname')
+        entity_displayname = entity_displayname or entity_helper.get_entity_with_name(world.config['default_entity'])['display_name']
         user_action_webi.user_form_add_line(
             linenumber=user_properties['number'],
             context=user_properties['context'],
