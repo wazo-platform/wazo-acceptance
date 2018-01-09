@@ -106,8 +106,8 @@ def _configure_postgresql():
     cmd = ['chmod', '600', '.pgpass']
     world.ssh_client_xivo.check_call(cmd)
 
-    hba_file = '/etc/postgresql/9.4/main/pg_hba.conf'
-    postgres_conf_file = '/etc/postgresql/9.4/main/postgresql.conf'
+    hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'
+    postgres_conf_file = '/etc/postgresql/9.6/main/postgresql.conf'
 
     subnet_line = 'host all all {subnet} md5'
     for subnet in world.config['prerequisites']['subnets']:

@@ -36,7 +36,7 @@ BASE_SERVICES = [
     'xivo-dird-phoned',
 ]
 
-ALL_SERVICES = ['rabbitmq-server', 'consul', 'postgresql@9.4-main', 'nginx'] + BASE_SERVICES
+ALL_SERVICES = ['rabbitmq-server', 'consul', 'postgresql@9.6-main', 'nginx'] + BASE_SERVICES
 
 MONIT_RUNNING = re.compile(r'^\d+ monit$')
 RUNNING_SERVICE = re.compile(r'^\s+running\s+(\S+)$')

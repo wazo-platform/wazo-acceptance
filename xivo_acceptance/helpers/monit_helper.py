@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2015 Avencall
+# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ def _wait_monit_restart(maxtries):
 
 def is_monit_started():
     result = get_monit_status()
-    if 'Error connecting to the monit daemon' in result:
+    if 'Cannot create socket to [localhost]:2812 -- Connection refused' in result:
         return False
     return True
 
