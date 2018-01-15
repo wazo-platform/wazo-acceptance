@@ -33,7 +33,7 @@ from xivo_acceptance.lettuce import func, common
 
 @step(u'Given the switchboard is configured for internal directory lookup')
 def given_the_switchboard_is_configured_for_internal_directory_lookup(step):
-    context_helper.add_or_replace_context('__switchboard_directory', 'Switchboard', 'internal')
+    context_helper.add_or_replace_context('__switchboard_directory', 'Switchboard', 'others')
     phonebook_action_webi.remove_directory_if_exists('acceptance-switchboard-phonebook')
     phonebook_action_webi.create_local_dird_directory('acceptance-switchboard-phonebook',
                                                       'wazo',
