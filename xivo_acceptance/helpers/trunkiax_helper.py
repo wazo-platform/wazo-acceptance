@@ -18,15 +18,15 @@
 from lettuce import world
 
 
-def add_trunkiax(data):
-    endpoint = world.confd_client.endpoints_iax.create({'name': data['name']})
-    trunk = world.confd_client.trunks.create({'context': data['context']})
+def add_trunkiax(name, context='default'):
+    endpoint = world.confd_client.endpoints_iax.create({'name': name})
+    trunk = world.confd_client.trunks.create({'context': context})
     world.confd_client.trunks(trunk).add_endpoint_iax(endpoint)
 
 
-def add_or_replace_trunkiax(data):
-    delete_trunkiaxs_with_name(data['name'])
-    add_trunkiax(data)
+def add_or_replace_trunkiax(name, context='default'):
+    delete_trunkiaxs_with_name(name)
+    add_trunkiax(name, context)
 
 
 def delete_trunkiaxs_with_name(name):
