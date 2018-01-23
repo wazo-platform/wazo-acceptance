@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,9 +23,7 @@ from xivo_acceptance.lettuce import common, form
 
 @step(u'Given there is a trunkiax "([^"]*)"')
 def given_there_is_a_trunkiax(step, name):
-    data = {'name': name,
-            'context': 'default'}
-    trunkiax_helper.add_or_replace_trunkiax(data)
+    trunkiax_helper.add_or_replace_trunkiax(name)
 
 
 @step(u'Given there is no trunkiax "([^"]*)"')

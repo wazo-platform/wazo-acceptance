@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,26 +16,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lettuce import world
-from xivo_ws import IAXTrunk
 
 
-def add_trunkiax(data):
-    iaxtrunk = IAXTrunk()
-    iaxtrunk.name = data['name']
-    iaxtrunk.context = data['context']
-    world.ws.iax_trunks.add(iaxtrunk)
+def add_trunkiax(name, context='default'):
+    endpoint = world.confd_client.endpoints_iax.create({'name': name})
+    trunk = world.confd_client.trunks.create({'context': context})
+    world.confd_client.trunks(trunk).add_endpoint_iax(endpoint)
 
 
-def add_or_replace_trunkiax(data):
-    delete_trunkiaxs_with_name(data['name'])
-    add_trunkiax(data)
+def add_or_replace_trunkiax(name, context='default'):
+    delete_trunkiaxs_with_name(name)
+    add_trunkiax(name, context)
 
 
 def delete_trunkiaxs_with_name(name):
-    iax_trunks = _search_trunkiax_with_name(name)
-    for iax_trunk in iax_trunks:
-        world.ws.iax_trunks.delete(iax_trunk.id)
-
-
-def _search_trunkiax_with_name(name):
-    return world.ws.iax_trunks.search_by_name(name)
+    endpoints = world.confd_client.endpoints_iax.list(name=name)['items']
+    for endpoint in endpoints:
+        world.confd_client.endpoints_iax.delete(endpoint)
+        if endpoint['trunk']:
+            world.confd_client.trunks.delete(endpoint['trunk']['id'])
