@@ -230,12 +230,12 @@ Feature: Call Log Generation
             | LINKEDID_END | 2015-06-18 14:17:37.545342 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-00000033 | 1434651452.51 | 1434651452.51 |           |
         When I generate call logs using the last 12 unprocessed CEL entries
         Then I should have the following call logs:
-            | date                       | date_answer                | date_end                   | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:17:32.195429 | 2015-06-18 14:17:34.080717 | 2015-06-18 14:17:37.544217 | Elès 45     | 1045         | 1001              |            | sip/as2mkq           | sip/je5qtq                |
+            | date                       | date_answer                | date_end                   |
+            | 2015-06-18 14:17:32.195429 | 2015-06-18 14:17:34.080717 | 2015-06-18 14:17:37.544217 |
         Then I should not have the following call logs:
-            | date                       | date_answer                | date_end                   | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:17:15.314919 | 2015-06-18 14:17:17.642693 | 2015-06-18 14:17:22.264727 | Elès 45     | 1045         | 1001              |            | sip/as2mkq           | sip/je5qtq                |
-            | 2015-06-18 14:17:24.135378 | 2015-06-18 14:17:27.135653 | 2015-06-18 14:17:30.558334 | Elès 45     | 1045         | 1001              |            | sip/as2mkq           | sip/je5qtq                |
+            | date                       | date_answer                | date_end                   |
+            | 2015-06-18 14:17:15.314919 | 2015-06-18 14:17:17.642693 | 2015-06-18 14:17:22.264727 |
+            | 2015-06-18 14:17:24.135378 | 2015-06-18 14:17:27.135653 | 2015-06-18 14:17:30.558334 |
 
      Scenario: Generation for a specified latest CEL count with processed calls
          Given there are no call logs
@@ -280,12 +280,12 @@ Feature: Call Log Generation
         When I generate call logs using the last 12 unprocessed CEL entries
         When I generate call logs using the last 12 unprocessed CEL entries
         Then I should have the following call logs:
-            | date                | date_answer         | date_end            | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2013-01-01 09:00:00 | 2013-01-01 09:00:05 | 2013-01-01 09:00:10 | Bob Marley  |         1002 |              1001 |            | sip/z77kvm           | sip/hg63xv                |
-            | 2013-01-01 10:00:00 | 2013-01-01 10:00:05 | 2013-01-01 10:00:10 | Bob Marley  |         1002 |              1001 |            | sip/z77kvm           | sip/hg63xv                |
+            | date                | date_answer         | date_end            |
+            | 2013-01-01 09:00:00 | 2013-01-01 09:00:05 | 2013-01-01 09:00:10 |
+            | 2013-01-01 10:00:00 | 2013-01-01 10:00:05 | 2013-01-01 10:00:10 |
         Then I should not have the following call logs:
-            | date                | date_answer         | date_end            | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2013-01-01 08:00:00 | 2013-01-01 08:00:05 | 2013-01-01 08:00:10 | Bob Marley  |         1002 |              1001 |            | sip/z77kvm           | sip/hg63xv                |
+            | date                | date_answer         | date_end            |
+            | 2013-01-01 08:00:00 | 2013-01-01 08:00:05 | 2013-01-01 08:00:10 |
 
      Scenario: Running call log generation in parallel should fail
          Given there are no call logs
@@ -310,8 +310,8 @@ Feature: Call Log Generation
             | CHAN_END     | 2013-01-01 08:00:10 | Bob Marley    |    1002 | s     | user    | SIP/z77kvm-00000028 | 1375994780.1 | 1375994780.1 |           |
          When I generate call logs using the last 1 unprocessed CEL entries
          Then I should have the following call logs:
-            | date                | date_answer         | date_end            | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2013-01-01 08:00:00 | 2013-01-01 08:00:05 | 2013-01-01 08:00:10 | Bob Marley  |         1002 |              1001 |            | sip/z77kvm           | sip/hg63xv                |
+            | date                | date_answer         | date_end            |
+            | 2013-01-01 08:00:00 | 2013-01-01 08:00:05 | 2013-01-01 08:00:10 |
 
      Scenario: Generation of partially processed calls
         Given there are only the following call logs:
