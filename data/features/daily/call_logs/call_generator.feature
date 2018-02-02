@@ -20,8 +20,8 @@ Feature: Call Log Generation
             | LINKEDID_END | 2015-06-18 14:09:02.272325 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000001f | 1434650936.31 | 1434650936.31 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                       | date_answer             | date_end                   | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:08:56.910686 | 2015-06-18 14:08:59.878 | 2015-06-18 14:09:02.271033 | Elès 45     | 1045         | 1001              |            | sip/as2mkq           | sip/je5qtq                |
+            | date                       | date_answer             | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
+            | 2015-06-18 14:08:56.910686 | 2015-06-18 14:08:59.878 | 2015-06-18 14:09:02.271033 | Elès 45     |         1045 |            1001 | default           |              1001 |            | sip/as2mkq           | sip/je5qtq                |
 
     Scenario: Generation of non-answered internal call
         Given there are no call logs
@@ -37,8 +37,59 @@ Feature: Call Log Generation
             | LINKEDID_END | 2015-06-18 14:10:28.292243 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-00000021 | 1434651024.33 | 1434651024.33 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                       | date_answer | date_end                   | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:10:24.586638 | NULL        | 2015-06-18 14:10:28.290746 | Elès 45     | 1045         | 1001              |            | sip/as2mkq           | sip/je5qtq                |
+            | date                       | date_answer | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
+            | 2015-06-18 14:10:24.586638 | NULL        | 2015-06-18 14:10:28.290746 | Elès 45     | 1045         |            1001 | default           | 1001              |            | sip/as2mkq           | sip/je5qtq                |
+
+    Scenario: Generation of answered internal call forwarded to internal
+        Given there are no call logs
+        Given I have only the following CEL entries:
+            | eventtype     | eventtime                  | cid_name         | cid_num | exten             | context     | channame            |      uniqueid |      linkedid |
+            | CHAN_START    | 2018-02-02 15:00:25.106723 | Alice            |     101 | 103               | default     | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
+            | XIVO_USER_FWD | 2018-02-02 15:00:25.546267 | Alice            |     101 | forward_voicemail | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
+            | ANSWER        | 2018-02-02 15:00:26.051203 | Alice            |     101 | pickup            | xivo-pickup | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
+            | APP_START     | 2018-02-02 15:00:27.373161 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
+            | CHAN_START    | 2018-02-02 15:00:27.392589 | Bernard          |     102 | s                 | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
+            | ANSWER        | 2018-02-02 15:00:29.207311 | Bernard          |     102 | s                 | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
+            | BRIDGE_ENTER  | 2018-02-02 15:00:29.227529 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
+            | BRIDGE_ENTER  | 2018-02-02 15:00:29.22922  | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
+            | BRIDGE_EXIT   | 2018-02-02 15:00:30.464687 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
+            | HANGUP        | 2018-02-02 15:00:30.471676 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
+            | CHAN_END      | 2018-02-02 15:00:30.476368 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
+            | BRIDGE_EXIT   | 2018-02-02 15:00:30.478914 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
+            | HANGUP        | 2018-02-02 15:00:30.481403 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
+            | CHAN_END      | 2018-02-02 15:00:30.484065 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
+            | LINKEDID_END  | 2018-02-02 15:00:30.486225 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
+        When I generate call logs
+        Then I should have the following call logs:
+            | date                       | date_answer               | date_end                   | source_exten | requested_exten | requested_context | destination_exten | destination_name | source_line_identity | destination_line_identity |
+            | 2018-02-02 15:00:25.106723 | 2018-02-02 15:00:29.22922 | 2018-02-02 15:00:30.484065 |          101 |             103 | default           |               102 | Bernard          | sccp/101             | sip/dm77z3                |
+
+    Scenario: Generation of answered internal call forwarded to outgoing
+        Given there are no call logs
+        Given I have only the following CEL entries:
+            | eventtype     | eventtime                  | cid_name |   cid_num | exten             | context     | channame            |      uniqueid |      linkedid |
+            | CHAN_START    | 2018-02-02 15:41:43.836685 | Alice    |       101 | 103               | default     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+            | XIVO_USER_FWD | 2018-02-02 15:41:44.282567 | Alice    |       101 | forward_voicemail | user        | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+            | ANSWER        | 2018-02-02 15:41:44.783914 | Alice    |       101 | pickup            | xivo-pickup | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+            | XIVO_OUTCALL  | 2018-02-02 15:41:45.921035 | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+            | APP_START     | 2018-02-02 15:41:45.94522  | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+            | CHAN_START    | 2018-02-02 15:41:45.94822  |          |           | s                 | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
+            | ANSWER        | 2018-02-02 15:41:51.553289 |          | **9742309 | dial              | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
+            | BRIDGE_ENTER  | 2018-02-02 15:41:51.560433 |          | **9742309 |                   | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
+            | BRIDGE_ENTER  | 2018-02-02 15:41:51.589309 | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+            | BRIDGE_EXIT   | 2018-02-02 15:41:54.252016 |          | **9742309 |                   | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
+            | HANGUP        | 2018-02-02 15:41:54.271408 |          | **9742309 |                   | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
+            | CHAN_END      | 2018-02-02 15:41:54.276601 |          | **9742309 |                   | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
+            | BRIDGE_EXIT   | 2018-02-02 15:41:54.27823  | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+            | HANGUP        | 2018-02-02 15:41:54.278472 | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+            | CHAN_END      | 2018-02-02 15:41:54.2831   | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+            | LINKEDID_END  | 2018-02-02 15:41:54.285531 | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+
+        When I generate call logs
+
+        Then I should have the following call logs:
+            | date                       | date_answer                | date_end                 | source_name | source_exten | requested_exten | requested_context | destination_exten | source_line_identity | destination_line_identity |
+            | 2018-02-02 15:41:43.836685 | 2018-02-02 15:41:51.589309 | 2018-02-02 15:41:54.2831 | Alice       |          101 |             103 | default           | **9742309         | sccp/101             | sip/dev_32                |
 
     Scenario: Generation of answered incoming call
         Given there are no call logs
@@ -58,8 +109,8 @@ Feature: Call Log Generation
             | LINKEDID_END | 2013-01-01 11:02:45.5 |            | 0612345678 | s     | user        | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                  | date_answer           | date_end              | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2013-01-01 11:02:38.0 | 2013-01-01 11:02:42.2 | 2013-01-01 11:02:45.4 |   612345678 |   0612345678 |              1002 |            | sip/trunk            | sip/hg63xv                |
+            | date                  | date_answer           | date_end              | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
+            | 2013-01-01 11:02:38.0 | 2013-01-01 11:02:42.2 | 2013-01-01 11:02:45.4 |   612345678 |   0612345678 |            1002 | from-extern       |              1002 |            | sip/trunk            | sip/hg63xv                |
 
 	Scenario: Generation of answered incoming call on s extension
         Given there are no call logs
@@ -80,8 +131,8 @@ Feature: Call Log Generation
             | LINKEDID_END | 2013-01-01 11:02:45.5 |            | 0612345678 | s     | user        | SIP/trunk-00000028  | 1376060558.17 | 1376060558.17 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                  | date_answer           | date_end              | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2013-01-01 11:02:38.0 | 2013-01-01 11:02:42.2 | 2013-01-01 11:02:45.4 |   612345678 |   0612345678 |              1002 |            | sip/trunk            | sip/hg63xv                |
+            | date                  | date_answer           | date_end              | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
+            | 2013-01-01 11:02:38.0 | 2013-01-01 11:02:42.2 | 2013-01-01 11:02:45.4 |   612345678 |   0612345678 |            1002 | from-extern       |              1002 |            | sip/trunk            | sip/hg63xv                |
 
     Scenario: Generation of answered outgoing call
         Given there are no call logs
@@ -119,9 +170,9 @@ Feature: Call Log Generation
             | LINKEDID_END | 2015-06-18 14:13:24.152458 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000028 | 1434651198.40 | 1434651198.39 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                       | date_answer                | date_end                   | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:12:05.935283 | 2015-06-18 14:12:12.515753 | 2015-06-18 14:12:16.862638 | Elès 01     | 1001         | **9642301         |            | sip/je5qtq           | sip/dev_34-1              |
-            | 2015-06-18 14:13:18.176182 | 2015-06-18 14:13:21.190246 | 2015-06-18 14:13:24.14759  | Elès 01     | 1001         | **9642301         | foo        | sip/je5qtq           | sip/dev_34-1              |
+            | date                       | date_answer                | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
+            | 2015-06-18 14:12:05.935283 | 2015-06-18 14:12:12.515753 | 2015-06-18 14:12:16.862638 | Elès 01     | 1001         |       **9642301 | default           | **9642301         |            | sip/je5qtq           | sip/dev_34-1              |
+            | 2015-06-18 14:13:18.176182 | 2015-06-18 14:13:21.190246 | 2015-06-18 14:13:24.14759  | Elès 01     | 1001         |       **9642301 | default           | **9642301         | foo        | sip/je5qtq           | sip/dev_34-1              |
 
     Scenario: Generation of originate call
         Given there are no call logs
@@ -143,8 +194,8 @@ Feature: Call Log Generation
             |  LINKEDID_END | 2015-06-18 14:15:19.213763 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002b | 1434651312.43 | 1434651312.43 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                       | date_answer                | date_end                   | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:15:12.978338 | 2015-06-18 14:15:16.396213 | 2015-06-18 14:15:19.212596 | Elès 45     | 1045         | 1001              |            | sip/as2mkq           | sip/je5qtq                |
+            | date                       | date_answer                | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
+            | 2015-06-18 14:15:12.978338 | 2015-06-18 14:15:16.396213 | 2015-06-18 14:15:19.212596 | Elès 45     | 1045         |            1001 | default           | 1001              |            | sip/as2mkq           | sip/je5qtq                |
 
     Scenario: Generation of unanswered originate call
         Given there are no call logs
@@ -161,8 +212,8 @@ Feature: Call Log Generation
             | LINKEDID_END | 2015-06-18 14:15:54.9539   | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002d | 1434651348.45 | 1434651348.45 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                       | date_answer | date_end                   | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:15:48.836632 | NULL        | 2015-06-18 14:15:54.952707 | Elès 45     | 1045         | 1001              |            | sip/as2mkq           | sip/je5qtq                |
+            | date                       | date_answer | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
+            | 2015-06-18 14:15:48.836632 | NULL        | 2015-06-18 14:15:54.952707 | Elès 45     | 1045         |            1001 | default           | 1001              |            | sip/as2mkq           | sip/je5qtq                |
 
     Scenario: Generation of originates hung up by the switchboard
         Given there are no call logs
@@ -179,8 +230,8 @@ Feature: Call Log Generation
             | LINKEDID_END | 2014-02-20 09:29:00.309806 | Carlos   |    1003 | endcall:hangupsilent | forward | SIP/d49t0y-00000003 | 1392906526.4 | 1392906526.4 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                       | date_answer | date_end                   | source_name | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2014-02-20 09:28:46.683014 | NULL        | 2014-02-20 09:29:00.309786 | Carlos      |         1003 |              1002 |            | sip/d49t0y           | sccp/1002                 |
+            | date                       | date_answer | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
+            | 2014-02-20 09:28:46.683014 | NULL        | 2014-02-20 09:29:00.309786 | Carlos      |         1003 |            1002 | pcmdev            |              1002 |            | sip/d49t0y           | sccp/1002                 |
 
      Scenario: Generation for a specified latest CEL count with no processed calls
          Given there are no call logs
@@ -353,5 +404,5 @@ Feature: Call Log Generation
             | LINKEDID_END | 2013-12-04 14:21:07.2 | Neelix Talaxian  | 1066    | s     | user    | SIP/2dvtpb-00000009 | 1386184858.9  | 1386184858.9 |           |
         When I generate call logs
         Then I should have the following call logs:
-            | date                  | date_answer           | date_end              | source_name     | source_exten | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2013-12-04 14:20:58.0 | 2013-12-04 14:21:05.5 | 2013-12-04 14:21:07.1 | Neelix Talaxian |         1066 |              1624 |            | sip/2dvtpb           | sip/zsp7wv                |
+            | date                  | date_answer           | date_end              | source_name     | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
+            | 2013-12-04 14:20:58.0 | 2013-12-04 14:21:05.5 | 2013-12-04 14:21:07.1 | Neelix Talaxian |         1066 |            1624 | default           |              1624 |            | sip/2dvtpb           | sip/zsp7wv                |
