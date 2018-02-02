@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # Copyright (C) 2016 Proformatique Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -28,7 +28,7 @@ def insert_entries(entries):
     for entry in entries:
         cel = dict(entry)
 
-        for key in ['userdeftype', 'cid_ani', 'cid_rdnis', 'cid_dnid', 'channame', 'appname', 'appdata', 'accountcode', 'peeraccount', 'peer']:
+        for key in ['userdeftype', 'cid_ani', 'cid_rdnis', 'cid_dnid', 'channame', 'appname', 'appdata', 'accountcode', 'peeraccount', 'peer', 'userfield']:
             cel.setdefault(key, '')
 
         cel.setdefault('amaflags', 0)
