@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ from hamcrest import assert_that, equal_to
 
 from xivo_acceptance.action.webi import profile as profile_action_webi
 from xivo_acceptance.lettuce import common
-from xivo_acceptance.lettuce import logs
 
 
 @step(u'Given there is no CTI profile "([^"]*)"$')
@@ -45,9 +44,3 @@ def then_the_profile_1_has_default_services_activated(step, profile_name):
     selected_services = profile_action_webi.selected_services()
 
     assert_that(selected_services, equal_to(expected_services))
-
-
-@step(u'Then there are no errors in the CTI logs')
-def then_there_are_no_errors_in_the_cti_logs(step):
-    errors_found = logs.search_str_in_xivo_cti_log("ERROR")
-    assert_that(errors_found, equal_to(False), 'errors were found in CTI logs')

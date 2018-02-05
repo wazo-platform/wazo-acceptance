@@ -23,17 +23,6 @@ from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce.common import open_url
 
 
-@step(u'Given I have the following context:')
-def given_i_have_the_following_extensions(step):
-    for context_data in step.hashes:
-        context_helper.add_or_replace_context(context_data['name'],
-                                              context_data['name'],
-                                              'internal')
-        context_helper.update_contextnumbers_user(context_data['name'],
-                                                  context_data['numberbeg'],
-                                                  context_data['numberend'])
-
-
 @step(u'^Given there are contexts with infos:$')
 def given_there_are_contexts_with_infos(step):
     for context_data in step.hashes:

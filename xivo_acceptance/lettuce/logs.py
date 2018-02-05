@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,8 +26,6 @@ DAEMON_LOGFILE = '/var/log/daemon.log'
 ASTERISK_LOGFILE = '/var/log/asterisk/messages'
 XIVO_AGENT_LOGFILE = '/var/log/xivo-agentd.log'
 XIVO_AGID_LOGFILE = '/var/log/xivo-agid.log'
-XIVO_CTI_LOGFILE = '/var/log/xivo-ctid.log'
-XIVO_PROVD_LOGFILE = '/var/log/xivo-provd.log'
 XIVO_CONFD_LOGFILE = '/var/log/xivo-confd.log'
 XIVO_SYSCONFD_LOGFILE = '/var/log/xivo-sysconfd.log'
 
@@ -58,14 +56,6 @@ XIVO_AGID_LOG_INFO = LogfileInfo(logfile=XIVO_AGID_LOGFILE,
                                  date_format=PYTHON_DATE_FORMAT,
                                  date_pattern=PYTHON_DATE_PATTERN)
 
-XIVO_CTI_LOG_INFO = LogfileInfo(logfile=XIVO_CTI_LOGFILE,
-                                date_format=PYTHON_DATE_FORMAT,
-                                date_pattern=PYTHON_DATE_PATTERN)
-
-XIVO_PROVD_LOG_INFO = LogfileInfo(logfile=XIVO_PROVD_LOGFILE,
-                                  date_format=PYTHON_DATE_FORMAT,
-                                  date_pattern=PYTHON_DATE_PATTERN)
-
 XIVO_CONFD_LOG_INFO = LogfileInfo(logfile=XIVO_CONFD_LOGFILE,
                                   date_format=CONFD_DATE_FORMAT,
                                   date_pattern=CONFD_DATE_PATTERN)
@@ -91,24 +81,8 @@ def search_str_in_xivo_agid_log(expression, delta=10):
     return _search_str_in_log_file(expression, XIVO_AGID_LOG_INFO, delta)
 
 
-def search_str_in_xivo_cti_log(expression, delta=10):
-    return _search_str_in_log_file(expression, XIVO_CTI_LOG_INFO, delta)
-
-
-def find_line_in_xivo_provd_log(delta=10):
-    return _find_line_in_log_file(XIVO_PROVD_LOG_INFO, delta)
-
-
-def search_str_in_xivo_confd_log(expression, delta=10):
-    return _search_str_in_log_file(expression, XIVO_CONFD_LOG_INFO, delta)
-
-
 def find_line_in_xivo_sysconfd_log(delta=10):
     return _find_line_in_log_file(XIVO_SYSCONFD_LOG_INFO, delta)
-
-
-def find_line_in_daemon_log(delta=10):
-    return _find_line_in_log_file(DAEMON_LOG_INFO, delta)
 
 
 def find_line_in_xivo_confd_log(delta=10):
