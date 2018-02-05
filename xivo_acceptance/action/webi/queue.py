@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from selenium.common.exceptions import ElementClickInterceptedException
 from xivo_acceptance.helpers import context_helper, queue_helper
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce.form.input import set_text_field_with_label
@@ -34,7 +35,12 @@ AUTOPAUSE_AGENTS = 'autopause agents'
 
 
 def type_queue_ring_strategy(ring_strategy):
-    set_select_field_with_label('Ring strategy', ring_strategy)
+    try:
+        set_select_field_with_label('Ring strategy', ring_strategy)
+    except ElementClickInterceptedException:
+        '''Sometimes, the list of extensions hides the field'''
+        common.reset_focus()
+        set_select_field_with_label('Ring strategy', ring_strategy)
 
 
 def type_queue_exit_context(context_name):
