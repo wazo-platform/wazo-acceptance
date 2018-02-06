@@ -18,6 +18,7 @@
 from selenium.common.exceptions import ElementClickInterceptedException
 from xivo_acceptance.helpers import context_helper, queue_helper
 from xivo_acceptance.lettuce import common
+from xivo_acceptance.action.webi import common as common_action_webi
 from xivo_acceptance.lettuce.form.input import set_text_field_with_label
 from xivo_acceptance.lettuce.form.select import set_select_field_with_label, \
     set_select_field_with_id
@@ -39,7 +40,7 @@ def type_queue_ring_strategy(ring_strategy):
         set_select_field_with_label('Ring strategy', ring_strategy)
     except ElementClickInterceptedException:
         '''Sometimes, the list of extensions hides the field'''
-        common.reset_focus()
+        common_action_webi.reset_focus()
         set_select_field_with_label('Ring strategy', ring_strategy)
 
 
