@@ -40,7 +40,7 @@ Feature: Call Log Generation
             | date                       | date_answer | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
             | 2015-06-18 14:10:24.586638 | NULL        | 2015-06-18 14:10:28.290746 | Elès 45     | 1045         |            1001 | default           | 1001              |            | sip/as2mkq           | sip/je5qtq                |
 
-    Scenario: Generation of answered internal call forwarded to internal
+    Scenario: Generation of answered internal call inconditionnally forwarded to internal
         Given there are no call logs
         Given I have only the following CEL entries:
             | eventtype     | eventtime                  | cid_name         | cid_num | exten             | context     | channame            |      uniqueid |      linkedid |
@@ -64,32 +64,35 @@ Feature: Call Log Generation
             | date                       | date_answer               | date_end                   | source_exten | requested_exten | requested_context | destination_exten | destination_name | source_line_identity | destination_line_identity |
             | 2018-02-02 15:00:25.106723 | 2018-02-02 15:00:29.22922 | 2018-02-02 15:00:30.484065 |          101 |             103 | default           |               102 | Bernard          | sccp/101             | sip/dm77z3                |
 
-    Scenario: Generation of answered internal call forwarded to outgoing
+    Scenario: Generation of answered internal call busy forwarded to internal
         Given there are no call logs
         Given I have only the following CEL entries:
-            | eventtype     | eventtime                  | cid_name |   cid_num | exten             | context     | channame            |      uniqueid |      linkedid |
-            | CHAN_START    | 2018-02-02 15:41:43.836685 | Alice    |       101 | 103               | default     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
-            | XIVO_USER_FWD | 2018-02-02 15:41:44.282567 | Alice    |       101 | forward_voicemail | user        | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
-            | ANSWER        | 2018-02-02 15:41:44.783914 | Alice    |       101 | pickup            | xivo-pickup | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
-            | XIVO_OUTCALL  | 2018-02-02 15:41:45.921035 | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
-            | APP_START     | 2018-02-02 15:41:45.94522  | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
-            | CHAN_START    | 2018-02-02 15:41:45.94822  |          |           | s                 | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
-            | ANSWER        | 2018-02-02 15:41:51.553289 |          | **9742309 | dial              | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
-            | BRIDGE_ENTER  | 2018-02-02 15:41:51.560433 |          | **9742309 |                   | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
-            | BRIDGE_ENTER  | 2018-02-02 15:41:51.589309 | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
-            | BRIDGE_EXIT   | 2018-02-02 15:41:54.252016 |          | **9742309 |                   | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
-            | HANGUP        | 2018-02-02 15:41:54.271408 |          | **9742309 |                   | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
-            | CHAN_END      | 2018-02-02 15:41:54.276601 |          | **9742309 |                   | from-extern | SIP/dev_32-0000000f | 1517604105.27 | 1517604103.26 |
-            | BRIDGE_EXIT   | 2018-02-02 15:41:54.27823  | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
-            | HANGUP        | 2018-02-02 15:41:54.278472 | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
-            | CHAN_END      | 2018-02-02 15:41:54.2831   | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
-            | LINKEDID_END  | 2018-02-02 15:41:54.285531 | Alice    |       101 | dial              | outcall     | SCCP/101-0000000b   | 1517604103.26 | 1517604103.26 |
+            | eventtype     | eventtime                  | cid_name         | cid_num | exten             | context     | channame            |      uniqueid |      linkedid |
+            | CHAN_START    | 2018-02-06 13:33:31.114956 | Alice            |     101 | 103               | default     | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
+            | APP_START     | 2018-02-06 13:33:31.897767 | Alice            |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
+            | CHAN_START    | 2018-02-06 13:33:31.927285 | Charlie          |     103 | s                 | default     | SIP/rku3uo-0000000e | 1517942011.17 | 1517942011.16 |
+            | HANGUP        | 2018-02-06 13:33:33.272605 | Charlie          |     103 | s                 | default     | SIP/rku3uo-0000000e | 1517942011.17 | 1517942011.16 |
+            | CHAN_END      | 2018-02-06 13:33:33.287358 | Charlie          |     103 | s                 | default     | SIP/rku3uo-0000000e | 1517942011.17 | 1517942011.16 |
+            | XIVO_USER_FWD | 2018-02-06 13:33:33.28969  | Alice            |     101 | forward_voicemail | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
+            | ANSWER        | 2018-02-06 13:33:33.778962 | Alice            |     101 | pickup            | xivo-pickup | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
+            | APP_START     | 2018-02-06 13:33:35.089841 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
+            | CHAN_START    | 2018-02-06 13:33:35.107786 | Bernard          |     102 | s                 | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
+            | ANSWER        | 2018-02-06 13:33:36.315745 | Bernard          |     102 | s                 | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
+            | BRIDGE_ENTER  | 2018-02-06 13:33:36.331304 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
+            | BRIDGE_ENTER  | 2018-02-06 13:33:36.333193 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
+            | BRIDGE_EXIT   | 2018-02-06 13:33:37.393726 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
+            | HANGUP        | 2018-02-06 13:33:37.401862 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
+            | CHAN_END      | 2018-02-06 13:33:37.404542 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
+            | BRIDGE_EXIT   | 2018-02-06 13:33:37.407847 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
+            | HANGUP        | 2018-02-06 13:33:37.410228 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
+            | CHAN_END      | 2018-02-06 13:33:37.412453 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
+            | LINKEDID_END  | 2018-02-06 13:33:37.414762 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
 
         When I generate call logs
 
         Then I should have the following call logs:
-            | date                       | date_answer                | date_end                 | source_name | source_exten | requested_exten | requested_context | destination_exten | source_line_identity | destination_line_identity |
-            | 2018-02-02 15:41:43.836685 | 2018-02-02 15:41:51.589309 | 2018-02-02 15:41:54.2831 | Alice       |          101 |             103 | default           | **9742309         | sccp/101             | sip/dev_32                |
+            | date                       | date_answer                | date_end                   | source_exten | requested_exten | requested_context | destination_exten | source_line_identity | destination_line_identity |
+            | 2018-02-06 13:33:31.114956 | 2018-02-06 13:33:36.333193 | 2018-02-06 13:33:37.412453 |          101 |             103 | default           |               102 | sccp/101             | sip/dm77z3                |
 
     Scenario: Generation of answered incoming call
         Given there are no call logs
