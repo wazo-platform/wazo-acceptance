@@ -103,7 +103,6 @@ def fill_general_tab(queue):
 
     set_text_field_with_label('Name', queue['name'])
     set_text_field_with_label('Display name', queue['display name'])
-    set_text_field_with_label('Number', queue['number'])
 
     context = context_helper.get_context_with_name(queue['context'])
     context_field_value = '%s (%s)' % (context.display_name, context.name)
@@ -111,6 +110,8 @@ def fill_general_tab(queue):
 
     if 'ring strategy' in queue:
         type_queue_ring_strategy(queue['ring strategy'])
+
+    set_text_field_with_label('Number', queue['number'])
 
 
 def fill_application_tab(queue):
