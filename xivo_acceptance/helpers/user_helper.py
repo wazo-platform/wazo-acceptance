@@ -106,6 +106,7 @@ def _delete_voicemail(user):
 
 def _delete_user(user):
     world.confd_client.users.delete(user['id'])
+    world.auth_client.users.delete(user['uuid'])
 
 
 def add_user_with_infos(user_data, step=None):
@@ -156,9 +157,6 @@ def add_user_with_infos(user_data, step=None):
             'password': user['cti_passwd'],
             'email_address': email
         }
-        matching_users = world.auth_client.users.list(username=user['cti_login'])
-        for u in matching_users['items']:
-            world.auth_client.users.delete(u['uuid'])
         world.auth_client.users.new(**wazo_auth_user)
 
 
