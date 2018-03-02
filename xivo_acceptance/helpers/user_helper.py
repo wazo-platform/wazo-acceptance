@@ -156,7 +156,6 @@ def add_user_with_infos(user_data, step=None):
             'password': user['cti_passwd'],
             'email_address': email
         }
-        world.auth_client.set_token(world.config['auth_token'])
         matching_users = world.auth_client.users.list(username=user['cti_login'])
         for u in matching_users['items']:
             world.auth_client.users.delete(u['uuid'])
