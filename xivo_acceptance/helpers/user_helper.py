@@ -150,6 +150,8 @@ def add_user_with_infos(user_data, step=None):
         email = '{}@acceptance.wazo.community'.format(user['cti_login'])
         wazo_auth_user = {
             'uuid': user['uuid'],
+            'firstname': user['firstname'],
+            'lastname': user['lastname'],
             'username': user['cti_login'],
             'password': user['cti_passwd'],
             'email_address': email
