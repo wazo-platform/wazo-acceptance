@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2015-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import world
@@ -54,6 +54,7 @@ def setup_auth_token():
                                    password='proformatique',
                                    verify_certificate=False)
     world.config['auth_token'] = auth.new_auth_token()
+    world.auth_client.set_token(world.config.get('auth_token'))
 
 
 @debug.logcall

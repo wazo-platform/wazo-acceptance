@@ -106,87 +106,58 @@ def _delete_voicemail(user):
 
 def _delete_user(user):
     world.confd_client.users.delete(user['id'])
+    world.auth_client.users.delete(user['uuid'])
 
 
 def add_user_with_infos(user_data, step=None):
-    user_ws_data = {}
-    user_ws_data['firstname'] = user_data['firstname']
-    user_ws_data['lastname'] = user_data['lastname']
+    user = dict(user_data)
+    user.setdefault('entity_name', world.config['default_entity'])
 
-    if user_data.get('entity_name'):
-        user_ws_data['entity_name'] = user_data.get('entity_name', world.config['default_entity'])
+    if user.get('number') and user.get('context'):
+        user['line_number'] = user.pop('number')
+        user['line_context'] = user.pop('context')
 
-    if user_data.get('number') and user_data.get('context'):
-        user_ws_data['line_number'] = user_data['number']
-        user_ws_data['line_context'] = user_data['context']
-        if 'protocol' in user_data:
-            user_ws_data['protocol'] = user_data['protocol']
-        if 'device' in user_data:
-            user_ws_data['device'] = user_data['device']
-        if 'device_slot' in user_data:
-            user_ws_data['device_slot'] = user_data['device_slot']
+    if 'voicemail_name' in user:
+        user.setdefault('language', 'en_US')
 
-        if {'voicemail_name', 'voicemail_number', 'voicemail_context'}.issubset(user_data):
-            user_ws_data['voicemail_name'] = user_data['voicemail_name']
-            user_ws_data['voicemail_number'] = user_data['voicemail_number']
-            user_ws_data['voicemail_context'] = user_data['voicemail_context']
+    if user.get('cti_profile'):
+        user['enable_client'] = True
+        user['client_profile'] = user.pop('cti_profile')
+        user['client_username'] = user.pop('cti_login', user['firstname'].lower())
+        user['client_password'] = user.pop('cti_passwd', user['lastname'].lower())
 
-    if user_data.get('bsfilter'):
-        user_ws_data['bsfilter'] = user_data['bsfilter']
+    user = {key: value for key, value in user.iteritems() if value is not None}
+    user_id = helpers.user_line_extension_helper.add_or_replace_user(user, step=step)
 
-    if user_data.get('language'):
-        user_ws_data['language'] = user_data['language']
+    if user.get('schedule'):
+        fullname = '{firstname} {lastname}'.format(**user).strip()
+        user_action_webi.add_schedule(fullname, user['schedule'])
 
-    if 'voicemail_name' in user_data and 'language' not in user_data:
-        user_ws_data['language'] = 'en_US'
-
-    if user_data.get('cti_profile'):
-        user_ws_data['enable_client'] = True
-        user_ws_data['client_profile'] = user_data['cti_profile']
-        if user_data.get('cti_login'):
-            user_ws_data['client_username'] = user_data['cti_login']
-        else:
-            user_ws_data['client_username'] = user_ws_data['firstname'].lower()
-        if user_data.get('cti_passwd'):
-            user_ws_data['client_password'] = user_data['cti_passwd']
-        else:
-            user_ws_data['client_password'] = user_ws_data['lastname'].lower()
-
-    if user_data.get('mobile_number'):
-        user_ws_data['mobile_number'] = user_data['mobile_number']
-
-    user_id = helpers.user_line_extension_helper.add_or_replace_user(user_ws_data, step=step)
-
-    schedule = user_data.get('schedule')
-    if schedule:
-        fullname = '{firstname} {lastname}'.format(**user_data).strip()
-        user_action_webi.add_schedule(fullname, schedule)
-
-    if user_data.get('agent_number'):
-        helpers.agent_helper.delete_agents_with_number(user_data['agent_number'])
-        agent_data = {'firstname': user_data['firstname'],
-                      'lastname': user_data['lastname'],
-                      'number': user_data['agent_number'],
-                      'context': user_data.get('context', 'default'),
-                      'users': [int(user_id)]}
+    if user.get('agent_number'):
+        helpers.agent_helper.delete_agents_with_number(user['agent_number'])
+        agent_data = {'firstname': user['firstname'],
+                      'lastname': user['lastname'],
+                      'number': user['agent_number'],
+                      'context': user.get('line_context', 'default'),
+                      'users': [user_id]}
         helpers.agent_helper.add_agent(agent_data)
 
-    if user_data.get('group_name'):
-        user = world.confd_client.users.get(user_id)
-        group_helper.add_or_replace_group(user_data['group_name'], users=[user])
+    if user.get('group_name'):
+        user_created = world.confd_client.users.get(user_id)
+        group_helper.add_or_replace_group(user['group_name'], users=[user_created])
 
-    if user_data.get('wazo_auth'):
+    if user.get('wazo_auth'):
         user = world.confd_client.users.get(user_id)
-        email = '{}@acceptance.wazo.community'.format(user_data['cti_login'])
-        user_args = {'uuid': user['uuid'],
-                     'username': user_data['cti_login'],
-                     'password': user_data['cti_passwd'],
-                     'email_address': email}
-        world.auth_client.set_token(world.config['auth_token'])
-        matching_users = world.auth_client.users.list(username=user_data['cti_login'])
-        for u in matching_users['items']:
-            world.auth_client.users.delete(u['uuid'])
-        world.auth_client.users.new(**user_args)
+        email = '{}@acceptance.wazo.community'.format(user['cti_login'])
+        wazo_auth_user = {
+            'uuid': user['uuid'],
+            'firstname': user['firstname'],
+            'lastname': user['lastname'],
+            'username': user['cti_login'],
+            'password': user['cti_passwd'],
+            'email_address': email
+        }
+        world.auth_client.users.new(**wazo_auth_user)
 
 
 def add_user(data_dict, step=None):
