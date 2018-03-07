@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2012-2016 Avencall
+# Copyright 2012-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import os
@@ -9,7 +9,7 @@ import xivo_ws
 
 XIVO_HOST = os.environ.get('XIVO_HOST', 'daily-xivo-pxe.lan.proformatique.com')
 XIVO_CONFD_PORT = os.environ.get('XIVO_CONFD_PORT', 9486)
-XIVO_CONFD_USERNAME = os.environ.get('XIVO_CONFD_USERNAME', 'admin')
+XIVO_CONFD_USERNAME = os.environ.get('XIVO_CONFD_USERNAME', 'xivo-acceptance')
 XIVO_CONFD_PASSWORD = os.environ.get('XIVO_CONFD_PASSWORD', 'proformatique')
 
 
