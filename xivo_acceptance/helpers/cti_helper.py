@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import time
@@ -7,7 +7,6 @@ import time
 from hamcrest import assert_that, equal_to
 from lettuce.registry import world
 from selenium.webdriver.support.select import Select
-from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.lettuce import common, sysutils, xivoclient, form
 
 SORT_ASCENDING = 0
@@ -239,13 +238,12 @@ def log_in_the_xivo_client():
     return res
 
 
-def log_user_in_client(firstname, lastname):
-    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+def log_user_in_client(username, password):
     conf_dict = {
         'main_server_address': common.get_host_address(),
         'main_server_port': 5003,
-        'login': user['username'],
-        'password': user['password'],
+        'login': username,
+        'password': password,
         'agent_option': 'no',
     }
     configure_client(conf_dict)

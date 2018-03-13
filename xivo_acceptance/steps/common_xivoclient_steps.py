@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import time
@@ -117,15 +117,15 @@ def then_i_not_logged_after_x_seconds(step, wait_seconds):
     assert_that(cti_helper.is_logged(), equal_to(False))
 
 
-@step(u'Then I can\'t connect the CTI client of "([^"]*)" "([^"]*)"')
-def then_i_can_t_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
-    res = cti_helper.log_user_in_client(firstname, lastname)
+@step(u'Then I can\'t connect the CTI Client with "([^"]*)" "([^"]*)"')
+def then_i_can_t_connect_the_cti_client_with_group1_group2(step, username, password):
+    res = cti_helper.log_user_in_client(username, password)
     assert_that(res['test_result'], equal_to('failed'))
 
 
-@step(u'Then I can connect the CTI client of "([^"]*)" "([^"]*)"')
-def then_i_can_connect_the_cti_client_of_group1_group2(step, firstname, lastname):
-    res = cti_helper.log_user_in_client(firstname, lastname)
+@step(u'Then I can connect the CTI Client with "([^"]*)" "([^"]*)"')
+def then_i_can_connect_the_cti_client_with_group1_group2(step, username, password):
+    res = cti_helper.log_user_in_client(username, password)
     assert_that(res['test_result'], equal_to('passed'))
 
 

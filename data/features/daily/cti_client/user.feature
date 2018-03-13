@@ -8,4 +8,4 @@ Feature: CTI User
           | firstname | lastname   | cti_profile | cti_login | cti_passwd |
           | Abraham   | Washington | noservices  | abraham   | washington |
         When I start the XiVO Client
-        Then I can connect the CTI Client of "Abraham" "Washington"
+        Then I can connect the CTI Client with "abraham" "washington"
