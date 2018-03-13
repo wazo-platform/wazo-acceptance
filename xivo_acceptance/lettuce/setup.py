@@ -4,15 +4,16 @@
 
 from lettuce import world
 
-from xivo_acceptance.config import load_config, XivoAcceptanceConfig
-from xivo_acceptance.lettuce import debug
 from xivo_agentd_client import Client as AgentdClient
 from xivo_auth_client import Client as AuthClient
 from wazo_call_logd_client import Client as CallLogdClient
 from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
 from xivo_dird_client import Client as DirdClient
+
 from . import auth
+from . import debug
+from ..config import load_config, XivoAcceptanceConfig
 from .display import XiVODisplay
 from .xivobrowser import XiVOBrowser
 
@@ -55,6 +56,7 @@ def setup_auth_token():
                                    verify_certificate=False)
     world.config['auth_token'] = auth.new_auth_token()
     world.auth_client.set_token(world.config.get('auth_token'))
+    auth.register_for_token_renewal(world.auth_client.set_token)
 
 
 @debug.logcall
