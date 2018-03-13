@@ -2,8 +2,8 @@ Feature: User
 
     Scenario: User ACL generation
         Given there are users with infos:
-        | firstname | lastname | number | context | agent_number | wazo_auth | cti_login | cti_passwd |
-        | Bob       | Marley   |   1101 | default | 1101         | True      | bob       | secret     |
+        | firstname | lastname | number | context | agent_number | cti_login | cti_passwd | cti_profile |
+        | Bob       | Marley   |   1101 | default | 1101         | bob       | secret     | Client      |
         When I create a token with infos:
         | username | password | backend   |
         | bob      | secret   | wazo_user |

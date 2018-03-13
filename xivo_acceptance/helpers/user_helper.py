@@ -146,19 +146,6 @@ def add_user_with_infos(user_data, step=None):
         user_created = world.confd_client.users.get(user_id)
         group_helper.add_or_replace_group(user['group_name'], users=[user_created])
 
-    if user.get('wazo_auth'):
-        user = world.confd_client.users.get(user_id)
-        email = '{}@acceptance.wazo.community'.format(user['cti_login'])
-        wazo_auth_user = {
-            'uuid': user['uuid'],
-            'firstname': user['firstname'],
-            'lastname': user['lastname'],
-            'username': user['cti_login'],
-            'password': user['cti_passwd'],
-            'email_address': email
-        }
-        world.auth_client.users.new(**wazo_auth_user)
-
 
 def add_user(data_dict, step=None):
     user = User()
