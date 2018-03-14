@@ -22,7 +22,17 @@ from xivo_ws.exception import WebServiceRequestError
 
 def add_or_replace_user(userinfo):
     delete_similar_users(userinfo)
-    world.confd_client.users.create(userinfo)
+    user = world.confd_client.users.create(userinfo)
+    auth_user = {
+        'uuid': user['uuid'],
+        'firstname': user['firstname'],
+        'lastname': user['lastname'],
+        'username': userinfo.get('username', userinfo.get('email', user['uuid'])),
+        'password': userinfo.get('password') or None,
+        'email_address': user['email'],
+        'enabled': True
+    }
+    world.auth_client.users.new(**auth_user)
 
 
 def find_by_user_id(user_id):
