@@ -265,6 +265,8 @@ def disable_cti_client(firstname, lastname):
     users = _search_users_with_firstname_lastname(firstname, lastname)
     for user in users:
         user.enable_client = False
+        user.client_username = None
+        user.client_password = None
         world.ws.users.edit(user)
 
 
@@ -272,6 +274,8 @@ def enable_cti_client(firstname, lastname):
     users = _search_users_with_firstname_lastname(firstname, lastname)
     for user in users:
         user.enable_client = True
+        user.client_username = None
+        user.client_password = None
         world.ws.users.edit(user)
 
 
