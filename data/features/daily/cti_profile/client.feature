@@ -66,4 +66,4 @@ Feature: CTI Profile
         When I activate the CTI client for user "Félix" "Lechat"
         When I associate CTI profile with name "Client" with user "Félix" "Lechat"
         When I start the XiVO Client
-        Then I can connect the CTI Client with "Félix" "Lechat"
+        Then I can connect the CTI Client with "flechat" "1234"
