@@ -142,9 +142,21 @@ def when_i_create_users_with_the_following_parameters(step):
 @step(u'When I update user "([^"]*)" "([^"]*)" with the following parameters:')
 def when_i_update_user_group1_group2_with_the_following_parameters(step, firstname, lastname):
     user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    updated_user = step.hashes[0]
+    updated_user = dict(step.hashes[0])
+    username = updated_user.pop('username', None)
+    password = updated_user.pop('password', None)
     updated_user['id'] = user['id']
     world.confd_client.users.update(updated_user)
+    if username:
+        world.auth_client.users.edit(
+            user['uuid'],
+            username=username,
+            firstname=user['firstname'],
+            lastname=user['lastname'],
+            enabled=True,
+        )
+    if password:
+        world.auth_client.users.set_password(user['uuid'], password=password)
 
 
 @step(u'When I reorder "([^"]*)" "([^"]*)"s function keys such that:')
