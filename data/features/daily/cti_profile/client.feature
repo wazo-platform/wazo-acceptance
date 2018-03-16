@@ -10,7 +10,7 @@ Feature: CTI Profile
         | Abraham   | Washington | noservices  | abraham   | washington |
 
         When I start the XiVO Client
-        Then I can connect the CTI Client of "abraham" "washington"
+        Then I can connect the CTI Client with "abraham" "washington"
 
     Scenario: Edit Xlet list without restart cti server
         Given there is a profile "toto" with no services and xlets:
