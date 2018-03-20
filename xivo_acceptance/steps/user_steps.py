@@ -8,6 +8,7 @@ from hamcrest import has_items
 from hamcrest import is_
 from lettuce import step
 from lettuce.registry import world
+from selenium.common.exceptions import NoSuchElementException
 from xivo_auth_client import Client as AuthClient
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import entity_helper
@@ -315,7 +316,11 @@ def then_i_see_a_user_with_infos(step):
     user_expected_properties = step.hashes[0]
     fullname = user_expected_properties['fullname']
     common.open_url('user', 'search', {'search': '%s' % fullname})
-    user_actual_properties = user_action_webi.get_user_list_entry(fullname)
+    try:
+        user_actual_properties = user_action_webi.get_user_list_entry(fullname)
+    except NoSuchElementException:
+        world.dump_current_page()
+        raise
     assert_that(fullname, equal_to(user_expected_properties['fullname']))
     for user_field, user_value in user_expected_properties.iteritems():
         assert_that(user_actual_properties[user_field], equal_to(user_value))
