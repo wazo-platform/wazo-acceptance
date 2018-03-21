@@ -14,6 +14,7 @@ from xivo_acceptance.helpers import voicemail_helper
 from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
+from xivo_acceptance.helpers import tenant_helper
 from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_ws import User
@@ -22,6 +23,8 @@ from xivo_ws.exception import WebServiceRequestError
 
 def add_or_replace_user(userinfo):
     delete_similar_users(userinfo)
+    tenant_uuid = tenant_helper.get_tenant_uuid()
+    userinfo['tenant_uuid'] = tenant_uuid
     user = world.confd_client.users.create(userinfo)
     auth_user = {
         'uuid': user['uuid'],
@@ -30,7 +33,8 @@ def add_or_replace_user(userinfo):
         'username': userinfo.get('username', userinfo.get('email', user['uuid'])),
         'password': userinfo.get('password') or None,
         'email_address': user['email'],
-        'enabled': True
+        'enabled': True,
+        'tenant_uuid': tenant_uuid,
     }
     world.auth_client.users.new(**auth_user)
 
