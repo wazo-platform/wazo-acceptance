@@ -1,18 +1,18 @@
-#XiVO Acceptance
+# XiVO Acceptance
 
 xivo-acceptance is a testing framework for running automated tests on a Wazo
 server. These tests are used for fixing regressions and testing features before
 releasing a new version of Wazo.
 
 
-#Prerequisites
+# Prerequisites
 
 For Linphone to work, you must do:
 
     adduser jenkins audio  #Jenkins is the user tunning the tests
 
 
-#Configuration
+# Configuration
 
 Create a yaml local configuration file in ```~/.xivo-acceptance/default``` and
 redefine only options that need to be changed. Default options can be found in
@@ -30,9 +30,9 @@ addresses and subnets. For example:
 			- 192.168.0.0/24
 
 
-#Getting Started
+# Getting Started
 
-##Usage
+## Usage
 
 	usage: xivo-acceptance [-h] [-i INTERNAL_FEATURES] [-p] [-v] [-x XIVO_HOST]
 	
@@ -45,7 +45,7 @@ addresses and subnets. For example:
 	  -x XIVO_HOST, --xivo-host XIVO_HOST
 	                        xivo host
 
-##Internal Features Structure
+## Internal Features Structure
 
     /usr/share/xivo-acceptance/features
     |-- daily
@@ -76,7 +76,7 @@ Launch admin_user.feature feature:
     $XA_CMD="xivo-acceptance -v -i daily/webi/admin_user"
 
 
-##Requirements
+## Requirements
 
 We recommend running tests on a dedicated debian machine. Run the following
 commands to install requirements:
@@ -94,19 +94,19 @@ Once the requirements are installed, modify the configuration files and run the 
     python ./bin/xivo-acceptance -p
 
 
-##XiVO Client
+## Wazo Client
 
-Tests require a local copy of the [XiVO Client](http://github.com/wazo-pbx/xivo-client-qt)
+Tests require a local copy of the [Wazo Client](http://github.com/wazo-pbx/wazo-client-qt)
 on the test machine with FUNCTESTS enabled. Here is a quick example on how to
 install and compile the client:
 
-    git clone git://github.com/wazo-pbx/xivo-client-qt
-    cd xivo-client-qt
+    git clone git://github.com/wazo-pbx/wazo-client-qt
+    cd wazo-client-qt
     qmake
     make FUNCTESTS=yes
 
 
-##Configuration
+## Configuration
 
 Create a local configuration file in ```~/.xivo-acceptance/default``` and
 redefine only options that need to be changed. Default options can be found in
@@ -127,15 +127,15 @@ addresses and subnets. For example:
 			- 192.168.0.0/24
 
 
-#Running tests
+# Running tests
 
 Tests can be found in the ```features``` directory. You can run all tests:
 
-    PYTHONPATH=path/to/xivo_acceptance XC_PATH=/path/to/xivo-client-qt/bin lettuce data/features/daily
+    PYTHONPATH=path/to/xivo_acceptance XC_PATH=/path/to/wazo-client-qt/bin lettuce data/features/daily
 
 Or only a single test file:
 
-    PYTHONPATH=path/to/xivo_acceptance XC_PATH=/path/to/xivo-client-qt/bin lettuce data/features/group/group.feature
+    PYTHONPATH=path/to/xivo_acceptance XC_PATH=/path/to/wazo-client-qt/bin lettuce data/features/group/group.feature
 
 
 If you're using firefox 47 or greater you can use the selenium/standalone-firefox docker image
@@ -159,7 +159,7 @@ If you need to see what is going on in the browser, use the `selenium/standalone
     docker run -d -v /tmp/downloads:/tmp/downloads -p 4444:4444 -p 5901:5900 selenium/standalone-firefox-debug
 
 
-#Coverage
+# Coverage
 
 To get code coverage of xivo_acceptance:
 
