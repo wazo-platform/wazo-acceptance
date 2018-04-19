@@ -7,7 +7,7 @@ from lettuce import world
 
 def get_tenant_uuid(name=None):
     name = name or world.config['default_entity']
-    tenants = world.config['token_data']['metadata']['tenants']
+    tenants = world.auth_client.tenants.list(name=name)['items']
     for tenant in tenants:
         if tenant['name'] != name:
             continue
