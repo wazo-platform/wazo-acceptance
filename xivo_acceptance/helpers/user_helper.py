@@ -113,9 +113,9 @@ def _delete_line_associations(user):
 
 
 def _delete_voicemail(user):
-    voicemail = voicemail_helper.find_voicemail_by_user_id(user['id'])
-    if voicemail:
-        voicemail_helper.delete_voicemail(voicemail['id'])
+    voicemail_id = voicemail_helper.find_voicemail_by_user_id(user['id'])
+    if voicemail_id:
+        voicemail_helper.delete_voicemail(voicemail_id)
 
 
 def _delete_user(user):
