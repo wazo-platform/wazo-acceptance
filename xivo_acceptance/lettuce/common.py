@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from __future__ import unicode_literals
@@ -346,9 +346,9 @@ def go_to_tab(tab_label, ss_tab_label=None):
     """
     tab_button = world.browser.find_element_by_xpath("//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
     if ss_tab_label:
-        ActionChains(world.browser).move_to_element(tab_button).perform()
         ss_tab_label = tab_button.find_element_by_xpath("//div[@class='stab']//a[contains(.,'%s')]" % ss_tab_label)
         time.sleep(0.5)
+        ActionChains(world.browser).move_to_element(tab_button).move_to_element(ss_tab_label).perform()
         ss_tab_label.click()
     else:
         tab_button.click()
