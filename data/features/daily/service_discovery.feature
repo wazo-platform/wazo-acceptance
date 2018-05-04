@@ -8,7 +8,7 @@ Feature: Service discovery
         | xivo-agentd   |
         | xivo-ctid     |
         | xivo-ctid-ng  |
-        | xivo-dird     |
         | wazo-auth     |
+        | wazo-dird     |
         | wazo-plugind  |
         | wazo-webhookd |

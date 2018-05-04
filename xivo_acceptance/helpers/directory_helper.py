@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2014-2016 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2014-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import world
@@ -23,7 +23,7 @@ def configure_internal_directory():
 
 
 def restart_dird():
-    sysutils.restart_service('xivo-dird')
+    sysutils.restart_service('wazo-dird')
     wait_for_dird_http()
 
 

@@ -508,7 +508,7 @@ Feature: Sheet
         | directory |
         | dbvars    |
         Given I restart "xivo-ctid"
-        Given I restart xivo-dird
+        Given I restart wazo-dird
         Given I have a sheet model named "testsheet" with the variables:
         | variable     |
         | db-firstname |

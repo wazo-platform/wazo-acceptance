@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2015 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import step
@@ -95,7 +95,7 @@ def when_i_include_phonebook_in_the_default_directory(step, phonebook):
 def when_i_set_the_following_directories_for_directory_reverse_lookup(step):
     directories = [entry['directory'] for entry in step.hashes]
     directory_action_webi.set_reverse_directories(directories)
-    sysutils.restart_service('xivo-dird')
+    sysutils.restart_service('wazo-dird')
 
 
 @step(u'Then the directory configuration "([^"]*)" has the URI "([^"]*)"')

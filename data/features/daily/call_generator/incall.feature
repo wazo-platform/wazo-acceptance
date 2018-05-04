@@ -44,7 +44,7 @@ Feature: Incoming calls
         Given the following directories are used in reverse lookup:
         | directory       |
         | xivodirreverse  |
-        Given I restart xivo-dird
+        Given I restart wazo-dird
         Given I listen on the bus for messages:
         | queue                     | routing_key   |
         | test_incall_reverselookup | ami.UserEvent |

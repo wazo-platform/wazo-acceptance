@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright 2016-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import subprocess
@@ -9,6 +9,7 @@ import re
 BASE_SERVICES = [
     'dahdi',
     'wazo-auth',
+    'wazo-dird',
     'wazo-call-logd',
     'xivo-sysconfd',
     'xivo-confgend',
@@ -20,7 +21,6 @@ BASE_SERVICES = [
     'xivo-amid',
     'xivo-agentd',
     'xivo-ctid',
-    'xivo-dird',
     'xivo-dird-phoned',
 ]
 
