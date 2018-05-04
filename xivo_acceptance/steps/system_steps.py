@@ -35,7 +35,7 @@ def i_restart_service(step, service_name):
 
 
 @step(u'I restart wazo-dird$')
-def i_restart_xivo_dird(step):
+def i_restart_wazo_dird(step):
     directory_helper.restart_dird()
 
 
