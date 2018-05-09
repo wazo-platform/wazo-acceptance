@@ -347,17 +347,17 @@ def go_to_tab(tab_label, ss_tab_label=None):
     tab_button = world.browser.find_element_by_xpath("//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
     if ss_tab_label:
         ss_tab_label = tab_button.find_element_by_xpath("//div[@class='stab']//a[contains(.,'%s')]" % ss_tab_label)
-        actions = ActionChains(world.browser)
-        actions.move_to_element(tab_button)
-        actions.perform()
+        ActionChains(world.browser).move_to_element(tab_button).perform()
 
         # Wait for the submenu to appear
         # Can't use actions.pause(1) as nothing happens after that
         time.sleep(0.5)
 
-        actions = ActionChains(world.browser)
-        actions.click(ss_tab_label)
-        actions.perform()
+        ActionChains(world.browser).move_to_element(ss_tab_label).perform()
+
+        time.sleep(0.5)
+
+        ss_tab_label.click()
     else:
         tab_button.click()
     time.sleep(1)
