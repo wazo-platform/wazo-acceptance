@@ -11,7 +11,10 @@ from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support.expected_conditions import staleness_of
+from selenium.webdriver.support.expected_conditions import (
+    staleness_of,
+    visibility_of,
+)
 
 from form.checkbox import Checkbox
 from xivo_acceptance.action.webi import common as common_action_webi
@@ -346,18 +349,10 @@ def go_to_tab(tab_label, ss_tab_label=None):
     """
     tab_button = world.browser.find_element_by_xpath("//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
     if ss_tab_label:
-        ss_tab_label = tab_button.find_element_by_xpath("//div[@class='stab']//a[contains(.,'%s')]" % ss_tab_label)
+        ss_tab = tab_button.find_element_by_xpath("//div[@class='stab']//a[contains(.,'%s')]" % ss_tab_label)
         ActionChains(world.browser).move_to_element(tab_button).perform()
-
-        # Wait for the submenu to appear
-        # Can't use actions.pause(1) as nothing happens after that
-        time.sleep(0.5)
-
-        ActionChains(world.browser).move_to_element(ss_tab_label).perform()
-
-        time.sleep(0.5)
-
-        ss_tab_label.click()
+        WebDriverWait(world.browser, world.timeout).until(visibility_of(ss_tab))
+        ss_tab.click()
     else:
         tab_button.click()
     time.sleep(1)
