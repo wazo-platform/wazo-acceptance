@@ -347,9 +347,11 @@ def go_to_tab(tab_label, ss_tab_label=None):
 
         - tab_label -- Label of the tab to switch to.
     """
+    common_action_webi.reset_focus()
     tab_button = world.browser.find_element_by_xpath("//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
     if ss_tab_label:
         ss_tab = tab_button.find_element_by_xpath("//div[@class='stab']//a[contains(.,'%s')]" % ss_tab_label)
+        WebDriverWait(world.browser, world.timeout).until(visibility_of(tab_button))
         ActionChains(world.browser).move_to_element(tab_button).perform()
         WebDriverWait(world.browser, world.timeout).until(visibility_of(ss_tab))
         ss_tab.click()
