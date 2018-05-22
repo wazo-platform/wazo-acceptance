@@ -310,10 +310,14 @@ def click_on_line_with_alert(act, line_substring, column=None):
 
 
 def disable_selected_lines():
+    common_action_webi.reset_focus()
+
     menu_button = world.browser.find_element_by_id("toolbar-bt-advanced")
+    WebDriverWait(world.browser, world.timeout).until(visibility_of(menu_button))
     ActionChains(world.browser).move_to_element(menu_button).perform()
 
     disable_button = world.browser.find_element_by_id("toolbar-advanced-menu-disable")
+    WebDriverWait(world.browser, world.timeout).until(visibility_of(disable_button))
     disable_button.click()
 
 
