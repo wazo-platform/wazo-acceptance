@@ -4,6 +4,7 @@ Feature: Entity Filter
         Given there are entities with infos:
           | name           | display_name  |
           | entity_filter  | entity_filter |
+          | default        | default       |
 
         Given there is no admin_user "admin1"
         When I create an admin user with login "admin1" and password "admin1" and entity_name "entity_filter"
