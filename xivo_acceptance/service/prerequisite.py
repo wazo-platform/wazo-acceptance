@@ -28,6 +28,7 @@ def run(extra_config):
     setup.setup_call_logd_client()
     setup.setup_confd_client()
     setup.setup_xivo_configured()
+    setup.setup_auth_token()
 
     setup.setup_display()
     setup.setup_browser()
