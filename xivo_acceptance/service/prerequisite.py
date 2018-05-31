@@ -28,13 +28,15 @@ def run(extra_config):
     setup.setup_call_logd_client()
     setup.setup_confd_client()
     setup.setup_xivo_configured()
-    setup.setup_auth_token()
 
     setup.setup_display()
     setup.setup_browser()
     try:
         logger.debug('Configuring WebService Access on XiVO')
         _create_webservices_access()
+
+        logger.debug('Creating auth client')
+        setup.setup_auth_token()
 
         logger.debug('Configuring CA certificates')
         _configure_ca_certificates()
