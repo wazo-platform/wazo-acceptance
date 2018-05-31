@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 
 from lettuce import world
 
-from xivo_acceptance.helpers import outcall_helper
+from xivo_acceptance.helpers import outcall_helper, entity_helper
 from xivo_ws import Context, ContextRange, WebServiceRequestError
 
 
@@ -18,7 +18,7 @@ def update_contextnumbers_user(name, numberbeg, numberend, entity_name=None):
                     name,
                     'internal',
                     contextnumbers_user=contextnumbers,
-                    entity_name=entity_name or world.config['default_entity'])
+                    entity_name=entity_name)
     else:
         context.users.append(contextnumbers)
         world.ws.contexts.edit(context)
@@ -32,7 +32,7 @@ def update_contextnumbers_group(name, numberbeg, numberend, entity_name=None):
                     name,
                     'internal',
                     contextnumbers_group=contextnumbers,
-                    entity_name=entity_name or world.config['default_entity'])
+                    entity_name=entity_name)
     else:
         context.groups.append(contextnumbers)
         world.ws.contexts.edit(context)
@@ -46,7 +46,7 @@ def update_contextnumbers_queue(name, numberbeg, numberend, entity_name=None):
                     name,
                     'internal',
                     contextnumbers_queue=contextnumbers,
-                    entity_name=entity_name or world.config['default_entity'])
+                    entity_name=entity_name)
     else:
         context.queues.append(contextnumbers)
         world.ws.contexts.edit(context)
@@ -60,7 +60,7 @@ def update_contextnumbers_meetme(name, numberbeg, numberend, entity_name=None):
                     name,
                     'internal',
                     contextnumbers_meetme=contextnumbers,
-                    entity_name=entity_name or world.config['default_entity'])
+                    entity_name=entity_name)
     else:
         context.conf_rooms.append(contextnumbers)
         world.ws.contexts.edit(context)
@@ -74,7 +74,7 @@ def update_contextnumbers_incall(name, numberbeg, numberend, didlength, entity_n
                     name,
                     'incall',
                     contextnumbers_incall=contextnumbers,
-                    entity_name=entity_name or world.config['default_entity'])
+                    entity_name=entity_name)
     else:
         context.incalls.append(contextnumbers)
         world.ws.contexts.edit(context)
@@ -90,12 +90,14 @@ def add_context(name,
                 contextnumbers_queue='',
                 contextnumbers_incall='',
                 entity_name=None):
+    entity_name = entity_name or world.config['default_entity']
+    entity_helper.add_entity(entity_name, entity_name)
 
     context = Context()
     context.name = name
     context.display_name = display_name
     context.type = context_type
-    context.entity = entity_name or world.config['default_entity']
+    context.entity = entity_name
 
     if context_include:
         context.context_include = [context_include]
