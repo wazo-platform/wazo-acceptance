@@ -1,2 +1,0 @@
-nose
-git+git://github.com/wazo-pbx/xivo-ws.git
