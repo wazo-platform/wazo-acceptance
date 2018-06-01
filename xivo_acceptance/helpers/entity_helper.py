@@ -20,6 +20,7 @@ def add_entity(name, display_name):
 
 
 def get_entity_with_name(name):
+    auth.renew_auth_token()
     try:
         entities = world.confd_client.entities.list(name=name)['items']
         for entity in entities:
