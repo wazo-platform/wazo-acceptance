@@ -62,8 +62,8 @@ Feature: User
         | firstname | lastname | protocol | number | context |
         | Bill      | Bush     | SCCP     |  1632  | Default |
         Then I see a user with infos:
-        | fullname  | number | provisioning_code | protocol |
-        | Bill Bush |   1632 |                 - | sccp     |
+        | fullname  | number | protocol |
+        | Bill Bush |   1632 | sccp     |
         When I remove user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
