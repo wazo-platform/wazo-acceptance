@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from hamcrest import assert_that
@@ -44,7 +44,7 @@ def then_the_group1_section_of_group2_contains(step, section, filename):
 
 @step(u'Then the section of "([^"]*)" with extension "([^"]*)" contains the options:')
 def then_the_section_of_group1_with_extension_group2_contains(step, filename, extension):
-    extensions = world.confd_client.extensions.list(exten=extension)['items'][0]
+    extensions = world.confd_client.extensions.list(exten=extension, recurse=True)['items'][0]
     line = world.confd_client.lines.get(extensions['lines'][0]['id'])
     section = line['name']
 
@@ -67,7 +67,7 @@ def then_the_group1_section_of_group2_does_not_contain_the_options(step, section
 
 @step(u'Then the section of "([^"]*)" with extension "([^"]*)" does not contain the options:')
 def then_the_section_of_group1_with_extension_group2_does_not_contain_options(step, filename, extension):
-    extensions = world.confd_client.extensions.list(exten=extension)['items'][0]
+    extensions = world.confd_client.extensions.list(exten=extension, recurse=True)['items'][0]
     line = world.confd_client.lines.get(extensions['lines'][0]['id'])
     section = line['name']
 

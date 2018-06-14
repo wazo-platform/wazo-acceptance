@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright (C) 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import world
@@ -27,7 +26,8 @@ def add_group(name, exten, context='default', users=None):
 
 def delete_groups_with_number(exten, context='default'):
     extensions = world.confd_client.extensions.list(exten=exten,
-                                                    context=context)['items']
+                                                    context=context,
+                                                    recurse=True)['items']
     for extension in extensions:
         if extension['group']:
             world.confd_client.groups.delete(extension['group']['id'])

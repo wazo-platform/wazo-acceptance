@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright (C) 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import world
@@ -23,7 +22,7 @@ def get_by_id(line_id):
 
 
 def find_with_exten_context(exten, context='default'):
-    extensions = world.confd_client.extensions.list(exten=exten, context=context)['items']
+    extensions = world.confd_client.extensions.list(exten=exten, context=context, recurse=True)['items']
     if not extensions or not extensions[0]['lines']:
         return None
 

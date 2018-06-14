@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright (C) 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import world
@@ -73,7 +72,7 @@ def _build_ivr_destination(ivr_name):
 
 
 def delete_incalls_with_did(incall_did, context='from-extern'):
-    extensions = world.confd_client.extensions.list(exten=incall_did, context=context)
+    extensions = world.confd_client.extensions.list(exten=incall_did, context=context, recurse=True)
     for extension in extensions['items']:
         if extension['incall']:
             world.confd_client.incalls.delete(extension['incall']['id'])
