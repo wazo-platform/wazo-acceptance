@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright (C) 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import world
@@ -25,7 +25,7 @@ def find_extension_by_exten_context(exten, context='default'):
 
 
 def get_by_exten_context(exten, context='default'):
-    return world.confd_client.extensions.list(exten=exten, context=context)['items'][0]
+    return world.confd_client.extensions.list(exten=exten, context=context, recurse=True)['items'][0]
 
 
 def get_by_id(extension_id):
