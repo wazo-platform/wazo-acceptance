@@ -75,16 +75,16 @@ def run(extra_config):
         context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
         logger.debug('Configuring wazo-auth')
-        _configure_wazo_auth()
+        _configure_wazo_service('wazo-auth')
 
         logger.debug('Configuring xivo-confd')
-        _configure_xivo_confd()
+        _configure_wazo_service('xivo-confd')
 
         logger.debug('Configuring xivo-ctid')
-        _configure_xivo_ctid()
+        _configure_wazo_service('xivo-ctid')
 
         logger.debug('Configuring xivo-ctid-ng')
-        _configure_xivo_ctid_ng()
+        _configure_wazo_service('xivo-ctid-ng')
 
         logger.debug('Allowing SIP usernames to change')
         _set_sip_usernames_read_write()
@@ -185,21 +185,6 @@ def _configure_wazo_service(service):
     service_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name(service))
     if service_is_running:
         _restart_service(service)
-
-def _configure_wazo_auth():
-    return _configure_wazo_service('wazo-auth')
-
-
-def _configure_xivo_confd():
-    return _configure_wazo_service('xivo-confd')
-
-
-def _configure_xivo_ctid():
-    return _configure_wazo_service('xivo-ctid')
-
-
-def _configure_xivo_ctid_ng():
-    return _configure_wazo_service('xivo-ctid-ng')
 
 
 def _set_sip_usernames_read_write():
