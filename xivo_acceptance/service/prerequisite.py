@@ -77,6 +77,9 @@ def run(extra_config):
         logger.debug('Configuring wazo-auth')
         _configure_wazo_auth()
 
+        logger.debug('Configuring xivo-confd')
+        _configure_xivo_confd()
+
         logger.debug('Configuring xivo-ctid')
         _configure_xivo_ctid()
 
@@ -182,6 +185,13 @@ def _configure_wazo_auth():
     wazo_auth_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('wazo-auth'))
     if wazo_auth_is_running:
         _restart_service('wazo-auth')
+
+
+def _configure_xivo_confd():
+    _copy_daemon_config_file('xivo-confd')
+    xivo_ctid_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('xivo-confd'))
+    if xivo_confd_is_running:
+        _restart_service('xivo-confd')
 
 
 def _configure_xivo_ctid():
