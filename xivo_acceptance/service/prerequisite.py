@@ -180,32 +180,26 @@ def _configure_consul():
         _restart_service('consul')
 
 
+def _configure_wazo_service(service):
+    _copy_daemon_config_file(service)
+    service_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name(service))
+    if service_is_running:
+        _restart_service(service)
+
 def _configure_wazo_auth():
-    _copy_daemon_config_file('wazo-auth')
-    wazo_auth_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('wazo-auth'))
-    if wazo_auth_is_running:
-        _restart_service('wazo-auth')
+    return _configure_wazo_service('wazo-auth')
 
 
 def _configure_xivo_confd():
-    _copy_daemon_config_file('xivo-confd')
-    xivo_ctid_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('xivo-confd'))
-    if xivo_confd_is_running:
-        _restart_service('xivo-confd')
+    return _configure_wazo_service('xivo-confd')
 
 
 def _configure_xivo_ctid():
-    _copy_daemon_config_file('xivo-ctid')
-    xivo_ctid_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('xivo-ctid'))
-    if xivo_ctid_is_running:
-        _restart_service('xivo-ctid')
+    return _configure_wazo_service('xivo-ctid')
 
 
 def _configure_xivo_ctid_ng():
-    _copy_daemon_config_file('xivo-ctid-ng')
-    xivo_ctid_ng_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name('xivo-ctid-ng'))
-    if xivo_ctid_ng_is_running:
-        _restart_service('xivo-ctid-ng')
+    return _configure_wazo_service('xivo-ctid-ng')
 
 
 def _set_sip_usernames_read_write():
