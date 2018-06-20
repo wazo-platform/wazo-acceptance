@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import time
@@ -14,6 +14,7 @@ SERVICE_PIDFILES = {
     'consul': '/var/run/consul/consul.pid',
     'wazo-auth': '/var/run/wazo-auth/wazo-auth.pid',
     'xivo-agent': '/var/run/xivo-agentd/xivo-agentd.pid',
+    'xivo-confd': '/var/run/xivo-confd/xivo-confd.pid',
     'xivo-ctid': '/var/run/xivo-ctid/xivo-ctid.pid',
     'xivo-ctid-ng': '/var/run/xivo-ctid-ng/xivo-ctid-ng.pid',
 }
