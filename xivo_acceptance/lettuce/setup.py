@@ -11,6 +11,8 @@ from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
 from xivo_dird_client import Client as DirdClient
 
+from xivo_acceptance.helpers import entity_helper
+
 from . import auth
 from . import debug
 from ..config import load_config, XivoAcceptanceConfig
@@ -57,6 +59,15 @@ def setup_auth_token():
     world.config['auth_token'] = auth.new_auth_token()
     world.auth_client.set_token(world.config.get('auth_token'))
     auth.register_for_token_renewal(world.auth_client.set_token)
+
+
+def setup_tenant():
+    entity_name = world.config.get('entity')
+    entity = entity_helper.get_entity_with_name(entity_name)
+    tenant_uuid = entity['tenant']['uuid']
+
+    world.auth_client.set_tenant(tenant_uuid)
+    world.confd_client.set_tenant(tenant_uuid)
 
 
 @debug.logcall

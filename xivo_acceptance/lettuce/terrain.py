@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import logging
@@ -87,6 +87,8 @@ def set_xivo_target(extra_config):
     setup.setup_ctid_ng_client()
     logger.debug("setup dird client...")
     setup.setup_dird_client()
+    logger.debug('setup tenant_uuid')
+    setup.setup_tenant()
     logger.debug("setup consul...")
     setup.setup_consul()
     logger.debug("setup display...")
