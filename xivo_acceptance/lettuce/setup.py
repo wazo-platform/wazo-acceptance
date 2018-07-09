@@ -64,6 +64,9 @@ def setup_auth_token():
 def setup_tenant():
     entity_name = world.config.get('entity')
     entity = entity_helper.get_entity_with_name(entity_name)
+    if not entity:
+        return
+
     tenant_uuid = entity['tenant']['uuid']
 
     world.auth_client.set_tenant(tenant_uuid)
