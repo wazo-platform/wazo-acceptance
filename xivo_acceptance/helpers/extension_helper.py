@@ -7,6 +7,7 @@ from lettuce import world
 from requests.exceptions import HTTPError
 
 from xivo_acceptance.helpers import dialpattern_helper
+from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import group_helper
 from xivo_acceptance.helpers import incall_helper
@@ -25,7 +26,13 @@ def find_extension_by_exten_context(exten, context='default'):
 
 
 def get_by_exten_context(exten, context='default'):
-    return world.confd_client.extensions.list(exten=exten, context=context, recurse=True)['items'][0]
+    entity = entity_helper.get_default_entity()
+    return world.confd_client.extensions.list(
+        exten=exten,
+        context=context,
+        tenant_uuid=entity['tenant']['uuid'],
+        recurse=True,
+    )['items'][0]
 
 
 def get_by_id(extension_id):

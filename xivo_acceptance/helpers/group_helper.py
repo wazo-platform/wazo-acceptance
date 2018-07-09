@@ -12,11 +12,11 @@ def add_or_replace_group(name, exten='2000', context='default', users=None):
 
 
 def add_group(name, exten, context='default', users=None):
-    group = {'name': name}
-    group = world.confd_client.groups.create(group)
-
     extension = {'exten': exten, 'context': context}
     extension = world.confd_client.extensions.create(extension)
+
+    group = {'name': name}
+    group = world.confd_client.groups.create(group, tenant_uuid=extension['tenant_uuid'])
 
     world.confd_client.groups(group).add_extension(extension)
 

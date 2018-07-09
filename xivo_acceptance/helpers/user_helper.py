@@ -193,6 +193,9 @@ def add_user(data_dict, step=None):
     else:
         user.entity_id = entity_helper.default_entity_id()
 
+    entity = entity_helper.get_entity(user.entity_id)
+    world.confd_client.set_tenant(entity['tenant']['uuid'])
+
     if 'mobile_number' in data_dict:
         user.mobile_number = data_dict['mobile_number']
 

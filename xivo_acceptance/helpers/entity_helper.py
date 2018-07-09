@@ -19,6 +19,15 @@ def add_entity(name, display_name):
         world.confd_client.entities.create(body)
 
 
+def get_default_entity():
+    return get_entity(default_entity_id())
+
+
+def get_entity(id_):
+    auth.renew_auth_token()
+    return world.confd_client.entities.get(id_)
+
+
 def get_entity_with_name(name):
     auth.renew_auth_token()
     try:
