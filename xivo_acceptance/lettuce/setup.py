@@ -63,7 +63,11 @@ def setup_auth_token():
 
 def setup_tenant():
     entity_name = world.config.get('entity')
-    entity = entity_helper.get_entity_with_name(entity_name)
+    if entity_name:
+        entity = entity_helper.get_entity_with_name(entity_name)
+    else:
+        entity = entity_helper.get_default_entity()
+
     if not entity:
         return
 
