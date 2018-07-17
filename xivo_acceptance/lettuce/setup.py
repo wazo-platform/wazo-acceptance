@@ -2,6 +2,8 @@
 # Copyright 2015-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+import logging
+
 from lettuce import world
 
 from xivo_agentd_client import Client as AgentdClient
@@ -18,6 +20,8 @@ from . import debug
 from ..config import load_config, XivoAcceptanceConfig
 from .display import XiVODisplay
 from .xivobrowser import XiVOBrowser
+
+logger = logging.getLogger(__name__)
 
 
 def setup_agentd_client():
@@ -66,7 +70,11 @@ def setup_tenant():
     if entity_name:
         entity = entity_helper.get_entity_with_name(entity_name)
     else:
-        entity = entity_helper.get_default_entity()
+        try:
+            entity = entity_helper.get_default_entity()
+        except Exception:
+            logger.exception('failed to get an entity')
+            return
 
     if not entity:
         return
