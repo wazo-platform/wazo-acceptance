@@ -55,7 +55,7 @@ def find_voicemail_by_user_id(user_id):
 
 
 def find_voicemail_by_number(number, context='default'):
-    voicemails = world.confd_client.voicemails.list(number=number, context=context)['items']
+    voicemails = world.confd_client.voicemails.list(number=number, context=context, recurse=True)['items']
     return voicemails[0] if voicemails else None
 
 
