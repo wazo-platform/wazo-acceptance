@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from hamcrest import assert_that, is_not, none
@@ -44,17 +43,8 @@ def _delete_voicemail(voicemail_id):
 
 
 def find_user_id_for_voicemail(voicemail_id):
-    query = """
-    SELECT
-        id
-    FROM
-        userfeatures
-    WHERE
-        voicemailid = :voicemail_id
-    """
-
-    result = postgres.exec_sql_request(query, voicemail_id=voicemail_id)
-    return result.scalar()
+    for association in world.confd_client.voicemails(voicemail_id).list_users()['items']:
+        return association['user_id']
 
 
 def find_voicemail_by_user_id(user_id):
