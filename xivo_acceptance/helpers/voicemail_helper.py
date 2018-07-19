@@ -2,7 +2,11 @@
 # Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
-from hamcrest import assert_that, is_not, none
+from hamcrest import (
+    assert_that,
+    is_not,
+    none,
+)
 from lettuce import world
 from requests.exceptions import HTTPError
 
@@ -15,12 +19,16 @@ def add_or_replace_voicemail(parameters):
 
 
 def delete_similar_voicemails(parameters):
-    if 'number' in parameters:
-        number = parameters['number']
-        context = parameters.get('context', 'default')
-        voicemail = find_voicemail_by_number(number, context)
-        if voicemail:
-            delete_voicemail(voicemail['id'])
+    number = parameters.get('number')
+    if not number:
+        return
+
+    context = parameters.get('context', 'default')
+    voicemail = find_voicemail_by_number(number, context)
+    if not voicemail:
+        return
+
+    delete_voicemail(voicemail['id'])
 
 
 def create_voicemail(parameters):
@@ -61,6 +69,9 @@ def find_voicemail_by_number(number, context='default'):
 
 def get_voicemail_by_number(number, context='default'):
     voicemail = find_voicemail_by_number(number, context)
-    assert_that(voicemail, is_not(none()),
-                "voicemail %s@%s not found" % (number, context))
+    assert_that(
+        voicemail,
+        is_not(none()),
+        "voicemail %s@%s not found" % (number, context)
+    )
     return voicemail
