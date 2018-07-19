@@ -41,9 +41,7 @@ def delete_voicemail(voicemail_id):
 
 
 def _delete_associations(voicemail_id):
-    user_id = find_user_id_for_voicemail(voicemail_id)
-    if user_id:
-        world.confd_client.users(user_id).remove_voicemail()
+    world.confd_client.voicemails(voicemail_id).remove_users()
 
 
 def _delete_voicemail(voicemail_id):
