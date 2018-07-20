@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2015 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright (C) 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import world
@@ -26,15 +25,11 @@ def delete_user_line_extension_voicemail(firstname, lastname, context=None, exte
 
 
 def delete_voicemail(mailbox, context):
-    voicemail = voicemail_helper.find_voicemail_by_number(mailbox, context)
-    if voicemail:
-        voicemail_helper.delete_voicemail(voicemail['id'])
+    voicemail_helper.delete_similar_voicemails({'number': mailbox, 'context': context})
 
 
 def delete_extension(exten, context):
-    extension = extension_helper.find_extension_by_exten_context(exten, context)
-    if extension:
-        extension_helper.delete_extension(extension['id'])
+    extension_helper.delete_similar_extensions({'exten': exten, 'context': context})
 
 
 def delete_lines(exten):
