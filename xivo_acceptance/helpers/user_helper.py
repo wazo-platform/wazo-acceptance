@@ -54,21 +54,9 @@ def get_by_exten_context(exten, context):
 
 
 def find_by_exten_context(exten, context):
-    query = """
-    SELECT
-        CAST(typeval AS INT)
-    FROM
-        extensions
-    WHERE
-        type = 'user'
-        AND exten = :exten
-        AND context = :context
-        AND typeval != '0'
-    """
-
-    result = postgres.exec_sql_request(query, exten=exten, context=context)
-    user_id = result.scalar()
-    return find_by_user_id(user_id) if user_id else None
+    response = world.confd_client.users.list(exten=exten, context=context, recurse=True, view='summary')
+    for user in response['items']:
+        return user
 
 
 def find_by_firstname_lastname(firstname, lastname):
