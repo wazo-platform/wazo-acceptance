@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import world
@@ -58,7 +57,7 @@ def delete_queues_with_name_or_number(queue_name, queue_number):
 
 def delete_queues_with_name(name):
     for queue in _search_queues_with_name(name):
-        world.ws.queues.delete(queue.id)
+        world.ws.queues.delete(queue['id'])
 
 
 def delete_queues_with_number(number):
@@ -68,12 +67,12 @@ def delete_queues_with_number(number):
 
 def get_queue_with_name(name):
     queue = _find_queue_with_name(name)
-    return world.ws.queues.view(queue.id)
+    return world.ws.queues.view(queue['id'])
 
 
 def find_queue_id_with_name(name):
     queue = _find_queue_with_name(name)
-    return queue.id
+    return queue['id']
 
 
 def _find_queue_with_name(name):
@@ -87,8 +86,8 @@ def _find_queue_with_name(name):
 def _search_queues_with_name(name):
     # name is not the same as display name
     name = unicode(name)
-    queues = world.ws.queues.list()
-    return [queue for queue in queues if queue.name == name]
+    response = world.confd_client.queues.list(name=name)
+    return response['items']
 
 
 def _search_queues_with_number(number):
