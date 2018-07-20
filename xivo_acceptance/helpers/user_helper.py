@@ -60,10 +60,9 @@ def find_by_exten_context(exten, context):
 
 
 def find_by_firstname_lastname(firstname, lastname):
-    users = world.confd_client.users.list(firstname=firstname, lastname=lastname)['items']
-    if not users:
-        return None
-    return users[0]
+    response = world.confd_client.users.list(firstname=firstname, lastname=lastname, recurse=True)
+    for user in response['items']:
+        return user
 
 
 def get_by_firstname_lastname(firstname, lastname):
