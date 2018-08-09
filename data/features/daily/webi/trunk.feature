@@ -1,5 +1,6 @@
 Feature: Trunk
 
+    @skip_old_webi_step
     Scenario: Add a trunksip in the webi
         Given there is no trunksip "tokyo_paris"
         When I create a trunksip with name "tokyo_paris" in the webi
@@ -12,6 +13,7 @@ Feature: Trunk
         Then trunksip "tokyo_paris" is not displayed in the list
         Then the "sip.conf" file should not contain peer "tokyo_paris"
 
+    @skip_old_webi_step
     Scenario: Add a trunkcustom in the webi
         Given there is no trunkcustom "tokyo_paris"
         When I create a trunkcustom with name "tokyo_paris" in the webi

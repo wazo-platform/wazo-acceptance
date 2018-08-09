@@ -1,5 +1,6 @@
 Feature: TrunkIAX
 
+    @skip_old_webi_step
     Scenario: Add a trunkiax
         Given there is no trunkiax "tokyo_paris"
         When I create a trunkiax with name "tokyo_paris"

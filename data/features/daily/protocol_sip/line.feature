@@ -1,5 +1,6 @@
 Feature: Line
 
+    @skip_old_webi_step
     Scenario: Add a SIP line and remove it
         When I add a SIP line with infos:
         | context |
@@ -17,6 +18,7 @@ Feature: Line
          | Caller ID              |
          | "André óíúéåäë" <1801> |
 
+    @skip_old_webi_step
     Scenario: Choose custom SIP codec
         When I add a SIP line with infos:
         | context | custom_codecs              |

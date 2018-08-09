@@ -1,5 +1,6 @@
 Feature: Callfilter
 
+    @skip_old_webi_step
     Scenario: Add a callfilter
         Given there is no callfilter "totitatu"
         Given there are users with infos:

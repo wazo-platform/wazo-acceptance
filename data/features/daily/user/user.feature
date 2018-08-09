@@ -43,6 +43,7 @@ Feature: User
         Then I should be at the user list page
         Then "Bob" "Dylan" is in group "rastafarien"
 
+    @skip_old_webi_step
     Scenario: Add user with SIP line and remove it
         Given there is no user "Bill" "Bush"
         Given I have no extension with exten "1632@default"
@@ -55,6 +56,7 @@ Feature: User
         When I remove user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
+    @skip_old_webi_step
     Scenario: Add user with SCCP line and remove it
         Given there is no user "Bill" "Bush"
         Given I have no extension with exten "1632@default"
@@ -67,6 +69,7 @@ Feature: User
         When I remove user "Bill" "Bush"
         Then user "Bill Bush" is not displayed in the list
 
+    @skip_old_webi_step
     Scenario: Add user with SIP line and device and remove it
         Given the plugin "xivo-aastra-3.3.1-SP4" is installed
         Given there are no devices with mac "00:de:ad:be:ef:00"
@@ -94,6 +97,7 @@ Feature: User
         | mac               | configured |
         | 00:de:ad:be:ef:00 | False      |
 
+    @skip_old_webi_step
     Scenario: Create a user with a device that only has a MAC
       Given I have the following devices:
           | mac               |

@@ -1,5 +1,6 @@
 Feature: Entity Filter
 
+    @skip_old_webi_step
     Scenario: Context / User / Line / Group / Voicemail / Conference Room / Incall / Queue / Agent / Callfilter / Pickup group / Schedule / Device
         Given there are entities with infos:
           | name           | display_name  |
