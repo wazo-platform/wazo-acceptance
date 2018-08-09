@@ -1,37 +1,29 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import time
 
-from hamcrest import assert_that
-from hamcrest import equal_to
-from hamcrest import has_items
-from hamcrest import is_
-from hamcrest import not_
-from lettuce import step
-from lettuce import world
+from hamcrest import (
+    assert_that,
+    equal_to,
+    has_items,
+    is_,
+    not_,
+)
+from lettuce import step, world
 
-from xivo_acceptance.helpers import cti_helper
-from xivo_acceptance.helpers import asterisk_helper
-from xivo_acceptance.helpers import line_read_helper
-from xivo_acceptance.helpers import sip_config
-from xivo_acceptance.helpers import sip_phone
-from xivo_acceptance.helpers import user_helper
-from xivo_acceptance.lettuce import common
-from xivo_acceptance.lettuce import form, func
-from xivo_acceptance.lettuce.form.checkbox import Checkbox
+from xivo_acceptance.helpers import (
+    asterisk_helper,
+    cti_helper,
+    line_read_helper,
+    sip_config,
+    sip_phone,
+    user_helper,
+)
+from xivo_acceptance.lettuce import common, func
 
 from linphonelib import ExtensionNotFoundException
-
-
-@step(u'Given there is "([^"]*)" activated in extenfeatures page')
-def given_there_is_group1_activated_in_extensions_page(step, option_label):
-    common.open_url('extenfeatures')
-    option = Checkbox.from_label(option_label)
-    option.check()
-    form.submit.submit_form()
 
 
 @step(u'When a call is started:')

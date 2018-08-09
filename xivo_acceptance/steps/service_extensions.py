@@ -11,6 +11,7 @@ _DESCRIPTION_TO_FEATURE = {
     'Enable unconditional forwarding': 'fwdunc',
     'Do not disturb': 'enablednd',
     'Incoming call filtering': 'incallfilter',
+    'Call recording': 'callrecord',
 }
 
 

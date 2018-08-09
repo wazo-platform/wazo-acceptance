@@ -20,7 +20,7 @@ Feature: Callgen
          | 1101                  | 3        | True     |
 
     Scenario: Call with extension call recording activated
-        Given there is "Call recording" activated in extenfeatures page
+        Given the "Call recording" extension is enabled
         Given there are users with infos:
          | firstname | lastname | number | context | protocol |
          | User      | 100      |   1100 | default | sip      |
