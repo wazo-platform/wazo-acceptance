@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import time
@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import (
     ElementNotVisibleException,
     NoSuchElementException,
+    StaleElementReferenceException,
     TimeoutException,
 )
 from selenium.webdriver.support.ui import WebDriverWait
@@ -83,6 +84,9 @@ def _uninstall_plugin(plugin_line):
 def _find_uninstall_btn(plugin_line):
     try:
         return plugin_line.find_element_by_xpath(".//a[@title='Uninstall']")
+    except StaleElementReferenceException:
+        world.dump_current_page()
+        raise
     except (NoSuchElementException, ElementNotVisibleException):
         return None
 
