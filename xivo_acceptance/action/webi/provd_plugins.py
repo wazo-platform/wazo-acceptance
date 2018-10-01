@@ -2,6 +2,7 @@
 # Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+import logging
 import time
 
 from lettuce import world
@@ -9,7 +10,6 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import (
     ElementNotVisibleException,
     NoSuchElementException,
-    StaleElementReferenceException,
     TimeoutException,
 )
 from selenium.webdriver.support.ui import WebDriverWait
@@ -17,6 +17,8 @@ from selenium.webdriver.support.expected_conditions import visibility_of_element
 
 from xivo_acceptance.action.webi import provd_general as provd_general_action_webi
 from xivo_acceptance.lettuce import common
+
+logger = logging.getLogger(__name__)
 
 
 def update_plugin_list(url, check_confirmation=True):
@@ -58,8 +60,7 @@ def plugins_error_during_update():
 
 def uninstall_plugin(plugin_name):
     common.open_url('provd_plugin')
-    plugin_line = common.get_line(plugin_name)
-    _uninstall_plugin(plugin_line)
+    common.click_on_line_with_alert('Uninstall', plugin_name)
 
 
 def uninstall_plugins(plugin_name):
@@ -69,26 +70,11 @@ def uninstall_plugins(plugin_name):
     for plugin_line in common.find_lines(plugin_name):
         plugin_names.append(plugin_line.find_element_by_xpath('.//td[2]').text)
     for plugin_name in plugin_names:
-        plugin_line = common.get_line(plugin_name)
-        _uninstall_plugin(plugin_line)
-
-
-def _uninstall_plugin(plugin_line):
-    uninstall_btn = _find_uninstall_btn(plugin_line)
-    if uninstall_btn:
-        uninstall_btn.click()
-        alert = world.browser.switch_to_alert()
-        alert.accept()
-
-
-def _find_uninstall_btn(plugin_line):
-    try:
-        return plugin_line.find_element_by_xpath(".//a[@title='Uninstall']")
-    except StaleElementReferenceException:
-        world.dump_current_page()
-        raise
-    except (NoSuchElementException, ElementNotVisibleException):
-        return None
+        try:
+            common.click_on_line_with_alert('Uninstall', plugin_name)
+        except NoSuchElementException:
+            logger.debug('No Uninstall button found for prov plugin "%s".', plugin_name)
+            pass  # element not installed
 
 
 def install_plugin(plugin_name):
