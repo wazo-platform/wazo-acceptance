@@ -67,8 +67,11 @@ def find_by_firstname_lastname(firstname, lastname):
 
 def get_by_firstname_lastname(firstname, lastname):
     user = find_by_firstname_lastname(firstname, lastname)
-    assert_that(user, is_not(none()),
-                (u"user '%s %s' does not exist" % (firstname, lastname)).encode('utf8'))
+    assert_that(
+        user,
+        is_not(none()),
+        u"user '{}' does not exist".format(u'{} {}'.format(firstname, lastname).strip()).encode('utf8')
+    )
     return user
 
 
