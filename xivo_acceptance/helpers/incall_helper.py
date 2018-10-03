@@ -38,6 +38,8 @@ def _build_destination(type_, args):
         key_id = _build_voicemail_destination(args)
     elif type_ == 'ivr':
         key_id = _build_ivr_destination(args)
+    else:
+        key_id = args
 
     result = {'type': type_}
     result.update(key_id)

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from xivo_acceptance.lettuce import terrain
@@ -9,6 +8,7 @@ from .admin_user_steps import *
 from .agent_list_steps import *
 from .agent_steps import *
 from .agid_steps import *
+from .application_steps import *
 from .asterisk_steps import *
 from .backup_steps import *
 from .call_logs_steps import *
