@@ -4,7 +4,7 @@
 
 import time
 
-from lettuce import step
+from lettuce import step, world
 
 from hamcrest import (
     assert_that,
@@ -32,7 +32,7 @@ def when_user_picks_up_the_call_from_the_application_app(step, user_name, app_na
     app = _get_application(step, app_name)
 
     for _ in xrange(10):
-        calls = application_helper.list_calls(app['uuid'])
+        calls = world.ctid_ng_client.applications.list_calls(app['uuid'])['items']
         if not calls:
             time.sleep(0.25)
             continue
@@ -42,22 +42,21 @@ def when_user_picks_up_the_call_from_the_application_app(step, user_name, app_na
     else:
         assert False, 'call failed to enter stasis app'
 
-    node = application_helper.create_node(app['uuid'], incoming_call['id'])
+    node = world.ctid_ng_client.applications.create_node(app['uuid'], incoming_call['id'])
 
     user = user_helper.get_user_by_name(user_name)
     user_exten = user['lines'][0]['extensions'][0]['exten']
     user_context = user['lines'][0]['extensions'][0]['context']
-    user_call = application_helper.join_node(app['uuid'], node['uuid'], user_exten, user_context)
+    world.ctid_ng_client.applications.join_node(app['uuid'], node['uuid'], user_exten, user_context)
 
     phone = step.scenario.phone_register.get_user_phone(user_name)
     phone.answer()
 
 
-
 @step(u'Then "([^"]*)" contains a node with "([^"]*)" calls')
 def then_application_contains_a_node_with_n_calls(step, app_name, n):
     app = _get_application(step, app_name)
-    calls = application_helper.list_calls(app['uuid'])
+    calls = world.ctid_ng_client.applications.list_calls(app['uuid'])['items']
     assert_that(len(calls), equal_to(2))
 
 

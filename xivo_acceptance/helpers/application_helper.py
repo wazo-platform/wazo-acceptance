@@ -7,26 +7,6 @@ from lettuce import world
 from . import incall_helper
 
 
-def join_node(application_uuid, node_uuid, exten, context):
-    result = world.ctid_ng_client.applications.join_node(
-        application_uuid,
-        node_uuid,
-        exten,
-        context,
-    )
-    return result
-
-
-def list_calls(application_uuid):
-    result = world.ctid_ng_client.applications.list_calls(application_uuid)
-    return result['items']
-
-
-def create_node(application_uuid, call_id):
-    result = world.ctid_ng_client.applications.create_node(application_uuid, call_id)
-    return result
-
-
 def add_or_replace_application(application):
     _delete_similar_applications(application)
     app_body = {
@@ -48,15 +28,11 @@ def add_or_replace_application(application):
     return app
 
 
-def _delete_application(uuid):
-    world.confd_client.applications.delete(uuid)
-
-
 def _delete_similar_applications(application):
     name = application.get('name')
     if name:
         for app in _find_by_name(name):
-            _delete_application(app['uuid'])
+            world.confd_client.applications.delete(app['uuid'])
 
     incall = application.get('incall')
     if incall:
