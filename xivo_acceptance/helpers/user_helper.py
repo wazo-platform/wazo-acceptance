@@ -59,22 +59,39 @@ def find_by_exten_context(exten, context):
         return user
 
 
-def find_by_firstname_lastname(firstname, lastname):
-    response = world.confd_client.users.list(firstname=firstname, lastname=lastname, recurse=True)
+def find_by_firstname_lastname(firstname, lastname=None):
+    kwargs = {
+        'firstname': firstname,
+        'recurse': True,
+    }
+    if lastname:
+        kwargs['lastname'] = lastname
+
+    response = world.confd_client.users.list(**kwargs)
     for user in response['items']:
-        return user
+        # The user was searched by firstname & lastname the result matches
+        if lastname:
+            return user
+
+        # We searched without a lastname confd returned results for every user with the matching
+        # firstname and ignored the lastname argument
+        if not user['lastname']:
+            return user
 
 
-def get_by_firstname_lastname(firstname, lastname):
+def get_by_firstname_lastname(firstname, lastname=None):
     user = find_by_firstname_lastname(firstname, lastname)
-    assert_that(user, is_not(none()),
-                (u"user '%s %s' does not exist" % (firstname, lastname)).encode('utf8'))
+    assert_that(
+        user,
+        is_not(none()),
+        u"user '{}' does not exist".format(u'{} {}'.format(firstname, lastname).strip()).encode('utf8')
+    )
     return user
 
 
 def get_user_by_name(name):
-    firstname, lastname = name.split(" ", 1)
-    return get_by_firstname_lastname(firstname, lastname)
+    names = name.split(" ", 1)
+    return get_by_firstname_lastname(*names)
 
 
 def delete_similar_users(userinfo):
