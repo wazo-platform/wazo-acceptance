@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import re
@@ -211,7 +211,11 @@ class _XiVORemoteBrowserImplementation(_XiVOBrowserMixin, webdriver.Remote):
 
     def __init__(self, debug=False):
         self._debug = debug
-        super(_XiVORemoteBrowserImplementation, self).__init__(command_executor='http://localhost:4444/wd/hub',
+        executor_url = 'http://{host}:{port}/wd/hub'.format(
+            host=world.config['browser'].get('remoting_host', 'localhost'),
+            port=world.config['browser'].get('remoting_port', '4444'),
+        )
+        super(_XiVORemoteBrowserImplementation, self).__init__(command_executor=executor_url,
                                                                desired_capabilities=DesiredCapabilities.FIREFOX,
                                                                browser_profile=self._setup_browser_profile())
 

@@ -89,7 +89,10 @@ def load_config(extra_config):
             'enable': True,
             'visible': False,
             'timeout': 5,
-            'resolution': '1024x768'
+            'resolution': '1024x768',
+            'docker': False,
+            'remoting_host': 'localhost',
+            'remoting_port': '4444',
         },
         'xivo_client': {
             'login_timeout': 5

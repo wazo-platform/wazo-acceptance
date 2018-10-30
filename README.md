@@ -151,6 +151,8 @@ To configure xivo-acceptance to use the Remote webdriver modify your xivo-accept
 
     browser:
         docker: True
+        remoting_host: localhost  # defaults to localhost
+        remoting_port: 4444  # defaults to 4444
 
 
 If you need to see what is going on in the browser, use the `selenium/standalone-firefox-debug` image, which runs a VNC server (the password is "secret"):
