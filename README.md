@@ -150,7 +150,7 @@ To start the browser:
 To configure xivo-acceptance to use the Remote webdriver modify your xivo-acceptance configuration:
 
     browser:
-        docker: True
+        remoting_enabled: True
         remoting_host: localhost  # defaults to localhost
         remoting_port: 4444  # defaults to 4444
 

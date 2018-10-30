@@ -39,7 +39,7 @@ class XiVOBrowser(object):
 
     def _start_client(self):
         display = world.display.get_instance()
-        if world.config['browser'].get('docker', False):
+        if world.config['browser'].get('remoting_enabled', False):
             self._instance = _XiVORemoteBrowserImplementation(self._debug)
         else:
             self._instance = _XiVOLocalBrowserImplementation(self._debug)

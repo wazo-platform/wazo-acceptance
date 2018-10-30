@@ -90,7 +90,7 @@ def load_config(extra_config):
             'visible': False,
             'timeout': 5,
             'resolution': '1024x768',
-            'docker': False,
+            'remoting_enabled': False,
             'remoting_host': 'localhost',
             'remoting_port': '4444',
         },
