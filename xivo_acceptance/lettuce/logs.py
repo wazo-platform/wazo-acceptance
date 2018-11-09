@@ -13,7 +13,6 @@ DAEMON_LOGFILE = '/var/log/daemon.log'
 ASTERISK_LOGFILE = '/var/log/asterisk/messages'
 XIVO_AGENT_LOGFILE = '/var/log/xivo-agentd.log'
 XIVO_AGID_LOGFILE = '/var/log/xivo-agid.log'
-XIVO_CONFD_LOGFILE = '/var/log/xivo-confd.log'
 XIVO_SYSCONFD_LOGFILE = '/var/log/xivo-sysconfd.log'
 
 DAEMON_DATE_FORMAT = "%b %d %H:%M:%S"
@@ -21,9 +20,6 @@ DAEMON_DATE_PATTERN = r"([\w]{3} [\d ]{2} [\d]{2}:[\d]{2}:[\d]{2})"
 
 PYTHON_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 PYTHON_DATE_PATTERN = r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})"
-
-CONFD_DATE_FORMAT = "%Y-%m-%d %H:%M:%S,%f"
-CONFD_DATE_PATTERN = r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})"
 
 LogfileInfo = namedtuple('LogfileInfo', ['logfile', 'date_format', 'date_pattern'])
 
@@ -42,10 +38,6 @@ XIVO_AGENT_LOG_INFO = LogfileInfo(logfile=XIVO_AGENT_LOGFILE,
 XIVO_AGID_LOG_INFO = LogfileInfo(logfile=XIVO_AGID_LOGFILE,
                                  date_format=PYTHON_DATE_FORMAT,
                                  date_pattern=PYTHON_DATE_PATTERN)
-
-XIVO_CONFD_LOG_INFO = LogfileInfo(logfile=XIVO_CONFD_LOGFILE,
-                                  date_format=CONFD_DATE_FORMAT,
-                                  date_pattern=CONFD_DATE_PATTERN)
 
 XIVO_SYSCONFD_LOG_INFO = LogfileInfo(logfile=XIVO_SYSCONFD_LOGFILE,
                                      date_format=PYTHON_DATE_FORMAT,
@@ -70,10 +62,6 @@ def search_str_in_xivo_agid_log(expression, delta=10):
 
 def find_line_in_xivo_sysconfd_log(delta=10):
     return _find_line_in_log_file(XIVO_SYSCONFD_LOG_INFO, delta)
-
-
-def find_line_in_xivo_confd_log(delta=10):
-    return _find_line_in_log_file(XIVO_CONFD_LOG_INFO, delta)
 
 
 def _find_line_in_log_file(loginfo, delta=10):

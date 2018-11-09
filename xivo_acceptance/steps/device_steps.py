@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from hamcrest import assert_that
@@ -12,7 +11,7 @@ from lettuce import step, world
 from xivo_acceptance.action.webi import provd_plugins
 from xivo_acceptance.action.webi import device as device_action_webi
 from xivo_acceptance.helpers import device_helper, provd_helper, line_read_helper
-from xivo_acceptance.lettuce import form, common
+from xivo_acceptance.lettuce import common
 
 
 @step(u'Given there are no devices with mac "([^"]*)"')
@@ -46,22 +45,10 @@ def _provisioning_server_http_requests(step):
         provd_helper.request_http(request_data['path'], request_data['user-agent'])
 
 
-@step(u'When I request devices in the webi')
-def when_i_request_devices_in_the_webi(step):
-    common.open_url('device')
-
-
 @step(u'When I synchronize the device with mac "([^"]*)" from webi')
 def when_i_synchronize_the_device_group1_from_webi(step, mac):
     device_action_webi.search_device(mac)
     common.click_on_line_with_alert('Synchronize', mac)
-    device_action_webi.search_device('')
-
-
-@step(u'When I reset to autoprov the device with mac "([^"]*)" from webi')
-def when_i_reset_to_autoprov_the_device_from_webi(step, mac):
-    device_action_webi.search_device(mac)
-    common.click_on_line_with_alert('Reset to autoprov mode', mac)
     device_action_webi.search_device('')
 
 
@@ -73,37 +60,6 @@ def when_i_search_device(step, search):
 @step(u'When I search device by number "([^"]*)"')
 def when_i_search_device_by_number(step, number):
     device_action_webi.search_device(number, by_number=True)
-
-
-@step(u'When I create the device with infos:')
-def when_i_create_the_device_with_infos(step):
-    common.open_url('device', 'add')
-    device_infos = step.hashes[0]
-    if 'mac' in device_infos:
-        provd_helper.delete_device_with_mac(device_infos['mac'])
-        device_action_webi.type_input('mac', device_infos['mac'])
-    if 'ip' in device_infos:
-        provd_helper.delete_device_with_ip(device_infos['ip'])
-        device_action_webi.type_input('ip', device_infos['ip'])
-    if 'plugin' in device_infos:
-        device_action_webi.type_input('plugin', device_infos['plugin'])
-    if 'template_id' in device_infos:
-        device_action_webi.type_select('template_id', device_infos['template_id'])
-    form.submit.submit_form()
-
-
-@step(u'When I edit the device with mac "([^"]*)" via webi with infos:')
-def when_i_edit_the_device_with_mac_via_webi_with_infos(step, mac):
-    device = provd_helper.get_by_mac(mac)
-    common.open_url('device', 'edit', qry={'id': device['id']})
-    device_infos = step.hashes[0]
-    if 'plugin' in device_infos:
-        device_action_webi.type_input('plugin', device_infos['plugin'])
-    if 'template_id' in device_infos:
-        device_action_webi.type_select('template_id', device_infos['template_id'])
-    if 'description' in device_infos:
-        device_action_webi.type_input('description', device_infos['description'])
-    form.submit.submit_form()
 
 
 @step(u'^When I delete the device with mac "([^"]*)" via webi$')

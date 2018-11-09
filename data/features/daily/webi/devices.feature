@@ -36,32 +36,6 @@ Feature: Devices
           | present           | not present       |
           | 00:00:00:00:aa:02 | 00:00:00:00:cc:22 |
 
-    Scenario: List
-        When I request devices in the webi
-        Then the confd REST API received a request with infos:
-          | method | path         |
-          | GET    | /1.1/devices |
-
-    Scenario: Create
-        When I create the device with infos:
-          |            ip | mac               |
-          | 192.168.32.21 | 00:00:00:00:bb:02 |
-        Then the confd REST API received a request with infos:
-          | method | path         |
-          | POST   | /1.1/devices |
-
-    Scenario: Edit
-        Given I have the following devices:
-          |             ip | mac               |
-          | 192.168.32.197 | 00:00:00:00:aa:01 |
-        When I edit the device with mac "00:00:00:00:aa:01" via webi with infos:
-          | description    |
-          | toto           |
-# This step is broken because the logger now include headers
-#        Then the confd REST API received a request with infos:
-#          | method | path             | data                                                                                                                                       |
-#          | PUT    | /1.1/devices/\w+  | {"ip":"192.168.32.197","mac":"00:00:00:00:aa:01","template_id":"defaultconfigdevice","description":"toto","options":{"switchboard":false}} |
-
     Scenario: Edit the switchboard option
         Given the plugin "null" is installed
         Given there's no plugins "xivo-aastra" installed
@@ -89,9 +63,6 @@ Feature: Devices
           |             ip | mac               |
           | 192.168.32.197 | 00:00:00:00:aa:01 |
         When I delete the device with mac "00:00:00:00:aa:01" via webi
-        Then the confd REST API received a request with infos:
-          | method | path                         |
-          | DELETE | /1.1/devices/\w+ |
         Then there is no device "00:00:00:00:aa:01"
 
     Scenario: Delete a device associated to a line
@@ -128,16 +99,6 @@ Feature: Devices
         When I modify the device of user "Han" "Solo" to ""
         When I modify the device of user "Han" "Duo" to ""
         Then I see no errors
-
-    Scenario: Autoprov
-        Given I have the following devices:
-          |             ip | mac               |
-          | 192.168.32.197 | 00:00:00:00:aa:01 |
-        When I reset to autoprov the device with mac "00:00:00:00:aa:01" from webi
-        Then the confd REST API received a request with infos:
-          | method | path                                    |
-          | GET    | /1.1/devices/\w+/autoprov    |
-          | GET    | /1.1/devices/\w+/synchronize |
 
     Scenario: Provision
         Given I have the following users:
