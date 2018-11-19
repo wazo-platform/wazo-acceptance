@@ -6,12 +6,12 @@ import logging
 
 from lettuce import world
 
+from wazo_dird_client import Client as DirdClient
 from xivo_agentd_client import Client as AgentdClient
 from xivo_auth_client import Client as AuthClient
 from wazo_call_logd_client import Client as CallLogdClient
 from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
-from xivo_dird_client import Client as DirdClient
 
 from xivo_acceptance.helpers import entity_helper
 
