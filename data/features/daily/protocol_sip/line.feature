@@ -9,15 +9,6 @@ Feature: Line
         When I remove this line
         Then this line is not displayed in the list
 
-    # BUG #3642
-    Scenario: See IPBX infos in line page with accent in callerid
-        Given there are users with infos:
-         | firstname | lastname | number | context |
-         | André     | óíúéåäë  |   1801 | default |
-        Then the line "1801" has the following line options:
-         | Caller ID              |
-         | "André óíúéåäë" <1801> |
-
     @skip_old_webi_step
     Scenario: Choose custom SIP codec
         When I add a SIP line with infos:
