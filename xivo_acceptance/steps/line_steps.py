@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import time
@@ -204,10 +203,10 @@ def then_the_line_with_number_group1_does_not_have_the_codec_group2(step, linenu
 
 
 def check_codec_for_sip_line(peer, codec):
-    command = ['asterisk', '-rx', '"sip show peer %s"' % peer]
+    command = ['asterisk', '-rx', '"pjsip show endpoint %s"' % peer]
     output = world.ssh_client_xivo.out_call(command)
     codec_line = [x for x in output.split("\n") if 'Codecs' in x][0]
-    codec_list = re.match(r"\s+Codecs\s+:\s+\(([\w\|]*?)\)", codec_line).group(1).split('|')
+    codec_list = re.match(r"\s+allow\s+:\s+\(([\w\|]*?)\)", codec_line).group(1).split('|')
     return codec in codec_list
 
 
