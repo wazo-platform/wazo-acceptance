@@ -96,5 +96,5 @@ Feature: Line
         When "Ruffnut Thorson" calls "1603"
         Then "Tuffnut Thorson" is ringing
         Then I have the following hints:
-        | exten        | line            |
-        | 1603@default | SIP/newusername |
+        | exten        | line              |
+        | 1603@default | PJSIP/newusername |
