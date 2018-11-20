@@ -8,7 +8,6 @@ import re
 from hamcrest import assert_that, has_entries
 from lettuce import step, world
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support.select import Select
 
 from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import line_read_helper
@@ -239,28 +238,6 @@ def then_this_line_is_not_displayed_in_the_list(step):
     common.open_url('line', 'search', {'search': world.id})
     assert common.find_line(world.id) is None
     common.open_url('line', 'search', {'search': ''})
-
-
-@step(u'Then the line "([^"]*)" has the following line options:')
-def then_the_line_1_has_the_following_line_options(step, line_number):
-    line = line_read_helper.get_with_exten_context(line_number, 'default')
-    time.sleep(world.timeout)
-    common.open_url('line', 'edit', {'id': line['id']})
-    for line_data in step.hashes:
-        for key, value in line_data.iteritems():
-            if key == 'Call limit':
-                common.go_to_tab('IPBX Infos')
-                assert line_action_webi.get_value_from_ipbx_infos_tab('call_limit') == value
-            elif key == 'NAT':
-                common.go_to_tab('General')
-                nat_select = world.browser.find_element_by_label('NAT')
-                nat_value = Select(nat_select).first_selected_option.text
-                assert nat_value == value
-            elif key == 'Caller ID':
-                common.go_to_tab('IPBX Infos')
-                assert line_action_webi.get_value_from_ipbx_infos_tab('callerid') == value
-            else:
-                raise Exception('%s is not a valid key' % key)
 
 
 @step(u'Then I see the line "([^"]*)" exists$')
