@@ -83,8 +83,8 @@ def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, exten
     line = line_read_helper.find_with_exten_context(extension, context)
     line_name = line['name']
     lines = [
-        'Action: SIPnotify',
-        'Channel: %s' % line_name,
+        'Action: PJSIPnotify',
+        'Endpoint: {}'.format(line_name),
         'Variable: Event=check-sync',
     ]
 
