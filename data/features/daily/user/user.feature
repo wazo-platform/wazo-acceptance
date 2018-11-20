@@ -141,6 +141,7 @@ Feature: User
         | name   | value                |
         | member | Local/1101@default,0 |
 
+    @skip_old_webi_step
     Scenario: Update a user with SIP line
     # The problem is that saving the user form may erase values previously
     # set in the line form (bug #2918)
