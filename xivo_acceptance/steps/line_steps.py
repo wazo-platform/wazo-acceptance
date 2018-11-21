@@ -204,7 +204,7 @@ def then_the_line_with_number_group1_does_not_have_the_codec_group2(step, linenu
 def check_codec_for_sip_line(peer, codec):
     command = ['asterisk', '-rx', '"pjsip show endpoint %s"' % peer]
     output = world.ssh_client_xivo.out_call(command)
-    codec_line = [x for x in output.split("\n") if 'Codecs' in x][0]
+    codec_line = [x for x in output.split("\n") if 'allow' in x][0]
     codec_list = re.match(r"\s+allow\s+:\s+\(([\w\|]*?)\)", codec_line).group(1).split('|')
     return codec in codec_list
 
