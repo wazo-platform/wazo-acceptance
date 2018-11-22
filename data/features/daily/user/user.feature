@@ -159,6 +159,7 @@ Feature: User
           | NAT | Call limit |
           | No  |         10 |
 
+    @skip_old_webi_step
     Scenario: Delete user
         Given there are users with infos:
           | firstname | lastname | number | context |
@@ -173,6 +174,7 @@ Feature: User
         When I remove user "Tom" "Sawyer"
         Then I see a group "american_dream" with no users
 
+    @skip_old_webi_step
     Scenario: Delete user in queue
         Given there are users with infos:
           | firstname | lastname | number | context |
