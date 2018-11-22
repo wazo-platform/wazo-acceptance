@@ -167,6 +167,7 @@ Feature: User
         When I remove user "Tom" "Sawyer"
         Then there is no data about this user remaining in the database.
 
+    @skip_old_webi_step
     Scenario: Delete user in group
         Given there are users with infos:
           | firstname | lastname | number | context | group_name     |
