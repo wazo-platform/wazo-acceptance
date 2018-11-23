@@ -42,7 +42,7 @@ def when_user_picks_up_the_call_from_the_application_app(step, user_name, app_na
     else:
         assert False, 'call failed to enter stasis app'
 
-    node = world.ctid_ng_client.applications.create_node(app['uuid'], incoming_call['id'])
+    node = world.ctid_ng_client.applications.create_node(app['uuid'], [incoming_call['id']])
 
     user = user_helper.get_user_by_name(user_name)
     user_exten = user['lines'][0]['extensions'][0]['exten']
