@@ -32,8 +32,8 @@ def run(extra_config):
     setup.setup_display()
     setup.setup_browser()
     try:
-        logger.debug('Configuring WebService Access on XiVO')
-        _create_webservices_access()
+        logger.debug('Configuring users external_api')
+        _configure_auth_users()
 
         logger.debug('Creating auth client')
         setup.setup_auth_token()
@@ -117,11 +117,54 @@ def _configure_rabbitmq():
     _restart_service('rabbitmq-server')
 
 
-def _create_webservices_access():
-    copy_asset_to_server('webservices.sql', '/tmp')
-    cmd = ['sudo', '-u', 'postgres', 'psql', '-f', '/tmp/webservices.sql']
-    world.ssh_client_xivo.check_call(cmd)
-    cmd = ['xivo-update-keys']
+def _configure_auth_users():
+    _create_auth_user(
+        'xivo-acceptance',
+        'proformatique',
+        ['auth.#', 'confd.#', 'dird.#', 'agentd.#', 'ctid-ng.#', 'call-logd.#'],
+    )
+    _create_auth_user(
+        'admin',
+        'proformatique',
+        [],
+    )
+
+
+def _create_auth_user(username, password, acl_templates):
+    cmd = [
+        'wazo-auth-cli',
+        '--config', '/root/.config/wazo-auth-cli',
+        'user',
+        'create',
+        '--password', password,
+        '--purpose', 'external_api',
+        username,
+    ]
+    user_uuid = world.ssh_client_xivo.out_call(cmd).decode('utf-8').strip()
+
+    args = []
+    if acl_templates:
+        args = ['--acl']
+        args.extend(acl_templates)
+
+    cmd = [
+        'wazo-auth-cli',
+        '--config', '/root/.config/wazo-auth-cli',
+        'policy',
+        'create',
+        '{}-policy'.format(username),
+    ]
+    cmd.extend(args)
+    policy_uuid = world.ssh_client_xivo.out_call(cmd).decode('utf-8').strip()
+
+    cmd = [
+        'wazo-auth-cli',
+        '--config', '/root/.config/wazo-auth-cli',
+        'user',
+        'add',
+        '--policy', policy_uuid,
+        user_uuid,
+    ]
     world.ssh_client_xivo.check_call(cmd)
 
 

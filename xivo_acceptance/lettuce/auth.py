@@ -15,7 +15,7 @@ ONE_HOUR = 3600
 def new_auth_token():
     try:
         token_data = world.config['token_data'] = world.auth_client.token.new(
-            'xivo_service',
+            'wazo_user',
             expiration=6*ONE_HOUR,
         )
         token_id = token_data['token']
