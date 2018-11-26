@@ -9,6 +9,4 @@ def get_tenant_uuid(name=None):
     name = name or world.config['default_entity']
     tenants = world.auth_client.tenants.list(name=name)['items']
     for tenant in tenants:
-        if tenant['name'] != name:
-            continue
         return tenant['uuid']
