@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import step
@@ -54,7 +54,7 @@ def given_there_s_an_ldap_server_configured_for_reverse(step):
 
 def _configure_ldap_ssl(step):
     ldap_action_webi.add_or_replace_ldap_server(name='openldap-dev',
-                                                host='openldap-dev.lan.proformatique.com',
+                                                host='openldap-dev.lan.wazo.io',
                                                 ssl=True)
     ldap_action_webi.add_or_replace_ldap_filter(
         name='openldap-dev',

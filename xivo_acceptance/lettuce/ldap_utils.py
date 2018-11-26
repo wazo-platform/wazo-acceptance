@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import base64
@@ -8,7 +8,7 @@ import hashlib
 import ldap.modlist
 
 
-LDAP_URI = 'ldap://openldap-dev.lan.proformatique.com:389/'
+LDAP_URI = 'ldap://openldap-dev.lan.wazo.io:389/'
 LDAP_LOGIN = 'cn=admin,dc=lan-quebec,dc=avencall,dc=com'
 LDAP_PASSWORD = 'superpass'
 LDAP_USER_GROUP = 'ou=people,dc=lan-quebec,dc=avencall,dc=com'

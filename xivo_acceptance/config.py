@@ -36,7 +36,7 @@ _FEATURES_DIRS = [
     os.path.join(_ROOT_DIR, 'data', 'features')
 ]
 
-DEFAULT_XIVO_HOST = 'daily-xivo-pxe.lan.proformatique.com'
+DEFAULT_XIVO_HOST = 'daily-xivo-pxe.lan.wazo.io'
 
 
 def load_config(extra_config):
