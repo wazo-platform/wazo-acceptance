@@ -48,7 +48,8 @@ xivo_restore_db() {
     sudo -u postgres pg_restore -C -d postgres asterisk-*.dump
     sudo -u postgres dropdb xivo
     sudo -u postgres pg_restore -C -d postgres xivo-*.dump
-    xivo-update-keys
+    wazo-auth-keys service update --recreate
+    wazo-auth-keys service clean --users
     XIVO_UUID=$(sudo -u postgres psql -d asterisk -tA -c 'select uuid from infos')
     echo "export XIVO_UUID=$XIVO_UUID" > /etc/profile.d/xivo_uuid.sh
     sed -i "s/DefaultEnvironment=.*/DefaultEnvironment=\"XIVO_UUID=$XIVO_UUID\"/" /etc/systemd/system.conf
