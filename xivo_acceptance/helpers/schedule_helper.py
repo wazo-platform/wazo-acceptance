@@ -1,135 +1,97 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from hamcrest import assert_that
-from hamcrest import equal_to
+from hamcrest import has_entries
 from lettuce import world
 
-from xivo_ws import Schedule
 from xivo_acceptance.helpers import entity_helper
-from xivo_acceptance.helpers import user_helper
 
 
-class ScheduleDestination(object):
-    pass
-
-
-class ScheduleDestinationNone(ScheduleDestination):
-    def to_ws_actiontype(self):
-        return 'none'
-
-    def to_ws_action_id(self):
-        return ''
-
-    def to_ws_action_args(self):
-        return ''
-
-
-class ScheduleDestinationUser(ScheduleDestination):
-    def __init__(self, user_id):
-        self.user_id = user_id
-
-    def to_ws_actiontype(self):
-        return 'user'
-
-    def to_ws_action_id(self):
-        return str(self.user_id)
-
-    def to_ws_action_args(self):
-        return ''
-
-    @classmethod
-    def from_name(cls, firstname, lastname):
-        user = user_helper.get_by_firstname_lastname(firstname, lastname)
-        return cls(user['id'])
-
-
-def add_schedule(name, timezone, times, destination=ScheduleDestinationNone()):
+def add_schedule(name, timezone, times, destination=None):
     delete_schedules_with_name(name)
     schedule = _create_schedule(name, timezone, times, destination)
-    world.ws.schedules.add(schedule)
+    world.confd_client.create(schedule)
 
 
 def add_or_replace_schedule(data):
     delete_schedules_with_name(data['name'])
     entity = entity_helper.get_entity_with_name(data['entity'])
-    entity_id = entity['id'] if entity else entity_helper.default_entity_id()
-    schedule = Schedule(
-        entity_id=entity_id,
-        name=data['name'],
-        timezone=data.get('timezone', 'America/Montreal'),
-    )
-    world.ws.schedules.add(schedule)
+    if entity:
+        tenant_uuid = entity['tenant_uuid']
+    else:
+        tenant_uuid = entity_helper.default_entity_id()['tenant_uuid']
+
+    schedule = {
+        'name': data['name'],
+        'timezone': data.get('timezone', 'America/Montreal'),
+    }
+    world.confd_client.schedules.create(schedule, tenant_uuid=tenant_uuid)
 
 
-def assert_schedule_exists(name, timezone, times, destination=ScheduleDestinationNone()):
-    expected_schedule = _create_schedule(name, timezone, times, destination)
-    result_schedule = view_schedule(find_schedule_id_with_name(name))
+def assert_schedule_exists(name, timezone, times):
+    expected = _create_schedule(name, timezone, times)
+    result = find_schedule_by(name=name)
+    assert_that(result, has_entries(**expected))
 
-    assert_that(result_schedule, equal_to(expected_schedule))
+
+def expand_number_ranges(collapsed):
+    numbers = []
+    for range_bloc in collapsed.split(','):
+        if '-' in range_bloc:
+            low, high = map(int, range_bloc.split('-'))
+            numbers += range(low, high+1)
+        else:
+            numbers.append(int(range_bloc))
+    return numbers
 
 
-def _create_schedule(name, timezone, times, fallback_destination):
-    schedule = Schedule(
-        entity_id=entity_helper.default_entity_id(),
-        name=name,
-        timezone=timezone,
-        fallback_actiontype=fallback_destination.to_ws_actiontype(),
-        fallback_action_destination_id=fallback_destination.to_ws_action_id(),
-        fallback_action_destination_args=fallback_destination.to_ws_action_args(),
-    )
+def _create_schedule(name, timezone, times, destination=None):
+    schedule = {
+        'name': name,
+        'timezone': timezone,
+        'closed_destination': {
+            'type': 'none'
+        }
+    }
+    if destination:
+        schedule['closed_destination'] = destination
+
     opened, closed = [], []
     for time in times:
-        formatted_time = {
-            'hours': '%s-%s' % (time['Start hour'], time['End hour']),
-            'weekdays': time['Days of week'],
-            'monthdays': time['Days of month'],
-            'months': time['Months'],
+        period = {
+            'hours_end': time['End hour'],
+            'hours_start': time['Start hour'],
+            'month_days': expand_number_ranges(time['Days of month']),
+            'months': expand_number_ranges(time['Months']),
+            'week_days': expand_number_ranges(time['Days of week']),
         }
-        destination = ScheduleDestinationNone()
-        if time.get('Destination firstname') and time.get('Destination lastname'):
-            destination = ScheduleDestinationUser.from_name(time['Destination firstname'], time['Destination lastname'])
-        formatted_time['dialaction'] = {}
-        formatted_time['dialaction']['actiontype'] = destination.to_ws_actiontype()
-        formatted_time['dialaction']['actionarg1'] = destination.to_ws_action_id()
-        formatted_time['dialaction']['actionarg2'] = destination.to_ws_action_args()
-        if time['Status'] == 'Opened':
-            opened.append(formatted_time)
-        elif time['Status'] == 'Closed':
-            closed.append(formatted_time)
-    if opened:
-        schedule.opened = opened
-    if closed:
-        schedule.closed = closed
 
+        if time['Status'] == 'Opened':
+            opened.append(period)
+        elif time['Status'] == 'Closed':
+            closed.append(period)
+
+    schedule['open_periods'] = opened
+    schedule['exceptional_periods'] = opened
     return schedule
 
 
 def delete_schedules_with_name(name):
-    for schedule in _search_schedules_with_name(name):
-        world.ws.schedules.delete(schedule.id)
+    schedules = world.confd_client.schedules.list(name=name)['items']
+    for schedule in schedules:
+        world.confd_client.delete(schedule['id'])
 
 
-def find_schedule_id_with_name(name):
-    schedule = _find_schedule_with_name(name)
-    return schedule.id
+def get_schedule_by(**kwargs):
+    schedule = find_schedule_by(**kwargs)
+    if not schedule:
+        raise Exception('Schedule not found: %s' % kwargs)
+    return schedule
 
 
-def view_schedule(schedule_id):
-    return world.ws.schedules.view(schedule_id)
-
-
-def _find_schedule_with_name(name):
-    schedules = _search_schedules_with_name(name)
-    if len(schedules) != 1:
-        raise Exception('expecting 1 schedule with name %r: found %s' %
-                        (name, len(schedules)))
-    return schedules[0]
-
-
-def _search_schedules_with_name(name):
-    name = unicode(name)
-    schedules = world.ws.schedules.list()
-    return [schedule for schedule in schedules if schedule.name == name]
+def find_schedule_by(**kwargs):
+    schedules = world.confd_client.schedules.list(**kwargs)['items']
+    for schedule in schedules:
+        return schedule

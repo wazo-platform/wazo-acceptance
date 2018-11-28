@@ -54,7 +54,7 @@ def convert_agent_numbers(agent_numbers):
 
 
 def convert_schedule_name(schedule_name):
-    schedule_id = schedule_helper.find_schedule_id_with_name(schedule_name)
+    schedule_id = schedule_helper.get_schedule_by(name=schedule_name)
     return schedule_id
 
 
