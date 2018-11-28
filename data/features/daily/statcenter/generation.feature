@@ -2,7 +2,7 @@ Feature: Stats generation
 
     Scenario: 01 Generation of event FULL
         Given there is no "FULL" entry in queue "q01"
-        Given there is a agent "Agent" "001" with extension "001@statscenter"
+        Given there is a agent "Agent" "001" with number "001"
         Given there are queues with infos:
           | name | number | context     | maxlen | agent_numbers |
           | q01  | 5001   | statscenter | 1      | 001           |
@@ -19,7 +19,7 @@ Feature: Stats generation
 
     Scenario: 02 Generation of event ABANDON
         Given there is no "ABANDON" entry in queue "q02"
-        Given there is a agent "Agent" "002" with extension "002@statscenter"
+        Given there is a agent "Agent" "002" with number "002"
         Given there are queues with infos:
           | name | number | context     | agents_number |
           | q02  | 5002   | statscenter | 002           |
@@ -68,7 +68,7 @@ Feature: Stats generation
 
     Scenario: 05 Generation of event ENTERQUEUE
         Given there is no "ENTERQUEUE" entry in queue "q05"
-        Given there is a agent "Agent" "005" with extension "005@statscenter"
+        Given there is a agent "Agent" "005" with number "005"
         Given there are queues with infos:
           | name | number | context     | agents_number |
           | q05  | 5005   | statscenter | 005           |

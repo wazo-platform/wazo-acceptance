@@ -5,7 +5,7 @@ Feature: WEBI Agent Stats
         Given there are queues with infos:
            | name | number | context     |
            | q01  | 5001   | statscenter |
-        Given there is a agent "Agent" "1" with extension "1@statscenter"
+        Given there is a agent "Agent" "1" with number "1"
         Given there is a statistic configuration "test" from "8:00" to "12:00" with queue "q01" and agent "1"
         Given I have the following queue_log entries:
           | time                       | callid      | queuename | agent     | event               | data1 | data2          | data3 | data4 | data5 |
@@ -34,7 +34,7 @@ Feature: WEBI Agent Stats
         Given there are queues with infos:
            | name | number | context     |
            | q02  | 5002   | statscenter |
-        Given there is a agent "Agent" "2" with extension "2@statscenter"
+        Given there is a agent "Agent" "2" with number "2"
         Given there is a statistic configuration "test_talktime" from "8:00" to "12:00" with queue "q02" and agent "2"
         Given I have the following queue_log entries:
           | time                       | callid      | queuename | agent    | event            | data1  | data2        | data3   | data4 | data5  |
@@ -69,7 +69,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Generate stats for total login time
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is a agent "Agent" "3" with extension "3@statscenter"
+        Given there is a agent "Agent" "3" with number "3"
         Given there is a statistic configuration "test_login_time_1" from "8:00" to "12:00" with agent "3"
         Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1            | data2 | data3         | data4 | data5 |
@@ -89,7 +89,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Two login session during the same hour
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is a agent "Agent" "4" with extension "4@statscenter"
+        Given there is a agent "Agent" "4" with number "4"
         Given there is a statistic configuration "test_login_time_2" from "8:00" to "12:00" with agent "4"
         Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
@@ -111,7 +111,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Login before the hour logout during the hour
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is a agent "Agent" "5" with extension "5@statscenter"
+        Given there is a agent "Agent" "5" with number "5"
         Given there is a statistic configuration "test_login_time_3" from "8:00" to "12:00" with agent "5"
         Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
@@ -131,7 +131,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Implicit login before the hour then logout exactly at the hour
         Given there is no entries in queue_log between "2012-01-02 07:00:00" and "2012-01-02 09:00:00"
-        Given there is a agent "Agent" "5" with extension "5@statscenter"
+        Given there is a agent "Agent" "5" with number "5"
         Given there is a statistic configuration "test_logout_time" from "08:00" to "09:00" with agent "5"
         Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
@@ -145,7 +145,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Implicit login then logoff after the hour
         Given there is no entries in queue_log between "2012-01-02 07:00:00" and "2012-01-02 10:00:00"
-        Given there is a agent "Agent" "5" with extension "5@statscenter"
+        Given there is a agent "Agent" "5" with number "5"
         Given there is a statistic configuration "test_logout_time" from "08:00" to "09:00" with agent "5"
         Given I have the following queue_log entries:
         | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
@@ -159,7 +159,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Login after the hour with no logout
         Given there is no entries in queue_log between "2012-01-02 07:00:00" and "2012-01-02 10:00:00"
-        Given there is a agent "Agent" "5" with extension "5@statscenter"
+        Given there is a agent "Agent" "5" with number "5"
         Given there is a statistic configuration "test_logout_time" from "08:00" to "09:00" with agent "5"
         Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2  | data3         | data4 | data5 |
@@ -173,7 +173,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Login and logoff during the hour and login after the hour
         Given there is no entries in queue_log between "2012-01-02 07:00:00" and "2012-01-02 10:00:00"
-        Given there is a agent "Agent" "5" with extension "5@statscenter"
+        Given there is a agent "Agent" "5" with number "5"
         Given there is a statistic configuration "test_logout_time" from "08:00" to "09:00" with agent "5"
         Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
@@ -191,7 +191,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Login before the day logout after the day
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-03 23:59:59"
-        Given there is a agent "Agent" "6" with extension "6@statscenter"
+        Given there is a agent "Agent" "6" with number "6"
         Given there is a statistic configuration "test_login_time_4" from "8:00" to "12:00" with agent "6"
         Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              |  data2 | data3         | data4 | data5 |
@@ -212,7 +212,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Generate stats twice
         Given there is no entries in queue_log in the last hour
-        Given there is a agent "Agent" "8" with extension "8@statscenter"
+        Given there is a agent "Agent" "8" with number "8"
         Given there is a statistic configuration "test_login_time_6" from "00:00" to "24:00" with agent "8"
         Given I have the following queue_log entries in the last hour:
           | time         | callid       | queuename | agent   | event               | data1            | data2 | data3         | data4 | data5 |
@@ -226,7 +226,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Login during the hour logout after the hour
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is a agent "Agent" "9" with extension "9@statscenter"
+        Given there is a agent "Agent" "9" with number "9"
         Given there is a statistic configuration "test_login_time_9" from "8:00" to "12:00" with agent "9"
         Given I have the following queue_log entries:
           | time                       | callid       | queuename | agent   | event               | data1              | data2 | data3         | data4 | data5 |
@@ -247,7 +247,7 @@ Feature: WEBI Agent Stats
 
     Scenario: Generate stats for total pause time
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is a agent "Agent" "10" with extension "10@statscenter"
+        Given there is a agent "Agent" "10" with number "10"
         Given there is a statistic configuration "test_pause_time_1" from "8:00" to "12:00" with agent "10"
         Given I have the following queue_log entries:
           | time                       | callid | queuename | agent    | event      | data1 | data2 | data3 | data4 | data5 |
@@ -276,7 +276,7 @@ Feature: WEBI Agent Stats
 
     Scenario: last Pause in QueueLog without Unpause
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
-        Given there is a agent "Agent" "10" with extension "10@statscenter"
+        Given there is a agent "Agent" "10" with number "10"
         Given there is a statistic configuration "test_pause_time_2" from "8:00" to "12:00" with agent "10"
         Given I have the following queue_log entries:
           | time                       | callid | queuename | agent    | event      | data1 | data2 | data3 | data4 | data5 |
@@ -307,7 +307,7 @@ Feature: WEBI Agent Stats
         Given there are queues with infos:
            | name | number | context     |
            | q11  | 5011   | statscenter |
-        Given there is a agent "Agent" "11" with extension "11@statscenter"
+        Given there is a agent "Agent" "11" with number "11"
         Given there is a statistic configuration "test_wrapup_time" from "8:00" to "12:00" with queue "q11" and agent "11"
         Given I have the following queue_log entries:
           | time                       | callid        | queuename | agent    | event         | data1 | data2         | data3 | data4 | data5 |
@@ -332,8 +332,8 @@ Feature: WEBI Agent Stats
             | name | number | context     |
             | q12  | 5012   | statscenter |
             | q13  | 5013   | statscenter |
-        Given there is a agent "Agent" "12" with extension "12@statscenter"
-        Given there is a agent "Agent" "13" with extension "13@statscenter"
+        Given there is a agent "Agent" "12" with number "12"
+        Given there is a agent "Agent" "13" with number "13"
         Given there is a statistic configuration "test_agent_transfer_to_queue" from "8:00" to "12:00" with the following parameters:
             | queues  | agents |
             | q12,q13 | 12,13  |

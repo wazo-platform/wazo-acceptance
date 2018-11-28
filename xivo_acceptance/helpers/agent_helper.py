@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2015 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import time
@@ -14,21 +13,18 @@ from xivo_agentd_client.error import AgentdClientError
 
 
 def add_agent(data_dict):
-    agent = Agent()
-    agent.firstname = data_dict['firstname']
-    agent.number = data_dict['number']
-    agent.context = data_dict['context']
+    entity_name = data_dict.pop('entity', None)
+    tenant_uuid = tenant_helper.get_tenant_uuid(entity_name)
 
-    if 'lastname' in data_dict:
-        agent.lastname = data_dict['lastname']
-    if 'passwd' in data_dict:
-        agent.passwd = data_dict['passwd']
+    agent = world.confd.agents.create(data_dict, tenant_uuid=tenant_uuid)
+
     if 'users' in data_dict:
         agent.users = data_dict['users']
 
-    world.ws.agents.add(agent)
-    agent = _find_agent_with_number(data_dict['number'])
-    return int(agent.id)
+    for user_id in data_dict['users']:
+        world.confd.users(user_id).add_agent(agent['id'])
+
+    return agent['id']
 
 
 def delete_agents_with_number(number):
