@@ -53,7 +53,7 @@ def _build_user_destination(fullname):
 
 
 def _build_queue_destination(queue_name):
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.get_queue_by(name=queue_name)['id']
     return {'queue_id': queue_id}
 
 

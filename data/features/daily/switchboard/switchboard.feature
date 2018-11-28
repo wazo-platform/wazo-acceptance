@@ -9,7 +9,7 @@ Feature: Switchboard
          | Charlie   | C        |             |           |            |   1634 | default | sip      |              |
         Given there is a switchboard configured as:
          | incalls queue name | hold calls queue name   | incalls queue number | incalls queue context | hold calls queue number | hold calls queue context | agents       |
-         | __switchboard-test | __switchboard_hold-test |                 3009 | default               |                    3010 | default                  | 1631@default |
+         | __switchboard-test | __switchboard_hold-test |                 3009 | default               |                    3010 | default                  | 1631         |
         When I start the XiVO Client
         When I set the switchboard queues:
          | incalls            | on hold                 |
@@ -32,7 +32,7 @@ Feature: Switchboard
          | Alice     | A        |             |           |            |   1439 | default | sip      |              |
         Given there is a switchboard configured as:
          | incalls queue name | hold calls queue name   | incalls queue number | incalls queue context | hold calls queue number | hold calls queue context | agents       |
-         | __switchboard-test | __switchboard_hold-test |                 3009 | default               |                    3010 | default                  | 1438@default |
+         | __switchboard-test | __switchboard_hold-test |                 3009 | default               |                    3010 | default                  | 1438         |
         When I start the XiVO Client
         When I set the switchboard queues:
          | incalls            | on hold                 |
@@ -54,7 +54,7 @@ Feature: Switchboard
          | Alice     | A        |             |           |            |   1439 | default | sip      |              |
         Given there is a switchboard configured as:
          | incalls queue name | hold calls queue name   | incalls queue number | incalls queue context | hold calls queue number | hold calls queue context | agents       |
-         | __switchboard-test | __switchboard_hold-test |                 3009 | default               |                    3010 | default                  | 1438@default |
+         | __switchboard-test | __switchboard_hold-test |                 3009 | default               |                    3010 | default                  | 1438         |
         When I start the XiVO Client
         When I set the switchboard queues:
          | incalls            | on hold                 |
@@ -75,7 +75,7 @@ Feature: Switchboard
          | Alice     | A        |             |           |            |   1439 | default | sip      |              |
         Given there is a switchboard configured as:
          | incalls queue name | hold calls queue name   | incalls queue number | incalls queue context | hold calls queue number | hold calls queue context | agents       |
-         | __switchboard-test | __switchboard_hold-test |                 3009 | default               |                    3010 | default                  | 1438@default |
+         | __switchboard-test | __switchboard_hold-test |                 3009 | default               |                    3010 | default                  | 1438         |
         When I start the XiVO Client
         When I set the switchboard queues:
          | incalls            | on hold                 |

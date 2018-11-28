@@ -43,7 +43,7 @@ def open_queue_stat_page_on_week(queue_name, day, config_name):
 
 def _open_queue_stat_page(queue_name, day, config_name, axis):
     conf_id = stat_helper.find_conf_id_with_name(config_name)
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.get_queue_by(name=queue_name)['id']
     host = world.config['xivo_host']
 
     uri = '''https://%s/statistics/index.php/call_center/data/stats1''' % host

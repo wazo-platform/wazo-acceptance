@@ -20,7 +20,7 @@ def add_configuration_with_agent(config_name, work_start, work_end, agent_number
 
 def add_configuration_with_queue(config_name, work_start, work_end, queue_name):
     delete_confs_with_name(config_name)
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.get_queue_by(name=queue_name)['id']
 
     conf = _build_base_configuration(config_name, work_start, work_end)
     conf.queue = [queue_id]
@@ -31,7 +31,7 @@ def add_configuration_with_queue(config_name, work_start, work_end, queue_name):
 
 def add_configuration_with_queue_and_agent(config_name, work_start, work_end, queue_name, agent_number):
     delete_confs_with_name(config_name)
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.get_queue_by(name=queue_name)['id']
     agent_id = agent_helper.find_agent_by(number=agent_number)['id']
 
     conf = _build_base_configuration(config_name, work_start, work_end)
@@ -49,7 +49,7 @@ def add_configuration_with_queue_and_agents(config_name, work_start, work_end, q
     queue_ids = []
     queue_qos = {}
     for queue_name in queue_names:
-        queue_id = queue_helper.find_queue_id_with_name(queue_name.strip())
+        queue_id = queue_helper.get_queue_by(queue_name.strip())['id']
         queue_ids.append(queue_id)
         queue_qos[queue_id] = 10
 

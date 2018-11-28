@@ -74,14 +74,14 @@ def when_i_create_the_following_invalid_queues(step):
 
 @step(u'When I edit the queue "([^"]*)"$')
 def when_i_edit_the_queue_group1(step, queue_name):
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.get_queue_by(name=queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     form.submit.submit_form()
 
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)"$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_name, ring_strategy):
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.get_queue_by(name=queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     queue_action_webi.type_queue_ring_strategy(ring_strategy)
     form.submit.submit_form()
@@ -89,62 +89,61 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_nam
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)" with errors$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(step, queue_name, ring_strategy):
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
-    common.open_url('queue', 'edit', {'id': queue_id})
+    queue = queue_helper.find_queue_by(name=queue_name)
+    common.open_url('queue', 'edit', {'id': queue['id']})
     queue_action_webi.type_queue_ring_strategy(ring_strategy)
     form.submit.submit_form_with_errors()
 
 
 @step(u'When I add agent "([^"]*)" to "([^"]*)"')
 def when_i_add_agent_1_to_2(step, agent_number, queue_name):
-    queue = queue_helper.get_queue_with_name(queue_name)
-    agent_id = agent_helper.find_agent_by(number=agent_number)['id']
-    queue.agents.append(agent_id)
-    world.ws.queues.edit(queue)
+    queue = queue_helper.get_queue_by(name=queue_name)
+    agent = agent_helper.find_agent_by(number=agent_number)
+    world.confd_client.queues(queue).add_agent_member(agent)
     time.sleep(5)
 
 
 @step(u'When I add the agent with extension "([^"]*)" to the queue "([^"]*)"')
 def when_i_add_the_agent_with_extension_group1_to_the_queue_group2(step, extension, queue_name):
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
-    common.open_url('queue', 'edit', {'id': queue_id})
+    queue = queue_helper.find_queue_by(name=queue_name)
+    common.open_url('queue', 'edit', {'id': queue['id']})
     queue_action_webi.add_agents_to_queue([extension])
     form.submit.submit_form()
 
 
 @step(u'When I remove agent "([^"]*)" from "([^"]*)"')
 def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
-    queue = queue_helper.get_queue_with_name(queue_name)
-    agent_id = agent_helper.find_agent_by(number=agent_number)['id']
-    queue.agents.remove(agent_id)
-    world.ws.queues.edit(queue)
+    queue = queue_helper.get_queue_by(name=queue_name)
+    agent = agent_helper.find_agent_by(number=agent_number)
+    world.confd_client.queues(queue).remove_agent_member(agent)
     time.sleep(10)
 
 
 @step(u'When I remove the agent with extension "([^"]*)" from the queue "([^"]*)"')
 def when_i_remove_the_agent_with_extension_group1_from_the_queue_group2(step, extension, queue_name):
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
-    common.open_url('queue', 'edit', {'id': queue_id})
+    queue = queue_helper.find_queue_by(name=queue_name)
+    common.open_url('queue', 'edit', {'id': queue['id']})
     queue_action_webi.remove_agents_from_queue([extension])
     form.submit.submit_form()
 
 
 @step(u'When I delete the queue with extension "([^"]*)@([^"]*)"')
 def when_i_delete_the_queue_with_number_group1(step, exten, context):
-    queues = queues_with_exten(exten, context)
-    assert queues, "No queue with extension {exten}@{context}".format(exten=exten, context=context)
-    queue_id = queues[0].id
+    extensions = extension_with_queue(exten, context)
+    assert extensions, "No queue with extension {exten}@{context}".format(exten=exten, context=context)
+    queue_id = extensions[0]['queue']['id']
     common.open_url('queue', 'delete', {'id': queue_id})
     common.wait_until(queue_is_no_longer_in_list, exten, context, tries=5)
 
 
 def queue_is_no_longer_in_list(exten, context):
-    queues = queues_with_exten(exten, context)
-    return len(queues) == 0
+    extensions = extension_with_queue(exten, context)
+    return len(extensions) == 0
 
 
-def queues_with_exten(exten, context):
-    return [queue for queue in world.ws.queues.search(exten) if queue.number == exten and queue.context == context]
+def extension_with_queue(exten, context):
+    extensions = world.confd_client.extensions.list(exten=exten, context=context)['items']
+    return [extension for extension in extensions if extension['queue']]
 
 
 @step(u'Then the agent "([^"]*)" is a member of the queue "([^"]*)" in asterisk')
@@ -180,7 +179,7 @@ def then_i_see_the_element_not_exists(step, name):
 
 @step(u'When I edit the queue "([^"]*)" and set exit context at "([^"]*)"')
 def when_i_edit_the_queue_group1_and_set_exit_context_at_group2(step, queue_name, context_name):
-    queue_id = queue_helper.find_queue_id_with_name(queue_name)
+    queue_id = queue_helper.get_queue_by(name=queue_name)
     common.open_url('queue', 'edit', {'id': queue_id})
     common.go_to_tab('Advanced')
     queue_action_webi.type_queue_exit_context(context_name)

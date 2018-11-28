@@ -4,41 +4,42 @@
 
 from lettuce import world
 
-from xivo_ws import Queue
 from xivo_acceptance.lettuce import sysutils
+from . import extension_helper
 
 
 def add_queue(data):
-    queue = Queue()
-    queue.name = data['name'].lower().strip()
-    queue.display_name = data['name']
-    queue.number = data['number']
-    queue.context = data['context']
+    queue = {
+        'name': data['name'].lower().strip(),
+        'label': data['name'],
+        'options': []
+    }
+
     if 'maxlen' in data:
-        queue.maxlen = data['maxlen']
-    if 'agents' in data:
-        queue.agents = data['agents']
-    if 'users' in data:
-        queue.users = data['users']
+        queue['options'].append(['maxlen', data['maxlen']])
     if 'joinempty' in data:
-        queue.joinempty = data['joinempty']
+        queue['options'].append(['joinempty', data['joinempty']])
     if 'leavewhenempty' in data:
-        queue.leavewhenempty = data['leavewhenempty']
-    if 'waittime' in data:
-        queue.waittime = data['waittime']
-    if 'waitratio' in data:
-        queue.waitratio = data['waitratio']
-    if 'schedule_id' in data:
-        queue.schedule_id = data['schedule_id']
+        queue['options'].append(['leavewhenempty', data['leavewhenempty']])
     if 'ringing_time' in data:
-        queue.ringing_time = data['ringing_time']
+        queue['timeout'] = data['ringing_time']
     if 'wrapuptime' in data:
-        queue.wrapuptime = data['wrapuptime']
+        queue['options'].append(['wrapuptime', data['wrapuptime']])
     if 'reachability_timeout' in data:
-        queue.reachability_timeout = data['reachability_timeout']
+        queue['options'].append(['timeout', data['reachability_timeout']])
     if 'ring_strategy' in data:
-        queue.ring_strategy = data['ring_strategy']
-    world.ws.queues.add(queue)
+        queue['options'].append(['strategy', data['ring_strategy']])
+
+    queue = world.confd_client.queues.create(queue)
+    extension = {'exten': data['number'], 'context': data['context']}
+    extension_helper.add_or_replace_extension(extension)
+
+    for agent_id in data.get('agents', []):
+        world.confd_client.queues(queue).add_agent_member({'id': agent_id})
+    for user_id in data.get('users', []):
+        world.confd_client.queues(queue).add_agent_member({'id': user_id})
+    if 'schedule_id' in data:
+        world.confd_client.queues(queue).add_schedule({'id': data['schedule_id']})
 
 
 def add_or_replace_queue(queue_data):
@@ -56,44 +57,31 @@ def delete_queues_with_name_or_number(queue_name, queue_number):
 
 
 def delete_queues_with_name(name):
-    for queue in _search_queues_with_name(name):
-        world.ws.queues.delete(queue['id'])
+    queues = world.confd_client.queues.list(name=name)['items']
+    for queue in queues:
+        world.confd_client.queues.delete(queue)
+        if queue['extensions']:
+            world.confd_client.extensions.delete(queue['extensions'][0])
 
 
 def delete_queues_with_number(number):
-    for queue in _search_queues_with_number(number):
-        world.ws.queues.delete(queue.id)
+    extension = extension_helper.find_extension_by_exten_context(number)
+    world.confd_client.extensions.delete(extension)
+    if extension['queue']:
+        world.confd_client.queues.delete(extension['queue']['uuid'])
 
 
-def get_queue_with_name(name):
-    queue = _find_queue_with_name(name)
-    return world.ws.queues.view(queue['id'])
+def get_queue_by(**kwargs):
+    queue = find_queue_by(**kwargs)
+    if not queue:
+        raise Exception('Queue Not Found: %s' % kwargs)
+    return queue
 
 
-def find_queue_id_with_name(name):
-    queue = _find_queue_with_name(name)
-    return queue['id']
-
-
-def _find_queue_with_name(name):
-    queues = _search_queues_with_name(name)
-    if len(queues) != 1:
-        raise Exception('expecting 1 queue with name %r: found %s' %
-                        (name, len(queues)))
-    return queues[0]
-
-
-def _search_queues_with_name(name):
-    # name is not the same as display name
-    name = unicode(name)
-    response = world.confd_client.queues.list(name=name)
-    return response['items']
-
-
-def _search_queues_with_number(number):
-    number = unicode(number)
-    queues = world.ws.queues.search(number)
-    return [queue for queue in queues if queue.number == number]
+def find_queue_by(name):
+    queues = world.confd_client.queues.list(name=name)['items']
+    for queue in queues:
+        return queue
 
 
 def does_queue_exist_in_asterisk(queue_name):
