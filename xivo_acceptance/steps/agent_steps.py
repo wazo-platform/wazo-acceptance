@@ -132,7 +132,7 @@ def when_i_remove_selected_agent_group(step):
 
 @step(u'When I change the agent "([^"]*)" password to "([^"]*)"')
 def when_i_change_the_agent_password_to_group1(step, number, password):
-    agent_id = agent_helper.find_agent_id_with_number(number)
+    agent_id = agent_helper.find_agent_by(number=number)['id']
     common.open_url('agent', 'editagent', {'group': '1', 'id': agent_id})
     agent_action_webi.change_password(password)
     form.submit.submit_form()
@@ -195,7 +195,9 @@ def then_agent_group_has_x_agents(step, agent_group, nb_agents):
 
 @step(u'Then the agent "([^"]*)" password is "([^"]*)"')
 def then_the_agent_password_is(step, number, password):
-    current_password = agent_helper.find_agent_password_with_number(number)
+    current_password = agent_helper.find_agent_by(number=number)['password']
+    if current_password is None:
+        current_password = ''
 
     assert_that(current_password, equal_to(password))
 

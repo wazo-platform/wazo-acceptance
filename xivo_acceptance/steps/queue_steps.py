@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import time
@@ -8,10 +7,14 @@ from hamcrest import assert_that, contains
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import queue as queue_action_webi
-from xivo_acceptance.helpers import agent_helper, asterisk_helper, \
-    queue_helper, schedule_helper, user_helper
-from xivo_acceptance.lettuce import common
-from xivo_acceptance.lettuce import form
+from xivo_acceptance.helpers import (
+    agent_helper,
+    asterisk_helper,
+    queue_helper,
+    schedule_helper,
+    user_helper,
+)
+from xivo_acceptance.lettuce import common, form
 
 
 @step(u'^Given there are queues with infos:$')
@@ -45,7 +48,7 @@ def convert_agent_numbers(agent_numbers):
     agent_ids = []
     agent_number_list = agent_numbers.split(',')
     for agent_number in agent_number_list:
-        agent_id = agent_helper.find_agent_id_with_number(agent_number.strip())
+        agent_id = agent_helper.find_agent_by(number=agent_number.strip())['id']
         agent_ids.append(agent_id)
     return agent_ids
 
@@ -95,7 +98,7 @@ def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2_with_errors(ste
 @step(u'When I add agent "([^"]*)" to "([^"]*)"')
 def when_i_add_agent_1_to_2(step, agent_number, queue_name):
     queue = queue_helper.get_queue_with_name(queue_name)
-    agent_id = agent_helper.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_by(number=agent_number)['id']
     queue.agents.append(agent_id)
     world.ws.queues.edit(queue)
     time.sleep(5)
@@ -112,7 +115,7 @@ def when_i_add_the_agent_with_extension_group1_to_the_queue_group2(step, extensi
 @step(u'When I remove agent "([^"]*)" from "([^"]*)"')
 def when_i_remove_agent_1_from_2(step, agent_number, queue_name):
     queue = queue_helper.get_queue_with_name(queue_name)
-    agent_id = agent_helper.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_by(number=agent_number)['id']
     queue.agents.remove(agent_id)
     world.ws.queues.edit(queue)
     time.sleep(10)

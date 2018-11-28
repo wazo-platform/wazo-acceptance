@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import copy
-from hamcrest import *
+from hamcrest import (
+    assert_that,
+    equal_to,
+    has_items,
+)
 from lettuce.registry import world
 
 from xivo_acceptance.helpers import agent_helper, queue_helper, stat_helper
@@ -58,7 +62,7 @@ def _open_queue_stat_page(queue_name, day, config_name, axis):
 
 def open_agent_stat_page_on_day(agent_number, day, config_name):
     conf_id = stat_helper.find_conf_id_with_name(config_name)
-    agent_id = agent_helper.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_by(number=agent_number)['id']
     host = world.config['xivo_host']
 
     uri = '''https://%s/statistics/index.php/call_center/data/stats2''' % host

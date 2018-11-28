@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from lettuce import world
@@ -11,7 +10,7 @@ from xivo_ws import Statconf
 
 def add_configuration_with_agent(config_name, work_start, work_end, agent_number):
     delete_confs_with_name(config_name)
-    agent_id = agent_helper.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_by(number=agent_number)['id']
 
     conf = _build_base_configuration(config_name, work_start, work_end)
     conf.agent = [agent_id]
@@ -33,7 +32,7 @@ def add_configuration_with_queue(config_name, work_start, work_end, queue_name):
 def add_configuration_with_queue_and_agent(config_name, work_start, work_end, queue_name, agent_number):
     delete_confs_with_name(config_name)
     queue_id = queue_helper.find_queue_id_with_name(queue_name)
-    agent_id = agent_helper.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_by(number=agent_number)['id']
 
     conf = _build_base_configuration(config_name, work_start, work_end)
     conf.queue = [queue_id]
@@ -57,7 +56,7 @@ def add_configuration_with_queue_and_agents(config_name, work_start, work_end, q
     agent_numbers = agents.split(',')
     agent_ids = []
     for agent_number in agent_numbers:
-        agent_ids.append(agent_helper.find_agent_id_with_number(agent_number.strip()))
+        agent_ids.append(agent_helper.find_agent_by(number=agent_number.strip()))['id']
 
     conf = _build_base_configuration(config_name, work_start, work_end)
     conf.queue = queue_ids
