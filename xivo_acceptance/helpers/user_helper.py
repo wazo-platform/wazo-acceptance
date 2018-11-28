@@ -7,6 +7,7 @@ from hamcrest import assert_that, is_not, none
 from requests.exceptions import HTTPError
 
 from xivo_acceptance import helpers
+from xivo_acceptance.helpers import cti_profile_helper
 from xivo_acceptance.helpers import group_helper
 from xivo_acceptance.helpers import line_write_helper
 from xivo_acceptance.helpers import line_read_helper
@@ -17,8 +18,6 @@ from xivo_acceptance.helpers import sip_phone
 from xivo_acceptance.helpers import tenant_helper
 from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.action.webi import user as user_action_webi
-from xivo_ws import User
-from xivo_ws.exception import WebServiceRequestError
 
 
 def add_or_replace_user(userinfo):
@@ -156,7 +155,6 @@ def add_user_with_infos(user_data, step=None):
         agent_data = {'firstname': user['firstname'],
                       'lastname': user['lastname'],
                       'number': user['agent_number'],
-                      'context': user.get('line_context', 'default'),
                       'users': [user_id]}
         helpers.agent_helper.add_agent(agent_data)
 
@@ -166,49 +164,45 @@ def add_user_with_infos(user_data, step=None):
 
 
 def add_user(data_dict, step=None):
-    user = User()
-
-    if 'id' in data_dict:
-        user.id = data_dict['id']
-
-    user.firstname = data_dict['firstname']
-
-    if 'lastname' in data_dict:
-        user.lastname = data_dict['lastname']
-    if 'agentid' in data_dict:
-        user.agent_id = int(data_dict['agentid'])
-    if 'language' in data_dict:
-        user.language = data_dict['language']
-    if 'enable_client' in data_dict:
-        user.enable_client = bool(data_dict['enable_client'])
-    if 'client_username' in data_dict:
-        user.client_username = data_dict['client_username']
-    if 'client_password' in data_dict:
-        user.client_password = data_dict['client_password']
-    if 'client_profile' in data_dict:
-        user.client_profile = data_dict['client_profile']
-    if 'bsfilter' in data_dict:
-        user.bsfilter = data_dict['bsfilter']
-
+    tenant_uuid = None
     if 'entity_name' in data_dict:
         entity = entity_helper.get_entity_with_name(data_dict['entity_name'])
         if entity:
-            user.entity_id = entity['id']
+            tenant_uuid = entity['tenant']['uuid']
     else:
-        user.entity_id = entity_helper.default_entity_id()
+        tenant_uuid = tenant_helper.get_tenant_uuid()
 
-    entity = entity_helper.get_entity(user.entity_id)
-    world.confd_client.set_tenant(entity['tenant']['uuid'])
+    world.confd_client.set_tenant(tenant_uuid)
+    world.auth_client.set_tenant(tenant_uuid)
+    user = {}
 
+    user['firstname'] = data_dict['firstname']
+
+    if 'lastname' in data_dict:
+        user['lastname'] = data_dict['lastname']
+    if 'language' in data_dict:
+        user['language'] = data_dict['language']
     if 'mobile_number' in data_dict:
         user.mobile_number = data_dict['mobile_number']
 
-    try:
-        user_id = world.ws.users.add(user)
-    except WebServiceRequestError as e:
-        raise Exception('Could not add user %s %s: %s' % (user.firstname, user.lastname, e))
-    if not user_id:
-        return False
+    user = world.confd_client.users.create(user)
+
+    auth_user = {
+        'uuid': user['uuid'],
+        'username': user['uuid'],
+    }
+    if 'client_username' in data_dict:
+        auth_user['username'] = data_dict['username']
+        auth_user['password'] = data_dict.get('password')
+        auth_user['enabled'] = data_dict.get('enable_client', True)
+    world.auth_client.users.new(**auth_user)
+
+    if 'client_profile' in data_dict:
+        profile_id = cti_profile_helper.find_profile_id_by_name(data_dict['client_profile'])
+        world.confd_client.users(user['uuid']).update_cti_profile({'id': profile_id})
+
+    if 'agentid' in data_dict:
+        world.confd_client.users(user['uuid']).add_agent(data_dict['agentid'])
 
     if 'line_number' in data_dict and 'line_context' in data_dict:
         extension_data = {'context': data_dict['line_context'],
@@ -233,7 +227,7 @@ def add_user(data_dict, step=None):
             world.confd_client.lines(line['id']).add_endpoint_custom(endpoint)
 
         world.confd_client.lines(line['id']).add_extension(extension)
-        world.confd_client.users(user_id).add_line(line['id'])
+        world.confd_client.users(user['uuid']).add_line(line['id'])
 
         mac = data_dict.get('device')
         if mac:
@@ -246,12 +240,12 @@ def add_user(data_dict, step=None):
             'number': data_dict['voicemail_number'],
             'context': data_dict['voicemail_context'],
         })
-        world.confd_client.users.relations(user_id).add_voicemail(voicemail)
+        world.confd_client.users.relations(user['uuid']).add_voicemail(voicemail)
 
     if step is not None:
         _register_and_track_phone(step.scenario, data_dict)
 
-    return int(user_id)
+    return user['id']
 
 
 def _register_and_track_phone(scenario, user_data):
@@ -283,28 +277,19 @@ def user_is_in_group(user, group):
 
 
 def disable_cti_client(firstname, lastname):
-    users = _search_users_with_firstname_lastname(firstname, lastname)
+    users = world.confd_client.users.list(firstname=firstname, lastname=lastname)['items']
     for user in users:
-        user.enable_client = False
-        user.client_username = None
-        user.client_password = None
-        world.ws.users.edit(user)
+        auth_user = world.auth_client.users.get(user['uuid'])
+        auth_user['enabled'] = False
+        world.auth_client.users.edit(auth_user['uuid'], auth_user)
 
 
 def enable_cti_client(firstname, lastname):
-    users = _search_users_with_firstname_lastname(firstname, lastname)
+    users = world.confd_client.users.list(firstname=firstname, lastname=lastname)['items']
     for user in users:
-        user.enable_client = True
-        user.client_username = None
-        user.client_password = None
-        world.ws.users.edit(user)
-
-
-def _search_users_with_firstname_lastname(firstname, lastname):
-    users = world.ws.users.search('%s %s' % (firstname, lastname))
-    return [user for user in users if
-            user.firstname == firstname and
-            user.lastname == lastname]
+        auth_user = world.auth_client.users.get(user['uuid'])
+        auth_user['enabled'] = True
+        world.auth_client.users.edit(auth_user['uuid'], auth_user)
 
 
 def count_linefeatures(user_id):
