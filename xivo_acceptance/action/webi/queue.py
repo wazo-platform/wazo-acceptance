@@ -7,8 +7,10 @@ from xivo_acceptance.helpers import context_helper, queue_helper
 from xivo_acceptance.lettuce import common
 from xivo_acceptance.action.webi import common as common_action_webi
 from xivo_acceptance.lettuce.form.input import set_text_field_with_label
-from xivo_acceptance.lettuce.form.select import set_select_field_with_label, \
-    set_select_field_with_id
+from xivo_acceptance.lettuce.form.select import (
+    set_select_field_with_label,
+    set_select_field_with_id,
+)
 from xivo_acceptance.lettuce.form.checkbox import set_checkbox_with_id
 from xivo_acceptance.lettuce.form.list_pane import ListPane
 from xivo_acceptance.lettuce.form.submit import submit_form
@@ -91,8 +93,8 @@ def fill_general_tab(queue):
     set_text_field_with_label('Name', queue['name'])
     set_text_field_with_label('Display name', queue['display name'])
 
-    context = context_helper.get_context_with_name(queue['context'])
-    context_field_value = '%s (%s)' % (context.display_name, context.name)
+    context = context_helper.find_context_by(name=queue['context'])
+    context_field_value = '%s (%s)' % (context['label'], context['name'])
     set_select_field_with_label('Context', context_field_value)
 
     if 'ring strategy' in queue:
