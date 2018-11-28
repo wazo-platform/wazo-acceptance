@@ -123,13 +123,6 @@ def setup_xivo_acceptance_config():
 
 
 @debug.logcall
-def setup_ws():
-    # Prerequisite:
-    # - setup_xivo_acceptance_config
-    world.ws = world.xivo_acceptance_config.ws_utils
-
-
-@debug.logcall
 def teardown_browser():
     world.browser.quit()
     if hasattr(world, 'display'):

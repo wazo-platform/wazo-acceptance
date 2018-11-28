@@ -71,8 +71,6 @@ def set_xivo_target(extra_config):
 
     logger.debug("setup ssh client...")
     setup.setup_ssh_client()
-    logger.debug("setup ws...")
-    setup.setup_ws()
     logger.debug("setup provd...")
     setup.setup_provd()
     logger.debug("setup auth token...")

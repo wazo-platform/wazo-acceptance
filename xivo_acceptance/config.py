@@ -14,7 +14,6 @@ import xivo_dao
 from xivo_provd_client import new_provisioning_client
 from xivo_acceptance.lettuce import ssh
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
-import xivo_ws
 
 
 logger = logging.getLogger(__name__)
@@ -52,10 +51,6 @@ def load_config(extra_config):
         'frontend': {
             'username': 'root',
             'passwd': 'superpass'
-        },
-        'rest_api': {
-            'username': 'xivo-acceptance',
-            'passwd': 'proformatique'
         },
         'call_logd': {
             'host': DEFAULT_XIVO_HOST,
@@ -197,8 +192,6 @@ class XivoAcceptanceConfig(object):
         self._setup_dao()
         logger.debug("_setup_ssh_client...")
         self._setup_ssh_client()
-        logger.debug("_setup_ws...")
-        self._setup_ws()
         logger.debug("_setup_provd...")
         self._setup_provd()
 
@@ -208,17 +201,6 @@ class XivoAcceptanceConfig(object):
     def _setup_ssh_client(self):
         self.ssh_client_xivo = ssh.SSHClient(hostname=self._config['xivo_host'],
                                              login=self._config['ssh_login'])
-
-    def _setup_ws(self):
-        rest_config_dict = {
-            'hostname': self._config['xivo_host'],
-            'auth_username': self._config['rest_api']['username'],
-            'auth_passwd': self._config['rest_api']['passwd']
-        }
-
-        self.ws_utils = xivo_ws.XivoServer(host=rest_config_dict['hostname'],
-                                           username=rest_config_dict['auth_username'],
-                                           password=rest_config_dict['auth_passwd'])
 
     def _setup_provd(self):
         provd_config_obj = RestConfiguration(protocol=self._config['provd']['rest_protocol'],
