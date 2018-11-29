@@ -1,5 +1,6 @@
 Feature: WEBI Agent Stats
 
+    @skip_old_webi_step
     Scenario: Generate stats for answered calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there are queues with infos:
@@ -29,6 +30,7 @@ Feature: WEBI Agent Stats
           | Total   |        3 |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats for total conversation time
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there are queues with infos:
@@ -67,6 +69,7 @@ Feature: WEBI Agent Stats
           | Total   |        6 |     00:01:00 |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats for total login time
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "3" with number "3"
@@ -87,6 +90,7 @@ Feature: WEBI Agent Stats
           | Total   | 00:15:00 |
 
 
+    @skip_old_webi_step
     Scenario: Two login session during the same hour
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "4" with number "4"
@@ -109,6 +113,7 @@ Feature: WEBI Agent Stats
           | Total   | 02:10:36 |
 
 
+    @skip_old_webi_step
     Scenario: Login before the hour logout during the hour
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "5" with number "5"
@@ -129,6 +134,7 @@ Feature: WEBI Agent Stats
           | 11h-12h | 00:00:00 |
           | Total   | 00:11:35 |
 
+    @skip_old_webi_step
     Scenario: Implicit login before the hour then logout exactly at the hour
         Given there is no entries in queue_log between "2012-01-02 07:00:00" and "2012-01-02 09:00:00"
         Given there is a agent "Agent" "5" with number "5"
@@ -143,6 +149,7 @@ Feature: WEBI Agent Stats
           | 8h-9h   | 00:00:00 |
           | Total   | 00:00:00 |
 
+    @skip_old_webi_step
     Scenario: Implicit login then logoff after the hour
         Given there is no entries in queue_log between "2012-01-02 07:00:00" and "2012-01-02 10:00:00"
         Given there is a agent "Agent" "5" with number "5"
@@ -157,6 +164,7 @@ Feature: WEBI Agent Stats
           | 8h-9h   | 00:00:00 |
           | Total   | 00:00:00 |
 
+    @skip_old_webi_step
     Scenario: Login after the hour with no logout
         Given there is no entries in queue_log between "2012-01-02 07:00:00" and "2012-01-02 10:00:00"
         Given there is a agent "Agent" "5" with number "5"
@@ -171,6 +179,7 @@ Feature: WEBI Agent Stats
           | 8h-9h   | 00:00:00 |
           | Total   | 00:00:00 |
 
+    @skip_old_webi_step
     Scenario: Login and logoff during the hour and login after the hour
         Given there is no entries in queue_log between "2012-01-02 07:00:00" and "2012-01-02 10:00:00"
         Given there is a agent "Agent" "5" with number "5"
@@ -189,6 +198,7 @@ Feature: WEBI Agent Stats
           | 8h-9h   | 00:10:00 |
           | Total   | 00:10:00 |
 
+    @skip_old_webi_step
     Scenario: Login before the day logout after the day
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-03 23:59:59"
         Given there is a agent "Agent" "6" with number "6"
@@ -210,6 +220,7 @@ Feature: WEBI Agent Stats
           | Total   | 04:00:00 |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats twice
         Given there is no entries in queue_log in the last hour
         Given there is a agent "Agent" "8" with number "8"
@@ -224,6 +235,7 @@ Feature: WEBI Agent Stats
         Then I should have "00:15:00" minutes login in the last hour on agent "8" on configuration "test_login_time_6":
 
 
+    @skip_old_webi_step
     Scenario: Login during the hour logout after the hour
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "9" with number "9"
@@ -245,6 +257,7 @@ Feature: WEBI Agent Stats
           | Total   | 00:22:35 |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats for total pause time
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "10" with number "10"
@@ -274,6 +287,7 @@ Feature: WEBI Agent Stats
           | Total   | 01:13:28 |
 
 
+    @skip_old_webi_step
     Scenario: last Pause in QueueLog without Unpause
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there is a agent "Agent" "10" with number "10"
@@ -302,6 +316,7 @@ Feature: WEBI Agent Stats
           | Total   | 02:27:28 |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats for total wrapup time
         Given there is no entries in queue_log between "2012-01-01 08:00:00" and "2012-01-01 11:59:59"
         Given there are queues with infos:
@@ -325,6 +340,7 @@ Feature: WEBI Agent Stats
           | Total   |        1 | 00:00:15 |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats for answered calls transfered by an agent to an another queue
         Given there is no entries in queue_log between "2013-11-08 08:00:00" and "2013-11-08 11:59:59"
         Given I clear the statistics cache
@@ -363,6 +379,7 @@ Feature: WEBI Agent Stats
             | 11h-12h |        0 |
             | Total   |        1 |
 
+    @skip_old_webi_step
     Scenario: Agent login time in queue_log
         Given there is no agents logged
         Given there are users with infos:

@@ -1,6 +1,7 @@
 Feature: WEBI Queue Stats
 
 
+    @skip_old_webi_step
     Scenario: Statistics for calls distributed to two queues at the boundaries of a xivo-stat deletion limit
         Given there is no entries in queue_log between "2013-11-08 08:00:00" and "2013-11-09 00:00:00"
         Given there are queues with infos:
@@ -30,6 +31,7 @@ Feature: WEBI Queue Stats
           | 10h-11h |        1 |        1 |
           | Total   |        1 |        1 |
 
+    @skip_old_webi_step
     Scenario: Generate stats for received/abandoned calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there are queues with infos:
@@ -60,6 +62,7 @@ Feature: WEBI Queue Stats
           | Total   |         5 |         5 | 00:00:03 |           0 % |       |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats for received/answered calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there are queues with infos:
@@ -96,6 +99,7 @@ Feature: WEBI Queue Stats
           | Total   |         5 |         5 | 00:00:03 |         100 % | 100 % |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats for received/blocking calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there are queues with infos:
@@ -120,6 +124,7 @@ Feature: WEBI Queue Stats
           | Total   |         5 |         5 |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats for closed queue
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there are queues with infos:
@@ -144,6 +149,7 @@ Feature: WEBI Queue Stats
           | Total   |         5 |       5 |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats for saturated calls
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there are queues with infos:
@@ -168,6 +174,7 @@ Feature: WEBI Queue Stats
           | Total   |         5 |         5 |
 
 
+    @skip_old_webi_step
     Scenario: Generate stats for answered rate with calls on closed queue
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there are queues with infos:
@@ -209,6 +216,7 @@ Feature: WEBI Queue Stats
           | 11h-12h | 9        | 4        | 1      | 50 %          |
           | Total   | 9        | 4        | 1      | 50 %          |
 
+    @skip_old_webi_step
     Scenario: Answered rate when all calls are closed should be empty
         Given there is no entries in queue_log between "2012-07-01 08:00:00" and "2012-07-01 11:59:59"
         Given there are queues with infos:
@@ -227,6 +235,7 @@ Feature: WEBI Queue Stats
           | 11h-12h |        1 |        0 |      1 |               |
           | Total   |        1 |        0 |      1 |               |
 
+    @skip_old_webi_step
     Scenario: Generate stats for partial answered call logs
         Given there is no entries in queue_log between "2012-07-01 11:00:00" and "2012-07-01 12:00:00"
         Given there are queues with infos:
@@ -243,6 +252,7 @@ Feature: WEBI Queue Stats
           | 11h-12h | 1        | 1        | 0      | 100 %         |
           | Total   | 1        | 1        | 0      | 100 %         |
 
+    @skip_old_webi_step
     Scenario: First week of 2014
         Given there is no entries in queue_log between "2013-12-30 00:00:00" and "2014-01-03 11:59:59"
         Given there are queues with infos:
