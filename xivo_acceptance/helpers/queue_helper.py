@@ -5,7 +5,6 @@
 from lettuce import world
 
 from xivo_acceptance.lettuce import sysutils
-from . import extension_helper
 
 
 def add_queue(data):
@@ -32,7 +31,7 @@ def add_queue(data):
 
     queue = world.confd_client.queues.create(queue)
     extension = {'exten': data['number'], 'context': data['context']}
-    extension_helper.add_or_replace_extension(extension)
+    world.confd_client.extensions.create(extension)
 
     for agent_id in data.get('agents', []):
         world.confd_client.queues(queue).add_agent_member({'id': agent_id})
@@ -65,10 +64,11 @@ def delete_queues_with_name(name):
 
 
 def delete_queues_with_number(number):
-    extension = extension_helper.find_extension_by_exten_context(number)
-    world.confd_client.extensions.delete(extension)
-    if extension['queue']:
-        world.confd_client.queues.delete(extension['queue']['uuid'])
+    extensions = world.confd_client.extensions.list(exten=number, recurse=True)
+    for extension in extensions['items']:
+        if extension['queue']:
+            world.confd_client.queues.delete(extension['queue']['id'])
+        world.confd_client.extensions.delete(extension['id'])
 
 
 def get_queue_by(**kwargs):
