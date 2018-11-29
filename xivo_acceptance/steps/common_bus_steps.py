@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
-# Copyright (C) 2016 Proformatique, Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import logging
@@ -8,23 +7,24 @@ import json
 
 from kombu import Connection, Exchange, Producer
 
-from hamcrest import all_of
-from hamcrest import assert_that
-from hamcrest import has_entry
-from hamcrest import has_entries
-from hamcrest import has_item
-from hamcrest import matches_regexp
+from hamcrest import (
+    all_of,
+    assert_that,
+    has_entries,
+    has_entry,
+    has_item,
+    matches_regexp,
+)
 from mock import ANY
 from lettuce import step
 from lettuce.registry import world
-from xivo_acceptance.helpers import agent_helper
-from xivo_acceptance.helpers import bus_helper
-from xivo_acceptance.helpers import user_helper
-from xivo_acceptance.helpers import line_read_helper
-from xivo_acceptance.helpers import xivo_helper
-from xivo_bus import Marshaler
-from xivo_bus.resources.chat.event import ChatMessageEvent
-
+from xivo_acceptance.helpers import (
+    agent_helper,
+    bus_helper,
+    line_read_helper,
+    user_helper,
+    xivo_helper,
+)
 
 logger = logging.getLogger('acceptance')
 
@@ -122,7 +122,7 @@ def then_i_receive_a_message_on_the_queue_with_data(step, expected_message, queu
             raw_expected_event['data']['status'] = int(expected_event['status'])
 
         if expected_event.get('agent_id', 'no') == 'yes':
-            agent_id = agent_helper.find_agent_id_with_number(expected_event['agent_number'])
+            agent_id = agent_helper.find_agent_by(number=expected_event['agent_number'])['id']
             raw_expected_event['data']['agent_id'] = agent_id
 
         if expected_event.get('from', 'no') == 'yes':

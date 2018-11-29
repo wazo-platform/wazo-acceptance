@@ -71,8 +71,8 @@ Feature: Entity Filter
           |      4234 | alberta     |
           |      4321 | from-extern |
 
-        Given there is a agent "entity_filter" "" with extension "1111@foo"
-        Given there is a agent "agent02" "" with extension "2222@default"
+        Given there is a agent "entity_filter" "" with number "1111" in entity "entity_filter"
+        Given there is a agent "agent02" "" with number "2222" in entity "default"
 
         Given there are queues with infos:
           | name           | display name   | number | context |

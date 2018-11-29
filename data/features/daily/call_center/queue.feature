@@ -33,7 +33,7 @@ Feature: Queues
          | Bob       | Smith    |   1101 | default | 1101         | sip      |
         When I create the following queues:
             | name   | display name | number | context | agents       |
-            | queue1 | Queue 1      | 3101   | default | 1101@default |
+            | queue1 | Queue 1      | 3101   | default | 1101         |
         Then the agent "1101" is not a member of the queue "queue1" in asterisk
 
     Scenario: Add a logged agent to a new queue
@@ -43,7 +43,7 @@ Feature: Queues
         When I log agent "1102"
         When I create the following queues:
             | name   | display name | number | context | agents       |
-            | queue2 | Queue 2      | 3102   | default | 1102@default |
+            | queue2 | Queue 2      | 3102   | default | 1102         |
         Then the agent "1102" is a member of the queue "queue2" in asterisk
 
     Scenario: Add a logged agent to a new queue and answer a call
@@ -53,7 +53,7 @@ Feature: Queues
         When I log agent "1102"
         When I create the following queues:
           | name   | display name | number | context | agents       |
-          | queue2 | Queue 2      | 3102   | default | 1102@default |
+          | queue2 | Queue 2      | 3102   | default | 1102         |
 
         Given there is an incall "3102" in context "from-extern" to the "Queue" "queue2"
         Given there is no "CONNECT" entry in queue "queue2"

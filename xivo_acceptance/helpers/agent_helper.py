@@ -1,62 +1,40 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2015 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import time
 
 from lettuce import world
-from xivo_ws import Agent
 
 from xivo_acceptance.helpers import user_helper
+from xivo_acceptance.helpers import tenant_helper
 from xivo_acceptance.lettuce import func
 from xivo_agentd_client.error import AgentdClientError
 
 
 def add_agent(data_dict):
-    agent = Agent()
-    agent.firstname = data_dict['firstname']
-    agent.number = data_dict['number']
-    agent.context = data_dict['context']
+    agent = world.confd_client.agents.create(data_dict)
+    # When agent will be multi-tenant
+    # entity_name = data_dict.pop('entity', None)
+    # tenant_uuid = tenant_helper.get_tenant_uuid(entity_name)
+    # agent = world.confd_client.agents.create(data_dict, tenant_uuid=tenant_uuid)
 
-    if 'lastname' in data_dict:
-        agent.lastname = data_dict['lastname']
-    if 'passwd' in data_dict:
-        agent.passwd = data_dict['passwd']
-    if 'users' in data_dict:
-        agent.users = data_dict['users']
+    for user_id in data_dict.get('users', []):
+        world.confd_client.users(user_id).add_agent(agent['id'])
 
-    world.ws.agents.add(agent)
-    agent = _find_agent_with_number(data_dict['number'])
-    return int(agent.id)
+    return agent['id']
 
 
 def delete_agents_with_number(number):
-    for agent in _search_agents_with_number(number):
-        world.ws.agents.delete(agent.id)
+    agents = world.confd_client.agents.list(number=number)['items']
+    for agent in agents:
+        world.confd_client.agents.delete(agent['id'])
 
 
-def find_agent_id_with_number(number):
-    agent = _find_agent_with_number(number)
-    return agent.id
-
-
-def find_agent_password_with_number(number):
-    agent = _find_agent_with_number(number)
-    return agent.password
-
-
-def get_agent_with_number(number):
-    agent = _find_agent_with_number(number)
-    return world.ws.agents.view(agent.id)
-
-
-def _find_agent_with_number(number):
-    return world.ws.agents.find_one_by_number(number)
-
-
-def _search_agents_with_number(number):
-    return world.ws.agents.search_by_number(number)
+def find_agent_by(**kwargs):
+    agents = world.confd_client.agents.list(**kwargs)['items']
+    for agent in agents:
+        return agent
 
 
 def login_agent(agent_number, extension=None, ignore_error=False):
@@ -115,10 +93,9 @@ def unpause_agent(agent_number):
 
 
 def _get_extension_from_agent(agent_number):
-    agent = get_agent_with_number(agent_number)
-    if not agent.users:
+    agent = find_agent_by(number=agent_number)
+    if not agent['users']:
         raise Exception('agent %s has no users' % agent_number)
-    user_id = agent.users[0]
-    user = world.confd_client.users.get(user_id)
+    user = world.confd_client.users.get(agent['users'][0]['uuid'])
     extension = user['lines'][0]['extensions'][0]
     return extension['exten'], extension['context']

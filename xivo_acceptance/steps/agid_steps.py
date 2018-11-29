@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from hamcrest import assert_that, equal_to
@@ -12,7 +12,7 @@ from xivo_acceptance.lettuce import agi, logs
 def when_10_simultaneous_agi_requests_are_done_to_get_the_status_of_agent_1001(step, nb_request, agent_number):
     nb_request = int(nb_request)
 
-    agent_id = agent_helper.find_agent_id_with_number(agent_number)
+    agent_id = agent_helper.find_agent_by(number=agent_number)['id']
     agi.do_simultaneous_requests(nb_request, 'agent_get_status', [agent_id])
 
 

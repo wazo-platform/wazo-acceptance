@@ -7,15 +7,15 @@ Feature: Agent
         Then agent "Aaliyah Stuart" is not displayed in the list of "default" agent group
 
     Scenario: Agent modification
-        Given there is a agent "John" "Wayne" with extension "24000@default"
+        Given there is a agent "John" "Wayne" with number "24000"
         Then the agent "24000" password is ""
         When I change the agent "24000" password to "8888"
         Then the agent "24000" password is "8888"
 
     Scenario: Agent search
-        Given there is a agent "Il" "buono" with extension "24001@default"
-        Given there is a agent "Il" "brutto" with extension "24002@default"
-        Given there is a agent "Il" "cattivo" with extension "24003@default"
+        Given there is a agent "Il" "buono" with number "24001"
+        Given there is a agent "Il" "brutto" with number "24002"
+        Given there is a agent "Il" "cattivo" with number "24003"
         When I search an agent "24002"
         Then agent "24002" is displayed in the list of "default" agent group
         When I search an agent "cattivo"

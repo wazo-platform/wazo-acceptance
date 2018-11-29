@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2016-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from hamcrest import assert_that, equal_to, instance_of
@@ -8,20 +8,30 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
 from xivo_acceptance.helpers import agent_helper
-from xivo_acceptance.lettuce import auth, common, form, func
+from xivo_acceptance.lettuce import auth, common, form
 from xivo_agentd_client import Client as AgentdClient
 from xivo_agentd_client.error import AgentdClientError
 
 
-@step(u'Given there is a agent "([^"]+)" "([^"]*)" with extension "([^"]+)"$')
-def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, extension):
-    number, context = func.extract_number_and_context_from_extension(extension)
+@step(u'Given there is a agent "([^"]+)" "([^"]*)" with number "([^"]+)" in entity "([^"]+)"$')
+def given_there_is_a_agent_in_context_with_number_in_entity(step, firstname, lastname, number, entity):
     agent_helper.delete_agents_with_number(number)
     agent_data = {
         'firstname': firstname,
         'lastname': lastname,
         'number': number,
-        'context': context
+        'entity': entity,
+    }
+    agent_helper.add_agent(agent_data)
+
+
+@step(u'Given there is a agent "([^"]+)" "([^"]*)" with number "([^"]+)"$')
+def given_there_is_a_agent_in_context_with_number(step, firstname, lastname, number):
+    agent_helper.delete_agents_with_number(number)
+    agent_data = {
+        'firstname': firstname,
+        'lastname': lastname,
+        'number': number,
     }
     agent_helper.add_agent(agent_data)
 
@@ -122,7 +132,7 @@ def when_i_remove_selected_agent_group(step):
 
 @step(u'When I change the agent "([^"]*)" password to "([^"]*)"')
 def when_i_change_the_agent_password_to_group1(step, number, password):
-    agent_id = agent_helper.find_agent_id_with_number(number)
+    agent_id = agent_helper.find_agent_by(number=number)['id']
     common.open_url('agent', 'editagent', {'group': '1', 'id': agent_id})
     agent_action_webi.change_password(password)
     form.submit.submit_form()
@@ -185,7 +195,9 @@ def then_agent_group_has_x_agents(step, agent_group, nb_agents):
 
 @step(u'Then the agent "([^"]*)" password is "([^"]*)"')
 def then_the_agent_password_is(step, number, password):
-    current_password = agent_helper.find_agent_password_with_number(number)
+    current_password = agent_helper.find_agent_by(number=number)['password']
+    if current_password is None:
+        current_password = ''
 
     assert_that(current_password, equal_to(password))
 
