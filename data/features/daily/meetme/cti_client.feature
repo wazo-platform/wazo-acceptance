@@ -1,5 +1,6 @@
 Feature: Meetme
 
+    @skip_old_webi_step
     Scenario: All conference rooms show up in CTI client
         Given I have no extension with exten "1042@default"
         Given there are users with infos:
@@ -21,6 +22,7 @@ Feature: Meetme
             | room2 | 4002   |
             | room3 | 4003   |
 
+    @skip_old_webi_step
     Scenario: PIN Code for a conference room shows up in the CTI client
         Given I have no extension with exten "1042@default"
         Given there are users with infos:
