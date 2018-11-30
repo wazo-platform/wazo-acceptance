@@ -7,17 +7,19 @@ from hamcrest import assert_that, is_not, none
 from requests.exceptions import HTTPError
 
 from xivo_acceptance import helpers
-from xivo_acceptance.helpers import cti_profile_helper
-from xivo_acceptance.helpers import group_helper
-from xivo_acceptance.helpers import line_write_helper
-from xivo_acceptance.helpers import line_read_helper
-from xivo_acceptance.helpers import voicemail_helper
-from xivo_acceptance.helpers import entity_helper
-from xivo_acceptance.helpers import sip_config
-from xivo_acceptance.helpers import sip_phone
-from xivo_acceptance.helpers import tenant_helper
-from xivo_acceptance.lettuce import postgres
 from xivo_acceptance.action.webi import user as user_action_webi
+from xivo_acceptance.helpers import (
+    cti_profile_helper,
+    entity_helper,
+    group_helper,
+    line_read_helper,
+    line_write_helper,
+    sip_config,
+    sip_phone,
+    tenant_helper,
+    voicemail_helper,
+)
+from xivo_acceptance.lettuce import postgres
 
 
 def add_or_replace_user(userinfo):
@@ -189,12 +191,10 @@ def add_user(data_dict, step=None):
 
     auth_user = {
         'uuid': user['uuid'],
-        'username': user['uuid'],
+        'username': data_dict('client_username', user['uuid']),
+        'password': data_dict.get('client_password'),
+        'enabled': data_dict.get('enable_client', True),
     }
-    if 'client_username' in data_dict:
-        auth_user['username'] = data_dict['username']
-        auth_user['password'] = data_dict.get('password')
-        auth_user['enabled'] = data_dict.get('enable_client', True)
     world.auth_client.users.new(**auth_user)
 
     if 'client_profile' in data_dict:
