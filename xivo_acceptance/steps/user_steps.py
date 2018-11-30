@@ -14,13 +14,12 @@ from selenium.common.exceptions import NoSuchElementException
 from xivo_auth_client import Client as AuthClient
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import (
-    common,
     entity_helper,
-    form,
     group_helper,
     user_helper,
     user_line_extension_helper as ule_helper,
 )
+from xivo_acceptance.lettuce import common, form
 
 
 @step(u'^Given there are users with infos:$')
