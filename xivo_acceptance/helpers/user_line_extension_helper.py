@@ -4,11 +4,12 @@
 
 from lettuce import world
 
-from xivo_acceptance.helpers import user_helper
-from xivo_acceptance.helpers import voicemail_helper
-from xivo_acceptance.helpers import line_write_helper
-from xivo_acceptance.helpers import extension_helper
-from xivo_acceptance.lettuce.exception import NoSuchProfileException
+from xivo_acceptance.helpers import (
+    extension_helper,
+    line_write_helper,
+    user_helper,
+    voicemail_helper,
+)
 
 
 def delete_user_line_extension_voicemail(firstname, lastname, context=None, exten=None, mailbox=None):
@@ -63,16 +64,10 @@ def add_or_replace_user(data_dict, step=None):
 
 
 def delete_users_with_profile(profile_name):
-    users = world.ws.users.list()
-    profiles = [profile for profile in world.ws.cti_profiles.list() if profile.name == profile_name]
-
-    if not profiles:
-        raise NoSuchProfileException('The CTI profile %s does not exist.' % profile_name)
-
-    profile_id = profiles[0].id
+    users = world.confd_client.users.list()['items']
     for user in users:
-        if user.client_profile_id == profile_id:
-            if user.voicemail:
-                voicemail_helper.delete_voicemail(user.voicemail.id)
-            delete_lines_for_user(user.id)
-            delete_user(user.id)
+        if user['cti_profile'] and user['cti_profile']['name'] == profile_name:
+            if user['voicemail']:
+                voicemail_helper.delete_voicemail(user['voicemail']['id'])
+            delete_lines_for_user(user['id'])
+            delete_user(user['id'])

@@ -2,20 +2,25 @@
 # Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
-from hamcrest import assert_that
-from hamcrest import equal_to
-from hamcrest import has_items
-from hamcrest import is_
+from hamcrest import (
+    assert_that,
+    equal_to,
+    has_items,
+    is_,
+)
 from lettuce import step
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException
 from xivo_auth_client import Client as AuthClient
 from xivo_acceptance.action.webi import user as user_action_webi
-from xivo_acceptance.helpers import entity_helper
-from xivo_acceptance.helpers import user_helper
-from xivo_acceptance.helpers import group_helper
-from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
-from xivo_acceptance.lettuce import common, form
+from xivo_acceptance.helpers import (
+    common,
+    entity_helper,
+    form,
+    group_helper,
+    user_helper,
+    user_line_extension_helper as ule_helper,
+)
 
 
 @step(u'^Given there are users with infos:$')
@@ -216,8 +221,8 @@ def when_i_search_for_user_with_number_group1(step, number):
 
 @step(u'When I delete agent number "([^"]*)"$')
 def when_i_delete_agent_number_1(step, agent_number):
-    agent = world.ws.agents.search(agent_number)[0]
-    world.ws.agents.delete(agent.id)
+    agents = world.confd_client.agents.list(number=agent_number)['items']
+    world.confd_client.agents.delete(agents[0])
 
 
 @step(u'When I remove line from user "([^"]*)" "([^"]*)"$')

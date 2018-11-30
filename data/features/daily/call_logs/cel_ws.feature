@@ -1,5 +1,6 @@
 Feature: CEL webservice
 
+    @skip_old_webi_step
     Scenario: Access to the webservice
         Given I have only the following CEL entries:
             | id | eventtype    | eventtime                  | cid_name      | cid_num | exten | context | uniqueid     | linkedid     | userfield |

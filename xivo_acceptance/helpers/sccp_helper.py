@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from contextlib import contextmanager
@@ -9,26 +9,26 @@ from lettuce import world
 @contextmanager
 def sccp_settings():
     settings = world.ws.sccp_general_settings.view()
+    settings = world.confd_client.sccp_general.get()
     yield settings
-    dict_obj = settings.to_obj_dict()
-    world.ws.sccp_general_settings.raw_edit(None, dict_obj)
+    world.confd_client.sccp_general.update(settings)
 
 
 def disable_directmedia():
     with sccp_settings() as settings:
-        settings.directmedia = False
+        settings['options']['directmedia'] = "no"
 
 
 def enable_directmedia():
     with sccp_settings() as settings:
-        settings.directmedia = True
+        settings['options']['directmedia'] = "yes"
 
 
 def set_dialtimeout(timeout):
     with sccp_settings() as settings:
-        settings.dialtimeout = timeout
+        settings['options']['dialtimeout'] = str(timeout)
 
 
 def set_language(language):
     with sccp_settings() as settings:
-        settings.language = language
+        settings['options']['language'] = language
