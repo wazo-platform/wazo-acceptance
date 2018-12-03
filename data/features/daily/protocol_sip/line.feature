@@ -18,62 +18,6 @@ Feature: Line
         When I disable custom codecs for this line
         Then the codec "siren14" does not appear after typing 'sip show peer' in asterisk
 
-    Scenario: Edit SIP line with no modifications
-        Given there are users with infos:
-        | firstname | lastname   | number | context |
-        | Johnny    | Wilkinson  | 1601   | default |
-        When I edit the user "Johnny" "Wilkinson" without changing anything
-        Then I see no errors
-        When I edit the line "1601" without changing anything
-        Then I see no errors
-
-    Scenario: Add custom SIP codec to user line
-        Given there are users with infos:
-        | firstname | lastname   | number | context |
-        | Johnny    | Wilkinson  | 1601   | default |
-        When I add the codec "Speex (Audio)" to the line with number "1601"
-        When I edit the user "Johnny" "Wilkinson" without changing anything
-        Then the line with number "1601" has the codec "speex"
-
-    Scenario: Edit custom SIP line without changing anything
-        Given there are users with infos:
-        | firstname | lastname   | number | context |
-        | Johnny    | Wilkinson  | 1601   | default |
-        Given the line "1601" has the codec "Speex (Audio)"
-        When I edit the line "1601" without changing anything
-        When I edit the user "Johnny" "Wilkinson" without changing anything
-        Then the line with number "1601" has the codec "speex"
-
-    Scenario: Remove custom SIP codec from user line
-        Given there are users with infos:
-        | firstname | lastname   | number | context |
-        | Johnny    | Wilkinson  | 1601   | default |
-        Given the line "1601" has the codec "Speex (Audio)"
-        When I remove the codec "Speex (Audio)" from the line with number "1601"
-        When I edit the user "Johnny" "Wilkinson" without changing anything
-        Then the line with number "1601" does not have the codec "speex"
-
-    Scenario: Add 2 custom SIP codecs to user line
-        Given there are users with infos:
-        | firstname | lastname   | number | context |
-        | Johnny    | Wilkinson  | 1601   | default |
-        When I add the codec "Speex (Audio)" to the line with number "1601"
-        When I add the codec "iLBC (Audio)" to the line with number "1601"
-        When I edit the user "Johnny" "Wilkinson" without changing anything
-        Then the line with number "1601" has the codec "speex"
-        Then the line with number "1601" has the codec "ilbc"
-
-    Scenario: Remove a single custom SIP codec from user line
-        Given there are users with infos:
-        | firstname | lastname   | number | context |
-        | Johnny    | Wilkinson  | 1601   | default |
-        Given the line "1601" has the codec "Speex (Audio)"
-        Given the line "1601" has the codec "iLBC (Audio)"
-        When I remove the codec "Speex (Audio)" from the line with number "1601"
-        When I edit the user "Johnny" "Wilkinson" without changing anything
-        Then the line with number "1601" has the codec "ilbc"
-        Then the line with number "1601" does not have the codec "speex"
-
     Scenario: Change SIP line username
         Given there are no SIP lines with username "newusername"
         Given there are users with infos:
