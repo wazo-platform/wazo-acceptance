@@ -185,13 +185,13 @@ def add_user(data_dict, step=None):
     if 'language' in data_dict:
         user['language'] = data_dict['language']
     if 'mobile_number' in data_dict:
-        user.mobile_number = data_dict['mobile_number']
+        user['mobile_phone_number'] = data_dict['mobile_number'] or None
 
     user = world.confd_client.users.create(user)
 
     auth_user = {
         'uuid': user['uuid'],
-        'username': data_dict('client_username', user['uuid']),
+        'username': data_dict.get('client_username', user['uuid']),
         'password': data_dict.get('client_password'),
         'enabled': data_dict.get('enable_client', True),
     }
@@ -199,7 +199,10 @@ def add_user(data_dict, step=None):
 
     if 'client_profile' in data_dict:
         profile_id = cti_profile_helper.find_profile_id_by_name(data_dict['client_profile'])
-        world.confd_client.users(user['uuid']).update_cti_profile({'id': profile_id})
+        world.confd_client.users(user['uuid']).update_cti_profile(
+            {'id': profile_id},
+            enabled=False,  # enabled is handled by wazo-auth
+        )
 
     if 'agentid' in data_dict:
         world.confd_client.users(user['uuid']).add_agent(data_dict['agentid'])

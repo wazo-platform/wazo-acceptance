@@ -14,6 +14,7 @@ Feature: Queues
             | general | general      | 3001   | default |
         Then I see errors
 
+    @skip_old_webi_step
     Scenario: Queue strategy ring linear
         Given I have no extension with exten "3500@default"
         When I create the following queues:

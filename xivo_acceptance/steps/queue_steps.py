@@ -74,15 +74,15 @@ def when_i_create_the_following_invalid_queues(step):
 
 @step(u'When I edit the queue "([^"]*)"$')
 def when_i_edit_the_queue_group1(step, queue_name):
-    queue_id = queue_helper.get_queue_by(name=queue_name)
-    common.open_url('queue', 'edit', {'id': queue_id})
+    queue = queue_helper.get_queue_by(name=queue_name)
+    common.open_url('queue', 'edit', {'id': queue['id']})
     form.submit.submit_form()
 
 
 @step(u'When I edit the queue "([^"]*)" and set ring strategy at "([^"]*)"$')
 def when_i_edit_the_queue_group1_and_set_ring_strategy_at_group2(step, queue_name, ring_strategy):
-    queue_id = queue_helper.get_queue_by(name=queue_name)
-    common.open_url('queue', 'edit', {'id': queue_id})
+    queue = queue_helper.get_queue_by(name=queue_name)
+    common.open_url('queue', 'edit', {'id': queue['id']})
     queue_action_webi.type_queue_ring_strategy(ring_strategy)
     form.submit.submit_form()
 
@@ -179,8 +179,8 @@ def then_i_see_the_element_not_exists(step, name):
 
 @step(u'When I edit the queue "([^"]*)" and set exit context at "([^"]*)"')
 def when_i_edit_the_queue_group1_and_set_exit_context_at_group2(step, queue_name, context_name):
-    queue_id = queue_helper.get_queue_by(name=queue_name)
-    common.open_url('queue', 'edit', {'id': queue_id})
+    queue = queue_helper.get_queue_by(name=queue_name)
+    common.open_url('queue', 'edit', {'id': queue['id']})
     common.go_to_tab('Advanced')
     queue_action_webi.type_queue_exit_context(context_name)
     form.submit.submit_form()

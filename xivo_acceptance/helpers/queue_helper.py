@@ -31,7 +31,8 @@ def add_queue(data):
 
     queue = world.confd_client.queues.create(queue)
     extension = {'exten': data['number'], 'context': data['context']}
-    world.confd_client.extensions.create(extension)
+    extension = world.confd_client.extensions.create(extension)
+    world.confd_client.queues(queue).add_extension(extension)
 
     for agent_id in data.get('agents', []):
         world.confd_client.queues(queue).add_agent_member({'id': agent_id})

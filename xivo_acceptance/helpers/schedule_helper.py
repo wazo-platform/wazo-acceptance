@@ -12,7 +12,7 @@ from xivo_acceptance.helpers import entity_helper
 def add_schedule(name, timezone, times, destination=None):
     delete_schedules_with_name(name)
     schedule = _create_schedule(name, timezone, times, destination)
-    world.confd_client.create(schedule)
+    world.confd_client.schedules.create(schedule)
 
 
 def add_or_replace_schedule(data):

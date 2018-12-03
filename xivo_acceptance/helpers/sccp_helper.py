@@ -8,7 +8,6 @@ from lettuce import world
 
 @contextmanager
 def sccp_settings():
-    settings = world.ws.sccp_general_settings.view()
     settings = world.confd_client.sccp_general.get()
     yield settings
     world.confd_client.sccp_general.update(settings)
