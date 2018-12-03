@@ -14,6 +14,7 @@ Feature: Devices
           | present           | not present       |
           | 00:00:00:00:aa:01 | 00:00:00:00:bb:02 |
 
+    @skip_old_webi_step
     Scenario: Search devices by number
         Given I have the following users:
             | firstname | lastname |
@@ -100,6 +101,7 @@ Feature: Devices
         When I modify the device of user "Han" "Duo" to ""
         Then I see no errors
 
+    @skip_old_webi_step
     Scenario: Provision
         Given I have the following users:
             | firstname     | lastname |

@@ -1,26 +1,13 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
-import json
-import requests
 
 from lettuce.registry import world
 
 
-AUTOPROV_URL = 'https://%s/xivo/configuration/json.php/restricted/provisioning/autoprov?act=configure'
-HEADERS = {'Content-Type': 'application/json'}
-
-
 def provision_device_using_webi(provcode, device_ip):
-    auth = requests.auth.HTTPBasicAuth(world.config['rest_api']['username'],
-                                       world.config['rest_api']['passwd'])
-    data = json.dumps({'code': provcode, 'ip': device_ip})
-    requests.post(url=AUTOPROV_URL % world.config['xivo_host'],
-                  headers=HEADERS,
-                  auth=auth,
-                  data=data,
-                  verify=False)
+    raise NotImplementedError
 
 
 def add_or_replace_device(device):
