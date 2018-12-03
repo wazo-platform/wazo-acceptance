@@ -295,38 +295,6 @@ def enable_cti_client(firstname, lastname):
         world.auth_client.users.edit(auth_user['uuid'], auth_user)
 
 
-def count_linefeatures(user_id):
-    return _count_table_with_cond("user_line", {'"user_id"': user_id})
-
-
-def count_rightcallmember(user_id):
-    return _count_table_with_cond("rightcallmember", {'"type"': "'user'", '"typeval"': "'%s'" % user_id})
-
-
-def count_dialaction(user_id):
-    return _count_table_with_cond("dialaction", {'"category"': "'user'", '"categoryval"': "'%s'" % user_id})
-
-
-def count_phonefunckey(user_id):
-    return _count_table_with_cond("phonefunckey", {'"iduserfeatures"': user_id})
-
-
-def count_callfiltermember(user_id):
-    return _count_table_with_cond("callfiltermember", {'"type"': "'user'", '"typeval"': "'%s'" % user_id})
-
-
-def count_queuemember(user_id):
-    return _count_table_with_cond("queuemember", {'"usertype"': "'user'", '"userid"': user_id})
-
-
-def count_schedulepath(user_id):
-    return _count_table_with_cond("schedule_path", {'"path"': "'user'", '"pathid"': user_id})
-
-
-def _count_table_with_cond(table, cond_dict):
-    return postgres.exec_count_request(table, **cond_dict)
-
-
 def get_unconditional_forward(fullname):
     firstname, lastname = fullname.split(' ', 1)
     query = """

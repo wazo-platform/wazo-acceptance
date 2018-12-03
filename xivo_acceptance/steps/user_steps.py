@@ -331,17 +331,6 @@ def then_i_see_a_user_with_infos(step):
     common.open_url('user', 'search', {'search': ''})
 
 
-@step(u'Then there is no data about this user remaining in the database.$')
-def then_there_is_no_data_about_this_user_remaining_in_the_database(step):
-    assert user_helper.count_linefeatures(world.user_id) == 0, "Data is remaining in linefeatures after user deletion."
-    assert user_helper.count_rightcallmember(world.user_id) == 0, "Data is remaining in rightcallmember after user deletion."
-    assert user_helper.count_dialaction(world.user_id) == 0, "Data is remaining in dialaction after user deletion."
-    assert user_helper.count_phonefunckey(world.user_id) == 0, "Data is remaining in phonefunckey after user deletion."
-    assert user_helper.count_callfiltermember(world.user_id) == 0, "Data is remaining in callfiltermember after user deletion."
-    assert user_helper.count_queuemember(world.user_id) == 0, "Data is remaining in queuemember after user deletion."
-    assert user_helper.count_schedulepath(world.user_id) == 0, "Data is remaining in schedulepath after user deletion."
-
-
 @step(u'When I modify the channel type of group "([^"]*)" of user "([^"]*)" to "([^"]*)"')
 def when_i_modify_the_channel_type_of_group_group1_of_user_group2_to_group3(step, group, fullname, chantype):
     common.open_url('user', 'search', {'search': fullname})
