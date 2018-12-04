@@ -28,7 +28,7 @@ def then_the_queue_members_xlet_for_queue_1_is_empty(step, queue_name):
 
 @step(u'Then the Queue members xlet for queue "([^"]*)" should display agents:')
 def then_the_queue_members_xlet_for_queue_1_should_display_agents(step, queue_name):
-    queue_id = queue_helper.get_queue_by(queue_name)['id']
+    queue_id = queue_helper.get_queue_by(name=queue_name)['id']
     cti_helper.set_queue_for_queue_members(queue_id)
     res = cti_helper.get_queue_members_infos()
     assert_that(res['return_value']['row_count'], greater_than(0))
