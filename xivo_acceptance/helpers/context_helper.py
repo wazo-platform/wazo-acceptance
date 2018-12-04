@@ -135,6 +135,6 @@ def add_or_replace_context(name, display_name, context_type):
 
 
 def find_context_by(**kwargs):
-    contexts = world.confd_client.contexts.list(**kwargs)['items']
+    contexts = world.confd_client.contexts.list(recurse=True, **kwargs)['items']
     for context in contexts:
         return context
