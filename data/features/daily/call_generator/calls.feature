@@ -62,6 +62,7 @@ Feature: Callgen
         | Sylvia    | Trench   |   1103 | default | sip      |
         Given "James Bond" has a dialaction on "Busy" to "User" "Sylvia Trench"
         When "Honey Ryder" calls "1101"
+        When "James Bond" is ringing
         When "James Bond" hangs up
         When I wait 2 seconds
         Then "Sylvia Trench" is ringing
