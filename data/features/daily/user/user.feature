@@ -186,6 +186,7 @@ Feature: User
         When I remove user "Tom" "Sawyer"
         Then there is no data about this user remaining in the database.
 
+    @skip_old_webi_step
     Scenario: Update user's extension to existing queue's extension
         Given there are contexts with infos:
           | type   | name      | range_start | range_end |

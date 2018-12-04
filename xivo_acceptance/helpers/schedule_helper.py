@@ -58,7 +58,7 @@ def _create_schedule(name, timezone, times, destination=None):
     if destination:
         schedule['closed_destination'] = destination
 
-    opened, closed = [], []
+    open_periods, exceptional_periods = [], []
     for time in times:
         period = {
             'hours_end': time['End hour'],
@@ -66,22 +66,23 @@ def _create_schedule(name, timezone, times, destination=None):
             'month_days': expand_number_ranges(time['Days of month']),
             'months': expand_number_ranges(time['Months']),
             'week_days': expand_number_ranges(time['Days of week']),
+            'destination': {'type': 'none'},
         }
 
         if time['Status'] == 'Opened':
-            opened.append(period)
+            open_periods.append(period)
         elif time['Status'] == 'Closed':
-            closed.append(period)
+            exceptional_periods.append(period)
 
-    schedule['open_periods'] = opened
-    schedule['exceptional_periods'] = opened
+    schedule['open_periods'] = open_periods
+    schedule['exceptional_periods'] = exceptional_periods
     return schedule
 
 
 def delete_schedules_with_name(name):
     schedules = world.confd_client.schedules.list(name=name)['items']
     for schedule in schedules:
-        world.confd_client.delete(schedule['id'])
+        world.confd_client.schedules.delete(schedule['id'])
 
 
 def get_schedule_by(**kwargs):

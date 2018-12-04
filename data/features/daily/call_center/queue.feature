@@ -47,6 +47,7 @@ Feature: Queues
             | queue2 | Queue 2      | 3102   | default | 1102         |
         Then the agent "1102" is a member of the queue "queue2" in asterisk
 
+    @skip_old_webi_step
     Scenario: Add a logged agent to a new queue and answer a call
         Given there are users with infos:
           | firstname | lastname | number | context | agent_number | protocol |

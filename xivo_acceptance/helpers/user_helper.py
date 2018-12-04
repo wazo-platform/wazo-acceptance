@@ -284,7 +284,7 @@ def disable_cti_client(firstname, lastname):
     for user in users:
         auth_user = world.auth_client.users.get(user['uuid'])
         auth_user['enabled'] = False
-        world.auth_client.users.edit(auth_user['uuid'], auth_user)
+        world.auth_client.users.edit(auth_user['uuid'], **auth_user)
 
 
 def enable_cti_client(firstname, lastname):
@@ -292,7 +292,7 @@ def enable_cti_client(firstname, lastname):
     for user in users:
         auth_user = world.auth_client.users.get(user['uuid'])
         auth_user['enabled'] = True
-        world.auth_client.users.edit(auth_user['uuid'], auth_user)
+        world.auth_client.users.edit(auth_user['uuid'], **auth_user)
 
 
 def count_linefeatures(user_id):

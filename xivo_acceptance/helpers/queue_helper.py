@@ -43,10 +43,8 @@ def add_queue(data):
 
 
 def add_or_replace_queue(queue_data):
-    queue_name = queue_data['name']
-    queue_number = queue_data['number']
-    delete_queues_with_number(queue_number)
-    delete_queues_with_name(queue_name)
+    delete_queues_with_number(queue_data['number'])
+    delete_queues_with_name(queue_data['name'])
 
     add_queue(queue_data)
 
@@ -69,6 +67,10 @@ def delete_queues_with_number(number):
     for extension in extensions['items']:
         if extension['queue']:
             world.confd_client.queues.delete(extension['queue']['id'])
+        if extension['incall']:
+            world.confd_client.incalls.delete(extension['incall']['id'])
+        for line in extension['lines']:
+            world.confd_client.lines.delete(line['id'])
         world.confd_client.extensions.delete(extension['id'])
 
 

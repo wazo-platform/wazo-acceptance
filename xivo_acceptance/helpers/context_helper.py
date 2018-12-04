@@ -123,7 +123,7 @@ def add_context(name,
 
 
 def delete_context(context):
-    outcall_helper.delete_outcalls_with_context(context.name)
+    outcall_helper.delete_outcalls_with_context(context['name'])
     world.confd_client.contexts.delete(context)
 
 
