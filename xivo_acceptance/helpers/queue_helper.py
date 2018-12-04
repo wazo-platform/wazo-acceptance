@@ -37,7 +37,7 @@ def add_queue(data):
     for agent_id in data.get('agents', []):
         world.confd_client.queues(queue).add_agent_member({'id': agent_id})
     for user_id in data.get('users', []):
-        world.confd_client.queues(queue).add_agent_member({'id': user_id})
+        world.confd_client.queues(queue).add_user_member({'id': user_id})
     if 'schedule_id' in data:
         world.confd_client.queues(queue).add_schedule({'id': data['schedule_id']})
 
