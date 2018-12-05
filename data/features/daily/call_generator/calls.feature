@@ -32,9 +32,9 @@ Feature: Callgen
 
     Scenario: Call to line that is disabled
         Given there are users with infos:
-            | firstname | lastname | number | context | protocol |
-            | Bountrabi | Sylla    | 1102   | default | sip      |
-            | Papa      | Sylla    | 1103   | default | sip      |
+            | firstname | lastname | number | context | protocol | with_phone |
+            | Bountrabi | Sylla    | 1102   | default | sip      | yes        |
+            | Papa      | Sylla    | 1103   | default | sip      | no         |
         Given the line "1103@default" is disabled
         When "Bountrabi Sylla" calls "1103"
         Then "Bountrabi Sylla" last dialed extension was not found

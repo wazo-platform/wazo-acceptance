@@ -245,7 +245,7 @@ def add_user(data_dict, step=None):
         })
         world.confd_client.users.relations(user['uuid']).add_voicemail(voicemail)
 
-    if step is not None:
+    if data_dict.get('with_phone', 'yes') == 'yes' and step:
         _register_and_track_phone(step.scenario, data_dict)
 
     return user['id']
