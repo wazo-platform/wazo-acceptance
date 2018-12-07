@@ -53,7 +53,7 @@ class LinphoneLogWrapper(object):
 class SipPhone(object):
 
     def __init__(self, config):
-        if world.config['debug'].get('debug', False):
+        if world.config['debug'].get('linphone', False):
             logfile = LinphoneLogWrapper(sys.stdout, prefix='[sip:{}]'.format(config.sip_name))
         else:
             logfile = None
