@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2015-2016 Avencall
+# Copyright 2015-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import datetime
@@ -53,7 +53,7 @@ class LinphoneLogWrapper(object):
 class SipPhone(object):
 
     def __init__(self, config):
-        if world.config['debug']['linphone']:
+        if world.config['debug'].get('debug', False):
             logfile = LinphoneLogWrapper(sys.stdout, prefix='[sip:{}]'.format(config.sip_name))
         else:
             logfile = None
