@@ -1,5 +1,6 @@
 Feature: Sheet
 
+    @skip_old_cti_step
     Scenario: xivo-calleridname variable on agent linked
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -38,6 +39,7 @@ Feature: Sheet
         | xivo-queuename    | frere           |
         | xivo-agentnumber  | 1153            |
 
+    @skip_old_cti_step
     Scenario: xivo-calleridname variable on agent unlinked
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -76,6 +78,7 @@ Feature: Sheet
         | xivo-queuename    | foo             |
         | xivo-agentnumber  | 1153            |
 
+    @skip_old_cti_step
     Scenario: Variables on link event to a User
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -103,6 +106,7 @@ Feature: Sheet
         | xivo-calledidname | Alice Gopher |
         | xivo-calledidnum  | 1007         |
 
+    @skip_old_cti_step
     Scenario: Variables on link event to a Queue
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -132,6 +136,7 @@ Feature: Sheet
         | xivo-calledidname | frere |
         | xivo-calledidnum  | 3001  |
 
+    @skip_old_cti_step
     Scenario: Variables on link event to a Group
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -161,7 +166,8 @@ Feature: Sheet
         | xivo-calledidname | main  |
         | xivo-calledidnum  | 2006  |
 
-  Scenario: Variables on dial event to group
+    @skip_old_cti_step
+    Scenario: Variables on dial event to group
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
         | xivo-calledidname |
@@ -201,7 +207,8 @@ Feature: Sheet
 
         Then I should not see any sheet
 
-  Scenario: Sheet on dial event sent to ringing agent when calling queue
+    @skip_old_cti_step
+    Scenario: Sheet on dial event sent to ringing agent when calling queue
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
         | xivo-calledidname |
@@ -230,7 +237,8 @@ Feature: Sheet
 
         Then chan_test hangs up "1043-1"
 
-  Scenario: Sheet on dial event not sent to non-ringing agent when calling queue
+    @skip_old_cti_step
+    Scenario: Sheet on dial event not sent to non-ringing agent when calling queue
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
         | xivo-calledidname |
@@ -256,6 +264,7 @@ Feature: Sheet
         Then I should not see any sheet
         Then chan_test hangs up "1043-2"
 
+    @skip_old_cti_step
     Scenario: Sheet distribution of link event to a Queue
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -297,6 +306,7 @@ Feature: Sheet
 
         Then I should not see any sheet
 
+    @skip_old_cti_step
     Scenario: Sheet distribution of link event to a Group
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -340,6 +350,7 @@ Feature: Sheet
         When "Alice Gopher" hangs up
         Then I should not see any sheet
 
+    @skip_old_cti_step
     Scenario: Sheet distribution of dial event to a Queue
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -380,6 +391,7 @@ Feature: Sheet
         When "Alice Gopher" hangs up
         Then I should not see any sheet
 
+    @skip_old_cti_step
     Scenario: Sheet distribution of link event to a Queue agent answers
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -409,6 +421,7 @@ Feature: Sheet
         | xivo-calledidname | frere |
         | xivo-calledidnum  | 3001  |
 
+    @skip_old_cti_step
     Scenario: Sheet distribution of link event to a Queue agent does not answer
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -435,6 +448,7 @@ Feature: Sheet
 
         Then I should not see any sheet
 
+    @skip_old_cti_step
     Scenario: Sheet distribution of dial event to a User
         Given I have a sheet model named "testsheet" with the variables:
         | variable         |
@@ -459,6 +473,7 @@ Feature: Sheet
         | Variable         |      Value |
         | xivo-calleridnum | 5555555555 |
 
+    @skip_old_cti_step
     Scenario: No sheet when a call is resumed on Link
         Given I have a sheet model named "testsheet" with the variables:
         | variable          |
@@ -484,6 +499,7 @@ Feature: Sheet
 
         Then I should not see any sheet
 
+    @skip_old_cti_step
     Scenario: db-variables on reverse lookup in a directory definition
         Given there are users with infos:
          | firstname | lastname   | number | context | cti_profile | protocol |
@@ -536,6 +552,7 @@ Feature: Sheet
         | db-mail      | asdf@asdf.com |
         | db-special   | asdf : ésdf  |
 
+    @skip_old_cti_step
     Scenario: Variable substitution in custom sheets
         Given there are users with infos:
          | firstname | lastname  | number | context | cti_profile | cti_login | cti_passwd | protocol |
@@ -560,6 +577,7 @@ Feature: Sheet
         | testlineedit      | to_default       |
         | testplaintextedit | Donald MacRonald |
 
+    @skip_old_cti_step
     Scenario: Bus notification after custom sheets sent
         Given there are users with infos:
          | firstname | lastname  | number | context | cti_profile | cti_login | cti_passwd | protocol |
