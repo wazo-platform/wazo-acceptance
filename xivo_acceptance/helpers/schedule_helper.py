@@ -9,6 +9,7 @@ from hamcrest import (
 from lettuce import world
 
 from xivo_acceptance.helpers import entity_helper
+from xivo_acceptance.helpers.user_helper import get_by_firstname_lastname
 
 
 def add_schedule(name, timezone, times, destination=None):
@@ -74,7 +75,7 @@ def _create_schedule(name, timezone, times, destination=None):
             'month_days': expand_number_ranges(time['Days of month']),
             'months': expand_number_ranges(time['Months']),
             'week_days': expand_number_ranges(time['Days of week']),
-            'destination': {'type': 'none'},
+            'destination': _get_destination(time),
         }
 
         if time['Status'] == 'Opened':
@@ -85,6 +86,17 @@ def _create_schedule(name, timezone, times, destination=None):
     schedule['open_periods'] = open_periods
     schedule['exceptional_periods'] = exceptional_periods
     return schedule
+
+
+def _get_destination(time):
+    firstname = time.get('Destination firstname')
+    lastname = time.get('Destination lastname')
+
+    if not (firstname and lastname):
+        return {'type': 'none'}
+
+    user = get_by_firstname_lastname(firstname, lastname)
+    return {'type': 'user', 'user_id': user['id']}
 
 
 def delete_schedules_with_name(name):
