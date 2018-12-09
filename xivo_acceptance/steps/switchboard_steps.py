@@ -8,13 +8,15 @@ from hamcrest import equal_to
 from lettuce import step, world
 
 from xivo_acceptance.action.webi import directory as directory_action_webi
-from xivo_acceptance.action.webi import queue as queue_action_webi
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.webi import phonebook as phonebook_action_webi
-from xivo_acceptance.helpers import (context_helper,
-                                     cti_helper,
-                                     incall_helper,
-                                     directory_helper)
+from xivo_acceptance.helpers import (
+    context_helper,
+    cti_helper,
+    incall_helper,
+    directory_helper,
+    queue_helper,
+)
 from xivo_acceptance.lettuce import func, common
 
 
@@ -57,16 +59,20 @@ def given_the_user_group1_is_configured_for_switchboard_use(step, user):
 @step(u'Given there is a switchboard configured as:')
 def given_there_is_a_switchboard_configured_as(step):
     for config in step.hashes:
-        queue_action_webi.add_or_replace_switchboard_queue(
-            config['incalls queue name'],
-            config['incalls queue number'],
-            config['incalls queue context'],
-            config['agents'])
+        incall_queue = {
+            'name': config['incalls queue name'],
+            'number': config['incalls queue number'],
+            'context': config['incalls queue context'],
+            'agents': config['agents'],
+        }
+        queue_helper.add_or_replace_queue(incall_queue)
 
-        queue_action_webi.add_or_replace_switchboard_hold_queue(
-            config['hold calls queue name'],
-            config['hold calls queue number'],
-            config['hold calls queue context'])
+        hold_queue = {
+            'name': config['hold calls queue name'],
+            'number': config['hold calls queue number'],
+            'context': config['hold calls queue context'],
+        }
+        queue_helper.add_or_replace_queue(hold_queue)
 
         incall_helper.add_or_replace_incall(exten=config['incalls queue number'],
                                             context='from-extern',
