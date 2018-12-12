@@ -216,6 +216,8 @@ def add_user(data_dict, step=None):
         }
         if 'device_slot' in data_dict:
             line_data['position'] = data_dict['device_slot']
+        if 'max_contacts' in data_dict:
+            line_data['max_contacts'] = data_dict['max_contacts']
         line = world.confd_client.lines.create(line_data)
 
         protocol = data_dict.get('protocol', 'sip')
@@ -266,10 +268,12 @@ def _register_and_track_phone(scenario, user_data):
                        user_data.get('lastname', ''))).strip()
 
     endpoint_sip = world.confd_client.endpoints_sip.get(line['endpoint_sip']['id'])
-    phone_config = sip_config.create_config(world.config, scenario.phone_register, endpoint_sip)
-    phone = sip_phone.register_line(phone_config)
-    if phone:
-        scenario.phone_register.add_registered_phone(phone, name)
+    max_contacts = int(user_data.get('max_contacts') or 1)
+    for _ in xrange(max_contacts):
+        phone_config = sip_config.create_config(world.config, scenario.phone_register, endpoint_sip)
+        phone = sip_phone.register_line(phone_config)
+        if phone:
+            scenario.phone_register.add_registered_phone(phone, name)
 
 
 def user_is_in_group(user, group):
