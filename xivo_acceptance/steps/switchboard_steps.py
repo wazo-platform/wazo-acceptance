@@ -11,6 +11,7 @@ from xivo_acceptance.action.webi import directory as directory_action_webi
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.action.webi import phonebook as phonebook_action_webi
 from xivo_acceptance.helpers import (
+    agent_helper,
     context_helper,
     cti_helper,
     incall_helper,
@@ -63,7 +64,7 @@ def given_there_is_a_switchboard_configured_as(step):
             'name': config['incalls queue name'],
             'number': config['incalls queue number'],
             'context': config['incalls queue context'],
-            'agents': config['agents'],
+            'agents': convert_agent_numbers(config['agents']),
         }
         queue_helper.add_or_replace_queue(incall_queue)
 
@@ -78,6 +79,15 @@ def given_there_is_a_switchboard_configured_as(step):
                                             context='from-extern',
                                             dst_type='queue',
                                             dst_name=config['incalls queue name'])
+
+
+def convert_agent_numbers(agent_numbers):
+    agent_ids = []
+    agent_number_list = agent_numbers.split(',')
+    for agent_number in agent_number_list:
+        agent_id = agent_helper.find_agent_by(number=agent_number.strip())['id']
+        agent_ids.append(agent_id)
+    return agent_ids
 
 
 @step(u'When I search a transfer destination "([^"]*)"')
