@@ -13,7 +13,6 @@ from xivo_acceptance.lettuce.form.select import (
 )
 from xivo_acceptance.lettuce.form.checkbox import set_checkbox_with_id
 from xivo_acceptance.lettuce.form.list_pane import ListPane
-from xivo_acceptance.lettuce.form.submit import submit_form
 
 
 CALLEE_TRANSFER = 'allow allee transfer'
@@ -41,37 +40,6 @@ def add_or_replace_queue(queue):
     queue_helper.delete_queues_with_name_or_number(queue['name'], queue['number'])
     common.open_url('queue', 'add')
     fill_form(queue)
-
-
-def add_or_replace_switchboard_queue(name, number, context, agents):
-    config = {
-        'name': name,
-        'display name': name,
-        'number': number,
-        'context': context,
-        'agents': agents,
-        CALLEE_TRANSFER: 'true',
-        CALLER_HANGUP: 'true',
-        REACH_TIMEOUT: 'Disabled',
-        CALL_RETRY: '1 second',
-        REASSIGN_DELAY: 'Disabled',
-        AUTOPAUSE_AGENTS: 'false',
-    }
-
-    add_or_replace_queue(config)
-    submit_form()
-
-
-def add_or_replace_switchboard_hold_queue(name, number, context):
-    config = {
-        'name': name,
-        'display name': name,
-        'number': number,
-        'context': context,
-    }
-
-    add_or_replace_queue(config)
-    submit_form()
 
 
 def fill_form(queue):
