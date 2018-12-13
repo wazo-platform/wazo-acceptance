@@ -49,11 +49,6 @@ def given_i_set_the_following_options_in_line_1(step, line_number, line_context)
     form.submit.submit_form()
 
 
-@step(u'Given the line "([^"]*)" has the codec "([^"]*)"')
-def given_the_line_group1_has_the_codec_group2(step, linenumber, codec):
-    _add_codec_to_line(codec, linenumber)
-
-
 @step(u'Given the line "(\d+)@(\w+)" is disabled')
 def given_the_line_group1_is_disabled(step, extension, context):
     common.open_url('line')
@@ -145,11 +140,6 @@ def when_i_add_a_custom_line(step):
             form.submit.submit_form()
 
 
-@step(u'When I add the codec "([^"]*)" to the line with number "([^"]*)"')
-def when_i_add_the_custom_codec_to_the_line_with_number(step, codec, linenumber):
-    _add_codec_to_line(codec, linenumber)
-
-
 @step(u'When I disable custom codecs for this line')
 def when_i_disable_custom_codecs_for_this_line(step):
     line_action_webi.search_line_number(world.id)
@@ -172,16 +162,6 @@ def when_i_edit_the_line_1(step, linenumber):
     common.open_url('line', 'edit', {'id': line['id']})
 
 
-@step(u'When I remove the codec "([^"]*)" from the line with number "([^"]*)"')
-def when_i_remove_the_codec_from_the_line_with_number(step, codec, linenumber):
-    line = line_read_helper.find_with_exten_context(linenumber, 'default')
-    common.open_url('line', 'edit', {'id': line['id']})
-    _open_codec_page()
-    codec_widget = CodecWidget()
-    codec_widget.remove(codec)
-    form.submit.submit_form()
-
-
 @step(u'Then I see a line with infos:')
 def then_i_see_a_line_with_infos(step):
     expected_line = step.hashes[0]
@@ -192,13 +172,6 @@ def then_i_see_a_line_with_infos(step):
     actual_line = line_action_webi.get_line_list_entry(number)
     assert_that(actual_line, has_entries(expected_line))
     common.open_url('user', 'search', {'search': ''})
-
-
-@step(u'Then the line with number "([^"]*)" does not have the codec "([^"]*)"')
-def then_the_line_with_number_group1_does_not_have_the_codec_group2(step, linenumber, codec):
-    line = line_read_helper.get_with_exten_context(linenumber, 'default')
-    sip_peer = line['name']
-    assert not check_codec_for_sip_line(sip_peer, codec)
 
 
 def check_codec_for_sip_line(peer, codec):
@@ -217,13 +190,6 @@ def then_the_codec_appears_after_typing_sip_show_peer_in_asterisk(step, codec):
 @step(u'Then the codec "([^"]*)" does not appear after typing \'sip show peer\' in asterisk')
 def then_the_codec_does_not_appear_after_typing_sip_show_peer_in_asterisk(step, codec):
     assert check_codec_for_sip_line(world.id, codec) is False
-
-
-@step(u'Then the line with number "([^"]*)" has the codec "([^"]*)"')
-def then_the_line_with_number_group1_has_the_codec_group2(step, linenumber, codec):
-    line = line_read_helper.get_with_exten_context(linenumber, 'default')
-    sip_peer = line['name']
-    assert check_codec_for_sip_line(sip_peer, codec)
 
 
 @step(u'Then this line is displayed in the list')
@@ -254,10 +220,6 @@ def then_i_see_the_element_not_exists(step, name):
     line = common.find_line(name)
     common.open_url('line', 'search', {'search': ''})
     assert line is None, 'Line: %s exist' % name
-
-
-def _add_codec_to_line(codec, exten):
-    _add_codec_list_to_line([codec], exten)
 
 
 def _add_codec_list_to_line(codecs, exten):

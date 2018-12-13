@@ -37,9 +37,7 @@ from .extensions_steps import *
 from .fail2ban_steps import *
 from .files_steps import *
 from .funckeys_steps import *
-from .general_settings_iax_steps import *
 from .general_settings_sccp_steps import *
-from .general_settings_sip_steps import *
 from .general_settings_xivo_steps import *
 from .group_steps import *
 from .ha_steps import *
