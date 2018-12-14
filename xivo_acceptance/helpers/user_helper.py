@@ -284,6 +284,7 @@ def _register_and_track_phone(scenario, user_data):
     for _ in xrange(max_contacts):
         phone_config = sip_config.create_config(world.config, scenario.phone_register, endpoint_sip)
         phone = sip_phone.register_line(phone_config)
+        phone.sip_contact_uri = scenario.phone_register.find_new_sip_contact(line['name'])
         if phone:
             scenario.phone_register.add_registered_phone(phone, name)
 
