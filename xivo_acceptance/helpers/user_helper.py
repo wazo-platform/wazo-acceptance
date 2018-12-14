@@ -6,6 +6,7 @@ from lettuce import world
 from hamcrest import assert_that, is_not, none
 from requests.exceptions import HTTPError
 
+from xivo_auth_client import Client as AuthClient
 from xivo_acceptance import helpers
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import (
@@ -142,14 +143,25 @@ def add_user_with_infos(user_data, step=None):
     if user.get('cti_profile'):
         user['enable_client'] = True
         user['client_profile'] = user.pop('cti_profile')
-        user['client_username'] = user.pop('cti_login', user['firstname'].lower())
-        user['client_password'] = user.pop('cti_passwd', user['lastname'].lower())
+
+    user['client_username'] = user.pop('cti_login', user['firstname'].lower())
+    user['client_password'] = user.pop('cti_passwd', user['lastname'].lower())
 
     user = {key: value for key, value in user.iteritems() if value is not None}
     user_id = helpers.user_line_extension_helper.add_or_replace_user(user, step=step)
 
+    fullname = '{firstname} {lastname}'.format(**user).strip()
+    if user.get('token', 'no') == 'yes':
+        auth_client = AuthClient(
+            world.config['xivo_host'],
+            username=user['client_username'],
+            password=user['client_password'],
+            verify_certificate=False,
+        )
+        token_data = auth_client.token.new(backend='wazo_user', expiration=120)
+        step.scenario.user_tokens[fullname] = token_data['token']
+
     if user.get('schedule'):
-        fullname = '{firstname} {lastname}'.format(**user).strip()
         user_action_webi.add_schedule(fullname, user['schedule'])
 
     if user.get('agent_number'):

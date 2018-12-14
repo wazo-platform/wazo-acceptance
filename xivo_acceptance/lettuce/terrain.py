@@ -27,6 +27,7 @@ def xivo_acceptance_lettuce_before_all():
 @before.each_scenario
 def xivo_acceptance_lettuce_before_each_scenario(scenario):
     scenario.phone_register = PhoneRegister()
+    scenario.user_tokens = {}
     setup.setup_browser()
     world.deleted_device = None
 
