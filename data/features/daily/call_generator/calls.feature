@@ -131,3 +131,14 @@ Feature: Callgen
         Then "Zzyxz Axalotl" is ringing
         When I wait 4 seconds
         Then "Zzyxz Axalotl" is hungup
+
+    Scenario: Relocate with multiple contacts
+        Given there are users with infos:
+        | firstname | lastname | number | context | protocol | max_contacts | token |
+        | Donald    | Trump    | 1001   | default | sip      |              |       |
+        | Vladimir  | Poutine  | 1002   | default | sip      | 2            | yes   |
+        Given "Donald Trump" calls "1002"
+        When "Vladimir Poutine" answers
+        When "Vladimir Poutine" relocate its call to its contact "2"
+        When "Vladimir Poutine" answers on its contact "2"
+        Then "Vladimir Poutine" is talking to "Donald Trump" on its contact "2"
