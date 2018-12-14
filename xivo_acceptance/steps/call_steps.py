@@ -13,6 +13,7 @@ from hamcrest import (
 )
 from lettuce import step, world
 
+from xivo_ctid_ng_client import Client as CtidNgClient
 from xivo_acceptance.helpers import (
     asterisk_helper,
     cti_helper,
@@ -265,6 +266,31 @@ def then_name_call_field_is_value(step, name, field, value):
             assert False, 'Found no call for {}'.format(name)
 
     common.wait_until_assert(assertion, tries=3)
+
+
+@step(u'When "([^"]*)" relocate its call to its contact "([^"]*)"')
+def when_user_relocate_its_call_to_its_contact_nth(step, name, position):
+    user = user_helper.get_user_by_name(name)
+    line_id = user['lines'][0]['id']
+    calls = world.ctid_ng_client.calls.list_calls()
+    call = None
+    for call in calls['items']:
+        if call['user_uuid'] == user['uuid']:
+            break
+
+    if not call:
+        raise AssertionError('No call found for {}'.format(name))
+
+    phone = step.scenario.phone_register.get_user_phone(name, int(position) - 1)
+    contact = phone.sip_contact_uri
+
+    destination = {
+        'line_id': line_id,
+        'contact': contact,
+    }
+    token = step.scenario.user_tokens.get(name)
+    ctid_ng_client = CtidNgClient(token=token, **world.config['ctid_ng'])
+    ctid_ng_client.relocates.create_from_user(call['call_id'], 'line', destination)
 
 
 def _sleep(seconds):
