@@ -107,9 +107,15 @@ def when_alice_transfers_to_exten(step, name, exten):
     phone.transfer(exten)
 
 
-@step(u'(?:When|Given) "([^"]*)" answers')
+@step(u'(?:When|Given) "([^"]*)" answers$')
 def a_answers(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)
+    phone.answer()
+
+
+@step(u'When "([^"]*)" answers on its contact "([^"]*)"')
+def when_group1_answers_on_its_contact_group2(step, name, contact):
+    phone = step.scenario.phone_register.get_user_phone(name, int(contact) - 1)
     phone.answer()
 
 
