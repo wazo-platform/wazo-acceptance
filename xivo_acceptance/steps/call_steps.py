@@ -210,10 +210,17 @@ def then_group1_is_hungup(step, user):
     common.wait_until(phone.is_hungup, tries=3)
 
 
-@step(u'Then "([^"]*)" is talking')
+@step(u'Then "([^"]*)" is talking$')
 def then_group1_is_talking(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
     common.wait_until(phone.is_talking, tries=3)
+
+
+@step(u'Then "([^"]*)" is talking to "([^"]*)" on its contact "([^"]*)"')
+def then_a_is_talking_to_b_on_its_contact_n(step, name_1, name_2, contact):
+    phone = step.scenario.phone_register.get_user_phone(name_1, int(contact) - 1)
+    common.wait_until(phone.is_talking, tries=3)
+    assert_that(phone.is_talking_to(name_2), equal_to(True))
 
 
 @step(u'Then I see no recording file of this call in monitoring audio files page')
