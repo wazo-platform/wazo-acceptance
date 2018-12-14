@@ -6,6 +6,7 @@ import logging
 
 from lettuce import world
 
+from xivo_amid_client import Client as AmidClient
 from wazo_dird_client import Client as DirdClient
 from xivo_agentd_client import Client as AgentdClient
 from xivo_auth_client import Client as AuthClient
@@ -29,6 +30,12 @@ def setup_agentd_client():
                                        token=world.config['auth_token'],
                                        verify_certificate=False)
     auth.register_for_token_renewal(world.agentd_client.set_token)
+
+
+def setup_amid_client():
+    world.amid_client = AmidClient(**world.config['amid'])
+    world.amid_client.set_token(world.config.get('auth_token'))
+    auth.register_for_token_renewal(world.amid_client.set_token)
 
 
 def setup_call_logd_client():

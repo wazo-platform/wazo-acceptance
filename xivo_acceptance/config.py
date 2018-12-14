@@ -52,6 +52,12 @@ def load_config(extra_config):
             'username': 'root',
             'passwd': 'superpass'
         },
+        'amid': {
+            'host': DEFAULT_XIVO_HOST,
+            'port': 9491,
+            'https': True,
+            'verify_certificate': False
+        },
         'call_logd': {
             'host': DEFAULT_XIVO_HOST,
             'port': 9298,
@@ -150,6 +156,9 @@ def _config_post_processor(config):
 
 
 def _config_update_host(config):
+    if config['amid']['host'] == DEFAULT_XIVO_HOST:
+        config['amid']['host'] = config['xivo_host']
+
     if config['call_logd']['host'] == DEFAULT_XIVO_HOST:
         config['call_logd']['host'] = config['xivo_host']
 
