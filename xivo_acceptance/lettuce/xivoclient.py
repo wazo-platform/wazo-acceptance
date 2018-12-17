@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import errno
@@ -42,7 +42,7 @@ class XivoClient(object):
         message = ('Error while connecting to the xivoclient socket: the socket {socket} does not exist. '
                    'The cause may be: XiVO Client multiples instance is disabled, or '
                    'the XiVO Client was not built for functional testing.').format(socket=self.socket_path)
-        common.wait_until(self.listen_socket, tries=3, message=message)
+        common.wait_until(self.listen_socket, tries=6, message=message)
 
     def is_running(self):
         return self.process is not None and self.process.poll() is None
