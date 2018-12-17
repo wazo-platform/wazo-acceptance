@@ -81,20 +81,3 @@ Feature: User
         Then the line "1405" has the following line options:
           | NAT | Call limit |
           | No  |         10 |
-
-    Scenario: Update user's extension to existing queue's extension
-        Given there are contexts with infos:
-          | type   | name      | range_start | range_end |
-          | user   | samerange | 1000        | 1999      |
-          | queue  | samerange | 1000        | 1999      |
-        Given there are users with infos:
-          | firstname | lastname | number | context   |
-          | Fab       | Lab      | 1001   | samerange |
-        Given there are queues with infos:
-          | name          | display name   | number | context   |
-          | americandream | American Dream | 1002   | samerange |
-        Given I have no extension with exten "1003@samerange"
-        When I modify the extension of user "Fab" "Lab" to "1002" with errors
-        When I modify the extension of user "Fab" "Lab" to "1003"
-        When I edit the queue "americandream"
-        Then I see no errors
