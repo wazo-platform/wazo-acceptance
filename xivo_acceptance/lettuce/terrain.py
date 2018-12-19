@@ -27,6 +27,7 @@ def xivo_acceptance_lettuce_before_all():
 @before.each_scenario
 def xivo_acceptance_lettuce_before_each_scenario(scenario):
     scenario.phone_register = PhoneRegister()
+    scenario.user_tokens = {}
     setup.setup_browser()
     world.deleted_device = None
 
@@ -75,6 +76,8 @@ def set_xivo_target(extra_config):
     setup.setup_provd()
     logger.debug("setup auth token...")
     setup.setup_auth_token()
+    logger.debug("setup amid client...")
+    setup.setup_amid_client()
     logger.debug("setup agentd client...")
     setup.setup_agentd_client()
     logger.debug("setup call logd client...")

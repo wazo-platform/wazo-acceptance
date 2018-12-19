@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# Copyright 2018 The Wazo Authors  (see the AUTHORS file)
+# SPDX-License-Identifier: GPL-3.0+
+
 from collections import namedtuple
 import subprocess
 
@@ -63,7 +67,7 @@ class _AvailableRTPPortFinder(_AbstractAvailablePortFinder):
 
 
 def create_config(world_config, phone_register, endpoint_sip_config):
-    existing_phones = phone_register.phones().values()
+    existing_phones = phone_register.phones()
     sip_port = _AvailableSipPortFinder(world_config).get_available_port(existing_phones)
     rtp_port = _AvailableRTPPortFinder(world_config).get_available_port(existing_phones)
     sip_name = endpoint_sip_config['username']

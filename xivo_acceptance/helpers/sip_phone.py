@@ -117,6 +117,9 @@ class SipPhone(object):
     def is_talking(self):
         return self._session.hook_status() == HookStatus.ANSWERED
 
+    def is_talking_to(self, name):
+        return self._session.is_talking_to(name)
+
     def is_ringing(self):
         return self._session.hook_status() == HookStatus.RINGING
 

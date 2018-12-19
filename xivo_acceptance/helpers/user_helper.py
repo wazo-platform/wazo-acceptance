@@ -6,6 +6,7 @@ from lettuce import world
 from hamcrest import assert_that, is_not, none
 from requests.exceptions import HTTPError
 
+from xivo_auth_client import Client as AuthClient
 from xivo_acceptance import helpers
 from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import (
@@ -142,14 +143,25 @@ def add_user_with_infos(user_data, step=None):
     if user.get('cti_profile'):
         user['enable_client'] = True
         user['client_profile'] = user.pop('cti_profile')
-        user['client_username'] = user.pop('cti_login', user['firstname'].lower())
-        user['client_password'] = user.pop('cti_passwd', user['lastname'].lower())
+
+    user['client_username'] = user.pop('cti_login', user['firstname'].lower())
+    user['client_password'] = user.pop('cti_passwd', user['lastname'].lower())
 
     user = {key: value for key, value in user.iteritems() if value is not None}
     user_id = helpers.user_line_extension_helper.add_or_replace_user(user, step=step)
 
+    fullname = '{firstname} {lastname}'.format(**user).strip()
+    if user.get('token', 'no') == 'yes':
+        auth_client = AuthClient(
+            world.config['xivo_host'],
+            username=user['client_username'],
+            password=user['client_password'],
+            verify_certificate=False,
+        )
+        token_data = auth_client.token.new(backend='wazo_user', expiration=120)
+        step.scenario.user_tokens[fullname] = token_data['token']
+
     if user.get('schedule'):
-        fullname = '{firstname} {lastname}'.format(**user).strip()
         user_action_webi.add_schedule(fullname, user['schedule'])
 
     if user.get('agent_number'):
@@ -216,6 +228,8 @@ def add_user(data_dict, step=None):
         }
         if 'device_slot' in data_dict:
             line_data['position'] = data_dict['device_slot']
+        if 'max_contacts' in data_dict:
+            line_data['max_contacts'] = data_dict['max_contacts']
         line = world.confd_client.lines.create(line_data)
 
         protocol = data_dict.get('protocol', 'sip')
@@ -266,10 +280,13 @@ def _register_and_track_phone(scenario, user_data):
                        user_data.get('lastname', ''))).strip()
 
     endpoint_sip = world.confd_client.endpoints_sip.get(line['endpoint_sip']['id'])
-    phone_config = sip_config.create_config(world.config, scenario.phone_register, endpoint_sip)
-    phone = sip_phone.register_line(phone_config)
-    if phone:
-        scenario.phone_register.add_registered_phone(phone, name)
+    max_contacts = int(user_data.get('max_contacts') or 1)
+    for _ in xrange(max_contacts):
+        phone_config = sip_config.create_config(world.config, scenario.phone_register, endpoint_sip)
+        phone = sip_phone.register_line(phone_config)
+        phone.sip_contact_uri = scenario.phone_register.find_new_sip_contact(line['name'])
+        if phone:
+            scenario.phone_register.add_registered_phone(phone, name)
 
 
 def user_is_in_group(user, group):

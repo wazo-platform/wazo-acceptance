@@ -79,6 +79,9 @@ def run(extra_config):
         logger.debug('Configuring wazo-auth')
         _configure_wazo_service('wazo-auth')
 
+        logger.debug('Configuring xivo-amid')
+        _configure_wazo_service('xivo-amid')
+
         logger.debug('Configuring xivo-confd')
         _configure_wazo_service('xivo-confd')
 
@@ -123,7 +126,15 @@ def _configure_auth_users():
     _create_auth_user(
         'xivo-acceptance',
         'proformatique',
-        ['auth.#', 'confd.#', 'dird.#', 'agentd.#', 'ctid-ng.#', 'call-logd.#'],
+        [
+            'amid.action.*.create',
+            'auth.#',
+            'confd.#',
+            'dird.#',
+            'agentd.#',
+            'ctid-ng.#',
+            'call-logd.#',
+        ],
     )
     _create_auth_user(
         'admin',

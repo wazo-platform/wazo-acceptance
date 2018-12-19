@@ -1,5 +1,6 @@
 git+git://github.com/wazo-pbx/pylinphonelib.git@master
 git+https://github.com/wazo-pbx/wazo-call-logd-client.git
+git+https://github.com/wazo-pbx/xivo-amid-client.git
 git+https://github.com/wazo-pbx/xivo-auth-client.git
 git+https://github.com/wazo-pbx/xivo-confd-client.git
 git+https://github.com/wazo-pbx/xivo-ctid-ng-client.git

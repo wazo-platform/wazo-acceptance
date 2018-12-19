@@ -57,6 +57,8 @@ def given_there_are_users_with_infos(step):
         protocol
         device
         with_phone (yes/no)
+        max_contacts
+        token (yes/no)
     """
     for user_data in step.hashes:
         user_helper.add_user_with_infos(user_data, step=step)
