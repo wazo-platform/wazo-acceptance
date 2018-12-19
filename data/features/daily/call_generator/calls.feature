@@ -138,7 +138,7 @@ Feature: Callgen
         | Donald    | Trump    | 1001   | default | sip      |              |       |
         | Vladimir  | Poutine  | 1002   | default | sip      | 2            | yes   |
         Given "Donald Trump" calls "1002"
-        When "Vladimir Poutine" answers
+        When "Vladimir Poutine" answers on its contact "1"
         When "Vladimir Poutine" relocate its call to its contact "2"
         When "Vladimir Poutine" answers on its contact "2"
         Then "Vladimir Poutine" is talking to "Donald Trump" on its contact "2"
