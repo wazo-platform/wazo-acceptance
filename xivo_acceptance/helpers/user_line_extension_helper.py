@@ -12,12 +12,25 @@ from xivo_acceptance.helpers import (
 )
 
 
-def delete_user_line_extension_voicemail(firstname, lastname, context=None, exten=None, mailbox=None):
+def delete_user_line_extension_voicemail(
+        firstname,
+        lastname,
+        context=None,
+        exten=None,
+        mailbox=None,
+        username=None
+):
     if mailbox and context:
         delete_voicemail(mailbox, context)
     if exten and context:
         delete_extension(exten, context)
         delete_lines(exten)
+
+    if username:
+        user = user_helper.find_by_username(username)
+        if user:
+            delete_lines_for_user(user['uuid'])
+            delete_user(user['uuid'])
 
     user = user_helper.find_by_firstname_lastname(firstname, lastname)
     if user:
@@ -53,12 +66,16 @@ def add_or_replace_user(data_dict, step=None):
     mailbox = data_dict.get('voicemail_number', None)
     exten = data_dict.get('line_number', None)
     context = data_dict.get('line_context', None)
+    username = data_dict.get('client_username', None)
 
-    delete_user_line_extension_voicemail(firstname,
-                                         lastname,
-                                         exten=exten,
-                                         context=context,
-                                         mailbox=mailbox)
+    delete_user_line_extension_voicemail(
+        firstname,
+        lastname,
+        exten=exten,
+        context=context,
+        mailbox=mailbox,
+        username=username,
+    )
 
     return user_helper.add_user(data_dict, step=step)
 

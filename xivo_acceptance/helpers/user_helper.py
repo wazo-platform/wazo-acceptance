@@ -61,6 +61,14 @@ def find_by_exten_context(exten, context):
         return user
 
 
+def find_by_username(username):
+    kwargs = {'username': username, 'recurse': True}
+
+    response = world.auth_client.users.list(**kwargs)
+    for user in response['items']:
+        return user
+
+
 def find_by_firstname_lastname(firstname, lastname=None):
     kwargs = {
         'firstname': firstname,
@@ -103,6 +111,11 @@ def delete_similar_users(userinfo):
         if user:
             delete_user(user['id'])
 
+    if 'cti_username' in userinfo:
+        user = find_by_username(userinfo['cti_username'])
+        if user:
+            delete_user(user['uuid'])
+
 
 def delete_user(user_id):
     user = world.confd_client.users.get(user_id)
@@ -125,13 +138,21 @@ def _delete_voicemail(user):
 
 
 def _delete_user(user):
-    world.confd_client.users.delete(user['id'])
-    world.auth_client.users.delete(user['uuid'])
+    try:
+        world.confd_client.users.delete(user['id'])
+    except HTTPError as e:
+        print 'deleting user from confd failed', e
+
+    try:
+        world.auth_client.users.delete(user['uuid'])
+    except HTTPError as e:
+        print 'deleting user from auth failed', e
 
 
 def add_user_with_infos(user_data, step=None):
     user = dict(user_data)
     user.setdefault('entity_name', world.config['default_entity'])
+    user.setdefault('lastname', '')
 
     if user.get('number') and user.get('context'):
         user['line_number'] = user.pop('number')
@@ -145,7 +166,7 @@ def add_user_with_infos(user_data, step=None):
         user['client_profile'] = user.pop('cti_profile')
 
     user['client_username'] = user.pop('cti_login', user['firstname'].lower())
-    password = user.pop('cti_passwd', user.get('lastname', '').lower())
+    password = user.pop('cti_passwd', user['lastname'].lower())
     if password:
         user['client_password'] = password
 
