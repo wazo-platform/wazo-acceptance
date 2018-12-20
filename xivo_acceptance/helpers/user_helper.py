@@ -173,7 +173,7 @@ def add_user_with_infos(user_data, step=None):
     user = {key: value for key, value in user.iteritems() if value is not None}
     user_id = helpers.user_line_extension_helper.add_or_replace_user(user, step=step)
 
-    fullname = '{firstname} {lastname}'.format(**user).strip()
+    fullname = u'{firstname} {lastname}'.format(**user).strip()
     if user.get('token', 'no') == 'yes':
         auth_client = AuthClient(
             world.config['xivo_host'],
