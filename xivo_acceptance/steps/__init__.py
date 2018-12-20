@@ -4,7 +4,6 @@
 
 from xivo_acceptance.lettuce import terrain
 
-from .admin_user_steps import *
 from .agent_list_steps import *
 from .agent_steps import *
 from .agid_steps import *
