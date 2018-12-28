@@ -226,6 +226,8 @@ def add_user(data_dict, step=None):
 
     auth_user = {
         'uuid': user['uuid'],
+        'firstname': user['firstname'],
+        'lastname': user.get('lastname', ''),
         'username': data_dict.get('client_username', user['uuid']),
         'password': data_dict.get('client_password'),
         'enabled': data_dict.get('enable_client', True),
