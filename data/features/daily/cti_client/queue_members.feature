@@ -2,14 +2,18 @@ Feature: Queue Member xlet
 
     Scenario: No selected queue
         Given there is a group with "2" users
-        Given there is a call center supervisor "Bertrand" "Caron"
+        Given there is a call center supervisor:
+         | firstname | lastname | cti_login | cti_passwd |
+         | Bertrand  | Caron    | bertrand  | caron      |
 
         When I start the XiVO Client
         When I log in the XiVO Client as "bertrand", pass "caron"
         Then the Queue members xlet is empty
 
     Scenario: Enable and Disable Hide Unlogged Agents
-        Given there is a call center supervisor "Etienne" "Lessard"
+        Given there is a call center supervisor:
+         | firstname | lastname | cti_login | cti_passwd |
+         | Etienne   | Lessard  | etienne   | lessard    |
         Given there are users with infos:
          | firstname | lastname          | number | context | protocol | agent_number |
          | Cédric    | Abunar            |   1202 | default | sip      | 1202         |
