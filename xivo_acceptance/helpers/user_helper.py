@@ -2,6 +2,8 @@
 # Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+import uuid
+
 from lettuce import world
 from hamcrest import assert_that, is_not, none
 from requests.exceptions import HTTPError
@@ -165,10 +167,8 @@ def add_user_with_infos(user_data, step=None):
         user['enable_client'] = True
         user['client_profile'] = user.pop('cti_profile')
 
-    user['client_username'] = user.pop('cti_login', user['firstname'].lower())
-    password = user.pop('cti_passwd', user['lastname'].lower())
-    if password:
-        user['client_password'] = password
+    user['client_username'] = user.pop('cti_login', str(uuid.uuid4()))
+    user['client_password'] = user.pop('cti_passwd', str(uuid.uuid4()))
 
     user = {key: value for key, value in user.iteritems() if value is not None}
     user_id = helpers.user_line_extension_helper.add_or_replace_user(user, step=step)
