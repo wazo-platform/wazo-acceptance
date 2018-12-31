@@ -167,8 +167,8 @@ def add_user_with_infos(user_data, step=None):
         user['enable_client'] = True
         user['client_profile'] = user.pop('cti_profile')
 
-    user['client_username'] = user.pop('cti_login', str(uuid.uuid4()))
-    user['client_password'] = user.pop('cti_passwd', str(uuid.uuid4()))
+    user['client_username'] = user.pop('cti_login', '') or str(uuid.uuid4())
+    user['client_password'] = user.pop('cti_passwd', '') or str(uuid.uuid4())
 
     user = {key: value for key, value in user.iteritems() if value is not None}
     user_id = helpers.user_line_extension_helper.add_or_replace_user(user, step=step)
