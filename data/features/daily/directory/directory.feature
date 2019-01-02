@@ -11,8 +11,8 @@ Feature: CTI Directories
 
     Scenario: Reverse lookup in a directory definition from UTF-8 CSV file
         Given there are users with infos:
-         | firstname | lastname   | number | context | cti_profile | protocol |
-         | GreatLord | MacDonnell | 1043   | default | Client      | sip      |
+         | firstname | lastname   | number | context | cti_profile | protocol | cti_login | cti_passwd |
+         | GreatLord | MacDonnell | 1043   | default | Client      | sip      | greatlord | macdonnell |
         Given the CSV file "phonebook-unicode.csv" is copied on the server into "/tmp"
         Given the following directory configurations exist:
           | name              | type     | URI                        |

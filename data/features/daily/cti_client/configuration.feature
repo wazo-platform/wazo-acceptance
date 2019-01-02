@@ -38,8 +38,8 @@ Feature: CTI Client Configuration
         | Agent status dashboard       | dock     |
         | People                       | dock     |
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Bernard   | Derome   | 1044   | default | full        |
+         | firstname | lastname | number | context | cti_profile | cti_login | cti_passwd |
+         | Bernard   | Derome   | 1044   | default | full        | bernard   | derome     |
         When I start the XiVO Client
         When I log in and log out of the XiVO Client as "bernard", pass "derome" 10 times
         Then the XiVO Client did not crash
@@ -76,8 +76,8 @@ Feature: CTI Client Configuration
 
     Scenario: Enable/Disable auto reconnect
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Gonzales  | DaCosta  | 1044   | default | Client      |
+         | firstname | lastname | number | context | cti_profile | cti_login | cti_passwd |
+         | Gonzales  | DaCosta  | 1044   | default | Client      | gonzales  | dacosta    |
         When I start the XiVO Client
         When I set auto-reconnect interval to "5" seconds
         When I enable auto-reconnect
@@ -87,8 +87,8 @@ Feature: CTI Client Configuration
 
     Scenario: Enable/Disable connect at startup
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile |
-         | Gonzales  | DaCosta  | 1044   | default | Client      |
+         | firstname | lastname | number | context | cti_profile | cti_login | cti_passwd |
+         | Gonzales  | DaCosta  | 1044   | default | Client      | gonzales  | dacosta    |
         When I start the XiVO Client
         When I enable keep password
         When I enable connect at startup

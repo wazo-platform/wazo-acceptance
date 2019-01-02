@@ -18,8 +18,8 @@ Feature: CTI Profile
         | Identity |
 
         Given there are users with infos:
-        | firstname | lastname | cti_profile |
-        | Al        | Pacino   | toto        |
+        | firstname | lastname | cti_profile | cti_login | cti_passwd |
+        | Al        | Pacino   | toto        | al        | pacino     |
 
         When I start the XiVO Client
         When I log in the XiVO Client as "al", pass "pacino"
@@ -31,8 +31,8 @@ Feature: CTI Profile
 
     Scenario: Show/Hide profile of configuration
         Given there are users with infos:
-        | firstname | lastname | cti_profile |
-        | Al        | Pacino   | Client      |
+        | firstname | lastname | cti_profile | cti_login | cti_passwd |
+        | Al        | Pacino   | Client      | al        | pacino     |
 
         When I start the XiVO Client
         When I log in the XiVO Client as "al", pass "pacino"
@@ -43,8 +43,8 @@ Feature: CTI Profile
 
     Scenario: Launch CtiClient with a profile
         Given there are users with infos:
-        | firstname | lastname | cti_profile |
-        | Al        | Pacino   | Client      |
+        | firstname | lastname | cti_profile | cti_login | cti_passwd |
+        | Al        | Pacino   | Client      | al        | pacino     |
 
         When I start the XiVO Client with an argument "apacino"
         When I update configuration as "display_profile" to "False"

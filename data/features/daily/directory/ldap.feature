@@ -14,8 +14,8 @@ Feature: LDAP
     Scenario: Reverse lookup with LDAP
         Given a reverse lookup test configuration
         Given there are users with infos:
-         | firstname | lastname | number | context | cti_profile | protocol |
-         | Sam       | Well     |   1767 | default | Client      | sip      |
+         | firstname | lastname | number | context | cti_profile | protocol | cti_login | cti_passwd |
+         | Sam       | Well     |   1767 | default | Client      | sip      | sam       | well       |
         Given there's an LDAP server configured for reverse lookup with entries:
          | first name | last name |      phone |
          | Peter      | Pan       | 5551236666 |
