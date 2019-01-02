@@ -1,5 +1,6 @@
 Feature: Devices
 
+    @skip_old_webi_step
     Scenario: Search
         Given I have the following devices:
           | ip             | mac               |
@@ -37,6 +38,7 @@ Feature: Devices
           | present           | not present       |
           | 00:00:00:00:aa:02 | 00:00:00:00:cc:22 |
 
+    @skip_old_webi_step
     Scenario: Edit the switchboard option
         Given the plugin "null" is installed
         Given there's no plugins "xivo-aastra" installed
@@ -59,6 +61,7 @@ Feature: Devices
           | switchboard_enabled | switchboard_checked |
           | True                | True                |
 
+    @skip_old_webi_step
     Scenario: Delete
         Given I have the following devices:
           |             ip | mac               |
@@ -66,6 +69,7 @@ Feature: Devices
         When I delete the device with mac "00:00:00:00:aa:01" via webi
         Then there is no device "00:00:00:00:aa:01"
 
+    @skip_old_webi_step
     Scenario: Delete a device associated to a line
         Given I have the following devices:
           |       ip | mac               |
@@ -76,6 +80,7 @@ Feature: Devices
         When I delete the device with mac "00:00:00:fa:1c:01" via webi
         Then there is no device "00:00:00:fa:1c:01"
 
+    @skip_old_webi_step
     Scenario: Update device slot
         Given I have the following devices:
           | mac               |
@@ -87,6 +92,7 @@ Feature: Devices
          When I modify the device slot of user "Han" "Solo" to "1"
          Then I see no errors
 
+    @skip_old_webi_step
     Scenario: Associate and dissociate multiple lines to device
         Given I have the following devices:
           | mac               |

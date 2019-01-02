@@ -18,6 +18,7 @@ Feature: Line
         When I disable custom codecs for this line
         Then the codec "siren14" does not appear after typing 'sip show peer' in asterisk
 
+    @skip_old_cti_step
     Scenario: Change SIP line username
         Given there are no SIP lines with username "newusername"
         Given there are users with infos:

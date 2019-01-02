@@ -53,6 +53,7 @@ Feature: User
           | fullname     | protocol | number |
           | Abarai Renji | sip      | 1677   |
 
+    @skip_old_cti_step
     Scenario: Update the group's channel type of a user
         Given there are users with infos:
         | firstname | lastname | number | context | group_name  |

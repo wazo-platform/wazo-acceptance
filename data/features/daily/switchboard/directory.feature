@@ -41,6 +41,7 @@ Feature: Switchboard search
          | Alice Wonder | 555        |
          | Bob Gainey   | 555        |
 
+    @skip_old_cti_step
     Scenario: Search mobile number of transfer destination
         Given there are users with infos:
          | firstname | lastname   | mobile_number | cti_profile | cti_login | cti_passwd |

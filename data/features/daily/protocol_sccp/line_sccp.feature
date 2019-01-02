@@ -1,5 +1,6 @@
 Feature: SCCP Line
 
+    @skip_old_cti_step
     Scenario: Customize codecs
         Given there are users with infos:
           | firstname | lastname | number | context | protocol |
@@ -18,6 +19,7 @@ Feature: SCCP Line
           | disallow |
           | allow    |
 
+    @skip_old_cti_step
     Scenario: Delete SCCP line from user resetting device to autoprov
         Given the latest plugin "xivo-cisco-sccp-legacy" is installed
         Given I have the following devices:
@@ -31,6 +33,7 @@ Feature: SCCP Line
           |               mac | configured |
           | 11:11:11:11:11:11 | False      |
 
+    @skip_old_cti_step
     Scenario: Delete user with SCCP line resetting device to autoprov
         Given the latest plugin "xivo-cisco-sccp-legacy" is installed
         Given I have the following devices:
@@ -44,6 +47,7 @@ Feature: SCCP Line
           |               mac | configured |
           | 11:11:11:11:11:12 | False      |
 
+    @skip_old_cti_step
     Scenario: Remove device from user resetting device to autoprov
         Given the latest plugin "xivo-cisco-sccp-legacy" is installed
         Given I have the following devices:
@@ -57,6 +61,7 @@ Feature: SCCP Line
           |               mac | configured |
           | 11:11:11:11:11:13 | False      |
 
+    @skip_old_cti_step
     Scenario: Change device of user resetting old device to autoprov
         Given the latest plugin "xivo-cisco-sccp-legacy" is installed
         Given I have the following devices:

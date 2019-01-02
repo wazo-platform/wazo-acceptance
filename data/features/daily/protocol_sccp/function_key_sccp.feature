@@ -1,5 +1,6 @@
 Feature: SCCP function keys
 
+  @skip_old_cti_step
   Scenario: Reorder SCCP function keys
       Given there are no devices with mac "00:00:00:00:aa:01"
       Given I have the following devices:

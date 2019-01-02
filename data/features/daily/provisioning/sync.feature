@@ -1,5 +1,6 @@
 Feature: Synchronize
 
+    @skip_old_cti_step
     Scenario: Synchronize device with previous state
         Given the latest plugin "xivo-aastra" is installed
         Given I have the following devices:
@@ -30,6 +31,7 @@ Feature: Synchronize
         When I synchronize the device with mac "00:11:22:33:44:01" from webi
         Then I see in the AMI that the line "1002@default" has been synchronized
 
+    @skip_old_cti_step
     Scenario: Synchronize two devices behind NAT
         Given the latest plugin "xivo-aastra" is installed
         Given I have the following devices:
