@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2015 Avencall
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # Copyright (C) 2016 Proformatique Inc.
 # SPDX-License-Identifier: GPL-3.0+
 
@@ -57,6 +57,9 @@ def _delete_line_associations(line):
 
 
 def dissociate_device(line):
+    if not line['device_id']:
+        return
+
     try:
         world.confd_client.lines(line).remove_device(line['device_id'])
     except HTTPError:
