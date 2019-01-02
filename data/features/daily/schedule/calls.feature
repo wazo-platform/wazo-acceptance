@@ -20,7 +20,7 @@ Feature: Schedule call distribution
     Given I have a schedule "closed" in "America/Montreal" towards user "Bruce" "Wayne" with the following schedules:
     | Status | Months | Days of month | Days of week | Start hour | End hour |
     | Opened |      1 |             1 |            1 |      00:00 |    00:01 |
-    Given user "Clark Kent" has schedule "closed"
+    Given user "Clark" "Kent" has schedule "closed"
     When "Peter Parker" calls "1002"
     When I wait 3 seconds
     Then "Bruce Wayne" is ringing
@@ -35,7 +35,7 @@ Feature: Schedule call distribution
     | Status | Months | Days of month | Days of week | Start hour | End hour | Destination firstname | Destination lastname |
     | Opened |   1-12 |          1-31 |          1-7 |      00:00 |    23:59 |                       |                      |
     | Closed |   1-12 |          1-31 |          1-7 |      00:01 |    23:58 | Bruce                 | Wayne                |
-    Given user "Clark Kent" has schedule "closed_in_open"
+    Given user "Clark" "Kent" has schedule "closed_in_open"
     When "Peter Parker" calls "1002"
     When I wait 3 seconds
     Then "Bruce Wayne" is ringing

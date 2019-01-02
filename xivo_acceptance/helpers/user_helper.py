@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import uuid
@@ -185,7 +185,7 @@ def add_user_with_infos(user_data, step=None):
         step.scenario.user_tokens[fullname] = token_data['token']
 
     if user.get('schedule'):
-        user_action_webi.add_schedule(fullname, user['schedule'])
+        associate_schedule(user['schedule'], user_id)
 
     if user.get('agent_number'):
         helpers.agent_helper.delete_agents_with_number(user['agent_number'])
@@ -356,3 +356,13 @@ def get_unconditional_forward(fullname):
 
     enabled, dest = rows[0]
     return bool(enabled), dest
+
+
+def associate_schedule(schedule_name, user_id):
+    schedules = world.confd_client.schedules.list(name=schedule_name)['items']
+    try:
+        schedule = schedules[0]
+    except IndexError:
+        raise Exception('Schedule not found: "{}"'.format(schedule_name))
+
+    world.confd_client.users.relations(user_id).add_schedule(schedule)

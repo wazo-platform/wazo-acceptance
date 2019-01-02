@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from hamcrest import (
@@ -136,9 +136,10 @@ def _edit_user(firstname, lastname):
     common.open_url('user', 'edit', qry={'id': user['id']})
 
 
-@step(u'Given user "([^"]*)" has schedule "([^"]*)"')
-def given_user_1_has_schedule_2(step, fullname, schedule):
-    user_action_webi.add_schedule(fullname, schedule)
+@step(u'Given user "([^"]*)" "([^"]*)" has schedule "([^"]*)"')
+def given_user_1_has_schedule_2(step, firstname, lastname, schedule):
+    user = user_helper.get_by_firstname_lastname(firstname, lastname)
+    user_helper.associate_schedule(schedule, user['id'])
 
 
 @step(u'When I create users with the following parameters:$')

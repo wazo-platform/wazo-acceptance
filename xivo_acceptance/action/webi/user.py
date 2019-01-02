@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # Copyright (C) 2016 Proformatique Inc.
 # SPDX-License-Identifier: GPL-3.0+
 
@@ -260,12 +260,6 @@ def get_user_list_entry(search_fullname):
         'number': number,
         'protocol': protocol
     }
-
-
-def add_schedule(user, schedule):
-    edit_user(user)
-    form.select.set_select_field_with_label('Schedules', schedule)
-    form.submit.submit_form()
 
 
 def edit_user(user):
