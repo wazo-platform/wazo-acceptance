@@ -253,13 +253,17 @@ def add_user(data_dict, step=None):
         }
         if 'device_slot' in data_dict:
             line_data['position'] = data_dict['device_slot']
-        if 'max_contacts' in data_dict:
-            line_data['max_contacts'] = data_dict['max_contacts']
         line = world.confd_client.lines.create(line_data)
 
         protocol = data_dict.get('protocol', 'sip')
         if protocol == 'sip':
-            endpoint = world.confd_client.endpoints_sip.create({})
+            endpoint_config = {}
+            max_contacts = data_dict.get('max_contacts')
+            if max_contacts:
+                endpoint_config['options'] = [
+                    ('max_contacts', max_contacts),
+                ]
+            endpoint = world.confd_client.endpoints_sip.create(endpoint_config)
             world.confd_client.lines(line['id']).add_endpoint_sip(endpoint)
         elif protocol == 'sccp':
             endpoint = world.confd_client.endpoints_sccp.create({})
