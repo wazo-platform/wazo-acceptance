@@ -11,7 +11,6 @@ import sys
 import yaml
 import xivo_dao
 
-from xivo_provd_client import new_provisioning_client
 from xivo_acceptance.lettuce import ssh
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
 
@@ -83,8 +82,10 @@ def load_config(extra_config):
             'verify_certificate': False
         },
         'provd': {
-            'rest_port': 8666,
-            'rest_protocol': 'http',
+            'host': DEFAULT_XIVO_HOST,
+            'port': 8666,
+            'https': True,
+            'verify_certificate': False,
         },
         'browser': {
             'enable': True,
