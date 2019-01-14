@@ -1,5 +1,6 @@
 Feature: Provd Proxy
 
+    @skip_old_webi_step
     Scenario: Configure a proxy
         Given I have no proxies configured
         When I configure the following proxies:
