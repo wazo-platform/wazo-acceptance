@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import unicode_literals
@@ -13,8 +13,6 @@ def add_entity(name, display_name):
     entity = get_entity_with_name(name)
     if not entity:
         tenant = world.auth_client.tenants.new(name=name)
-        # Remove the renew_auth_token call when we stop using xivo_admin auth backends
-        auth.renew_auth_token()  # The new tenant uuid is not on our token metadata
         body = {'name': name, 'display_name': display_name, 'tenant_uuid': tenant['uuid']}
         world.confd_client.entities.create(body)
 
