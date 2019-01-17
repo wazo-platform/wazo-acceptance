@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright (C) 2015-2016 Avencall
 # Copyright (C) 2016 Proformatique Inc.
-# SPDX-License-Identifier: GPL-3.0+
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from lettuce import step, world
 from hamcrest import (all_of, assert_that, equal_to, has_entry, has_key, calling, raises)
