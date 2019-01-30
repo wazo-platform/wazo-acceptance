@@ -73,6 +73,12 @@ def setup_auth_token():
     auth.register_for_token_renewal(world.auth_client.set_token)
 
 
+def setup_provd_client():
+    world.provd_client = ProvdClient(**world.config['provd'])
+    world.provd_client.set_token(world.config.get('auth_token'))
+    auth.register_for_token_renewal(world.provd_client.set_token)
+
+
 def setup_tenant():
     entity_name = world.config.get('entity')
     if entity_name:
@@ -113,14 +119,6 @@ def setup_consul():
 
 def setup_logging():
     debug.setup_logging(world.config)
-
-
-@debug.logcall
-def setup_provd():
-    world.provd_client = world.xivo_acceptance_config.provd_client
-    world.provd_client = ProvdClient(**world.config['provd'])
-    world.provd_client.set_token(world.config.get('auth_token'))
-    auth.register_for_token_renewal(world.provd_client.set_token)
 
 
 @debug.logcall
