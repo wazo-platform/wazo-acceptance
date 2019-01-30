@@ -86,6 +86,7 @@ def load_config(extra_config):
             'port': 8666,
             'https': True,
             'verify_certificate': False,
+            'prefix': '/provd',
         },
         'browser': {
             'enable': True,
@@ -202,8 +203,6 @@ class XivoAcceptanceConfig(object):
         self._setup_dao()
         logger.debug("_setup_ssh_client...")
         self._setup_ssh_client()
-        logger.debug("_setup_provd...")
-        self._setup_provd()
 
     def _setup_dao(self):
         xivo_dao.init_db(self._config['db_uri'])
