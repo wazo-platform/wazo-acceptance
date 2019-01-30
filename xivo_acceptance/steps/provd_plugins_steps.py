@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2015 Avencall
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from hamcrest import assert_that, contains_string
@@ -7,6 +7,7 @@ from lettuce import step, world
 
 from xivo_acceptance.action.webi import provd_general as provdg_action_webi
 from xivo_acceptance.action.webi import provd_plugins as provdp_action_webi
+from xivo_acceptance.helpers import provd_helper as provd
 from xivo_acceptance.lettuce import sysutils
 
 STABLE_URL = 'http://provd.wazo.community/plugins/1/stable/'
@@ -14,8 +15,7 @@ STABLE_URL = 'http://provd.wazo.community/plugins/1/stable/'
 
 @step(u'Given a update plugins provd with good url')
 def given_a_update_plugins_provd(step):
-    provdp_action_webi.update_plugin_list(STABLE_URL,
-                                          check_confirmation=False)
+    provd.update_plugin_list(STABLE_URL)
 
 
 @step(u'Given a update plugins provd with bad url')
@@ -37,8 +37,8 @@ def given_the_plugin_group1_is_installed(step, plugin):
 
 @step(u'Given the latest plugin "([^"]*)" is installed')
 def given_the_latest_plugin_group1_is_installed(step, plugin):
-    provdp_action_webi.update_plugin_list(STABLE_URL)
-    provdp_action_webi.install_latest_plugin(plugin)
+    provd.update_plugin_list(STABLE_URL)
+    provd.install_latest_plugin(plugin)
 
 
 @step(u'Given the latest plugin "([^"]*)" for "([^"]*)" is installed')
