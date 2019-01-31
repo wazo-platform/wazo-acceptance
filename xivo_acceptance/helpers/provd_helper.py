@@ -117,6 +117,10 @@ def _find_by(key, value):
 
 def update_plugin_list(url):
     world.provd_client.params.update('plugin_server', url)
+    with world.provd_client.plugins.update() as operation_progress:
+        until.assert_(
+            operation_successful, operation_progress, tries=20, interval=0.5
+        )
 
 
 def get_latest_plugin_name(plugin_name):
