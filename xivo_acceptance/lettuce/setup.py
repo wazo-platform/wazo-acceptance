@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2015-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -13,6 +13,7 @@ from xivo_auth_client import Client as AuthClient
 from wazo_call_logd_client import Client as CallLogdClient
 from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
+from wazo_provd_client import Client as ProvdClient
 
 from xivo_acceptance.helpers import entity_helper
 
@@ -72,6 +73,12 @@ def setup_auth_token():
     auth.register_for_token_renewal(world.auth_client.set_token)
 
 
+def setup_provd_client():
+    world.provd_client = ProvdClient(**world.config['provd'])
+    world.provd_client.set_token(world.config.get('auth_token'))
+    auth.register_for_token_renewal(world.provd_client.set_token)
+
+
 def setup_tenant():
     entity_name = world.config.get('entity')
     if entity_name:
@@ -112,12 +119,6 @@ def setup_consul():
 
 def setup_logging():
     debug.setup_logging(world.config)
-
-
-@debug.logcall
-def setup_provd():
-    world.rest_provd = world.xivo_acceptance_config.rest_provd
-    world.provd_client = world.xivo_acceptance_config.provd_client
 
 
 @debug.logcall

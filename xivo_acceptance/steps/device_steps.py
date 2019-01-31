@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from hamcrest import assert_that
@@ -8,7 +8,6 @@ from hamcrest import is_
 from hamcrest import is_not
 from hamcrest import none
 from lettuce import step, world
-from xivo_acceptance.action.webi import provd_plugins
 from xivo_acceptance.action.webi import device as device_action_webi
 from xivo_acceptance.helpers import device_helper, provd_helper, line_read_helper
 from xivo_acceptance.lettuce import common
@@ -24,7 +23,7 @@ def given_i_have_the_following_devices(step):
     for deviceinfo in step.hashes:
         if 'latest plugin of' in deviceinfo:
             deviceinfo = dict(deviceinfo)
-            deviceinfo['plugin'] = provd_plugins.get_latest_plugin_name(deviceinfo['latest plugin of'])
+            deviceinfo['plugin'] = provd_helper.get_latest_plugin_name(deviceinfo['latest plugin of'])
             del deviceinfo['latest plugin of']
         device = device_helper.add_or_replace_device(deviceinfo)
         world.confd_client.devices.autoprov(device['id'])

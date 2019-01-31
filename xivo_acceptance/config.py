@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2014-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2014-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import print_function
@@ -11,7 +11,6 @@ import sys
 import yaml
 import xivo_dao
 
-from xivo_provd_client import new_provisioning_client
 from xivo_acceptance.lettuce import ssh
 from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
 
@@ -83,8 +82,11 @@ def load_config(extra_config):
             'verify_certificate': False
         },
         'provd': {
-            'rest_port': 8666,
-            'rest_protocol': 'http',
+            'host': DEFAULT_XIVO_HOST,
+            'port': 8666,
+            'https': True,
+            'verify_certificate': False,
+            'prefix': '/provd',
         },
         'browser': {
             'enable': True,
@@ -201,8 +203,6 @@ class XivoAcceptanceConfig(object):
         self._setup_dao()
         logger.debug("_setup_ssh_client...")
         self._setup_ssh_client()
-        logger.debug("_setup_provd...")
-        self._setup_provd()
 
     def _setup_dao(self):
         xivo_dao.init_db(self._config['db_uri'])
@@ -211,13 +211,3 @@ class XivoAcceptanceConfig(object):
         self.ssh_client_xivo = ssh.SSHClient(hostname=self._config['xivo_host'],
                                              login=self._config['ssh_login'])
 
-    def _setup_provd(self):
-        provd_config_obj = RestConfiguration(protocol=self._config['provd']['rest_protocol'],
-                                             hostname=self._config['xivo_host'],
-                                             port=self._config['provd']['rest_port'],
-                                             content_type='application/vnd.proformatique.provd+json')
-        self.rest_provd = WsUtils(provd_config_obj)
-
-        provd_url = "http://{host}:{port}/provd".format(host=self._config['xivo_host'],
-                                                        port=self._config['provd']['rest_port'])
-        self.provd_client = new_provisioning_client(provd_url)
