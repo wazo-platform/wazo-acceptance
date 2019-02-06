@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import unicode_literals
@@ -339,6 +339,7 @@ def enable_selected_lines():
     ActionChains(world.browser).move_to_element(menu_button).perform()
 
     enable_button = world.browser.find_element_by_id("toolbar-advanced-menu-enable")
+    WebDriverWait(world.browser, world.timeout).until(visibility_of(enable_button))
     enable_button.click()
 
 
