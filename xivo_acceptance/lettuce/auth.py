@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2016-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -15,7 +15,6 @@ ONE_HOUR = 3600
 def new_auth_token():
     try:
         token_data = world.config['token_data'] = world.auth_client.token.new(
-            'wazo_user',
             expiration=6*ONE_HOUR,
         )
         token_id = token_data['token']

@@ -181,7 +181,7 @@ def add_user_with_infos(user_data, step=None):
             password=user['client_password'],
             verify_certificate=False,
         )
-        token_data = auth_client.token.new(backend='wazo_user', expiration=120)
+        token_data = auth_client.token.new(expiration=120)
         step.scenario.user_tokens[fullname] = token_data['token']
 
     if user.get('schedule'):
