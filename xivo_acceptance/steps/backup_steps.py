@@ -4,10 +4,14 @@
 
 import errno
 import os
-import time
+import logging
+
 from lettuce import step, world
 from hamcrest import assert_that, greater_than
 from xivo_acceptance.lettuce import assets, auth, common
+from xivo_test_helpers import until
+
+logger = logging.getLogger(__name__)
 
 
 @step(u'Given there is a backup file "([^"]*)"')
@@ -61,17 +65,18 @@ def when_i_execute_database_restore_command(step):
 @step(u'Then a non-empty file "([^"]*)" is present on disk')
 def then_a_non_empty_file_is_present_on_disk(step, filename):
     path = os.path.join('/', 'tmp', 'downloads', filename)
-    filesize = 0
-    for _ in range(30):
-        time.sleep(1)
-        is_file = os.path.isfile(path)
-        if is_file:
-            try:
-                filesize = os.path.getsize(path)
-                if filesize > 0:
-                    break
-            except OSError:
-                raise Exception("Unknown file : %s" % path)
 
-    assert_that(filesize, greater_than(0))
+    def file_is_not_empty(path):
+        try:
+            filesize = os.path.getsize(path)
+        except OSError as e:
+            if e.errno == errno.ENOENT:  # file not found
+                logger.debug('Error when getting file size: %s', e)
+                raise AssertionError('file not found: {}'.format(path))
+            raise
+
+        assert_that(filesize, greater_than(0))
+
+    until.assert_(file_is_not_empty, path, timeout=60)
+
     os.remove(path)
