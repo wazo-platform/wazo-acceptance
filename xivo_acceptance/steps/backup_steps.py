@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import errno
 import os
 import time
 from lettuce import step, world
@@ -13,6 +14,17 @@ from xivo_acceptance.lettuce import assets, auth, common
 def given_there_is_a_backup_file(step, filename):
     command = 'dd if=/dev/zero of=/var/backups/xivo/%s bs=1024 count=200240' % filename
     world.ssh_client_xivo.call([command])
+
+
+@step(u'Given there is no downloaded file "([^"]*)"')
+def given_there_is_no_downloaded_file(step, filename):
+    path = os.path.join('/', 'tmp', 'downloads', filename)
+    try:
+        os.unlink(path)
+    except OSError as e:
+        if e.errno == errno.ENOENT:  # no such file
+            return
+        raise
 
 
 @step(u'Given the asset file "([^"]*)" is copied on the server into "([^"]*)"')
