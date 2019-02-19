@@ -10,10 +10,11 @@ import urllib
 from lettuce.registry import world
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import (
     staleness_of,
-    visibility_of,
+    visibility_of_element_located,
 )
 
 from form.checkbox import Checkbox
@@ -313,11 +314,10 @@ def disable_selected_lines():
     common_action_webi.reset_focus()
 
     menu_button = world.browser.find_element_by_id("toolbar-bt-advanced")
-    WebDriverWait(world.browser, world.timeout).until(visibility_of(menu_button))
     ActionChains(world.browser).move_to_element(menu_button).perform()
 
+    WebDriverWait(world.browser, world.timeout).until(visibility_of_element_located((By.ID, "toolbar-advanced-menu-disable")))
     disable_button = world.browser.find_element_by_id("toolbar-advanced-menu-disable")
-    WebDriverWait(world.browser, world.timeout).until(visibility_of(disable_button))
     disable_button.click()
 
 
@@ -338,8 +338,8 @@ def enable_selected_lines():
     menu_button = world.browser.find_element_by_id("toolbar-bt-advanced")
     ActionChains(world.browser).move_to_element(menu_button).perform()
 
+    WebDriverWait(world.browser, world.timeout).until(visibility_of_element_located((By.ID, "toolbar-advanced-menu-enable")))
     enable_button = world.browser.find_element_by_id("toolbar-advanced-menu-enable")
-    WebDriverWait(world.browser, world.timeout).until(visibility_of(enable_button))
     enable_button.click()
 
 
@@ -355,10 +355,10 @@ def go_to_tab(tab_label, ss_tab_label=None):
     common_action_webi.reset_focus()
     tab_button = world.browser.find_element_by_xpath("//div[@class='tab']//a[contains(.,'%s')]" % tab_label)
     if ss_tab_label:
-        ss_tab = tab_button.find_element_by_xpath("//div[@class='stab']//a[contains(.,'%s')]" % ss_tab_label)
-        WebDriverWait(world.browser, world.timeout).until(visibility_of(tab_button))
         ActionChains(world.browser).move_to_element(tab_button).perform()
-        WebDriverWait(world.browser, world.timeout).until(visibility_of(ss_tab))
+        sub_tab_xpath = "//div[@class='stab']//a[contains(.,'%s')]"
+        WebDriverWait(world.browser, world.timeout).until(visibility_of_element_located((By.XPATH, sub_tab_xpath)))
+        ss_tab = tab_button.find_element_by_xpath("//div[@class='stab']//a[contains(.,'%s')]" % ss_tab_label)
         ss_tab.click()
     else:
         tab_button.click()
