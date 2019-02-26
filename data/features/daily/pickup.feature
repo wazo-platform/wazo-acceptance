@@ -20,8 +20,8 @@
       | Wally     |          |   1002 | default | sip      |
       | Alice     |          |   1003 | default | sip      |
      Given there are pickups:
-      | name  | intercepting users | intercepted users |
-      | first | Alice              | Wally             |
+      | name  | user_interceptor | user_target |
+      | first | Alice            | Wally       |
      Given "Dilbert" calls "1002"
      Given "Wally" is ringing
      When "Alice" calls "*8"
@@ -39,8 +39,8 @@
       | firstname |
       | Dogbert   |
      Given there are pickups:
-      | name  | intercepting groups | intercepted users |
-      | first | hr                  | Wally             |
+      | name  | group_interceptor | user_target |
+      | first | hr                | Wally       |
      Given "Dilbert" calls "1002"
      Given "Wally" is ringing
      When "Dogbert" calls "*8"
@@ -58,8 +58,8 @@
       | name | display name | number | context | users_number |
       | eng  | Engineering  |   3001 | default |         1003 |
      Given there are pickups:
-      | name  | intercepting queues | intercepted users |
-      | first | eng                 | Wally             |
+      | name  | intercepting queues | user_target |
+      | first | eng                 | Wally       |
      Given "Dilbert" calls "1002"
      Given "Wally" is ringing
      When "Asok" calls "*8"
@@ -77,8 +77,8 @@
       | firstname |
       | Dogbert   |
      Given there are pickups:
-      | name  | intercepted groups | intercepting users |
-      | first | hr                 | Wally              |
+      | name  | group_target | user_interceptor |
+      | first | hr           | Wally            |
      Given "Dilbert" calls "1003"
      Given "Dogbert" is ringing
      When "Wally" calls "*8"
@@ -96,8 +96,8 @@
       | name | display name | number | context | users_number |
       | eng  | Engineering  |   3001 | default |         1003 |
      Given there are pickups:
-      | name  | intercepted queues | intercepting users |
-      | first | eng                | Wally              |
+      | name  | intercepted queues | user_interceptor |
+      | first | eng                | Wally            |
      Given "Dilbert" calls "1003"
      Given "Asok" is ringing
      When "Wally" calls "*8"
