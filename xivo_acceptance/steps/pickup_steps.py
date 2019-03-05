@@ -1,27 +1,59 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from lettuce import step
-
-from xivo_acceptance.action.webi import pickup as pickup_action_webi
-from xivo_acceptance.lettuce import common, form
+from lettuce import step, world
 
 
 @step(u'Given there are pickups:$')
 def given_there_are_pickup(step):
     for data in step.hashes:
         _delete_pickup(data['name'])
-        pickup_action_webi.add_pickup(data)
+        pickup_args = {
+            'name': data['name']
+        }
+        call_pickup = world.confd_client.call_pickups.create(pickup_args)
+
+        user = _find_user_by_firstname(data.get('user_interceptor'))
+        if user:
+            world.confd_client.call_pickups(call_pickup['id']).update_user_interceptors([user])
+
+        group = _find_group_by_name(data.get('group_interceptor'))
+        if group:
+            world.confd_client.call_pickups(call_pickup['id']).update_group_interceptors([group])
+
+        user = _find_user_by_firstname(data.get('user_target'))
+        if user:
+            world.confd_client.call_pickups(call_pickup['id']).update_user_targets([user])
+
+        group = _find_group_by_name(data.get('group_target'))
+        if group:
+            world.confd_client.call_pickups(call_pickup['id']).update_group_targets([group])
 
 
 def _delete_pickup(name):
-    common.open_url('pickup')
-    _pickup_search(name)
-    common.remove_element_if_exist('pickup', name)
-    _pickup_search('')
+    call_pickups = world.confd_client.call_pickups.list(name=name)['items']
+    for call_pickup in call_pickups:
+        world.confd_client.call_pickups.delete(call_pickup['id'])
 
 
-def _pickup_search(term):
-    form.input.set_text_field_with_id('it-toolbar-search', term)
-    form.submit.submit_form('it-toolbar-subsearch')
+def _find_user_by_firstname(firstname):
+    if not firstname:
+        return
+
+    users = world.confd_client.users.list(firstname=firstname)['items']
+    for user in users:
+        # cannot search by empty/none lastname with confd
+        if user['lastname']:
+            continue
+
+        return user
+
+
+def _find_group_by_name(name):
+    if not name:
+        return
+
+    groups = world.confd_client.groups.list(name=name)['items']
+    for group in groups:
+        return group
