@@ -28,7 +28,6 @@ def xivo_acceptance_lettuce_before_all():
 def xivo_acceptance_lettuce_before_each_scenario(scenario):
     scenario.phone_register = PhoneRegister()
     scenario.user_tokens = {}
-    setup.setup_browser()
     world.deleted_device = None
 
 
@@ -92,8 +91,6 @@ def set_xivo_target(extra_config):
     setup.setup_tenant()
     logger.debug("setup consul...")
     setup.setup_consul()
-    logger.debug("setup display...")
-    setup.setup_display()
     logger.debug("setup xivo configured...")
     setup.setup_xivo_configured()
     world.dummy_ip_address = '10.99.99.99'

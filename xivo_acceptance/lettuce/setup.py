@@ -20,8 +20,6 @@ from xivo_acceptance.helpers import entity_helper
 from . import auth
 from . import debug
 from ..config import load_config, XivoAcceptanceConfig
-from .display import XiVODisplay
-from .xivobrowser import XiVOBrowser
 
 logger = logging.getLogger(__name__)
 
@@ -99,15 +97,6 @@ def setup_tenant():
     world.confd_client.set_tenant(tenant_uuid)
 
 
-@debug.logcall
-def setup_browser():
-    world.browser = XiVOBrowser(world.config['debug']['selenium'])
-
-
-def setup_display():
-    world.display = XiVODisplay()
-
-
 def setup_config(extra_config):
     world.config = load_config(extra_config)
 
@@ -128,13 +117,6 @@ def setup_ssh_client():
 
 def setup_xivo_acceptance_config():
     world.xivo_acceptance_config = XivoAcceptanceConfig(world.config)
-
-
-@debug.logcall
-def teardown_browser():
-    world.browser.quit()
-    if hasattr(world, 'display'):
-        world.display.get_instance().stop()
 
 
 def setup_xivo_configured():
