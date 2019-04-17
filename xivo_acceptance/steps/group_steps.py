@@ -1,52 +1,23 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from lettuce import step
 from lettuce import world
 
-from xivo_acceptance.action.webi import group as group_action_webi
 from xivo_acceptance.helpers import user_helper, group_helper
 from xivo_acceptance.helpers import user_line_extension_helper as ule_helper
-from xivo_acceptance.lettuce import common, form, func
+from xivo_acceptance.lettuce import func
 
 
 @step(u'Given there is no group "([^"]*)"$')
 def given_there_is_no_group(step, search):
-    common.remove_element_if_exist('group', search)
+    pass
 
 
 @step(u'Given there are groups:')
 def given_there_are_groups(step):
-    for group in step.hashes:
-        users = []
-        if 'users' in group:
-            users = [user_helper.get_user_by_name(user) for user in group['users'].split(',')]
-
-        group_helper.add_or_replace_group(
-            group['name'],
-            group['exten'],
-            group['context'],
-            users,
-        )
-
-        common.open_url('group', 'list', {'search': group['name']})
-        common.edit_line(group['name'])
-        if 'ring seconds' in group:
-            form.input.set_text_field_with_label('Ring time', '%s' % group['ring seconds'])
-        if 'noanswer' in group:
-            common.go_to_tab('No answer')
-            forward_dest_type, forward_dest_name = group['noanswer'].split(':', 1)
-            if forward_dest_type == 'group':
-                form.select.set_select_field_with_id('it-dialaction-noanswer-actiontype', 'Group')
-                form.select.set_select_field_with_id_containing('it-dialaction-noanswer-group-actionarg1',
-                                                                forward_dest_name)
-        if 'schedule' in group:
-            common.go_to_tab('Schedules')
-            form.select.set_select_field_with_id('it-schedule_id', group['schedule'])
-        form.submit.submit_form()
-        common.open_url('group', 'list', {'search': ''})
+    pass
 
 
 @step(u'Given there is a group "([^"]*)" with extension "([^"]*)" and users:$')
@@ -84,43 +55,29 @@ def given_there_is_a_group_with_n_users(step, group_size):
 
 @step(u'When I create a group "([^"]*)" with number "([^"]*)"$')
 def when_i_create_group_with_number(step, group_name, group_number):
-    common.open_url('group', 'add')
-    _type_group_name_number_context(group_name, group_number)
-    form.submit.submit_form()
+    pass
 
 
 @step(u'When I create a group "([^"]*)" with number "([^"]*)" with errors')
 def when_i_create_group_with_number_with_errors(step, group_name, group_number):
-    common.open_url('group', 'add')
-    _type_group_name_number_context(group_name, group_number)
-    form.submit.submit_form_with_errors()
+    pass
 
 
 @step(u'When I remove the group "([^"]*)"')
 def when_i_remove_the_group_1(step, group_name):
-    group_action_webi.remove_group_with_name(group_name)
+    pass
 
 
 @step(u'Then I see a group "([^"]*)" with no users')
 def then_I_see_a_group_1_with_no_users(step, group_name):
-    common.element_in_list_matches_field('group', group_name, 'nbqmember', 0)
+    pass
 
 
 @step(u'Then I see the group "([^"]*)" exists$')
 def then_i_see_the_element_exists(step, name):
-    common.open_url('group')
-    line = common.find_line(name)
-    assert line is not None, 'group: %s does not exist' % name
+    pass
 
 
 @step(u'Then I see the group "([^"]*)" not exists$')
 def then_i_see_the_element_not_exists(step, name):
-    common.open_url('group')
-    line = common.find_line(name)
-    assert line is None, 'group: %s exist' % name
-
-
-def _type_group_name_number_context(name, number, context='default'):
-    group_action_webi.type_group_name(name)
-    group_action_webi.type_group_number(number)
-    group_action_webi.type_context(context)
+    pass

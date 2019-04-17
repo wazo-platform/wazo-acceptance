@@ -1,27 +1,20 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import time
 import re
 
-from hamcrest import assert_that, has_entries
 from lettuce import step, world
-from selenium.common.exceptions import NoSuchElementException
 
-from xivo_acceptance.action.webi import line as line_action_webi
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.helpers import line_write_helper
 from xivo_acceptance.helpers import sip_config
 from xivo_acceptance.helpers import sip_phone
-from xivo_acceptance.lettuce import common, form
-from xivo_acceptance.lettuce.form.checkbox import Checkbox
-from xivo_acceptance.lettuce.widget.codec import CodecWidget
 
 
 @step(u'Given there are no custom lines with interface beginning with "([^"]*)"')
 def given_there_are_no_custom_lines_with_interface_beginning_with_1(step, interface_start):
-    common.remove_element_if_exist('line', interface_start)
+    pass
 
 
 @step(u'Given there are no SIP lines with username "([^"]*)"')
@@ -33,34 +26,12 @@ def given_there_are_no_sip_lines_with_infos(step, username):
 
 @step(u'(?:Given|When) I set the following options in line "(\d+)@(\w+)":')
 def given_i_set_the_following_options_in_line_1(step, line_number, line_context):
-    line = line_read_helper.find_with_exten_context(line_number, line_context)
-    common.open_url('line', 'edit', {'id': line['id']})
-
-    for line_data in step.hashes:
-        for key, value in line_data.iteritems():
-            if key == 'NAT':
-                common.go_to_tab('General')
-                form.select.set_select_field_with_label('NAT', value)
-            elif key == 'username':
-                form.input.set_text_field_with_label('Username', value)
-            else:
-                raise Exception('%s is not a valid key' % key)
-
-    form.submit.submit_form()
+    pass
 
 
 @step(u'Given the line "(\d+)@(\w+)" is disabled')
 def given_the_line_group1_is_disabled(step, extension, context):
-    common.open_url('line')
-    _search_for_line(extension, context)
-    common.click_checkbox_for_all_lines()
-    common.disable_selected_lines()
-    time.sleep(world.timeout)  # wait for dialplan to finish reloading
-
-
-def _search_for_line(extension, context):
-    form.input.edit_text_field_with_id('it-toolbar-search', extension)
-    form.select.set_select_field_with_id('it-toolbar-context', context)
+    pass
 
 
 @step(u'Given I have the following lines:')
@@ -94,84 +65,42 @@ def given_softphone_is_registered_on_sip_line(step, name):
 
 @step(u'When I customize line "([^"]*)" codecs to:')
 def when_i_customize_line_codecs_to(step, number):
-    codecs = (entry['codec'] for entry in step.hashes)
-    _add_codec_list_to_line(codecs, number)
+    pass
 
 
 @step(u'When I disable line codecs customization for line "([^"]*)"')
 def when_i_disable_line_codecs_customization_for_line(step, number):
-    line = line_read_helper.find_with_exten_context(number, 'default')
-    common.open_url('line', 'edit', {'id': line['id']})
-    _open_codec_page()
-    Checkbox.from_label("Customize codecs:").uncheck()
-    form.submit.submit_form()
+    pass
 
 
 @step(u'When I add a SIP line with infos:')
 def when_i_add_a_sip_line_with_infos(step):
-    for line_infos in step.hashes:
-        common.open_url('line', 'add', {'proto': 'sip'})
-        world.id = _get_line_name()
-        if 'context' in line_infos:
-            context = line_infos['context']
-            form.select.set_select_field_with_id_containing('it-protocol-context', context)
-        if 'custom_codecs' in line_infos:
-            codec = line_infos['custom_codecs']
-            _add_custom_codec(codec)
-        form.submit.submit_form()
-
-
-def _get_line_name():
-    return world.browser.find_element_by_id('it-protocol-name').get_attribute('value')
-
-
-def _add_custom_codec(codec):
-    _open_codec_page()
-    codec_widget = CodecWidget()
-    codec_widget.add(codec)
+    pass
 
 
 @step(u'When I add a custom line with infos:')
 def when_i_add_a_custom_line(step):
-    for line in step.hashes:
-        common.open_url('line', 'add', {'proto': 'custom'})
-        if 'interface' in line:
-            form.input.set_text_field_with_id('it-protocol-interface', line['interface'])
-            form.submit.submit_form()
+    pass
 
 
 @step(u'When I disable custom codecs for this line')
 def when_i_disable_custom_codecs_for_this_line(step):
-    line_action_webi.search_line_number(world.id)
-    common.edit_line(world.id)
-    _open_codec_page()
-    Checkbox.from_label("Customize codecs:").uncheck()
-    form.submit.submit_form()
+    pass
 
 
 @step(u'When I remove this line')
 def when_i_remove_this_line(step):
-    common.open_url('line', 'search', {'search': world.id})
-    common.remove_line(world.id)
-    common.open_url('line', 'search', {'search': ''})
+    pass
 
 
 @step(u'When I edit the line "([^"]*)"')
 def when_i_edit_the_line_1(step, linenumber):
-    line = line_read_helper.find_with_exten_context(linenumber, 'default')
-    common.open_url('line', 'edit', {'id': line['id']})
+    pass
 
 
 @step(u'Then I see a line with infos:')
 def then_i_see_a_line_with_infos(step):
-    expected_line = step.hashes[0]
-    if 'device' in expected_line:
-        expected_line['device'] = True if expected_line['device'] == 'True' else False
-    number = expected_line['number']
-    common.open_url('line', 'search', {'search': number})
-    actual_line = line_action_webi.get_line_list_entry(number)
-    assert_that(actual_line, has_entries(expected_line))
-    common.open_url('user', 'search', {'search': ''})
+    pass
 
 
 def check_codec_for_sip_line(peer, codec):
@@ -194,45 +123,19 @@ def then_the_codec_does_not_appear_after_typing_sip_show_peer_in_asterisk(step, 
 
 @step(u'Then this line is displayed in the list')
 def then_this_line_is_displayed_in_the_list(step):
-    common.open_url('line', 'search', {'search': world.id})
-    assert common.find_line(world.id) is not None
-    common.open_url('line', 'search', {'search': ''})
+    pass
 
 
 @step(u'Then this line is not displayed in the list')
 def then_this_line_is_not_displayed_in_the_list(step):
-    common.open_url('line', 'search', {'search': world.id})
-    assert common.find_line(world.id) is None
-    common.open_url('line', 'search', {'search': ''})
+    pass
 
 
 @step(u'Then I see the line "([^"]*)" exists$')
 def then_i_see_the_element_exists(step, name):
-    common.open_url('line', 'search', {'search': name})
-    line = common.find_line(name)
-    common.open_url('line', 'search', {'search': ''})
-    assert line is not None, 'Line: %s does not exist' % name
+    pass
 
 
 @step(u'Then I see the line "([^"]*)" not exists$')
 def then_i_see_the_element_not_exists(step, name):
-    common.open_url('line', 'search', {'search': name})
-    line = common.find_line(name)
-    common.open_url('line', 'search', {'search': ''})
-    assert line is None, 'Line: %s exist' % name
-
-
-def _add_codec_list_to_line(codecs, exten):
-    line = line_read_helper.get_with_exten_context(exten, 'default')
-    common.open_url('line', 'edit', {'id': line['id']})
-    for codec in codecs:
-        _add_custom_codec(codec)
-    form.submit.submit_form()
-
-
-def _open_codec_page():
-    try:
-        common.go_to_tab('General')
-    except NoSuchElementException:
-        # SCCP line has no Signalling tab
-        return
+    pass

@@ -12,7 +12,6 @@ import yaml
 import xivo_dao
 
 from xivo_acceptance.lettuce import ssh
-from xivo_acceptance.lettuce.ws_utils import RestConfiguration, WsUtils
 
 
 logger = logging.getLogger(__name__)
@@ -88,15 +87,6 @@ def load_config(extra_config):
             'verify_certificate': False,
             'prefix': '/provd',
         },
-        'browser': {
-            'enable': True,
-            'visible': False,
-            'timeout': 5,
-            'resolution': '1024x768',
-            'remoting_enabled': False,
-            'remoting_host': 'localhost',
-            'remoting_port': '4444',
-        },
         'xivo_client': {
             'login_timeout': 5
         },
@@ -109,7 +99,6 @@ def load_config(extra_config):
             'acceptance': False,
             'global': False,
             'linphone': False,
-            'selenium': False,
             'cticlient': False,
             'easyprocess': False,
             'pyvirtualdisplay': False
@@ -210,4 +199,3 @@ class XivoAcceptanceConfig(object):
     def _setup_ssh_client(self):
         self.ssh_client_xivo = ssh.SSHClient(hostname=self._config['xivo_host'],
                                              login=self._config['ssh_login'])
-

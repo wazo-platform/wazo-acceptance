@@ -1,25 +1,15 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
 
 from hamcrest import assert_that, equal_to
 from lettuce.registry import world
-from selenium.webdriver.support.select import Select
-from xivo_acceptance.lettuce import common, sysutils, xivoclient, form
+from xivo_acceptance.lettuce import sysutils, xivoclient
 
 SORT_ASCENDING = 0
 SORT_DESCENDING = 1
-
-
-EVENT_ELEMENT_MAP = {
-    'Dial': 'it-dial',
-    'Link': 'it-link',
-    'Unlink': 'it-unlink',
-    'Incoming DID': 'it-incomingdid',
-    'Hangup': 'it-hangup',
-}
 
 
 def configure_client(conf_dict):
@@ -55,8 +45,6 @@ def configure_client(conf_dict):
         }
 
     """
-    if 'main_server_address' not in conf_dict:
-        conf_dict['main_server_address'] = common.get_host_address()
     if 'main_server_port' not in conf_dict:
         conf_dict['main_server_port'] = 5003
     if 'enable_multiple_instances' not in conf_dict:
@@ -134,63 +122,6 @@ def get_infos_in_custom_sheet():
     return [{u'widget_name': key, u'value': value} for key, value in response['return_value'].iteritems()]
 
 
-def set_call_form_model_on_event(call_form_name, event):
-    common.open_url('sheetevent')
-
-    for name, element in EVENT_ELEMENT_MAP.iteritems():
-        select_box = world.browser.find_element_by_id(element)
-
-        if name == event:
-            Select(select_box).select_by_visible_text(call_form_name)
-        else:
-            Select(select_box).select_by_index(0)
-
-    form.submit.submit_form()
-
-
-def add_call_form_model(call_form_name, variables):
-    common.remove_element_if_exist('sheet', call_form_name, column='Model')
-    common.open_url('sheet', 'add')
-    form.input.set_text_field_with_label('Name :', call_form_name)
-    common.go_to_tab('Sheet')
-    for variable in variables:
-        _add_sheet_variable(variable)
-    form.submit.submit_form()
-
-
-def _add_sheet_variable(variable_name):
-    var_config = {
-        'title': variable_name,
-        'display_type': 'text',
-        'default_value': '',
-        'display_value': '{%s}' % variable_name,
-    }
-    add_sheet_field(**var_config)
-
-
-def add_sheet_field(title, display_type, default_value, display_value):
-    add_button = world.browser.find_element_by_id('add_variable')
-    add_button.click()
-    new_variable_line = world.browser.find_element_by_xpath(
-        "//tbody[@id='screens']/tr[last()]"
-    )
-
-    def _set(column, value):
-        xpaths = [
-            ".//input[@name='screencol1[]']",
-            ".//select[@name='screencol2[]']",
-            ".//input[@name='screencol3[]']",
-            ".//input[@name='screencol4[]']",
-        ]
-        widget = new_variable_line.find_element_by_xpath(xpaths[column])
-        if column in [0, 2, 3]:
-            widget.send_keys(value)
-        else:
-            Select(widget).select_by_visible_text(value)
-
-    map(_set, xrange(4), [title, display_type, default_value, display_value])
-
-
 def set_infos_in_custom_sheet(values_dict):
     response = xivoclient.exec_command('set_infos_in_custom_sheet', values_dict)
     assert_that(response['test_result'], equal_to('passed'))
@@ -236,18 +167,6 @@ def log_in_the_xivo_client():
         identity_infos = get_identity_infos()
         world.xc_identity_infos = identity_infos['return_value']
     return res
-
-
-def log_user_in_client(username, password):
-    conf_dict = {
-        'main_server_address': common.get_host_address(),
-        'main_server_port': 5003,
-        'login': username,
-        'password': password,
-        'agent_option': 'no',
-    }
-    configure_client(conf_dict)
-    return log_in_the_xivo_client()
 
 
 def restart_server():

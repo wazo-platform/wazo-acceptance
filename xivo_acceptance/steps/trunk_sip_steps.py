@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from lettuce import step, world
 
 from xivo_acceptance.helpers import trunksip_helper
-from xivo_acceptance.lettuce import common, form
 
 
 @step(u'Given there is no trunksip "([^"]*)"')
@@ -33,13 +31,9 @@ def when_i_remove_the_trunksip(step, name):
 
 @step(u'When I create a trunksip with name "([^"]*)" in the webi')
 def when_i_create_a_trunksip_with_name_and_trunk_in_the_webi(step, name):
-    common.open_url('trunksip', 'add')
-    input_name = world.browser.find_element_by_id('it-protocol-name', 'trunksip form not loaded')
-    input_name.send_keys(name)
-    form.submit.submit_form()
+    pass
 
 
 @step(u'When I remove the trunksip "([^"]*)" in the webi')
 def when_i_remove_the_trunksip_in_the_webi(step, name):
-    common.open_url('trunksip', 'list')
-    common.remove_line(name)
+    pass

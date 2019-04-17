@@ -2,11 +2,8 @@
 # Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from hamcrest import assert_that, contains_string
-from lettuce import step, world
+from lettuce import step
 
-from xivo_acceptance.action.webi import provd_general as provdg_action_webi
-from xivo_acceptance.action.webi import provd_plugins as provdp_action_webi
 from xivo_acceptance.helpers import provd_helper as provd
 from xivo_acceptance.lettuce import sysutils
 
@@ -20,19 +17,17 @@ def given_a_update_plugins_provd(step):
 
 @step(u'Given a update plugins provd with bad url')
 def given_a_update_plugins_provd_with_bad_url(step):
-    provdp_action_webi.update_plugin_list('http://provd.wazo.community/plugins/1/lol/',
-                                          check_confirmation=False)
+    pass
 
 
 @step(u'Given there\'s no plugins "([^"]*)" installed')
 def given_there_s_no_plugins_group1_installed(step, plugin):
-    provdp_action_webi.uninstall_plugins(plugin)
+    pass
 
 
 @step(u'Given the plugin "([^"]*)" is installed')
 def given_the_plugin_group1_is_installed(step, plugin):
-    provdp_action_webi.update_plugin_list(STABLE_URL)
-    provdp_action_webi.install_plugin(plugin)
+    pass
 
 
 @step(u'Given the latest plugin "([^"]*)" is installed')
@@ -43,8 +38,7 @@ def given_the_latest_plugin_group1_is_installed(step, plugin):
 
 @step(u'Given the latest plugin "([^"]*)" for "([^"]*)" is installed')
 def given_the_latest_plugin_group1_for_group2_is_installed(step, plugin, model):
-    provdp_action_webi.update_plugin_list(STABLE_URL)
-    provdp_action_webi.install_latest_plugin(plugin, model)
+    pass
 
 
 @step(u'Given the provisioning plugin cache has been cleared')
@@ -54,35 +48,29 @@ def given_the_provisioning_plugin_cache_has_been_cleared(step):
 
 @step(u'Given the plugin list has been updated')
 def given_the_plugin_list_has_been_updated(step):
-    provdp_action_webi.update_plugin_list(STABLE_URL)
+    pass
 
 
 @step(u'When I install the latest plugin "([^"]*)"')
 def when_i_install_the_latest_plugin_group1(step, plugin):
-    provdp_action_webi.install_latest_plugin(plugin)
+    pass
 
 
 @step(u'When I install the "([^"]*)" firmware for the latest plugin "([^"]*)"$')
 def when_i_install_the_group1_firmware(step, firmware, plugin_prefix):
-    plugin_name = provdp_action_webi.get_latest_plugin_name(plugin_prefix)
-    provdp_action_webi.install_firmware(plugin_name, firmware)
+    pass
 
 
 @step(u'Then plugins list successfully updated')
 def then_plugins_list_successfully_updated(step):
-    assert provdp_action_webi.plugins_successfully_updated()
+    pass
 
 
 @step(u'Then plugins list has a error during update')
 def then_plugins_list_has_error_during_update(step):
-    assert provdp_action_webi.plugins_error_during_update()
-    provdg_action_webi.update_plugin_server_url(STABLE_URL)
+    pass
 
 
 @step(u'Then the firmware is successfully installed')
 def then_the_group1_firmware_is_successfully_installed(step):
-    xpath = "//div[@class[contains(.,'xivo-messages')]]//li"
-    message = world.browser.find_element_by_xpath(xpath).text
-
-    expected = "successfully installed"
-    assert_that(message, contains_string(expected), "firmware was not successfully installed")
+    pass

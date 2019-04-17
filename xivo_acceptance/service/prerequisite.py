@@ -7,7 +7,6 @@ import logging
 from lettuce import world
 
 from xivo_acceptance.helpers import context_helper
-from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import setup
 from xivo_acceptance.lettuce import sysutils
 from xivo_acceptance.lettuce.assets import copy_asset_to_server
@@ -37,64 +36,56 @@ def run(extra_config):
 
     setup.setup_xivo_configured()
 
-    setup.setup_display()
-    setup.setup_browser()
-    try:
-        logger.debug('Configuring CA certificates')
-        _configure_ca_certificates()
+    logger.debug('Configuring CA certificates')
+    _configure_ca_certificates()
 
-        logger.debug('Configuring Consul')
-        _configure_consul()
+    logger.debug('Configuring Consul')
+    _configure_consul()
 
-        logger.debug('Configuring PostgreSQL on XiVO')
-        _configure_postgresql()
+    logger.debug('Configuring PostgreSQL on XiVO')
+    _configure_postgresql()
 
-        logger.debug('Configuring RabbitMQ on XiVO')
-        _configure_rabbitmq()
+    logger.debug('Configuring RabbitMQ on XiVO')
+    _configure_rabbitmq()
 
-        logger.debug('Configuring xivo-agid on XiVO')
-        _allow_agid_listen_on_all_interfaces()
+    logger.debug('Configuring xivo-agid on XiVO')
+    _allow_agid_listen_on_all_interfaces()
 
-        logger.debug('Configuring Provd REST API on XiVO')
-        _allow_provd_listen_on_all_interfaces()
+    logger.debug('Configuring Provd REST API on XiVO')
+    _allow_provd_listen_on_all_interfaces()
 
-        logger.debug('Installing packages')
-        _install_packages(['tcpflow'])
+    logger.debug('Installing packages')
+    _install_packages(['tcpflow'])
 
-        logger.debug('Installing chan_test (module for asterisk)')
-        _install_chan_test()
+    logger.debug('Installing chan_test (module for asterisk)')
+    _install_chan_test()
 
-        logger.debug('Installing core_dump program')
-        _install_core_dump()
+    logger.debug('Installing core_dump program')
+    _install_core_dump()
 
-        logger.debug('Adding context')
-        context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
-        context_helper.update_contextnumbers_user('statscenter', 1000, 1100)
-        context_helper.update_contextnumbers_user('default', 1000, 1999)
-        context_helper.update_contextnumbers_group('default', 2000, 2999)
-        context_helper.update_contextnumbers_queue('default', 3000, 3999)
-        context_helper.update_contextnumbers_meetme('default', 4000, 4999)
-        context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
+    logger.debug('Adding context')
+    context_helper.update_contextnumbers_queue('statscenter', 5000, 5100)
+    context_helper.update_contextnumbers_user('statscenter', 1000, 1100)
+    context_helper.update_contextnumbers_user('default', 1000, 1999)
+    context_helper.update_contextnumbers_group('default', 2000, 2999)
+    context_helper.update_contextnumbers_queue('default', 3000, 3999)
+    context_helper.update_contextnumbers_meetme('default', 4000, 4999)
+    context_helper.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
-        logger.debug('Configuring wazo-auth')
-        _configure_wazo_service('wazo-auth')
+    logger.debug('Configuring wazo-auth')
+    _configure_wazo_service('wazo-auth')
 
-        logger.debug('Configuring xivo-amid')
-        _configure_wazo_service('xivo-amid')
+    logger.debug('Configuring xivo-amid')
+    _configure_wazo_service('xivo-amid')
 
-        logger.debug('Configuring xivo-confd')
-        _configure_wazo_service('xivo-confd')
+    logger.debug('Configuring xivo-confd')
+    _configure_wazo_service('xivo-confd')
 
-        logger.debug('Configuring xivo-ctid')
-        _configure_wazo_service('xivo-ctid')
+    logger.debug('Configuring xivo-ctid')
+    _configure_wazo_service('xivo-ctid')
 
-        logger.debug('Configuring xivo-ctid-ng')
-        _configure_wazo_service('xivo-ctid-ng')
-
-        logger.debug('Allowing SIP usernames to change')
-        _set_sip_usernames_read_write()
-    finally:
-        setup.teardown_browser()
+    logger.debug('Configuring xivo-ctid-ng')
+    _configure_wazo_service('xivo-ctid-ng')
 
 
 def _configure_postgresql():
@@ -192,10 +183,11 @@ def _allow_agid_listen_on_all_interfaces():
 
 
 def _allow_provd_listen_on_all_interfaces():
+    # TODO use REST API
     with session_scope() as session:
         query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
         session.execute(query)
-    common.open_url('commonconf')
+    # Apply common.conf
 
 
 def _install_packages(packages):
@@ -242,13 +234,6 @@ def _configure_wazo_service(service):
     service_is_running = sysutils.is_process_running(sysutils.get_pidfile_for_service_name(service))
     if service_is_running:
         _restart_service(service)
-
-
-def _set_sip_usernames_read_write():
-    command = ['sed', '-i',
-               """'s/readonly-idpwd = "true"/readonly-idpwd = "false"/'""",
-               '/etc/xivo/web-interface/ipbx.ini']
-    world.ssh_client_xivo.check_call(command)
 
 
 def _copy_daemon_config_file(daemon_name):

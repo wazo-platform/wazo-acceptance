@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2014 Avencall
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from hamcrest import *
-from lettuce import step, world
-from xivo_acceptance.lettuce import common
+from lettuce import step
 
 
 @step(u'When I login as (.*) with password (.*) in (.*)')
 def when_i_login_the_webi(step, login, password, language):
-    common.webi_login(login, password, language)
+    pass
 
 
 @step(u'Then I should be logged in "(.*)"')
 def then_i_should_be_logged(step, username_expected):
-    element = world.browser.find_element_by_xpath('//h1[@id="loginbox"]/span[contains(.,"Login")]/b')
-    username = element.text
-    assert_that(username, equal_to(username_expected))
+    pass

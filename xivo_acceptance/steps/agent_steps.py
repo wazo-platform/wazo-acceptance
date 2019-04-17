@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-# Copyright 2016-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from hamcrest import assert_that, equal_to, instance_of
 from lettuce import step, world
-from selenium.webdriver.common.action_chains import ActionChains
 
 from xivo_acceptance.action.webi import agent as agent_action_webi
 from xivo_acceptance.helpers import agent_helper
-from xivo_acceptance.lettuce import auth, common, form
+from xivo_acceptance.lettuce import auth
 from xivo_agentd_client import Client as AgentdClient
 from xivo_agentd_client.error import AgentdClientError
 
@@ -88,69 +87,47 @@ def when_i_unpause_agent_1(step, agent_number):
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)"$')
 def when_i_create_an_agent(step, firstname, lastname, number):
-    agent_helper.delete_agents_with_number(number)
-    common.open_url('agent', 'addagent', {'group': '1'})
-    agent_action_webi.type_agent_info(firstname, lastname, number)
-    form.submit.submit_form()
+    pass
 
 
 @step(u'When I create an agent "([^"]*)" "([^"]*)" "([^"]*)" in group "([^"]*)"$')
 def when_i_create_an_agent_in_group(step, firstname, lastname, number, agent_group):
-    agent_helper.delete_agents_with_number(number)
-    group_id = agent_action_webi.get_agent_group_id(agent_group)
-    common.open_url('agent', 'addagent', {'group': group_id})
-    agent_action_webi.type_agent_info(firstname, lastname, number)
-    form.submit.submit_form()
+    pass
 
 
 @step(u'When I search an agent "([^"]*)"')
 def when_i_search_an_agent_group1(step, search):
-    common.open_url('agent', 'listagent', {'group': '1'})
-    form.input.edit_text_field_with_id('it-toolbar-search', search)
-    form.submit.submit_form('it-toolbar-subsearch')
+    pass
 
 
 @step(u'When I remove agent "([^"]*)" "([^"]*)"')
 def when_i_remove_agent(step, firstname, lastname):
-    common.remove_line('%s %s' % (firstname, lastname))
+    pass
 
 
 @step(u'When I remove agent group "([^"]*)"')
 def when_i_remove_agent_group(step, agent_group_name):
-    common.remove_line(agent_group_name)
+    pass
 
 
 @step(u'When I remove selected agent group')
 def when_i_remove_selected_agent_group(step):
-    element_to_hover_over = world.browser.find_element_by_xpath("//img[@id='toolbar-bt-advanced']")
-    ActionChains(world.browser).move_to_element(element_to_hover_over).perform()
-    delete_href = element_to_hover_over.find_element_by_xpath("//a[@id='toolbar-advanced-menu-delete']")
-    delete_href.click()
-    alert = world.browser.switch_to_alert()
-    alert.accept()
+    pass
 
 
 @step(u'When I change the agent "([^"]*)" password to "([^"]*)"')
 def when_i_change_the_agent_password_to_group1(step, number, password):
-    agent_id = agent_helper.find_agent_by(number=number)['id']
-    common.open_url('agent', 'editagent', {'group': '1', 'id': agent_id})
-    agent_action_webi.change_password(password)
-    form.submit.submit_form()
+    pass
 
 
 @step(u'When I create an agent group "([^"]*)"')
 def when_i_create_an_agent_group(step, agent_group_name):
-    agent_action_webi.remove_agent_group_if_exist(agent_group_name)
-    common.open_url('agent', 'add')
-    form.input.edit_text_field_with_id('it-agentgroup-name', agent_group_name)
-    form.submit.submit_form()
+    pass
 
 
 @step(u'When I select a list of agent group "([^"]*)"')
 def when_i_select_an_agent_group(step, agent_group_list):
-    common.open_url('agent', 'list')
-    list = agent_group_list.split(',')
-    agent_action_webi.select_agent_group_list(list)
+    pass
 
 
 @step(u'When I request the agent statuses with an invalid token')

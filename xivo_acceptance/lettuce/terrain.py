@@ -3,15 +3,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
-import os
-import tempfile
 import sys
 
 from lettuce import before, after, world
 from xivo_acceptance.config import load_config
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.lettuce import asterisk
-from xivo_acceptance.lettuce import debug
 from xivo_acceptance.lettuce import setup
 from xivo_acceptance.lettuce.phone_register import PhoneRegister
 from xivo.xivo_logging import setup_logging as xivo_setup_logging
@@ -44,13 +41,6 @@ def xivo_acceptance_lettuce_after_each_scenario(scenario):
     if xc:
         xc.stop()
     asterisk_helper.send_to_asterisk_cli(u'channel request hangup all')
-    world.browser.quit()
-
-
-@after.all
-def xivo_acceptance_lettuce_after_all(total):
-    if hasattr(world, 'display'):
-        world.display.get_instance().stop()
 
 
 def initialize(extra_config='default'):
@@ -94,22 +84,3 @@ def set_xivo_target(extra_config):
     logger.debug("setup xivo configured...")
     setup.setup_xivo_configured()
     world.dummy_ip_address = '10.99.99.99'
-
-
-@debug.logcall
-@world.absorb
-def dump_current_page(dirname='lettuce-dump-'):
-    """
-    Use this if you want to debug your test.
-    Call it with world.dump_current_page().
-    """
-    dump_dir = tempfile.mkdtemp(prefix=dirname, dir=world.config['output_dir'])
-
-    source_file_name = os.path.join(dump_dir, 'page-source.html')
-    with open(source_file_name, 'w') as fobj:
-        fobj.write(world.browser.page_source.encode('utf-8'))
-
-    image_file_name = os.path.join(dump_dir, 'screenshot.png')
-    world.browser.save_screenshot(image_file_name)
-
-    logger.info('Debug files dumped in {}'.format(dump_dir))
