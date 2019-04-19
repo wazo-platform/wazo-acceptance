@@ -17,16 +17,3 @@ Feature: Asterisk
 
     Scenario: Command core reload
         Asterisk command "core reload" return no error
-
-    Scenario: Restart
-        When I stop "monit"
-        When I stop "asterisk"
-        Then the service "asterisk" is no longer running
-        When I wait for the service "xivo-ctid" to stop
-        Then the service "xivo-ctid" is no longer running
-        When I start "monit"
-        When I wait for the service "asterisk" to restart
-        Then the service "asterisk" is running
-        When I wait for the service "xivo-ctid" to restart
-        Then the service "xivo-ctid" is running
-        Then I see in the log file service restarted by monit

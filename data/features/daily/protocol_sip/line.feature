@@ -1,23 +1,5 @@
 Feature: Line
 
-    @skip_old_webi_step
-    Scenario: Add a SIP line and remove it
-        When I add a SIP line with infos:
-        | context |
-        | default |
-        Then this line is displayed in the list
-        When I remove this line
-        Then this line is not displayed in the list
-
-    @skip_old_webi_step
-    Scenario: Choose custom SIP codec
-        When I add a SIP line with infos:
-        | context | custom_codecs              |
-        | default | Siren14 (G.722.1C) (Audio) |
-        Then the codec "siren14" appears after typing 'sip show peer' in asterisk
-        When I disable custom codecs for this line
-        Then the codec "siren14" does not appear after typing 'sip show peer' in asterisk
-
     @skip_old_cti_step
     Scenario: Change SIP line username
         Given there are no SIP lines with username "newusername"
