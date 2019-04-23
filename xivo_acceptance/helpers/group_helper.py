@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from lettuce import world
@@ -7,7 +7,7 @@ from lettuce import world
 
 def add_or_replace_group(name, exten='2000', context='default', users=None):
     delete_groups_with_number(exten, context)
-    delete_groups_with_name(name)
+    _delete_groups_with_name(name)
     add_group(name, exten, context, users)
 
 
@@ -34,7 +34,7 @@ def delete_groups_with_number(exten, context='default'):
         world.confd_client.extensions.delete(extension['id'])
 
 
-def delete_groups_with_name(name):
+def _delete_groups_with_name(name):
     groups = world.confd_client.groups.list(name=name)['items']
     for group in groups:
         world.confd_client.groups.delete(group['id'])

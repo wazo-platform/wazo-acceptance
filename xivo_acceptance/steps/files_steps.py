@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -13,7 +13,6 @@ from hamcrest import none
 from lettuce import step, world
 
 from xivo_acceptance.helpers import file_helper
-from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import sysutils
 
 
@@ -24,35 +23,9 @@ DAHDI_PATH = '/dev/dahdi'
 ASTERISK_SOUND_PATH = '/usr/share/asterisk/sounds/en'
 
 
-@step(u'Given a backup file with name "([^"]*)"')
-def given_a_backup_file_with_name(step, filename):
-    file_helper.create_backup_file(filename)
-
-
-@step(u'Given a musiconhold file with name "([^"]*)"')
-def given_a_musiconhold_file_with_name(step, filename):
-    file_helper.create_musiconhold_file(filename)
-
-
-@step(u'Given a recording file with name "([^"]*)"')
-def given_a_recording_file_with_name(step, filename):
-    file_helper.create_recordings_file(filename)
-
-
-@step(u'Given a recording meetme file with name "([^"]*)"')
-def given_a_recording_meetme_file_with_name(step, filename):
-    file_helper.create_recordings_meetme_file(filename)
-
-
 @step(u'Given the file "([^"]*)" is empty')
 def given_the_file_is_empty(step, path):
     file_helper.create_empty_file(path)
-
-
-@step(u'^Then musiconhold file "([^"]*)" is displayed in the list of MOH "([^"]*)"$')
-def then_musiconhold_file_is_displayed(step, filename, category):
-    moh = world.confd_client.moh.list(name=category)['items'][0]
-    common.element_is_in_list('musiconhold', filename, {'uuid': moh['uuid']}, 'listfile')
 
 
 @step(u'Then directory of the Asterisk voicemail is empty')
@@ -117,23 +90,17 @@ def _get_asterisk_pid():
 
 @step(u'Then max open file descriptors are equals to 8192')
 def then_max_open_file_descriptors_are_equals_to_8192(step):
-        pid = _get_asterisk_pid().strip()
-        cmd = ['grep', '\'Max open files\'', '/proc/%s/limits' % pid]
-        string_limit = sysutils.output_command(cmd)
-        limit = re.sub('\s+', ' ', string_limit).split()[3]
-        assert_that(int(limit), equal_to(8192))
+    pid = _get_asterisk_pid().strip()
+    cmd = ['grep', '\'Max open files\'', '/proc/%s/limits' % pid]
+    string_limit = sysutils.output_command(cmd)
+    limit = re.sub('\s+', ' ', string_limit).split()[3]
+    assert_that(int(limit), equal_to(8192))
 
 
 @step(u'Then the mirror list contains a line matching "([^"]*)"')
 def then_the_mirror_list_contains_a_line_matching_group1(step, regex):
     match = _match_on_mirror_list(regex)
     assert_that(match, is_not(none()))
-
-
-@step(u'Then the mirror list does not contain a line matching "([^"]*)"')
-def then_the_mirror_list_does_not_contain_a_line_matching_group1(step, regex):
-    match = _match_on_mirror_list(regex)
-    assert_that(match, none())
 
 
 def _match_on_mirror_list(regex):

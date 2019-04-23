@@ -1,12 +1,5 @@
 Feature: Queues
 
-    Scenario: Cannot add queue named general
-        Given I have no extension with exten "3001@default"
-        When I create the following invalid queues:
-            | name    | display name | number | context |
-            | general | general      | 3001   | default |
-        Then I see errors
-
     @skip_old_webi_step
     Scenario: Add a logged agent to a new queue and answer a call
         Given there are users with infos:

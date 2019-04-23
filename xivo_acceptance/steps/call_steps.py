@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -7,7 +7,6 @@ import time
 from hamcrest import (
     assert_that,
     equal_to,
-    has_items,
     is_,
     not_,
 )
@@ -16,7 +15,6 @@ from lettuce import step, world
 from xivo_ctid_ng_client import Client as CtidNgClient
 from xivo_acceptance.helpers import (
     asterisk_helper,
-    cti_helper,
     line_read_helper,
     sip_config,
     sip_phone,
@@ -102,12 +100,6 @@ def when_someone_calls_an_exten_and_wait_for_n_seconds(step, name, exten, tries)
     common.wait_until(phone.is_hungup, tries=int(tries))
 
 
-@step(u'When "([^"]*)" transfers to "([^"]*)"')
-def when_alice_transfers_to_exten(step, name, exten):
-    phone = step.scenario.phone_register.get_user_phone(name)
-    phone.transfer(exten)
-
-
 @step(u'(?:When|Given) "([^"]*)" answers$')
 def a_answers(step, name):
     phone = step.scenario.phone_register.get_user_phone(name)
@@ -140,11 +132,6 @@ def when_a_resumes_his_call(step, name):
 
 @step(u'I wait (\d+) seconds')
 def given_i_wait_n_seconds(step, seconds):
-    _sleep(seconds)
-
-
-@step(u'When "([^"]*)" waits for (\d+) seconds')
-def when_a_waits_for_n_seconds(step, _waiter, seconds):
     _sleep(seconds)
 
 
@@ -234,22 +221,6 @@ def then_i_not_see_recording_file_of_this_call_in_monitoring_audio_files_page(st
         file_name = search % (now - nbtries)
         assert not common.element_is_in_list('sounds', file_name, {'dir': 'monitor'})
         nbtries += 1
-
-
-@step(u'Then I should see the following caller id:')
-def then_i_should_see_the_following_caller_id(step):
-    caller_id_info = step.hashes[0]
-    expected = [
-        {'Variable': 'xivo-calleridname',
-         'Value': caller_id_info['Name']},
-        {'Variable': 'xivo-calleridnum',
-         'Value': caller_id_info['Number']},
-    ]
-
-    def assertion():
-        assert_that(cti_helper.get_sheet_infos(), has_items(*expected))
-
-    common.wait_until_assert(assertion, tries=4)
 
 
 @step(u'Then "([^"]*)" call "([^"]*)" is "([^"]*)"')

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from hamcrest import (
@@ -16,21 +16,6 @@ def add_schedule(name, timezone, times, destination=None):
     delete_schedules_with_name(name)
     schedule = _create_schedule(name, timezone, times, destination)
     world.confd_client.schedules.create(schedule)
-
-
-def add_or_replace_schedule(data):
-    delete_schedules_with_name(data['name'])
-    entity = entity_helper.get_entity_with_name(data['entity'])
-    if entity:
-        tenant_uuid = entity['tenant_uuid']
-    else:
-        tenant_uuid = entity_helper.default_entity_id()['tenant_uuid']
-
-    schedule = {
-        'name': data['name'],
-        'timezone': data.get('timezone', 'America/Montreal'),
-    }
-    world.confd_client.schedules.create(schedule, tenant_uuid=tenant_uuid)
 
 
 def assert_schedule_exists(name, timezone, times):

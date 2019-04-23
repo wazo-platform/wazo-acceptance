@@ -106,19 +106,6 @@ def get_user_by_name(name):
     return get_by_firstname_lastname(*names)
 
 
-def delete_similar_users(userinfo):
-    if 'firstname' in userinfo and 'lastname' in userinfo:
-        user = find_by_firstname_lastname(userinfo['firstname'],
-                                          userinfo['lastname'])
-        if user:
-            delete_user(user['id'])
-
-    if 'cti_username' in userinfo:
-        user = find_by_username(userinfo['cti_username'])
-        if user:
-            delete_user(user['uuid'])
-
-
 def delete_user(user_id):
     user = world.confd_client.users.get(user_id)
     _delete_voicemail(user)
@@ -316,13 +303,6 @@ def _register_and_track_phone(scenario, user_data):
         phone.sip_contact_uri = scenario.phone_register.find_new_sip_contact(line['name'])
         if phone:
             scenario.phone_register.add_registered_phone(phone, name)
-
-
-def user_is_in_group(user, group):
-    for group_user in group['members']['users']:
-        if user['uuid'] == group_user['uuid']:
-            return True
-    return False
 
 
 def disable_cti_client(firstname, lastname):

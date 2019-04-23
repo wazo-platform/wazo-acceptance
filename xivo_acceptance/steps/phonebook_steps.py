@@ -9,14 +9,6 @@ from xivo_acceptance.action.dird import phonebook as phonebook_action_dird
 from xivo_acceptance.lettuce.aastra import AastraPhonebookBrowser
 
 
-@step(u'Given "([^"]*)" "([^"]*)" is not in the phonebook "([^"]*)"')
-def given_entry_is_not_in_the_phonebook(step, firstname, lastname, phonebook_name):
-    entity = world.config['default_entity'].replace('_', '')
-    entry = {'first name': firstname,
-             'last name': lastname}
-    phonebook_action_dird.remove_entry_if_exists(entry, phonebook_name, entity)
-
-
 @step(u'Given the phonebook is accessible by any hosts')
 def given_phone_is_accessible_by_any_hosts(step):
     pass
@@ -35,22 +27,10 @@ def given_there_are_local_dird_phonebooks(step):
     pass
 
 
-@step(u'When I add the following entries to the phonebook "([^"]*)"')
-def when_i_add_the_following_entries_to_the_phonebook(step, phonebook_name):
-    pass
-
-
 @step(u'When I search the phonebook for "([^"]*)" on my Aastra "([^"]*)"$')
 def when_i_search_the_phonebook_on_my_aastra(step, term, mac_address):
     phonebook_browser = AastraPhonebookBrowser(mac_address)
     phonebook_browser.use_provd_lookup_url()
-    world.phone_results = phonebook_browser.search(term)
-
-
-@step(u'When I search the phonebook for "([^"]*)" on my Aastra "([^"]*)" using the compatibility URL$')
-def when_i_search_the_phonebook_on_my_aastra_using_compat_url(step, term, mac_address):
-    phonebook_browser = AastraPhonebookBrowser(mac_address)
-    phonebook_browser.use_compat_lookup_url()
     world.phone_results = phonebook_browser.search(term)
 
 
@@ -60,11 +40,6 @@ def then_i_see_the_following_results_on_the_phone(step):
     results = _extract_results(step.keys, world.phone_results)
 
     assert_that(results, has_items(*expected_results))
-
-
-@step(u'Then "([^"]*)" appears in the list')
-def then_entry_appears_in_the_list(step, entry):
-    pass
 
 
 def _extract_results(keys, phone_results):

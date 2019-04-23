@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import unicode_literals
@@ -8,7 +8,6 @@ from lettuce import world
 
 from xivo_acceptance.helpers import (
     entity_helper,
-    outcall_helper,
     tenant_helper,
 )
 
@@ -120,18 +119,6 @@ def add_context(name,
     }
 
     world.confd_client.contexts.create(context)
-
-
-def delete_context(context):
-    outcall_helper.delete_outcalls_with_context(context['name'])
-    world.confd_client.contexts.delete(context)
-
-
-def add_or_replace_context(name, display_name, context_type):
-    context = find_context_by(name=name)
-    if context:
-        delete_context(context)
-    add_context(name, display_name, context_type)
 
 
 def find_context_by(**kwargs):

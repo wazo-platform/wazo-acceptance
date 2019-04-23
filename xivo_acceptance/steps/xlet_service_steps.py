@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2016 Avencall
+# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from lettuce import step
@@ -56,11 +56,6 @@ def when_i_enable_forwarding_on_noanswer_on_xivo_client(step, destination):
     cti_helper.set_noanswer(True, destination)
 
 
-@step(u'(?:Given|When) I disable forwarding on no-answer on XiVO Client')
-def when_i_disable_forwarding_on_noanswer_on_xivo_client(step):
-    cti_helper.set_noanswer(False)
-
-
 @step(u'Then the forwarding on no-answer is disabled on XiVO Client')
 def then_the_forwarding_on_noanswer_is_enabled_on_xivo_client(step):
     enabled = cti_helper.get_incallfilter()['enabled']
@@ -80,11 +75,6 @@ def when_i_enable_forwarding_on_busy_on_xivo_client(step, destination):
     cti_helper.set_busy(True, destination)
 
 
-@step(u'(?:Given|When) I disable forwarding on busy on XiVO Client')
-def when_i_disable_forwarding_on_busy_on_xivo_client(step):
-    cti_helper.set_busy(False)
-
-
 @step(u'Then the forwarding on busy is disabled on XiVO Client')
 def then_the_forwarding_on_busy_is_disabled_on_xivo_client(step):
     enabled = cti_helper.get_busy()['enabled']
@@ -102,11 +92,6 @@ def then_the_forwarding_on_noanswer_is_enabled_with_destination_on_xivo_client(s
 @step(u'(?:Given|When) I enable unconditional forwarding with destination "([^"]*)" on XiVO Client')
 def when_i_enable_unconditional_forwarding_on_xivo_client(step, destination):
     cti_helper.set_unconditional(True, destination)
-
-
-@step(u'(?:Given|When) I disable unconditional forwarding on XiVO Client')
-def when_i_disable_unconditional_forwarding_on_xivo_client(step):
-    cti_helper.set_unconditional(False)
 
 
 @step(u'Then the unconditional forwarding is disabled on XiVO Client')

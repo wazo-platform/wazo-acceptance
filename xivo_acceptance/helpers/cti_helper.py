@@ -53,18 +53,6 @@ def configure_client(conf_dict):
     return xivoclient.exec_command('configure', conf_dict)
 
 
-def set_search_for_directory(search):
-    res = xivoclient.exec_command('set_search_for_directory', search)
-    time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
-
-
-def set_queue_for_queue_members(queue_id):
-    res = xivoclient.exec_command('set_queue_for_queue_members', queue_id)
-    time.sleep(world.config['xivo_client']['login_timeout'])
-    return res
-
-
 def get_configuration():
     res = xivoclient.exec_command('get_configuration')
     return res['return_value']
@@ -87,52 +75,12 @@ def get_remote_directory_infos():
     return xivoclient.exec_command('get_remote_directory_infos')
 
 
-def get_switchboard_infos():
-    return xivoclient.exec_command('get_switchboard_infos')
-
-
 def get_conference_room_infos():
     return xivoclient.exec_command('get_conference_room_infos')
 
 
 def get_identity_infos():
     return xivoclient.exec_command('get_identity_infos')
-
-
-def get_sheet_infos():
-    def _to_var_vals(sheet_result):
-        res = []
-        for var, val in sheet_result.iteritems():
-            res.append({u'Variable': var, u'Value': val})
-        return res
-
-    try:
-        return _to_var_vals(xivoclient.exec_command('get_sheet_infos')['return_value']['content'])
-    except KeyError:
-        return []
-
-
-def close_all_sheets():
-    return xivoclient.exec_command('close_all_sheets')
-
-
-def get_infos_in_custom_sheet():
-    response = xivoclient.exec_command('get_infos_in_custom_sheet')
-    assert_that(response['test_result'], equal_to('passed'))
-    return [{u'widget_name': key, u'value': value} for key, value in response['return_value'].iteritems()]
-
-
-def set_infos_in_custom_sheet(values_dict):
-    response = xivoclient.exec_command('set_infos_in_custom_sheet', values_dict)
-    assert_that(response['test_result'], equal_to('passed'))
-
-
-def get_queue_members_infos():
-    return xivoclient.exec_command('get_queue_members_infos')
-
-
-def get_agent_list_infos():
-    return xivoclient.exec_command('get_agent_list_infos')['return_value']
 
 
 def get_menu_availability_infos():
@@ -172,22 +120,6 @@ def log_in_the_xivo_client():
 def restart_server():
     sysutils.restart_service('xivo-ctid')
     time.sleep(10)
-
-
-def switchboard_answer_incoming_call(cid_name, cid_num):
-    response = xivoclient.exec_command('switchboard_answer_incoming_call', cid_name, cid_num)
-    assert_that(response['test_result'], equal_to('passed'))
-
-
-def switchboard_hang_up():
-    response = xivoclient.exec_command('switchboard_hang_up')
-    assert_that(response['test_result'], equal_to('passed'))
-
-
-def get_switchboard_current_call_infos():
-    response = xivoclient.exec_command('get_switchboard_current_call_infos')
-    assert_that(response['test_result'], equal_to('passed'))
-    return response['return_value']
 
 
 def get_switchboard_incoming_calls_infos():

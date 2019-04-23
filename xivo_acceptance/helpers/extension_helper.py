@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from lettuce import world
@@ -11,7 +11,6 @@ from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import group_helper
 from xivo_acceptance.helpers import incall_helper
-from xivo_acceptance.helpers import meetme_helper
 from xivo_acceptance.helpers import queue_helper
 from xivo_acceptance.helpers import line_write_helper
 
@@ -86,9 +85,13 @@ def _delete_extension_type(exten, extension_type, typeval):
     elif extension_type == 'incall':
         incall_helper.delete_incalls_with_did(exten)
     elif extension_type == 'meetme':
-        meetme_helper.delete_meetme_with_confno(exten)
+        _delete_meetme(exten)
     elif extension_type == 'outcall':
         dialpattern_helper.delete(int(typeval))
+
+
+def _delete_meetme(exten):
+    raise NotImplementedError
 
 
 def _delete_extension(extension_id):

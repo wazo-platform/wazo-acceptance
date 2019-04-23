@@ -5,14 +5,10 @@
 from hamcrest import (
     assert_that,
     equal_to,
-    has_items,
     is_,
 )
 from lettuce import step
-from lettuce.registry import world
-from xivo_auth_client import Client as AuthClient
 from xivo_acceptance.helpers import (
-    group_helper,
     user_helper,
     user_line_extension_helper as ule_helper,
 )
@@ -60,12 +56,6 @@ def given_there_are_users_with_infos(step):
         user_helper.add_user_with_infos(user_data, step=step)
 
 
-@step(u'Given I have the following users:')
-def given_i_have_the_following_users(step):
-    for userinfo in step.hashes:
-        user_helper.add_or_replace_user(userinfo)
-
-
 @step(u'Given there is no user "([^"]*)" "([^"]*)"$')
 def given_there_is_a_no_user_1_2(step, firstname, lastname):
     ule_helper.delete_user_line_extension_voicemail(firstname, lastname)
@@ -92,117 +82,8 @@ def given_user_1_has_schedule_2(step, firstname, lastname, schedule):
     user_helper.associate_schedule(schedule, user['id'])
 
 
-@step(u'When I create users with the following parameters:$')
-def when_i_create_users_with_the_following_parameters(step):
-    for userinfo in step.hashes:
-        world.confd_client.users.create(userinfo)
-
-
-@step(u'When I update user "([^"]*)" "([^"]*)" with the following parameters:')
-def when_i_update_user_group1_group2_with_the_following_parameters(step, firstname, lastname):
-    user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    updated_user = dict(step.hashes[0])
-    username = updated_user.pop('username', None)
-    password = updated_user.pop('password', None)
-    updated_user['id'] = user['id']
-    world.confd_client.users.update(updated_user)
-    if username:
-        world.auth_client.users.edit(
-            user['uuid'],
-            username=username,
-            firstname=user['firstname'],
-            lastname=user['lastname'],
-            enabled=True,
-        )
-    if password:
-        world.auth_client.users.set_password(user['uuid'], password=password)
-
-
 @step(u'When I reorder "([^"]*)" "([^"]*)"s function keys such that:')
 def when_i_reorder_group1_group2_s_function_keys_such_that(step, firstname, lastname):
-    pass
-
-
-@step(u'When I create a user with infos:$')
-def when_i_create_a_user(step):
-    pass
-
-
-@step(u'When I rename "([^"]*)" "([^"]*)" to "([^"]*)" "([^"]*)"$')
-def when_i_rename_user(step, orig_firstname, orig_lastname, dest_firstname, dest_lastname):
-    pass
-
-
-@step(u'When I remove user "([^"]*)" "([^"]*)"$')
-def remove_user(step, firstname, lastname):
-    pass
-
-
-@step(u'When I search for user "([^"]*)" "([^"]*)"')
-def when_i_search_for_user_firstname_lastname(step, firstname, lastname):
-    pass
-
-
-@step(u'When I search for user with number "([^"]*)"')
-def when_i_search_for_user_with_number_group1(step, number):
-    pass
-
-
-@step(u'When I delete agent number "([^"]*)"$')
-def when_i_delete_agent_number_1(step, agent_number):
-    agents = world.confd_client.agents.list(number=agent_number)['items']
-    world.confd_client.agents.delete(agents[0])
-
-
-@step(u'When I remove line from user "([^"]*)" "([^"]*)"$')
-def when_i_remove_line_from_user(step, firstname, lastname):
-    pass
-
-
-@step(u'When I modify the mobile number of user "([^"]*)" "([^"]*)" to "([^"]*)"')
-def when_i_modify_the_mobile_number_of_user_1_2_to_3(step, firstname, lastname, mobile_number):
-    pass
-
-
-@step(u'When I remove the mobile number of user "([^"]*)" "([^"]*)"')
-def when_i_remove_the_mobile_number_of_user_group1_group2(step, firstname, lastname):
-    pass
-
-
-@step(u'When I modify the device of user "([^"]*)" "([^"]*)" to "([^"]*)"$')
-def when_i_modify_the_device_of_user_group1_group2_to_group3(step, firstname, lastname, device):
-    pass
-
-
-@step(u'When I modify the device slot of user "([^"]*)" "([^"]*)" to "([^"]*)"$')
-def when_i_modify_the_device_slot_of_user_group1_group2_to_group3(step, firstname, lastname, device_slot):
-    pass
-
-
-@step(u'When I modify the device of user "([^"]*)" "([^"]*)" to "([^"]*)" with device slot "([^"]*)"$')
-def when_i_modify_the_device_and_device_slot_of_user_group1_group2_to_group3(step, firstname, lastname, device, device_slot):
-    pass
-
-
-@step(u'When I remove the device of user "([^"]*)" "([^"]*)"')
-def when_i_remove_the_device_of_user_group1_group2(step, firstname, lastname):
-    pass
-
-
-@step(u'Then "([^"]*)" "([^"]*)" is in group "([^"]*)"$')
-def then_user_is_in_group(step, firstname, lastname, group_name):
-    user = user_helper.get_by_firstname_lastname(firstname, lastname)
-    group = group_helper.get_group_by_name(group_name)
-    assert user_helper.user_is_in_group(user, group)
-
-
-@step(u'Then I should be at the user list page$')
-def then_i_should_be_at_the_user_list_page(step):
-    pass
-
-
-@step(u'When I edit the user "([^"]*)" "([^"]*)" without changing anything')
-def when_i_edit_the_user_1_2_without_changing_anything(step, firstname, lastname):
     pass
 
 
@@ -213,16 +94,6 @@ def then_the_user_not_exist(step, firstname, lastname):
 
 @step(u'Then I see a user with infos:')
 def then_i_see_a_user_with_infos(step):
-    pass
-
-
-@step(u'When I modify the channel type of group "([^"]*)" of user "([^"]*)" to "([^"]*)"')
-def when_i_modify_the_channel_type_of_group_group1_of_user_group2_to_group3(step, group, fullname, chantype):
-    pass
-
-
-@step(u'Then the channel type of group "([^"]*)" of user "([^"]*)" is "([^"]*)"')
-def then_the_channel_type_of_group_group1_of_user_group2_is_group3(step, group, fullname, chantype):
     pass
 
 
@@ -237,21 +108,3 @@ def then_user_has_an_unconditional_forward_set_to_group2(step, fullname, expecte
 def then_user_has_no_unconditional_forward(step, fullname):
     enabled, _ = user_helper.get_unconditional_forward(fullname)
     assert_that(enabled, is_(False))
-
-
-@step(u'When I create a token with infos:')
-def when_i_create_a_token_with_infos(step):
-    auth_data = {'verify_certificate': False}
-    for hash_ in step.hashes:
-        for key, value in hash_.iteritems():
-            auth_data[key] = value
-    client = AuthClient(world.config['xivo_host'], **auth_data)
-    step.scenario.token_data = client.token.new(backend=auth_data['backend'])
-
-
-@step(u'Then the token has the following ACLs:')
-def then_the_token_has_the_following_acls(step):
-    acls = step.scenario.token_data['acls']
-    for hash_ in step.hashes:
-        for acl in hash_.itervalues():
-            assert_that(acls, has_items(acl))

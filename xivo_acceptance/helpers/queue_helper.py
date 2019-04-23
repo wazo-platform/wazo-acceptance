@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from lettuce import world
@@ -75,56 +75,13 @@ def delete_queues_with_number(number):
 
 
 def get_queue_by(**kwargs):
-    queue = find_queue_by(**kwargs)
+    queue = _find_queue_by(**kwargs)
     if not queue:
         raise Exception('Queue Not Found: %s' % kwargs)
     return queue
 
 
-def find_queue_by(name):
+def _find_queue_by(name):
     queues = world.confd_client.queues.list(name=name)['items']
     for queue in queues:
         return queue
-
-
-def does_queue_exist_in_asterisk(queue_name):
-    output = _asterisk_queue_show(queue_name)
-    return not output.startswith("No such queue")
-
-
-def agent_numbers_from_asterisk(queue_name):
-    output = _asterisk_queue_show(queue_name)
-    agent_numbers = _parse_members(output)
-    return agent_numbers
-
-
-def _asterisk_queue_show(queue_name):
-    command = ['asterisk', '-rx', '"queue show %s"' % queue_name]
-    output = sysutils.output_command(command)
-    return output
-
-
-def _parse_members(output):
-    lines = output.split("\n")
-
-    lines.pop(0).strip()
-    member_header = lines.pop(0).strip()
-
-    if member_header == "No Members":
-        return []
-
-    agent_numbers = []
-    while lines[0].strip() not in ['Callers:', 'No Callers']:
-        line = lines.pop(0).strip()
-        agent_number = _parse_member_line(line)
-        agent_numbers.append(agent_number)
-
-    return agent_numbers
-
-
-def _parse_member_line(member_line):
-    agent, _, _ = member_line.partition(" ")
-    membertype, number = agent.split("/")
-    if membertype != "Agent":
-        raise Exception("membertype %s different from Agent" % membertype)
-    return int(number)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from hamcrest import assert_that
@@ -13,7 +13,7 @@ from hamcrest import not_
 from lettuce import step, world
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.helpers import line_read_helper
-from xivo_acceptance.lettuce import asterisk, sysutils, logs, common
+from xivo_acceptance.lettuce import asterisk, sysutils, common
 
 
 @step(u'Given the AMI is monitored')
@@ -27,11 +27,6 @@ def then_asterisk_command_group1_return_no_error(step, ast_cmd):
     assert sysutils.send_command(command)
 
 
-@step(u'Then I see in the log file service restarted by monit')
-def then_i_see_in_the_log_file_service_restarted_by_monit(step):
-    logs.search_str_in_daemon_log('start: /usr/bin/wazo-service')
-
-
 @step(u'Then the "([^"]*)" section of "([^"]*)" contains the options:')
 def then_the_group1_section_of_group2_contains(step, section, filename):
     option_names = [item['name'] for item in step.hashes]
@@ -42,35 +37,8 @@ def then_the_group1_section_of_group2_contains(step, section, filename):
     assert_that(options, contains(*expected_options))
 
 
-@step(u'Then the section of "([^"]*)" with extension "([^"]*)" contains the options:')
-def then_the_section_of_group1_with_extension_group2_contains(step, filename, extension):
-    extensions = world.confd_client.extensions.list(exten=extension, recurse=True)['items'][0]
-    line = world.confd_client.lines.get(extensions['lines'][0]['id'])
-    section = line['name']
-
-    option_names = [item['name'] for item in step.hashes]
-    expected_options = [(item['name'], item['value']) for item in step.hashes]
-
-    options = asterisk_helper.get_conf_options(filename, section, option_names)
-
-    assert_that(options, contains(*expected_options))
-
-
 @step(u'Then the "([^"]*)" section of "([^"]*)" does not contain the options:')
 def then_the_group1_section_of_group2_does_not_contain_the_options(step, section, filename):
-    option_names = [item['name'] for item in step.hashes]
-
-    options = asterisk_helper.get_conf_options(filename, section, option_names)
-
-    assert_that(options, equal_to([]))
-
-
-@step(u'Then the section of "([^"]*)" with extension "([^"]*)" does not contain the options:')
-def then_the_section_of_group1_with_extension_group2_does_not_contain_options(step, filename, extension):
-    extensions = world.confd_client.extensions.list(exten=extension, recurse=True)['items'][0]
-    line = world.confd_client.lines.get(extensions['lines'][0]['id'])
-    section = line['name']
-
     option_names = [item['name'] for item in step.hashes]
 
     options = asterisk_helper.get_conf_options(filename, section, option_names)
@@ -93,27 +61,6 @@ def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, exten
         assert_that(ami_lines, has_items(*lines))
 
     common.wait_until_assert(_assert, tries=3)
-
-
-@step(u'Then extension "([^"]*)" is not in context "([^"]*)"')
-def then_extension_is_not_in_context(step, extension, context):
-    in_context = _extension_in_context(extension, context)
-    common.wait_until_assert(lambda: assert_that(not_(in_context)), tries=3)
-
-
-@step(u'Then extension "([^"]*)" is in context "([^"]*)"')
-def then_extension_is_in_context(step, extension, context):
-    in_context = _extension_in_context(extension, context)
-    common.wait_until_assert(lambda: assert_that(not_(in_context)), tries=3)
-
-
-def _extension_in_context(extension, context):
-    asterisk_cmd = 'dialplan show {}@{}'.format(extension, context)
-    command = ['asterisk', '-rx', '"{}"'.format(asterisk_cmd)]
-
-    output = sysutils.output_command(command)
-
-    return 'There is no existence of' not in output
 
 
 @step('Then I have the following hints')

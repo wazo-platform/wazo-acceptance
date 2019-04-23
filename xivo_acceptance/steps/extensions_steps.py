@@ -1,19 +1,10 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from lettuce import step
 
 from xivo_acceptance.helpers import extension_helper
-
-
-@step(u'Given I have no extension with exten "([^"]*)"')
-def given_i_have_no_extension_with_exten_group1(step, pattern):
-    exten, context = pattern.split('@')
-    extension = extension_helper.find_extension_by_exten_context(exten, context)
-    if extension:
-        extension_helper.delete_extension(extension['id'])
 
 
 @step(u'Given I have the following extensions:')

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import re
@@ -11,16 +11,6 @@ from lettuce import step, world
 from xivo_acceptance.helpers import cti_helper
 from xivo_acceptance.helpers import directory_helper
 from xivo_acceptance.lettuce import sysutils
-
-
-@step(u'I start "([^"]*)"$')
-def i_start_service(step, service_name):
-    sysutils.start_service(service_name)
-
-
-@step(u'I stop "([^"]*)"$')
-def i_stop_service(step, service_name):
-    sysutils.stop_service(service_name)
 
 
 @step(u'I restart "([^"]*)"$')
@@ -39,28 +29,10 @@ def i_restart_wazo_dird(step):
     directory_helper.restart_dird()
 
 
-@step(u'When I wait for the service "([^"]*)" to stop')
-def when_i_wait_for_the_service_group1_to_stop(step, service):
-    pidfile = sysutils.get_pidfile_for_service_name(service)
-    sysutils.wait_service_successfully_stopped(pidfile)
-
-
-@step(u'When I wait for the service "([^"]*)" to restart')
-def when_i_wait_for_the_service_group1_to_restart(step, service):
-    pidfile = sysutils.get_pidfile_for_service_name(service)
-    assert sysutils.wait_service_successfully_started(pidfile)
-
-
 @step(u'Then the service "([^"]*)" is running')
 def then_the_service_group1_is_running(step, service):
     pidfile = sysutils.get_pidfile_for_service_name(service)
     assert sysutils.is_process_running(pidfile)
-
-
-@step(u'Then the service "([^"]*)" is no longer running')
-def then_the_service_group1_is_no_longer_running(step, service):
-    pidfile = sysutils.get_pidfile_for_service_name(service)
-    assert not sysutils.is_process_running(pidfile)
 
 
 @step(u'When I generate a core dump and remember the pid as "([^"]*)" and the epoch as "([^"]*)"')

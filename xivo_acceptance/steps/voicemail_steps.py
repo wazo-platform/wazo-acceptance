@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -16,30 +15,6 @@ from lettuce import step, world
 from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.helpers import bus_helper
 from xivo_acceptance.helpers import voicemail_helper
-from xivo_acceptance.lettuce import common
-
-FAKE_ID = 999999999
-
-
-@step(u'Given I have the following voicemails:')
-def given_have_the_following_voicemails(step):
-    for row in step.hashes:
-        voicemail_info = _extract_voicemail_info_to_confd(row)
-        voicemail_helper.add_or_replace_voicemail(voicemail_info)
-
-
-@step(u'Then I see the voicemail "([^"]*)" exists$')
-def then_i_see_the_element_exists(step, name):
-    common.open_url('voicemail')
-    line = common.find_line(name)
-    assert line is not None, 'voicemail: %s does not exist' % name
-
-
-@step(u'Then I see the voicemail "([^"]*)" not exists$')
-def then_i_see_the_element_not_exists(step, name):
-    common.open_url('voicemail')
-    line = common.find_line(name)
-    assert line is None, 'voicemail: %s exist' % name
 
 
 @step(u'When a message is left on voicemail "([^"]*)" by "([^"]*)"')

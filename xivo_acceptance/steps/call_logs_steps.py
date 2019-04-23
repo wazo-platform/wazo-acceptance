@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-
-from hamcrest import all_of
 from hamcrest import assert_that
 from hamcrest import ends_with
 from hamcrest import has_entries
-from hamcrest import has_item
-from hamcrest import has_property
 from lettuce import step, world
 from xivo_acceptance.helpers import call_logs_helper, cel_helper
 from xivo_acceptance.helpers.datetime_helper import close_to
@@ -59,22 +55,6 @@ def when_i_generate_call_logs_using_the_last_unprocessed_1_cel_entries(step, cel
 def when_i_generate_call_logs_twice_in_parallel(step):
     command = ['wazo-call-logs', '&', 'wazo-call-logs']
     world.command_output = world.ssh_client_xivo.out_err_call(command)
-
-
-@step(u'When I ask for the list of CEL via WebService:')
-def when_i_ask_for_the_list_of_cel_via_webservice(step):
-    pass
-
-
-@step(u'Then I get a list with the following CEL:')
-def then_i_get_a_list_with_the_following_cel(step):
-    for cel in step.hashes:
-        assert_that(world.response, has_item(_is_cel(cel)))
-
-
-def _is_cel(cel):
-    matchers = [has_property(key, value) for (key, value) in cel.iteritems()]
-    return all_of(*matchers)
 
 
 @step(u'Then I see that call log generation is already running')

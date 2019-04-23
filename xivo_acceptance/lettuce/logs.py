@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from collections import namedtuple
@@ -12,8 +12,6 @@ from xivo_acceptance.lettuce import sysutils
 DAEMON_LOGFILE = '/var/log/daemon.log'
 ASTERISK_LOGFILE = '/var/log/asterisk/messages'
 XIVO_AGENT_LOGFILE = '/var/log/xivo-agentd.log'
-XIVO_AGID_LOGFILE = '/var/log/xivo-agid.log'
-XIVO_SYSCONFD_LOGFILE = '/var/log/xivo-sysconfd.log'
 
 DAEMON_DATE_FORMAT = "%b %d %H:%M:%S"
 DAEMON_DATE_PATTERN = r"([\w]{3} [\d ]{2} [\d]{2}:[\d]{2}:[\d]{2})"
@@ -35,18 +33,6 @@ XIVO_AGENT_LOG_INFO = LogfileInfo(logfile=XIVO_AGENT_LOGFILE,
                                   date_format=PYTHON_DATE_FORMAT,
                                   date_pattern=PYTHON_DATE_PATTERN)
 
-XIVO_AGID_LOG_INFO = LogfileInfo(logfile=XIVO_AGID_LOGFILE,
-                                 date_format=PYTHON_DATE_FORMAT,
-                                 date_pattern=PYTHON_DATE_PATTERN)
-
-XIVO_SYSCONFD_LOG_INFO = LogfileInfo(logfile=XIVO_SYSCONFD_LOGFILE,
-                                     date_format=PYTHON_DATE_FORMAT,
-                                     date_pattern=PYTHON_DATE_PATTERN)
-
-
-def search_str_in_daemon_log(expression, delta=10):
-    return _search_str_in_log_file(expression, DAEMON_LOG_INFO, delta)
-
 
 def search_str_in_asterisk_log(expression, delta=10):
     return _search_str_in_log_file(expression, ASTERISK_LOG_INFO, delta)
@@ -54,14 +40,6 @@ def search_str_in_asterisk_log(expression, delta=10):
 
 def search_str_in_xivo_agent_log(expression, delta=10):
     return _search_str_in_log_file(expression, XIVO_AGENT_LOG_INFO, delta)
-
-
-def search_str_in_xivo_agid_log(expression, delta=10):
-    return _search_str_in_log_file(expression, XIVO_AGID_LOG_INFO, delta)
-
-
-def find_line_in_xivo_sysconfd_log(delta=10):
-    return _find_line_in_log_file(XIVO_SYSCONFD_LOG_INFO, delta)
 
 
 def _find_line_in_log_file(loginfo, delta=10):
