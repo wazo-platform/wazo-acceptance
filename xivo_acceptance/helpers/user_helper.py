@@ -11,7 +11,6 @@ from requests.exceptions import HTTPError
 from xivo_auth_client import Client as AuthClient
 from xivo_acceptance import helpers
 from xivo_acceptance.helpers import (
-    cti_profile_helper,
     entity_helper,
     group_helper,
     line_read_helper,
@@ -40,6 +39,14 @@ def add_or_replace_user(userinfo):
         'tenant_uuid': tenant_uuid,
     }
     world.auth_client.users.new(**auth_user)
+
+
+def delete_similar_users(userinfo):
+    if 'firstname' in userinfo and 'lastname' in userinfo:
+        user = find_by_firstname_lastname(userinfo['firstname'],
+                                          userinfo['lastname'])
+        if user:
+            delete_user(user['id'])
 
 
 def find_by_user_id(user_id):
@@ -151,7 +158,6 @@ def add_user_with_infos(user_data, step=None):
 
     if user.get('cti_profile'):
         user['enable_client'] = True
-        user['client_profile'] = user.pop('cti_profile')
 
     user['client_username'] = user.pop('cti_login', '') or str(uuid.uuid4())
     user['client_password'] = user.pop('cti_passwd', '') or str(uuid.uuid4())
@@ -219,13 +225,6 @@ def add_user(data_dict, step=None):
         'enabled': data_dict.get('enable_client', True),
     }
     world.auth_client.users.new(**auth_user)
-
-    if 'client_profile' in data_dict:
-        profile_id = cti_profile_helper.find_profile_id_by_name(data_dict['client_profile'])
-        world.confd_client.users(user['uuid']).update_cti_profile(
-            {'id': profile_id},
-            enabled=False,  # enabled is handled by wazo-auth
-        )
 
     if 'agentid' in data_dict:
         world.confd_client.users(user['uuid']).add_agent(data_dict['agentid'])
