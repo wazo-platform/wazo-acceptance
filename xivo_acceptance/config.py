@@ -87,9 +87,6 @@ def load_config(extra_config):
             'verify_certificate': False,
             'prefix': '/provd',
         },
-        'xivo_client': {
-            'login_timeout': 5
-        },
         'ssh_login': 'root',
         'linphone': {
             'sip_port_range': '5001,5009',
@@ -99,7 +96,6 @@ def load_config(extra_config):
             'acceptance': False,
             'global': False,
             'linphone': False,
-            'cticlient': False,
             'easyprocess': False,
             'pyvirtualdisplay': False
         },

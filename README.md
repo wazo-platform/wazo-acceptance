@@ -94,18 +94,6 @@ Once the requirements are installed, modify the configuration files and run the 
     python ./bin/xivo-acceptance -p
 
 
-## Wazo Client
-
-Tests require a local copy of the [Wazo Client](http://github.com/wazo-pbx/wazo-client-qt)
-on the test machine with FUNCTESTS enabled. Here is a quick example on how to
-install and compile the client:
-
-    git clone git://github.com/wazo-pbx/wazo-client-qt
-    cd wazo-client-qt
-    qmake
-    make FUNCTESTS=yes
-
-
 ## Configuration
 
 Create a local configuration file in ```~/.xivo-acceptance/default``` and
@@ -131,11 +119,11 @@ addresses and subnets. For example:
 
 Tests can be found in the ```features``` directory. You can run all tests:
 
-    PYTHONPATH=path/to/xivo_acceptance XC_PATH=/path/to/wazo-client-qt/bin lettuce data/features/daily
+    lettuce data/features/daily
 
 Or only a single test file:
 
-    PYTHONPATH=path/to/xivo_acceptance XC_PATH=/path/to/wazo-client-qt/bin lettuce data/features/group/group.feature
+    lettuce data/features/group/group.feature
 
 
 If you're using firefox 47 or greater you can use the selenium/standalone-firefox docker image

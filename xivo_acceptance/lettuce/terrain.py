@@ -37,9 +37,6 @@ def xivo_acceptance_lettuce_after_each_step(step):
 def xivo_acceptance_lettuce_after_each_scenario(scenario):
     asterisk.stop_ami_monitoring()
     scenario.phone_register.clear()
-    xc = getattr(scenario, '_pseudo_xivo_client', None)
-    if xc:
-        xc.stop()
     asterisk_helper.send_to_asterisk_cli(u'channel request hangup all')
 
 

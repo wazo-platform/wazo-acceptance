@@ -8,20 +8,13 @@ from hamcrest import assert_that
 from hamcrest import is_
 from lettuce import step, world
 
-from xivo_acceptance.helpers import cti_helper
 from xivo_acceptance.helpers import directory_helper
 from xivo_acceptance.lettuce import sysutils
 
 
 @step(u'I restart "([^"]*)"$')
 def i_restart_service(step, service_name):
-    if service_name == 'asterisk':
-        sysutils.restart_service('asterisk')
-        sysutils.restart_service('xivo-ctid')
-    elif service_name == 'xivo-ctid':
-        cti_helper.restart_server()
-    else:
-        sysutils.restart_service(service_name)
+    sysutils.restart_service(service_name)
 
 
 @step(u'I restart wazo-dird$')

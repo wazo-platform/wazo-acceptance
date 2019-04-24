@@ -10,7 +10,6 @@ from .asterisk_steps import *
 from .backup_steps import *
 from .call_logs_steps import *
 from .call_steps import *
-from .common_xivoclient_steps import *
 from .common_bus_steps import *
 from .conf_file_steps import *
 from .consul_steps import *
@@ -47,4 +46,3 @@ from .user_service_steps import *
 from .voicemail_steps import *
 from .wizard_steps import *
 from .xivo_agent_steps import *
-from .xlet_service_steps import *
