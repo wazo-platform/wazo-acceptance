@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2016 Avencall
+# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from lettuce import step
@@ -7,7 +7,6 @@ from lettuce import world
 
 from xivo_acceptance.lettuce import sysutils
 from xivo_acceptance.lettuce import terrain
-from xivo_acceptance.action.webi import high_availability as high_availability_action
 
 
 @step(u'I switch to the XiVO master')
@@ -22,18 +21,12 @@ def i_switch_to_the_xivo_slave(step):
 
 @step(u'Given the HA is enabled as master')
 def given_the_ha_is_enabled_as_master(step):
-    high_availability_action.set_ha_config(
-        mode='Master',
-        remote=world.config['slave_host']
-    )
+    pass
 
 
 @step(u'Given the HA is enabled as slave')
 def given_the_ha_is_enabled_as_slave(step):
-    high_availability_action.set_ha_config(
-        mode='Slave',
-        remote=world.config['master_host']
-    )
+    pass
 
 
 @step(u'When I start the replication between master and slave')
@@ -44,22 +37,14 @@ def when_i_start_the_replication_between_master_and_slave(step):
 
 @step(u'When I disable the HA')
 def when_i_disable_the_ha(step):
-    high_availability_action.set_ha_config_ignore_errors(
-        mode='Disabled'
-    )
+    pass
 
 
 @step(u'When I enable the HA as master')
 def when_i_enable_the_ha_as_master(step):
-    high_availability_action.set_ha_config(
-        mode='Master',
-        remote=world.config['slave_host']
-    )
+    pass
 
 
 @step(u'When I enable the HA as slave')
 def when_i_enable_the_ha_as_slave(step):
-    high_availability_action.set_ha_config(
-        mode='Slave',
-        remote=world.config['master_host']
-    )
+    pass

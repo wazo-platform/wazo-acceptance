@@ -10,7 +10,6 @@ from requests.exceptions import HTTPError
 
 from xivo_auth_client import Client as AuthClient
 from xivo_acceptance import helpers
-from xivo_acceptance.action.webi import user as user_action_webi
 from xivo_acceptance.helpers import (
     cti_profile_helper,
     entity_helper,
@@ -130,12 +129,12 @@ def _delete_user(user):
     try:
         world.confd_client.users.delete(user['id'])
     except HTTPError as e:
-        print 'deleting user from confd failed', e
+        print('deleting user from confd failed', e)
 
     try:
         world.auth_client.users.delete(user['uuid'])
     except HTTPError as e:
-        print 'deleting user from auth failed', e
+        print('deleting user from auth failed', e)
 
 
 def add_user_with_infos(user_data, step=None):

@@ -1,4 +1,3 @@
 *.xml
 *.pyc
 .tox
-geckodriver.log

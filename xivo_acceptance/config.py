@@ -46,10 +46,6 @@ def load_config(extra_config):
         'features_dir': _find_first_existing_path(_FEATURES_DIRS),
         'output_dir': '/tmp',
         'default_entity': 'xivoentity',
-        'frontend': {
-            'username': 'root',
-            'passwd': 'superpass'
-        },
         'amid': {
             'host': DEFAULT_XIVO_HOST,
             'port': 9491,
@@ -96,8 +92,6 @@ def load_config(extra_config):
             'acceptance': False,
             'global': False,
             'linphone': False,
-            'easyprocess': False,
-            'pyvirtualdisplay': False
         },
         'bus': {
             'exchange_name': 'xivo',
@@ -137,8 +131,6 @@ def load_config(extra_config):
 def _config_post_processor(config):
     if 'db_uri' not in config:
         config['db_uri'] = 'postgresql://asterisk:proformatique@{}/asterisk'.format(config['xivo_host'])
-    if 'url' not in config['frontend']:
-        config['frontend']['url'] = 'https://{}'.format(config['xivo_host'])
     config['bus_url'] = 'amqp://{username}:{password}@{host}:{port}//'.format(**config['bus'])
 
 

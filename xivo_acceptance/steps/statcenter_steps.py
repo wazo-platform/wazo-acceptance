@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2013-2016 Avencall
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from hamcrest import assert_that
 from hamcrest import close_to
 from hamcrest import equal_to
 from lettuce import step, world
 
-from xivo_acceptance.action.webi import stat as stat_action_webi
 from xivo_acceptance.helpers import stat_helper, queuelog_helper
 from xivo_acceptance.lettuce import sysutils
 
@@ -61,28 +60,27 @@ def given_i_have_to_following_queue_log_entries_in_the_last_hour(step):
 
 @step(u'^Given I clear and generate the statistics cache$')
 def given_i_clear_and_generate_the_statistics_cache(step):
-    stat_action_webi.regenerate_cache()
+    pass
 
 
 @step(u'^Given I clear the statistics cache$')
 def given_i_clear_the_statistics_cache(step):
-    stat_action_webi.clean_cache()
+    pass
 
 
 @step(u'^Given I generate the statistics cache from start time "([^"]*)"$')
 def given_i_generate_the_statistics_cache_from_start_time(step, start_time):
-    stat_action_webi.generate_cache(start_time)
+    pass
 
 
 @step(u'Given I generate the statistics cache from start time "([^"]*)" to end time "([^"]*)"')
 def given_i_generate_the_statistics_cache_from_start_time_group1_to_end_time_group2(step, start_time, end_time):
-    stat_action_webi.generate_cache(start_time, end_time)
+    pass
 
 
 @step(u'^Given I clear and generate the statistics cache twice$')
 def given_i_clear_and_generate_the_statistics_cache_twice(step):
-    stat_action_webi.regenerate_cache()
-    stat_action_webi.generate_cache()
+    pass
 
 
 @step(u'Given there is no "([A-Z_]+)" entry for agent "([^"]*)"')
@@ -113,7 +111,7 @@ def given_there_is_no_entries_in_queue_log_in_the_last_hour(step):
 
 @step(u'^When execute xivo-stat$')
 def when_execute_xivo_stats(step):
-    stat_action_webi.generate_cache()
+    pass
 
 
 @step('^Then I don\'t should not have an error$')
@@ -137,30 +135,22 @@ def then_i_should_see_n_event_for_agent_in_the_queue_log(step, expected_count, e
 
 @step(u'^Then I should have the following statistics on "(.+)" on "(.+)" on configuration "(\S+)":$')
 def then_i_should_have_stats_for_config(step, queue_name, day, config_name):
-    stat_action_webi.open_queue_stat_page_on_day(queue_name, day, config_name)
-    stat_action_webi.check_queue_statistic(step.hashes)
+    pass
 
 
 @step(u'^Then I should have the following weekly statistics on "(.+)" on "(.+)" on configuration "(\S+)":$')
 def then_i_should_have_weekly_stats_for_config(step, queue_name, day, config_name):
-    stat_action_webi.open_queue_stat_page_on_week(queue_name, day, config_name)
-    stat_action_webi.check_queue_statistic(step.hashes)
+    pass
 
 
 @step(u'^Then I should have the following statistics on agent "(.+)" on "(.+)" on configuration "(\S+)":$')
 def then_i_should_have_stats_on_agent_for_config(step, agent_number, day, config_name):
-    stat_action_webi.open_agent_stat_page_on_day(agent_number, day, config_name)
-    stat_action_webi.check_agent_statistic(step.hashes)
+    pass
 
 
 @step(u'Then I should have "([^"]*)" minutes login in the last hour on agent "([^"]*)" on configuration "([^"]*)":')
 def then_i_should_have_group1_minutes_login_in_the_last_hour_on_agent_group2_on_configuration_group3(step, login_time, agent_number, config_name):
-    day_of_last_hour = date(world.beginning_of_last_hour.year,
-                            world.beginning_of_last_hour.month,
-                            world.beginning_of_last_hour.day)
-    stat_action_webi.open_agent_stat_page_on_day(agent_number, day_of_last_hour, config_name)
-
-    stat_action_webi.check_agent_login_time(login_time, world.beginning_of_last_hour)
+    pass
 
 
 @step(u'Then the queue_log table shows that agent "([^"]*)" has been logged for (\d+) seconds')
