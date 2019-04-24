@@ -61,30 +61,10 @@ def given_there_is_a_no_user_1_2(step, firstname, lastname):
     ule_helper.delete_user_line_extension_voicemail(firstname, lastname)
 
 
-@step(u'Given "([^"]*)" has a dialaction on "([^"]*)" to "([^"]*)" "([^"]*)"')
-def given_user_has_a_dialaction(step, fullname, event, dialaction, destination):
-    pass
-
-
-@step(u'Given "([^"]*)" has a "([^"]*)" seconds ringing time')
-def given_user_has_a_n_ringing_time(step, fullname, ring_seconds):
-    pass
-
-
 @step(u'Given user "([^"]*)" "([^"]*)" has schedule "([^"]*)"')
 def given_user_1_has_schedule_2(step, firstname, lastname, schedule):
     user = user_helper.get_by_firstname_lastname(firstname, lastname)
     user_helper.associate_schedule(schedule, user['id'])
-
-
-@step(u'Then the user "([^"]*)" "([^"]*)" not exist')
-def then_the_user_not_exist(step, firstname, lastname):
-    pass
-
-
-@step(u'Then I see a user with infos:')
-def then_i_see_a_user_with_infos(step):
-    pass
 
 
 @step(u'Then "([^"]*)" has an unconditional forward set to "([^"]*)"')

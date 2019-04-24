@@ -17,16 +17,6 @@ def given_there_are_no_sip_lines_with_infos(step, username):
         world.confd_client.endpoints_sip.delete(endpoint_sip['id'])
 
 
-@step(u'(?:Given|When) I set the following options in line "(\d+)@(\w+)":')
-def given_i_set_the_following_options_in_line_1(step, line_number, line_context):
-    pass
-
-
-@step(u'Given the line "(\d+)@(\w+)" is disabled')
-def given_the_line_group1_is_disabled(step, extension, context):
-    pass
-
-
 @step(u'Given I have the following lines:')
 def given_i_have_the_following_lines(step):
     for lineinfo in step.hashes:

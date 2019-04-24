@@ -51,8 +51,3 @@ def convert_agent_numbers(agent_numbers):
 def convert_schedule_name(schedule_name):
     schedule_id = schedule_helper.get_schedule_by(name=schedule_name)
     return schedule_id
-
-
-@step(u'When I create the following queues:')
-def when_i_create_the_following_queues(step):
-    pass

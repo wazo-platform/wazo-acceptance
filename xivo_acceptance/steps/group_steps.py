@@ -8,11 +8,6 @@ from xivo_acceptance.helpers import user_helper, group_helper
 from xivo_acceptance.lettuce import func
 
 
-@step(u'Given there are groups:')
-def given_there_are_groups(step):
-    pass
-
-
 @step(u'Given there is a group "([^"]*)" with extension "([^"]*)" and users:$')
 def given_there_is_a_group_with_extension_and_users(step, name, extension):
     number, context = func.extract_number_and_context_from_extension(extension)

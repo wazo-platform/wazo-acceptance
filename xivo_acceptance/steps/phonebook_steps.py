@@ -9,22 +9,12 @@ from xivo_acceptance.action.dird import phonebook as phonebook_action_dird
 from xivo_acceptance.lettuce.aastra import AastraPhonebookBrowser
 
 
-@step(u'Given the phonebook is accessible by any hosts')
-def given_phone_is_accessible_by_any_hosts(step):
-    pass
-
-
 @step(u'Given there are entries in the phonebook "([^"]*)"')
 def given_there_are_entries_in_the_phonebook_1(step, phonebook_name):
     entity = world.config['default_entity'].replace('_', '')
     for entry in step.hashes:
         phonebook_action_dird.remove_entry_if_exists(entry, phonebook_name, entity)
         phonebook_action_dird.create_entry(entry, phonebook_name, entity)
-
-
-@step(u'Given there are local dird phonebooks:')
-def given_there_are_local_dird_phonebooks(step):
-    pass
 
 
 @step(u'When I search the phonebook for "([^"]*)" on my Aastra "([^"]*)"$')
