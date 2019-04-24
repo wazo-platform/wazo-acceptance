@@ -36,9 +36,6 @@ def run(extra_config):
 
     setup.setup_xivo_configured()
 
-    logger.debug('Configuring CA certificates')
-    _configure_ca_certificates()
-
     logger.debug('Configuring Consul')
     _configure_consul()
 
@@ -215,11 +212,6 @@ def _install_core_dump():
     _install_packages(['gcc'])
     command = ['gcc', '-o', '/usr/local/bin/core_dump', '/usr/src/core_dump.c']
     world.ssh_client_xivo.check_call(command)
-
-
-def _configure_ca_certificates():
-    copy_asset_to_server('openldap-dev.crt', '/usr/local/share/ca-certificates')
-    world.ssh_client_xivo.check_call(['update-ca-certificates'])
 
 
 def _configure_consul():
