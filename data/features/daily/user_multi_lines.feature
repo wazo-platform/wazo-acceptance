@@ -104,7 +104,6 @@ Feature: User multi lines
 
         Then "Bob Field" is hungup
 
-    @skip_old_cti_step
     Scenario: Ringing time are respected on user multi lines
         Given there are users with infos:
         | firstname | lastname | protocol | number | context |

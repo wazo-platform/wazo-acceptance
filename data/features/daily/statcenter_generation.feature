@@ -1,6 +1,5 @@
 Feature: Stats generation
 
-    @skip_old_webi_step
     Scenario: 01 Generation of event FULL
         Given there is no "FULL" entry in queue "q01"
         Given there is a agent "Agent" "001" with number "001"
@@ -18,7 +17,6 @@ Feature: Stats generation
         When chan_test hangs up "5001-3"
         When chan_test hangs up "5001-4"
 
-    @skip_old_webi_step
     Scenario: 02 Generation of event ABANDON
         Given there is no "ABANDON" entry in queue "q02"
         Given there is a agent "Agent" "002" with number "002"
@@ -35,7 +33,6 @@ Feature: Stats generation
         When I wait 3 seconds for the data processing
         Then i should see 3 "ABANDON" event in queue "q02" in the queue log
 
-    @skip_old_webi_step
     Scenario: 03 Generation of event CONNECT
         Given there is no agents logged
         Given there is no "CONNECT" entry in queue "q03"
@@ -53,7 +50,6 @@ Feature: Stats generation
         When I wait 3 seconds for the data processing
         Then i should see 1 "CONNECT" event in queue "q03" in the queue log
 
-    @skip_old_webi_step
     Scenario: 04 Generation of event RINGNOANSWER
         Given there is no agents logged
         Given there is no "RINGNOANSWER" entry in queue "q04"
@@ -70,7 +66,6 @@ Feature: Stats generation
         When I wait 3 seconds for the data processing
         Then I should see 1 "RINGNOANSWER" event in queue "q04" in the queue log
 
-    @skip_old_webi_step
     Scenario: 05 Generation of event ENTERQUEUE
         Given there is no "ENTERQUEUE" entry in queue "q05"
         Given there is a agent "Agent" "005" with number "005"
@@ -87,7 +82,6 @@ Feature: Stats generation
         When I wait 3 seconds for the data processing
         Then i should see 3 "ENTERQUEUE" event in queue "q05" in the queue log
 
-    @skip_old_webi_step
     Scenario: 06 Generation of event JOINEMPTY
         Given there is no "JOINEMPTY" entry in queue "q06"
         Given there are queues with infos:
@@ -103,7 +97,6 @@ Feature: Stats generation
         When I wait 3 seconds for the data processing
         Then i should see 3 "JOINEMPTY" event in queue "q06" in the queue log
 
-    @skip_old_webi_step
     Scenario: 07 Generation of event AGENTCALLBACKLOGIN
         Given there is no agents logged
         Given there is no "AGENTCALLBACKLOGIN" entry for agent "007"
@@ -113,7 +106,6 @@ Feature: Stats generation
         When I log agent "007"
         Then I should see 1 "AGENTCALLBACKLOGIN" event for agent "007" in the queue log
 
-    @skip_old_webi_step
     Scenario: 08 Login twice using AGENTCALLBACKLOGIN
         Given there is no agents logged
         Given there is no "AGENTCALLBACKLOGIN" entry for agent "007"
@@ -124,7 +116,6 @@ Feature: Stats generation
         When I log agent "007", ignoring errors
         Then I should see 1 "AGENTCALLBACKLOGIN" event for agent "007" in the queue log
 
-    @skip_old_webi_step
     Scenario: 09 Logoff when not logged in
         Given there is no agents logged
         Given there is no "AGENTCALLBACKLOGOFF" entry for agent "007"
@@ -136,7 +127,6 @@ Feature: Stats generation
         When I unlog agent "007", ignoring errors
         Then I should see 1 "AGENTCALLBACKLOGOFF" event for agent "007" in the queue log
 
-    @skip_old_webi_step
     Scenario: 10 Generation of event COMPLETECALLER
         Given there is no agents logged
         Given there is no "COMPLETECALLER" entry in queue "q08"
@@ -154,7 +144,6 @@ Feature: Stats generation
         When I wait 3 seconds for the data processing
         Then I should see 1 "COMPLETECALLER" event in queue "q08" in the queue log
 
-    @skip_old_webi_step
     Scenario: 11 Generation of event COMPLETEAGENT
         Given there is no agents logged
         Given there is no "COMPLETEAGENT" entry in queue "q09"
@@ -174,7 +163,6 @@ Feature: Stats generation
         When I wait 3 seconds for the data processing
         Then i should see 1 "COMPLETEAGENT" event in queue "q09" in the queue log
 
-    @skip_old_webi_step
     Scenario: 13 Generation of event CLOSED
         Given there is no "CLOSED" entry in queue "q11"
         Given I have a schedule "always_closed" in "America/Montreal" with the following schedules:
@@ -191,7 +179,6 @@ Feature: Stats generation
         When I wait 3 seconds for the data processing
         Then i should see 2 "CLOSED" event in queue "q11" in the queue log
 
-    @skip_old_webi_step
     Scenario: 14 Generation of event EXITWITHTIMEOUT
         Given there is no agents logged
         Given there is no "EXITWITHTIMEOUT" entry in queue "q12"
@@ -209,13 +196,11 @@ Feature: Stats generation
         When chan_test hangs up "5012-1"
         When chan_test hangs up "5012-2"
 
-    @skip_old_webi_step
     Scenario: 15 Generate corrupt stats with EXITWITHTIMEOUT event
         Given there are a corrupt entry in queue_log
         When execute xivo-stat
         Then I don't should not have an error
 
-    @skip_old_webi_step
     Scenario: 16 Generation of event PAUSEALL and UNPAUSEALL
         Given there is no agents logged
         Given there is no "PAUSEALL" entry for agent "013"
@@ -232,7 +217,6 @@ Feature: Stats generation
         Then I should see 1 "PAUSEALL" event for agent "013" in the queue log
         Then I should see 1 "UNPAUSEALL" event for agent "013" in the queue log
 
-    @skip_old_webi_step
     Scenario: 17 Generation of event WRAPUPSTART
         Given there is no agents logged
         Given there is no "WRAPUPSTART" entry for agent "014"

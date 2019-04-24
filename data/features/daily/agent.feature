@@ -1,3 +1,4 @@
+# Should be in xivo-agentd integration tests
 Feature: Agent
 
     Scenario: Agent login status update events

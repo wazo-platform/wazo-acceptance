@@ -1,5 +1,5 @@
 Feature: Provisioning security
-    @skip_old_webi_step
+
     Scenario: Fail2ban test for xivo-provd
         Given there's no plugins "xivo-aastra" installed
         Given the latest plugin "xivo-aastra" is installed

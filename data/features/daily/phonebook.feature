@@ -4,7 +4,6 @@ Feature: Phonebook
         Given the phonebook is accessible by any hosts
         Given the internal directory exists
         Given the directory definition "internal" is included in the default directory
-        Given I restart wazo-dird
         Given the latest plugin "xivo-aastra-3" is installed
         Given I have the following devices:
           | mac               | latest plugin of | vendor | model

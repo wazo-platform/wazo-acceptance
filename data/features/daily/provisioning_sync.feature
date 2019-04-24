@@ -1,6 +1,5 @@
 Feature: Synchronize
 
-    @skip_old_cti_step
     Scenario: Synchronize two devices behind NAT
         Given the latest plugin "xivo-aastra" is installed
         Given I have the following devices:
@@ -16,7 +15,7 @@ Feature: Synchronize
           | Aastra/001122334401.cfg | Aastra6731i MAC:00-11-22-33-44-01 V:3.2.2.1136-SIP |
           | Aastra/001122334402.cfg | Aastra6731i MAC:00-11-22-33-44-02 V:3.2.2.1136-SIP |
         Given the AMI is monitored
-        When I synchronize the device with mac "00:11:22:33:44:01" from webi
+        When I synchronize the device with mac "00:11:22:33:44:01"
         Then I see in the AMI that the line "1001@default" has been synchronized
-        When I synchronize the device with mac "00:11:22:33:44:02" from webi
+        When I synchronize the device with mac "00:11:22:33:44:02"
         Then I see in the AMI that the line "1002@default" has been synchronized

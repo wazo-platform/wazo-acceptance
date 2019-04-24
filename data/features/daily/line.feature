@@ -1,6 +1,5 @@
 Feature: Line
 
-    @skip_old_cti_step
     Scenario: Change SIP line username
         Given there are no SIP lines with username "newusername"
         Given there are users with infos:

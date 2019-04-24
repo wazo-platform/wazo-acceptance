@@ -1,4 +1,4 @@
-Feature: Callgen
+Feature: Call Generation
 
     Scenario: Call to inexistant extension
         Given there are users with infos:
@@ -30,7 +30,6 @@ Feature: Callgen
          | User 100 | 1101 | User 101 | 3         | callee |
         Then I see no recording file of this call in monitoring audio files page
 
-    @skip_old_webi_step
     Scenario: Call to line that is disabled
         Given there are users with infos:
             | firstname | lastname | number | context | protocol | with_phone |
@@ -40,7 +39,6 @@ Feature: Callgen
         When "Bountrabi Sylla" calls "1103"
         Then "Bountrabi Sylla" last dialed extension was not found
 
-    @skip_old_webi_step
     Scenario: No answer destination with disabled forward exten on no answer
         Given the "Enable forwarding on no-answer" extension is disabled
         Given there are users with infos:
@@ -55,7 +53,6 @@ Feature: Callgen
         When I wait 9 seconds
         Then "Pussy Galore" is ringing
 
-    @skip_old_webi_step
     Scenario: Busy destination with disabled forward exten on busy
         Given the "Enable forwarding on busy" extension is disabled
         Given there are users with infos:

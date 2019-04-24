@@ -1,3 +1,4 @@
+# Should be in xivo-call-logd integration tests
 Feature: Call Log Generation for Calls from Mobile
 
     Scenario: Generation of answered internal call

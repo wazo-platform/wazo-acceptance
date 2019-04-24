@@ -1,6 +1,5 @@
-Feature: Service
+Feature: Function Key BLF
 
-    @skip_not_implemented
     Scenario: Disabling all forwards hide the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
@@ -23,7 +22,6 @@ Feature: Service
         When I disable all forwards on XiVO Client
         Then the user "BLFMan Forward" has all forwards hints disabled
 
-    @skip_not_implemented
     Scenario: Enabling no-answer forward show the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
@@ -36,7 +34,6 @@ Feature: Service
         When I enable forwarding on no-answer with destination "1234"
         Then the user "NoAnswer Forward" has the "noanswer" forward hint enabled
 
-    @skip_not_implemented
     Scenario: Enabling wrong no-answer forward hide the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
@@ -48,7 +45,6 @@ Feature: Service
         When I enable forwarding on no-answer with destination "5678"
         Then the user "WNoAnswer Forward" has the "noanswer" forward hint disabled
 
-    @skip_not_implemented
     Scenario: Enabling busy forward show the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
@@ -61,7 +57,6 @@ Feature: Service
         When I enable forwarding on busy with destination "0912"
         Then the user "Busy Forward" has the "busy" forward hint enabled
 
-    @skip_not_implemented
     Scenario: Enabling wrong busy forward show the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
@@ -73,7 +68,6 @@ Feature: Service
         When I enable forwarding on busy with destination "5678"
         Then the user "WBusy Forward" has the "busy" forward hint disabled
 
-    @skip_not_implemented
     Scenario: Enabling unconditional forward show the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
@@ -86,7 +80,6 @@ Feature: Service
         When I enable unconditional forwarding with destination "5678"
         Then the user "Uncond Forward" has the "unconditional" forward hint enabled
 
-    @skip_not_implemented
     Scenario: Enabling unconditional forward show the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
@@ -98,7 +91,6 @@ Feature: Service
         When I enable unconditional forwarding with destination "5678"
         Then the user "WUncond Forward" has the "unconditional" forward hint disabled
 
-    @skip_not_implemented
     Scenario: Enabling DND show the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
@@ -110,7 +102,6 @@ Feature: Service
         When I enable DND
         Then the user "DND Service" has the "dnd" hint enabled
 
-    @skip_not_implemented
     Scenario: Disabling DND show the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
@@ -122,7 +113,6 @@ Feature: Service
         When I disable DND
         Then the user "DND Service" has the "dnd" hint disabled
 
-    @skip_not_implemented
     Scenario: Enabling incoming call filtering show the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
@@ -134,7 +124,6 @@ Feature: Service
         When I enable incoming call filtering
         Then the user "IncallFil Service" has the "incallfilter" hint enabled
 
-    @skip_not_implemented
     Scenario: Disabling incoming call filtering show the BLF
         Given there are users with infos:
          | firstname | lastname | cti_profile | cti_login | cti_passwd | protocol | context | number |
