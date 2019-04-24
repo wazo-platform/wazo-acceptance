@@ -3,15 +3,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from hamcrest import assert_that
-from hamcrest import contains
-from hamcrest import equal_to
 from hamcrest import empty
 from hamcrest import has_entries
 from hamcrest import has_item
 from hamcrest import has_items
 from hamcrest import not_
 from lettuce import step, world
-from xivo_acceptance.helpers import asterisk_helper
 from xivo_acceptance.helpers import line_read_helper
 from xivo_acceptance.lettuce import asterisk, sysutils, common
 
@@ -25,25 +22,6 @@ def given_the_ami_is_monitored(step):
 def then_asterisk_command_group1_return_no_error(step, ast_cmd):
     command = ['asterisk', '-rx', '"%s"' % ast_cmd]
     assert sysutils.send_command(command)
-
-
-@step(u'Then the "([^"]*)" section of "([^"]*)" contains the options:')
-def then_the_group1_section_of_group2_contains(step, section, filename):
-    option_names = [item['name'] for item in step.hashes]
-    expected_options = [(item['name'], item['value']) for item in step.hashes]
-
-    options = asterisk_helper.get_conf_options(filename, section, option_names)
-
-    assert_that(options, contains(*expected_options))
-
-
-@step(u'Then the "([^"]*)" section of "([^"]*)" does not contain the options:')
-def then_the_group1_section_of_group2_does_not_contain_the_options(step, section, filename):
-    option_names = [item['name'] for item in step.hashes]
-
-    options = asterisk_helper.get_conf_options(filename, section, option_names)
-
-    assert_that(options, equal_to([]))
 
 
 @step(u'Then I see in the AMI that the line "([^"]*)@(\w+)" has been synchronized')

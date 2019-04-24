@@ -35,8 +35,3 @@ def when_the_provisioning_server_receives_the_following_http_requests(step):
 def _provisioning_server_http_requests(step):
     for request_data in step.hashes:
         provd_helper.request_http(request_data['path'], request_data['user-agent'])
-
-
-@step(u'When I synchronize the device with mac "([^"]*)" from webi')
-def when_i_synchronize_the_device_group1_from_webi(step, mac):
-    pass
