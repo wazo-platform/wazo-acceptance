@@ -6,7 +6,6 @@ from lettuce import world
 
 from requests.exceptions import HTTPError
 
-from xivo_acceptance.helpers import dialpattern_helper
 from xivo_acceptance.helpers import entity_helper
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.helpers import group_helper
@@ -87,10 +86,14 @@ def _delete_extension_type(exten, extension_type, typeval):
     elif extension_type == 'meetme':
         _delete_meetme(exten)
     elif extension_type == 'outcall':
-        dialpattern_helper.delete(int(typeval))
+        _delete_dialpattern(typeval)
 
 
 def _delete_meetme(exten):
+    raise NotImplementedError
+
+
+def _delete_dialpattern(exten):
     raise NotImplementedError
 
 

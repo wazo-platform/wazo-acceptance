@@ -8,14 +8,10 @@ from xivo_acceptance.lettuce import common
 from xivo_acceptance.lettuce import sysutils
 
 
-def configure_internal_directory():
-    pass
-
-
 def restart_dird():
     sysutils.restart_service('wazo-dird')
-    wait_for_dird_http()
+    _wait_for_dird_http()
 
 
-def wait_for_dird_http():
+def _wait_for_dird_http():
     common.wait_until(world.dird_client.is_server_reachable, tries=10)

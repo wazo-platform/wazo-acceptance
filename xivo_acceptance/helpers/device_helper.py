@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-
 from lettuce.registry import world
-
-
-def provision_device_using_webi(provcode, device_ip):
-    raise NotImplementedError
 
 
 def add_or_replace_device(device):
