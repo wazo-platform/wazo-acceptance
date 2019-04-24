@@ -9,11 +9,6 @@ from xivo_acceptance.helpers import provd_helper as provd
 STABLE_URL = 'http://provd.wazo.community/plugins/1/stable/'
 
 
-@step(u'Given a update plugins provd with good url')
-def given_a_update_plugins_provd(step):
-    provd.update_plugin_list(STABLE_URL)
-
-
 @step(u'Given the latest plugin "([^"]*)" is installed')
 def given_the_latest_plugin_group1_is_installed(step, plugin):
     provd.update_plugin_list(STABLE_URL)

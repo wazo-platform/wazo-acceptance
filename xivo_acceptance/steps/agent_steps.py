@@ -2,13 +2,9 @@
 # Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from hamcrest import assert_that, equal_to, instance_of
-from lettuce import step, world
+from lettuce import step
 
 from xivo_acceptance.helpers import agent_helper
-from xivo_acceptance.lettuce import auth
-from xivo_agentd_client import Client as AgentdClient
-from xivo_agentd_client.error import AgentdClientError
 
 
 @step(u'Given there is a agent "([^"]+)" "([^"]*)" with number "([^"]+)"$')
@@ -65,36 +61,3 @@ def when_i_pause_agent_1(step, agent_number):
 @step(u'When I unpause agent "([^"]*)"')
 def when_i_unpause_agent_1(step, agent_number):
     agent_helper.unpause_agent(agent_number)
-
-
-@step(u'When I request the agent statuses with an invalid token')
-def when_i_request_the_agent_statuses_with_an_invalid_token(step):
-    agentd_client = AgentdClient(world.config['xivo_host'],
-                                 token=auth.invalid_auth_token(),
-                                 verify_certificate=False)
-    _agentd_request(agentd_client.agents.get_agent_statuses)
-
-
-def _agentd_request(fun, *args):
-    world.agentd_response = None
-    world.agentd_exception = None
-    try:
-        world.agentd_response = fun(*args)
-    except Exception as e:
-        world.agentd_exception = e
-
-
-@step(u'Then I get an "invalid token" response from xivo-agentd')
-def then_i_get_an_invalid_token_response_from_xivo_agentd(step):
-    assert_that(world.agentd_exception, instance_of(AgentdClientError))
-    assert_that(world.agentd_exception.error, equal_to('invalid token or unauthorized'))
-
-
-@step(u'Then the agent "([^"]*)" is logged')
-def then_the_agent_group1_is_logged(step, agent_number):
-    assert agent_helper.is_agent_logged(agent_number)
-
-
-@step(u'Then the agent "([^"]*)" is not logged')
-def then_the_agent_group1_is_not_logged(step, agent_number):
-    assert not agent_helper.is_agent_logged(agent_number)

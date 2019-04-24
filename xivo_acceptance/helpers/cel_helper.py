@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
-# Copyright (C) 2016 Proformatique Inc.
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from xivo_acceptance.lettuce import postgres
-
-
-def delete_all():
-    query = "DELETE FROM cel"
-    postgres.exec_sql_request(query)
 
 
 def insert_entries(entries):

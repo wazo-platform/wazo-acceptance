@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -7,7 +7,6 @@ import time
 from lettuce import world
 
 from xivo_acceptance.helpers import user_helper
-from xivo_acceptance.helpers import tenant_helper
 from xivo_acceptance.lettuce import func
 from xivo_agentd_client.error import AgentdClientError
 
@@ -73,11 +72,6 @@ def logoff_agent_from_phone(agent_number, phone_register):
     phone = phone_register.get_user_phone(fullname)
     phone.call('*32%s' % agent_number)
     time.sleep(3)
-
-
-def is_agent_logged(agent_number):
-    agent_status = world.agentd_client.agents.get_agent_status_by_number(agent_number)
-    return agent_status.logged
 
 
 def unlog_all_agents():
