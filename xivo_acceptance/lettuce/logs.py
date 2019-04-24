@@ -8,51 +8,20 @@ import re
 
 from xivo_acceptance.lettuce import sysutils
 
-
-DAEMON_LOGFILE = '/var/log/daemon.log'
-ASTERISK_LOGFILE = '/var/log/asterisk/messages'
 XIVO_AGENT_LOGFILE = '/var/log/xivo-agentd.log'
-
-DAEMON_DATE_FORMAT = "%b %d %H:%M:%S"
-DAEMON_DATE_PATTERN = r"([\w]{3} [\d ]{2} [\d]{2}:[\d]{2}:[\d]{2})"
 
 PYTHON_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 PYTHON_DATE_PATTERN = r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})"
 
 LogfileInfo = namedtuple('LogfileInfo', ['logfile', 'date_format', 'date_pattern'])
 
-DAEMON_LOG_INFO = LogfileInfo(logfile=DAEMON_LOGFILE,
-                              date_format=DAEMON_DATE_FORMAT,
-                              date_pattern=DAEMON_DATE_PATTERN)
-
-ASTERISK_LOG_INFO = LogfileInfo(logfile=ASTERISK_LOGFILE,
-                                date_format=DAEMON_DATE_FORMAT,
-                                date_pattern=DAEMON_DATE_PATTERN)
-
 XIVO_AGENT_LOG_INFO = LogfileInfo(logfile=XIVO_AGENT_LOGFILE,
                                   date_format=PYTHON_DATE_FORMAT,
                                   date_pattern=PYTHON_DATE_PATTERN)
 
 
-def search_str_in_asterisk_log(expression, delta=10):
-    return _search_str_in_log_file(expression, ASTERISK_LOG_INFO, delta)
-
-
 def search_str_in_xivo_agent_log(expression, delta=10):
     return _search_str_in_log_file(expression, XIVO_AGENT_LOG_INFO, delta)
-
-
-def _find_line_in_log_file(loginfo, delta=10):
-    min_datetime = sysutils.xivo_current_datetime() - timedelta(seconds=delta)
-    loglines = get_lines_since_timestamp(min_datetime, loginfo)
-    return loglines
-
-
-def _find_all_lines_in_log_file(loginfo):
-    command = ['tail', '-n', '30', loginfo.logfile]
-    result = sysutils.output_command(command)
-    lines = result.split("\n")
-    return lines
 
 
 def _search_str_in_log_file(expression, loginfo, delta=10):
@@ -62,6 +31,12 @@ def _search_str_in_log_file(expression, loginfo, delta=10):
         if expression in line:
             return True
     return False
+
+
+def _find_line_in_log_file(loginfo, delta=10):
+    min_datetime = sysutils.xivo_current_datetime() - timedelta(seconds=delta)
+    loglines = get_lines_since_timestamp(min_datetime, loginfo)
+    return loglines
 
 
 def get_lines_since_timestamp(min_timestamp, loginfo):
@@ -87,6 +62,13 @@ def get_lines_since_timestamp(min_timestamp, loginfo):
             after_date = True
 
     return res
+
+
+def _find_all_lines_in_log_file(loginfo):
+    command = ['tail', '-n', '30', loginfo.logfile]
+    result = sysutils.output_command(command)
+    lines = result.split("\n")
+    return lines
 
 
 def _add_year_to_datetime(ts, year=None):

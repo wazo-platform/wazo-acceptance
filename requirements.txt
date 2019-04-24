@@ -15,7 +15,6 @@ git+https://github.com/wazo-pbx/xivo-lib-rest-client.git
 git+https://github.com/wazo-pbx/xivo-test-helpers.git
 PyHamcrest
 SQLAlchemy
-jinja2
 kombu==3.0.35
 lettuce<0.2.21  # lettuce 0.2.21 breaks the -s3 behavior
 psycopg2==2.6.2

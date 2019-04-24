@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -7,7 +7,6 @@ import datetime
 
 from email.utils import parsedate
 from lettuce import world
-
 
 SERVICE_PIDFILES = {
     'asterisk': '/var/run/asterisk/asterisk.pid',
@@ -112,11 +111,6 @@ def get_pidfile_for_service_name(service):
 
 def start_service(service_name):
     command = ['systemctl', 'start', service_name]
-    world.ssh_client_xivo.check_call(command)
-
-
-def stop_service(service_name):
-    command = ['systemctl', 'stop', service_name]
     world.ssh_client_xivo.check_call(command)
 
 
