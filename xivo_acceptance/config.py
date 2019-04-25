@@ -45,6 +45,10 @@ def load_config(extra_config):
         'assets_dir': _find_first_existing_path(_ASSETS_DIRS),
         'features_dir': _find_first_existing_path(_FEATURES_DIRS),
         'output_dir': '/tmp',
+        'auth': {
+            'host': DEFAULT_XIVO_HOST,
+            'verify_certificate': False
+        },
         'amid': {
             'host': DEFAULT_XIVO_HOST,
             'port': 9491,
@@ -81,6 +85,11 @@ def load_config(extra_config):
             'https': True,
             'verify_certificate': False,
             'prefix': '/provd',
+        },
+        'setupd': {
+            'host': DEFAULT_XIVO_HOST,
+            'verify_certificate': False,
+            'timeout': 60,
         },
         'ssh_login': 'root',
         'linphone': {
@@ -134,6 +143,9 @@ def _config_post_processor(config):
 
 
 def _config_update_host(config):
+    if config['auth']['host'] == DEFAULT_XIVO_HOST:
+        config['auth']['host'] = config['xivo_host']
+
     if config['amid']['host'] == DEFAULT_XIVO_HOST:
         config['amid']['host'] = config['xivo_host']
 
@@ -148,6 +160,9 @@ def _config_update_host(config):
 
     if config['dird']['host'] == DEFAULT_XIVO_HOST:
         config['dird']['host'] = config['xivo_host']
+
+    if config['setupd']['host'] == DEFAULT_XIVO_HOST:
+        config['setupd']['host'] = config['xivo_host']
 
     if config['bus']['host'] == DEFAULT_XIVO_HOST:
         config['bus']['host'] = config['xivo_host']

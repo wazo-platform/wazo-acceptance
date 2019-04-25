@@ -6,14 +6,15 @@ import logging
 
 from lettuce import world
 
-from xivo_amid_client import Client as AmidClient
-from wazo_dird_client import Client as DirdClient
-from xivo_agentd_client import Client as AgentdClient
-from xivo_auth_client import Client as AuthClient
 from wazo_call_logd_client import Client as CallLogdClient
+from wazo_dird_client import Client as DirdClient
+from wazo_provd_client import Client as ProvdClient
+from wazo_setupd_client import Client as SetupdClient
+from xivo_agentd_client import Client as AgentdClient
+from xivo_amid_client import Client as AmidClient
+from xivo_auth_client import Client as AuthClient
 from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
-from wazo_provd_client import Client as ProvdClient
 
 from . import auth
 from . import debug
@@ -60,10 +61,11 @@ def setup_dird_client():
 
 
 def setup_auth_token():
-    world.auth_client = AuthClient(world.config['xivo_host'],
-                                   username='xivo-acceptance',
-                                   password='proformatique',
-                                   verify_certificate=False)
+    world.auth_client = AuthClient(
+        username='xivo-acceptance',
+        password='proformatique',
+        **world.config['auth']
+    )
     world.config['auth_token'] = auth.new_auth_token()
     world.auth_client.set_token(world.config.get('auth_token'))
     auth.register_for_token_renewal(world.auth_client.set_token)
@@ -73,6 +75,12 @@ def setup_provd_client():
     world.provd_client = ProvdClient(**world.config['provd'])
     world.provd_client.set_token(world.config.get('auth_token'))
     auth.register_for_token_renewal(world.provd_client.set_token)
+
+
+def setup_setupd_client():
+    world.setupd_client = SetupdClient(**world.config['setupd'])
+    world.setupd_client.set_token(world.config.get('auth_token'))
+    auth.register_for_token_renewal(world.setupd_client.set_token)
 
 
 def setup_config(extra_config):
