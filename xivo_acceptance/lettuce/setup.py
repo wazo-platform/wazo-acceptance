@@ -15,8 +15,6 @@ from xivo_confd_client import Client as ConfdClient
 from xivo_ctid_ng_client import Client as CtidNgClient
 from wazo_provd_client import Client as ProvdClient
 
-from xivo_acceptance.helpers import entity_helper
-
 from . import auth
 from . import debug
 from ..config import load_config, XivoAcceptanceConfig
@@ -75,26 +73,6 @@ def setup_provd_client():
     world.provd_client = ProvdClient(**world.config['provd'])
     world.provd_client.set_token(world.config.get('auth_token'))
     auth.register_for_token_renewal(world.provd_client.set_token)
-
-
-def setup_tenant():
-    entity_name = world.config.get('entity')
-    if entity_name:
-        entity = entity_helper.get_entity_with_name(entity_name)
-    else:
-        try:
-            entity = entity_helper.get_default_entity()
-        except Exception:
-            logger.exception('failed to get an entity')
-            return
-
-    if not entity:
-        return
-
-    tenant_uuid = entity['tenant']['uuid']
-
-    world.auth_client.set_tenant(tenant_uuid)
-    world.confd_client.set_tenant(tenant_uuid)
 
 
 def setup_config(extra_config):

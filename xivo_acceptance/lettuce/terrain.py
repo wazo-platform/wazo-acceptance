@@ -74,8 +74,6 @@ def set_xivo_target(extra_config):
     setup.setup_dird_client()
     logger.debug("setup provd client...")
     setup.setup_provd_client()
-    logger.debug('setup tenant_uuid')
-    setup.setup_tenant()
     logger.debug("setup consul...")
     setup.setup_consul()
     logger.debug("setup xivo configured...")

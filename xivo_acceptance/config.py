@@ -45,7 +45,6 @@ def load_config(extra_config):
         'assets_dir': _find_first_existing_path(_ASSETS_DIRS),
         'features_dir': _find_first_existing_path(_FEATURES_DIRS),
         'output_dir': '/tmp',
-        'default_entity': 'xivoentity',
         'amid': {
             'host': DEFAULT_XIVO_HOST,
             'port': 9491,
