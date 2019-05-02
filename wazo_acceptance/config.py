@@ -22,9 +22,7 @@ _CONFIG_DIRS = [
     os.path.join(_ROOT_DIR, 'config')
 ]
 _ASSETS_DIRS = [
-    '/usr/share/wazo-acceptance/assets',
-    os.path.join(sys.prefix, 'share', 'wazo-acceptance', 'assets'),
-    os.path.join(_ROOT_DIR, 'data', 'assets')
+    os.path.join(__package__, 'assets')
 ]
 _FEATURES_DIRS = [
     '/usr/share/wazo-acceptance/features',
