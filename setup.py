@@ -13,4 +13,9 @@ setup(
     author_email='dev@wazo.community',
     url='http://wazo.community',
     packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'xivo-acceptance=xivo_acceptance.main.main',
+        ],
+    },
 )
