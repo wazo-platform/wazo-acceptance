@@ -5,6 +5,7 @@
 import logging
 
 from wazo_call_logd_client import Client as CallLogdClient
+from wazo_calld_client import Client as CalldClient
 from wazo_dird_client import Client as DirdClient
 from wazo_provd_client import Client as ProvdClient
 from wazo_setupd_client import Client as SetupdClient
@@ -12,7 +13,6 @@ from xivo_agentd_client import Client as AgentdClient
 from xivo_amid_client import Client as AmidClient
 from xivo_auth_client import Client as AuthClient
 from xivo_confd_client import Client as ConfdClient
-from xivo_ctid_ng_client import Client as CtidNgClient
 
 from . import auth
 from . import debug
@@ -48,10 +48,10 @@ def setup_confd_client(context):
     auth.register_for_token_renewal(context.confd_client.set_token)
 
 
-def setup_ctid_ng_client(context):
-    context.ctid_ng_client = CtidNgClient(**context.config['ctid_ng'])
-    context.ctid_ng_client.set_token(context.config.get('auth_token'))
-    auth.register_for_token_renewal(context.ctid_ng_client.set_token)
+def setup_calld_client(context):
+    context.calld_client = CalldClient(**context.config['calld'])
+    context.calld_client.set_token(context.config.get('auth_token'))
+    auth.register_for_token_renewal(context.calld_client.set_token)
 
 
 def setup_dird_client(context):

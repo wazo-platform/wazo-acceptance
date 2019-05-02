@@ -60,15 +60,15 @@ def load_config(extra_config):
             'https': True,
             'verify_certificate': False
         },
-        'confd': {
+        'calld': {
             'host': DEFAULT_XIVO_HOST,
-            'port': 9486,
+            'port': 9500,
             'https': True,
             'verify_certificate': False
         },
-        'ctid_ng': {
+        'confd': {
             'host': DEFAULT_XIVO_HOST,
-            'port': 9500,
+            'port': 9486,
             'https': True,
             'verify_certificate': False
         },
@@ -151,11 +151,11 @@ def _config_update_host(config):
     if config['call_logd']['host'] == DEFAULT_XIVO_HOST:
         config['call_logd']['host'] = config['xivo_host']
 
+    if config['calld']['host'] == DEFAULT_XIVO_HOST:
+        config['calld']['host'] = config['xivo_host']
+
     if config['confd']['host'] == DEFAULT_XIVO_HOST:
         config['confd']['host'] = config['xivo_host']
-
-    if config['ctid_ng']['host'] == DEFAULT_XIVO_HOST:
-        config['ctid_ng']['host'] = config['xivo_host']
 
     if config['dird']['host'] == DEFAULT_XIVO_HOST:
         config['dird']['host'] = config['xivo_host']
