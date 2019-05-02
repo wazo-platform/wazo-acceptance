@@ -1,3 +1,4 @@
-*.xml
+*.egg-info
 *.pyc
+*.xml
 .tox
