@@ -11,14 +11,13 @@ import sys
 import yaml
 import xivo_dao
 
-from xivo_acceptance.lettuce import ssh
+from . import ssh
 
 
 logger = logging.getLogger(__name__)
 
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 _CONFIG_DIRS = [
-    os.getenv('LETTUCE_CONFIG', 'invalid_lettuce_config'),
     os.path.join(os.path.expanduser("~"), '.xivo-acceptance'),
     os.path.join(_ROOT_DIR, 'config')
 ]

@@ -6,7 +6,6 @@ import time
 import datetime
 
 from email.utils import parsedate
-from lettuce import world
 
 SERVICE_PIDFILES = {
     'asterisk': '/var/run/asterisk/asterisk.pid',
@@ -20,84 +19,84 @@ SERVICE_PIDFILES = {
 }
 
 
-def path_exists(path):
+def path_exists(context, path):
     command = ['ls', path]
     try:
-        return world.ssh_client_xivo.check_call(command) == 0
+        return context.ssh_client_xivo.check_call(command) == 0
     except Exception:
         return False
 
 
-def dir_is_empty(path):
+def dir_is_empty(context, path):
     command = ['ls', '-1A', path, '|', 'wc', '-l']
-    return world.ssh_client_xivo.out_call(command).strip() == '0'
+    return context.ssh_client_xivo.out_call(command).strip() == '0'
 
 
-def get_list_file(path):
+def get_list_file(context, path):
     command = ['ls', path]
-    return world.ssh_client_xivo.out_call(command)
+    return context.ssh_client_xivo.out_call(command)
 
 
-def file_owned_by_user(path, owner):
+def file_owned_by_user(context, path, owner):
     command = ['stat', '-c', '%U', path]
-    return world.ssh_client_xivo.out_call(command).strip() == owner
+    return context.ssh_client_xivo.out_call(command).strip() == owner
 
 
-def file_owned_by_group(path, owner):
+def file_owned_by_group(context, path, owner):
     command = ['stat', '-c', '%G', path]
-    return world.ssh_client_xivo.out_call(command).strip() == owner
+    return context.ssh_client_xivo.out_call(command).strip() == owner
 
 
-def get_content_file(path):
+def get_content_file(context, path):
     command = ['cat', path]
-    return world.ssh_client_xivo.out_call(command)
+    return context.ssh_client_xivo.out_call(command)
 
 
-def xivo_current_datetime():
+def xivo_current_datetime(context):
     # The main problem here is the timezone: `date` must give us the date in
     # localtime, because the log files are using localtime dates.
     command = ['date', '-R']
-    output = output_command(command).strip()
+    output = output_command(context, command).strip()
     date = parsedate(output)
     return datetime.datetime(*date[:6])
 
 
-def send_command(command, check=True):
+def send_command(context, command, check=True):
     if check:
-        res = world.ssh_client_xivo.check_call(command) == 0
+        res = context.ssh_client_xivo.check_call(command) == 0
     else:
-        res = world.ssh_client_xivo.call(command) == 0
+        res = context.ssh_client_xivo.call(command) == 0
     time.sleep(1)
     return res
 
 
-def output_command(command):
-    res = world.ssh_client_xivo.out_call(command)
+def output_command(context, command):
+    res = context.ssh_client_xivo.out_call(command)
     time.sleep(1)
     return res
 
 
-def is_process_running(pidfile):
-    if not path_exists(pidfile):
+def is_process_running(context, pidfile):
+    if not path_exists(context, pidfile):
         return False
-    pid = get_content_file(pidfile).strip()
+    pid = get_content_file(context, pidfile).strip()
     return path_exists("/proc/%s" % pid)
 
 
-def wait_service_successfully_stopped(pidfile, maxtries=16, wait_secs=10):
-    return _wait_for_the_service_state(pidfile, False, maxtries, wait_secs)
+def wait_service_successfully_stopped(context, pidfile, maxtries=16, wait_secs=10):
+    return _wait_for_the_service_state(context, pidfile, False, maxtries, wait_secs)
 
 
-def wait_service_successfully_started(pidfile, maxtries=16, wait_secs=10):
-    return _wait_for_the_service_state(pidfile, True, maxtries, wait_secs)
+def wait_service_successfully_started(context, pidfile, maxtries=16, wait_secs=10):
+    return _wait_for_the_service_state(context, pidfile, True, maxtries, wait_secs)
 
 
-def _wait_for_the_service_state(pidfile, status, maxtries, wait_secs):
+def _wait_for_the_service_state(context, pidfile, status, maxtries, wait_secs):
     nbtries = 0
-    process_status = is_process_running(pidfile)
+    process_status = is_process_running(context, pidfile)
     while nbtries < maxtries and process_status != status:
         time.sleep(wait_secs)
-        process_status = is_process_running(pidfile)
+        process_status = is_process_running(context, pidfile)
         nbtries += 1
 
     return process_status
@@ -109,11 +108,11 @@ def get_pidfile_for_service_name(service):
     return SERVICE_PIDFILES[service]
 
 
-def start_service(service_name):
+def start_service(context, service_name):
     command = ['systemctl', 'start', service_name]
-    world.ssh_client_xivo.check_call(command)
+    context.ssh_client_xivo.check_call(command)
 
 
-def restart_service(service_name):
+def restart_service(context, service_name):
     command = ['systemctl', 'restart', service_name]
-    world.ssh_client_xivo.check_call(command)
+    context.ssh_client_xivo.check_call(command)

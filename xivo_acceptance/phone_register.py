@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
-
-from lettuce import world
 
 
 class PhoneRegister(object):
 
-    def __init__(self):
+    def __init__(self, amid_client):
         self._sip_phones = {}
         self._registered_contacts = set()
+        self._amid_client = amid_client
 
     def find_new_sip_contact(self, endpoint):
-        sections = world.amid_client.action('PJSIPShowEndpoint', {'endpoint': endpoint})
+        sections = self._amid_client.action('PJSIPShowEndpoint', {'endpoint': endpoint})
         for section in sections:
             contacts = section.get('Contacts')
             if not contacts:

@@ -3,9 +3,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
-from lettuce import world
 
 
-def copy_asset_to_server(asset, serverpath):
-    assetpath = os.path.join(world.config['assets_dir'], asset)
-    world.ssh_client_xivo.send_files(assetpath, serverpath)
+def copy_asset_to_server(context, asset, serverpath):
+    assetpath = os.path.join(context.config['assets_dir'], asset)
+    context.ssh_client_xivo.send_files(assetpath, serverpath)

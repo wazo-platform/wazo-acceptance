@@ -5,16 +5,14 @@
 import logging
 import uuid
 
-from lettuce import world
-
 logger = logging.getLogger('acceptance')
 token_renewal_callbacks = []
 ONE_HOUR = 3600
 
 
-def new_auth_token():
+def new_auth_token(context):
     try:
-        token_data = world.config['token_data'] = world.auth_client.token.new(
+        token_data = context.config['token_data'] = context.auth_client.token.new(
             expiration=6*ONE_HOUR,
         )
         token_id = token_data['token']
@@ -28,8 +26,8 @@ def invalid_auth_token():
     return str(uuid.uuid4())
 
 
-def renew_auth_token():
-    token = world.config['auth_token'] = new_auth_token()
+def renew_auth_token(context):
+    token = context.config['auth_token'] = new_auth_token()
 
     for renewal_callback in token_renewal_callbacks:
         renewal_callback(token)

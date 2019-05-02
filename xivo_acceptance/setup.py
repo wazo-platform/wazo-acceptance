@@ -4,8 +4,6 @@
 
 import logging
 
-from lettuce import world
-
 from wazo_call_logd_client import Client as CallLogdClient
 from wazo_dird_client import Client as DirdClient
 from wazo_provd_client import Client as ProvdClient
@@ -18,95 +16,90 @@ from xivo_ctid_ng_client import Client as CtidNgClient
 
 from . import auth
 from . import debug
-from ..config import load_config, XivoAcceptanceConfig
+from .config import load_config, XivoAcceptanceConfig
 
 logger = logging.getLogger(__name__)
 
 
-def setup_agentd_client():
-    world.agentd_client = AgentdClient(world.config['xivo_host'],
-                                       token=world.config['auth_token'],
-                                       verify_certificate=False)
-    auth.register_for_token_renewal(world.agentd_client.set_token)
+def setup_agentd_client(context):
+    context.agentd_client = AgentdClient(
+        context.config['xivo_host'],
+        token=context.config['auth_token'],
+        verify_certificate=False,
+    )
+    auth.register_for_token_renewal(context.agentd_client.set_token)
 
 
-def setup_amid_client():
-    world.amid_client = AmidClient(**world.config['amid'])
-    world.amid_client.set_token(world.config.get('auth_token'))
-    auth.register_for_token_renewal(world.amid_client.set_token)
+def setup_amid_client(context):
+    context.amid_client = AmidClient(**context.config['amid'])
+    context.amid_client.set_token(context.config.get('auth_token'))
+    auth.register_for_token_renewal(context.amid_client.set_token)
 
 
-def setup_call_logd_client():
-    world.call_logd_client = CallLogdClient(**world.config['call_logd'])
-    world.call_logd_client.set_token(world.config.get('auth_token'))
-    auth.register_for_token_renewal(world.call_logd_client.set_token)
+def setup_call_logd_client(context):
+    context.call_logd_client = CallLogdClient(**context.config['call_logd'])
+    context.call_logd_client.set_token(context.config.get('auth_token'))
+    auth.register_for_token_renewal(context.call_logd_client.set_token)
 
 
-def setup_confd_client():
-    world.confd_client = ConfdClient(**world.config['confd'])
-    world.confd_client.set_token(world.config.get('auth_token'))
-    auth.register_for_token_renewal(world.confd_client.set_token)
+def setup_confd_client(context):
+    context.confd_client = ConfdClient(**context.config['confd'])
+    context.confd_client.set_token(context.config.get('auth_token'))
+    auth.register_for_token_renewal(context.confd_client.set_token)
 
 
-def setup_ctid_ng_client():
-    world.ctid_ng_client = CtidNgClient(**world.config['ctid_ng'])
-    world.ctid_ng_client.set_token(world.config.get('auth_token'))
-    auth.register_for_token_renewal(world.ctid_ng_client.set_token)
+def setup_ctid_ng_client(context):
+    context.ctid_ng_client = CtidNgClient(**context.config['ctid_ng'])
+    context.ctid_ng_client.set_token(context.config.get('auth_token'))
+    auth.register_for_token_renewal(context.ctid_ng_client.set_token)
 
 
-def setup_dird_client():
-    world.dird_client = DirdClient(**world.config['dird'])
-    world.dird_client.set_token(world.config.get('auth_token'))
-    auth.register_for_token_renewal(world.dird_client.set_token)
+def setup_dird_client(context):
+    context.dird_client = DirdClient(**context.config['dird'])
+    context.dird_client.set_token(context.config.get('auth_token'))
+    auth.register_for_token_renewal(context.dird_client.set_token)
 
 
-def setup_auth_token():
-    world.auth_client = AuthClient(
+def setup_auth_token(context):
+    context.auth_client = AuthClient(
         username='xivo-acceptance',
         password='proformatique',
-        **world.config['auth']
+        **context.config['auth']
     )
-    world.config['auth_token'] = auth.new_auth_token()
-    world.auth_client.set_token(world.config.get('auth_token'))
-    auth.register_for_token_renewal(world.auth_client.set_token)
+    context.config['auth_token'] = auth.new_auth_token(context)
+    context.auth_client.set_token(context.config.get('auth_token'))
+    auth.register_for_token_renewal(context.auth_client.set_token)
 
 
-def setup_provd_client():
-    world.provd_client = ProvdClient(**world.config['provd'])
-    world.provd_client.set_token(world.config.get('auth_token'))
-    auth.register_for_token_renewal(world.provd_client.set_token)
+def setup_provd_client(context):
+    context.provd_client = ProvdClient(**context.config['provd'])
+    context.provd_client.set_token(context.config.get('auth_token'))
+    auth.register_for_token_renewal(context.provd_client.set_token)
 
 
-def setup_setupd_client():
-    world.setupd_client = SetupdClient(**world.config['setupd'])
-    world.setupd_client.set_token(world.config.get('auth_token'))
-    auth.register_for_token_renewal(world.setupd_client.set_token)
+def setup_setupd_client(context):
+    context.setupd_client = SetupdClient(**context.config['setupd'])
+    context.setupd_client.set_token(context.config.get('auth_token'))
+    auth.register_for_token_renewal(context.setupd_client.set_token)
 
 
-def setup_config(extra_config):
-    world.config = load_config(extra_config)
+def setup_config(context, extra_config):
+    context.config = load_config(extra_config)
 
 
-def setup_consul():
+def setup_consul(context):
     command = 'cat /var/lib/consul/master_token'.split()
-    world.config['consul_token'] = world.ssh_client_xivo.out_call(command).strip()
+    context.config['consul_token'] = context.ssh_client_xivo.out_call(command).strip()
 
 
-def setup_logging():
-    debug.setup_logging(world.config)
+def setup_logging(context):
+    debug.setup_logging(context.config)
 
 
 @debug.logcall
-def setup_ssh_client():
-    world.ssh_client_xivo = world.xivo_acceptance_config.ssh_client_xivo
+def setup_ssh_client(context):
+    context.ssh_client_xivo = context.xivo_acceptance_config.ssh_client_xivo
 
 
-def setup_xivo_acceptance_config():
-    world.xivo_acceptance_config = XivoAcceptanceConfig(world.config)
-
-
-def setup_xivo_configured():
-    try:
-        world.xivo_configured = world.confd_client.wizard.get()['configured']
-    except Exception:
-        world.xivo_configured = False
+def setup_xivo_acceptance_config(context):
+    context.xivo_acceptance_config = XivoAcceptanceConfig(context.config)

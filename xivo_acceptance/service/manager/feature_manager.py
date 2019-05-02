@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2014 Avencall
+# Copyright 2014-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import print_function
@@ -22,15 +22,17 @@ class FeatureManager(object):
         feature_file_path = '%s.feature' % feature_path
 
         if os.path.exists(feature_file_path):
-            self._exec_lettuce_feature(feature_file_path)
+            self._exec_behave_feature(feature_file_path)
         elif os.path.isdir(feature_path):
-            self._exec_lettuce_feature(feature_path)
+            self._exec_behave_feature(feature_path)
         else:
             raise Exception('Unknown path: %s', feature_path)
 
-    def _exec_lettuce_feature(self, feature_path):
-        cmd = 'lettuce {feature_path} --with-xunit --verbosity=3 --xunit-file={output_dir}/xunit-tests.xml'.format(feature_path=feature_path,
-                                                                                                                   output_dir=self.config['output_dir'])
+    def _exec_behave_feature(self, feature_path):
+        cmd = 'behave {feature_path} --junit --verbosity=3 --junit={output_dir}'.format(
+            feature_path=feature_path,
+            output_dir=self.config['output_dir'],
+        )
         self._exec_sys_cmd(cmd)
 
     def _exec_sys_cmd(self, cmd):

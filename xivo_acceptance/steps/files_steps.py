@@ -9,17 +9,17 @@ from hamcrest import (
     is_not,
     none,
 )
-from lettuce import step
+from behave import then
 
-from xivo_acceptance.lettuce import sysutils
+from xivo_acceptance import sysutils
 
 
-@step(u'Then the mirror list contains a line matching "([^"]*)"')
-def then_the_mirror_list_contains_a_line_matching_group1(step, regex):
-    match = _match_on_mirror_list(regex)
+@then(u'the mirror list contains a line matching "{mirror}"')
+def then_the_mirror_list_contains_a_line_matching_mirror(context, mirror):
+    match = _match_on_mirror_list(context, mirror)
     assert_that(match, is_not(none()))
 
 
-def _match_on_mirror_list(regex):
-    output = sysutils.output_command(['apt-cache', 'policy'])
+def _match_on_mirror_list(context, regex):
+    output = sysutils.output_command(context, ['apt-cache', 'policy'])
     return re.search(regex, output)

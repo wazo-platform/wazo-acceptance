@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2014 Avencall
+# Copyright 2014-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import errno
@@ -10,13 +10,12 @@ import select
 import subprocess
 import sys
 import threading
-from lettuce import world
 
 logger = logging.getLogger('acceptance')
 
 
-def start_ami_monitoring():
-    _ami_monitor.start()
+def start_ami_monitoring(context):
+    _ami_monitor.start(context)
 
 
 def stop_ami_monitoring():
@@ -58,12 +57,12 @@ class _AMIMonitor(object):
         self._pipe = _Pipe()
         self._lock = threading.Lock()
 
-    def start(self):
+    def start(self, context):
         if self._thread:
             raise Exception('AMI monitor thread is already running')
 
         self._data = ''
-        p = world.ssh_client_xivo.new_process(self._REMOTE_COMMAND, stdout=subprocess.PIPE)
+        p = context.ssh_client_xivo.new_process(self._REMOTE_COMMAND, stdout=subprocess.PIPE)
         try:
             self._thread = threading.Thread(target=self._run, name='AMI monitor', args=(p,))
             self._thread.start()
