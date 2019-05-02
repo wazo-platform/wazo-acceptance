@@ -15,9 +15,9 @@ function project_root {
 }
 
 ROOT=$(project_root)
-STEP_DIR=$(project_root)/xivo_acceptance/steps
+STEP_DIR=$(project_root)/wazo_acceptance/steps
 FEATURE_DIR=$(project_root)/data/features
-FEATURES_CAT=/tmp/xivo-unused-steps-features
+FEATURES_CAT=/tmp/wazo-unused-steps-features
 
 find $FEATURE_DIR -name '*.feature' | xargs cat > $FEATURES_CAT
 

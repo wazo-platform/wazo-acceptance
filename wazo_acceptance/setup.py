@@ -16,14 +16,14 @@ from xivo_confd_client import Client as ConfdClient
 
 from . import auth
 from . import debug
-from .config import load_config, XivoAcceptanceConfig
+from .config import load_config, WazoAcceptanceConfig
 
 logger = logging.getLogger(__name__)
 
 
 def setup_agentd_client(context):
     context.agentd_client = AgentdClient(
-        context.config['xivo_host'],
+        context.config['wazo_host'],
         token=context.config['auth_token'],
         verify_certificate=False,
     )
@@ -89,7 +89,7 @@ def setup_config(context, extra_config):
 
 def setup_consul(context):
     command = 'cat /var/lib/consul/master_token'.split()
-    context.config['consul_token'] = context.ssh_client_xivo.out_call(command).strip()
+    context.config['consul_token'] = context.ssh_client.out_call(command).strip()
 
 
 def setup_logging(context):
@@ -98,8 +98,8 @@ def setup_logging(context):
 
 @debug.logcall
 def setup_ssh_client(context):
-    context.ssh_client_xivo = context.xivo_acceptance_config.ssh_client_xivo
+    context.ssh_client = context.wazo_acceptance_config.ssh_client
 
 
-def setup_xivo_acceptance_config(context):
-    context.xivo_acceptance_config = XivoAcceptanceConfig(context.config)
+def setup_wazo_acceptance_config(context):
+    context.wazo_acceptance_config = WazoAcceptanceConfig(context.config)

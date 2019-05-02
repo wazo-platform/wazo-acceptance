@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2014-2016 Avencall
+# Copyright 2014-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-from xivo_acceptance.service import prerequisite
+from wazo_acceptance.service import prerequisite
 
 
-class XiVOAcceptanceController(object):
+class WazoAcceptanceController(object):
 
     def __init__(self, feature_manager):
         self._feature_manager = feature_manager

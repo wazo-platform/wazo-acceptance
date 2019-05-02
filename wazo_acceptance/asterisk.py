@@ -62,7 +62,7 @@ class _AMIMonitor(object):
             raise Exception('AMI monitor thread is already running')
 
         self._data = ''
-        p = context.ssh_client_xivo.new_process(self._REMOTE_COMMAND, stdout=subprocess.PIPE)
+        p = context.ssh_client.new_process(self._REMOTE_COMMAND, stdout=subprocess.PIPE)
         try:
             self._thread = threading.Thread(target=self._run, name='AMI monitor', args=(p,))
             self._thread.start()

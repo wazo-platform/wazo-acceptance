@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2014-2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2014-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import argparse
@@ -8,9 +8,9 @@ import signal
 import ssl
 
 from xivo.xivo_logging import setup_logging
-from xivo_acceptance.config import load_config
-from xivo_acceptance.controller import XiVOAcceptanceController
-from xivo_acceptance.service.manager.feature_manager import FeatureManager
+from wazo_acceptance.config import load_config
+from wazo_acceptance.controller import WazoAcceptanceController
+from wazo_acceptance.service.manager.feature_manager import FeatureManager
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ def main():
 
     feature_manager = FeatureManager(config)
 
-    controller = XiVOAcceptanceController(feature_manager=feature_manager)
+    controller = WazoAcceptanceController(feature_manager=feature_manager)
 
     if parsed_args.prerequisite:
         controller.exec_prerequisite(extra_config=parsed_args.config)

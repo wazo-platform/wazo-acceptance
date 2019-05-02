@@ -4,7 +4,7 @@
 
 import logging
 
-from xivo.xivo_logging import setup_logging as xivo_setup_logging
+from xivo.xivo_logging import setup_logging as wazo_setup_logging
 
 from . import asterisk
 from . import setup
@@ -36,18 +36,18 @@ def after_scenario(context, scenario):
 def initialize(context, extra_config='default'):
     config = load_config(extra_config)
     debug = config.get('debug', {}).get('global', True)
-    xivo_setup_logging(log_file=config['log_file'], foreground=True, debug=debug)
-    set_xivo_target(context, extra_config)
+    wazo_setup_logging(log_file=config['log_file'], foreground=True, debug=debug)
+    set_wazo_target(context, extra_config)
 
 
-def set_xivo_target(context, extra_config):
+def set_wazo_target(context, extra_config):
     setup.setup_config(context, extra_config)
     setup.setup_logging(context)
 
     logger.info("Initializing acceptance tests...")
-    logger.info('xivo_host: %s', context.config['xivo_host'])
+    logger.info('wazo_host: %s', context.config['wazo_host'])
 
-    setup.setup_xivo_acceptance_config(context)
+    setup.setup_wazo_acceptance_config(context)
 
     logger.debug("setup ssh client...")
     setup.setup_ssh_client(context)

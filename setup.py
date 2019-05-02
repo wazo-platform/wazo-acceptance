@@ -7,7 +7,7 @@ from setuptools import setup
 from setuptools import find_packages
 
 setup(
-    name='xivo-acceptance',
+    name='wazo-acceptance',
     version='1.0',
     author='Wazo Authors',
     author_email='dev@wazo.community',
@@ -15,7 +15,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'xivo-acceptance=xivo_acceptance.main.main',
+            'wazo-acceptance=wazo_acceptance.main.main',
         ],
     },
 )

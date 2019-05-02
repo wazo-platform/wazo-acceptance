@@ -22,37 +22,37 @@ SERVICE_PIDFILES = {
 def path_exists(context, path):
     command = ['ls', path]
     try:
-        return context.ssh_client_xivo.check_call(command) == 0
+        return context.ssh_client.check_call(command) == 0
     except Exception:
         return False
 
 
 def dir_is_empty(context, path):
     command = ['ls', '-1A', path, '|', 'wc', '-l']
-    return context.ssh_client_xivo.out_call(command).strip() == '0'
+    return context.ssh_client.out_call(command).strip() == '0'
 
 
 def get_list_file(context, path):
     command = ['ls', path]
-    return context.ssh_client_xivo.out_call(command)
+    return context.ssh_client.out_call(command)
 
 
 def file_owned_by_user(context, path, owner):
     command = ['stat', '-c', '%U', path]
-    return context.ssh_client_xivo.out_call(command).strip() == owner
+    return context.ssh_client.out_call(command).strip() == owner
 
 
 def file_owned_by_group(context, path, owner):
     command = ['stat', '-c', '%G', path]
-    return context.ssh_client_xivo.out_call(command).strip() == owner
+    return context.ssh_client.out_call(command).strip() == owner
 
 
 def get_content_file(context, path):
     command = ['cat', path]
-    return context.ssh_client_xivo.out_call(command)
+    return context.ssh_client.out_call(command)
 
 
-def xivo_current_datetime(context):
+def wazo_current_datetime(context):
     # The main problem here is the timezone: `date` must give us the date in
     # localtime, because the log files are using localtime dates.
     command = ['date', '-R']
@@ -63,15 +63,15 @@ def xivo_current_datetime(context):
 
 def send_command(context, command, check=True):
     if check:
-        res = context.ssh_client_xivo.check_call(command) == 0
+        res = context.ssh_client.check_call(command) == 0
     else:
-        res = context.ssh_client_xivo.call(command) == 0
+        res = context.ssh_client.call(command) == 0
     time.sleep(1)
     return res
 
 
 def output_command(context, command):
-    res = context.ssh_client_xivo.out_call(command)
+    res = context.ssh_client.out_call(command)
     time.sleep(1)
     return res
 
@@ -110,9 +110,9 @@ def get_pidfile_for_service_name(service):
 
 def start_service(context, service_name):
     command = ['systemctl', 'start', service_name]
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)
 
 
 def restart_service(context, service_name):
     command = ['systemctl', 'restart', service_name]
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)

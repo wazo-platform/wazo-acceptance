@@ -7,4 +7,4 @@ import os
 
 def copy_asset_to_server(context, asset, serverpath):
     assetpath = os.path.join(context.config['assets_dir'], asset)
-    context.ssh_client_xivo.send_files(assetpath, serverpath)
+    context.ssh_client.send_files(assetpath, serverpath)

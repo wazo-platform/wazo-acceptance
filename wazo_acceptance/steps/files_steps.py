@@ -11,7 +11,7 @@ from hamcrest import (
 )
 from behave import then
 
-from xivo_acceptance import sysutils
+from .. import sysutils
 
 
 @then(u'the mirror list contains a line matching "{mirror}"')

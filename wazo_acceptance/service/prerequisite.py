@@ -4,10 +4,10 @@
 
 import logging
 
-from xivo_acceptance.helpers import context_helper
-from xivo_acceptance import setup
-from xivo_acceptance import sysutils
-from xivo_acceptance.assets import copy_asset_to_server
+from wazo_acceptance.helpers import context_helper
+from wazo_acceptance import setup
+from wazo_acceptance import sysutils
+from wazo_acceptance.assets import copy_asset_to_server
 from xivo_dao.helpers import db_manager  # TODO Remove xivo_dao dependency
 from xivo_dao.helpers.db_utils import session_scope
 
@@ -24,7 +24,7 @@ def run(extra_config):
     logger.debug('Initializing ...')
     setup.setup_config(context, extra_config)
     setup.setup_logging(context)
-    setup.setup_xivo_acceptance_config(context)
+    setup.setup_wazo_acceptance_config(context)
     setup.setup_ssh_client(context)
 
     logger.debug('Configuring users external_api')
@@ -82,16 +82,16 @@ def run(extra_config):
     logger.debug('Configuring xivo-ctid')
     _configure_wazo_service(context, 'xivo-ctid')
 
-    logger.debug('Configuring xivo-ctid-ng')
-    _configure_wazo_service(context, 'xivo-ctid-ng')
+    logger.debug('Configuring wazo-calld')
+    _configure_wazo_service(context, 'wazo-calld')
 
 
 def _configure_postgresql(context):
 
     cmd = ['echo', '*:*:asterisk:asterisk:proformatique', '>', '.pgpass']
-    context.ssh_client_xivo.check_call(cmd)
+    context.ssh_client.check_call(cmd)
     cmd = ['chmod', '600', '.pgpass']
-    context.ssh_client_xivo.check_call(cmd)
+    context.ssh_client.check_call(cmd)
 
     hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'
     postgres_conf_file = '/etc/postgresql/9.6/main/postgresql.conf'
@@ -144,7 +144,7 @@ def _create_auth_user(context, username, password, acl_templates):
         '--purpose', 'external_api',
         username,
     ]
-    user_uuid = context.ssh_client_xivo.out_call(cmd).decode('utf-8').strip()
+    user_uuid = context.ssh_client.out_call(cmd).decode('utf-8').strip()
 
     args = []
     if acl_templates:
@@ -159,7 +159,7 @@ def _create_auth_user(context, username, password, acl_templates):
         '{}-policy'.format(username),
     ]
     cmd.extend(args)
-    policy_uuid = context.ssh_client_xivo.out_call(cmd).decode('utf-8').strip()
+    policy_uuid = context.ssh_client.out_call(cmd).decode('utf-8').strip()
 
     cmd = [
         'wazo-auth-cli',
@@ -169,12 +169,12 @@ def _create_auth_user(context, username, password, acl_templates):
         '--policy', policy_uuid,
         user_uuid,
     ]
-    context.ssh_client_xivo.check_call(cmd)
+    context.ssh_client.check_call(cmd)
 
 
 def _add_line_to_remote_file(context, ssh_client, line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)
 
 
 def _allow_agid_listen_on_all_interfaces(context):
@@ -192,28 +192,28 @@ def _allow_provd_listen_on_all_interfaces():
 def _install_packages(context, packages):
     command = ['apt-get', 'update', '&&', 'apt-get', 'install', '-y']
     command.extend(packages)
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)
 
 
 def _install_chan_test(context):
     _install_packages(['make', 'asterisk-dev', 'gcc', 'libc6-dev', 'libssl-dev'])
     command = ['rm', '-rf', '/usr/src/chan-test-master', '/usr/src/chan-test.zip']
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)
     command = ['wget', 'https://github.com/wazo-pbx/chan-test/archive/master.zip', '-O', '/usr/src/chan-test.zip']
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)
     command = ['unzip', '-d', '/usr/src', '/usr/src/chan-test.zip']
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)
     command = ['make', '-C', '/usr/src/chan-test-master']
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)
     command = ['make', '-C', '/usr/src/chan-test-master', 'install']
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)
 
 
 def _install_core_dump(context):
     copy_asset_to_server(context, 'core_dump.c', '/usr/src')
     _install_packages(context, ['gcc'])
     command = ['gcc', '-o', '/usr/local/bin/core_dump', '/usr/src/core_dump.c']
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)
 
 
 def _configure_consul(context):
@@ -238,4 +238,4 @@ def _copy_daemon_config_file(context, daemon_name):
 
 def _restart_service(context, service_name):
     command = ['systemctl', 'restart', service_name]
-    context.ssh_client_xivo.check_call(command)
+    context.ssh_client.check_call(command)

@@ -4,7 +4,7 @@
 
 
 def send_to_asterisk_cli(context, asterisk_command):
-    context.ssh_client_xivo.call(_format_command(asterisk_command))
+    context.ssh_client.call(_format_command(asterisk_command))
 
 
 def _format_command(asterisk_command):
