@@ -2,8 +2,6 @@
 # Copyright 2014-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import print_function
-
 import logging
 import os
 import subprocess

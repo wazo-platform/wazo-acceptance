@@ -120,7 +120,7 @@ class _AMIMonitor:
             p.terminate()
             p.wait()
             if print_returncode:
-                print >> sys.stderr, 'AMI monitoring: process returned %s' % p.returncode
+                print('AMI monitoring: process returned {}'.format(p.returncode), file=sys.stderr)
 
 
 _ami_monitor = _AMIMonitor()

@@ -13,7 +13,7 @@ loggers = {
 def setup_logging(config):
     file_handler = logging.FileHandler(config['log_file'])
 
-    for name, logger in loggers.iteritems():
+    for name, logger in loggers.items():
         logger.setLevel(logging.INFO)
         for handler in logger.handlers:
             logger.removeHandler(handler)

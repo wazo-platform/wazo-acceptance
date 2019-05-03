@@ -29,7 +29,7 @@ def before_scenario(context, scenario):
 def after_scenario(context, scenario):
     asterisk.stop_ami_monitoring()
     scenario.phone_register.clear()
-    asterisk_helper.send_to_asterisk_cli(context, u'channel request hangup all')
+    asterisk_helper.send_to_asterisk_cli(context, 'channel request hangup all')
 
 
 def initialize(context, extra_config='default'):

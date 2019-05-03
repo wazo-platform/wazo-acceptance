@@ -7,4 +7,4 @@ def send_to_asterisk_cli(context, asterisk_command):
 
 
 def _format_command(asterisk_command):
-    return [u'asterisk', u'-rx', u'"{}"'.format(asterisk_command)]
+    return ['asterisk', '-rx', '"{}"'.format(asterisk_command)]

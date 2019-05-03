@@ -7,7 +7,7 @@ from behave import then
 from xivo_auth_client import Client as AuthClient
 
 
-@then(u'I can create an admin token')
+@then('I can create an admin token')
 def then_i_can_create_a_token(context):
     auth = AuthClient(
         username='root',

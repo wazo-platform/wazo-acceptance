@@ -13,7 +13,7 @@ from behave import then
 from .. import sysutils
 
 
-@then(u'the mirror list contains a line matching "{mirror}"')
+@then('the mirror list contains a line matching "{mirror}"')
 def then_the_mirror_list_contains_a_line_matching_mirror(context, mirror):
     match = _match_on_mirror_list(context, mirror)
     assert_that(match, is_not(none()))
@@ -21,4 +21,5 @@ def then_the_mirror_list_contains_a_line_matching_mirror(context, mirror):
 
 def _match_on_mirror_list(context, regex):
     output = sysutils.output_command(context, ['apt-cache', 'policy'])
+    output = output.decode('utf-8')
     return re.search(regex, output)

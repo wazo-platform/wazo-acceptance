@@ -41,7 +41,7 @@ class PhoneRegister:
 
     def phones(self):
         all_phones = []
-        for phones in self._sip_phones.itervalues():
+        for phones in self._sip_phones.values():
             for phone in phones:
                 all_phones.append(phone)
         return all_phones
