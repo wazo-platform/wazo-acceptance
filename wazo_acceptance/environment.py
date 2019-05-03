@@ -67,3 +67,5 @@ def set_wazo_target(context):
     setup.setup_tenant(context)
     logger.debug("setup consul...")
     setup.setup_consul(context)
+    logger.debug("setup helpers...")
+    setup.setup_helpers(context)

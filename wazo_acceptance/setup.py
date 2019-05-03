@@ -17,6 +17,7 @@ from . import auth
 from . import debug
 from .config import load_config
 from .ssh import SSHClient
+from .sysutils import RemoteSysUtils
 
 logger = logging.getLogger(__name__)
 
@@ -110,3 +111,7 @@ def setup_ssh_client(context):
         hostname=context.wazo_config['wazo_host'],
         login=context.wazo_config['ssh_login'],
     )
+
+
+def setup_helpers(context):
+    context.remote_sysutils = RemoteSysUtils(context.ssh_client)
