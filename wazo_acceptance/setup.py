@@ -61,8 +61,8 @@ def setup_dird_client(context):
 
 def setup_auth_token(context):
     context.auth_client = AuthClient(
-        username='xivo-acceptance',
-        password='proformatique',
+        username='wazo-acceptance',
+        password='hidden',
         **context.config['auth']
     )
     context.config['auth_token'] = auth.new_auth_token(context)
@@ -80,6 +80,17 @@ def setup_setupd_client(context):
     context.setupd_client = SetupdClient(**context.config['setupd'])
     context.setupd_client.set_token(context.config.get('auth_token'))
     auth.register_for_token_renewal(context.setupd_client.set_token)
+
+
+def setup_tenant(context):
+    name = context.config['default_tenant']
+    tenants = context.auth_client.tenants.list(name=name)['items']
+    if not tenants:
+        logger.exception('failed to get default tenant')
+        return
+
+    context.auth_client.set_tenant(tenants[0]['uuid'])
+    context.confd_client.set_tenant(tenants[0]['uuid'])
 
 
 def setup_config(context, extra_config):

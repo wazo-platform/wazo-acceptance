@@ -36,20 +36,26 @@ def run(extra_config):
     setup.setup_call_logd_client(context)
     setup.setup_confd_client(context)
 
+    logger.debug('Creating default tenant')
+    context.auth_client.tenants.new(name=context.config['default_tenant'])
+
+    logger.debug('Configuring python clients tenant')
+    setup.setup_tenant(context)
+
     logger.debug('Configuring Consul')
     _configure_consul(context)
 
-    logger.debug('Configuring PostgreSQL on XiVO')
+    logger.debug('Configuring PostgreSQL on Wazo')
     _configure_postgresql(context)
 
-    logger.debug('Configuring RabbitMQ on XiVO')
+    logger.debug('Configuring RabbitMQ on Wazo')
     _configure_rabbitmq(context)
 
-    logger.debug('Configuring xivo-agid on XiVO')
+    logger.debug('Configuring xivo-agid on Wazo')
     _allow_agid_listen_on_all_interfaces(context)
 
-    logger.debug('Configuring Provd REST API on XiVO')
-    _allow_provd_listen_on_all_interfaces(context)
+    logger.debug('Configuring Provd REST API on Wazo')
+    _allow_provd_listen_on_all_interfaces()
 
     logger.debug('Installing packages')
     _install_packages(context, ['tcpflow'])
@@ -75,9 +81,6 @@ def run(extra_config):
 
     logger.debug('Configuring xivo-confd')
     _configure_wazo_service(context, 'xivo-confd')
-
-    logger.debug('Configuring xivo-ctid')
-    _configure_wazo_service(context, 'xivo-ctid')
 
     logger.debug('Configuring wazo-calld')
     _configure_wazo_service(context, 'wazo-calld')
@@ -111,8 +114,8 @@ def _configure_rabbitmq(context):
 def _configure_auth_users(context):
     _create_auth_user(
         context,
-        username='xivo-acceptance',
-        password='proformatique',
+        username='wazo-acceptance',
+        password='hidden',
         acl_templates=[
             'amid.action.*.create',
             'auth.#',
@@ -123,11 +126,6 @@ def _configure_auth_users(context):
             'call-logd.#',
             'provd.#',
         ],
-    )
-    _create_auth_user(
-        username='admin',
-        password='proformatique',
-        acl_templates=[],
     )
 
 
@@ -169,7 +167,7 @@ def _create_auth_user(context, username, password, acl_templates):
     context.ssh_client.check_call(cmd)
 
 
-def _add_line_to_remote_file(context, ssh_client, line_text, file_name):
+def _add_line_to_remote_file(context, line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
     context.ssh_client.check_call(command)
 
@@ -193,7 +191,7 @@ def _install_packages(context, packages):
 
 
 def _install_chan_test(context):
-    _install_packages(['make', 'asterisk-dev', 'gcc', 'libc6-dev', 'libssl-dev'])
+    _install_packages(context, ['make', 'asterisk-dev', 'gcc', 'libc6-dev', 'libssl-dev'])
     command = ['rm', '-rf', '/usr/src/chan-test-master', '/usr/src/chan-test.zip']
     context.ssh_client.check_call(command)
     command = ['wget', 'https://github.com/wazo-pbx/chan-test/archive/master.zip', '-O', '/usr/src/chan-test.zip']
@@ -221,7 +219,7 @@ def _configure_consul(context):
 
 
 def _configure_wazo_service(context, service):
-    _copy_daemon_config_file(service)
+    _copy_daemon_config_file(context, service)
     service_is_running = sysutils.is_process_running(context, sysutils.get_pidfile_for_service_name(service))
     if service_is_running:
         _restart_service(context, service)

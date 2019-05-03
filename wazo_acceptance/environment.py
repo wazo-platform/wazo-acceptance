@@ -68,5 +68,7 @@ def set_wazo_target(context, extra_config):
     setup.setup_provd_client(context)
     logger.debug("setup setupd client...")
     setup.setup_setupd_client(context)
+    logger.debug("setup tenant...")
+    setup.setup_tenant(context)
     logger.debug("setup consul...")
     setup.setup_consul(context)

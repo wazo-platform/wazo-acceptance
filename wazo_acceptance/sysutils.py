@@ -78,7 +78,7 @@ def is_process_running(context, pidfile):
     if not path_exists(context, pidfile):
         return False
     pid = get_content_file(context, pidfile).strip()
-    return path_exists("/proc/%s" % pid)
+    return path_exists(context, "/proc/%s" % pid)
 
 
 def wait_service_successfully_stopped(context, pidfile, maxtries=16, wait_secs=10):

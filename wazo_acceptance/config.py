@@ -29,6 +29,7 @@ def load_config(extra_config):
     config = {
         'wazo_host': DEFAULT_WAZO_HOST,
         'master_host': None,
+        'default_tenant': 'wazo-tenant',
         'slave_host': None,
         'log_file': '/tmp/wazo-acceptance.log',
         'assets_dir': _find_first_existing_path(_ASSETS_DIRS),

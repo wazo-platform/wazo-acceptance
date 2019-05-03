@@ -15,7 +15,7 @@ setup(
     package_data={'wazo_acceptance': ['assets/*']},
     entry_points={
         'console_scripts': [
-            'wazo-acceptance=wazo_acceptance.main.main',
+            'wazo-acceptance=wazo_acceptance.main:main',
         ],
     },
 )
