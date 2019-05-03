@@ -12,7 +12,7 @@ ONE_HOUR = 3600
 def new_auth_token(context):
     try:
         token_data = context.config['token_data'] = context.auth_client.token.new(
-            expiration=6*ONE_HOUR,
+            expiration=6 * ONE_HOUR,
         )
         token_id = token_data['token']
     except Exception as e:
