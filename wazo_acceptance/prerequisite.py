@@ -3,14 +3,10 @@
 
 import logging
 
-from wazo_acceptance.helpers import context_helper
-from wazo_acceptance import setup
-from wazo_acceptance import sysutils
-from wazo_acceptance.assets import copy_asset_to_server
-from xivo_dao import init_db
-from xivo_dao.helpers import db_manager  # TODO Remove xivo_dao dependency
-from xivo_dao.helpers.db_utils import session_scope
-
+from . import setup
+from . import sysutils
+from .assets import copy_asset_to_server
+from .helpers import context_helper
 
 logger = logging.getLogger(__name__)
 
@@ -33,11 +29,10 @@ def run(extra_config_dir):
     setup.setup_auth_token(context)
 
     logger.debug('Configuring python clients')
-    setup.setup_call_logd_client(context)
     setup.setup_confd_client(context)
 
     logger.debug('Creating default tenant')
-    context.auth_client.tenants.new(name=context.config['default_tenant'])
+    _configure_default_tenant(context)
 
     logger.debug('Configuring python clients tenant')
     setup.setup_tenant(context)
@@ -45,20 +40,11 @@ def run(extra_config_dir):
     logger.debug('Configuring Consul')
     _configure_consul(context)
 
-    logger.debug('Configuring PostgreSQL on Wazo')
-    _configure_postgresql(context)
-
     logger.debug('Configuring RabbitMQ on Wazo')
     _configure_rabbitmq(context)
 
     logger.debug('Configuring xivo-agid on Wazo')
     _allow_agid_listen_on_all_interfaces(context)
-
-    logger.debug('Configuring Provd REST API on Wazo')
-    _allow_provd_listen_on_all_interfaces(context)
-
-    logger.debug('Installing packages')
-    _install_packages(context, ['tcpflow'])
 
     logger.debug('Installing chan_test (module for asterisk)')
     _install_chan_test(context)
@@ -84,26 +70,6 @@ def run(extra_config_dir):
 
     logger.debug('Configuring wazo-calld')
     _configure_wazo_service(context, 'wazo-calld')
-
-
-def _configure_postgresql(context):
-
-    cmd = ['echo', '*:*:asterisk:asterisk:proformatique', '>', '.pgpass']
-    context.ssh_client.check_call(cmd)
-    cmd = ['chmod', '600', '.pgpass']
-    context.ssh_client.check_call(cmd)
-
-    hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'
-    postgres_conf_file = '/etc/postgresql/9.6/main/postgresql.conf'
-
-    subnet_line = 'host all all {subnet} md5'
-    for subnet in context.config['prerequisites']['subnets']:
-        _add_line_to_remote_file(context, subnet_line.format(subnet=subnet), hba_file)
-
-    _add_line_to_remote_file(context, "listen_addresses = '*'", postgres_conf_file)
-
-    _restart_service(context, 'postgresql')
-    db_manager.init_db(context.config['db_uri'])
 
 
 def _configure_rabbitmq(context):
@@ -167,6 +133,10 @@ def _create_auth_user(context, username, password, acl_templates):
     context.ssh_client.check_call(cmd)
 
 
+def _configure_default_tenant(context):
+    context.auth_client.tenants.new(name=context.config['default_tenant'])
+
+
 def _add_line_to_remote_file(context, line_text, file_name):
     command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
     context.ssh_client.check_call(command)
@@ -174,15 +144,6 @@ def _add_line_to_remote_file(context, line_text, file_name):
 
 def _allow_agid_listen_on_all_interfaces(context):
     _add_line_to_remote_file(context, 'listen_address: 0.0.0.0', '/etc/xivo-agid/conf.d/acceptance.yml')
-
-
-def _allow_provd_listen_on_all_interfaces(context):
-    # TODO use REST API
-    init_db(context.config['db_uri'])
-    with session_scope() as session:
-        query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
-        session.execute(query)
-    # Apply common.conf
 
 
 def _install_packages(context, packages):
