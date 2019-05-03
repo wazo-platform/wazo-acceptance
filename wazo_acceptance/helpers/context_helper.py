@@ -13,10 +13,10 @@ from xivo_acceptance.helpers import (
 
 
 def update_contextnumbers_user(name, numberbeg, numberend, entity_name=None):
-    context = find_context_by(name=name)
+    context = _find_context_by(name=name)
     range_ = {'start': str(numberbeg), 'end': str(numberend)}
     if not context:
-        add_context(
+        _add_context(
             name,
             name,
             'internal',
@@ -29,10 +29,10 @@ def update_contextnumbers_user(name, numberbeg, numberend, entity_name=None):
 
 
 def update_contextnumbers_group(name, numberbeg, numberend, entity_name=None):
-    context = find_context_by(name=name)
+    context = _find_context_by(name=name)
     range_ = {'start': str(numberbeg), 'end': str(numberend)}
     if not context:
-        add_context(
+        _add_context(
             name,
             name,
             'internal',
@@ -45,10 +45,10 @@ def update_contextnumbers_group(name, numberbeg, numberend, entity_name=None):
 
 
 def update_contextnumbers_queue(name, numberbeg, numberend, entity_name=None):
-    context = find_context_by(name=name)
+    context = _find_context_by(name=name)
     range_ = {'start': str(numberbeg), 'end': str(numberend)}
     if not context:
-        add_context(
+        _add_context(
             name,
             name,
             'internal',
@@ -60,11 +60,11 @@ def update_contextnumbers_queue(name, numberbeg, numberend, entity_name=None):
         world.confd_client.contexts.update(context)
 
 
-def update_contextnumbers_meetme(name, numberbeg, numberend, entity_name=None):
-    context = find_context_by(name=name)
+def update_contextnumbers_conference(name, numberbeg, numberend, entity_name=None):
+    context = _find_context_by(name=name)
     range_ = {'start': str(numberbeg), 'end': str(numberend)}
     if not context:
-        add_context(
+        _add_context(
             name,
             name,
             'internal',
@@ -77,10 +77,10 @@ def update_contextnumbers_meetme(name, numberbeg, numberend, entity_name=None):
 
 
 def update_contextnumbers_incall(name, numberbeg, numberend, didlength, entity_name=None):
-    context = find_context_by(name=name)
+    context = _find_context_by(name=name)
     range_ = {'start': str(numberbeg), 'end': str(numberend), 'did_length': didlength}
     if not context:
-        add_context(
+        _add_context(
             name,
             name,
             'incall',
@@ -92,15 +92,15 @@ def update_contextnumbers_incall(name, numberbeg, numberend, didlength, entity_n
         world.confd_client.contexts.update(context)
 
 
-def add_context(name,
-                label,
-                type_,
-                conference_range=None,
-                group_range=None,
-                incall_range=None,
-                queue_range=None,
-                user_range=None,
-                entity_name=None):
+def _add_context(name,
+                 label,
+                 type_,
+                 conference_range=None,
+                 group_range=None,
+                 incall_range=None,
+                 queue_range=None,
+                 user_range=None,
+                 entity_name=None):
     entity_name = entity_name or world.config['default_entity']
     entity_helper.add_entity(entity_name, entity_name)
 
@@ -121,7 +121,7 @@ def add_context(name,
     world.confd_client.contexts.create(context)
 
 
-def find_context_by(**kwargs):
+def _find_context_by(**kwargs):
     contexts = world.confd_client.contexts.list(recurse=True, **kwargs)['items']
     for context in contexts:
         return context

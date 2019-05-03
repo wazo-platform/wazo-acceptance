@@ -61,12 +61,10 @@ def run(extra_config):
     _install_core_dump(context)
 
     logger.debug('Adding context')
-    context_helper.update_contextnumbers_queue(context, 'statscenter', 5000, 5100)
-    context_helper.update_contextnumbers_user(context, 'statscenter', 1000, 1100)
     context_helper.update_contextnumbers_user(context, 'default', 1000, 1999)
     context_helper.update_contextnumbers_group(context, 'default', 2000, 2999)
     context_helper.update_contextnumbers_queue(context, 'default', 3000, 3999)
-    context_helper.update_contextnumbers_meetme(context, 'default', 4000, 4999)
+    context_helper.update_contextnumbers_conference(context, 'default', 4000, 4999)
     context_helper.update_contextnumbers_incall(context, 'from-extern', 1000, 4999, 4)
 
     logger.debug('Configuring wazo-auth')
