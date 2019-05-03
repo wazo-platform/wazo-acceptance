@@ -22,11 +22,8 @@ logger = logging.getLogger(__name__)
 
 
 def setup_agentd_client(context):
-    context.agentd_client = AgentdClient(
-        context.config['wazo_host'],
-        token=context.token,
-        verify_certificate=False,
-    )
+    context.agentd_client = AgentdClient(**context.config['agentd'])
+    context.agentd_client.set_token(context.token)
     auth.register_for_token_renewal(context.agentd_client.set_token)
 
 

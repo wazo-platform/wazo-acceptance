@@ -21,11 +21,15 @@ DEFAULT_CONFIG = {
     'default_tenant': 'wazo-tenant',
     'log_file': '/tmp/wazo-acceptance.log',
     'assets_dir': os.path.join(__package__, 'assets'),
-    'auth': {
+    'agentd': {
         'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'amid': {
+        'host': DEFAULT_WAZO_HOST,
+        'verify_certificate': False,
+    },
+    'auth': {
         'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
@@ -105,6 +109,7 @@ def _config_post_processor(config):
 
 def _config_update_host(config):
     services = (
+        'agentd',
         'amid',
         'auth',
         'call_logd',
