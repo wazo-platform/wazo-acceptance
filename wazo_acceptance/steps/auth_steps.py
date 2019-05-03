@@ -12,7 +12,7 @@ def then_i_can_create_a_token(context):
     auth = AuthClient(
         username='root',
         password='wazosecret',
-        **context.config['auth']
+        **context.wazo_config['auth']
     )
     token = auth.token.new()
     assert_that(token['token'], is_not(none()))

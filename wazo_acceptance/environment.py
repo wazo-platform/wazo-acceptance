@@ -41,7 +41,7 @@ def set_wazo_target(context):
     setup.setup_logging(context)
 
     logger.info("Initializing acceptance tests...")
-    logger.info('wazo_host: %s', context.config['wazo_host'])
+    logger.info('wazo_host: %s', context.wazo_config['wazo_host'])
 
     logger.debug("setup ssh client...")
     setup.setup_ssh_client(context)

@@ -134,7 +134,7 @@ def _create_auth_user(context, username, password, acl_templates):
 
 
 def _configure_default_tenant(context):
-    context.auth_client.tenants.new(name=context.config['default_tenant'])
+    context.auth_client.tenants.new(name=context.wazo_config['default_tenant'])
 
 
 def _add_line_to_remote_file(context, line_text, file_name):
