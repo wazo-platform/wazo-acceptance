@@ -5,7 +5,6 @@ import logging
 
 from xivo.xivo_logging import setup_logging as wazo_setup_logging
 
-from . import asterisk
 from . import setup
 from .config import load_config
 from .helpers import asterisk_helper
@@ -27,7 +26,6 @@ def before_scenario(context, scenario):
 
 # Implicitly defined by behave
 def after_scenario(context, scenario):
-    asterisk.stop_ami_monitoring()
     scenario.phone_register.clear()
     asterisk_helper.send_to_asterisk_cli(context, 'channel request hangup all')
 
