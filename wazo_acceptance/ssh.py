@@ -14,7 +14,7 @@ SSH_OPTIONS = [
 logger = logging.getLogger(__name__)
 
 
-class SSHClient(object):
+class SSHClient:
 
     _fobj_devnull = open(os.devnull, 'r+')
 

@@ -6,7 +6,7 @@
 from wazo_acceptance.service import prerequisite
 
 
-class WazoAcceptanceController(object):
+class WazoAcceptanceController:
 
     def __init__(self, feature_manager):
         self._feature_manager = feature_manager

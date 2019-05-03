@@ -14,7 +14,7 @@ from xivo_dao.helpers.db_utils import session_scope
 logger = logging.getLogger(__name__)
 
 
-class Context(object):
+class Context:
     pass
 
 

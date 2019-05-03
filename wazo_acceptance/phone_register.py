@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-class PhoneRegister(object):
+class PhoneRegister:
 
     def __init__(self, amid_client):
         self._sip_phones = {}

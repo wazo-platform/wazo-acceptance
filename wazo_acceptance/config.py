@@ -182,7 +182,7 @@ def _find_first_existing_path(paths, file_name=None):
     raise Exception('Path does not exist: %s' % ' '.join(paths))
 
 
-class WazoAcceptanceConfig(object):
+class WazoAcceptanceConfig:
 
     def __init__(self, config):
         self._config = config

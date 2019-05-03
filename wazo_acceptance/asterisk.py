@@ -25,7 +25,7 @@ def fetch_ami_lines():
     return _ami_monitor.fetch_data().splitlines()
 
 
-class _Pipe(object):
+class _Pipe:
 
     def __init__(self):
         self.read_fd, self.write_fd = os.pipe()
@@ -46,7 +46,7 @@ class _Pipe(object):
         return os.write(self.write_fd, string)
 
 
-class _AMIMonitor(object):
+class _AMIMonitor:
 
     _REMOTE_COMMAND = ['tcpflow', '-C', '-i', 'lo', 'tcp', 'port', '5038']
 

@@ -12,7 +12,7 @@ import subprocess
 logger = logging.getLogger(__name__)
 
 
-class FeatureManager(object):
+class FeatureManager:
 
     def __init__(self, config):
         self.config = config
