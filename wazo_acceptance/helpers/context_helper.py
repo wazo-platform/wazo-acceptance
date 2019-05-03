@@ -3,111 +3,62 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-def update_contextnumbers_user(behave_context, name, numberbeg, numberend):
-    context = _find_context_by(behave_context, name=name)
-    range_ = {'start': str(numberbeg), 'end': str(numberend)}
-    if not context:
-        _add_context(
-            behave_context,
-            name,
-            name,
-            'internal',
-            user_range=range_,
-        )
-    else:
-        context['user_ranges'] = [range_]
-        behave_context.confd_client.contexts.update(context)
+class ContextHelper:
 
+    def __init__(self, confd_client):
+        self._confd_client = confd_client
 
-def update_contextnumbers_group(behave_context, name, numberbeg, numberend):
-    context = _find_context_by(behave_context, name=name)
-    range_ = {'start': str(numberbeg), 'end': str(numberend)}
-    if not context:
-        _add_context(
-            behave_context,
-            name,
-            name,
-            'internal',
-            group_range=range_,
-        )
-    else:
-        context['group_ranges'] = [range_]
-        behave_context.confd_client.contexts.update(context)
+    def update_contextnumbers_user(self, name, range_start, range_end):
+        context = self._find_context_by(name=name)
+        range_ = {'start': str(range_start), 'end': str(range_end)}
+        if not context:
+            context = {'name': name, 'label': name, 'type': 'internal', 'user_range': range_}
+            self._confd_client.contexts.create(context)
+        else:
+            context['user_ranges'] = [range_]
+            self._confd_client.contexts.update(context)
 
+    def update_contextnumbers_group(self, name, range_start, range_end):
+        context = self._find_context_by(name=name)
+        range_ = {'start': str(range_start), 'end': str(range_end)}
+        if not context:
+            context = {'name': name, 'label': name, 'type': 'internal', 'group_range': range_}
+            self._confd_client.contexts.create(context)
+        else:
+            context['group_ranges'] = [range_]
+            self._confd_client.contexts.update(context)
 
-def update_contextnumbers_queue(behave_context, name, numberbeg, numberend):
-    context = _find_context_by(behave_context, name=name)
-    range_ = {'start': str(numberbeg), 'end': str(numberend)}
-    if not context:
-        _add_context(
-            behave_context,
-            name,
-            name,
-            'internal',
-            queue_range=range_,
-        )
-    else:
-        context['queue_ranges'] = [range_]
-        behave_context.confd_client.contexts.update(context)
+    def update_contextnumbers_queue(self, name, range_start, range_end):
+        context = self._find_context_by(name=name)
+        range_ = {'start': str(range_start), 'end': str(range_end)}
+        if not context:
+            context = {'name': name, 'label': name, 'type': 'internal', 'queue_range': range_}
+            self._confd_client.contexts.create(context)
+        else:
+            context['queue_ranges'] = [range_]
+            self._confd_client.contexts.update(context)
 
+    def update_contextnumbers_conference(self, name, range_start, range_end):
+        context = self._find_context_by(name=name)
+        range_ = {'start': str(range_start), 'end': str(range_end)}
+        if not context:
+            context = {'name': name, 'label': name, 'type': 'internal', 'conference_range': range_}
+            self._confd_client.contexts.create(context)
+        else:
+            context['conference_ranges'] = [range_]
+            self._confd_client.contexts.update(context)
 
-def update_contextnumbers_conference(behave_context, name, numberbeg, numberend):
-    context = _find_context_by(behave_context, name=name)
-    range_ = {'start': str(numberbeg), 'end': str(numberend)}
-    if not context:
-        _add_context(
-            behave_context,
-            name,
-            name,
-            'internal',
-            conference_range=range_,
-        )
-    else:
-        context['conference_ranges'] = [range_]
-        behave_context.confd_client.contexts.update(context)
+    def update_contextnumbers_incall(self, name, range_start, range_end, did_length):
+        context = self._find_context_by(name=name)
+        range_ = {'start': str(range_start), 'end': str(range_end), 'did_length': did_length}
+        if not context:
+            context = {'name': name, 'label': name, 'type': 'incall', 'incall_range': range_}
+            self._confd_client.contexts.create(context)
+        else:
+            context['incall_ranges'] = [range_]
+            self._confd_client.contexts.update(context)
 
-
-def update_contextnumbers_incall(behave_context, name, numberbeg, numberend, didlength):
-    context = _find_context_by(behave_context, name=name)
-    range_ = {'start': str(numberbeg), 'end': str(numberend), 'did_length': didlength}
-    if not context:
-        _add_context(
-            behave_context,
-            name,
-            name,
-            'incall',
-            incall_range=range_,
-        )
-    else:
-        context['incall_ranges'] = [range_]
-        behave_context.confd_client.contexts.update(context)
-
-
-def _add_context(behave_context,
-                 name,
-                 label,
-                 type_,
-                 conference_range=None,
-                 group_range=None,
-                 incall_range=None,
-                 queue_range=None,
-                 user_range=None):
-
-    context = {
-        'name': name,
-        'label': label,
-        'type': type_,
-        'conference_ranges': [conference_range] if conference_range else [],
-        'group_ranges': [group_range] if group_range else [],
-        'incall_ranges': [incall_range] if incall_range else [],
-        'queue_ranges': [queue_range] if queue_range else [],
-        'user_ranges': [user_range] if user_range else [],
-    }
-
-    behave_context.confd_client.contexts.create(context)
-
-
-def _find_context_by(behave_context, **kwargs):
-    contexts = behave_context.confd_client.contexts.list(recurse=True, **kwargs)['items']
-    for context in contexts:
-        return context
+    def _find_context_by(self, **kwargs):
+        contexts = self._confd_client.contexts.list(recurse=True, **kwargs)['items']
+        for context in contexts:
+            return context

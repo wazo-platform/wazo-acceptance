@@ -7,7 +7,6 @@ from xivo.xivo_logging import setup_logging as wazo_setup_logging
 
 from . import setup
 from .config import load_config
-from .helpers import asterisk_helper
 from .phone_register import PhoneRegister
 
 logger = logging.getLogger('acceptance')
@@ -27,7 +26,7 @@ def before_scenario(context, scenario):
 # Implicitly defined by behave
 def after_scenario(context, scenario):
     scenario.phone_register.clear()
-    asterisk_helper.send_to_asterisk_cli(context, 'channel request hangup all')
+    context.helpers.asterisk.send_to_asterisk_cli(context, 'channel request hangup all')
 
 
 def initialize(context):
@@ -67,5 +66,7 @@ def set_wazo_target(context):
     setup.setup_tenant(context)
     logger.debug("setup consul...")
     setup.setup_consul(context)
+    logger.debug("setup remote sysutils...")
+    setup.setup_remote_sysutils(context)
     logger.debug("setup helpers...")
     setup.setup_helpers(context)

@@ -16,6 +16,8 @@ from xivo_confd_client import Client as ConfdClient
 from . import auth
 from . import debug
 from .config import load_config
+from .helpers.asterisk_helper import AsteriskHelper
+from .helpers.context_helper import ContextHelper
 from .ssh import SSHClient
 from .sysutils import RemoteSysUtils
 
@@ -113,5 +115,15 @@ def setup_ssh_client(context):
     )
 
 
+class Helpers:
+    pass
+
+
 def setup_helpers(context):
+    context.helpers = Helpers()
+    context.helpers.asterisk = AsteriskHelper(context.ssh_client)
+    context.helpers.context = ContextHelper(context.confd_client)
+
+
+def setup_remote_sysutils(context):
     context.remote_sysutils = RemoteSysUtils(context.ssh_client)

@@ -5,7 +5,6 @@ import logging
 
 from . import setup
 from .assets import copy_asset_to_server
-from .helpers import context_helper
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +20,8 @@ def run(extra_config_dir):
     setup.setup_logging(context)
     setup.setup_ssh_client(context)
 
-    logger.debug('Configuring helpers')
-    setup.setup_helpers(context)
+    logger.debug('Configuring remote sysutils')
+    setup.setup_remote_sysutils(context)
 
     logger.debug('Configuring users external_api')
     _configure_auth_users(context)
@@ -54,12 +53,15 @@ def run(extra_config_dir):
     logger.debug('Installing core_dump program')
     _install_core_dump(context)
 
+    logger.debug('Configuring helpers')
+    setup.setup_helpers(context)
+
     logger.debug('Adding context')
-    context_helper.update_contextnumbers_user(context, 'default', 1000, 1999)
-    context_helper.update_contextnumbers_group(context, 'default', 2000, 2999)
-    context_helper.update_contextnumbers_queue(context, 'default', 3000, 3999)
-    context_helper.update_contextnumbers_conference(context, 'default', 4000, 4999)
-    context_helper.update_contextnumbers_incall(context, 'from-extern', 1000, 4999, 4)
+    context.helpers.context.update_contextnumbers_user('default', 1000, 1999)
+    context.helpers.context.update_contextnumbers_group('default', 2000, 2999)
+    context.helpers.context.update_contextnumbers_queue('default', 3000, 3999)
+    context.helpers.context.update_contextnumbers_conference('default', 4000, 4999)
+    context.helpers.context.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
     logger.debug('Configuring wazo-auth')
     _configure_wazo_service(context, 'wazo-auth')
