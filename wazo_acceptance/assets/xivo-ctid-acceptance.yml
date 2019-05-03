@@ -1,4 +1,0 @@
-rest_api:
-  http:
-    listen: 0.0.0.0
-debug: true
