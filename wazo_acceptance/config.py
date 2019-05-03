@@ -21,11 +21,6 @@ _CONFIG_DIRS = [
 _ASSETS_DIRS = [
     os.path.join(__package__, 'assets')
 ]
-_FEATURES_DIRS = [
-    '/usr/share/wazo-acceptance/features',
-    os.path.join(sys.prefix, 'share', 'wazo-acceptance', 'features'),
-    os.path.join(_ROOT_DIR, 'data', 'features')
-]
 
 DEFAULT_WAZO_HOST = 'daily-wazo-rolling-dev.lan.wazo.io'
 
@@ -37,7 +32,6 @@ def load_config(extra_config):
         'slave_host': None,
         'log_file': '/tmp/wazo-acceptance.log',
         'assets_dir': _find_first_existing_path(_ASSETS_DIRS),
-        'features_dir': _find_first_existing_path(_FEATURES_DIRS),
         'output_dir': '/tmp',
         'auth': {
             'host': DEFAULT_WAZO_HOST,
