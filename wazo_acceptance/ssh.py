@@ -33,10 +33,12 @@ class SSHClient:
         ]
         scp_command.extend(cmd)
 
-        return subprocess.call(scp_command,
-                               stdout=PIPE,
-                               stderr=STDOUT,
-                               close_fds=True)
+        return subprocess.call(
+            scp_command,
+            stdout=PIPE,
+            stderr=STDOUT,
+            close_fds=True,
+        )
 
     def call(self, remote_command):
         command_result = self._exec_ssh_command(remote_command)
@@ -46,8 +48,12 @@ class SSHClient:
         command_result = self._exec_ssh_command(remote_command, err_in_out=True)
         if command_result.returncode != 0:
             logger.error(command_result.stdout_result)
-            raise Exception('Remote command %r returned non-zero exit status %r' %
-                            (remote_command, command_result.returncode))
+            raise Exception(
+                'Remote command {cmd} returned non-zero exit status {code}'.format(
+                    cmd=remote_command,
+                    code=command_result.returncode
+                )
+            )
         return command_result.returncode
 
     def out_call(self, remote_command):
