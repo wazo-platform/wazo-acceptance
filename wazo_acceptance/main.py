@@ -7,8 +7,8 @@ import signal
 
 from xivo.xivo_logging import setup_logging
 
-from wazo_acceptance.config import load_config
-from wazo_acceptance.service import prerequisite
+from . import prerequisite
+from .config import load_config
 
 
 logger = logging.getLogger(__name__)
