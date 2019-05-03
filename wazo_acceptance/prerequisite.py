@@ -7,6 +7,7 @@ from wazo_acceptance.helpers import context_helper
 from wazo_acceptance import setup
 from wazo_acceptance import sysutils
 from wazo_acceptance.assets import copy_asset_to_server
+from xivo_dao import init_db
 from xivo_dao.helpers import db_manager  # TODO Remove xivo_dao dependency
 from xivo_dao.helpers.db_utils import session_scope
 
@@ -18,12 +19,11 @@ class Context:
     pass
 
 
-def run(extra_config):
+def run(extra_config_dir):
     context = Context()
     logger.debug('Initializing ...')
-    setup.setup_config(context, extra_config)
+    setup.setup_config(context, extra_config_dir)
     setup.setup_logging(context)
-    setup.setup_wazo_acceptance_config(context)
     setup.setup_ssh_client(context)
 
     logger.debug('Configuring users external_api')
@@ -55,7 +55,7 @@ def run(extra_config):
     _allow_agid_listen_on_all_interfaces(context)
 
     logger.debug('Configuring Provd REST API on Wazo')
-    _allow_provd_listen_on_all_interfaces()
+    _allow_provd_listen_on_all_interfaces(context)
 
     logger.debug('Installing packages')
     _install_packages(context, ['tcpflow'])
@@ -176,8 +176,9 @@ def _allow_agid_listen_on_all_interfaces(context):
     _add_line_to_remote_file(context, 'listen_address: 0.0.0.0', '/etc/xivo-agid/conf.d/acceptance.yml')
 
 
-def _allow_provd_listen_on_all_interfaces():
+def _allow_provd_listen_on_all_interfaces(context):
     # TODO use REST API
+    init_db(context.config['db_uri'])
     with session_scope() as session:
         query = 'UPDATE provisioning SET net4_ip_rest = \'0.0.0.0\''
         session.execute(query)

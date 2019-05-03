@@ -15,7 +15,8 @@ from xivo_confd_client import Client as ConfdClient
 
 from . import auth
 from . import debug
-from .config import load_config, WazoAcceptanceConfig
+from .config import load_config
+from .ssh import SSHClient
 
 logger = logging.getLogger(__name__)
 
@@ -93,8 +94,8 @@ def setup_tenant(context):
     context.confd_client.set_tenant(tenants[0]['uuid'])
 
 
-def setup_config(context, extra_config):
-    context.config = load_config(extra_config)
+def setup_config(context, extra_config_dir=None):
+    context.config = load_config(extra_config_dir)
 
 
 def setup_consul(context):
@@ -108,8 +109,7 @@ def setup_logging(context):
 
 @debug.logcall
 def setup_ssh_client(context):
-    context.ssh_client = context.wazo_acceptance_config.ssh_client
-
-
-def setup_wazo_acceptance_config(context):
-    context.wazo_acceptance_config = WazoAcceptanceConfig(context.config)
+    context.ssh_client = SSHClient(
+        hostname=context.config['wazo_host'],
+        login=context.config['ssh_login'],
+    )

@@ -30,21 +30,18 @@ def after_scenario(context, scenario):
     asterisk_helper.send_to_asterisk_cli(context, 'channel request hangup all')
 
 
-def initialize(context, extra_config='default'):
-    config = load_config(extra_config)
-    debug = config.get('debug', {}).get('global', True)
-    wazo_setup_logging(log_file=config['log_file'], foreground=True, debug=debug)
-    set_wazo_target(context, extra_config)
+def initialize(context):
+    config = load_config()
+    wazo_setup_logging(config['log_file'], foreground=True, debug=config['debug']['global'])
+    set_wazo_target(context)
 
 
-def set_wazo_target(context, extra_config):
-    setup.setup_config(context, extra_config)
+def set_wazo_target(context):
+    setup.setup_config(context)
     setup.setup_logging(context)
 
     logger.info("Initializing acceptance tests...")
     logger.info('wazo_host: %s', context.config['wazo_host'])
-
-    setup.setup_wazo_acceptance_config(context)
 
     logger.debug("setup ssh client...")
     setup.setup_ssh_client(context)
