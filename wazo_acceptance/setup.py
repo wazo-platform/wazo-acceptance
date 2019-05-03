@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 def setup_agentd_client(context):
     context.agentd_client = AgentdClient(
         context.config['wazo_host'],
-        token=context.config['auth_token'],
+        token=context.token,
         verify_certificate=False,
     )
     auth.register_for_token_renewal(context.agentd_client.set_token)
@@ -31,31 +31,31 @@ def setup_agentd_client(context):
 
 def setup_amid_client(context):
     context.amid_client = AmidClient(**context.config['amid'])
-    context.amid_client.set_token(context.config.get('auth_token'))
+    context.amid_client.set_token(context.token)
     auth.register_for_token_renewal(context.amid_client.set_token)
 
 
 def setup_call_logd_client(context):
     context.call_logd_client = CallLogdClient(**context.config['call_logd'])
-    context.call_logd_client.set_token(context.config.get('auth_token'))
+    context.call_logd_client.set_token(context.token)
     auth.register_for_token_renewal(context.call_logd_client.set_token)
 
 
 def setup_confd_client(context):
     context.confd_client = ConfdClient(**context.config['confd'])
-    context.confd_client.set_token(context.config.get('auth_token'))
+    context.confd_client.set_token(context.token)
     auth.register_for_token_renewal(context.confd_client.set_token)
 
 
 def setup_calld_client(context):
     context.calld_client = CalldClient(**context.config['calld'])
-    context.calld_client.set_token(context.config.get('auth_token'))
+    context.calld_client.set_token(context.token)
     auth.register_for_token_renewal(context.calld_client.set_token)
 
 
 def setup_dird_client(context):
     context.dird_client = DirdClient(**context.config['dird'])
-    context.dird_client.set_token(context.config.get('auth_token'))
+    context.dird_client.set_token(context.token)
     auth.register_for_token_renewal(context.dird_client.set_token)
 
 
@@ -65,20 +65,20 @@ def setup_auth_token(context):
         password='hidden',
         **context.config['auth']
     )
-    context.config['auth_token'] = auth.new_auth_token(context)
-    context.auth_client.set_token(context.config.get('auth_token'))
+    context.token = auth.new_auth_token(context)
+    context.auth_client.set_token(context.token)
     auth.register_for_token_renewal(context.auth_client.set_token)
 
 
 def setup_provd_client(context):
     context.provd_client = ProvdClient(**context.config['provd'])
-    context.provd_client.set_token(context.config.get('auth_token'))
+    context.provd_client.set_token(context.token)
     auth.register_for_token_renewal(context.provd_client.set_token)
 
 
 def setup_setupd_client(context):
     context.setupd_client = SetupdClient(**context.config['setupd'])
-    context.setupd_client.set_token(context.config.get('auth_token'))
+    context.setupd_client.set_token(context.token)
     auth.register_for_token_renewal(context.setupd_client.set_token)
 
 
