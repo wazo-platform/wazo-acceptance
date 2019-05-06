@@ -87,13 +87,13 @@ def _configure_auth_users(context):
         username='wazo-acceptance',
         password='hidden',
         acl_templates=[
+            'agentd.#',
             'amid.action.*.create',
             'auth.#',
+            'call-logd.#',
+            'calld.#',
             'confd.#',
             'dird.#',
-            'agentd.#',
-            'ctid-ng.#',
-            'call-logd.#',
             'provd.#',
         ],
     )
