@@ -10,7 +10,7 @@ from xivo.chain_map import ChainMap
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_ASSETS_DIR = os.path.join(__package__ or 'wazo_acceptance', 'assets'),
+DEFAULT_ASSETS_DIR = os.path.join(__package__ or 'wazo_acceptance', 'assets')
 DEFAULT_CONFIG_DIR = os.path.join(os.path.expanduser("~"), '.wazo-acceptance')
 
 DEFAULT_WAZO_HOST = os.environ.get('WAZO_HOST', 'daily-wazo-rolling-dev.lan.wazo.io')
