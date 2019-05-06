@@ -52,13 +52,13 @@ Once the requirements are installed, modify the configuration files and run the 
 
 # Running tests
 
-Tests can be found in the ```data/features``` directory. You can run all tests:
+Tests can be found in the ```features``` directory. You can run all tests:
 
-    behave data/features/daily
+    behave features/daily
 
 Or only a single test file:
 
-    behave data/features/daily/<file>.feature
+    behave features/daily/<file>.feature
 
 
 # Coverage
