@@ -26,7 +26,7 @@ def before_scenario(context, scenario):
 # Implicitly defined by behave
 def after_scenario(context, scenario):
     scenario.phone_register.clear()
-    context.helpers.asterisk.send_to_asterisk_cli(context, 'channel request hangup all')
+    context.helpers.asterisk.send_to_asterisk_cli('channel request hangup all')
 
 
 def initialize(context):
