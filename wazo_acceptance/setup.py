@@ -3,6 +3,8 @@
 
 import logging
 
+from requests.exceptions import HTTPError
+
 from wazo_call_logd_client import Client as CallLogdClient
 from wazo_calld_client import Client as CalldClient
 from wazo_dird_client import Client as DirdClient
@@ -85,7 +87,12 @@ def setup_setupd_client(context):
 
 def setup_tenant(context):
     name = context.wazo_config['default_tenant']
-    tenants = context.auth_client.tenants.list(name=name)['items']
+    try:
+        tenants = context.auth_client.tenants.list(name=name)['items']
+    except HTTPError:
+        logger.exception('Error or Unauthorized to list tenants')
+        return
+
     if not tenants:
         logger.exception('failed to get default tenant')
         return
