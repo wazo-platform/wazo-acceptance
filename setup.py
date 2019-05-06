@@ -1,50 +1,21 @@
-#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+#!/usr/bin/env python3
+# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
-from distutils.core import setup
-import fnmatch
-import os
-
-
-def is_package(path):
-    is_svn_dir = fnmatch.fnmatch(path, '*/.svn*')
-    is_test_module = fnmatch.fnmatch(path, '*tests')
-    return not (is_svn_dir or is_test_module)
-
-
-def packages_in(package):
-    return [p for p, _, _ in os.walk(package) if is_package(p)]
-
-
-def files_in(directory):
-    for dir, _, files in os.walk(directory):
-        for file in files:
-            yield '{dir}/{file}'.format(dir=dir, file=file)
-
-
-def data(source_dir, dest_dir):
-    for root, dirnames, filenames in os.walk(source_dir):
-        relpath = os.path.relpath(root, source_dir)
-        newpath = os.path.join(dest_dir, relpath)
-        yield (newpath, [os.path.join(root, filename) for filename in filenames])
-
-
-packages = (packages_in('xivo_acceptance'))
-confd = list(files_in('etc/xivo-acceptance/conf.d'))
+from setuptools import setup
+from setuptools import find_packages
 
 setup(
-    name='xivo-acceptance',
-    version='0.1',
-    description='XiVO Acceptance',
+    name='wazo-acceptance',
+    version='1.0',
     author='Wazo Authors',
-    author_email='dev.wazo@gmail.com',
+    author_email='dev@wazo.community',
     url='http://wazo.community',
-    license='GPLv3',
-    packages=packages,
-    scripts=[
-        'bin/xivo-acceptance',
-    ],
-    data_files=list(
-        data('data', 'share/xivo-acceptance')
-    )
+    packages=find_packages(),
+    package_data={'wazo_acceptance': ['assets/*']},
+    entry_points={
+        'console_scripts': [
+            'wazo-acceptance=wazo_acceptance.main:main',
+        ],
+    },
 )

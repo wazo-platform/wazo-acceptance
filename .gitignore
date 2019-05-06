@@ -1,4 +1,6 @@
-*.xml
+*.egg-info
 *.pyc
+*.xml
 .tox
-geckodriver.log
+pycodestyle.txt
+pylint.txt
