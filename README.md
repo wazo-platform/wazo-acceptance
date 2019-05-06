@@ -1,71 +1,27 @@
-# XiVO Acceptance
+# wazo-acceptance
 
-xivo-acceptance is a testing framework for running automated tests on a Wazo
-server. These tests are used for fixing regressions and testing features before
-releasing a new version of Wazo.
-
-
-# Prerequisites
-
-For Linphone to work, you must do:
-
-    adduser jenkins audio  #Jenkins is the user tunning the tests
-
-
-# Configuration
-
-Create a yaml local configuration file in ```~/.xivo-acceptance/default``` and
-redefine only options that need to be changed. Default options can be found in
-```xivo_acceptance/config.py```. Usually, you will only need to change the IP
-addresses and subnets. For example:
-
-    ;IP address of the Wazo server
-    xivo_host: 192.168.0.10
-
-    ;we need to allow access from the test machine to the server.
-    ;add a subnet that includes the test machine's IP address
-    prerequisites:
-        subnets: 
-			- 10.0.0.0/8
-			- 192.168.0.0/24
+wazo-acceptance is a testing framework for running automated tests on a Wazo server.
+These tests are used for testing features before releasing a new version of Wazo.
 
 
 # Getting Started
 
-## Usage
+## Prerequisites
 
-	usage: xivo-acceptance [-h] [-i INTERNAL_FEATURES] [-p] [-v] [-x XIVO_HOST]
-	
-	optional arguments:
-	  -h, --help            show this help message and exit
-	  -i INTERNAL_FEATURES, --internal-features INTERNAL_FEATURES
-	                        execute internal features
-	  -p, --prerequisite    execute prerequisite
-	  -v, --verbose         verbose mode
-	  -x XIVO_HOST, --xivo-host XIVO_HOST
-	                        xivo host
+For Linphone to work, you must do:
 
-## Internal Features Structure
+    adduser jenkins audio  #Jenkins is the user running the tests
 
-    /usr/share/xivo-acceptance/features
-    |-- daily
-    |   |-- backup
-    |   |--...
-    |   |-- user
-    |   |   |-- client.feature
-    |   |   |-- ...
-    |   |   |-- webi.feature
-    |   `-- xivo_configuration
-    |-- example
-    |   `-- example.feature
-    `-- pre_daily
-        |-- 01_post_install
-        `-- 02_wizard
-        ...
 
-Launch daily features:
+## Configuration
 
-    $XA_CMD="xivo-acceptance -v -i daily"
+Create a yaml local configuration file in ```~/.wazo-acceptance/config.yml``` and
+redefine only options that need to be changed. Default options can be found in
+```wazo_acceptance/config.py```. Usually, you will only need to change the IP
+addresses. For example:
+
+    ;IP address of the Wazo server
+    wazo_host: 192.168.0.10
 
 
 ## Requirements
@@ -73,50 +29,42 @@ Launch daily features:
 We recommend running tests on a dedicated debian machine. Run the following
 commands to install requirements:
 
-    apt-get install libsasl2-dev linphone-nogtk python-dev postgresql-server-dev-all lsof
+    apt-get install libsasl2-dev linphone-nogtk python-dev lsof
     pip install -r requirements.txt
+    python setup.py install
 
 Once the requirements are installed, modify the configuration files and run the prerequisite script:
 
-    python ./bin/xivo-acceptance -p
+    wazo-acceptance -p
 
 
-## Configuration
+## Usage
 
-Create a local configuration file in ```~/.xivo-acceptance/default``` and
-redefine only options that need to be changed. Default options can be found in
-```xivo_acceptance/config.py```. Usually, you will only need to change the IP
-addresses and subnets. For example:
+	usage: wazo-acceptance [-h] [-p] [-v] [-x XIVO_HOST]
 
-    amid:
-        host: 0.0.0.0
-
-    ;IP address of the Wazo server
-    xivo_host: 192.168.0.10
-
-    ;we need to allow access from the test machine to the server.
-    ;add a subnet that includes the test machine's IP address
-    prerequisites:
-    	subnets:
-			- 10.0.0.8/24
-			- 192.168.0.0/24
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -p, --prerequisite    execute prerequisite
+	  -v, --verbose         verbose mode
+	  -x WAZO_HOST, --wazo-host WAZO_HOST
+	                        wazo host
 
 
 # Running tests
 
-Tests can be found in the ```features``` directory. You can run all tests:
+Tests can be found in the ```data/features``` directory. You can run all tests:
 
-    lettuce data/features/daily
+    behave data/features/daily
 
 Or only a single test file:
 
-    lettuce data/features/group/group.feature
+    behave data/features/daily/<file>.feature
 
 
 # Coverage
 
-To get code coverage of xivo_acceptance:
+To get code coverage of wazo_acceptance:
 
     pip install coverage
-    coverage run --source=xivo_acceptance $(which lettuce) ...
+    coverage run --source=wazo_acceptance $(which behave) ...
     coverage html
