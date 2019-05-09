@@ -16,3 +16,8 @@ def generate_core_dump(context, pid, epoch):
             setattr(context, pid, value.decode())
         elif name == b'Epoch time':
             setattr(context, epoch, value.decode())
+
+    context.add_cleanup(
+        context.remote_sysutils.output_command,
+        ['rm', '-f', '~/core.{}.{}'.format(context.pid, context.epoch)],
+    )
