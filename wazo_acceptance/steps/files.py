@@ -6,6 +6,7 @@ import re
 from hamcrest import (
     assert_that,
     is_not,
+    is_,
     none,
 )
 from behave import then
@@ -21,7 +22,10 @@ def then_the_mirror_list_contains_a_line_matching_mirror(context, mirror):
 def there_should_by_a_file(context, filename):
     filename = _replace_variables(context, filename)
     path = '~/%s' % filename
-    assert context.remote_sysutils.path_exists(path), 'No such file or directory %s' % path
+    assert_that(
+        context.remote_sysutils.path_exists(path), is_(True),
+        'No such file or directory {}'.format(path),
+    )
 
 
 def _extract_variable(context, pattern, raw_string):
