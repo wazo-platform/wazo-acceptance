@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import re
+import os
 
 from hamcrest import (
     assert_that,
@@ -21,7 +22,7 @@ def then_the_mirror_list_contains_a_line_matching_mirror(context, mirror):
 @then(u'there should be a file name "{filename}"')
 def there_should_by_a_file(context, filename):
     filename = _replace_variables(context, filename)
-    path = '~/%s' % filename
+    path = os.path.join('~', filename)
     assert_that(
         context.remote_sysutils.path_exists(path), is_(True),
         'No such file or directory {}'.format(path),
