@@ -12,6 +12,8 @@ from hamcrest import (
 )
 from behave import then
 
+VARIABLE_RE = re.compile(r'\${(\w+)}')
+
 
 @then('the mirror list contains a line matching "{mirror}"')
 def then_the_mirror_list_contains_a_line_matching_mirror(context, mirror):
@@ -29,8 +31,8 @@ def there_should_by_a_file(context, filename):
     )
 
 
-def _extract_variable(context, pattern, raw_string):
-    variable_names = re.findall(pattern, raw_string)
+def _extract_variable(context, raw_string):
+    variable_names = re.findall(VARIABLE_RE, raw_string)
     return {name: getattr(context, name) for name in variable_names}
 
 
@@ -41,11 +43,10 @@ def _match_on_mirror_list(context, regex):
 
 
 def _replace_variables(context, raw_string):
-    pattern = r'\${(\w+)}'
-    mappings = _extract_variable(context, pattern, raw_string)
+    mappings = _extract_variable(context, raw_string)
 
     def resolve(match):
         variable_name = match.group(0)[2:-1]
         return mappings.get(variable_name)
 
-    return re.sub(pattern, resolve, raw_string)
+    return re.sub(VARIABLE_RE, resolve, raw_string)
