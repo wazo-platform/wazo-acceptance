@@ -4,7 +4,7 @@ Feature: Incoming calls
         Given there are users with infos:
         | firstname | lastname   | number | context | protocol |
         | Oscar     | Latraverse |   1867 | default | sip      |
-        | Will      | Hopkins    |   1868 | default | sip      |  # not necessary, workaround for linphone bug
+        | Will      | Hopkins    |   1868 | default | sip      |
         Given there is an incall "1867" in context "from-extern" to the "user" "Oscar Latraverse"
         Given I listen on the bus for messages:
         | queue       | routing_key   |
@@ -22,7 +22,7 @@ Feature: Incoming calls
         Given there are users with infos:
         | firstname | lastname | number | context | protocol |
         | Plume     | Wilde    |   1868 | default | sip      |
-        | Anthony   | Smith    |   1869 | default | sip      |  # not necessary, workaround for linphone bug
+        | Anthony   | Smith    |   1869 | default | sip      |
         Given there is an incall "1868" in context "from-extern" to the "user" "Plume Wilde"
         Given there are entries in the phonebook "wazo"
         | first name | last name | phone | email           | company   | address1 |
