@@ -26,7 +26,7 @@ def there_should_by_a_file(context, filename):
 
 def _extract_variable(context, pattern, raw_string):
     variable_names = re.findall(pattern, raw_string)
-    return {name: getattr(context.scenario, name) for name in variable_names}
+    return {name: getattr(context, name) for name in variable_names}
 
 
 def _match_on_mirror_list(context, regex):

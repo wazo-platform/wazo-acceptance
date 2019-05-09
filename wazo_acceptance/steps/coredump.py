@@ -13,6 +13,6 @@ def generate_core_dump(context, pid, epoch):
             continue
         name, value = line.split(separator, 1)
         if name == b'PID':
-            setattr(context.scenario, pid, value.decode())
+            setattr(context, pid, value.decode())
         elif name == b'Epoch time':
-            setattr(context.scenario, epoch, value.decode())
+            setattr(context, epoch, value.decode())
