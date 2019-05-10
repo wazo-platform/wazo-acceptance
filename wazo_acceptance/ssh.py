@@ -81,6 +81,7 @@ class SSHClient:
             stdout=PIPE,
             stderr=stderr,
             close_fds=True,
+            universal_newlines=True,  # python3.7: use text=True
         )
         p.stdout_result, p.stderr_result = p.communicate()
         return p

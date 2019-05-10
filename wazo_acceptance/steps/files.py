@@ -19,5 +19,4 @@ def then_the_mirror_list_contains_a_line_matching_mirror(context, mirror):
 
 def _match_on_mirror_list(context, regex):
     output = context.remote_sysutils.output_command(['apt-cache', 'policy'])
-    output = output.decode('utf-8')
     return re.search(regex, output)
