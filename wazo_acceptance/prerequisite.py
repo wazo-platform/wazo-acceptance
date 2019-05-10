@@ -109,7 +109,7 @@ def _create_auth_user(context, username, password, acl_templates):
         '--purpose', 'external_api',
         username,
     ]
-    user_uuid = context.ssh_client.out_call(cmd).decode('utf-8').strip()
+    user_uuid = context.ssh_client.out_call(cmd).strip()
 
     args = []
     if acl_templates:
@@ -124,7 +124,7 @@ def _create_auth_user(context, username, password, acl_templates):
         '{}-policy'.format(username),
     ]
     cmd.extend(args)
-    policy_uuid = context.ssh_client.out_call(cmd).decode('utf-8').strip()
+    policy_uuid = context.ssh_client.out_call(cmd).strip()
 
     cmd = [
         'wazo-auth-cli',

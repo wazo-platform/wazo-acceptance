@@ -38,7 +38,6 @@ def _extract_variable(context, raw_string):
 
 def _match_on_mirror_list(context, regex):
     output = context.remote_sysutils.output_command(['apt-cache', 'policy'])
-    output = output.decode('utf-8')
     return re.search(regex, output)
 
 
