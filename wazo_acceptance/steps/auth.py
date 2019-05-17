@@ -4,7 +4,7 @@
 from hamcrest import assert_that, is_not, none
 from behave import then
 
-from xivo_auth_client import Client as AuthClient
+from wazo_auth_client import Client as AuthClient
 
 
 @then('I can create an admin token')

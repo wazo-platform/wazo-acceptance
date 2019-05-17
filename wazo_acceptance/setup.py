@@ -5,6 +5,7 @@ import logging
 
 from requests.exceptions import HTTPError
 
+from wazo_auth_client import Client as AuthClient
 from wazo_call_logd_client import Client as CallLogdClient
 from wazo_calld_client import Client as CalldClient
 from wazo_dird_client import Client as DirdClient
@@ -12,7 +13,6 @@ from wazo_provd_client import Client as ProvdClient
 from wazo_setupd_client import Client as SetupdClient
 from xivo_agentd_client import Client as AgentdClient
 from xivo_amid_client import Client as AmidClient
-from xivo_auth_client import Client as AuthClient
 from xivo_confd_client import Client as ConfdClient
 
 from . import auth
