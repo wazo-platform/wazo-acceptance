@@ -20,6 +20,7 @@ from . import debug
 from .config import load_config
 from .helpers.asterisk_helper import AsteriskHelper
 from .helpers.context_helper import ContextHelper
+from .helpers.extension_helper import ExtensionHelper
 from .ssh import SSHClient
 from .sysutils import RemoteSysUtils
 
@@ -130,6 +131,7 @@ def setup_helpers(context):
     context.helpers = Helpers()
     context.helpers.asterisk = AsteriskHelper(context.ssh_client)
     context.helpers.context = ContextHelper(context.confd_client)
+    context.helpers.extension = ExtensionHelper(context)
 
 
 def setup_remote_sysutils(context):
