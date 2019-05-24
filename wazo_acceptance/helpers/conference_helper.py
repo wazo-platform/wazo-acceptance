@@ -15,7 +15,7 @@ class ConferenceHelper:
             extension,
         )
 
-    def create(self, name):
-        conference = self._confd_client.conferences.create({'name': name})
+    def create(self, body):
+        conference = self._confd_client.conferences.create(body)
         self._context.add_cleanup(self._confd_client.conferences.delete, conference)
         return conference

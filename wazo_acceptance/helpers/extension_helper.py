@@ -8,7 +8,8 @@ class ExtensionHelper:
         self._context = context
         self._confd_client = context.confd_client
 
-    def create(self, number, context='default'):
-        extension = self._confd_client.extensions.create({'exten': number, 'context': context})
+    def create(self, body):
+        body.setdefault('context', 'default')
+        extension = self._confd_client.extensions.create(body)
         self._context.add_cleanup(self._confd_client.extensions.delete, extension)
         return extension
