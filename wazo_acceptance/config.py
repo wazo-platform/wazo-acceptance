@@ -53,7 +53,6 @@ DEFAULT_CONFIG = {
     'provd': {
         'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
-        'prefix': '/provd',
     },
     'setupd': {
         'host': DEFAULT_WAZO_HOST,
