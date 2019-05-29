@@ -16,6 +16,6 @@ Feature: HTTP
     | GET    | /api/ctid-ng/1.0/status      |
     | GET    | /api/dird/0.1/config         |
     | GET    | /api/plugind/0.2/config      |
-    | GET    | /api/provd/configure         |
+    | GET    | /api/provd/0.2/configure     |
     | GET    | /api/webhookd/1.0/config     |
     | GET    | /api/websocketd/             |
