@@ -22,6 +22,7 @@ from .helpers.asterisk_helper import AsteriskHelper
 from .helpers.conference_helper import ConferenceHelper
 from .helpers.context_helper import ContextHelper
 from .helpers.extension_helper import ExtensionHelper
+from .helpers.token_helper import TokenHelper
 from .ssh import SSHClient
 from .sysutils import RemoteSysUtils
 
@@ -134,6 +135,7 @@ def setup_helpers(context):
     context.helpers.conference = ConferenceHelper(context)
     context.helpers.context = ContextHelper(context.confd_client)
     context.helpers.extension = ExtensionHelper(context)
+    context.helpers.token = TokenHelper(context)
 
 
 def setup_remote_sysutils(context):
