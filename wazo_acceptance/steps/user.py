@@ -21,7 +21,4 @@ def given_there_is_a_user(context):
         'username': context.username,
         'password': context.password,
     }
-
-    user = context.auth_client.users.new(**body)
-
-    context.add_cleanup(context.auth_client.users.delete, user['uuid'])
+    context.helpers.user.create(body)
