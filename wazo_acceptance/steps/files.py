@@ -49,7 +49,7 @@ def then_backup_files_successfully_rotated(context):
 
     expected_files = [file_.format(num='1') for file_ in rotated_files]
     for expected_file in expected_files:
-        assert sysutils.path_exists(expected_file)
+        assert context.remote_sysutils.path_exists(expected_file)
 
     context.remote_sysutils.send_command(
         ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup']
