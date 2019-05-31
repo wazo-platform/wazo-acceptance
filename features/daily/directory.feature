@@ -5,7 +5,7 @@ Feature: Directory integration
         Given there are conference rooms with infos:
         | name | exten |
         | test | 4001  |
-        When the user lists conference rooms
+        When the user lists conference rooms using wazo-dird
         Then the conference rooms list contains:
         | name | exten |
         | test | 4001  |

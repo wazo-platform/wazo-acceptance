@@ -22,7 +22,7 @@ def there_are_conference_rooms(context):
         context.helpers.conference.add_extension(conference, extension)
 
 
-@when('the user lists conference rooms')
+@when('the user lists conference rooms using wazo-dird')
 def user_list_conference_rooms(context):
     token = context.helpers.token.create(context.username, context.password)['token']
     backend = 'conference'
