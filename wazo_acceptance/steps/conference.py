@@ -4,6 +4,7 @@
 from hamcrest import (
     assert_that,
     contains_inanyorder,
+    has_entries,
 )
 
 from behave import (
@@ -16,7 +17,7 @@ from behave import (
 @given('there are conference rooms with infos')
 def there_are_conference_rooms(context):
     for row in context.table:
-        body = dict(zip(row.headings, row.cells))
+        body = row.as_dict()
         conference = context.helpers.conference.create(body)
         extension = context.helpers.extension.create(body)
         context.helpers.conference.add_extension(conference, extension)
@@ -48,7 +49,10 @@ def the_conference_rooms_list_contains(context):
     name_numbers = []
     for row in context.conference_contacts:
         for extension in row['extensions']:
-            name_numbers.append(set((row['name'], extension['exten'])))
+            name_numbers.append({
+                'name': row['name'],
+                'exten': extension['exten'],
+            })
 
-    expected = list(set(row.cells) for row in context.table)
+    expected = [has_entries(row.as_dict()) for row in context.table]
     assert_that(name_numbers, contains_inanyorder(*expected))
