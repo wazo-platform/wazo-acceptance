@@ -43,7 +43,7 @@ def user_list_conference_rooms(context):
             context.conference_contacts.append(contact)
 
 
-@then(u'the conference rooms list contains')
+@then('the conference rooms list contains')
 def the_conference_rooms_list_contains(context):
     name_numbers = []
     for row in context.conference_contacts:
