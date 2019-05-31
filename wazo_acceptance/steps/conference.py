@@ -48,10 +48,7 @@ def the_conference_rooms_list_contains(context):
     name_numbers = []
     for row in context.conference_contacts:
         for extension in row['extensions']:
-            name_numbers.append({
-                'name': row['name'],
-                'exten': extension['exten'],
-            })
+            name_numbers.append(set((row['name'], extension['exten'])))
 
-    expected = list(dict(zip(row.headings, row.cells)) for row in context.table)
+    expected = list(set(row.cells) for row in context.table)
     assert_that(name_numbers, contains_inanyorder(*expected))
