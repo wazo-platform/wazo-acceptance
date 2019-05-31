@@ -5,11 +5,24 @@ import logging
 
 from xivo.xivo_logging import setup_logging as wazo_setup_logging
 
-from . import setup
+from . import (
+    debug,
+    setup
+)
 from .config import load_config
 from .phone_register import PhoneRegister
 
 logger = logging.getLogger('acceptance')
+
+
+class Instances:
+    '''Container for InstanceContext. Each attribute is an InstanceContext'''
+    pass
+
+
+class InstanceContext:
+    '''Substitute for behave's context, one per instance'''
+    pass
 
 
 # Implicitly defined by behave
@@ -35,15 +48,25 @@ def after_scenario(context, scenario):
 
 def initialize(context):
     config = load_config()
-    wazo_setup_logging(config['log_file'], foreground=True, debug=config['debug']['global'])
-    set_wazo_target(context)
+    wazo_setup_logging(config['default']['log_file'], foreground=True, debug=config['default']['debug']['global'])
+    setup.setup_config(context, config)
+    debug.setup_logging(context.wazo_config)
+    set_wazo_instance(context, 'default', config['default'])
+    set_wazo_instances(context, config)
 
 
-def set_wazo_target(context):
-    setup.setup_config(context)
-    setup.setup_logging(context)
+def set_wazo_instances(context, config):
+    context.instances = Instances()
+    for instance_name, instance_config in config.items():
+        instance_context = InstanceContext()
+        set_wazo_instance(instance_context, instance_name, instance_config)
+        context.instances.__setattr__(instance_name, instance_context)
 
-    logger.info("Initializing acceptance tests...")
+
+def set_wazo_instance(context, instance_name, config):
+    logger.info("Adding instance %s...", instance_name)
+    setup.setup_config(context, config)
+
     logger.info('wazo_host: %s', context.wazo_config['wazo_host'])
 
     logger.debug("setup ssh client...")
