@@ -22,3 +22,44 @@ def given_there_is_a_user(context):
         'password': context.password,
     }
     context.helpers.user.create(body)
+
+
+@given('there are telephony users with infos')
+def given_there_are_telephony_users_with_infos(context):
+    context.table.require_columns(['firstname'])
+    for row in context.table:
+        body = row.as_dict()
+
+        confd_user = context.helpers.confd_user.create(body)
+
+        user_body = {
+            'uuid': confd_user['uuid'],
+            'firstname': body['firstname'],
+            'lastname': body.get('lastname'),
+            'username': body.get('username') or random_string(10),
+            'password': body.get('password') or random_string(10, sample=string.printable),
+        }
+        user = context.helpers.user.create(user_body)
+
+        line = context.helpers.line.create(body)
+
+        endpoint = body.get('endpoint', 'sip')
+        if endpoint == 'sip':
+            sip = context.helpers.endpoint_sip.create(body)
+            context.helpers.line.add_endpoint_sip(line, sip)
+        elif endpoint == 'sccp':
+            raise NotImplementedError()
+        elif endpoint == 'custom':
+            raise NotImplementedError()
+
+        if body.get('exten') and body.get('context'):
+            extension = context.helpers.extension.create(body)
+            context.helpers.line.add_extension(line, extension)
+
+        context.helpers.confd_user.add_line(confd_user, line)
+
+        if body.get('device'):
+            device = context.confd_client.devices.list(mac=body['device'])['items'][0]
+            context.helpers.line.add_device(line, device)
+
+        # TODO voicemail

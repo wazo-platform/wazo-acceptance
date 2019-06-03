@@ -19,9 +19,12 @@ from . import auth
 from . import debug
 from .config import load_config
 from .helpers.asterisk_helper import AsteriskHelper
+from .helpers.confd_user_helper import ConfdUserHelper
 from .helpers.conference_helper import ConferenceHelper
 from .helpers.context_helper import ContextHelper
+from .helpers.endpoint_sip_helper import EndpointSIPHelper
 from .helpers.extension_helper import ExtensionHelper
+from .helpers.line_helper import LineHelper
 from .helpers.token_helper import TokenHelper
 from .helpers.user_helper import UserHelper
 from .ssh import SSHClient
