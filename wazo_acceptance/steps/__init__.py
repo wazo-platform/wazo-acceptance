@@ -7,5 +7,6 @@ from .coredump import *  # noqa
 from .files import *  # noqa
 from .group import *  # noqa
 from .http import *  # noqa
+from .phone_call import *  # noqa
 from .setupd import *  # noqa
 from .user import *  # noqa
