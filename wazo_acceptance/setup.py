@@ -17,7 +17,6 @@ from xivo_amid_client import Client as AmidClient
 
 from . import auth
 from . import debug
-from .config import load_config
 from .helpers.asterisk_helper import AsteriskHelper
 from .helpers.confd_group_helper import ConfdGroupHelper
 from .helpers.confd_user_helper import ConfdUserHelper
@@ -26,6 +25,7 @@ from .helpers.context_helper import ContextHelper
 from .helpers.endpoint_sip_helper import EndpointSIPHelper
 from .helpers.extension_helper import ExtensionHelper
 from .helpers.line_helper import LineHelper
+from .helpers.ha_helper import HAHelper
 from .helpers.token_helper import TokenHelper
 from .helpers.user_helper import UserHelper
 from .helpers.sip_config import SIPConfigGenerator
@@ -143,6 +143,7 @@ def setup_helpers(context):
     context.helpers.endpoint_sip = EndpointSIPHelper(context)
     context.helpers.extension = ExtensionHelper(context)
     context.helpers.line = LineHelper(context)
+    context.helpers.ha = HAHelper(context)
     context.helpers.token = TokenHelper(context)
     context.helpers.user = UserHelper(context)
 
