@@ -85,6 +85,8 @@ def _configure_rabbitmq(context):
 
 
 def _configure_auth_users(context):
+    if _auth_user_exists(context, 'wazo-acceptance'):
+        return
     _create_auth_user(
         context,
         username='wazo-acceptance',
@@ -100,6 +102,18 @@ def _configure_auth_users(context):
             'provd.#',
         ],
     )
+
+
+def _auth_user_exists(context, username):
+    cmd = [
+        'wazo-auth-cli',
+        '--config', '/root/.config/wazo-auth-cli',
+        'user',
+        'show',
+        username,
+    ]
+    return_code = context.ssh_client.call(cmd)
+    return return_code == 0
 
 
 def _create_auth_user(context, username, password, acl_templates):
@@ -141,7 +155,14 @@ def _create_auth_user(context, username, password, acl_templates):
 
 
 def _configure_default_tenant(context):
-    context.auth_client.tenants.new(name=context.wazo_config['default_tenant'])
+    name = context.wazo_config['default_tenant']
+    try:
+        tenants = context.auth_client.tenants.list(name=name)['items']
+    except HTTPError:
+        logger.exception('Error or Unauthorized to list tenants')
+        return
+    if not tenants:
+        context.auth_client.tenants.new(name=context.wazo_config['default_tenant'])
 
 
 def _add_line_to_remote_file(context, line_text, file_name):
