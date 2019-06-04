@@ -9,6 +9,10 @@ class ConfdGroupHelper:
         self._confd_client = context.confd_client
 
     def create(self, body):
+        timeout = body.pop('timeout', None)
+        if timeout:
+            body['timeout'] = int(timeout)
+
         group = self._confd_client.groups.create(body)
         self._context.add_cleanup(self._confd_client.groups.delete, group)
         return group
