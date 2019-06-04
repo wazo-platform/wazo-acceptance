@@ -64,6 +64,10 @@ def given_there_are_telephony_users_with_infos(context):
 
         # TODO voicemail
 
+        # TODO listen on sip reload event
+        import time
+        time.sleep(2)
+
         if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
             _register_and_track_phone(context, user['uuid'], sip)
 
