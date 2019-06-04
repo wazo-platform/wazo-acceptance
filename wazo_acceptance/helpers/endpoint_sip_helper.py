@@ -12,9 +12,3 @@ class EndpointSIPHelper:
         sip = self._confd_client.endpoints_sip.create(body)
         self._context.add_cleanup(self._confd_client.endpoints_sip.delete, sip)
         return sip
-
-    def find_option(self, endpoint_sip, desired_option):
-        for option, value in endpoint_sip['options']:
-            if option == desired_option:
-                return value
-        return None

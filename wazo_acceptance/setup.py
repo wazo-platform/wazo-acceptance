@@ -27,6 +27,9 @@ from .helpers.extension_helper import ExtensionHelper
 from .helpers.line_helper import LineHelper
 from .helpers.token_helper import TokenHelper
 from .helpers.user_helper import UserHelper
+from .helpers.sip_config import SIPConfigGenerator
+from .helpers.sip_phone import RegisterLine
+from .phone_register import PhoneRegister
 from .ssh import SSHClient
 from .sysutils import RemoteSysUtils
 
@@ -136,12 +139,25 @@ class Helpers:
 def setup_helpers(context):
     context.helpers = Helpers()
     context.helpers.asterisk = AsteriskHelper(context.ssh_client)
+    context.helpers.confd_user = ConfdUserHelper(context)
     context.helpers.conference = ConferenceHelper(context)
     context.helpers.context = ContextHelper(context.confd_client)
+    context.helpers.endpoint_sip = EndpointSIPHelper(context)
     context.helpers.extension = ExtensionHelper(context)
+    context.helpers.line = LineHelper(context)
     context.helpers.token = TokenHelper(context)
     context.helpers.user = UserHelper(context)
 
 
 def setup_remote_sysutils(context):
     context.remote_sysutils = RemoteSysUtils(context.ssh_client)
+
+
+def setup_phone(context):
+    context.phone_register = PhoneRegister(context.amid_client)
+    context.helpers.sip_phone = RegisterLine(context.wazo_config['debug'].get('linphone', False))
+    context.helpers.sip_config = SIPConfigGenerator(
+        context.wazo_config['wazo_host'],
+        context.wazo_config['linphone'],
+        context.phone_register,
+    )

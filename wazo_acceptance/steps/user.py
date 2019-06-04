@@ -63,3 +63,16 @@ def given_there_are_telephony_users_with_infos(context):
             context.helpers.line.add_device(line, device)
 
         # TODO voicemail
+
+        if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
+            _register_and_track_phone(context, user['uuid'], sip)
+
+
+def _register_and_track_phone(context, user_uuid, endpoint_sip, nb_phone=1):
+    for _ in range(nb_phone):
+        phone_config = context.helpers.sip_config.create(endpoint_sip)
+        phone = context.helpers.sip_phone.register_line(phone_config)
+        phone.sip_contact_uri = context.phone_register.find_new_sip_contact(
+            endpoint_sip['username'],
+        )
+        context.phone_register.add_registered_phone(phone, user_uuid)

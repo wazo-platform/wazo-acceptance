@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright 2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2018-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from collections import namedtuple
@@ -10,6 +9,7 @@ SIPConfig = namedtuple('SIPConfig', ('sip_port', 'rtp_port', 'sip_name', 'sip_pa
 
 
 class _AbstractAvailablePortFinder(object):
+
     def _port_range(self, port_range):
         start, _, end = port_range.partition(',')
         return int(start), int(end)
@@ -31,9 +31,9 @@ class _AbstractAvailablePortFinder(object):
 
 class _AvailableSipPortFinder(_AbstractAvailablePortFinder):
 
-    def __init__(self, world_config):
-        start, end = self._port_range(world_config['linphone']['sip_port_range'])
-        self._ports = xrange(start, end)
+    def __init__(self, sip_port_range):
+        start, end = self._port_range(sip_port_range)
+        self._ports = range(start, end)
 
     def _port_from_phone(self, phone):
         return phone.sip_port
@@ -48,12 +48,12 @@ class _AvailableSipPortFinder(_AbstractAvailablePortFinder):
 
 class _AvailableRTPPortFinder(_AbstractAvailablePortFinder):
 
-    def __init__(self, world_config):
-        start, end = self._port_range(world_config['linphone']['rtp_port_range'])
+    def __init__(self, rtp_port_range):
+        start, end = self._port_range(rtp_port_range)
 
         # RTP port must be an even number
         # RTCP will use the higher odd number
-        self._ports = xrange(start, end, 2)
+        self._ports = range(start, end, 2)
 
     def _port_from_phone(self, phone):
         return phone.rtp_port
@@ -66,12 +66,19 @@ class _AvailableRTPPortFinder(_AbstractAvailablePortFinder):
             return False
 
 
-def create_config(world_config, phone_register, endpoint_sip_config):
-    existing_phones = phone_register.phones()
-    sip_port = _AvailableSipPortFinder(world_config).get_available_port(existing_phones)
-    rtp_port = _AvailableRTPPortFinder(world_config).get_available_port(existing_phones)
-    sip_name = endpoint_sip_config['username']
-    sip_passwd = endpoint_sip_config['secret']
-    sip_host = world_config['xivo_host']
+class SIPConfigGenerator:
 
-    return SIPConfig(sip_port, rtp_port, sip_name, sip_passwd, sip_host)
+    def __init__(self, host, config, phone_register):
+        self._host = host
+        self._rtp_port_range = config['rtp_port_range']
+        self._sip_port_range = config['sip_port_range']
+        self._phone_register = phone_register
+
+    def create(self, endpoint_sip):
+        existing_phones = self._phone_register.phones()
+        sip_port = _AvailableSipPortFinder(self._sip_port_range).get_available_port(existing_phones)
+        rtp_port = _AvailableRTPPortFinder(self._rtp_port_range).get_available_port(existing_phones)
+        sip_name = endpoint_sip['username']
+        sip_passwd = endpoint_sip['secret']
+        sip_host = self._host
+        return SIPConfig(sip_port, rtp_port, sip_name, sip_passwd, sip_host)
