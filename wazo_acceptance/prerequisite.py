@@ -75,6 +75,9 @@ def run(extra_config_dir):
     logger.debug('Configuring wazo-calld')
     _configure_wazo_service(context, 'wazo-calld')
 
+    logger.debug('Configuring wazo-dird')
+    _configure_wazo_service(context, 'wazo-dird')
+
 
 def _configure_rabbitmq(context):
     copy_asset_to_server(context, 'rabbitmq.config', '/etc/rabbitmq/rabbitmq.config')
