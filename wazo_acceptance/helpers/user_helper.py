@@ -12,3 +12,14 @@ class UserHelper:
         user = self._auth_client.users.new(**body)
         self._context.add_cleanup(self._auth_client.users.delete, user['uuid'])
         return user
+
+    def get_by(self, **kwargs):
+        user = self._find_by(**kwargs)
+        if not user:
+            raise Exception('User not found: {}'.format(kwargs))
+        return user
+
+    def _find_by(self, **kwargs):
+        users = self._auth_client.users.list(**kwargs)['items']
+        for user in users:
+            return user
