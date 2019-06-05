@@ -7,3 +7,6 @@ import os
 def copy_asset_to_server(context, asset, serverpath):
     assetpath = os.path.join(context.wazo_config['assets_dir'], asset)
     context.ssh_client.send_files(assetpath, serverpath)
+    context.add_cleanup(context.ssh_client.check_call, ['rm {}'.format(
+        os.path.join(serverpath, asset)
+    )])
