@@ -11,6 +11,7 @@ SERVICE_PIDFILES = {
     'consul': '/var/run/consul/consul.pid',
     'wazo-auth': '/var/run/wazo-auth/wazo-auth.pid',
     'wazo-calld': '/var/run/wazo-calld/wazo-calld.pid',
+    'wazo-dird': '/var/run/wazo-dird/wazo-dird.pid',
     'xivo-agent': '/var/run/xivo-agentd/xivo-agentd.pid',
     'xivo-amid': '/var/run/xivo-amid/xivo-amid.pid',
     'xivo-confd': '/var/run/xivo-confd/xivo-confd.pid',
