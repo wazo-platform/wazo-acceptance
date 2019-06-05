@@ -30,7 +30,7 @@ from .helpers.line_helper import LineHelper
 from .helpers.token_helper import TokenHelper
 from .helpers.user_helper import UserHelper
 from .helpers.sip_config import SIPConfigGenerator
-from .helpers.sip_phone import RegisterLine
+from .helpers.sip_phone import LineRegistrar
 from .phone_register import PhoneRegister
 from .ssh import SSHClient
 from .sysutils import RemoteSysUtils
@@ -159,7 +159,7 @@ def setup_remote_sysutils(context):
 
 def setup_phone(context):
     context.phone_register = PhoneRegister(context.amid_client)
-    context.helpers.sip_phone = RegisterLine(context.wazo_config['debug'].get('linphone', False))
+    context.helpers.sip_phone = LineRegistrar(context.wazo_config['debug'].get('linphone', False))
     context.helpers.sip_config = SIPConfigGenerator(
         context.wazo_config['wazo_host'],
         context.wazo_config['linphone'],
