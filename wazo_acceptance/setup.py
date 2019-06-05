@@ -19,7 +19,6 @@ from . import auth
 from . import debug
 from .config import load_config
 from .helpers.asterisk_helper import AsteriskHelper
-from .helpers.common_helper import CommonHelper
 from .helpers.confd_group_helper import ConfdGroupHelper
 from .helpers.confd_user_helper import ConfdUserHelper
 from .helpers.conference_helper import ConferenceHelper
@@ -141,7 +140,6 @@ class Helpers:
 def setup_helpers(context):
     context.helpers = Helpers()
     context.helpers.asterisk = AsteriskHelper(context.ssh_client)
-    context.helpers.common = CommonHelper()
     context.helpers.confd_group = ConfdGroupHelper(context)
     context.helpers.confd_user = ConfdUserHelper(context)
     context.helpers.conference = ConferenceHelper(context)

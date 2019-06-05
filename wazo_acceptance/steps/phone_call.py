@@ -3,6 +3,7 @@
 
 import time
 
+from xivo_test_helpers import until
 from behave import step, when
 
 
@@ -17,7 +18,7 @@ def a_calls_exten(context, firstname, lastname, exten):
 def user_is_ringing(context, firstname, lastname):
     user = context.helpers.user.get_by(firstname=firstname, lastname=lastname)
     phone = context.phone_register.get_user_phone(user['uuid'])
-    context.helpers.common.wait_until(phone.is_ringing, tries=3)
+    until.true(phone.is_ringing, tries=3)
 
 
 @when('I wait "{seconds}" seconds for the call to be forwarded')
