@@ -20,8 +20,14 @@ redefine only options that need to be changed. Default options can be found in
 ```wazo_acceptance/config.py```. Usually, you will only need to change the IP
 addresses. For example:
 
-    ;IP address of the Wazo server
-    wazo_host: 192.168.0.10
+    default:
+      # IP address of the Wazo server
+      wazo_host: 192.168.0.10
+
+Configuration path can be changed by passing the following options:
+
+    behave -D acceptance_config_dir=/some/config/path ...
+    wazo-acceptance -c /some/config/path ...
 
 
 ## Requirements

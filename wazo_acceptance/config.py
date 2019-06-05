@@ -89,12 +89,12 @@ DEFAULT_INSTANCE_CONFIG = {
 }
 
 
-def load_config(extra_config_dir=None):
-    extra_configs = []
-    if extra_config_dir:
-        extra_configs = parse_config_dir(extra_config_dir)
-    file_configs = parse_config_dir(DEFAULT_CONFIG_DIR)
-    config = ChainMap(*extra_configs, *file_configs)
+def load_config(config_dir=None):
+    config_dir = config_dir or DEFAULT_CONFIG_DIR
+    config_dir = os.path.abspath(config_dir)
+    logger.debug('Reading config from %s...', config_dir)
+    file_configs = parse_config_dir(config_dir)
+    config = ChainMap(*file_configs)
 
     # set default config for each instance
     config = {instance: ChainMap(config[instance], deepcopy(DEFAULT_INSTANCE_CONFIG)) for instance in config}
