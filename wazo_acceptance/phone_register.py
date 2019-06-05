@@ -23,21 +23,21 @@ class PhoneRegister:
                 self._registered_contacts.add(contact)
                 return 'PJSIP/{}'.format(contact)
 
-    def add_registered_phone(self, phone, name):
-        if name not in self._sip_phones:
-            self._sip_phones[name] = []
+    def add_registered_phone(self, phone, user_uuid):
+        if user_uuid not in self._sip_phones:
+            self._sip_phones[user_uuid] = []
 
-        self._sip_phones[name].append(phone)
+        self._sip_phones[user_uuid].append(phone)
 
     def clear(self):
         self._sip_phones.clear()
         self._registered_contacts = set()
 
-    def remove(self, name):
-        self._sip_phones.pop(name, None)
+    def remove(self, user_uuid):
+        self._sip_phones.pop(user_uuid, None)
 
-    def get_user_phone(self, name, position=0):
-        return self._sip_phones.get(name)[position]
+    def get_user_phone(self, user_uuid, position=0):
+        return self._sip_phones.get(user_uuid)[position]
 
     def phones(self):
         all_phones = []

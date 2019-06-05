@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright 2015-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
@@ -7,21 +6,17 @@ import logging
 import sys
 import time
 
-from lettuce import world
-
-from linphonelib import ExtensionNotFoundException
-from linphonelib import LinphoneException
-from linphonelib import Session
+from linphonelib import (
+    ExtensionNotFoundException,
+    LinphoneException,
+    Session,
+)
 from linphonelib.commands import HookStatus
 
 logger = logging.getLogger('linphone')
 
 
-class CallResult(object):
-    not_found = 'not_found'
-
-
-class LinphoneLogWrapper(object):
+class _LinphoneLogWrapper:
 
     def __init__(self, file_, prefix):
         self._file = file_
@@ -50,19 +45,17 @@ class LinphoneLogWrapper(object):
         return data
 
 
-class SipPhone(object):
+class SIPPhone:
 
-    def __init__(self, config):
-        if world.config['debug'].get('linphone', False):
-            logfile = LinphoneLogWrapper(sys.stdout, prefix='[sip:{}]'.format(config.sip_name))
-        else:
-            logfile = None
-        self._session = Session(config.sip_name,
-                                config.sip_passwd,
-                                config.sip_host,
-                                config.sip_port,
-                                config.rtp_port,
-                                logfile)
+    def __init__(self, config, logfile=None):
+        self._session = Session(
+            config.sip_name,
+            config.sip_passwd,
+            config.sip_host,
+            config.sip_port,
+            config.rtp_port,
+            logfile,
+        )
         self._call_result = None
         self.sip_port = config.sip_port
         self.rtp_port = config.rtp_port
@@ -127,7 +120,17 @@ class SipPhone(object):
         return self._session.hook_status() == HookStatus.OFFHOOK
 
 
-def register_line(sip_config):
-    phone = SipPhone(sip_config)
-    phone.register()
-    return phone
+class LineRegistrar:
+
+    def __init__(self, debug):
+        self._debug = debug
+
+    def register_line(self, sip_config):
+        logfile = None
+        if self._debug:
+            prefix = '[sip:{}]'.format(sip_config.sip_name)
+            logfile = _LinphoneLogWrapper(sys.stdout, prefix=prefix)
+
+        phone = SIPPhone(sip_config, logfile=logfile)
+        phone.register()
+        return phone

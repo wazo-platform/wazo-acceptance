@@ -70,3 +70,5 @@ def set_wazo_target(context):
     setup.setup_remote_sysutils(context)
     logger.debug("setup helpers...")
     setup.setup_helpers(context)
+    logger.debug("setup phone...")
+    setup.setup_phone(context)
