@@ -4,7 +4,7 @@
 import random
 import string
 
-from behave import given
+from behave import given, then
 
 
 def random_string(length, sample=string.ascii_lowercase):
@@ -22,6 +22,46 @@ def given_there_is_a_user(context):
         'password': context.password,
     }
     context.helpers.user.create(body)
+
+
+@given('there are authentication users with info')
+def given_there_are_authentication_users_with_info(context):
+    for row in context.table:
+        body = {
+            'firstname': row['firstname'],
+            'username': row['username'],
+            'password': row['password'],
+        }
+        context.helpers.user.create(body)
+
+
+@given('there are permanent authentication users with info')
+def given_there_are_permanent_authentication_users_with_info(context):
+    for row in context.table:
+        body = {
+            'firstname': row['firstname'],
+            'username': row['username'],
+            'password': row['password'],
+        }
+        context.helpers.user.create(body, cleanup=False)
+
+
+def _check_user_exists(context, username):
+    try:
+        context.helpers.user.get_by(username=username)
+        return True
+    except Exception:
+        return False
+
+
+@then('I see a user with username "{username}"')
+def then_i_see_a_user_with_username(context, username):
+    assert _check_user_exists(context, username)
+
+
+@then('the user with username "{username}" does not exist')
+def then_the_user_with_username_does_not_exist(context, username):
+    assert not _check_user_exists(context, username)
 
 
 @given('there are telephony users with infos')

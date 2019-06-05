@@ -8,9 +8,10 @@ class UserHelper:
         self._context = context
         self._auth_client = context.auth_client
 
-    def create(self, body):
+    def create(self, body, cleanup=True):
         user = self._auth_client.users.new(**body)
-        self._context.add_cleanup(self._auth_client.users.delete, user['uuid'])
+        if cleanup:
+            self._context.add_cleanup(self._auth_client.users.delete, user['uuid'])
         return user
 
     def get_by(self, **kwargs):
