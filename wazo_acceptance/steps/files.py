@@ -33,8 +33,11 @@ def given_there_are_backup_files(context):
     ]
 
     for file_ in backuped_files:
-        context.remote_sysutils.send_command(['rm', '-f', '{file_}*'.format(file_=file_)])
         context.remote_sysutils.send_command(['touch', file_])
+        context.add_cleanup(
+            context.remote_sysutils.send_command,
+            ['rm', '-f', '{file_}'.format(file_=file_)]
+        )
 
 @then('backup files successfully rotated')
 def then_backup_files_successfully_rotated(context):
@@ -48,8 +51,13 @@ def then_backup_files_successfully_rotated(context):
     )
 
     expected_files = [file_.format(num='1') for file_ in rotated_files]
+
     for expected_file in expected_files:
         assert context.remote_sysutils.path_exists(expected_file)
+        context.add_cleanup(
+            context.remote_sysutils.send_command,
+            ['rm', '-f', '{expected_file}'.format(expected_file=expected_file)]
+        )
 
     context.remote_sysutils.send_command(
         ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup']
@@ -58,3 +66,7 @@ def then_backup_files_successfully_rotated(context):
     expected_files = [file_.format(num='2') for file_ in rotated_files]
     for expected_file in expected_files:
         assert context.remote_sysutils.path_exists(expected_file)
+        context.add_cleanup(
+            context.remote_sysutils.send_command,
+            ['rm', '-f', '{expected_file}'.format(expected_file=expected_file)]
+        )
