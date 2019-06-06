@@ -13,12 +13,12 @@ def given_the_file_is_copied_on_the_server(context, assetfile, serverpath):
 
 @when('I execute database backup command')
 def when_i_execute_database_backup_command(context):
-    command = 'bash /tmp/xivo-backup-manager backup db'
+    command = 'bash /tmp/wazo-backup-manager backup db'
     context.ssh_client.check_call([command])
 
 
 @when('I execute database restore command')
 def when_i_execute_database_restore_command(context):
-    command = 'bash /tmp/xivo-backup-manager restore db'
+    command = 'bash /tmp/wazo-backup-manager restore db'
     context.ssh_client.check_call([command])
     auth.renew_auth_token(context)

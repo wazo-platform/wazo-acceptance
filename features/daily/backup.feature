@@ -5,7 +5,7 @@ Feature: Backup
         Then backup files successfully rotated
 
     Scenario: Backup and restore database
-        Given the asset file "xivo-backup-manager" is copied on the server into "/tmp"
+        Given the asset file "wazo-backup-manager" is copied on the server into "/tmp"
         When I execute database backup command
 
         Given there are permanent authentication users with info
