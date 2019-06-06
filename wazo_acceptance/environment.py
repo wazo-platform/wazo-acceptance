@@ -22,7 +22,12 @@ class Instances:
 
 class InstanceContext:
     '''Substitute for behave's context, one per instance'''
-    pass
+
+    def __init__(self, global_context):
+        self._global_context = global_context
+
+    def add_cleanup(self, *args, **kwargs):
+        self._global_context.add_cleanup(*args, **kwargs)
 
 
 # Implicitly defined by behave
