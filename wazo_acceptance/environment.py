@@ -15,12 +15,15 @@ logger = logging.getLogger('acceptance')
 # Implicitly defined by behave
 def before_all(context):
     initialize(context)
+    context.fail_on_cleanup_errors = False
 
 
 # Implicitly defined by behave
 def before_scenario(context, scenario):
     scenario.phone_register = PhoneRegister(context)
     scenario.user_tokens = {}
+    if 'no_cleanup_errors_fail' not in context.tags:
+        context.fail_on_cleanup_errors = True
 
 
 # Implicitly defined by behave
