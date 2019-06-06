@@ -35,17 +35,6 @@ def given_there_are_authentication_users_with_info(context):
         context.helpers.user.create(body)
 
 
-@given('there are permanent authentication users with info')
-def given_there_are_permanent_authentication_users_with_info(context):
-    for row in context.table:
-        body = {
-            'firstname': row['firstname'],
-            'username': row['username'],
-            'password': row['password'],
-        }
-        context.helpers.user.create(body, cleanup=False)
-
-
 def _check_user_exists(context, username):
     try:
         context.helpers.user.get_by(username=username)
