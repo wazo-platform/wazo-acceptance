@@ -3,8 +3,12 @@
 
 import logging
 
-from . import setup
+from . import (
+    debug,
+    setup,
+)
 from .assets import copy_asset_to_server
+from .config import load_config
 
 logger = logging.getLogger(__name__)
 
@@ -13,11 +17,17 @@ class Context:
     pass
 
 
-def run(extra_config_dir):
+def run(config_dir, instance_name):
     context = Context()
+
     logger.debug('Initializing ...')
-    setup.setup_config(context, extra_config_dir)
-    setup.setup_logging(context)
+    config = load_config(config_dir)
+    setup.setup_config(context, config)
+    debug.setup_logging(context.wazo_config)
+
+    logger.debug('Running prerequisites for instance "%s" ...', instance_name)
+    setup.setup_config(context, config[instance_name])
+
     setup.setup_ssh_client(context)
 
     logger.debug('Configuring remote sysutils')
@@ -29,7 +39,7 @@ def run(extra_config_dir):
     logger.debug('Creating auth client')
     setup.setup_auth_token(context)
 
-    logger.debug('Configuring python clients')
+    logger.debug('Configuring confd client')
     setup.setup_confd_client(context)
 
     logger.debug('Creating default tenant')
@@ -56,7 +66,7 @@ def run(extra_config_dir):
     logger.debug('Configuring helpers')
     setup.setup_helpers(context)
 
-    logger.debug('Adding context')
+    logger.debug('Adding instance context')
     context.helpers.context.update_contextnumbers_user('default', 1000, 1999)
     context.helpers.context.update_contextnumbers_group('default', 2000, 2999)
     context.helpers.context.update_contextnumbers_queue('default', 3000, 3999)

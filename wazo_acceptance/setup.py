@@ -17,7 +17,6 @@ from xivo_amid_client import Client as AmidClient
 
 from . import auth
 from . import debug
-from .config import load_config
 from .helpers.asterisk_helper import AsteriskHelper
 from .helpers.confd_group_helper import ConfdGroupHelper
 from .helpers.confd_user_helper import ConfdUserHelper
@@ -112,17 +111,13 @@ def setup_tenant(context):
     context.confd_client.set_tenant(tenants[0]['uuid'])
 
 
-def setup_config(context, extra_config_dir=None):
-    context.wazo_config = load_config(extra_config_dir)
+def setup_config(context, config):
+    context.wazo_config = config
 
 
 def setup_consul(context):
     command = 'cat /var/lib/consul/master_token'.split()
     context.wazo_config['consul_token'] = context.ssh_client.out_call(command).strip()
-
-
-def setup_logging(context):
-    debug.setup_logging(context.wazo_config)
 
 
 @debug.logcall

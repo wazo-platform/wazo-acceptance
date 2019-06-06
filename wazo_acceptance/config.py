@@ -4,6 +4,7 @@
 import logging
 import os
 
+from copy import deepcopy
 from xivo.config_helper import parse_config_dir
 from xivo.chain_map import ChainMap
 
@@ -15,7 +16,7 @@ DEFAULT_CONFIG_DIR = os.path.join(os.path.expanduser("~"), '.wazo-acceptance')
 
 DEFAULT_WAZO_HOST = os.environ.get('WAZO_HOST', 'daily-wazo-rolling-dev.lan.wazo.io')
 
-DEFAULT_CONFIG = {
+DEFAULT_INSTANCE_CONFIG = {
     'wazo_host': DEFAULT_WAZO_HOST,
     'master_host': None,
     'slave_host': None,
@@ -88,15 +89,19 @@ DEFAULT_CONFIG = {
 }
 
 
-def load_config(extra_config_dir=None):
-    extra_configs = []
-    if extra_config_dir:
-        extra_configs = parse_config_dir(extra_config_dir)
-    file_configs = parse_config_dir(DEFAULT_CONFIG_DIR)
-    config = ChainMap(*extra_configs, *file_configs, DEFAULT_CONFIG)
+def load_config(config_dir=None):
+    config_dir = config_dir or DEFAULT_CONFIG_DIR
+    config_dir = os.path.abspath(config_dir)
+    logger.debug('Reading config from %s...', config_dir)
+    file_configs = parse_config_dir(config_dir)
+    config = ChainMap(*file_configs)
 
-    _config_update_host(config)
-    _config_post_processor(config)
+    # set default config for each instance
+    config = {instance: ChainMap(config[instance], deepcopy(DEFAULT_INSTANCE_CONFIG)) for instance in config}
+
+    for instance_config in config.values():
+        _config_update_host(instance_config)
+        _config_post_processor(instance_config)
 
     return config
 
