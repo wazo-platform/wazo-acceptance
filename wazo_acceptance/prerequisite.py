@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
+import os
 
 from . import (
     debug,
     setup,
 )
-from .assets import copy_asset_to_server
 from .config import load_config
 
 logger = logging.getLogger(__name__)
@@ -90,7 +90,7 @@ def run(config_dir, instance_name):
 
 
 def _configure_rabbitmq(context):
-    copy_asset_to_server(context, 'rabbitmq.config', '/etc/rabbitmq/rabbitmq.config')
+    copy_asset_to_server_permanently(context, 'rabbitmq.config', '/etc/rabbitmq')
     context.remote_sysutils.restart_service('rabbitmq-server')
 
 
@@ -205,14 +205,14 @@ def _install_chan_test(context):
 
 
 def _install_core_dump(context):
-    copy_asset_to_server(context, 'core_dump.c', '/usr/src')
+    copy_asset_to_server_permanently(context, 'core_dump.c', '/usr/src')
     _install_packages(context, ['gcc'])
     command = ['gcc', '-o', '/usr/local/bin/core_dump', '/usr/src/core_dump.c']
     context.ssh_client.check_call(command)
 
 
 def _configure_consul(context):
-    copy_asset_to_server(context, 'public_consul.json', '/etc/consul/xivo/public_consul.json')
+    copy_asset_to_server_permanently(context, 'public_consul.json', '/etc/consul/xivo')
     consul_pidfile = context.remote_sysutils.get_pidfile_for_service_name('consul')
     consul_is_running = context.remote_sysutils.is_process_running(consul_pidfile)
     if consul_is_running:
@@ -230,4 +230,9 @@ def _configure_wazo_service(context, service):
 def _copy_daemon_config_file(context, daemon_name):
     asset_filename = '{}-acceptance.yml'.format(daemon_name)
     remote_path = '/etc/{}/conf.d'.format(daemon_name)
-    copy_asset_to_server(context, asset_filename, remote_path)
+    copy_asset_to_server_permanently(context, asset_filename, remote_path)
+
+
+def copy_asset_to_server_permanently(context, asset, serverpath):
+    assetpath = os.path.join(context.wazo_config['assets_dir'], asset)
+    context.ssh_client.send_files(assetpath, serverpath)
