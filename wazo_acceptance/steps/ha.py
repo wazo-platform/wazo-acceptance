@@ -7,7 +7,7 @@ from behave import given, when
 @given('the HA is enabled as master on "{instance}"')
 def given_the_ha_is_enabled_as_master_on_instance(context, instance):
     context = getattr(context.instances, instance)
-    context.helpers.ha.set({
+    context.confd_client.ha.update({
         'node_type': 'master',
         'remote_address': context.wazo_config['slave_host']
     })
@@ -16,7 +16,7 @@ def given_the_ha_is_enabled_as_master_on_instance(context, instance):
 @given('the HA is enabled as slave on "{instance}"')
 def given_the_ha_is_enabled_as_slave(context, instance):
     context = getattr(context.instances, instance)
-    context.helpers.ha.set({
+    context.confd_client.ha.update({
         'node_type': 'slave',
         'remote_address': context.wazo_config['master_host']
     })
@@ -25,7 +25,7 @@ def given_the_ha_is_enabled_as_slave(context, instance):
 @when('I disable the HA on "{instance}"')
 def when_i_disable_the_ha_on_instance(context, instance):
     context = getattr(context.instances, instance)
-    context.helpers.ha.set({
+    context.confd_client.ha.update({
         'node_type': 'disabled',
     })
 
@@ -33,7 +33,7 @@ def when_i_disable_the_ha_on_instance(context, instance):
 @when('I enable the HA as master on "{instance}"')
 def when_i_enable_the_ha_as_master_on_instance(context, instance):
     context = getattr(context.instances, instance)
-    context.helpers.ha.set({
+    context.confd_client.ha.update({
         'node_type': 'master',
         'remote_address': context.wazo_config['slave_host']
     })
@@ -42,7 +42,7 @@ def when_i_enable_the_ha_as_master_on_instance(context, instance):
 @when('I enable the HA as slave on "{instance}"')
 def when_i_enable_the_ha_as_slave_on_instance(context, instance):
     context = getattr(context.instances, instance)
-    context.helpers.ha.set({
+    context.confd_client.ha.update({
         'node_type': 'slave',
         'remote_address': context.wazo_config['master_host']
     })
