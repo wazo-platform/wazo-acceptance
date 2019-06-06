@@ -18,28 +18,28 @@ EOF
 
 cd /tmp
 
-xivo_backup() {
+wazo_backup() {
     case $target in
-        db) xivo_backup_db;;
+        db) wazo_backup_db;;
         *) usage;;
     esac
 }
 
-xivo_restore() {
+wazo_restore() {
     case $target in
-        db) xivo_restore_db;;
+        db) wazo_restore_db;;
         *) usage;;
     esac
 }
 
-xivo_backup_db() {
+wazo_backup_db() {
     wazo-service stop
     service postgresql restart
     xivo-backup db db
     wazo-service start
 }
 
-xivo_restore_db() {
+wazo_restore_db() {
     wazo-service stop
     tar xvf db.tgz -C /tmp
     cd /tmp/pg-backup
@@ -60,7 +60,7 @@ xivo_restore_db() {
 }
 
 case $action in
-    backup)     xivo_backup;;
-    restore)    xivo_restore;;
+    backup)     wazo_backup;;
+    restore)    wazo_restore;;
     *)          usage;;
 esac
