@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 # Copyright 2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, when
 
 
-@given(u'the HA is enabled as master on "{instance}"')
+@given('the HA is enabled as master on "{instance}"')
 def given_the_ha_is_enabled_as_master_on_instance(context, instance):
     context = getattr(context.instances, instance)
     context.helpers.ha.set({
@@ -14,7 +13,7 @@ def given_the_ha_is_enabled_as_master_on_instance(context, instance):
     })
 
 
-@given(u'the HA is enabled as slave on "{instance}"')
+@given('the HA is enabled as slave on "{instance}"')
 def given_the_ha_is_enabled_as_slave(context, instance):
     context = getattr(context.instances, instance)
     context.helpers.ha.set({
@@ -23,7 +22,7 @@ def given_the_ha_is_enabled_as_slave(context, instance):
     })
 
 
-@when(u'I disable the HA on "{instance}"')
+@when('I disable the HA on "{instance}"')
 def when_i_disable_the_ha_on_instance(context, instance):
     context = getattr(context.instances, instance)
     context.helpers.ha.set({
@@ -31,7 +30,7 @@ def when_i_disable_the_ha_on_instance(context, instance):
     })
 
 
-@when(u'I enable the HA as master on "{instance}"')
+@when('I enable the HA as master on "{instance}"')
 def when_i_enable_the_ha_as_master_on_instance(context, instance):
     context = getattr(context.instances, instance)
     context.helpers.ha.set({
@@ -40,7 +39,7 @@ def when_i_enable_the_ha_as_master_on_instance(context, instance):
     })
 
 
-@when(u'I enable the HA as slave on "{instance}"')
+@when('I enable the HA as slave on "{instance}"')
 def when_i_enable_the_ha_as_slave_on_instance(context, instance):
     context = getattr(context.instances, instance)
     context.helpers.ha.set({

@@ -88,6 +88,12 @@ def then_there_are_cron_jobs_in_file_name_on_instance(context, file_name, instan
     file_content = instance_context.remote_sysutils.get_content_file(file_name)
     for row in step_context.table:
         expected_line = row['cron job']
-        expected_line = expected_line.replace('{{ slave_voip_ip_address }}', instance_context.wazo_config.get('slave_host') or '<unknown>')
-        expected_line = expected_line.replace('{{ master_voip_ip_address }}', instance_context.wazo_config.get('master_host') or'<unknown>')
+        expected_line = expected_line.replace(
+            '{{ slave_voip_ip_address }}',
+            instance_context.wazo_config.get('slave_host') or '<unknown>',
+        )
+        expected_line = expected_line.replace(
+            '{{ master_voip_ip_address }}',
+            instance_context.wazo_config.get('master_host') or '<unknown>',
+        )
         assert_that(file_content, contains_string(expected_line))
