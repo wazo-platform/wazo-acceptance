@@ -36,11 +36,7 @@ def given_there_are_authentication_users_with_info(context):
 
 
 def _check_user_exists(context, username):
-    try:
-        context.helpers.user.get_by(username=username)
-        return True
-    except Exception:
-        return False
+    return context.helpers.user.find_by(username=username) is not None
 
 
 @then('I see a user with username "{username}"')
