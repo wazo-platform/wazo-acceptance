@@ -63,7 +63,7 @@ def initialize(context):
 def set_wazo_instances(context, config):
     context.instances = Instances()
     for instance_name, instance_config in config.items():
-        instance_context = InstanceContext()
+        instance_context = InstanceContext(context)
         set_wazo_instance(instance_context, instance_name, instance_config)
         context.instances.__setattr__(instance_name, instance_context)
 
