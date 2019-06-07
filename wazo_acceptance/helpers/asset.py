@@ -4,7 +4,7 @@
 import os
 
 
-class AssetHelper:
+class Asset:
 
     def __init__(self, context):
         self._context = context

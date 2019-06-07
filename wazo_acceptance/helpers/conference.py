@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-class ConferenceHelper:
+class Conference:
 
     def __init__(self, context):
         self._context = context

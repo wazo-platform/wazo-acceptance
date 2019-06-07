@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-class AsteriskHelper:
+class Asterisk:
 
     def __init__(self, ssh_client):
         self._ssh_client = ssh_client

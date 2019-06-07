@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-class ConfdUserHelper:
+class ConfdUser:
 
     def __init__(self, context):
         self._context = context

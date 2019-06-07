@@ -17,17 +17,17 @@ from xivo_amid_client import Client as AmidClient
 
 from . import auth
 from . import debug
-from .helpers.asset import AssetHelper
-from .helpers.asterisk import AsteriskHelper
-from .helpers.confd_group import ConfdGroupHelper
-from .helpers.confd_user import ConfdUserHelper
-from .helpers.conference import ConferenceHelper
-from .helpers.context import ContextHelper
-from .helpers.endpoint_sip import EndpointSIPHelper
-from .helpers.extension import ExtensionHelper
-from .helpers.line import LineHelper
-from .helpers.token import TokenHelper
-from .helpers.user import UserHelper
+from .helpers.asset import Asset
+from .helpers.asterisk import Asterisk
+from .helpers.confd_group import ConfdGroup
+from .helpers.confd_user import ConfdUser
+from .helpers.conference import Conference
+from .helpers.context import Context
+from .helpers.endpoint_sip import EndpointSIP
+from .helpers.extension import Extension
+from .helpers.line import Line
+from .helpers.token import Token
+from .helpers.user import User
 from .helpers.sip_config import SIPConfigGenerator
 from .helpers.sip_phone import LineRegistrar
 from .phone_register import PhoneRegister
@@ -135,17 +135,17 @@ class Helpers:
 
 def setup_helpers(context):
     context.helpers = Helpers()
-    context.helpers.asset = AssetHelper(context)
-    context.helpers.asterisk = AsteriskHelper(context.ssh_client)
-    context.helpers.confd_group = ConfdGroupHelper(context)
-    context.helpers.confd_user = ConfdUserHelper(context)
-    context.helpers.conference = ConferenceHelper(context)
-    context.helpers.context = ContextHelper(context.confd_client)
-    context.helpers.endpoint_sip = EndpointSIPHelper(context)
-    context.helpers.extension = ExtensionHelper(context)
-    context.helpers.line = LineHelper(context)
-    context.helpers.token = TokenHelper(context)
-    context.helpers.user = UserHelper(context)
+    context.helpers.asset = Asset(context)
+    context.helpers.asterisk = Asterisk(context.ssh_client)
+    context.helpers.confd_group = ConfdGroup(context)
+    context.helpers.confd_user = ConfdUser(context)
+    context.helpers.conference = Conference(context)
+    context.helpers.context = Context(context.confd_client)
+    context.helpers.endpoint_sip = EndpointSIP(context)
+    context.helpers.extension = Extension(context)
+    context.helpers.line = Line(context)
+    context.helpers.token = Token(context)
+    context.helpers.user = User(context)
 
 
 def setup_remote_sysutils(context):
