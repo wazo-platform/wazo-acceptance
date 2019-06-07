@@ -17,6 +17,7 @@ from xivo_amid_client import Client as AmidClient
 
 from . import auth
 from . import debug
+from .helpers.asset_helper import AssetHelper
 from .helpers.asterisk_helper import AsteriskHelper
 from .helpers.confd_group_helper import ConfdGroupHelper
 from .helpers.confd_user_helper import ConfdUserHelper
@@ -134,6 +135,7 @@ class Helpers:
 
 def setup_helpers(context):
     context.helpers = Helpers()
+    context.helpers.asset = AssetHelper(context)
     context.helpers.asterisk = AsteriskHelper(context.ssh_client)
     context.helpers.confd_group = ConfdGroupHelper(context)
     context.helpers.confd_user = ConfdUserHelper(context)

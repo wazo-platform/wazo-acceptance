@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, when
-from .. import assets, auth
+from .. import auth
 
 BACKUP_MANAGER = 'wazo-backup-manager'
 SERVER_PATH = '/tmp'
@@ -10,7 +10,7 @@ SERVER_PATH = '/tmp'
 
 @given('the backup manager asset is copied on the server')
 def given_the_backup_manager_asset_is_copied_on_the_server(context):
-    assets.copy_asset_to_server(context, BACKUP_MANAGER, SERVER_PATH)
+    context.helpers.asset.copy_asset_to_server(BACKUP_MANAGER, SERVER_PATH)
 
 
 @when('I execute database backup command')
