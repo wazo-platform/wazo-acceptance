@@ -4,6 +4,8 @@
 import logging
 import os
 
+from requests.exceptions import HTTPError
+
 from . import (
     debug,
     setup,
