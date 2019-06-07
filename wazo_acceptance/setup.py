@@ -17,19 +17,7 @@ from xivo_amid_client import Client as AmidClient
 
 from . import auth
 from . import debug
-from .helpers.asset import Asset
-from .helpers.asterisk import Asterisk
-from .helpers.confd_group import ConfdGroup
-from .helpers.confd_user import ConfdUser
-from .helpers.conference import Conference
-from .helpers.context import Context
-from .helpers.endpoint_sip import EndpointSIP
-from .helpers.extension import Extension
-from .helpers.line import Line
-from .helpers.token import Token
-from .helpers.user import User
-from .helpers.sip_config import SIPConfigGenerator
-from .helpers.sip_phone import LineRegistrar
+from . import helpers
 from .phone_register import PhoneRegister
 from .ssh import SSHClient
 from .sysutils import RemoteSysUtils
@@ -135,17 +123,17 @@ class Helpers:
 
 def setup_helpers(context):
     context.helpers = Helpers()
-    context.helpers.asset = Asset(context)
-    context.helpers.asterisk = Asterisk(context.ssh_client)
-    context.helpers.confd_group = ConfdGroup(context)
-    context.helpers.confd_user = ConfdUser(context)
-    context.helpers.conference = Conference(context)
-    context.helpers.context = Context(context.confd_client)
-    context.helpers.endpoint_sip = EndpointSIP(context)
-    context.helpers.extension = Extension(context)
-    context.helpers.line = Line(context)
-    context.helpers.token = Token(context)
-    context.helpers.user = User(context)
+    context.helpers.asset = helpers.Asset(context)
+    context.helpers.asterisk = helpers.Asterisk(context.ssh_client)
+    context.helpers.confd_group = helpers.ConfdGroup(context)
+    context.helpers.confd_user = helpers.ConfdUser(context)
+    context.helpers.conference = helpers.Conference(context)
+    context.helpers.context = helpers.Context(context.confd_client)
+    context.helpers.endpoint_sip = helpers.EndpointSIP(context)
+    context.helpers.extension = helpers.Extension(context)
+    context.helpers.line = helpers.Line(context)
+    context.helpers.token = helpers.Token(context)
+    context.helpers.user = helpers.User(context)
 
 
 def setup_remote_sysutils(context):
@@ -154,8 +142,8 @@ def setup_remote_sysutils(context):
 
 def setup_phone(context):
     context.phone_register = PhoneRegister(context.amid_client)
-    context.helpers.sip_phone = LineRegistrar(context.wazo_config['debug'].get('linphone', False))
-    context.helpers.sip_config = SIPConfigGenerator(
+    context.helpers.sip_phone = helpers.LineRegistrar(context.wazo_config['debug'].get('linphone', False))
+    context.helpers.sip_config = helpers.SIPConfigGenerator(
         context.wazo_config['wazo_host'],
         context.wazo_config['linphone'],
         context.phone_register,
