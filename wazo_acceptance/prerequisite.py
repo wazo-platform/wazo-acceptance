@@ -81,8 +81,8 @@ def run(config_dir, instance_name):
     logger.debug('Configuring xivo-amid')
     _configure_wazo_service(context, 'xivo-amid')
 
-    logger.debug('Configuring xivo-confd')
-    _configure_wazo_service(context, 'xivo-confd')
+    logger.debug('Configuring wazo-confd')
+    _configure_wazo_service(context, 'wazo-confd')
 
     logger.debug('Configuring wazo-calld')
     _configure_wazo_service(context, 'wazo-calld')
