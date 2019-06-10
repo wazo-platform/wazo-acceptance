@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-class UserHelper:
+class User:
 
     def __init__(self, context):
         self._context = context

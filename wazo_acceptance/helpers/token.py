@@ -4,7 +4,7 @@
 from wazo_auth_client import Client as AuthClient
 
 
-class TokenHelper:
+class Token:
 
     def __init__(self, context):
         self._context = context
