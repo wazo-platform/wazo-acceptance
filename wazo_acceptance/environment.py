@@ -54,8 +54,7 @@ def after_scenario(context, scenario):
 def initialize(context):
     config = load_config(config_dir=context.config.userdata.get('acceptance_config_dir'))
     wazo_setup_logging(config['default']['log_file'], foreground=True, debug=config['default']['debug']['global'])
-    setup.setup_config(context, config)
-    debug.setup_logging(context.wazo_config)
+    debug.setup_logging(config)
     set_wazo_instance(context, 'default', config['default'])
     set_wazo_instances(context, config)
 
