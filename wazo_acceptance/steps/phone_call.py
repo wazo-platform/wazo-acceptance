@@ -7,17 +7,15 @@ from xivo_test_helpers import until
 from behave import step, when
 
 
-@step('"{firstname} {lastname}" calls "{exten}"')
-def a_calls_exten(context, firstname, lastname, exten):
-    user = context.helpers.user.get_by(firstname=firstname, lastname=lastname)
-    phone = context.phone_register.get_user_phone(user['uuid'])
+@step('"{tracking_id}" calls "{exten}"')
+def a_calls_exten(context, tracking_id, exten):
+    phone = context.phone_register.get_phone(tracking_id)
     phone.call(exten)
 
 
-@step('"{firstname} {lastname}" is ringing')
-def user_is_ringing(context, firstname, lastname):
-    user = context.helpers.user.get_by(firstname=firstname, lastname=lastname)
-    phone = context.phone_register.get_user_phone(user['uuid'])
+@step('"{tracking_id}" is ringing')
+def user_is_ringing(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_ringing, tries=3)
 
 
