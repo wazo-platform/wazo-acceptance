@@ -58,7 +58,6 @@ DEFAULT_INSTANCE_CONFIG = {
     'setupd': {
         'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
-        'timeout': 60,
     },
     'ssh_login': 'root',
     'linphone': {
