@@ -1,32 +1,5 @@
 Feature: User multi lines
 
-    Scenario: Ring all lines of a user
-        Given there are users with infos:
-        | firstname | lastname | protocol | number | context |
-        | Multi     | Lines    |          |        |         |
-        | Bob       | Field    | sip      | 1802   | default |
-        Given I have the following lines:
-        | context | username | protocol |
-        | default | line1    | sip      |
-        | default | line2    | sip      |
-        | default | line3    | sip      |
-        Given I have the following extensions:
-        | context | exten |
-        | default | 1801  |
-        Given SIP line "line1" is associated to extension "1801@default"
-        Given SIP line "line2" is associated to extension "1801@default"
-        Given SIP line "line1" is associated to user "Multi" "Lines"
-        Given SIP line "line2" is associated to user "Multi" "Lines"
-        Given SIP line "line3" is associated to user "Multi" "Lines"
-        Given a softphone is registered on SIP line "line1"
-        Given a softphone is registered on SIP line "line2"
-        Given a softphone is registered on SIP line "line3"
-
-        When "Bob Field" calls "1801"
-        Then "line1" is ringing
-        Then "line2" is ringing
-        Then "line3" is hungup
-
     Scenario: User multi lines multi extensions
         Given there are users with infos:
         | firstname | lastname | protocol | number | context |
