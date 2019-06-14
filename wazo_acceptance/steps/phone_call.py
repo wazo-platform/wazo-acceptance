@@ -19,6 +19,12 @@ def user_is_ringing(context, tracking_id):
     until.true(phone.is_ringing, tries=3)
 
 
+@step('"{tracking_id}" is hungup')
+def user_is_hungup(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    until.true(phone.is_hungup, tries=3)
+
+
 @when('I wait "{seconds}" seconds for the call to be forwarded')
 @when('I wait "{seconds}" seconds for the timeout to not expire')
 def given_i_wait_n_seconds(context, seconds):

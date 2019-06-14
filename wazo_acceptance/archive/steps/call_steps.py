@@ -175,12 +175,6 @@ def when_1_transfers_2_to_3_with_timeout_4_via_xivo_ctid_ng(self, initiator, tra
                                                  timeout=int(timeout))
 
 
-@step(u'Then "([^"]*)" is hungup')
-def then_group1_is_hungup(step, user):
-    phone = step.scenario.phone_register.get_user_phone(user)
-    common.wait_until(phone.is_hungup, tries=3)
-
-
 @step(u'Then "([^"]*)" is talking$')
 def then_group1_is_talking(step, user):
     phone = step.scenario.phone_register.get_user_phone(user)
