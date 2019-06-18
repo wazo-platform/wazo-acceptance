@@ -1,4 +1,4 @@
-# Should be in xivo-agentd integration tests
+# Should be in wazo-agentd integration tests
 Feature: Agent
 
     Scenario: Agent login status update events
@@ -26,6 +26,6 @@ Feature: Agent
         When I unlog agent "1003" from the phone
         Then the agent "1003" is not logged
 
-    Scenario: Mandatory token authentication for xivo-agentd
+    Scenario: Mandatory token authentication for wazo-agentd
         When I request the agent statuses with an invalid token
-        Then I get an "invalid token" response from xivo-agentd
+        Then I get an "invalid token" response from wazo-agentd

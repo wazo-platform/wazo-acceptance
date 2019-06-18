@@ -8,20 +8,20 @@ import re
 
 from xivo_acceptance.lettuce import sysutils
 
-XIVO_AGENT_LOGFILE = '/var/log/xivo-agentd.log'
+WAZO_AGENTD_LOGFILE = '/var/log/wazo-agentd.log'
 
 PYTHON_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 PYTHON_DATE_PATTERN = r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})"
 
 LogfileInfo = namedtuple('LogfileInfo', ['logfile', 'date_format', 'date_pattern'])
 
-XIVO_AGENT_LOG_INFO = LogfileInfo(logfile=XIVO_AGENT_LOGFILE,
-                                  date_format=PYTHON_DATE_FORMAT,
-                                  date_pattern=PYTHON_DATE_PATTERN)
+WAZO_AGENTD_LOG_INFO = LogfileInfo(logfile=WAZO_AGENTD_LOGFILE,
+                                   date_format=PYTHON_DATE_FORMAT,
+                                   date_pattern=PYTHON_DATE_PATTERN)
 
 
-def search_str_in_xivo_agent_log(expression, delta=10):
-    return _search_str_in_log_file(expression, XIVO_AGENT_LOG_INFO, delta)
+def search_str_in_wazo_agentd_log(expression, delta=10):
+    return _search_str_in_log_file(expression, WAZO_AGENTD_LOG_INFO, delta)
 
 
 def _search_str_in_log_file(expression, loginfo, delta=10):
