@@ -13,7 +13,7 @@ SERVICE_PIDFILES = {
     'wazo-calld': '/var/run/wazo-calld/wazo-calld.pid',
     'wazo-confd': '/var/run/wazo-confd/wazo-confd.pid',
     'wazo-dird': '/var/run/wazo-dird/wazo-dird.pid',
-    'xivo-agent': '/var/run/xivo-agentd/xivo-agentd.pid',
+    'wazo-agentd': '/var/run/wazo-agentd/wazo-agentd.pid',
     'xivo-amid': '/var/run/xivo-amid/xivo-amid.pid',
 }
 

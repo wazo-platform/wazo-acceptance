@@ -44,4 +44,4 @@ from .user_forward_steps import *
 from .user_service_steps import *
 from .voicemail_steps import *
 from .wizard_steps import *
-from .xivo_agent_steps import *
+from .wazo_agentd_steps import *

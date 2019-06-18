@@ -7,6 +7,7 @@ import re
 
 BASE_SERVICES = [
     'dahdi',
+    'wazo-agentd',
     'wazo-auth',
     'wazo-dird',
     'wazo-call-logd',
@@ -18,7 +19,6 @@ BASE_SERVICES = [
     'xivo-agid',
     'asterisk',
     'xivo-amid',
-    'xivo-agentd',
     'xivo-ctid',
     'xivo-dird-phoned',
 ]
