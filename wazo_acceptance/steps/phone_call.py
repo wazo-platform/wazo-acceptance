@@ -27,6 +27,7 @@ def user_is_hungup(context, tracking_id):
 
 @when('I wait "{seconds}" seconds for the call processing')
 @when('I wait "{seconds}" seconds for the call to be forwarded')
+@when('I wait "{seconds}" seconds for the end of ringing time')
 @when('I wait "{seconds}" seconds for the timeout to not expire')
 def given_i_wait_n_seconds(context, seconds):
     _sleep(seconds)

@@ -9,6 +9,10 @@ class ConfdUser:
         self._confd_client = context.confd_client
 
     def create(self, body):
+        ring_seconds = body.pop('ring_seconds', None)
+        if ring_seconds:
+            body['ring_seconds'] = int(ring_seconds)
+
         user = self._confd_client.users.create(body)
         self._context.add_cleanup(self._confd_client.users.delete, user)
         return user
