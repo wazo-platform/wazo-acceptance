@@ -154,3 +154,10 @@ def then_the_user_has_enabled_forward_to(context, firstname, lastname, forward_n
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = {'destination': exten, 'enabled': True}
     context.confd_client.users(confd_user).update_forward(forward_name, forward)
+
+
+@given('the user "{firstname} {lastname}" has enabled "{dnd_name}" service')
+def then_the_user_has_enabled_service(context, firstname, lastname, dnd_name):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    service = {'enabled': True}
+    context.confd_client.users(confd_user).update_service(dnd_name, service)

@@ -25,6 +25,7 @@ def user_is_hungup(context, tracking_id):
     until.true(phone.is_hungup, tries=3)
 
 
+@when('I wait "{seconds}" seconds for the call processing')
 @when('I wait "{seconds}" seconds for the call to be forwarded')
 @when('I wait "{seconds}" seconds for the timeout to not expire')
 def given_i_wait_n_seconds(context, seconds):
