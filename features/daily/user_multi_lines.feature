@@ -56,3 +56,21 @@ Feature: User multi lines
         When "Bob Field" calls "1801"
         When I wait "5" seconds for the call processing
         Then "Bob Field" is hungup
+
+    Scenario: Ringing time are respected on user multi lines
+        Given there are telephony users with infos:
+        | firstname | lastname | protocol | exten | context | ring_seconds |
+        | Multi     | Lines    |          |       |         | 5            |
+        | Bob       | Field    | sip      | 1802  | default |              |
+        Given the user "Multi Lines" has lines:
+        | name  | exten | context | with_phone |
+        | line1 | 1801  | default | yes        |
+        | line2 | 1801  | default | yes        |
+        When "Bob Field" calls "1801"
+        Then "line1" is ringing
+        Then "line2" is ringing
+        When I wait "5" seconds for the end of ringing time
+        Then "line1" is hungup
+        Then "line2" is hungup
+        When I wait "5" seconds for the call processing
+        Then "Bob Field" is hungup
