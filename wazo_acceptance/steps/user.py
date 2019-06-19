@@ -147,3 +147,10 @@ def _register_and_track_phone(context, tracking_id, endpoint_sip, nb_phone=1):
             endpoint_sip['username'],
         )
         context.phone_register.add_registered_phone(phone, tracking_id)
+
+
+@given('the user "{firstname} {lastname}" has enabled "{forward_name}" forward to "{exten}"')
+def then_the_user_has_enabled_forward_to(context, firstname, lastname, forward_name, exten):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    forward = {'destination': exten, 'enabled': True}
+    context.confd_client.users(confd_user).update_forward(forward_name, forward)
