@@ -101,7 +101,7 @@ def given_there_are_telephony_users_with_infos(context):
             _register_and_track_phone(context, tracking_id, sip)
 
 
-@given('the telephony user "{firstname} {lastname}" has lines')
+@given('the user "{firstname} {lastname}" has lines')
 def given_the_tlephony_user_has_lines(context, firstname, lastname):
     context.table.require_columns(['name', 'context'])
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
