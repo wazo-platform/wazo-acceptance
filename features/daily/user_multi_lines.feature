@@ -5,7 +5,7 @@ Feature: User multi lines
         | firstname | lastname | protocol | exten  | context |
         | Multi     | Lines    |          |        |         |
         | Bob       | Field    | sip      | 1802   | default |
-        Given the telephony user "Multi Lines" has lines:
+        Given the user "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1801  | default | yes        |
@@ -20,7 +20,7 @@ Feature: User multi lines
         | firstname | lastname | protocol | exten | context |
         | Multi     | Lines    |          |       |         |
         | Bob       | Field    | sip      | 1803  | default |
-        Given the telephony user "Multi Lines" has lines:
+        Given the user "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1802  | default | yes        |
@@ -34,7 +34,7 @@ Feature: User multi lines
         | Multi     | Lines    |          |       |         |
         | Bob       | Field    | sip      | 1802  | default |
         | Forward   | Unc      | sip      | 1803  | default |
-        Given the telephony user "Multi Lines" has lines:
+        Given the user "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1801  | default | yes        |
