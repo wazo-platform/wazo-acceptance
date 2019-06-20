@@ -66,6 +66,8 @@ Or only a single test file:
 
     behave features/daily/<file>.feature
 
+To see linphone ouput, use flag `--no-capture`
+
 
 # Coverage
 
