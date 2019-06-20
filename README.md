@@ -74,3 +74,11 @@ To get code coverage of wazo_acceptance:
     pip install coverage
     coverage run --source=wazo_acceptance $(which behave) ...
     coverage html
+
+# With tox
+
+Tox can be used to wrap all previous examples::
+
+    tox -e setup -- <server_ip>
+    tox -e acceptance -- ...
+    tox -e behave -- ...
