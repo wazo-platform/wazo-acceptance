@@ -44,3 +44,5 @@ class Bus:
                 websocket_thread.join()
             # TODO allow to remove callback on wazo-websocketd-client
             self._websocketd_client._callbacks.pop('asterisk_reload_progress')
+            self._websocketd_client._ws_app = None
+            self._websocketd_client._is_running = None
