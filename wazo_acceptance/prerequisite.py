@@ -112,6 +112,7 @@ def _configure_auth_users(context):
             'confd.#',
             'dird.#',
             'provd.#',
+            'events.#',
         ],
     )
 

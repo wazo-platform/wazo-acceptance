@@ -12,6 +12,7 @@ from wazo_confd_client import Client as ConfdClient
 from wazo_dird_client import Client as DirdClient
 from wazo_provd_client import Client as ProvdClient
 from wazo_setupd_client import Client as SetupdClient
+from wazo_websocketd_client import Client as WebsocketdClient
 from xivo_agentd_client import Client as AgentdClient
 from xivo_amid_client import Client as AmidClient
 
@@ -84,6 +85,12 @@ def setup_setupd_client(context):
     auth.register_for_token_renewal(context.setupd_client.set_token)
 
 
+def setup_websocketd_client(context):
+    context.websocketd_client = WebsocketdClient(**context.wazo_config['websocketd'])
+    context.websocketd_client.set_token(context.token)
+    auth.register_for_token_renewal(context.websocketd_client.set_token)
+
+
 def setup_tenant(context):
     name = context.wazo_config['default_tenant']
     try:
@@ -125,6 +132,7 @@ def setup_helpers(context):
     context.helpers = Helpers()
     context.helpers.asset = helpers.Asset(context)
     context.helpers.asterisk = helpers.Asterisk(context.ssh_client)
+    context.helpers.bus = helpers.Bus(context.websocketd_client)
     context.helpers.confd_group = helpers.ConfdGroup(context)
     context.helpers.confd_user = helpers.ConfdUser(context)
     context.helpers.conference = helpers.Conference(context)

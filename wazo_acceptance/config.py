@@ -59,6 +59,10 @@ DEFAULT_INSTANCE_CONFIG = {
         'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
+    'websocketd': {
+        'host': DEFAULT_WAZO_HOST,
+        'verify_certificate': False,
+    },
     'ssh_login': 'root',
     'linphone': {
         'sip_port_range': '5001,5009',
