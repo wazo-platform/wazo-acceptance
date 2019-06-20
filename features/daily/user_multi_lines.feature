@@ -74,3 +74,18 @@ Feature: User multi lines
         Then "line2" is hungup
         When I wait "5" seconds for the call processing
         Then "Bob Field" is hungup
+
+    Scenario: Incoming call rings all lines that have the same extension as the main line
+        Given there are telephony users with infos:
+        | firstname | lastname |
+        | Multi     | Lines    |
+        Given there is an incall "1801@from-extern" to the user "Multi Lines"
+        Given the user "Multi Lines" has lines:
+        | name  | exten | context | with_phone |
+        | line1 | 1801  | default | yes        |
+        | line2 | 1801  | default | yes        |
+        | line3 | 1802  | default | yes        |
+        When chan_test calls "1801@from-extern"
+        Then "line1" is ringing
+        Then "line2" is ringing
+        Then "line3" is hungup

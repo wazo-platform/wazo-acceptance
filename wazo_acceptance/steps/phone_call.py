@@ -6,6 +6,8 @@ import time
 from xivo_test_helpers import until
 from behave import step, when
 
+CHAN_PREFIX = 'PJSIP'
+
 
 @step('"{tracking_id}" calls "{exten}"')
 def a_calls_exten(context, tracking_id, exten):
@@ -31,6 +33,16 @@ def user_is_hungup(context, tracking_id):
 @when('I wait "{seconds}" seconds for the timeout to not expire')
 def given_i_wait_n_seconds(context, seconds):
     _sleep(seconds)
+
+
+@when('chan_test calls "{exten}@{exten_context}"')
+def when_chan_test_calls(context, exten, exten_context):
+    cmd = 'test new {exten} {context} chan-test-num chan-test-name {prefix}'.format(
+        exten=exten,
+        context=exten_context,
+        prefix=CHAN_PREFIX,
+    )
+    context.helpers.asterisk.send_to_asterisk_cli(cmd)
 
 
 def _sleep(seconds):

@@ -131,6 +131,7 @@ def setup_helpers(context):
     context.helpers.context = helpers.Context(context.confd_client)
     context.helpers.endpoint_sip = helpers.EndpointSIP(context)
     context.helpers.extension = helpers.Extension(context)
+    context.helpers.incall = helpers.Incall(context)
     context.helpers.line = helpers.Line(context)
     context.helpers.token = helpers.Token(context)
     context.helpers.user = helpers.User(context)
