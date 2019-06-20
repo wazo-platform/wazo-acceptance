@@ -9,6 +9,7 @@ from .conference import Conference
 from .context import Context
 from .endpoint_sip import EndpointSIP
 from .extension import Extension
+from .incall import Incall
 from .line import Line
 from .sip_config import SIPConfigGenerator
 from .sip_phone import LineRegistrar
@@ -24,6 +25,7 @@ __all__ = [
     'Context',
     'EndpointSIP',
     'Extension',
+    'Incall',
     'Line',
     'LineRegistrar',
     'SIPConfigGenerator',
