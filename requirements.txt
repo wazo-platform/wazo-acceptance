@@ -17,8 +17,8 @@ SQLAlchemy
 behave
 kombu==3.0.35
 pexpect  # From liblinphonelib
-psycopg2==2.6.2
+psycopg2
 python-consul==0.7.0
-pyyaml==3.12
+pyyaml
 requests==2.21.0
 stevedore==1.17.1
