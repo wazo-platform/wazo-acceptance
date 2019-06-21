@@ -38,7 +38,6 @@ def before_all(context):
 
 # Implicitly defined by behave
 def before_scenario(context, scenario):
-    scenario.phone_register = PhoneRegister(context)
     scenario.user_tokens = {}
     if 'no_cleanup_errors_fail' not in context.tags:
         with context._use_with_behave_mode():
@@ -47,7 +46,6 @@ def before_scenario(context, scenario):
 
 # Implicitly defined by behave
 def after_scenario(context, scenario):
-    scenario.phone_register.clear()
     context.helpers.asterisk.send_to_asterisk_cli('channel request hangup all')
 
 
