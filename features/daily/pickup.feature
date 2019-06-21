@@ -6,7 +6,6 @@ Feature: Pickup
          | Dilbert   | Bologna  | sip      | 1001  | default |
          | Wally     | Lasagna  | sip      | 1002  | default |
          | Alice     | Wonder   | sip      | 1003  | default |
-        When I wait "3" seconds for the call processing
         When "Dilbert Bologna" calls "1002"
         When I wait "3" seconds for the call processing
         Then "Wally Lasagna" is ringing
@@ -25,7 +24,6 @@ Feature: Pickup
         Given there are pickups:
          | name  | user_interceptor | user_target   |
          | first | Alice Wonder     | Wally Lasagna |
-        When I wait "3" seconds for the call processing
         When "Dilbert Bologna" calls "1002"
         When I wait "3" seconds for the call processing
         Then "Wally Lasagna" is ringing
@@ -50,7 +48,6 @@ Feature: Pickup
         Given there are pickups:
          | name  | group_interceptor | user_target   |
          | first | hr                | Wally Lasagna |
-        When I wait "3" seconds for the call processing
         When "Dilbert Bologna" calls "1002"
         When I wait "3" seconds for the call processing
         Then "Wally Lasagna" is ringing
@@ -75,7 +72,6 @@ Feature: Pickup
         Given there are pickups:
          | name  | group_target | user_interceptor |
          | first | hr           | Wally Lasagna    |
-        When I wait "3" seconds for the call processing
         When "Dilbert Bologna" calls "1003"
         When I wait "3" seconds for the call processing
         Then "Dogbert Canine" is ringing
