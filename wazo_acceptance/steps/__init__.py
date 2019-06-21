@@ -10,6 +10,7 @@ from .group import *  # noqa
 from .ha import *  # noqa
 from .http import *  # noqa
 from .incall import *  # noqa
+from .line import *  # noqa
 from .phone_call import *  # noqa
 from .setupd import *  # noqa
 from .user import *  # noqa

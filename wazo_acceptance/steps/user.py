@@ -161,3 +161,13 @@ def then_the_user_has_enabled_service(context, firstname, lastname, dnd_name):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     service = {'enabled': True}
     context.confd_client.users(confd_user).update_service(dnd_name, service)
+
+
+@given('the user "{firstname} {lastname}" has reconfigured the line "{exten}@{exten_context}"')
+def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, exten_context):
+    extension = context.helpers.extension.find_by(exten=exten,
+                                                  context=exten_context)
+    line = context.confd_client.lines.get(extension['lines'][0]['id'])
+    endpoint_sip = context.confd_client.lines_sip.get(line['endpoint_sip']['id'])
+    tracking_id = "{} {}".format(firstname, lastname)
+    _register_and_track_phone(context, tracking_id, endpoint_sip)
