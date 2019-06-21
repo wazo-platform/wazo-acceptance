@@ -126,7 +126,8 @@ def _config_update_host(config):
         'dird',
         'provd',
         'setupd',
-        'bus'
+        'bus',
+        'websocketd',
     )
     for service in services:
         if config[service]['host'] == DEFAULT_WAZO_HOST:
