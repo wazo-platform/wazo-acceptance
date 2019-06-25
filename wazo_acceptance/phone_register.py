@@ -4,10 +4,11 @@
 
 class PhoneRegister:
 
-    def __init__(self, amid_client):
+    def __init__(self, context):
+        self._context = context
         self._sip_phones = {}
         self._registered_contacts = set()
-        self._amid_client = amid_client
+        self._amid_client = context.amid_client
 
     def find_new_sip_contact(self, endpoint):
         sections = self._amid_client.action('PJSIPShowEndpoint', {'endpoint': endpoint})
@@ -28,6 +29,7 @@ class PhoneRegister:
             self._sip_phones[tracking_id] = []
 
         self._sip_phones[tracking_id].append(phone)
+        self._context.add_cleanup(self.remove, tracking_id)
 
     def clear(self):
         self._sip_phones.clear()
