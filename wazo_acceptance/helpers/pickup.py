@@ -12,15 +12,3 @@ class Pickup:
         call_pickup = self._confd_client.call_pickups.create(pickup_args)
         self._context.add_cleanup(self._confd_client.call_pickups.delete, call_pickup['id'])
         return call_pickup
-
-    def update_user_interceptors(self, pickup, user):
-        self._confd_client.call_pickups(pickup['id']).update_user_interceptors([user])
-
-    def update_group_interceptors(self, pickup, group):
-        self._confd_client.call_pickups(pickup['id']).update_group_interceptors([group])
-
-    def update_user_targets(self, pickup, user):
-        self._confd_client.call_pickups(pickup['id']).update_user_targets([user])
-
-    def update_group_targets(self, pickup, group):
-        self._confd_client.call_pickups(pickup['id']).update_group_targets([group])

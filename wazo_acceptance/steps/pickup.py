@@ -17,19 +17,19 @@ def given_there_are_pickup(context):
 
             user = _find_user_by_name(context, data.get('user_interceptor'))
             if user:
-                context.helpers.pickup.update_user_interceptors(call_pickup, user)
+                context.confd_client.call_pickups(call_pickup['id']).update_user_interceptors([user])
 
             group = _find_group_by_name(context, data.get('group_interceptor'))
             if group:
-                context.helpers.pickup.update_group_interceptors(call_pickup, group)
+                context.confd_client.call_pickups(call_pickup['id']).update_group_interceptors([group])
 
             user = _find_user_by_name(context, data.get('user_target'))
             if user:
-                context.helpers.pickup.update_user_targets(call_pickup, user)
+                context.confd_client.call_pickups(call_pickup['id']).update_user_targets([user])
 
             group = _find_group_by_name(context, data.get('group_target'))
             if group:
-                context.helpers.pickup.update_group_targets(call_pickup, group)
+                context.confd_client.call_pickups(call_pickup['id']).update_group_targets([group])
 
 
 def _find_group_by_name(context, name):
@@ -41,7 +41,7 @@ def _find_group_by_name(context, name):
 
 def _find_user_by_name(context, name):
     if not name:
-        return name
+        return
 
     firstname, lastname = name.split()
     return context.helpers.user.get_by(firstname=firstname, lastname=lastname)
