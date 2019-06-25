@@ -80,12 +80,6 @@ def when_chan_test_hangs_up(step, channelid):
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 
-@step(u'(?:When|Given) "([^"]*)" calls "([^"]*)"$')
-def a_calls_exten(step, name, exten):
-    phone = step.scenario.phone_register.get_user_phone(name)
-    phone.call(exten)
-
-
 @step(u'(?:Given|When) "([^"]*)" calls "([^"]*)" and waits until the end$')
 def when_a_calls_exten_and_waits_until_the_end(step, name, exten):
     phone = step.scenario.phone_register.get_user_phone(name)
@@ -130,11 +124,6 @@ def when_a_resumes_his_call(step, name):
     phone.resume()
 
 
-@step(u'I wait (\d+) seconds')
-def given_i_wait_n_seconds(step, seconds):
-    _sleep(seconds)
-
-
 @step(u'When I reconfigure the phone "([^"]*)" on line (\d+)@(\w+)')
 def when_i_reconfigure_the_phone_1_on_line_2_3(step, name, exten, context):
     step.scenario.phone_register.remove(name)
@@ -161,12 +150,6 @@ def then_user_last_dialed_extension_was_not_found(step, name):
         raise AssertionError('ExtensionNotFound was not raised')
 
 
-@step(u'(?:Given|Then|When) "([^"]*)" is ringing')
-def user_is_ringing(step, user):
-    phone = step.scenario.phone_register.get_user_phone(user)
-    common.wait_until(phone.is_ringing, tries=3)
-
-
 @step(u'When "([^"]*)" transfers "([^"]*)" to "([^"]*)" with timeout "([^"]*)" via xivo-ctid-ng')
 def when_1_transfers_2_to_3_with_timeout_4_via_xivo_ctid_ng(self, initiator, transferred, recipient_exten, timeout):
     transferred_uuid = user_helper.get_user_by_name(transferred)['uuid']
@@ -190,12 +173,6 @@ def when_1_transfers_2_to_3_with_timeout_4_via_xivo_ctid_ng(self, initiator, tra
                                                  context='default',
                                                  exten=recipient_exten,
                                                  timeout=int(timeout))
-
-
-@step(u'Then "([^"]*)" is hungup')
-def then_group1_is_hungup(step, user):
-    phone = step.scenario.phone_register.get_user_phone(user)
-    common.wait_until(phone.is_hungup, tries=3)
 
 
 @step(u'Then "([^"]*)" is talking$')

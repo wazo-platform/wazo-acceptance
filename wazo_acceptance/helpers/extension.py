@@ -13,3 +13,8 @@ class Extension:
         extension = self._confd_client.extensions.create(body)
         self._context.add_cleanup(self._confd_client.extensions.delete, extension)
         return extension
+
+    def find_by(self, **kwargs):
+        extensions = self._confd_client.extensions.list(**kwargs)['items']
+        for extension in extensions:
+            return extension
