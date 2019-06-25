@@ -59,6 +59,10 @@ DEFAULT_INSTANCE_CONFIG = {
         'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
+    'websocketd': {
+        'host': DEFAULT_WAZO_HOST,
+        'verify_certificate': False,
+    },
     'ssh_login': 'root',
     'linphone': {
         'sip_port_range': '5001,5009',
@@ -122,7 +126,8 @@ def _config_update_host(config):
         'dird',
         'provd',
         'setupd',
-        'bus'
+        'bus',
+        'websocketd',
     )
     for service in services:
         if config[service]['host'] == DEFAULT_WAZO_HOST:

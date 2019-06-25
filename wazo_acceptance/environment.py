@@ -91,6 +91,8 @@ def set_wazo_instance(context, instance_name, config):
     setup.setup_provd_client(context)
     logger.debug("setup setupd client...")
     setup.setup_setupd_client(context)
+    logger.debug("setup websocketd client...")
+    setup.setup_websocketd_client(context)
     logger.debug("setup tenant...")
     setup.setup_tenant(context)
     logger.debug("setup consul...")

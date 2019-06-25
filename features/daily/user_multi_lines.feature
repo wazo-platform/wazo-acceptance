@@ -79,12 +79,12 @@ Feature: User multi lines
         Given there are telephony users with infos:
         | firstname | lastname |
         | Multi     | Lines    |
-        Given there is an incall "1801@from-extern" to the user "Multi Lines"
         Given the user "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1801  | default | yes        |
         | line3 | 1802  | default | yes        |
+        Given there is an incall "1801@from-extern" to the user "Multi Lines"
         When chan_test calls "1801@from-extern"
         Then "line1" is ringing
         Then "line2" is ringing

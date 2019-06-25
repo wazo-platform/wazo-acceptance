@@ -1,7 +1,6 @@
 # Copyright 2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import time
 import random
 import string
 
@@ -94,8 +93,6 @@ def given_there_are_telephony_users_with_infos(context):
 
         # TODO voicemail
 
-        _wait_for_sip_reload()
-
         if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
             tracking_id = "{} {}".format(body['firstname'], body.get('lastname', '')).strip()
             _register_and_track_phone(context, tracking_id, sip)
@@ -128,15 +125,8 @@ def given_the_tlephony_user_has_lines(context, firstname, lastname):
 
         context.helpers.confd_user.add_line(confd_user, line)
 
-        _wait_for_sip_reload()
-
         if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
             _register_and_track_phone(context, body['name'], sip)
-
-
-def _wait_for_sip_reload():
-    # TODO listen on sip reload event
-    time.sleep(2)
 
 
 def _register_and_track_phone(context, tracking_id, endpoint_sip, nb_phone=1):

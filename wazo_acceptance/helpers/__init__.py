@@ -3,6 +3,7 @@
 
 from .asset import Asset
 from .asterisk import Asterisk
+from .bus import Bus
 from .confd_group import ConfdGroup
 from .confd_user import ConfdUser
 from .conference import Conference
@@ -19,6 +20,7 @@ from .user import User
 __all__ = [
     'Asset',
     'Asterisk',
+    'Bus',
     'ConfdGroup',
     'ConfdUser',
     'Conference',

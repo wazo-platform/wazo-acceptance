@@ -14,5 +14,6 @@ class Incall:
         return incall
 
     def add_extension(self, incall, extension):
-        self._confd_client.incalls(incall).add_extension(extension)
+        with self._context.helpers.bus.wait_for_dialplan_reload():
+            self._confd_client.incalls(incall).add_extension(extension)
         self._context.add_cleanup(self._confd_client.incalls(incall).remove_extension, extension)

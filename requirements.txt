@@ -6,6 +6,7 @@ git+https://github.com/wazo-pbx/wazo-calld-client.git
 git+https://github.com/wazo-pbx/wazo-dird-client.git
 git+https://github.com/wazo-pbx/wazo-provd-client.git
 git+https://github.com/wazo-pbx/wazo-setupd-client.git
+git+https://github.com/wazo-pbx/wazo-websocketd-client.git
 git+https://github.com/wazo-pbx/xivo-agentd-client.git
 git+https://github.com/wazo-pbx/xivo-amid-client.git
 git+https://github.com/wazo-pbx/xivo-bus.git
@@ -22,3 +23,4 @@ python-consul==0.7.0
 pyyaml
 requests==2.21.0
 stevedore==1.17.1
+websocket-client==0.37.0

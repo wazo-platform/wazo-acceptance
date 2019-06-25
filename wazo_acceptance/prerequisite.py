@@ -44,6 +44,9 @@ def run(config_dir, instance_name):
     logger.debug('Configuring confd client')
     setup.setup_confd_client(context)
 
+    logger.debug("Configuring websocketd client")
+    setup.setup_websocketd_client(context)
+
     logger.debug('Creating default tenant')
     _configure_default_tenant(context)
 
@@ -112,6 +115,7 @@ def _configure_auth_users(context):
             'confd.#',
             'dird.#',
             'provd.#',
+            'events.#',
         ],
     )
 
