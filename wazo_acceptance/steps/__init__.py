@@ -6,6 +6,7 @@ from .asterisk import *  # noqa
 from .backup import *  # noqa
 from .conference import *  # noqa
 from .coredump import *  # noqa
+from .endpoint_sip import *  # noqa
 from .files import *  # noqa
 from .group import *  # noqa
 from .ha import *  # noqa
@@ -13,5 +14,4 @@ from .http import *  # noqa
 from .incall import *  # noqa
 from .phone_call import *  # noqa
 from .setupd import *  # noqa
-from .sip_endpoint import *  # noqa
 from .user import *  # noqa

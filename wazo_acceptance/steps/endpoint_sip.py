@@ -5,7 +5,7 @@ from behave import when
 
 
 @when(u'I set the following options in line "{exten}@{exten_context}"')
-def when_i_update_lines_with_infos(context, exten, exten_context):
+def when_i_set_the_following_option_in_line(context, exten, exten_context):
     for row in context.table:
         row = row.as_dict()
         extension = context.helpers.extension.find_by(

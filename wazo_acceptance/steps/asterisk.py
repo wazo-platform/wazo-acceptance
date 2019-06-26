@@ -8,6 +8,8 @@ from hamcrest import (
     has_entries,
     has_item
 )
+
+
 @then('I have the following hints')
 def then_i_have_the_following_hints(context):
     output = context.helpers.asterisk.send_to_asterisk_cli('core show hints').split('\n')
@@ -16,5 +18,5 @@ def then_i_have_the_following_hints(context):
              for line in output]
 
     for row in context.table:
-        row = row.as_dcit()
+        row = row.as_dict()
         assert_that(hints, has_item(has_entries(row)))
