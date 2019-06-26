@@ -19,4 +19,4 @@ def when_i_set_the_following_option_in_line(context, exten, exten_context):
         }
         for option, value in row.items():
             sip[option] = value
-        context.confd_client.endpoints_sip.update(sip)
+        context.helpers.endpoint_sip.update(sip)

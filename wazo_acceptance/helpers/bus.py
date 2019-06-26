@@ -18,6 +18,11 @@ class Bus:
             yield
 
     @contextmanager
+    def wait_for_pjsip_reload(self):
+        with self._wait_for_asterisk_reload('pjsip reload'):
+            yield
+
+    @contextmanager
     def _wait_for_asterisk_reload(self, reload_command):
         # WARNING: context manager cannot be nested
         def asterisk_reload(data):
