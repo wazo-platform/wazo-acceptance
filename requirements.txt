@@ -21,7 +21,7 @@ kombu==3.0.35
 pexpect  # From liblinphonelib
 psycopg2
 python-consul==0.7.0
-pyyaml
+pyyaml==3.12
 requests==2.21.0
 stevedore==1.17.1
 websocket-client==0.37.0
