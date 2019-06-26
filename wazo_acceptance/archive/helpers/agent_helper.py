@@ -8,7 +8,7 @@ from lettuce import world
 
 from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.lettuce import func
-from xivo_agentd_client.error import AgentdClientError
+from wazo_agentd_client.error import AgentdClientError
 
 
 def add_agent(data_dict):
