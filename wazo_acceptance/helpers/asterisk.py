@@ -8,7 +8,7 @@ class Asterisk:
         self._ssh_client = ssh_client
 
     def send_to_asterisk_cli(self, asterisk_command):
-        self._ssh_client.call(self._format_command(asterisk_command))
+        return self._ssh_client.out_call(self._format_command(asterisk_command))
 
     def _format_command(self, asterisk_command):
         return ['asterisk', '-rx', '"{}"'.format(asterisk_command)]

@@ -12,3 +12,7 @@ class EndpointSIP:
         sip = self._confd_client.endpoints_sip.create(body)
         self._context.add_cleanup(self._confd_client.endpoints_sip.delete, sip)
         return sip
+
+    def update(self, body):
+        with self._context.helpers.bus.wait_for_pjsip_reload():
+            self._confd_client.endpoints_sip.update(body)
