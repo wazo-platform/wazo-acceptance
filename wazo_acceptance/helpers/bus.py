@@ -42,8 +42,7 @@ class Bus:
         try:
             yield
         finally:
-            timeout = 5
-            websocket_thread.join(timeout)
+            websocket_thread.join(timeout=5)
             if websocket_thread.is_alive():
                 self._websocketd_client._ws_app.close()
                 websocket_thread.join()
