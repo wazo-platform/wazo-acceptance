@@ -19,7 +19,7 @@ class Bus:
 
     @contextmanager
     def wait_for_pjsip_reload(self):
-        with self._wait_for_asterisk_reload('pjsip reload'):
+        with self._wait_for_asterisk_reload('module reload res_pjsip.so'):
             yield
 
     @contextmanager
