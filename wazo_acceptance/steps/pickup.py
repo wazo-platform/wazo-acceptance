@@ -12,24 +12,24 @@ def given_there_are_pickup(context):
         pickup_args = {
             'name': data['name']
         }
-        with context.helpers.bus.wait_for_dialplan_reload():
-            call_pickup = context.helpers.pickup.create(pickup_args)
 
-            user = _find_user_by_name(context, data.get('user_interceptor'))
-            if user:
-                context.confd_client.call_pickups(call_pickup['id']).update_user_interceptors([user])
+        call_pickup = context.helpers.pickup.create(pickup_args)
 
-            group = _find_group_by_name(context, data.get('group_interceptor'))
-            if group:
-                context.confd_client.call_pickups(call_pickup['id']).update_group_interceptors([group])
+        user = _find_user_by_name(context, data.get('user_interceptor'))
+        if user:
+            context.confd_client.call_pickups(call_pickup['id']).update_user_interceptors([user])
 
-            user = _find_user_by_name(context, data.get('user_target'))
-            if user:
-                context.confd_client.call_pickups(call_pickup['id']).update_user_targets([user])
+        group = _find_group_by_name(context, data.get('group_interceptor'))
+        if group:
+            context.confd_client.call_pickups(call_pickup['id']).update_group_interceptors([group])
 
-            group = _find_group_by_name(context, data.get('group_target'))
-            if group:
-                context.confd_client.call_pickups(call_pickup['id']).update_group_targets([group])
+        user = _find_user_by_name(context, data.get('user_target'))
+        if user:
+            context.confd_client.call_pickups(call_pickup['id']).update_user_targets([user])
+
+        group = _find_group_by_name(context, data.get('group_target'))
+        if group:
+            context.confd_client.call_pickups(call_pickup['id']).update_group_targets([group])
 
 
 def _find_group_by_name(context, name):
