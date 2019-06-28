@@ -17,19 +17,23 @@ def given_there_are_pickup(context):
 
         user = _find_user_by_name(context, data.get('user_interceptor'))
         if user:
-            context.confd_client.call_pickups(call_pickup['id']).update_user_interceptors([user])
+            with context.helpers.bus.wait_for_pjsip_reload():
+                context.confd_client.call_pickups(call_pickup['id']).update_user_interceptors([user])
 
         group = _find_group_by_name(context, data.get('group_interceptor'))
         if group:
-            context.confd_client.call_pickups(call_pickup['id']).update_group_interceptors([group])
+            with context.helpers.bus.wait_for_pjsip_reload():
+                context.confd_client.call_pickups(call_pickup['id']).update_group_interceptors([group])
 
         user = _find_user_by_name(context, data.get('user_target'))
         if user:
-            context.confd_client.call_pickups(call_pickup['id']).update_user_targets([user])
+            with context.helpers.bus.wait_for_pjsip_reload():
+                context.confd_client.call_pickups(call_pickup['id']).update_user_targets([user])
 
         group = _find_group_by_name(context, data.get('group_target'))
         if group:
-            context.confd_client.call_pickups(call_pickup['id']).update_group_targets([group])
+            with context.helpers.bus.wait_for_pjsip_reload():
+                context.confd_client.call_pickups(call_pickup['id']).update_group_targets([group])
 
 
 def _find_group_by_name(context, name):
