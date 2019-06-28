@@ -27,6 +27,12 @@ def user_is_hungup(context, tracking_id):
     until.true(phone.is_hungup, tries=3)
 
 
+@step('"{tracking_id}" is talking')
+def user_is_talking(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    until.true(phone.is_talking, tries=3)
+
+
 @when('I wait "{seconds}" seconds for the call processing')
 @when('I wait "{seconds}" seconds for the call to be forwarded')
 @when('I wait "{seconds}" seconds for the end of ringing time')

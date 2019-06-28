@@ -141,6 +141,7 @@ def setup_helpers(context):
     context.helpers.extension = helpers.Extension(context)
     context.helpers.incall = helpers.Incall(context)
     context.helpers.line = helpers.Line(context)
+    context.helpers.pickup = helpers.Pickup(context)
     context.helpers.token = helpers.Token(context)
     context.helpers.user = helpers.User(context)
 
