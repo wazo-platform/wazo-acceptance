@@ -2,11 +2,8 @@
 # Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import time
-
 from lettuce import world
 
-from xivo_acceptance.helpers import user_helper
 from xivo_acceptance.lettuce import func
 from wazo_agentd_client.error import AgentdClientError
 
@@ -54,24 +51,6 @@ def logoff_agent(agent_number, ignore_error=False):
     except AgentdClientError:
         if not ignore_error:
             raise
-
-
-def login_agent_from_phone(agent_number, phone_register):
-    number, context = _get_extension_from_agent(agent_number)
-    user = user_helper.get_by_exten_context(number, context)
-    fullname = " ".join([user['firstname'], user.get('lastname', '')])
-    phone = phone_register.get_user_phone(fullname)
-    phone.call('*31%s' % agent_number)
-    time.sleep(3)
-
-
-def logoff_agent_from_phone(agent_number, phone_register):
-    number, context = _get_extension_from_agent(agent_number)
-    user = user_helper.get_by_exten_context(number, context)
-    fullname = " ".join([user['firstname'], user.get('lastname', '')])
-    phone = phone_register.get_user_phone(fullname)
-    phone.call('*32%s' % agent_number)
-    time.sleep(3)
 
 
 def unlog_all_agents():

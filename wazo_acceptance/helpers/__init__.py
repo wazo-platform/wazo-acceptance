@@ -1,6 +1,7 @@
 # Copyright 2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from .agent import Agent
 from .asset import Asset
 from .asterisk import Asterisk
 from .bus import Bus
@@ -20,6 +21,7 @@ from .token import Token
 from .user import User
 
 __all__ = [
+    'Agent',
     'Asset',
     'Asterisk',
     'Bus',
