@@ -7,7 +7,7 @@ from hamcrest import assert_that, not_
 
 @when('I log agent "{number}" from phone')
 def when_i_log_agent_from_the_phone(context, number):
-    user = context.confd_client.agents.list(number=number)['items'][0]['users'][0]
+    user = context.helpers.agent.get_by(number=number)['users'][0]
     tracking_id = "{} {}".format(user['firstname'], user['lastname'])
     phone = context.phone_register.get_phone(tracking_id)
     phone.call('*31{number}'.format(number=number))
@@ -15,7 +15,7 @@ def when_i_log_agent_from_the_phone(context, number):
 
 @when('I unlog agent "{number}" from phone')
 def when_i_unlog_agent_from_the_phone(context, number):
-    user = context.confd_client.agents.list(number=number)['items'][0]['users'][0]
+    user = context.helpers.agent.get_by(number=number)['users'][0]
     tracking_id = "{} {}".format(user['firstname'], user['lastname'])
     phone = context.phone_register.get_phone(tracking_id)
     phone.call('*32{number}'.format(number=number))
