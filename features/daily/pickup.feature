@@ -80,3 +80,23 @@ Feature: Pickup
         Then "Dogbert Canine" is hungup
         Then "Dilbert Bologna" is talking
         Then "Wally Lasagna" is talking
+
+    Scenario: Pickup a call coming from a group
+        Given there are telephony users with infos:
+         | firstname | lastname | protocol | exten | context |
+         | User      | 100      | sip      | 1100  | default |
+         | User      | 101      | sip      | 1101  | default |
+         | User      | 102      | sip      | 1102  | default |
+        Given there are telephony groups with infos:
+         | name   | exten | context | timeout | noanswer_destination |
+         | group1 | 2001  | default |         |                      |
+        Given the telephony group "group1" has users:
+         | firstname | lastname |
+         | User      | 101      |
+        When "User 100" calls "2001"
+        When I wait "3" seconds for the call processing
+        Then "User 101" is ringing
+        When "User 102" calls "*81101"
+        When I wait "3" seconds for the call processing
+        Then "User 100" is talking
+        Then "User 102" is talking
