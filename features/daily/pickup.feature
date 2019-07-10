@@ -100,3 +100,17 @@ Feature: Pickup
         When I wait "3" seconds for the call processing
         Then "User 100" is talking
         Then "User 102" is talking
+
+    Scenario: Pickup a call coming from an incoming call
+        Given there are telephony users with infos:
+         | firstname | lastname | protocol | exten  | context |
+         | User      | 143      | sip      | 1143   | default |
+         | User      | 148      | sip      | 1148   | default |
+        Given there is an incall "1143@from-extern" to the user "User 143"
+
+        When chan_test calls "1143@from-extern"
+        When I wait "3" seconds for the call processing
+        Then "User 143" is ringing
+        When "User 148" calls "*81143"
+        When I wait "3" seconds for the call processing
+        Then "User 148" is talking
