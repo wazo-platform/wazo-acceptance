@@ -33,6 +33,7 @@ def user_is_talking(context, tracking_id):
     until.true(phone.is_talking, tries=3)
 
 
+@when('I wait "{seconds}" seconds')
 @when('I wait "{seconds}" seconds for the call processing')
 @when('I wait "{seconds}" seconds for the call to be forwarded')
 @when('I wait "{seconds}" seconds for the end of ringing time')
@@ -41,12 +42,33 @@ def given_i_wait_n_seconds(context, seconds):
     _sleep(seconds)
 
 
+@when('chan_test calls "{exten}@{exten_context}" with id "{channel_id}"')
+def when_chan_test_calls_with_id(context, exten, exten_context, channel_id):
+    cmd = 'test newid {channel_id} {exten} {context} chan-test-num chan-test-name {prefix}'.format(
+        channel_id=channel_id,
+        exten=exten,
+        context=exten_context,
+        prefix=CHAN_PREFIX,
+    )
+    context.helpers.asterisk.send_to_asterisk_cli(cmd)
+
+
 @when('chan_test calls "{exten}@{exten_context}"')
 def when_chan_test_calls(context, exten, exten_context):
     cmd = 'test new {exten} {context} chan-test-num chan-test-name {prefix}'.format(
         exten=exten,
         context=exten_context,
         prefix=CHAN_PREFIX,
+    )
+    context.helpers.asterisk.send_to_asterisk_cli(cmd)
+
+
+@when('chan_test queues DTMF "{digit}" on channel with id "{channel_id}"')
+def when_chan_test_queues_dtmf(context, digit, channel_id):
+    cmd = u'test dtmf {prefix}/auto-{channel_id} {digit}'.format(
+        prefix=CHAN_PREFIX,
+        channel_id=channel_id,
+        digit=digit,
     )
     context.helpers.asterisk.send_to_asterisk_cli(cmd)
 
