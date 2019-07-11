@@ -1,9 +1,11 @@
 # Copyright 2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import logging
 import threading
 from contextlib import contextmanager
 
+logger = logging.getLogger(__name__)
 tasks = None
 
 
@@ -68,6 +70,7 @@ class Bus:
             if websocket_thread.is_alive():
                 self._websocketd_client._ws_app.close()
                 websocket_thread.join()
+                logger.warning('No event received for %s', reload_commands)
             # TODO allow to remove callback on wazo-websocketd-client
             self._websocketd_client._callbacks.pop('asterisk_reload_progress')
             self._websocketd_client._ws_app = None
