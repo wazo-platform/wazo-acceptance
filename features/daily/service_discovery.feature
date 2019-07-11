@@ -5,10 +5,12 @@ Feature: Service discovery
 
     Examples:
         | service       |
-        | xivo-ctid     |
-        | xivo-ctid-ng  |
         | wazo-agentd   |
         | wazo-auth     |
+        | wazo-calld    |
+        | wazo-chatd    |
+        | wazo-confd    |
         | wazo-dird     |
         | wazo-plugind  |
+        | wazo-setupd   |
         | wazo-webhookd |

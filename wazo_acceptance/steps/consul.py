@@ -1,19 +1,18 @@
-# -*- coding: utf-8 -*-
-# Copyright (C) 2016 Proformatique, Inc.
+# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from hamcrest import assert_that, empty, not_
-from lettuce import step, world
+from behave import then
 
 from xivo_test_helpers import until
 from xivo.consul_helpers import ServiceFinder
 
 
-@step(u'Then consul returns a running "([^"]*)" service')
-def then_consul_returns_a_running_service(step, service_name):
-    consul_config = {'token': world.config['consul_token'],
+@then('consul returns a running "{service_name}" service')
+def consul_returns_a_running_service(context, service_name):
+    consul_config = {'token': context.wazo_config['consul_token'],
                      'scheme': 'https',
-                     'host': world.config['xivo_host'],
+                     'host': context.wazo_config['wazo_host'],
                      'port': 8500,
                      'verify': False}
     finder = ServiceFinder(consul_config)
