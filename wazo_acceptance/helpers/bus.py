@@ -31,16 +31,6 @@ class Bus:
             yield
 
     @contextmanager
-    def wait_for_dialplan_reload(self):
-        with self._wait_for_asterisk_reload(['dialplan reload']):
-            yield
-
-    @contextmanager
-    def wait_for_pjsip_reload(self):
-        with self._wait_for_asterisk_reload(['module reload res_pjsip.so']):
-            yield
-
-    @contextmanager
     def _wait_for_asterisk_reload(self, reload_commands):
         global tasks
         tasks = {command: None for command in reload_commands}

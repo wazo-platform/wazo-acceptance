@@ -14,5 +14,5 @@ class EndpointSIP:
         return sip
 
     def update(self, body):
-        with self._context.helpers.bus.wait_for_pjsip_reload():
+        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True):
             self._confd_client.endpoints_sip.update(body)

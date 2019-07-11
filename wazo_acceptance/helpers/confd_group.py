@@ -13,7 +13,7 @@ class ConfdGroup:
         if timeout:
             body['timeout'] = int(timeout)
 
-        with self._context.helpers.bus.wait_for_pjsip_reload():
+        with self._context.helpers.bus.wait_for_asterisk_reload(queue=True):
             group = self._confd_client.groups.create(body)
         self._context.add_cleanup(self._confd_client.groups.delete, group)
         return group
