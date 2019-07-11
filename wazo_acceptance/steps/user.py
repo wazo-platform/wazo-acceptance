@@ -5,6 +5,7 @@ import random
 import string
 
 from behave import given, then
+from hamcrest import assert_that, equal_to, is_
 
 
 def random_string(length, sample=string.ascii_lowercase):
@@ -163,3 +164,17 @@ def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, ex
     endpoint_sip = context.confd_client.lines_sip.get(line['endpoint_sip']['id'])
     tracking_id = "{} {}".format(firstname, lastname)
     _register_and_track_phone(context, tracking_id, endpoint_sip)
+
+@then('the user "{firstname} {lastname}" has an "{forward_name}" forward set to "{exten}"')
+def user_has_an_unconditional_forward_set_to_exten(context, firstname, lastname, forward_name, exten):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    forward = context.confd_client.users(confd_user).get_forward(forward_name)
+    assert_that(forward['enabled'])
+    assert_that(forward['destination'], equal_to(exten))
+
+
+@then('the user "{firstname} {lastname}" has no "{forward_name}" forward')
+def then_user_has_no_unconditional_forward(context, firstname, lastname, forward_name):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    forward = context.confd_client.users(confd_user).get_forward(forward_name)
+    assert_that(forward['enabled'], is_(False))
