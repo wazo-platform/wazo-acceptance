@@ -4,6 +4,34 @@ wazo-acceptance is a testing framework for running automated tests on a Wazo ser
 These tests are used for testing features before releasing a new version of Wazo.
 
 
+# Style Guide
+
+## Feature file
+
+* Indent with 2 spaces
+* In table indent the value to the left
+* For other rules, please refer to feature files and then write it here
+
+### Example
+```
+Feature: Scenarios to test
+
+  Scenario: Description of the scenario
+    Given a precondition
+    Given a precondition with table
+      | long_key_with_a_small_value | key2 |
+      | left_indent                 | val2 |
+    When something happen
+    Then I assert something
+```
+
+## Helper file
+
+You should write helper file if you need:
+* Have some cleanup
+* Wait for asterisk events
+* Can be useful for other tests
+
 # Getting Started
 
 ## Prerequisites
