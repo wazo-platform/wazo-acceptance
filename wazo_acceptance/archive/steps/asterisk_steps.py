@@ -18,12 +18,6 @@ def given_the_ami_is_monitored(step):
     asterisk.start_ami_monitoring()
 
 
-@step(u'Asterisk command "([^"]*)" return no error')
-def then_asterisk_command_group1_return_no_error(step, ast_cmd):
-    command = ['asterisk', '-rx', '"%s"' % ast_cmd]
-    assert sysutils.send_command(command)
-
-
 @step(u'Then I see in the AMI that the line "([^"]*)@(\w+)" has been synchronized')
 def then_i_see_in_the_ami_that_the_line_group1_has_been_synchronized(step, extension, context):
     line = line_read_helper.find_with_exten_context(extension, context)
