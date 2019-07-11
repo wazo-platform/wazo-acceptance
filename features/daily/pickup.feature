@@ -7,10 +7,8 @@ Feature: Pickup
          | Wally     | Lasagna  | sip      | 1002  | default |
          | Alice     | Wonder   | sip      | 1003  | default |
         When "Dilbert Bologna" calls "1002"
-        When I wait "3" seconds for the call processing
         Then "Wally Lasagna" is ringing
         When "Alice Wonder" calls "*81002"
-        When I wait "3" seconds for the call processing
         Then "Wally Lasagna" is hungup
         Then "Dilbert Bologna" is talking
         Then "Alice Wonder" is talking
@@ -25,10 +23,8 @@ Feature: Pickup
          | name  | user_interceptor | user_target   |
          | first | Alice Wonder     | Wally Lasagna |
         When "Dilbert Bologna" calls "1002"
-        When I wait "3" seconds for the call processing
         Then "Wally Lasagna" is ringing
         When "Alice Wonder" calls "*8"
-        When I wait "3" seconds for the call processing
         Then "Wally Lasagna" is hungup
         Then "Dilbert Bologna" is talking
         Then "Alice Wonder" is talking
@@ -49,10 +45,8 @@ Feature: Pickup
          | name  | group_interceptor | user_target   |
          | first | hr                | Wally Lasagna |
         When "Dilbert Bologna" calls "1002"
-        When I wait "3" seconds for the call processing
         Then "Wally Lasagna" is ringing
         When "Dogbert Canine" calls "*8"
-        When I wait "3" seconds for the call processing
         Then "Wally Lasagna" is hungup
         Then "Dilbert Bologna" is talking
         Then "Dogbert Canine" is talking
@@ -73,10 +67,8 @@ Feature: Pickup
          | name  | group_target | user_interceptor |
          | first | hr           | Wally Lasagna    |
         When "Dilbert Bologna" calls "1003"
-        When I wait "3" seconds for the call processing
         Then "Dogbert Canine" is ringing
         When "Wally Lasagna" calls "*8"
-        When I wait "3" seconds for the call processing
         Then "Dogbert Canine" is hungup
         Then "Dilbert Bologna" is talking
         Then "Wally Lasagna" is talking
@@ -94,10 +86,8 @@ Feature: Pickup
          | firstname | lastname |
          | User      | 101      |
         When "User 100" calls "2001"
-        When I wait "3" seconds for the call processing
         Then "User 101" is ringing
         When "User 102" calls "*81101"
-        When I wait "3" seconds for the call processing
         Then "User 100" is talking
         Then "User 102" is talking
 
@@ -109,8 +99,6 @@ Feature: Pickup
         Given there is an incall "1143@from-extern" to the user "User 143"
 
         When chan_test calls "1143@from-extern"
-        When I wait "3" seconds for the call processing
         Then "User 143" is ringing
         When "User 148" calls "*81143"
-        When I wait "3" seconds for the call processing
         Then "User 148" is talking
