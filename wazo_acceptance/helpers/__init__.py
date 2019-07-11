@@ -11,6 +11,7 @@ from .context import Context
 from .endpoint_sip import EndpointSIP
 from .extension import Extension
 from .incall import Incall
+from .ivr import IVR
 from .line import Line
 from .pickup import Pickup
 from .sip_config import SIPConfigGenerator
@@ -28,6 +29,7 @@ __all__ = [
     'Context',
     'EndpointSIP',
     'Extension',
+    'IVR',
     'Incall',
     'Line',
     'LineRegistrar',

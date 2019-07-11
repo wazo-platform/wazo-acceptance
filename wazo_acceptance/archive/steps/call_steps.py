@@ -45,32 +45,11 @@ def when_a_call_is_started(step):
         _call(**call_info)
 
 
-@step(u'When chan_test calls "([^"]*)"$')
-def when_chan_test_calls(step, extension):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    cmd = u'test new {} {} chan-test-num chan-test-name {}'.format(number, context, CHAN_PREFIX)
-    asterisk_helper.send_to_asterisk_cli(cmd)
-
-
-@step(u'When chan_test calls "([^"]*)" with id "([^"]*)"$')
-def when_chan_test_calls_with_id(step, extension, channelid):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    cmd = u'test newid {} {} {} chan-test-num chan-test-name {}'.format(
-        channelid, number, context, CHAN_PREFIX)
-    asterisk_helper.send_to_asterisk_cli(cmd)
-
-
 @step(u'When chan_test calls "([^"]*)" with id "([^"]*)" and calleridname "([^"]*)" and calleridnum "([^"]*)"$')
 def when_chan_test_calls_with_id_calleridname_calleridnum(step, extension, channelid, calleridname, calleridnum):
     number, context = func.extract_number_and_context_from_extension(extension)
     cmd = u'test newid {} {} {} {} {} {}'.format(
         channelid, number, context, calleridnum, calleridname, CHAN_PREFIX)
-    asterisk_helper.send_to_asterisk_cli(cmd)
-
-
-@step(u'chan_test queues DTMF (\w) on channel with id "([^"]*)"$')
-def when_chan_test_queues_dtmf(step, digit, channelid):
-    cmd = u'test dtmf {}/auto-{} {}'.format(CHAN_PREFIX, channelid, digit)
     asterisk_helper.send_to_asterisk_cli(cmd)
 
 

@@ -140,6 +140,7 @@ def setup_helpers(context):
     context.helpers.endpoint_sip = helpers.EndpointSIP(context)
     context.helpers.extension = helpers.Extension(context)
     context.helpers.incall = helpers.Incall(context)
+    context.helpers.ivr = helpers.IVR(context)
     context.helpers.line = helpers.Line(context)
     context.helpers.pickup = helpers.Pickup(context)
     context.helpers.token = helpers.Token(context)
