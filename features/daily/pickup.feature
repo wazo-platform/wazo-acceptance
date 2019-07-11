@@ -2,10 +2,10 @@ Feature: Pickup
 
     Scenario: Directed pickup
         Given there are telephony users with infos:
-         | firstname | lastname | protocol | exten | context |
-         | Dilbert   | Bologna  | sip      | 1001  | default |
-         | Wally     | Lasagna  | sip      | 1002  | default |
-         | Alice     | Wonder   | sip      | 1003  | default |
+         | firstname | lastname | exten | context |
+         | Dilbert   | Bologna  | 1001  | default |
+         | Wally     | Lasagna  | 1002  | default |
+         | Alice     | Wonder   | 1003  | default |
         When "Dilbert Bologna" calls "1002"
         Then "Wally Lasagna" is ringing
         When "Alice Wonder" calls "*81002"
@@ -15,10 +15,10 @@ Feature: Pickup
 
     Scenario: Intercepting user
         Given there are telephony users with infos:
-         | firstname | lastname | protocol | exten | context |
-         | Dilbert   | Bologna  | sip      | 1001  | default |
-         | Wally     | Lasagna  | sip      | 1002  | default |
-         | Alice     | Wonder   | sip      | 1003  | default |
+         | firstname | lastname | exten | context |
+         | Dilbert   | Bologna  | 1001  | default |
+         | Wally     | Lasagna  | 1002  | default |
+         | Alice     | Wonder   | 1003  | default |
         Given there are pickups:
          | name  | user_interceptor | user_target   |
          | first | Alice Wonder     | Wally Lasagna |
@@ -31,10 +31,10 @@ Feature: Pickup
 
     Scenario: Intercepting group
         Given there are telephony users with infos:
-         | firstname | lastname | protocol | exten | context |
-         | Dilbert   | Bologna  | sip      | 1001  | default |
-         | Wally     | Lasagna  | sip      | 1002  | default |
-         | Dogbert   | Canine   | sip      | 1003  | default |
+         | firstname | lastname | exten | context |
+         | Dilbert   | Bologna  | 1001  | default |
+         | Wally     | Lasagna  | 1002  | default |
+         | Dogbert   | Canine   | 1003  | default |
         Given there are telephony groups with infos:
          | name | exten | context | timeout | noanswer_destination |
          | hr   | 2001  | default |         |                      |
@@ -53,10 +53,10 @@ Feature: Pickup
 
     Scenario: Intercepted group
         Given there are telephony users with infos:
-         | firstname | lastname | protocol | exten | context |
-         | Dilbert   | Bologna  | sip      | 1001  | default |
-         | Wally     | Lasagna  | sip      | 1002  | default |
-         | Dogbert   | Canine   | sip      | 1003  | default |
+         | firstname | lastname | exten | context |
+         | Dilbert   | Bologna  | 1001  | default |
+         | Wally     | Lasagna  | 1002  | default |
+         | Dogbert   | Canine   | 1003  | default |
         Given there are telephony groups with infos:
          | name | exten | context | timeout | noanswer_destination |
          | hr   | 2001  | default |         |                      |
@@ -75,10 +75,10 @@ Feature: Pickup
 
     Scenario: Pickup a call coming from a group
         Given there are telephony users with infos:
-         | firstname | lastname | protocol | exten | context |
-         | User      | 100      | sip      | 1100  | default |
-         | User      | 101      | sip      | 1101  | default |
-         | User      | 102      | sip      | 1102  | default |
+         | firstname | lastname | exten | context |
+         | User      | 100      | 1100  | default |
+         | User      | 101      | 1101  | default |
+         | User      | 102      | 1102  | default |
         Given there are telephony groups with infos:
          | name   | exten | context | timeout | noanswer_destination |
          | group1 | 2001  | default |         |                      |
@@ -93,11 +93,10 @@ Feature: Pickup
 
     Scenario: Pickup a call coming from an incoming call
         Given there are telephony users with infos:
-         | firstname | lastname | protocol | exten  | context |
-         | User      | 143      | sip      | 1143   | default |
-         | User      | 148      | sip      | 1148   | default |
+         | firstname | lastname | exten  | context |
+         | User      | 143      | 1143   | default |
+         | User      | 148      | 1148   | default |
         Given there is an incall "1143@from-extern" to the user "User 143"
-
         When chan_test calls "1143@from-extern"
         Then "User 143" is ringing
         When "User 148" calls "*81143"
