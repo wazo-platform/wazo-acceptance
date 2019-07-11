@@ -40,6 +40,13 @@ def a_calls_exten_and_waits_until_the_end(context, tracking_id, exten):
     until.true(phone.is_hungup, tries=10)
 
 
+@step('"{tracking_id}" calls "{exten}" and waits for "{time}" seconds')
+def a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time):
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.call(exten)
+    until.true(phone.is_hungup, tries=int(time))
+
+
 @when('I wait "{seconds}" seconds')
 @when('I wait "{seconds}" seconds for the call processing')
 @when('I wait "{seconds}" seconds for the call to be forwarded')
