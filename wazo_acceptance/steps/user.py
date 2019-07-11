@@ -99,7 +99,7 @@ def given_there_are_telephony_users_with_infos(context):
             _register_and_track_phone(context, tracking_id, sip)
 
 
-@given('the user "{firstname} {lastname}" has lines')
+@given('"{firstname} {lastname}" has lines')
 def given_the_tlephony_user_has_lines(context, firstname, lastname):
     context.table.require_columns(['name', 'context'])
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
@@ -140,21 +140,21 @@ def _register_and_track_phone(context, tracking_id, endpoint_sip, nb_phone=1):
         context.phone_register.add_registered_phone(phone, tracking_id)
 
 
-@given('the user "{firstname} {lastname}" has enabled "{forward_name}" forward to "{exten}"')
+@given('"{firstname} {lastname}" has enabled "{forward_name}" forward to "{exten}"')
 def then_the_user_has_enabled_forward_to(context, firstname, lastname, forward_name, exten):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = {'destination': exten, 'enabled': True}
     context.confd_client.users(confd_user).update_forward(forward_name, forward)
 
 
-@given('the user "{firstname} {lastname}" has enabled "{dnd_name}" service')
+@given('"{firstname} {lastname}" has enabled "{dnd_name}" service')
 def then_the_user_has_enabled_service(context, firstname, lastname, dnd_name):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     service = {'enabled': True}
     context.confd_client.users(confd_user).update_service(dnd_name, service)
 
 
-@given('the user "{firstname} {lastname}" has reconfigured the line "{exten}@{exten_context}"')
+@given('"{firstname} {lastname}" has reconfigured the line "{exten}@{exten_context}"')
 def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, exten_context):
     extension = context.helpers.extension.find_by(
         exten=exten,
@@ -166,14 +166,14 @@ def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, ex
     _register_and_track_phone(context, tracking_id, endpoint_sip)
 
 
-@given('the user "{firstname} {lastname}" has an "{forward_name}" forward set to "{exten}"')
+@given('"{firstname} {lastname}" has an "{forward_name}" forward set to "{exten}"')
 def given_user_has_an_unconditional_forward_set_to_exten(context, firstname, lastname, forward_name, exten):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = {'enabled': True, 'destination': exten}
     context.confd_client.users(confd_user).update_forward(forward_name, forward)
 
 
-@then('the user "{firstname} {lastname}" has an "{forward_name}" forward set to "{exten}"')
+@then('"{firstname} {lastname}" has an "{forward_name}" forward set to "{exten}"')
 def then_user_has_an_unconditional_forward_set_to_exten(context, firstname, lastname, forward_name, exten):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = context.confd_client.users(confd_user).get_forward(forward_name)
@@ -181,7 +181,7 @@ def then_user_has_an_unconditional_forward_set_to_exten(context, firstname, last
     assert_that(forward['destination'], equal_to(exten))
 
 
-@then('the user "{firstname} {lastname}" has no "{forward_name}" forward')
+@then('"{firstname} {lastname}" has no "{forward_name}" forward')
 def then_user_has_no_unconditional_forward(context, firstname, lastname, forward_name):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = context.confd_client.users(confd_user).get_forward(forward_name)

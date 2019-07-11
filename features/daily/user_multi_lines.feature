@@ -5,7 +5,7 @@ Feature: User multi lines
         | firstname | lastname | protocol | exten  | context |
         | Multi     | Lines    |          |        |         |
         | Bob       | Field    | sip      | 1802   | default |
-        Given the user "Multi Lines" has lines:
+        Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1801  | default | yes        |
@@ -20,7 +20,7 @@ Feature: User multi lines
         | firstname | lastname | protocol | exten | context |
         | Multi     | Lines    |          |       |         |
         | Bob       | Field    | sip      | 1803  | default |
-        Given the user "Multi Lines" has lines:
+        Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1802  | default | yes        |
@@ -34,11 +34,11 @@ Feature: User multi lines
         | Multi     | Lines    |          |       |         |
         | Bob       | Field    | sip      | 1802  | default |
         | Forward   | Unc      | sip      | 1803  | default |
-        Given the user "Multi Lines" has lines:
+        Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1801  | default | yes        |
-        Given the user "Multi Lines" has enabled "unconditional" forward to "1803"
+        Given "Multi Lines" has enabled "unconditional" forward to "1803"
         When "Bob Field" calls "1801"
         When I wait "3" seconds for the call to be forwarded
         Then "Forward Unc" is ringing
@@ -48,11 +48,11 @@ Feature: User multi lines
         | firstname | lastname | protocol | exten | context |
         | Multi     | Lines    |          |       |         |
         | Bob       | Field    | sip      | 1802  | default |
-        Given the user "Multi Lines" has lines:
+        Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1801  | default | yes        |
-        Given the user "Multi Lines" has enabled "dnd" service
+        Given "Multi Lines" has enabled "dnd" service
         When "Bob Field" calls "1801"
         When I wait "5" seconds for the call processing
         Then "Bob Field" is hungup
@@ -62,7 +62,7 @@ Feature: User multi lines
         | firstname | lastname | protocol | exten | context | ring_seconds |
         | Multi     | Lines    |          |       |         | 5            |
         | Bob       | Field    | sip      | 1802  | default |              |
-        Given the user "Multi Lines" has lines:
+        Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1801  | default | yes        |
@@ -79,7 +79,7 @@ Feature: User multi lines
         Given there are telephony users with infos:
         | firstname | lastname |
         | Multi     | Lines    |
-        Given the user "Multi Lines" has lines:
+        Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1801  | default | yes        |
