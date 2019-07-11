@@ -165,8 +165,16 @@ def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, ex
     tracking_id = "{} {}".format(firstname, lastname)
     _register_and_track_phone(context, tracking_id, endpoint_sip)
 
+
+@given('the user "{firstname} {lastname}" has an "{forward_name}" forward set to "{exten}"')
+def given_user_has_an_unconditional_forward_set_to_exten(context, firstname, lastname, forward_name, exten):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    forward = {'enabled': True, 'destination': exten}
+    context.confd_client.users(confd_user).update_forward(forward_name, forward)
+
+
 @then('the user "{firstname} {lastname}" has an "{forward_name}" forward set to "{exten}"')
-def user_has_an_unconditional_forward_set_to_exten(context, firstname, lastname, forward_name, exten):
+def then_user_has_an_unconditional_forward_set_to_exten(context, firstname, lastname, forward_name, exten):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = context.confd_client.users(confd_user).get_forward(forward_name)
     assert_that(forward['enabled'])

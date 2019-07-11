@@ -20,7 +20,7 @@ Feature: User Forward
          | firstname | lastname | exten | context |
          | Mia       | Wallace  | 1001  | default |
          | Vincent   | Vega     | 1002  | default |
-        When "Mia Wallace" calls "*211002" and waits until the end
-        When "Vincent Vega" calls "*211001" and waits until the end
+        Given the user "Mia Wallace" has an "unconditional" forward set to "1002"
+        Given the user "Vincent Vega" has an "unconditional" forward set to "1001"
         When "Mia Wallace" calls "1002" and waits for "120" seconds
         Then "Mia Wallace" is hungup
