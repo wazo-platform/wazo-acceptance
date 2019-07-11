@@ -8,12 +8,17 @@ from behave import then, given
 from hamcrest import (
     assert_that,
     contains_string,
+    equal_to,
     is_,
     is_not,
     none,
 )
 
 BACKUP_DIR = '/var/backups/xivo'
+ASTERISK_VM_PATH = '/var/spool/asterisk/voicemail'
+MOH_PATH = '/usr/share/asterisk/moh/default'
+DAHDI_PATH = '/dev/dahdi'
+ASTERISK_SOUND_PATH = '/usr/share/asterisk/sounds/en'
 
 
 @then('the mirror list contains a line matching "{mirror}"')
@@ -97,3 +102,44 @@ def then_there_are_cron_jobs_in_file_name_on_instance(context, file_name, instan
             instance_context.wazo_config.get('master_host') or '<unknown>',
         )
         assert_that(file_content, contains_string(expected_line))
+
+
+@then('Asterisk may open at most {max_file_descriptors} file descriptors')
+def then_asterisk_may_open_at_most_max_file_descriptors(context, max_file_descriptors):
+    pid_file = context.remote_sysutils.get_pidfile_for_service_name('asterisk')
+    command = ['cat', pid_file]
+    pid = context.ssh_client.out_call(command).strip()
+    command = ['grep', '\'Max open files\'', '/proc/{pid}/limits'.format(pid=pid)]
+    limit_row = context.ssh_client.out_call(command).strip()
+
+    limit = re.search(r'Max open files\s+(\d+)\s+\d+\s+\w+', limit_row).group(1)
+
+    assert_that(int(limit), equal_to(8192))
+
+
+@then(u'Asterisk sound files are correctly installed')
+def then_asterisk_sound_files_correctly_installed(context):
+    assert not context.remote_sysutils.dir_is_empty(ASTERISK_SOUND_PATH)
+
+
+@then(u'Asterisk owns /dev/dadhi')
+def then_asterisk_owns_dev_dadhi(context):
+    text = context.remote_sysutils.get_list_file(DAHDI_PATH)
+    lines = text.split("\n")
+    for line in lines:
+        if line:
+            file = '%s/%s' % (DAHDI_PATH, line.strip())
+            assert context.remote_sysutils.file_owned_by_user(file, 'asterisk')
+
+
+@then(u'MOH files are owned by asterisk:www-data')
+def then_moh_files_are_owned_by_asterisk_www_data(context):
+    command = ['apt-get', 'install', '-y', 'asterisk-moh-opsound-wav']
+    context.remote_sysutils.send_command(command)
+    text = context.remote_sysutils.get_list_file(MOH_PATH)
+    lines = text.split("\n")
+    for line in lines:
+        if line:
+            file = '%s/%s' % (MOH_PATH, line.strip())
+            assert context.remote_sysutils.file_owned_by_user(file, 'asterisk')
+            assert context.remote_sysutils.file_owned_by_group(file, 'www-data')
