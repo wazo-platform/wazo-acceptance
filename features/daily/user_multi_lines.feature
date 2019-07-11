@@ -38,7 +38,7 @@ Feature: User multi lines
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
         | line2 | 1801  | default | yes        |
-        Given "Multi Lines" has enabled "unconditional" forward to "1803"
+        Given "Multi Lines" has an "unconditional" forward set to "1803"
         When "Bob Field" calls "1801"
         When I wait "3" seconds for the call to be forwarded
         Then "Forward Unc" is ringing
