@@ -2,9 +2,9 @@ Feature: User multi lines
 
     Scenario: Ring all lines of a user
         Given there are telephony users with infos:
-        | firstname | lastname | protocol | exten  | context |
-        | Multi     | Lines    |          |        |         |
-        | Bob       | Field    | sip      | 1802   | default |
+        | firstname | lastname | exten  | context |
+        | Multi     | Lines    |        |         |
+        | Bob       | Field    | 1802   | default |
         Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
@@ -17,9 +17,9 @@ Feature: User multi lines
 
     Scenario: User multi lines multi extensions
         Given there are telephony users with infos:
-        | firstname | lastname | protocol | exten | context |
-        | Multi     | Lines    |          |       |         |
-        | Bob       | Field    | sip      | 1803  | default |
+        | firstname | lastname | exten | context |
+        | Multi     | Lines    |       |         |
+        | Bob       | Field    | 1803  | default |
         Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
@@ -30,10 +30,10 @@ Feature: User multi lines
 
     Scenario: Activate a forward on user multi lines
         Given there are telephony users with infos:
-        | firstname | lastname | protocol | exten | context |
-        | Multi     | Lines    |          |       |         |
-        | Bob       | Field    | sip      | 1802  | default |
-        | Forward   | Unc      | sip      | 1803  | default |
+        | firstname | lastname | exten | context |
+        | Multi     | Lines    |       |         |
+        | Bob       | Field    | 1802  | default |
+        | Forward   | Unc      | 1803  | default |
         Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
@@ -45,9 +45,9 @@ Feature: User multi lines
 
     Scenario: Activate dnd on user multi lines
         Given there are telephony users with infos:
-        | firstname | lastname | protocol | exten | context |
-        | Multi     | Lines    |          |       |         |
-        | Bob       | Field    | sip      | 1802  | default |
+        | firstname | lastname | exten | context |
+        | Multi     | Lines    |       |         |
+        | Bob       | Field    | 1802  | default |
         Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
@@ -59,9 +59,9 @@ Feature: User multi lines
 
     Scenario: Ringing time are respected on user multi lines
         Given there are telephony users with infos:
-        | firstname | lastname | protocol | exten | context | ring_seconds |
-        | Multi     | Lines    |          |       |         | 5            |
-        | Bob       | Field    | sip      | 1802  | default |              |
+        | firstname | lastname | exten | context | ring_seconds |
+        | Multi     | Lines    |       |         | 5            |
+        | Bob       | Field    | 1802  | default |              |
         Given "Multi Lines" has lines:
         | name  | exten | context | with_phone |
         | line1 | 1801  | default | yes        |
