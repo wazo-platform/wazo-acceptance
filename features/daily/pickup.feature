@@ -36,8 +36,8 @@ Feature: Pickup
          | Wally     | Lasagna  | 1002  | default |
          | Dogbert   | Canine   | 1003  | default |
         Given there are telephony groups with infos:
-         | name | exten | context | timeout | noanswer_destination |
-         | hr   | 2001  | default |         |                      |
+         | name | exten | context |
+         | hr   | 2001  | default |
         Given the telephony group "hr" has users:
          | firstname | lastname |
          | Dogbert   | Canine   |
@@ -58,8 +58,8 @@ Feature: Pickup
          | Wally     | Lasagna  | 1002  | default |
          | Dogbert   | Canine   | 1003  | default |
         Given there are telephony groups with infos:
-         | name | exten | context | timeout | noanswer_destination |
-         | hr   | 2001  | default |         |                      |
+         | name | exten | context |
+         | hr   | 2001  | default |
         Given the telephony group "hr" has users:
          | firstname | lastname |
          | Dogbert   | Canine   |
@@ -80,8 +80,8 @@ Feature: Pickup
          | User      | 101      | 1101  | default |
          | User      | 102      | 1102  | default |
         Given there are telephony groups with infos:
-         | name   | exten | context | timeout | noanswer_destination |
-         | group1 | 2001  | default |         |                      |
+         | name   | exten | context |
+         | group1 | 2001  | default |
         Given the telephony group "group1" has users:
          | firstname | lastname |
          | User      | 101      |
