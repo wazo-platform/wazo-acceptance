@@ -94,6 +94,10 @@ def given_there_are_telephony_users_with_infos(context):
 
         # TODO voicemail
 
+        if body.get('agent_number'):
+            agent = context.helpers.agent.create({'number': body['agent_number']})
+            context.confd_client.users(confd_user).add_agent(agent)
+
         if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
             tracking_id = "{} {}".format(body['firstname'], body.get('lastname', '')).strip()
             _register_and_track_phone(context, tracking_id, sip)

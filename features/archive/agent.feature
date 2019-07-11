@@ -1,6 +1,6 @@
-# Should be in wazo-agentd integration tests
 Feature: Agent
 
+    # TODO move to wazo-agentd integration tests
     Scenario: Agent login status update events
         Given there is no agents logged
         Given there are users with infos:
@@ -17,15 +17,7 @@ Feature: Agent
         | agent_id | agent_number | status    | xivo_uuid |
         | yes      |         1003 | logged_in | yes       |
 
-    Scenario: Login and logout an agent from the phone
-        Given there are users with infos:
-        | firstname | lastname | number | context     | agent_number | protocol |
-        | User      |      003 |   1003 | statscenter |         1003 | sip      |
-        When I log agent "1003" from the phone
-        Then the agent "1003" is logged
-        When I unlog agent "1003" from the phone
-        Then the agent "1003" is not logged
-
+    # TODO move to wazo-agentd integration tests
     Scenario: Mandatory token authentication for wazo-agentd
         When I request the agent statuses with an invalid token
         Then I get an "invalid token" response from wazo-agentd
