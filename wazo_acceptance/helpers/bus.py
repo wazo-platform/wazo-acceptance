@@ -1,10 +1,12 @@
 # Copyright 2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import logging
 import threading
 from contextlib import contextmanager
 
-task_uuid = None
+logger = logging.getLogger(__name__)
+tasks = None
 
 
 class Bus:
@@ -13,28 +15,40 @@ class Bus:
         self._websocketd_client = websocketd_client
 
     @contextmanager
-    def wait_for_dialplan_reload(self):
-        with self._wait_for_asterisk_reload('dialplan reload'):
+    def wait_for_asterisk_reload(self, dialplan=False, pjsip=False, queue=False):
+        commands = []
+        if dialplan:
+            commands.append('dialplan reload')
+        if pjsip:
+            commands.append('module reload res_pjsip.so')
+        if queue:
+            commands.append('module reload app_queue.so')
+
+        if not commands:
+            raise Exception('No wait module specified')
+
+        with self._wait_for_asterisk_reload(commands):
             yield
 
     @contextmanager
-    def wait_for_pjsip_reload(self):
-        with self._wait_for_asterisk_reload('module reload res_pjsip.so'):
-            yield
+    def _wait_for_asterisk_reload(self, reload_commands):
+        global tasks
+        tasks = {command: None for command in reload_commands}
 
-    @contextmanager
-    def _wait_for_asterisk_reload(self, reload_command):
-        # WARNING: context manager cannot be nested
         def asterisk_reload(data):
-            if data['command'] != reload_command:
+            global tasks
+            command = data['command']
+            if command not in tasks:
                 return
 
-            global task_uuid
+            task_uuid = data['uuid']
             if data['status'] == 'starting':
-                task_uuid = data['uuid']
-            elif data['status'] == 'completed' and task_uuid == data['uuid']:
-                # TODO expose close method on wazo-websocketd-client
-                self._websocketd_client._ws_app.close()
+                tasks[command] = task_uuid
+            elif data['status'] == 'completed' and task_uuid in tasks.values():
+                tasks.pop(command)
+                if not tasks:
+                    # TODO expose close method on wazo-websocketd-client
+                    self._websocketd_client._ws_app.close()
 
         self._websocketd_client.on('asterisk_reload_progress', asterisk_reload)
         websocket_thread = threading.Thread(target=self._websocketd_client.run)
@@ -46,6 +60,7 @@ class Bus:
             if websocket_thread.is_alive():
                 self._websocketd_client._ws_app.close()
                 websocket_thread.join()
+                logger.warning('No event received for %s', reload_commands)
             # TODO allow to remove callback on wazo-websocketd-client
             self._websocketd_client._callbacks.pop('asterisk_reload_progress')
             self._websocketd_client._ws_app = None
