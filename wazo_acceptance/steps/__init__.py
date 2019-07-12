@@ -16,5 +16,6 @@ from .incall import *  # noqa
 from .ivr import *  # noqa
 from .phone_call import *  # noqa
 from .pickup import *  # noqa
+from .process import *  # noqa
 from .setupd import *  # noqa
 from .user import *  # noqa
