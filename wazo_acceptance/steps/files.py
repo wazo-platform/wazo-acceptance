@@ -104,7 +104,7 @@ def then_there_are_cron_jobs_in_file_name_on_instance(context, file_name, instan
         assert_that(file_content, contains_string(expected_line))
 
 
-@then('Asterisk may open at most {max_file_descriptors} file descriptors')
+@then('Asterisk may open at most "{max_file_descriptors}" file descriptors')
 def then_asterisk_may_open_at_most_max_file_descriptors(context, max_file_descriptors):
     pid_file = context.remote_sysutils.get_pidfile_for_service_name('asterisk')
     command = ['cat', pid_file]
