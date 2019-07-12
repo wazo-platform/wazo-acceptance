@@ -79,7 +79,7 @@ def when_chan_test_calls(context, exten, exten_context):
 
 @when('chan_test queues DTMF "{digit}" on channel with id "{channel_id}"')
 def when_chan_test_queues_dtmf(context, digit, channel_id):
-    cmd = u'test dtmf {prefix}/auto-{channel_id} {digit}'.format(
+    cmd = 'test dtmf {prefix}/auto-{channel_id} {digit}'.format(
         prefix=CHAN_PREFIX,
         channel_id=channel_id,
         digit=digit,
