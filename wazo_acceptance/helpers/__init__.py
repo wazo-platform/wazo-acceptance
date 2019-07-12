@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from .agent import Agent
+from .application import Application
 from .asset import Asset
 from .asterisk import Asterisk
 from .bus import Bus
@@ -28,6 +29,7 @@ from .voicemail import Voicemail
 
 __all__ = [
     'Agent',
+    'Application',
     'Asset',
     'Asterisk',
     'Bus',

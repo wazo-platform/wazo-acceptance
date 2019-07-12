@@ -3,9 +3,7 @@
 
 from behave import when
 
-from wazo_acceptance import sysutils
-
 
 @when('I restart "{service_name}"')
 def i_restart_service(context, service_name):
-    sysutils.restart_service(service_name)
+    context.remote_sysutils.restart_service(service_name)

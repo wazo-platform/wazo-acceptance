@@ -22,5 +22,6 @@ class Line:
         self._context.add_cleanup(self._confd_client.lines(line).remove_endpoint_sip, sip)
 
     def add_extension(self, line, extension):
-        self._confd_client.lines(line).add_extension(extension)
+        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
+            self._confd_client.lines(line).add_extension(extension)
         self._context.add_cleanup(self._confd_client.lines(line).remove_extension, extension)

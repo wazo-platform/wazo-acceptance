@@ -9,6 +9,13 @@ from behave import step, when
 CHAN_PREFIX = 'PJSIP'
 
 
+@step('"{tracking_id}" answers the phone')
+def step_impl(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    user_is_ringing(context, tracking_id)
+    phone.answer()
+
+
 @step('"{tracking_id}" calls "{exten}"')
 def step_a_calls_exten(context, tracking_id, exten):
     phone = context.phone_register.get_phone(tracking_id)
