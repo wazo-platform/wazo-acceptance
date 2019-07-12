@@ -5,4 +5,4 @@ Feature: Asterisk
         Then Asterisk sound files are correctly installed
         Then Asterisk owns /dev/dadhi
         Then MOH files are owned by asterisk:www-data
-        Then Asterisk command "core reload" returns no error
+        Then the service "asterisk" is running

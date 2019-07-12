@@ -19,9 +19,3 @@ def then_i_have_the_following_hints(context):
     for row in context.table:
         row = row.as_dict()
         assert_that(hints, has_item(has_entries(row)))
-
-
-@then('Asterisk command "{command}" returns no error')
-def then_asterisk_command_group1_returns_no_error(context, command):
-    command = ['asterisk', '-rx', '"{command}"'.format(command=command)]
-    assert context.remote_sysutils.send_command(command)
