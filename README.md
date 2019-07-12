@@ -14,6 +14,7 @@ These tests are used for testing features before releasing a new version of Wazo
 * some table columns are optional; it's preferrable to omit them if not necessary (for example, the `protocol` column)
 * there must be an empty line after a `Feature` definition and around `Scenario` blocks
 * there must be no empty lines between steps
+* variable must be surrounded by double quote (`"`)
 * for other rules, please refer to feature files and then write them here
 
 ### Example
@@ -25,7 +26,7 @@ Feature: Scenarios to test
     Given a precondition with table
       | long_key_with_a_small_value | key2 |
       | left_align                  | val2 |
-    When something happen
+    When something happen with "12" parameters
     Then I assert something
 ```
 
