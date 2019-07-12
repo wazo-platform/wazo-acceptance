@@ -8,7 +8,7 @@ Feature: Line
         When  I set the following options in endpoint sip "1603@default"
         | username    |
         | newusername |
-        Given the user "Tuffnut Thorson" has reconfigured the line "1603@default"
+        Given "Tuffnut Thorson" has reconfigured the line "1603@default"
         When "Ruffnut Thorson" calls "1603"
         Then "Tuffnut Thorson" is ringing
         Then I have the following hints:
