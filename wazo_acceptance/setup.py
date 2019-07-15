@@ -143,6 +143,7 @@ def setup_helpers(context):
     context.helpers.incall = helpers.Incall(context)
     context.helpers.ivr = helpers.IVR(context)
     context.helpers.line = helpers.Line(context)
+    context.helpers.monit = helpers.Monit(context)
     context.helpers.pickup = helpers.Pickup(context)
     context.helpers.token = helpers.Token(context)
     context.helpers.user = helpers.User(context)

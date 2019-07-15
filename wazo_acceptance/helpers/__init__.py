@@ -14,6 +14,7 @@ from .extension import Extension
 from .incall import Incall
 from .ivr import IVR
 from .line import Line
+from .monit import Monit
 from .pickup import Pickup
 from .sip_config import SIPConfigGenerator
 from .sip_phone import LineRegistrar
@@ -35,6 +36,7 @@ __all__ = [
     'Incall',
     'Line',
     'LineRegistrar',
+    'Monit',
     'Pickup',
     'SIPConfigGenerator',
     'Token',

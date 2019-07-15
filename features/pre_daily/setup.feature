@@ -1,8 +1,9 @@
-Feature: Post Install
+Feature: Setup freshly installed machine
 
-    Scenario: Debian sources list points on right mirrors
+    Scenario: Engine is freshly installed
         Then the mirror list contains a line matching "mirror.wazo.community"
 
-    Scenario: Successfull completion of the wizard and create token
+    Scenario: Wizard finishes successfully
         When I pass the setup
         Then I can create an admin token
+        Then monit does not monitor the service "isc-dhcp-server"
