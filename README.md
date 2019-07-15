@@ -4,116 +4,78 @@ wazo-acceptance is a testing framework for running automated tests on a Wazo ser
 These tests are used for testing features before releasing a new version of Wazo.
 
 
-# Style Guide
+## Getting Started
 
-## Feature files
+### Requirements
 
-* indent using 2 spaces
-* indent tables
-* in tables, align values to the left
-* some table columns are optional; it's preferrable to omit them if not necessary (for example, the `protocol` column)
-* there must be an empty line after a `Feature` definition and around `Scenario` blocks
-* there must be no empty lines between steps
-* variable must be surrounded by double quote (`"`)
-* for other rules, please refer to feature files and then write them here
+Run the following commands to install requirements on the machine running the
+tests (not the engine under test):
 
-### Example
-```
-Feature: Scenarios to test
+    apt-get install libsasl2-dev linphone-nogtk python-dev lsof
 
-  Scenario: Description of the scenario
-    Given a precondition
-    Given a precondition with table
-      | long_key_with_a_small_value | key2 |
-      | left_align                  | val2 |
-    When something happen with "12" parameters
-    Then I assert something
-```
+For Linphone to work, you must:
 
-## Helper files
+    adduser jenkins audio  # Jenkins is the user running the tests
 
-You should write helper files if:
-* you need to have some cleanup
-* you have to wait for asterisk events
-* they can be useful for other tests
+Then setup the environment:
 
-# Getting Started
+    tox -e setup -- <engine_ip_address>
 
-## Prerequisites
+This command will:
 
-For Linphone to work, you must do:
-
-    adduser jenkins audio  #Jenkins is the user running the tests
+  - create a configuration file for your engine
+  - configure your engine to be ready for testing
 
 
-## Configuration
+### Running tests
 
-Create a yaml local configuration file in ```~/.wazo-acceptance/config.yml``` and
-redefine only options that need to be changed. Default options can be found in
-```wazo_acceptance/config.py```. Usually, you will only need to change the IP
-addresses. For example:
+Tests can be found in the ```features``` directory. You can run all tests with:
+
+    tox -e behave -- features/daily
+
+Or only a single test file:
+
+    tox -e behave -- features/daily/<file>.feature
+
+
+## Writing tests
+
+See [STYLEGUIDE.md](STYLEGUIDE.md) for guidelines.
+
+
+## Customization
+
+wazo-acceptance tests behaviour can be controlled via configuration files. The
+configuration files live in `~/.wazo-acceptance/config.yml` by default.
+Configuration files path can be changed by passing the following options:
+
+    tox -e behave -- -D acceptance_config_dir=/some/config/path ...
+    wazo-acceptance -c /some/config/path ...
+    
+To override the default configuration of wazo-acceptance, add a YAML file in the
+config directory. This file should only override what is necessary. Default
+values can be found in `wazo_acceptance/config.py`.
+
+For example:
 
     default:
       # IP address of the Wazo server
       wazo_host: 192.168.0.10
-
-Configuration path can be changed by passing the following options:
-
-    behave -D acceptance_config_dir=/some/config/path ...
-    wazo-acceptance -c /some/config/path ...
-
-
-## Requirements
-
-We recommend running tests on a dedicated debian machine. Run the following
-commands to install requirements:
-
-    apt-get install libsasl2-dev linphone-nogtk python-dev lsof
-    pip install -r requirements.txt
-    python setup.py install
-
-Once the requirements are installed, modify the configuration files and run the prerequisite script:
-
-    wazo-acceptance -p
+      debug:
+        global: true
+        acceptance: false
+        linphone: true
 
 
-## Usage
-
-	usage: wazo-acceptance [-h] [-p] [-v] [-x XIVO_HOST]
-
-	optional arguments:
-	  -h, --help            show this help message and exit
-	  -p, --prerequisite    execute prerequisite
-	  -v, --verbose         verbose mode
-	  -x WAZO_HOST, --wazo-host WAZO_HOST
-	                        wazo host
-
-
-# Running tests
-
-Tests can be found in the ```features``` directory. You can run all tests:
-
-    behave features/daily
-
-Or only a single test file:
-
-    behave features/daily/<file>.feature
+## Debugging
 
 To see linphone ouput, use flag `--no-capture`
 
 
-# Coverage
+## Coverage
 
 To get code coverage of wazo_acceptance:
 
     pip install coverage
     coverage run --source=wazo_acceptance $(which behave) ...
     coverage html
-
-# With tox
-
-Tox can be used to wrap all previous examples::
-
-    tox -e setup -- <server_ip>
-    tox -e acceptance -- ...
-    tox -e behave -- ...
