@@ -56,6 +56,16 @@ To override the default configuration of wazo-acceptance, add a YAML file in the
 config directory. This file should only override what is necessary. Default
 values can be found in `wazo_acceptance/config.py`.
 
+For example:
+
+    default:
+      # IP address of the Wazo server
+      wazo_host: 192.168.0.10
+      debug:
+        global: true
+        acceptance: false
+        linphone: true
+
 
 ## Debugging
 
