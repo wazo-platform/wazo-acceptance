@@ -8,7 +8,8 @@ These tests are used for testing features before releasing a new version of Wazo
 
 ### Requirements
 
-Run the following commands to install requirements on the machine running the tests (not the engine under test):
+Run the following commands to install requirements on the machine running the
+tests (not the engine under test):
 
     apt-get install libsasl2-dev linphone-nogtk python-dev lsof
 
@@ -44,12 +45,16 @@ See [STYLEGUIDE.md](STYLEGUIDE.md) for guidelines.
 
 ## Customization
 
-wazo-acceptance tests behaviour can be controlled via configuration files. The configuration files live in `~/.wazo-acceptance/config.yml` by default. Configuration files path can be changed by passing the following options:
+wazo-acceptance tests behaviour can be controlled via configuration files. The
+configuration files live in `~/.wazo-acceptance/config.yml` by default.
+Configuration files path can be changed by passing the following options:
 
     tox -e behave -- -D acceptance_config_dir=/some/config/path ...
     wazo-acceptance -c /some/config/path ...
     
-To override the default configuration of wazo-acceptance, add a YAML file in the config directory. This file should only override what is necessary. Default values can be found in `wazo_acceptance/config.py`.
+To override the default configuration of wazo-acceptance, add a YAML file in the
+config directory. This file should only override what is necessary. Default
+values can be found in `wazo_acceptance/config.py`.
 
 
 ## Debugging
