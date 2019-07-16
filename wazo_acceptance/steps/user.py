@@ -100,7 +100,7 @@ def given_there_are_telephony_users_with_infos(context):
                 'context': body['voicemail_context'],
                 'number': body['voicemail_number']
             })
-            context.helpers.voicemail.associate(confd_user, voicemail['id'])
+            context.helpers.confd_user.add_voicemail(confd_user, voicemail['id'])
 
         if body.get('agent_number'):
             agent = context.helpers.agent.create({'number': body['agent_number']})
