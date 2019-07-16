@@ -17,9 +17,8 @@ from behave import (
 )
 
 
-@when('a message is left on voicemail "{mailbox}" by "{cid_name}"')
-def when_a_message_is_left_on_voicemail(context, mailbox, cid_name):
-    vm_number, vm_context = mailbox.split(u'@', 1)
+@when('a message is left on voicemail "{vm_number}@{vm_context}" by "{cid_name}"')
+def when_a_message_is_left_on_voicemail(context, vm_number, vm_context, cid_name):
     # start the call to the voicemail
     context.helpers.asterisk.send_to_asterisk_cli(
         'test newid leavevm *97{} {} 555 {} SIP'.format(vm_number, vm_context, cid_name)
@@ -59,9 +58,8 @@ def when_a_message_is_checked_and_kept_on_voicemail(context, vm_number, vm_conte
     )
 
 
-@when('a message is checked and deleted on voicemail "{mailbox}"')
-def when_a_message_is_checked_and_deleted_on_voicemail(context, mailbox):
-    vm_number, vm_context = mailbox.split(u'@', 1)
+@when('a message is checked and deleted on voicemail "{vm_number}@{vm_context}"')
+def when_a_message_is_checked_and_deleted_on_voicemail(context, vm_number, vm_context):
     # start the call to the voicemail
     context.helpers.asterisk.send_to_asterisk_cli(
         'test newid checkvm *99{} {} 555 Test SIP'.format(vm_number, vm_context)
@@ -145,16 +143,3 @@ def _flatten_message(message):
     flat_message['folder_name'] = folder['name']
     flat_message['folder_id'] = folder['id']
     return flat_message
-
-
-def _extract_voicemail_info_to_confd(row):
-    voicemail = dict(row)
-
-    if 'max_messages' in voicemail and voicemail['max_messages'] is not None and voicemail['max_messages'].isdigit():
-        voicemail['max_messages'] = int(voicemail['max_messages'])
-
-    for key in ['attach_audio', 'delete_messages', 'ask_password']:
-        if key in voicemail:
-            voicemail[key] = (voicemail[key] == 'true')
-
-    return voicemail
