@@ -5,14 +5,14 @@ from behave import given
 
 
 @given('there are IVR with infos')
-def there_are_ivr_with_infos(context):
+def given_there_are_ivr_with_infos(context):
     for row in context.table:
         body = row.as_dict()
         context.helpers.ivr.create(body)
 
 
 @given('the IVR "{name}" choices are')
-def the_ivr_choices_are(context, name):
+def given_the_ivr_choices_are(context, name):
     choices = []
     for row in context.table:
         if row['destination_type'] == 'user':

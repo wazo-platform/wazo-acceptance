@@ -15,7 +15,7 @@ from behave import (
 
 
 @given('there are conference rooms with infos')
-def there_are_conference_rooms(context):
+def given_there_are_conference_rooms(context):
     for row in context.table:
         body = row.as_dict()
         conference = context.helpers.conference.create(body)
@@ -24,7 +24,7 @@ def there_are_conference_rooms(context):
 
 
 @when('the user lists conference rooms using wazo-dird')
-def user_list_conference_rooms(context):
+def when_user_list_conference_rooms(context):
     token = context.helpers.token.create(context.username, context.password)['token']
     backend = 'conference'
     response = context.dird_client.directories.list_sources(
@@ -45,7 +45,7 @@ def user_list_conference_rooms(context):
 
 
 @then('the conference rooms list contains')
-def the_conference_rooms_list_contains(context):
+def then_the_conference_rooms_list_contains(context):
     name_numbers = []
     for row in context.conference_contacts:
         for extension in row['extensions']:

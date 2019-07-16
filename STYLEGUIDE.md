@@ -31,3 +31,6 @@ You should write helper files if:
 * you have to wait for asterisk events
 * they can be useful for other tests
 
+## Step files
+
+* the function name must be prefixed by the decorator name (`step`/`give`/`when`/`then`)

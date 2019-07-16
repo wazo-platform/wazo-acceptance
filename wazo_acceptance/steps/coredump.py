@@ -13,7 +13,7 @@ from hamcrest import (
 
 
 @when('I generate a core dump')
-def generate_core_dump(context):
+def when_generate_core_dump(context):
     res = context.remote_sysutils.output_command(['ulimit -c 1024 && /usr/local/bin/core_dump'])
     separator = ': '
     for line in res.split('\n'):
@@ -32,7 +32,7 @@ def generate_core_dump(context):
 
 
 @then('there is a core dump file with a distinctive name')
-def there_should_by_a_file(context):
+def then_there_should_by_a_file(context):
     assert_that(context.pid, is_not(empty()))
     assert_that(context.epoch, is_not(empty()))
 

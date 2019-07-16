@@ -10,38 +10,38 @@ CHAN_PREFIX = 'PJSIP'
 
 
 @step('"{tracking_id}" calls "{exten}"')
-def a_calls_exten(context, tracking_id, exten):
+def step_a_calls_exten(context, tracking_id, exten):
     phone = context.phone_register.get_phone(tracking_id)
     phone.call(exten)
 
 
 @step('"{tracking_id}" is ringing')
-def user_is_ringing(context, tracking_id):
+def step_user_is_ringing(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_ringing, tries=3)
 
 
 @step('"{tracking_id}" is hungup')
-def user_is_hungup(context, tracking_id):
+def step_user_is_hungup(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_hungup, tries=3)
 
 
 @step('"{tracking_id}" is talking')
-def user_is_talking(context, tracking_id):
+def step_user_is_talking(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_talking, tries=3)
 
 
 @step('"{tracking_id}" calls "{exten}" and waits until the end')
-def a_calls_exten_and_waits_until_the_end(context, tracking_id, exten):
+def step_a_calls_exten_and_waits_until_the_end(context, tracking_id, exten):
     phone = context.phone_register.get_phone(tracking_id)
     phone.call(exten)
     until.true(phone.is_hungup, tries=10)
 
 
 @step('"{tracking_id}" calls "{exten}" and waits for "{time}" seconds')
-def a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time):
+def step_a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time):
     phone = context.phone_register.get_phone(tracking_id)
     phone.call(exten)
     until.true(phone.is_hungup, tries=int(time))
@@ -52,7 +52,7 @@ def a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time):
 @when('I wait "{seconds}" seconds for the call to be forwarded')
 @when('I wait "{seconds}" seconds for the end of ringing time')
 @when('I wait "{seconds}" seconds for the timeout to not expire')
-def given_i_wait_n_seconds(context, seconds):
+def when_given_i_wait_n_seconds(context, seconds):
     _sleep(seconds)
 
 
