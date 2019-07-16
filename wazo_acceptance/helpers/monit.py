@@ -13,7 +13,7 @@ class Monit:
         until.true(self.is_monit_started, timeout=60, interval=10, message='Monit is unreachable')
         result = self.get_monit_status()
         for line in result:
-            if line == "Process '%s'" % process_name:
+            if line == "Process '{}'".format(process_name):
                 return True
         return False
 
