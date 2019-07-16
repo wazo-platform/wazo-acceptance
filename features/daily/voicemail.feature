@@ -2,8 +2,8 @@ Feature: Voicemail
 
   Scenario: Leave voicemail message
     Given there are telephony users with infos:
-      | firstname | lastname | number | context | protocol | voicemail_name | voicemail_number | voicemail_context |
-      | Geroge    | Hanson   | 1801   | default | sip      | George Hanson  | 1801             | default           |
+      | firstname | lastname | number | context | voicemail_name | voicemail_number | voicemail_context |
+      | George    | Hanson   | 1801   | default | George Hanson  | 1801             | default           |
     Given I listen on the bus for "user_voicemail_message_created" messages
     When a message is left on voicemail "1801@default" by "Billy"
     Then I receive a voicemail message event "user_voicemail_message_created" with data:
@@ -15,8 +15,8 @@ Feature: Voicemail
 
   Scenario: Check voicemail message
     Given there are telephony users with infos:
-      | firstname | lastname | number | context | protocol | voicemail_name | voicemail_number | voicemail_context |
-      | Geroge    | Hanson   | 1801   | default | sip      | George Hanson  | 1801             | default           |
+      | firstname | lastname | number | context | voicemail_name | voicemail_number | voicemail_context |
+      | George    | Hanson   | 1801   | default | George Hanson  | 1801             | default           |
     Given I listen on the bus for "user_voicemail_message_updated" messages
     When a message is left on voicemail "1801@default" by "Billy"
     When a message is checked and kept on voicemail "1801@default"
@@ -29,8 +29,8 @@ Feature: Voicemail
 
   Scenario: Delete voicemail message
     Given there are telephony users with infos:
-      | firstname | lastname | number | context | protocol | voicemail_name | voicemail_number | voicemail_context |
-      | Geroge    | Hanson   | 1801   | default | sip      | George Hanson  | 1801             | default           |
+      | firstname | lastname | number | context | voicemail_name | voicemail_number | voicemail_context |
+      | George    | Hanson   | 1801   | default | George Hanson  | 1801             | default           |
     Given I listen on the bus for "user_voicemail_message_deleted" messages
     When a message is left on voicemail "1801@default" by "Billy"
     When a message is checked and deleted on voicemail "1801@default"
