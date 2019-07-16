@@ -78,7 +78,7 @@ class Bus:
         self._received_events.put({'name': name, 'data': data})
 
     def pop_received_event(self, timeout=5):
-        if self._received_events is None:
+        if self._websocket_thread is None:
             raise RuntimeError("websocket thread not started")
         return self._received_events.get(timeout=timeout)
 
@@ -97,5 +97,5 @@ class Bus:
         self._websocketd_client._callbacks.clear()
         self._websocketd_client._ws_app = None
         self._websocketd_client._is_running = None
-        self._websocket_thread = None
         self._received_events = None
+        self._websocket_thread = None
