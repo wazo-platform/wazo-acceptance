@@ -5,7 +5,7 @@
 * indent using 2 spaces
 * indent tables
 * in tables, align values to the left
-* some table columns are optional; it's preferrable to omit them if not necessary (for example, the `protocol` column)
+* some table columns are optional; it's preferable to omit them if not necessary (for example, the `protocol` column)
 * there must be an empty line after a `Feature` definition and around `Scenario` blocks
 * there must be no empty lines between steps
 * variable must be surrounded by double quote (`"`)
