@@ -23,8 +23,3 @@ class User:
         users = self._auth_client.users.list(**kwargs)['items']
         for user in users:
             return user
-
-    def add(self, user, voicemail_id):
-        confd_user = self._confd_client.users(user)
-        confd_user.add_voicemail(voicemail_id)
-        self._context.add_cleanup(confd_user.remove_voicemail)
