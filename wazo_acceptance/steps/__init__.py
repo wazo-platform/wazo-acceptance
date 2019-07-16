@@ -21,3 +21,4 @@ from .pickup import *  # noqa
 from .process import *  # noqa
 from .setupd import *  # noqa
 from .user import *  # noqa
+from .voicemail import *  # noqa

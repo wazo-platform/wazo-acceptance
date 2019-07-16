@@ -20,6 +20,7 @@ from .sip_config import SIPConfigGenerator
 from .sip_phone import LineRegistrar
 from .token import Token
 from .user import User
+from .voicemail import Voicemail
 
 __all__ = [
     'Agent',
@@ -41,4 +42,5 @@ __all__ = [
     'SIPConfigGenerator',
     'Token',
     'User',
+    'Voicemail',
 ]

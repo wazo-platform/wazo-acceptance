@@ -133,7 +133,7 @@ def setup_helpers(context):
     context.helpers.agent = helpers.Agent(context)
     context.helpers.asset = helpers.Asset(context)
     context.helpers.asterisk = helpers.Asterisk(context.ssh_client)
-    context.helpers.bus = helpers.Bus(context.websocketd_client)
+    context.helpers.bus = helpers.Bus(context)
     context.helpers.confd_group = helpers.ConfdGroup(context)
     context.helpers.confd_user = helpers.ConfdUser(context)
     context.helpers.conference = helpers.Conference(context)
@@ -147,6 +147,7 @@ def setup_helpers(context):
     context.helpers.pickup = helpers.Pickup(context)
     context.helpers.token = helpers.Token(context)
     context.helpers.user = helpers.User(context)
+    context.helpers.voicemail = helpers.Voicemail(context)
 
 
 def setup_remote_sysutils(context):
