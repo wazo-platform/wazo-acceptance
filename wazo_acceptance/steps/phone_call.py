@@ -52,7 +52,7 @@ def step_a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time
 @when('I wait "{seconds}" seconds for the call to be forwarded')
 @when('I wait "{seconds}" seconds for the end of ringing time')
 @when('I wait "{seconds}" seconds for the timeout to not expire')
-def when_given_i_wait_n_seconds(context, seconds):
+def when_i_wait_n_seconds(context, seconds):
     _sleep(seconds)
 
 
