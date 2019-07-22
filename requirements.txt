@@ -17,11 +17,11 @@ git+https://github.com/wazo-pbx/xivo-test-helpers.git
 PyHamcrest
 SQLAlchemy
 behave
-kombu==3.0.35
+kombu==4.2.1
 pexpect  # From liblinphonelib
 psycopg2
-python-consul==0.7.0
-pyyaml==3.12
-requests==2.21.0
-stevedore==1.17.1
-websocket-client==0.37.0
+python-consul==0.7.1
+pyyaml==3.13
+requests==0.4.13
+stevedore==1.29.0
+websocket-client==0.53.0
