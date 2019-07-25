@@ -22,6 +22,6 @@ pexpect  # From liblinphonelib
 psycopg2
 python-consul==0.7.1
 pyyaml==3.13
-requests==0.4.13
+requests==2.21.0
 stevedore==1.29.0
 websocket-client==0.53.0
