@@ -17,8 +17,12 @@ def consul_returns_a_running_service(context, service_name):
                      'verify': False}
     finder = ServiceFinder(consul_config)
 
-    def test():
+    def service_is_healthy(service_name):
         healthy_services = finder.list_healthy_services(service_name)
         assert_that(healthy_services, not_(empty()))
 
-    until.assert_(test, tries=5)
+    until.assert_(
+        service_is_healthy, service_name,
+        timeout=5,
+        message='Service {} not found in Consul'.format(service_name),
+    )
