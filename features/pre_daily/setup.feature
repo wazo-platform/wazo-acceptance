@@ -2,6 +2,7 @@ Feature: Setup freshly installed machine
 
     Scenario: Engine is freshly installed
         Then the mirror list contains a line matching "mirror.wazo.community"
+        Then consul returns a running "wazo-setupd" service
 
     Scenario: Wizard finishes successfully
         When I pass the setup

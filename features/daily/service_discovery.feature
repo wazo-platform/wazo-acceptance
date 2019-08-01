@@ -12,5 +12,4 @@ Feature: Service discovery
         | wazo-confd    |
         | wazo-dird     |
         | wazo-plugind  |
-        | wazo-setupd   |
         | wazo-webhookd |
