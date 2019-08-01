@@ -145,3 +145,9 @@ def then_moh_files_are_owned_by_asterisk_www_data(context):
         file_ = '{}/{}'.format(MOH_PATH, line.strip())
         assert context.remote_sysutils.file_owned_by_user(file_, 'asterisk')
         assert context.remote_sysutils.file_owned_by_group(file_, 'www-data')
+
+
+@given('the file "{path}" is empty')
+def given_the_file_is_empty(context, path):
+    # if the file already exist on the fs, it will be truncated to 0
+    context.ssh_client.check_call(['truncate', '-s0', path])
