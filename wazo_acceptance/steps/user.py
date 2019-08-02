@@ -159,6 +159,13 @@ def then_the_user_has_enabled_service(context, firstname, lastname, dnd_name):
     context.confd_client.users(confd_user).update_service(dnd_name, service)
 
 
+@given('"{firstname} {lastname}" has schedule "{schedule}"')
+def given_user_1_has_schedule_2(context, firstname, lastname, schedule):
+    confd_user = context.helpers.confd_user.get_by(firtname=firstname, lastname=lastname)
+    schedule = context.helpers.schedule.get_by(name=schedule)
+    context.confd_client.users(confd_user).add_schedule(schedule['id'])
+
+
 @given('"{firstname} {lastname}" has reconfigured the line "{exten}@{exten_context}"')
 def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, exten_context):
     extension = context.helpers.extension.find_by(

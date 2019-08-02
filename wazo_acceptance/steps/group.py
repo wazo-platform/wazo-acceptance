@@ -16,6 +16,10 @@ def given_there_are_telephony_groups_with_infos(context):
             extension = context.helpers.extension.create(body)
             context.helpers.confd_group.add_extension(group, extension)
 
+        if body.get('schedule'):
+            schedule = context.helpers.schedule.get_by(name=body['schedule'])
+            context.confd_client.groups(group).add_schedule(schedule['id'])
+
         if body.get('noanswer_destination'):
             type_, name = body['noanswer_destination'].split(':')
             fallbacks_body = {'noanswer_destination': {'type': type_}}
