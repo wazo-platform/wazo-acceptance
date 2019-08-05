@@ -18,6 +18,7 @@ from .line import Line
 from .monit import Monit
 from .pickup import Pickup
 from .provd import Provd
+from .queue import Queue
 from .schedule import Schedule
 from .sip_config import SIPConfigGenerator
 from .sip_phone import LineRegistrar
@@ -44,6 +45,7 @@ __all__ = [
     'Monit',
     'Pickup',
     'Provd',
+    'Queue',
     'Schedule',
     'SIPConfigGenerator',
     'Token',
