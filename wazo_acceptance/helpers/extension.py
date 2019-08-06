@@ -14,6 +14,12 @@ class Extension:
         self._context.add_cleanup(self._confd_client.extensions.delete, extension)
         return extension
 
+    def get_by(self, **kwargs):
+        user = self.find_by(**kwargs)
+        if not user:
+            raise Exception('Extension not found: {}'.format(kwargs))
+        return user
+
     def find_by(self, **kwargs):
         extensions = self._confd_client.extensions.list(**kwargs)['items']
         for extension in extensions:
