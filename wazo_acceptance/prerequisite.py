@@ -59,7 +59,7 @@ def run(config_dir, instance_name):
     logger.debug('Configuring RabbitMQ on Wazo')
     _configure_rabbitmq(context)
 
-    logger.debug('Configuring xivo-agid on Wazo')
+    logger.debug('Configuring wazo-agid on Wazo')
     _allow_agid_listen_on_all_interfaces(context)
 
     logger.debug('Installing chan_test (module for asterisk)')
@@ -187,7 +187,7 @@ def _add_line_to_remote_file(context, line_text, file_name):
 
 
 def _allow_agid_listen_on_all_interfaces(context):
-    _add_line_to_remote_file(context, 'listen_address: 0.0.0.0', '/etc/xivo-agid/conf.d/acceptance.yml')
+    _add_line_to_remote_file(context, 'listen_address: 0.0.0.0', '/etc/wazo-agid/conf.d/acceptance.yml')
 
 
 def _install_packages(context, packages):
