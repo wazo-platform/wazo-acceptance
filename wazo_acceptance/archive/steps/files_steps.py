@@ -7,21 +7,14 @@ import re
 
 from hamcrest import assert_that
 from hamcrest import contains_string
-from hamcrest import equal_to
 from hamcrest import is_not
 from hamcrest import none
 from lettuce import step, world
 
-from xivo_acceptance.helpers import file_helper
 from xivo_acceptance.lettuce import sysutils
 
 
 BACKUP_DIR = '/var/backups/xivo'
-
-
-@step(u'Given the file "([^"]*)" is empty')
-def given_the_file_is_empty(step, path):
-    file_helper.create_empty_file(path)
 
 
 @step(u'Then backup files successfully rotated')

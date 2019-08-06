@@ -6,11 +6,6 @@ from lettuce import step, world
 from xivo_acceptance.helpers import device_helper, provd_helper
 
 
-@step(u'Given there are no devices with mac "([^"]*)"')
-def given_there_are_no_devices_with_mac_group1(step, mac):
-    provd_helper.delete_device_with_mac(mac)
-
-
 @step(u'Given I have the following devices:')
 def given_i_have_the_following_devices(step):
     for deviceinfo in step.hashes:
@@ -24,11 +19,6 @@ def given_i_have_the_following_devices(step):
 
 @step(u'Given the provisioning server has received the following HTTP requests:')
 def given_the_provisioning_server_has_received_the_following_http_requests(step):
-    _provisioning_server_http_requests(step)
-
-
-@step(u'When the provisioning server receives the following HTTP requests:')
-def when_the_provisioning_server_receives_the_following_http_requests(step):
     _provisioning_server_http_requests(step)
 
 

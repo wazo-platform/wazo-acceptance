@@ -16,6 +16,7 @@ from .ivr import IVR
 from .line import Line
 from .monit import Monit
 from .pickup import Pickup
+from .provd import Provd
 from .sip_config import SIPConfigGenerator
 from .sip_phone import LineRegistrar
 from .token import Token
@@ -39,6 +40,7 @@ __all__ = [
     'LineRegistrar',
     'Monit',
     'Pickup',
+    'Provd',
     'SIPConfigGenerator',
     'Token',
     'User',
