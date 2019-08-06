@@ -70,4 +70,4 @@ def given_i_have_a_schedule_in_timezone_towards_a_user_with_the_following_schedu
 def givent_i_have_a_schedule_associated_to_incall(context, name, exten, exten_context):
     extension = context.helpers.extension.get_by(exten=exten, context=exten_context)
     schedule = context.helpers.schedule.get_by(name=name)
-    context.helpers.incall.add_schedule(extension['incall'], schedule['id'])
+    context.confd_client.incalls(extension['incall']).add_schedule(schedule)
