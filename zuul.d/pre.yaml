@@ -1,0 +1,54 @@
+---
+- hosts: all
+  tasks:
+    - name: Create an SSH key in .ssh/id_rsa
+      user:
+        name: zuul-worker
+        generate_ssh_key: yes
+        ssh_key_file: "~/.ssh/id_rsa"
+
+    - name: Capturing SSH Keys
+      command: "cat ~/.ssh/id_rsa.pub"
+      register: "_ssh_pub_key"
+
+    - name: Set authorized key taken for root
+      become: yes
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ _ssh_pub_key.stdout }}"
+
+    - name: Validate root key
+      shell: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=publickey root@localhost -n \"/bin/ls\""
+
+    - name: Install list of packages
+      become: yes
+      apt: name={{item}} state=installed
+      with_items:
+        - python3-pip
+        - libsasl2-dev
+        - linphone-nogtk
+        - python-dev
+        - lsof
+
+    - name: Install list of packages
+      become: yes
+      apt: name={{item}} state=installed
+      with_items:
+        - python3-pip
+
+    - name: Install ansible via pip
+      become: yes
+      pip:
+        name: ansible==2.7.9
+
+    - name: Install paramiko via pip
+      become: yes
+      pip:
+        name: paramiko
+
+    - name: Install postgresql ansible module from galaxy
+      become: yes
+      command: "ansible-galaxy install -r requirements-postgresql.yml"
+      args:
+        chdir: "{{ zuul.project.src_dir }}/../wazo-ansible"
