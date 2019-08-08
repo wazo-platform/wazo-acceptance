@@ -8,9 +8,9 @@ from hamcrest import (
 )
 
 _FAIL2BAN_REGEX_ARGS = {
-    'xivo-provd': {
-        'log': '/var/log/xivo-provd-fail2ban.log',
-        'regex': '/etc/fail2ban/filter.d/xivo-provd.conf',
+    'wazo-provd': {
+        'log': '/var/log/wazo-provd-fail2ban.log',
+        'regex': '/etc/fail2ban/filter.d/wazo-provd.conf',
     },
 }
 
