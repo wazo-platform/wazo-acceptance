@@ -5,6 +5,7 @@ from .agent import *  # noqa
 from .asterisk import *  # noqa
 from .auth import *  # noqa
 from .backup import *  # noqa
+from .bus import *  # noqa
 from .conference import *  # noqa
 from .consul import *  # noqa
 from .coredump import *  # noqa
@@ -23,7 +24,7 @@ from .phone_call import *  # noqa
 from .pickup import *  # noqa
 from .process import *  # noqa
 from .provd import *  # noqa
-from .setupd import *  # noqa
 from .schedule import *  # noqa
+from .setupd import *  # noqa
 from .user import *  # noqa
 from .voicemail import *  # noqa
