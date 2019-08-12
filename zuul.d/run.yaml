@@ -18,7 +18,7 @@
               global: True
               
               acceptance: True
-              linphone: False  # otherwise, there are unprintable (^H) character that jenkins cannot decode in junit.xml
+              linphone: True  # otherwise, there are unprintable (^H) character that jenkins cannot decode in junit.xml
             setupd:
               timeout: 120
 
