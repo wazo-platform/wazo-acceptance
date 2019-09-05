@@ -13,8 +13,8 @@
     check:
       jobs:
         - wazo-acceptance:
-            nodeset: debian9-vm
+            nodeset: debian10-vm
     gate:
       jobs:
         - wazo-acceptance:
-            nodeset: debian9-vm
+            nodeset: debian10-vm
