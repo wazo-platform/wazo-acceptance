@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2016-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import subprocess
@@ -23,7 +23,7 @@ BASE_SERVICES = [
     'xivo-dird-phoned',
 ]
 
-ALL_SERVICES = ['rabbitmq-server', 'consul', 'postgresql@9.6-main', 'nginx'] + BASE_SERVICES
+ALL_SERVICES = ['rabbitmq-server', 'consul', 'postgresql@11-main', 'nginx'] + BASE_SERVICES
 
 MONIT_RUNNING = re.compile(r'^\d+ monit$')
 RUNNING_SERVICE = re.compile(r'^\s+running\s+(\S+)$')
