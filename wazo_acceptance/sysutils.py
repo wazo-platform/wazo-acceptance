@@ -9,12 +9,12 @@ from email.utils import parsedate
 SERVICE_PIDFILES = {
     'asterisk': '/var/run/asterisk/asterisk.pid',
     'consul': '/var/run/consul/consul.pid',
+    'wazo-agentd': '/var/run/wazo-agentd/wazo-agentd.pid',
+    'wazo-amid': '/var/run/wazo-amid/wazo-amid.pid',
     'wazo-auth': '/var/run/wazo-auth/wazo-auth.pid',
     'wazo-calld': '/var/run/wazo-calld/wazo-calld.pid',
     'wazo-confd': '/var/run/wazo-confd/wazo-confd.pid',
     'wazo-dird': '/var/run/wazo-dird/wazo-dird.pid',
-    'wazo-agentd': '/var/run/wazo-agentd/wazo-agentd.pid',
-    'xivo-amid': '/var/run/xivo-amid/xivo-amid.pid',
 }
 
 
