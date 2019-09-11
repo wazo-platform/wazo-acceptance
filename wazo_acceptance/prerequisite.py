@@ -200,7 +200,7 @@ def _install_chan_test(context):
     _install_packages(context, ['make', 'asterisk-dev', 'gcc', 'libc6-dev', 'libssl-dev'])
     command = ['rm', '-rf', '/usr/src/chan-test-master', '/usr/src/chan-test.zip']
     context.ssh_client.check_call(command)
-    command = ['wget', 'https://github.com/wazo-pbx/chan-test/archive/master.zip', '-O', '/usr/src/chan-test.zip']
+    command = ['wget', 'https://github.com/wazo-platform/chan-test/archive/master.zip', '-O', '/usr/src/chan-test.zip']
     context.ssh_client.check_call(command)
     command = ['unzip', '-d', '/usr/src', '/usr/src/chan-test.zip']
     context.ssh_client.check_call(command)
