@@ -12,7 +12,7 @@ BASE_SERVICES = [
     'wazo-dird',
     'wazo-call-logd',
     'xivo-sysconfd',
-    'xivo-confgend',
+    'wazo-confgend',
     'xivo-confd',
     'xivo-dxtora',
     'xivo-provd',
