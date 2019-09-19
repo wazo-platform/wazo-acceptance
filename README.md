@@ -11,7 +11,7 @@ These tests are used for testing features before releasing a new version of Wazo
 Run the following commands to install requirements on the machine running the
 tests (not the engine under test):
 
-    apt-get install libsasl2-dev linphone-nogtk python-dev lsof
+    apt-get install libsasl2-dev linphone-nogtk python3-dev lsof
 
 For Linphone to work, you must:
 
