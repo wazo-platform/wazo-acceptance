@@ -19,8 +19,6 @@
 
               acceptance: True
               linphone: True
-            setupd:
-              timeout: 120
 
     - name: Setup acceptance tests
       shell: "tox -e setup"
