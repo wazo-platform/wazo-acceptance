@@ -16,9 +16,9 @@
             wazo_host: localhost
             debug:
               global: True
-              
+
               acceptance: True
-              linphone: True  # otherwise, there are unprintable (^H) character that jenkins cannot decode in junit.xml
+              linphone: True
             setupd:
               timeout: 120
 
