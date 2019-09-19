@@ -96,6 +96,6 @@ class Bus:
         # TODO allow to remove callback on wazo-websocketd-client
         self._websocketd_client._callbacks.clear()
         self._websocketd_client._ws_app = None
-        self._websocketd_client._is_running = None
+        self._websocketd_client._is_running = False
         self._received_events = None
         self._websocket_thread = None
