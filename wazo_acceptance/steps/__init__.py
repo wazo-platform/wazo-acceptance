@@ -6,6 +6,7 @@ from .asterisk import *  # noqa
 from .auth import *  # noqa
 from .backup import *  # noqa
 from .conference import *  # noqa
+from .consul import *  # noqa
 from .coredump import *  # noqa
 from .device import *  # noqa
 from .dhcp import *  # noqa

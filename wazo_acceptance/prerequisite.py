@@ -218,7 +218,7 @@ def _install_core_dump(context):
 
 
 def _configure_consul(context):
-    copy_asset_to_server_permanently(context, 'public_consul.json', '/etc/consul/xivo')
+    copy_asset_to_server_permanently(context, 'public_consul.json', '/etc/consul.d/zz-wazo-acceptance.json')
     consul_pidfile = context.remote_sysutils.get_pidfile_for_service_name('consul')
     consul_is_running = context.remote_sysutils.is_process_running(consul_pidfile)
     if consul_is_running:
