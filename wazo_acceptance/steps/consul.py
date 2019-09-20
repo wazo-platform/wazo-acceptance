@@ -7,9 +7,15 @@ from behave import then
 from xivo_test_helpers import until
 from xivo.consul_helpers import ServiceFinder
 
+from ..prerequisite import _configure_consul
+
 
 @then('consul returns a running "{service_name}" service')
 def consul_returns_a_running_service(context, service_name):
+    # FIXME(afournier): the following should be done differently
+    if service_name == 'wazo-setupd':
+        _configure_consul(context)
+
     consul_config = {'token': context.wazo_config['consul_token'],
                      'scheme': 'https',
                      'host': context.wazo_config['wazo_host'],
