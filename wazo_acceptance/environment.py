@@ -53,7 +53,9 @@ def initialize(context):
     config = load_config(config_dir=context.config.userdata.get('acceptance_config_dir'))
     wazo_setup_logging(config['default']['log_file'], foreground=True, debug=config['default']['debug']['global'])
     debug.setup_logging(config)
-    set_wazo_instance(context, 'default', config['default'])
+
+    if config.get('default'):
+        set_wazo_instance(context, 'default', config['default'])
     set_wazo_instances(context, config)
 
 
