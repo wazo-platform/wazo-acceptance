@@ -10,7 +10,6 @@ from . import (
     setup
 )
 from .config import load_config
-from .phone_register import PhoneRegister
 
 logger = logging.getLogger('acceptance')
 
