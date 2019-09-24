@@ -14,53 +14,40 @@ logger = logging.getLogger(__name__)
 DEFAULT_ASSETS_DIR = os.path.join(__package__ or 'wazo_acceptance', 'assets')
 DEFAULT_CONFIG_DIR = os.path.join(os.path.expanduser("~"), '.wazo-acceptance')
 
-DEFAULT_WAZO_HOST = os.environ.get('WAZO_HOST', 'daily-wazo-rolling-dev.lan.wazo.io')
-
 DEFAULT_INSTANCE_CONFIG = {
-    'wazo_host': DEFAULT_WAZO_HOST,
     'master_host': None,
     'slave_host': None,
     'default_tenant': 'wazo-tenant',
     'log_file': '/tmp/wazo-acceptance.log',
     'assets_dir': DEFAULT_ASSETS_DIR,
     'agentd': {
-        'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'amid': {
-        'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'auth': {
-        'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'call_logd': {
-        'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'calld': {
-        'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'confd': {
-        'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'dird': {
-        'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'provd': {
-        'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'setupd': {
-        'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'websocketd': {
-        'host': DEFAULT_WAZO_HOST,
         'verify_certificate': False,
     },
     'ssh_login': 'root',
@@ -78,7 +65,6 @@ DEFAULT_INSTANCE_CONFIG = {
         'exchange_name': 'xivo',
         'exchange_type': 'topic',
         'exchange_durable': True,
-        'host': DEFAULT_WAZO_HOST,
         'port': 5672,
         'username': 'guest',
         'password': 'guest',
@@ -116,6 +102,10 @@ def _config_post_processor(config):
 
 
 def _config_update_host(config):
+    wazo_host = config.get('wazo_host')
+    if not wazo_host:
+        raise Exception('wazo_host key must be defined')
+
     services = (
         'agentd',
         'amid',
@@ -130,5 +120,4 @@ def _config_update_host(config):
         'websocketd',
     )
     for service in services:
-        if config[service]['host'] == DEFAULT_WAZO_HOST:
-            config[service]['host'] = config['wazo_host']
+        config[service].setdefault('host', wazo_host)
