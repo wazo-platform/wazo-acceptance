@@ -156,9 +156,9 @@ def setup_remote_sysutils(context):
     context.remote_sysutils = RemoteSysUtils(context.ssh_client)
 
 
-def setup_phone(context, linephone_debug):
+def setup_phone(context, linphone_debug):
     context.phone_register = PhoneRegister(context)
-    context.helpers.sip_phone = helpers.LineRegistrar(linephone_debug)
+    context.helpers.sip_phone = helpers.LineRegistrar(linphone_debug)
     context.helpers.sip_config = helpers.SIPConfigGenerator(
         context.wazo_config['wazo_host'],
         context.wazo_config['linphone'],
