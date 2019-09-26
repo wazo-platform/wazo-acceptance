@@ -58,13 +58,15 @@ values can be found in `wazo_acceptance/config.py`.
 
 For example:
 
-    default:
-      # IP address of the Wazo server
-      wazo_host: 192.168.0.10
-      debug:
-        global: true
-        acceptance: false
-        linphone: true
+    log_file: /tmp/wazo-acceptance.log
+    debug:
+      global: true
+      acceptance: false
+      linphone: true
+    instances:
+        default:
+          # IP address of the Wazo server
+          wazo_host: 192.168.0.10
 
 
 ## Debugging

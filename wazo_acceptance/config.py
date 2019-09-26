@@ -14,11 +14,20 @@ logger = logging.getLogger(__name__)
 DEFAULT_ASSETS_DIR = os.path.join(__package__ or 'wazo_acceptance', 'assets')
 DEFAULT_CONFIG_DIR = os.path.join(os.path.expanduser("~"), '.wazo-acceptance')
 
+DEFAULT_GLOBAL_CONFIG = {
+    'log_file': '/tmp/wazo-acceptance.log',
+    'debug': {
+        'global': False,
+
+        'acceptance': False,
+        'linphone': False,
+    },
+    'instances': {}
+}
 DEFAULT_INSTANCE_CONFIG = {
     'master_host': None,
     'slave_host': None,
     'default_tenant': 'wazo-tenant',
-    'log_file': '/tmp/wazo-acceptance.log',
     'assets_dir': DEFAULT_ASSETS_DIR,
     'agentd': {
         'verify_certificate': False,
@@ -55,12 +64,6 @@ DEFAULT_INSTANCE_CONFIG = {
         'sip_port_range': '5001,5009',
         'rtp_port_range': '5100,5120',
     },
-    'debug': {
-        'global': False,
-
-        'acceptance': False,
-        'linphone': False,
-    },
     'bus': {
         'exchange_name': 'xivo',
         'exchange_type': 'topic',
@@ -83,15 +86,18 @@ def load_config(config_dir=None):
     config_dir = os.path.abspath(config_dir)
     logger.debug('Reading config from %s...', config_dir)
     file_configs = parse_config_dir(config_dir)
-    config = ChainMap(*file_configs)
+    config = ChainMap(*file_configs, DEFAULT_GLOBAL_CONFIG)
+    instances = config['instances']
 
     # set default config for each instance
-    config = {instance: ChainMap(config[instance], deepcopy(DEFAULT_INSTANCE_CONFIG)) for instance in config}
+    instances = {instance: ChainMap(instances[instance], deepcopy(DEFAULT_INSTANCE_CONFIG))
+                 for instance in instances}
 
-    for instance_config in config.values():
+    for instance_config in instances.values():
         _config_update_host(instance_config)
         _config_post_processor(instance_config)
 
+    config['instances'] = instances
     return config
 
 
