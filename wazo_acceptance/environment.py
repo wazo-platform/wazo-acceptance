@@ -10,7 +10,6 @@ from . import (
     setup
 )
 from .config import load_config
-from .phone_register import PhoneRegister
 
 logger = logging.getLogger('acceptance')
 
@@ -51,23 +50,25 @@ def after_scenario(context, scenario):
 
 def initialize(context):
     config = load_config(config_dir=context.config.userdata.get('acceptance_config_dir'))
-    wazo_setup_logging(config['default']['log_file'], foreground=True, debug=config['default']['debug']['global'])
-    debug.setup_logging(config)
-    set_wazo_instance(context, 'default', config['default'])
-    set_wazo_instances(context, config)
+    wazo_setup_logging(config['log_file'], foreground=True, debug=config['debug']['global'])
+    debug.setup_logging(config['log_file'], config['debug'])
+
+    if config['instances'].get('default'):
+        set_wazo_instance(context, 'default', config['instances']['default'], config['debug'])
+    set_wazo_instances(context, config['instances'], config['debug'])
 
 
-def set_wazo_instances(context, config):
+def set_wazo_instances(context, instances_config, debug_config):
     context.instances = Instances()
-    for instance_name, instance_config in config.items():
+    for instance_name, instance_config in instances_config.items():
         instance_context = InstanceContext(context)
-        set_wazo_instance(instance_context, instance_name, instance_config)
+        set_wazo_instance(instance_context, instance_name, instance_config, debug_config)
         context.instances.__setattr__(instance_name, instance_context)
 
 
-def set_wazo_instance(context, instance_name, config):
+def set_wazo_instance(context, instance_name, instance_config, debug_config):
     logger.info("Adding instance %s...", instance_name)
-    setup.setup_config(context, config)
+    setup.setup_config(context, instance_config)
 
     logger.info('wazo_host: %s', context.wazo_config['wazo_host'])
 
@@ -102,4 +103,4 @@ def set_wazo_instance(context, instance_name, config):
     logger.debug("setup helpers...")
     setup.setup_helpers(context)
     logger.debug("setup phone...")
-    setup.setup_phone(context)
+    setup.setup_phone(context, debug_config['linphone'])

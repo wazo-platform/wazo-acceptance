@@ -10,15 +10,15 @@ loggers = {
 }
 
 
-def setup_logging(config):
-    file_handler = logging.FileHandler(config['default']['log_file'])
+def setup_logging(log_file, debug_config):
+    file_handler = logging.FileHandler(log_file)
 
     for name, logger in loggers.items():
         logger.setLevel(logging.INFO)
         for handler in logger.handlers:
             logger.removeHandler(handler)
         logger.addHandler(file_handler)
-        if config['default']['debug'].get(name):
+        if debug_config.get(name):
             logger.setLevel(logging.DEBUG)
 
     requests.packages.urllib3.disable_warnings()
