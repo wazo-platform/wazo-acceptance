@@ -89,6 +89,9 @@ def load_config(config_dir=None):
     config = ChainMap(*file_configs, DEFAULT_GLOBAL_CONFIG)
     instances = config['instances']
 
+    if not instances:
+        raise Exception('At least one instance should be defined. See the README for the format.')
+
     # set default config for each instance
     instances = {instance: ChainMap(instances[instance], deepcopy(DEFAULT_INSTANCE_CONFIG))
                  for instance in instances}
