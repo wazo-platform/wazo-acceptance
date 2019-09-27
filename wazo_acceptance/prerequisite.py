@@ -24,11 +24,12 @@ def run(config_dir, instance_name):
 
     logger.debug('Initializing ...')
     config = load_config(config_dir)
-    setup.setup_config(context, config)
-    debug.setup_logging(context.wazo_config)
+    instance_config = config['instances'][instance_name]
+    setup.setup_config(context, instance_config)
+    debug.setup_logging(config['log_file'], config['debug'])
 
     logger.debug('Running prerequisites for instance "%s" ...', instance_name)
-    setup.setup_config(context, config[instance_name])
+    setup.setup_config(context, instance_config)
 
     setup.setup_ssh_client(context)
 
