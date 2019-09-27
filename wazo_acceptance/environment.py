@@ -45,7 +45,8 @@ def before_scenario(context, scenario):
 
 # Implicitly defined by behave
 def after_scenario(context, scenario):
-    context.helpers.asterisk.send_to_asterisk_cli('channel request hangup all')
+    if hasattr(context, 'helpers'):
+        context.helpers.asterisk.send_to_asterisk_cli('channel request hangup all')
 
 
 def initialize(context):
