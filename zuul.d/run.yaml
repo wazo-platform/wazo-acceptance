@@ -19,7 +19,7 @@
             linphone: True
           instances:
             default:
-              wazo_host: localhost
+              wazo_host: 127.0.0.1
 
     - name: Setup acceptance tests
       shell: "tox -e setup"
