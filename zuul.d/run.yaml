@@ -1,0 +1,33 @@
+---
+- hosts: all
+  tasks:
+    - name: Run the installation script
+      become: yes
+      command: "ansible-playbook -i inventories/uc-engine uc-engine.yml"
+      args:
+        chdir: "{{ zuul.project.src_dir }}/../wazo-ansible"
+
+    - name: create acceptance config
+      blockinfile:
+        create: yes
+        path: ~/.wazo-acceptance/config.yml
+        block: |
+          debug:
+            global: True
+
+            acceptance: True
+            linphone: True
+          instances:
+            default:
+              wazo_host: 127.0.0.1
+
+    - name: Setup acceptance tests
+      shell: "tox -e setup"
+      args:
+        chdir: "{{ zuul.project.src_dir }}"
+
+    - name: Run acceptance tests
+      shell: "tox -e behave -- features/daily"
+      args:
+        chdir: "{{ zuul.project.src_dir }}"
+
