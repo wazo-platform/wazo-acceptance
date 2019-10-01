@@ -33,7 +33,7 @@ def step_impl(context, username, old_password, new_password):
     auth.set_token(result['token'])
 
     auth.users.change_password(
-        result['metadata']['xivo_user_uuid'],
+        result['metadata']['uuid'],
         old_password=old_password,
         new_password=new_password,
     )
