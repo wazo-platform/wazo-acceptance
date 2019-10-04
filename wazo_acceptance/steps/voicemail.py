@@ -86,11 +86,6 @@ def when_a_message_is_checked_and_deleted_on_voicemail(context, vm_number, vm_co
     )
 
 
-@given('I listen on the bus for "{event_name}" messages')
-def given_i_listen_on_the_bus_for_messages(context, event_name):
-    context.helpers.bus.subscribe([event_name])
-
-
 @then('I receive a voicemail message event "{event_name}" with data')
 def then_i_receive_a_voicemail_message_event_on_queue(context, event_name):
     event = context.helpers.bus.pop_received_event()

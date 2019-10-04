@@ -9,6 +9,14 @@ class EndpointSIP:
         self._confd_client = context.confd_client
 
     def create(self, body):
+        options = []
+        webrtc = body.get('webrtc')
+        if webrtc is not None:
+            options.append(('webrtc', webrtc))
+
+        if options:
+            body['options'] = options
+
         sip = self._confd_client.endpoints_sip.create(body)
         self._context.add_cleanup(self._confd_client.endpoints_sip.delete, sip)
         return sip

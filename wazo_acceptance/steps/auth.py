@@ -3,6 +3,7 @@
 
 from hamcrest import assert_that, is_not, none
 from behave import (
+    given,
     then,
     when,
 )
@@ -22,6 +23,11 @@ def then_i_can_get_a_user_token(context, username, password):
     assert_that(token['token'], is_not(none()))
 
 
+@given('I create a mobile session with username "{username}" password "{password}"')
+def given_i_create_a_mobile_session(context, username, password):
+    _create_token(context, username, password, session_type='mobile')
+
+
 @when('"{username}" changes its password from "{old_password}" to "{new_password}"')
 def step_impl(context, username, old_password, new_password):
     auth = AuthClient(
@@ -39,10 +45,10 @@ def step_impl(context, username, old_password, new_password):
     )
 
 
-def _create_token(context, username, password):
+def _create_token(context, username, password, **kwargs):
     auth = AuthClient(
-        username='root',
-        password='wazosecret',
+        username=username,
+        password=password,
         **context.wazo_config['auth']
     )
-    return auth.token.new()
+    return auth.token.new(**kwargs)
