@@ -1,20 +1,9 @@
-- job:
-    parent: base
-    name: wazo-acceptance
-    description: install Wazo platform and run acceptance tests
-    required-projects:
-      wazo-platform/wazo-ansible
-    timeout: 10800
-    pre-run: zuul.d/pre.yaml
-    run: zuul.d/run.yaml
-    post-run: zuul.d/fetch-logs.yaml
-
 - project:
     check:
       jobs:
-        - wazo-acceptance:
+        - wazo-acceptance-job:
             nodeset: debian10-vm
     gate:
       jobs:
-        - wazo-acceptance:
+        - wazo-acceptance-job:
             nodeset: debian10-vm
