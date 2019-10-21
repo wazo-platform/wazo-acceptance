@@ -224,6 +224,7 @@ def _configure_consul(context):
     consul_is_running = context.remote_sysutils.is_process_running(consul_pidfile)
     if consul_is_running:
         context.remote_sysutils.restart_service('consul')
+    context.remote_sysutils.wait_service_successfully_started(consul_pidfile)
 
 
 def _configure_wazo_service(context, service):
