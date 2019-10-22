@@ -1,6 +1,7 @@
 Feature: Pickup
 
   Scenario: Directed pickup
+    Given the direct pickup is enabled with "*8"
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
       | Dilbert   | Bologna  | 1001  | default |
@@ -74,6 +75,7 @@ Feature: Pickup
     Then "Wally Lasagna" is talking
 
   Scenario: Pickup a call coming from a group
+    Given the direct pickup is enabled with "*8"
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
       | User      | 100      | 1100  | default |
@@ -93,6 +95,7 @@ Feature: Pickup
     Then "User 102" is talking
 
   Scenario: Pickup a call coming from an incoming call
+    Given the direct pickup is enabled with "*8"
     Given there are telephony users with infos:
       | firstname | lastname | exten  | context |
       | User      | 143      | 1143   | default |
