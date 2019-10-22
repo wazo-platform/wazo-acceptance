@@ -1,19 +1,5 @@
 Feature: Pickup
 
-  Scenario: Directed pickup
-    Given the direct pickup is enabled with "*8"
-    Given there are telephony users with infos:
-      | firstname | lastname | exten | context |
-      | Dilbert   | Bologna  | 1001  | default |
-      | Wally     | Lasagna  | 1002  | default |
-      | Alice     | Wonder   | 1003  | default |
-    When "Dilbert Bologna" calls "1002"
-    Then "Wally Lasagna" is ringing
-    When "Alice Wonder" calls "*81002"
-    Then "Wally Lasagna" is hungup
-    Then "Dilbert Bologna" is talking
-    Then "Alice Wonder" is talking
-
   Scenario: Intercepting user
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
@@ -74,7 +60,21 @@ Feature: Pickup
     Then "Dilbert Bologna" is talking
     Then "Wally Lasagna" is talking
 
-  Scenario: Pickup a call coming from a group
+  Scenario: Directed pickup
+    Given the direct pickup is enabled with "*8"
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context |
+      | Dilbert   | Bologna  | 1001  | default |
+      | Wally     | Lasagna  | 1002  | default |
+      | Alice     | Wonder   | 1003  | default |
+    When "Dilbert Bologna" calls "1002"
+    Then "Wally Lasagna" is ringing
+    When "Alice Wonder" calls "*81002"
+    Then "Wally Lasagna" is hungup
+    Then "Dilbert Bologna" is talking
+    Then "Alice Wonder" is talking
+
+  Scenario: Directed pickup a call coming from a group
     Given the direct pickup is enabled with "*8"
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
@@ -94,7 +94,7 @@ Feature: Pickup
     Then "User 100" is talking
     Then "User 102" is talking
 
-  Scenario: Pickup a call coming from an incoming call
+  Scenario: Directed pickup a call coming from an incoming call
     Given the direct pickup is enabled with "*8"
     Given there are telephony users with infos:
       | firstname | lastname | exten  | context |
