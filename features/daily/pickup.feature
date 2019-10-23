@@ -94,6 +94,28 @@ Feature: Pickup
     Then "User 100" is talking
     Then "User 102" is talking
 
+  Scenario: Pickup a call coming from a group
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context |
+      | User      | 100      | 1100  | default |
+      | User      | 101      | 1101  | default |
+      | User      | 102      | 1102  | default |
+    Given there are telephony groups with infos:
+      | name   | exten | context |
+      | group1 | 2001  | default |
+    Given the telephony group "group1" has users:
+      | firstname | lastname |
+      | User      | 101      |
+    Given there are pickups:
+      | name   | user_interceptor | user_target |
+      | second | User 102         | User 101    |
+    When "User 100" calls "2001"
+    When I wait "2" seconds for the call processing with slow machine
+    Then "User 101" is ringing
+    When "User 102" calls "*8"
+    Then "User 100" is talking
+    Then "User 102" is talking
+
   Scenario: Pickup a call coming from an incoming call
     Given there are telephony users with infos:
       | firstname | lastname | exten  | context |
