@@ -94,14 +94,16 @@ Feature: Pickup
     Then "User 100" is talking
     Then "User 102" is talking
 
-  Scenario: Directed pickup a call coming from an incoming call
-    Given the direct pickup is enabled with "*8"
+  Scenario: Pickup a call coming from an incoming call
     Given there are telephony users with infos:
       | firstname | lastname | exten  | context |
       | User      | 143      | 1143   | default |
       | User      | 148      | 1148   | default |
+    Given there are pickups:
+      | name   | user_interceptor | user_target |
+      | pickup | User 148         | User 143    |
     Given there is an incall "1143@from-extern" to the user "User 143"
     When chan_test calls "1143@from-extern"
     Then "User 143" is ringing
-    When "User 148" calls "*81143"
+    When "User 148" calls "*8"
     Then "User 148" is talking
