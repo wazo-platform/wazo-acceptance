@@ -32,6 +32,11 @@ def step_user_is_talking(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_talking, tries=3)
 
+@step('"{tracking_id}" answers')
+def step_user_answers(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.answer()
+
 
 @step('"{tracking_id}" calls "{exten}" and waits until the end')
 def step_a_calls_exten_and_waits_until_the_end(context, tracking_id, exten):
@@ -87,6 +92,14 @@ def when_chan_test_queues_dtmf(context, digit, channel_id):
     )
     context.helpers.asterisk.send_to_asterisk_cli(cmd)
 
+
+@when('chan_test hangs up channel with id "{channel_id}"')
+def when_chan_test_hangs_up_channel_with_id(context, channel_id):
+    cmd = 'channel request hangup {prefix}/auto-{channel_id}'.format(
+        CHAN_PREFIX,
+        channel_id,
+    )
+    context.helpers.asterisk.send_to_asterisk_cli(cmd)
 
 def _sleep(seconds):
     time.sleep(float(seconds))
