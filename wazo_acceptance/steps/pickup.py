@@ -38,7 +38,7 @@ def given_there_are_pickup(context):
 
 @given('the direct pickup is enabled with "{extension}"')
 def given_the_direct_pickup_is_enabled_with_extension(context, extension):
-    context.helpers.pickup.enable_directed_extension(extension)
+    context.helpers.extension_feature.enable('pickup', extension=extension)
 
 
 def _find_group_by_name(context, name):
