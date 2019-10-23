@@ -11,6 +11,7 @@ from .conference import Conference
 from .context import Context
 from .endpoint_sip import EndpointSIP
 from .extension import Extension
+from .extension_feature import ExtensionFeature
 from .incall import Incall
 from .ivr import IVR
 from .line import Line
@@ -35,6 +36,7 @@ __all__ = [
     'Context',
     'EndpointSIP',
     'Extension',
+    'ExtensionFeature',
     'IVR',
     'Incall',
     'Line',
