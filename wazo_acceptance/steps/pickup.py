@@ -36,6 +36,11 @@ def given_there_are_pickup(context):
                 context.confd_client.call_pickups(call_pickup['id']).update_group_targets([group])
 
 
+@given('the direct pickup is enabled with "{extension}"')
+def given_the_direct_pickup_is_enabled_with_extension(context, extension):
+    context.helpers.pickup.enable_directed_extension(extension)
+
+
 def _find_group_by_name(context, name):
     if not name:
         return
