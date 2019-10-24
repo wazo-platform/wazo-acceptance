@@ -15,10 +15,10 @@ class Extension:
         return extension
 
     def get_by(self, **kwargs):
-        user = self.find_by(**kwargs)
-        if not user:
+        extension = self.find_by(**kwargs)
+        if not extension:
             raise Exception('Extension not found: {}'.format(kwargs))
-        return user
+        return extension
 
     def find_by(self, **kwargs):
         extensions = self._confd_client.extensions.list(**kwargs)['items']
