@@ -44,16 +44,16 @@ def setup_call_logd_client(context):
     auth.register_for_token_renewal(context.call_logd_client.set_token)
 
 
-def setup_confd_client(context):
-    context.confd_client = ConfdClient(**context.wazo_config['confd'])
-    context.confd_client.set_token(context.token)
-    auth.register_for_token_renewal(context.confd_client.set_token)
-
-
 def setup_calld_client(context):
     context.calld_client = CalldClient(**context.wazo_config['calld'])
     context.calld_client.set_token(context.token)
     auth.register_for_token_renewal(context.calld_client.set_token)
+
+
+def setup_confd_client(context):
+    context.confd_client = ConfdClient(**context.wazo_config['confd'])
+    context.confd_client.set_token(context.token)
+    auth.register_for_token_renewal(context.confd_client.set_token)
 
 
 def setup_dird_client(context):
