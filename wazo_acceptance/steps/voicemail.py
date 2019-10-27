@@ -8,10 +8,8 @@ from hamcrest import (
     contains_inanyorder,
     empty,
     has_entries,
-    has_key,
 )
 from behave import (
-    given,
     then,
     when,
 )
@@ -86,14 +84,6 @@ def when_a_message_is_checked_and_deleted_on_voicemail(context, vm_number, vm_co
     )
 
 
-@then('I receive a voicemail message event "{event_name}" with data')
-def then_i_receive_a_voicemail_message_event_on_queue(context, event_name):
-    event = context.helpers.bus.pop_received_event()
-    assert_that(event, has_entries({'name': event_name, 'data': has_key('message')}))
-    message = _flatten_message(event['data']['message'])
-    assert_that(message, has_entries(context.table[0].as_dict()))
-
-
 @then('there\'s the following messages in voicemail "{vm_number}@{vm_context}"')
 def then_there_is_the_following_messages_in_voicemail(context, vm_number, vm_context):
     vm_conf = context.confd_client.voicemails.list(
@@ -129,12 +119,3 @@ def _flatten_voicemail_messages(voicemail):
             flat_message['folder_id'] = folder['id']
             flat_messages.append(flat_message)
     return flat_messages
-
-
-def _flatten_message(message):
-    flat_message = dict(message)
-    folder = flat_message.pop('folder')
-    flat_message['folder_type'] = folder['type']
-    flat_message['folder_name'] = folder['name']
-    flat_message['folder_id'] = folder['id']
-    return flat_message

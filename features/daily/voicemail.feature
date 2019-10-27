@@ -6,7 +6,7 @@ Feature: Voicemail
       | George    | Hanson   | 1801   | default | George Hanson  | 1801             | default           |
     Given I listen on the bus for "user_voicemail_message_created" messages
     When a message is left on voicemail "1801@default" by "Billy"
-    Then I receive a voicemail message event "user_voicemail_message_created" with data:
+    Then I receive a "user_voicemail_message_created" event with "message" data:
       | caller_id_name | folder_name | folder_type |
       | Billy          | inbox       | new         |
     Then there's the following messages in voicemail "1801@default"
@@ -20,7 +20,7 @@ Feature: Voicemail
     Given I listen on the bus for "user_voicemail_message_updated" messages
     When a message is left on voicemail "1801@default" by "Billy"
     When a message is checked and kept on voicemail "1801@default"
-    Then I receive a voicemail message event "user_voicemail_message_updated" with data:
+    Then I receive a "user_voicemail_message_updated" event with "message" data:
       | caller_id_name | folder_name | folder_type |
       | Billy          | old         | old         |
     Then there's the following messages in voicemail "1801@default"
@@ -34,7 +34,7 @@ Feature: Voicemail
     Given I listen on the bus for "user_voicemail_message_deleted" messages
     When a message is left on voicemail "1801@default" by "Billy"
     When a message is checked and deleted on voicemail "1801@default"
-    Then I receive a voicemail message event "user_voicemail_message_deleted" with data:
+    Then I receive a "user_voicemail_message_deleted" event with "message" data:
       | caller_id_name | folder_name | folder_type |
       | Billy          | inbox       | new         |
     Then there's no message in voicemail "1801@default"
