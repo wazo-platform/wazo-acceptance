@@ -44,6 +44,9 @@ DEFAULT_INSTANCE_CONFIG = {
     'calld': {
         'verify_certificate': False,
     },
+    'chatd': {
+        'verify_certificate': False,
+    },
     'confd': {
         'verify_certificate': False,
     },
@@ -121,6 +124,7 @@ def _config_update_host(config):
         'auth',
         'call_logd',
         'calld',
+        'chatd',
         'confd',
         'dird',
         'provd',

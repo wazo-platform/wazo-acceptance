@@ -85,6 +85,8 @@ def set_wazo_instance(context, instance_name, instance_config, debug_config):
     setup.setup_call_logd_client(context)
     logger.debug("setup calld client...")
     setup.setup_calld_client(context)
+    logger.debug("setup chatd client...")
+    setup.setup_chatd_client(context)
     logger.debug("setup confd client...")
     setup.setup_confd_client(context)
     logger.debug("setup dird client...")
