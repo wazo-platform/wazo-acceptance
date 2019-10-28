@@ -9,6 +9,7 @@ from wazo_agentd_client import Client as AgentdClient
 from wazo_auth_client import Client as AuthClient
 from wazo_call_logd_client import Client as CallLogdClient
 from wazo_calld_client import Client as CalldClient
+from wazo_chatd_client import Client as ChatdClient
 from wazo_confd_client import Client as ConfdClient
 from wazo_dird_client import Client as DirdClient
 from wazo_provd_client import Client as ProvdClient
@@ -44,16 +45,22 @@ def setup_call_logd_client(context):
     auth.register_for_token_renewal(context.call_logd_client.set_token)
 
 
-def setup_confd_client(context):
-    context.confd_client = ConfdClient(**context.wazo_config['confd'])
-    context.confd_client.set_token(context.token)
-    auth.register_for_token_renewal(context.confd_client.set_token)
-
-
 def setup_calld_client(context):
     context.calld_client = CalldClient(**context.wazo_config['calld'])
     context.calld_client.set_token(context.token)
     auth.register_for_token_renewal(context.calld_client.set_token)
+
+
+def setup_chatd_client(context):
+    context.chatd_client = ChatdClient(**context.wazo_config['chatd'])
+    context.chatd_client.set_token(context.token)
+    auth.register_for_token_renewal(context.chatd_client.set_token)
+
+
+def setup_confd_client(context):
+    context.confd_client = ConfdClient(**context.wazo_config['confd'])
+    context.confd_client.set_token(context.token)
+    auth.register_for_token_renewal(context.confd_client.set_token)
 
 
 def setup_dird_client(context):

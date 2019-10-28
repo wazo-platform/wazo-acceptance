@@ -23,6 +23,11 @@ def then_i_can_get_a_user_token(context, username, password):
     assert_that(token['token'], is_not(none()))
 
 
+@when('I create a session with username "{username}" password "{password}"')
+def when_i_create_a_session(context, username, password):
+    _create_token(context, username, password)
+
+
 @given('I create a mobile session with username "{username}" password "{password}"')
 def given_i_create_a_mobile_session(context, username, password):
     _create_token(context, username, password, session_type='mobile')
