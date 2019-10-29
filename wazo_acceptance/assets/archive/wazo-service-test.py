@@ -18,7 +18,7 @@ BASE_SERVICES = [
     'xivo-provd',
     'xivo-agid',
     'asterisk',
-    'xivo-amid',
+    'wazo-amid',
     'xivo-ctid',
     'xivo-dird-phoned',
 ]
