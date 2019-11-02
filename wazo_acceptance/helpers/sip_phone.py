@@ -11,7 +11,7 @@ from linphonelib import (
     LinphoneException,
     Session,
 )
-from linphonelib.commands import HookStatus
+from linphonelib.commands import CallStatus
 
 logger = logging.getLogger('linphone')
 
@@ -105,19 +105,19 @@ class SIPPhone:
             raise self._call_result
 
     def is_ringback_tone(self):
-        return self._session.hook_status() == HookStatus.RINGBACK_TONE
+        return self._session.hook_status() == CallStatus.RINGBACK_TONE
 
     def is_talking(self):
-        return self._session.hook_status() == HookStatus.ANSWERED
+        return self._session.call_status() == CallStatus.ANSWERED
 
     def is_talking_to(self, name):
         return self._session.is_talking_to(name)
 
     def is_ringing(self):
-        return self._session.hook_status() == HookStatus.RINGING
+        return self._session.call_status() == CallStatus.RINGING
 
     def is_hungup(self):
-        return self._session.hook_status() == HookStatus.OFFHOOK
+        return self._session.call_status() == CallStatus.OFF
 
 
 class LineRegistrar:
