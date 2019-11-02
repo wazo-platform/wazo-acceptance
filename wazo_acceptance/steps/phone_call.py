@@ -38,6 +38,12 @@ def step_user_answers(context, tracking_id):
     phone.answer()
 
 
+@step('"{tracking_id}" hangs up')
+def step_user_hangs_up(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.hangup()
+
+
 @step('"{tracking_id}" calls "{exten}" and waits until the end')
 def step_a_calls_exten_and_waits_until_the_end(context, tracking_id, exten):
     phone = context.phone_register.get_phone(tracking_id)

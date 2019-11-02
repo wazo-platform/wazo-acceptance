@@ -15,6 +15,6 @@ Feature: Queues
         When I wait "1" seconds for the call processing
         When "John Doe" answers
         When I wait "1" seconds for the call processing
-        When "John Doe" is hungup
+        When "John Doe" hangs up
         When chan_test hangs up channel with id "3102-1"
         When I wait "1" seconds for the call processing
