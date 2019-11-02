@@ -102,10 +102,11 @@ def when_chan_test_queues_dtmf(context, digit, channel_id):
 @when('chan_test hangs up channel with id "{channel_id}"')
 def when_chan_test_hangs_up_channel_with_id(context, channel_id):
     cmd = 'channel request hangup {prefix}/auto-{channel_id}'.format(
-        CHAN_PREFIX,
-        channel_id,
+        prefix=CHAN_PREFIX,
+        channel_id=channel_id,
     )
     context.helpers.asterisk.send_to_asterisk_cli(cmd)
+
 
 def _sleep(seconds):
     time.sleep(float(seconds))
