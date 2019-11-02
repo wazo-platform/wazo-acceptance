@@ -104,9 +104,6 @@ class SIPPhone:
         if self._call_result:
             raise self._call_result
 
-    def is_ringback_tone(self):
-        return self._session.hook_status() == CallStatus.RINGBACK_TONE
-
     def is_talking(self):
         return self._session.call_status() == CallStatus.ANSWERED
 
