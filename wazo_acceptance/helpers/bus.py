@@ -57,14 +57,8 @@ class Bus:
                     self._websocketd_client._ws_app.close()
 
         self._websocketd_client.on('asterisk_reload_progress', asterisk_reload)
-        self._start()
-        try:
+        with self._managed_bus_connection(reload_commands):
             yield
-        finally:
-            self._websocket_thread.join(timeout=5)
-            if self._websocket_thread.is_alive():
-                logger.warning('No event received for %s', reload_commands)
-            self._stop()
 
     @contextmanager
     def wait_for_event(self, event_name, expected_data):
@@ -78,6 +72,11 @@ class Bus:
             self._websocketd_client._ws_app.close()
 
         self._websocketd_client.on(event_name, event_received)
+        with self._managed_bus_connection(event_name):
+            yield
+
+    @contextmanager
+    def _managed_bus_connection(self, event_name):
         self._start()
         try:
             yield
