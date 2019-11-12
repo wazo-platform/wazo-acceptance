@@ -1,31 +1,25 @@
 # wazo-acceptance
 
-wazo-acceptance is a testing framework for running automated tests on a Wazo server.
-These tests are used for testing features before releasing a new version of Wazo.
-
+wazo-acceptance is a testing framework for running automated tests on wazo-platform.
+These tests are used for testing features before releasing a new version of wazo-platform.
 
 ## Getting Started
 
 ### Requirements
 
-Run the following commands to install requirements on the machine running the
-tests (not the engine under test):
-
-    apt-get install libsasl2-dev linphone-nogtk python3-dev lsof
-
-For Linphone to work, you must:
-
-    adduser jenkins audio  # Jenkins is the user running the tests
+* A fresh installation of wazo-platform
+* `pip install requirements.txt`
+* `docker pull wazopbx/wazo-linphone`
 
 Then setup the environment:
 
-    tox -e setup -- <engine_ip_address>
+    tox -e setup -- <wazo_platform_ip_address>
 
 This command will:
 
-  - create a configuration file for your engine
-  - configure your engine to be ready for testing
-
+* create a configuration file for your wazo-platform
+* validate wazo-platform installation
+* configure your engine to be ready for testing
 
 ### Running tests
 
@@ -37,11 +31,9 @@ Or only a single test file:
 
     tox -e behave -- features/daily/<file>.feature
 
-
 ## Writing tests
 
 See [STYLEGUIDE.md](STYLEGUIDE.md) for guidelines.
-
 
 ## Customization
 
@@ -51,7 +43,7 @@ Configuration files path can be changed by passing the following options:
 
     tox -e behave -- -D acceptance_config_dir=/some/config/path ...
     wazo-acceptance -c /some/config/path ...
-    
+
 To override the default configuration of wazo-acceptance, add a YAML file in the
 config directory. This file should only override what is necessary. Default
 values can be found in `wazo_acceptance/config.py`.
@@ -68,11 +60,9 @@ For example:
           # IP address of the Wazo server
           wazo_host: 192.168.0.10
 
-
 ## Debugging
 
-To see linphone ouput, use flag `--no-capture`
-
+To see linphone ouput, use behave flag `--no-capture`
 
 ## Coverage
 

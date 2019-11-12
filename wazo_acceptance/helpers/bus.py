@@ -6,6 +6,7 @@ import functools
 import queue
 import threading
 from contextlib import contextmanager
+from hamcrest import assert_that, has_entries
 
 logger = logging.getLogger(__name__)
 tasks = None
@@ -56,13 +57,33 @@ class Bus:
                     self._websocketd_client._ws_app.close()
 
         self._websocketd_client.on('asterisk_reload_progress', asterisk_reload)
+        with self._managed_bus_connection(reload_commands):
+            yield
+
+    @contextmanager
+    def wait_for_event(self, event_name, expected_data):
+        def event_received(data):
+
+            try:
+                assert_that(data, has_entries(**expected_data))
+            except AssertionError:
+                return
+            # TODO expose close method on wazo-websocketd-client
+            self._websocketd_client._ws_app.close()
+
+        self._websocketd_client.on(event_name, event_received)
+        with self._managed_bus_connection(event_name):
+            yield
+
+    @contextmanager
+    def _managed_bus_connection(self, event_name):
         self._start()
         try:
             yield
         finally:
             self._websocket_thread.join(timeout=5)
             if self._websocket_thread.is_alive():
-                logger.warning('No event received for %s', reload_commands)
+                logger.warning('No event received for %s', event_name)
             self._stop()
 
     def subscribe(self, events):

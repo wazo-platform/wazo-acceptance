@@ -108,7 +108,9 @@ def given_there_are_telephony_users_with_infos(context):
 
         if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
             tracking_id = "{} {}".format(body['firstname'], body.get('lastname', '')).strip()
-            _register_and_track_phone(context, tracking_id, sip)
+            expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
+            with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
+                _register_and_track_phone(context, tracking_id, sip)
 
 
 @given('"{firstname} {lastname}" has lines')
