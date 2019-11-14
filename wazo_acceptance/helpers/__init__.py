@@ -6,6 +6,7 @@ from .application import Application
 from .asset import Asset
 from .asterisk import Asterisk
 from .bus import Bus
+from .call import Call
 from .confd_group import ConfdGroup
 from .confd_user import ConfdUser
 from .conference import Conference
@@ -33,6 +34,7 @@ __all__ = [
     'Asset',
     'Asterisk',
     'Bus',
+    'Call',
     'ConfdGroup',
     'ConfdUser',
     'Conference',
