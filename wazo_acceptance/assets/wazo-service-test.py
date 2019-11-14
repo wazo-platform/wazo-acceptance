@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -37,8 +37,7 @@ STARTING_SERVICE = re.compile(r'^\s+starting (\S+) ... OK$')
 
 def _exec(cmd):
     print(' '.join(cmd))
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    lines, _ = p.communicate()
+    lines = subprocess.run(cmd, capture_output=True, encoding='utf-8').stdout
     lines = lines.split('\n')
     for line in lines:
         print(line)
