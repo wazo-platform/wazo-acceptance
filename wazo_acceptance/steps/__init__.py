@@ -23,6 +23,7 @@ from .monit import *  # noqa
 from .phone_call import *  # noqa
 from .presence import *  # noqa
 from .pickup import *  # noqa
+from .queue import *  # noqa
 from .process import *  # noqa
 from .provd import *  # noqa
 from .schedule import *  # noqa

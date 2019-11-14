@@ -154,8 +154,9 @@ def setup_helpers(context):
     context.helpers.monit = helpers.Monit(context)
     context.helpers.pickup = helpers.Pickup(context)
     context.helpers.provd = helpers.Provd(context)
-    context.helpers.token = helpers.Token(context)
+    context.helpers.queue = helpers.Queue(context)
     context.helpers.schedule = helpers.Schedule(context)
+    context.helpers.token = helpers.Token(context)
     context.helpers.user = helpers.User(context)
     context.helpers.voicemail = helpers.Voicemail(context)
 
