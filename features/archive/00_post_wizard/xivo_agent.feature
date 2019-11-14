@@ -1,3 +1,5 @@
+# Should be wazo-agentd integration-test
+# wazo-agentd should use amid-client instead of testing ami socket connection
 Feature: XIVO Agent
 
     Scenario: wazo-agentd reconnects when asterisk restarts
