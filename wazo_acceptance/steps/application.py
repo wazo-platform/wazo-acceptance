@@ -21,19 +21,7 @@ def there_are_application_with_info(context):
         body = {'name': config['name'], 'destination': config['destination']}
         if config.get('destination_type'):
             body['destination_options'] = {'type': config['destination_type']}
-        application = context.helpers.application.create(body)
-
-        body = {'destination': {
-            'type': 'application',
-            'application': 'custom',
-            'application_uuid': application['uuid'],
-        }}
-        incall = context.helpers.incall.create(body)
-
-        body = {'exten': config['incall'], 'context': 'from-extern'}
-        extension = context.helpers.extension.create(body)
-
-        context.helpers.incall.add_extension(incall, extension)
+        context.helpers.application.create(body)
 
 
 @when('"{user_name}" picks up the call from the application "{app_name}"')

@@ -17,6 +17,12 @@ class Application:
     def create_node(self, application_uuid, call_ids):
         return self._calld_client.applications.create_node(application_uuid, call_ids)
 
+    def get_by(self, **kwargs):
+        application = self.find_by(**kwargs)
+        if not application:
+            raise Exception('Application not found: {}'.format(kwargs))
+        return application
+
     def find_by(self, **kwargs):
         applications = self._confd_client.applications.list(**kwargs)['items']
         for application in applications:

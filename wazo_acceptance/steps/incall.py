@@ -41,3 +41,22 @@ def given_there_is_an_incall_to_the_queue(context, exten, exten_context, queue_n
     extension = context.helpers.extension.create(body)
 
     context.helpers.incall.add_extension(incall, extension)
+
+
+@given('there is an incall "{exten}@{exten_context}" to the application "{app_name}"')
+def given_there_is_an_incall_to_the_application(context, exten, exten_context, app_name):
+    application = context.helpers.application.get_by(name=app_name)
+
+    body = {
+        'destination': {
+            'type': 'application',
+            'application': 'custom',
+            'application_uuid': application['uuid']
+        }
+    }
+    incall = context.helpers.incall.create(body)
+
+    body = {'exten': exten, 'context': exten_context}
+    extension = context.helpers.extension.create(body)
+
+    context.helpers.incall.add_extension(incall, extension)
