@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,21 +6,25 @@ import subprocess
 import re
 
 BASE_SERVICES = [
+    'asterisk',
     'dahdi',
     'wazo-agentd',
-    'wazo-auth',
-    'wazo-dird',
-    'wazo-call-logd',
-    'xivo-sysconfd',
-    'wazo-confgend',
-    'xivo-confd',
-    'xivo-dxtora',
-    'xivo-provd',
-    'xivo-agid',
-    'asterisk',
+    'wazo-agid',
     'wazo-amid',
-    'xivo-ctid',
-    'xivo-dird-phoned',
+    'wazo-auth',
+    'wazo-call-logd',
+    'wazo-calld',
+    'wazo-chatd',
+    'wazo-confd',
+    'wazo-confgend',
+    'wazo-dird',
+    'wazo-dxtora',
+    'wazo-phoned',
+    'wazo-plugind',
+    'wazo-provd',
+    'wazo-webhookd',
+    'wazo-websocketd',
+    'xivo-sysconfd',
 ]
 
 ALL_SERVICES = ['rabbitmq-server', 'consul', 'postgresql@11-main', 'nginx'] + BASE_SERVICES
@@ -32,12 +36,11 @@ STARTING_SERVICE = re.compile(r'^\s+starting (\S+) ... OK$')
 
 
 def _exec(cmd):
-    print ' '.join(cmd)
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    lines, _ = p.communicate()
+    print(' '.join(cmd))
+    lines = subprocess.run(cmd, capture_output=True, encoding='utf-8').stdout
     lines = lines.split('\n')
     for line in lines:
-        print line
+        print(line)
     return lines
 
 
@@ -50,7 +53,7 @@ def _is_monit_running():
     return matched
 
 
-def _xivo_service(*args):
+def _wazo_service(*args):
     lines = _exec(['wazo-service'] + list(args))
     return lines
 
@@ -64,7 +67,7 @@ def _are_services_stopped(services):
 
 
 def _are_services_matching(matcher, services):
-    output = _xivo_service('status')
+    output = _wazo_service('status')
     return _are_all_items_matched_in_buffer(output, matcher, services)
 
 
@@ -81,7 +84,7 @@ def _are_all_items_matched_in_buffer(buf, matcher, items):
         to_match.discard(match.group(1))
 
     if to_match:
-        print 'Unmatched items', to_match
+        print('Unmatched items', to_match)
         return False
     else:
         return True
@@ -91,16 +94,16 @@ def main():
     assert _is_monit_running()
     assert _are_services_running(BASE_SERVICES)
 
-    _xivo_service('stop')
+    _wazo_service('stop')
     assert not _is_monit_running()
     assert _are_services_stopped(BASE_SERVICES)
 
-    output = _xivo_service('start')
+    output = _wazo_service('start')
     assert _are_services_starting(output, BASE_SERVICES)
     assert _is_monit_running()
     assert _are_services_running(BASE_SERVICES)
 
-    output = _xivo_service('restart', 'all')
+    output = _wazo_service('restart', 'all')
     assert _are_services_starting(output, ALL_SERVICES)
     assert _is_monit_running()
 
