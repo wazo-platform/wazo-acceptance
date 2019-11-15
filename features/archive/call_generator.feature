@@ -1,46 +1,6 @@
 # Should be in xivo-call-logd integration tests
 Feature: Call Log Generation
 
-    Scenario: Generation of answered outgoing call
-        Given there are no call logs
-        Given I have only the following CEL entries:
-            | eventtype    | eventtime                  | cid_name | cid_num   | exten     | context     | channame              |      uniqueid |     linkedid  | userfield |
-            | CHAN_START   | 2015-06-18 14:12:05.935283 | Elès 01  | 1001      | **9642301 | default     | SIP/je5qtq-00000025   | 1434651125.37 | 1434651125.37 |           |
-            | XIVO_OUTCALL | 2015-06-18 14:12:06.118509 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000025   | 1434651125.37 | 1434651125.37 |           |
-            | APP_START    | 2015-06-18 14:12:06.123695 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000025   | 1434651125.37 | 1434651125.37 |           |
-            | CHAN_START   | 2015-06-18 14:12:06.124957 |          |           | s         | from-extern | SIP/dev_34-1-00000026 | 1434651126.38 | 1434651125.37 |           |
-            | ANSWER       | 2015-06-18 14:12:12.500153 |          | **9642301 | dial      | from-extern | SIP/dev_34-1-00000026 | 1434651126.38 | 1434651125.37 |           |
-            | ANSWER       | 2015-06-18 14:12:12.514389 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000025   | 1434651125.37 | 1434651125.37 |           |
-            | BRIDGE_ENTER | 2015-06-18 14:12:12.515753 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000025   | 1434651125.37 | 1434651125.37 |           |
-            | BRIDGE_ENTER | 2015-06-18 14:12:12.517027 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000026 | 1434651126.38 | 1434651125.37 |           |
-            | BRIDGE_EXIT  | 2015-06-18 14:12:16.85455  | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000025   | 1434651125.37 | 1434651125.37 |           |
-            | HANGUP       | 2015-06-18 14:12:16.861414 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000025   | 1434651125.37 | 1434651125.37 |           |
-            | CHAN_END     | 2015-06-18 14:12:16.862638 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000025   | 1434651125.37 | 1434651125.37 |           |
-            | BRIDGE_EXIT  | 2015-06-18 14:12:16.863979 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000026 | 1434651126.38 | 1434651125.37 |           |
-            | HANGUP       | 2015-06-18 14:12:16.865316 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000026 | 1434651126.38 | 1434651125.37 |           |
-            | CHAN_END     | 2015-06-18 14:12:16.866615 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000026 | 1434651126.38 | 1434651125.37 |           |
-            | LINKEDID_END | 2015-06-18 14:12:16.867848 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000026 | 1434651126.38 | 1434651125.37 |           |
-            | CHAN_START   | 2015-06-18 14:13:18.176182 | Elès 01  | 1001      | **9642301 | default     | SIP/je5qtq-00000027   | 1434651198.39 | 1434651198.39 |           |
-            | XIVO_OUTCALL | 2015-06-18 14:13:18.250067 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000027   | 1434651198.39 | 1434651198.39 | foo       |
-            | APP_START    | 2015-06-18 14:13:18.254452 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000027   | 1434651198.39 | 1434651198.39 | foo       |
-            | CHAN_START   | 2015-06-18 14:13:18.255915 |          |           | s         | from-extern | SIP/dev_34-1-00000028 | 1434651198.40 | 1434651198.39 |           |
-            | ANSWER       | 2015-06-18 14:13:20.98612  |          | **9642301 | dial      | from-extern | SIP/dev_34-1-00000028 | 1434651198.40 | 1434651198.39 |           |
-            | ANSWER       | 2015-06-18 14:13:20.998113 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000027   | 1434651198.39 | 1434651198.39 | foo       |
-            | BRIDGE_ENTER | 2015-06-18 14:13:21.190246 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000027   | 1434651198.39 | 1434651198.39 | foo       |
-            | BRIDGE_ENTER | 2015-06-18 14:13:21.192798 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000028 | 1434651198.40 | 1434651198.39 |           |
-            | BRIDGE_EXIT  | 2015-06-18 14:13:24.137056 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000027   | 1434651198.39 | 1434651198.39 | foo       |
-            | HANGUP       | 2015-06-18 14:13:24.146256 | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000027   | 1434651198.39 | 1434651198.39 | foo       |
-            | CHAN_END     | 2015-06-18 14:13:24.14759  | Elès 01  | 1001      | dial      | outcall     | SIP/je5qtq-00000027   | 1434651198.39 | 1434651198.39 | foo       |
-            | BRIDGE_EXIT  | 2015-06-18 14:13:24.148734 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000028 | 1434651198.40 | 1434651198.39 |           |
-            | HANGUP       | 2015-06-18 14:13:24.149943 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000028 | 1434651198.40 | 1434651198.39 |           |
-            | CHAN_END     | 2015-06-18 14:13:24.151296 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000028 | 1434651198.40 | 1434651198.39 |           |
-            | LINKEDID_END | 2015-06-18 14:13:24.152458 |          | **9642301 |           | from-extern | SIP/dev_34-1-00000028 | 1434651198.40 | 1434651198.39 |           |
-        When I generate call logs
-        Then I should have the following call logs:
-            | date                       | date_answer                | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:12:05.935283 | 2015-06-18 14:12:12.515753 | 2015-06-18 14:12:16.862638 | Elès 01     | 1001         |       **9642301 | default           | **9642301         |            | sip/je5qtq           | sip/dev_34-1              |
-            | 2015-06-18 14:13:18.176182 | 2015-06-18 14:13:21.190246 | 2015-06-18 14:13:24.14759  | Elès 01     | 1001         |       **9642301 | default           | **9642301         | foo        | sip/je5qtq           | sip/dev_34-1              |
-
     Scenario: Generation of originate call
         Given there are no call logs
         Given I have only the following CEL entries:
