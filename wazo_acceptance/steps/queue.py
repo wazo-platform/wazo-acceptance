@@ -4,7 +4,7 @@
 from behave import when, given
 
 
-@given('there are queues')
+@given('there are queues with infos')
 def given_there_are_queues(context):
     context.table.require_columns(['name', 'exten', 'context'])
     for row in context.table:

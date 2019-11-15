@@ -1,15 +1,15 @@
 Feature: Call transfer
 
-  Scenario: Multiple blind transfers do not mix up channel
+  Scenario: Multiple blind transfers do not mix up channels
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
       | User      | A        | 1801  | default |
       | User      | B        | 1802  | default |
       | User      | C        | 1803  | default |
       | User      | D        | 1804  | default |
-    Given there are queues
-      | name    | display_name | exten | context | users         |
-      | queue_a | Queue A      | 3801  | default | 1801@default  |
+    Given there are queues with infos:
+      | name    | display_name | exten | context | users        |
+      | queue_a | Queue A      | 3801  | default | 1801@default |
     Given there is an incall "3801@from-extern" to the queue "queue_a"
 
     When chan_test calls "3801@from-extern"
