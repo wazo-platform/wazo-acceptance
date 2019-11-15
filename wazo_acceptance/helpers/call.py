@@ -11,7 +11,7 @@ class Call:
     def get_by(self, **kwargs):
         call = self._find_by(**kwargs)
         if not call:
-            raise Exception('Call found: {}'.format(kwargs))
+            raise Exception('Call not found: {}'.format(kwargs))
         return call
 
     def _find_by(self, **kwargs):
