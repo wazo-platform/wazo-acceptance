@@ -24,3 +24,14 @@ class Application:
         applications = self._confd_client.applications.list(**kwargs)['items']
         for application in applications:
             return application
+
+    def get_first_call(self, application_uuid):
+        call = self._find_first_call(application_uuid)
+        if not call:
+            raise Exception('Call not found from application: {}'.format(application_uuid))
+        return call
+
+    def _find_first_call(self, application_uuid):
+        calls = self._calld_client.applications.list_calls(application_uuid)['items']
+        for call in calls:
+            return call

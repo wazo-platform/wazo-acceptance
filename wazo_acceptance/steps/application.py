@@ -1,7 +1,6 @@
 # Copyright 2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import time
 from behave import (
     given,
     then,
@@ -11,6 +10,7 @@ from hamcrest import (
     assert_that,
     equal_to,
 )
+from xivo_test_helpers import until
 
 
 @given('there are applications with infos')
@@ -28,17 +28,12 @@ def there_are_application_with_info(context):
 def step_impl(context, user_name, app_name):
     application = context.helpers.application.get_by(name=app_name, recurse=True)
 
-    for _ in range(10):
-        calls = context.calld_client.applications.list_calls(application['uuid'])['items']
-        if not calls:
-            time.sleep(0.25)
-            continue
-
-        incoming_call = calls[0]
-        break
-    else:
-        assert False, 'call failed to enter stasis app'
-
+    incoming_call = until.return_(
+        context.helpers.application.get_first_call,
+        application['uuid'],
+        timeout=3,
+        interval=0.25
+    )
     node = context.calld_client.applications.create_node(application['uuid'], [incoming_call['id']])
 
     user = context.helpers.confd_user.get_by(firstname=user_name)
