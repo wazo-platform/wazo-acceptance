@@ -18,7 +18,10 @@ def there_are_application_with_info(context):
     for row in context.table:
         config = row.as_dict()
 
-        application = context.helpers.application.create(config)
+        body = {'name': config['name'], 'destination': config['destination']}
+        if config.get('destination_type'):
+            body['destination_options'] = {'type': config['destination_type']}
+        application = context.helpers.application.create(body)
 
         body = {'destination': {
             'type': 'application',

@@ -9,20 +9,9 @@ class Application:
         self._calld_client = context.calld_client
         self._confd_client = context.confd_client
 
-    def create(self, row):
-        body = {
-            'name': row['name'],
-            'destination': row['destination'],
-            'destination_options': {
-                'type': 'holding',
-            },
-        }
-        if row.get('destination_type') == 'holding':
-            body['destination_options']['type'] = 'holding'
-
+    def create(self, body):
         application = self._confd_client.applications.create(body)
         self._context.add_cleanup(self._confd_client.applications.delete, application['uuid'])
-
         return application
 
     def create_node(self, application_uuid, call_ids):
