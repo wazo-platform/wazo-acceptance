@@ -1,30 +1,6 @@
 # Should be in xivo-call-logd integration tests
 Feature: Call Log Generation
 
-    Scenario: Generation of answered internal call inconditionnally forwarded to internal
-        Given there are no call logs
-        Given I have only the following CEL entries:
-            | eventtype     | eventtime                  | cid_name         | cid_num | exten             | context     | channame            |      uniqueid |      linkedid |
-            | CHAN_START    | 2018-02-02 15:00:25.106723 | Alice            |     101 | 103               | default     | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
-            | XIVO_USER_FWD | 2018-02-02 15:00:25.546267 | Alice            |     101 | forward_voicemail | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
-            | ANSWER        | 2018-02-02 15:00:26.051203 | Alice            |     101 | pickup            | xivo-pickup | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
-            | APP_START     | 2018-02-02 15:00:27.373161 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
-            | CHAN_START    | 2018-02-02 15:00:27.392589 | Bernard          |     102 | s                 | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
-            | ANSWER        | 2018-02-02 15:00:29.207311 | Bernard          |     102 | s                 | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
-            | BRIDGE_ENTER  | 2018-02-02 15:00:29.227529 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
-            | BRIDGE_ENTER  | 2018-02-02 15:00:29.22922  | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
-            | BRIDGE_EXIT   | 2018-02-02 15:00:30.464687 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
-            | HANGUP        | 2018-02-02 15:00:30.471676 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
-            | CHAN_END      | 2018-02-02 15:00:30.476368 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000a | 1517601627.18 | 1517601625.17 |
-            | BRIDGE_EXIT   | 2018-02-02 15:00:30.478914 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
-            | HANGUP        | 2018-02-02 15:00:30.481403 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
-            | CHAN_END      | 2018-02-02 15:00:30.484065 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
-            | LINKEDID_END  | 2018-02-02 15:00:30.486225 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000007   | 1517601625.17 | 1517601625.17 |
-        When I generate call logs
-        Then I should have the following call logs:
-            | date                       | date_answer               | date_end                   | source_exten | requested_exten | requested_context | destination_exten | destination_name | source_line_identity | destination_line_identity |
-            | 2018-02-02 15:00:25.106723 | 2018-02-02 15:00:29.22922 | 2018-02-02 15:00:30.484065 |          101 |             103 | default           |               102 | Bernard          | sccp/101             | sip/dm77z3                |
-
     Scenario: Generation of answered internal call busy forwarded to internal
         Given there are no call logs
         Given I have only the following CEL entries:
