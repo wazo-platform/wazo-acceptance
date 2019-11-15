@@ -1,36 +1,6 @@
 # Should be in xivo-call-logd integration tests
 Feature: Call Log Generation
 
-    Scenario: Generation of answered internal call busy forwarded to internal
-        Given there are no call logs
-        Given I have only the following CEL entries:
-            | eventtype     | eventtime                  | cid_name         | cid_num | exten             | context     | channame            |      uniqueid |      linkedid |
-            | CHAN_START    | 2018-02-06 13:33:31.114956 | Alice            |     101 | 103               | default     | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
-            | APP_START     | 2018-02-06 13:33:31.897767 | Alice            |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
-            | CHAN_START    | 2018-02-06 13:33:31.927285 | Charlie          |     103 | s                 | default     | SIP/rku3uo-0000000e | 1517942011.17 | 1517942011.16 |
-            | HANGUP        | 2018-02-06 13:33:33.272605 | Charlie          |     103 | s                 | default     | SIP/rku3uo-0000000e | 1517942011.17 | 1517942011.16 |
-            | CHAN_END      | 2018-02-06 13:33:33.287358 | Charlie          |     103 | s                 | default     | SIP/rku3uo-0000000e | 1517942011.17 | 1517942011.16 |
-            | XIVO_USER_FWD | 2018-02-06 13:33:33.28969  | Alice            |     101 | forward_voicemail | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
-            | ANSWER        | 2018-02-06 13:33:33.778962 | Alice            |     101 | pickup            | xivo-pickup | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
-            | APP_START     | 2018-02-06 13:33:35.089841 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
-            | CHAN_START    | 2018-02-06 13:33:35.107786 | Bernard          |     102 | s                 | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
-            | ANSWER        | 2018-02-06 13:33:36.315745 | Bernard          |     102 | s                 | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
-            | BRIDGE_ENTER  | 2018-02-06 13:33:36.331304 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
-            | BRIDGE_ENTER  | 2018-02-06 13:33:36.333193 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
-            | BRIDGE_EXIT   | 2018-02-06 13:33:37.393726 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
-            | HANGUP        | 2018-02-06 13:33:37.401862 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
-            | CHAN_END      | 2018-02-06 13:33:37.404542 | Bernard          |     102 |                   | default     | SIP/dm77z3-0000000f | 1517942015.18 | 1517942011.16 |
-            | BRIDGE_EXIT   | 2018-02-06 13:33:37.407847 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
-            | HANGUP        | 2018-02-06 13:33:37.410228 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
-            | CHAN_END      | 2018-02-06 13:33:37.412453 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
-            | LINKEDID_END  | 2018-02-06 13:33:37.414762 | Charlie -> Alice |     101 | s                 | user        | SCCP/101-00000002   | 1517942011.16 | 1517942011.16 |
-
-        When I generate call logs
-
-        Then I should have the following call logs:
-            | date                       | date_answer                | date_end                   | source_exten | requested_exten | requested_context | destination_exten | source_line_identity | destination_line_identity |
-            | 2018-02-06 13:33:31.114956 | 2018-02-06 13:33:36.333193 | 2018-02-06 13:33:37.412453 |          101 |             103 | default           |               102 | sccp/101             | sip/dm77z3                |
-
     Scenario: Generation of answered incoming call
         Given there are no call logs
         Given I have only the following CEL entries:
