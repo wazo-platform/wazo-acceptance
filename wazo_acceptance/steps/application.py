@@ -26,8 +26,7 @@ def there_are_application_with_info(context):
 
 @when('"{user_name}" picks up the call from the application "{app_name}"')
 def step_impl(context, user_name, app_name):
-    application = context.helpers.application.find_by(name=app_name, recurse=True)
-    assert application is not None
+    application = context.helpers.application.get_by(name=app_name, recurse=True)
 
     for _ in range(10):
         calls = context.helpers.application.list_calls(application['uuid'])
@@ -58,7 +57,7 @@ def step_impl(context, user_name, app_name):
 
 @then(u'"{app_name}" contains a node with "{n}" calls')
 def application_contains_node_with_n_calls(context, app_name, n):
-    application = context.helpers.application.find_by(name=app_name, recurse=True)
+    application = context.helpers.application.get_by(name=app_name, recurse=True)
 
     calls = context.helpers.application.list_calls(application['uuid'])
     assert_that(len(calls), equal_to(2))
