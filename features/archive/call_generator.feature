@@ -1,24 +1,6 @@
 # Should be in xivo-call-logd integration tests
 Feature: Call Log Generation
 
-    Scenario: Generation of unanswered originate call
-        Given there are no call logs
-        Given I have only the following CEL entries:
-            | eventtype    | eventtime                  | cid_name | cid_num | exten | context | channame            |      uniqueid |     linkedid  | userfield |
-            | CHAN_START   | 2015-06-18 14:15:48.836632 | Elès 45  | 1045    | s     | default | SIP/as2mkq-0000002d | 1434651348.45 | 1434651348.45 |           |
-            | ANSWER       | 2015-06-18 14:15:50.127815 | 1001     | 1001    |       | default | SIP/as2mkq-0000002d | 1434651348.45 | 1434651348.45 |           |
-            | APP_START    | 2015-06-18 14:15:50.220755 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002d | 1434651348.45 | 1434651348.45 |           |
-            | CHAN_START   | 2015-06-18 14:15:50.22621  | Elès 01  | 1001    | s     | default | SIP/je5qtq-0000002e | 1434651350.46 | 1434651348.45 |           |
-            | HANGUP       | 2015-06-18 14:15:54.936991 | Elès 01  | 1001    | s     | default | SIP/je5qtq-0000002e | 1434651350.46 | 1434651348.45 |           |
-            | CHAN_END     | 2015-06-18 14:15:54.949784 | Elès 01  | 1001    | s     | default | SIP/je5qtq-0000002e | 1434651350.46 | 1434651348.45 |           |
-            | HANGUP       | 2015-06-18 14:15:54.951351 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002d | 1434651348.45 | 1434651348.45 |           |
-            | CHAN_END     | 2015-06-18 14:15:54.952707 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002d | 1434651348.45 | 1434651348.45 |           |
-            | LINKEDID_END | 2015-06-18 14:15:54.9539   | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002d | 1434651348.45 | 1434651348.45 |           |
-        When I generate call logs
-        Then I should have the following call logs:
-            | date                       | date_answer | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:15:48.836632 | NULL        | 2015-06-18 14:15:54.952707 | Elès 45     | 1045         |            1001 | default           | 1001              |            | sip/as2mkq           | sip/je5qtq                |
-
     Scenario: Generation of originates hung up by the switchboard
         Given there are no call logs
         Given I have only the following CEL entries:
