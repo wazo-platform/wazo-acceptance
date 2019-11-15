@@ -1,23 +1,6 @@
 # Should be in xivo-call-logd integration tests
 Feature: Call Log Generation
 
-    Scenario: Generation of non-answered internal call
-        Given there are no call logs
-        Given I have only the following CEL entries:
-            | eventtype    | eventtime                  | cid_name | cid_num | exten | context | channame            |      uniqueid |     linkedid  | userfield |
-            | CHAN_START   | 2015-06-18 14:10:24.586638 | Elès 45  | 1045    | 1001  | default | SIP/as2mkq-00000021 | 1434651024.33 | 1434651024.33 |           |
-            | APP_START    | 2015-06-18 14:10:24.6893   | Elès 45  | 1045    | s     | user    | SIP/as2mkq-00000021 | 1434651024.33 | 1434651024.33 |           |
-            | CHAN_START   | 2015-06-18 14:10:24.694166 | Elès 01  | 1001    | s     | default | SIP/je5qtq-00000022 | 1434651024.34 | 1434651024.33 |           |
-            | HANGUP       | 2015-06-18 14:10:28.280456 | Elès 01  | 1001    | s     | default | SIP/je5qtq-00000022 | 1434651024.34 | 1434651024.33 |           |
-            | CHAN_END     | 2015-06-18 14:10:28.28819  | Elès 01  | 1001    | s     | default | SIP/je5qtq-00000022 | 1434651024.34 | 1434651024.33 |           |
-            | HANGUP       | 2015-06-18 14:10:28.289431 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-00000021 | 1434651024.33 | 1434651024.33 |           |
-            | CHAN_END     | 2015-06-18 14:10:28.290746 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-00000021 | 1434651024.33 | 1434651024.33 |           |
-            | LINKEDID_END | 2015-06-18 14:10:28.292243 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-00000021 | 1434651024.33 | 1434651024.33 |           |
-        When I generate call logs
-        Then I should have the following call logs:
-            | date                       | date_answer | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:10:24.586638 | NULL        | 2015-06-18 14:10:28.290746 | Elès 45     | 1045         |            1001 | default           | 1001              |            | sip/as2mkq           | sip/je5qtq                |
-
     Scenario: Generation of answered internal call inconditionnally forwarded to internal
         Given there are no call logs
         Given I have only the following CEL entries:
