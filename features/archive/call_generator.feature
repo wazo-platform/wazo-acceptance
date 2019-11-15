@@ -1,29 +1,6 @@
 # Should be in xivo-call-logd integration tests
 Feature: Call Log Generation
 
-    Scenario: Generation of originate call
-        Given there are no call logs
-        Given I have only the following CEL entries:
-            | eventtype     | eventtime                  | cid_name | cid_num | exten | context | channame            |      uniqueid |     linkedid  | userfield |
-            |  CHAN_START   | 2015-06-18 14:15:12.978338 | Elès 45  | 1045    | s     | default | SIP/as2mkq-0000002b | 1434651312.43 | 1434651312.43 |           |
-            |  ANSWER       | 2015-06-18 14:15:14.587341 | 1001     | 1001    |       | default | SIP/as2mkq-0000002b | 1434651312.43 | 1434651312.43 |           |
-            |  APP_START    | 2015-06-18 14:15:14.697414 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002b | 1434651312.43 | 1434651312.43 |           |
-            |  CHAN_START   | 2015-06-18 14:15:14.702394 | Elès 01  | 1001    | s     | default | SIP/je5qtq-0000002c | 1434651314.44 | 1434651312.43 |           |
-            |  ANSWER       | 2015-06-18 14:15:16.389857 | Elès 01  | 1001    | s     | default | SIP/je5qtq-0000002c | 1434651314.44 | 1434651312.43 |           |
-            |  BRIDGE_ENTER | 2015-06-18 14:15:16.396213 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002b | 1434651312.43 | 1434651312.43 |           |
-            |  BRIDGE_ENTER | 2015-06-18 14:15:16.397787 | Elès 01  | 1001    |       | default | SIP/je5qtq-0000002c | 1434651314.44 | 1434651312.43 |           |
-            |  BRIDGE_EXIT  | 2015-06-18 14:15:19.192422 | Elès 01  | 1001    |       | default | SIP/je5qtq-0000002c | 1434651314.44 | 1434651312.43 |           |
-            |  HANGUP       | 2015-06-18 14:15:19.206152 | Elès 01  | 1001    |       | default | SIP/je5qtq-0000002c | 1434651314.44 | 1434651312.43 |           |
-            |  CHAN_END     | 2015-06-18 14:15:19.208217 | Elès 01  | 1001    |       | default | SIP/je5qtq-0000002c | 1434651314.44 | 1434651312.43 |           |
-            |  BRIDGE_EXIT  | 2015-06-18 14:15:19.209432 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002b | 1434651312.43 | 1434651312.43 |           |
-            |  HANGUP       | 2015-06-18 14:15:19.211393 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002b | 1434651312.43 | 1434651312.43 |           |
-            |  CHAN_END     | 2015-06-18 14:15:19.212596 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002b | 1434651312.43 | 1434651312.43 |           |
-            |  LINKEDID_END | 2015-06-18 14:15:19.213763 | Elès 45  | 1045    | s     | user    | SIP/as2mkq-0000002b | 1434651312.43 | 1434651312.43 |           |
-        When I generate call logs
-        Then I should have the following call logs:
-            | date                       | date_answer                | date_end                   | source_name | source_exten | requested_exten | requested_context | destination_exten | user_field | source_line_identity | destination_line_identity |
-            | 2015-06-18 14:15:12.978338 | 2015-06-18 14:15:16.396213 | 2015-06-18 14:15:19.212596 | Elès 45     | 1045         |            1001 | default           | 1001              |            | sip/as2mkq           | sip/je5qtq                |
-
     Scenario: Generation of unanswered originate call
         Given there are no call logs
         Given I have only the following CEL entries:
