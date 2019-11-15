@@ -29,7 +29,7 @@ def step_impl(context, user_name, app_name):
     application = context.helpers.application.get_by(name=app_name, recurse=True)
 
     for _ in range(10):
-        calls = context.helpers.application.list_calls(application['uuid'])
+        calls = context.calld_client.applications.list_calls(application['uuid'])['items']
         if not calls:
             time.sleep(0.25)
             continue
@@ -39,12 +39,12 @@ def step_impl(context, user_name, app_name):
     else:
         assert False, 'call failed to enter stasis app'
 
-    node = context.helpers.application.create_node(application['uuid'], [incoming_call['id']])
+    node = context.calld_client.applications.create_node(application['uuid'], [incoming_call['id']])
 
     user = context.helpers.confd_user.get_by(firstname=user_name)
     user_exten = user['lines'][0]['extensions'][0]['exten']
     user_context = user['lines'][0]['extensions'][0]['context']
-    context.helpers.application.join_node(
+    context.calld_client.applications.join_node(
         application['uuid'],
         node['uuid'],
         user_exten,
@@ -55,9 +55,8 @@ def step_impl(context, user_name, app_name):
     phone.answer()
 
 
-@then(u'"{app_name}" contains a node with "{n}" calls')
+@then('"{app_name}" contains a node with "{n}" calls')
 def application_contains_node_with_n_calls(context, app_name, n):
     application = context.helpers.application.get_by(name=app_name, recurse=True)
-
-    calls = context.helpers.application.list_calls(application['uuid'])
+    calls = context.calld_client.applications.list_calls(application['uuid'])['items']
     assert_that(len(calls), equal_to(2))
