@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from .agent import *  # noqa
+from .application import *  # noqa
 from .assets import *  # noqa
 from .asterisk import *  # noqa
 from .auth import *  # noqa
@@ -30,5 +31,6 @@ from .provd import *  # noqa
 from .queue import *  # noqa
 from .schedule import *  # noqa
 from .setupd import *  # noqa
+from .system import *  # noqa
 from .user import *  # noqa
 from .voicemail import *  # noqa

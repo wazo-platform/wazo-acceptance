@@ -138,6 +138,7 @@ class Helpers:
 def setup_helpers(context):
     context.helpers = Helpers()
     context.helpers.agent = helpers.Agent(context)
+    context.helpers.application = helpers.Application(context)
     context.helpers.asset = helpers.Asset(context)
     context.helpers.asterisk = helpers.Asterisk(context.ssh_client)
     context.helpers.bus = helpers.Bus(context)
