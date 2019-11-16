@@ -9,6 +9,23 @@ class Queue:
         self._confd_client = context.confd_client
 
     def create(self, body):
+        options = body.pop('options', [])
+
+        strategy = body.pop('strategy', None)
+        if strategy is not None:
+            options.append(('strategy', strategy))
+
+        retry = body.pop('retry', None)
+        if retry is not None:
+            options.append(('retry', retry))
+
+        retry_on_timeout = body.pop('retry_on_timeout', None)
+        if isinstance(retry_on_timeout, str):
+            body['retry_on_timeout'] = retry_on_timeout.lower() == 'true'
+
+        if options:
+            body['options'] = options
+
         with self._context.helpers.bus.wait_for_asterisk_reload(queue=True):
             queue = self._confd_client.queues.create(body)
         self._context.add_cleanup(self._confd_client.queues.delete, queue)
