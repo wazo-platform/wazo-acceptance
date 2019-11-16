@@ -8,8 +8,8 @@ Feature: Call transfer
       | User      | C        | 1803  | default |
       | User      | D        | 1804  | default |
     Given there are queues with infos:
-      | name    | display_name | exten | context | users        |
-      | queue_a | Queue A      | 3801  | default | 1801@default |
+      | name    | exten | context | users        |
+      | queue_a | 3801  | default | 1801@default |
     Given there is an incall "3801@from-extern" to the queue "queue_a"
 
     When chan_test calls "3801@from-extern"
