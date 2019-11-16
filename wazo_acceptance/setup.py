@@ -138,6 +138,7 @@ class Helpers:
 def setup_helpers(context):
     context.helpers = Helpers()
     context.helpers.agent = helpers.Agent(context)
+    context.helpers.agent_skill = helpers.AgentSkill(context)
     context.helpers.application = helpers.Application(context)
     context.helpers.asset = helpers.Asset(context)
     context.helpers.asterisk = helpers.Asterisk(context.ssh_client)
@@ -157,6 +158,7 @@ def setup_helpers(context):
     context.helpers.pickup = helpers.Pickup(context)
     context.helpers.provd = helpers.Provd(context)
     context.helpers.queue = helpers.Queue(context)
+    context.helpers.queue_skill_rule = helpers.QueueSkillRule(context)
     context.helpers.schedule = helpers.Schedule(context)
     context.helpers.token = helpers.Token(context)
     context.helpers.user = helpers.User(context)

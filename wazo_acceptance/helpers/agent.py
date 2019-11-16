@@ -13,6 +13,11 @@ class Agent:
         self._context.add_cleanup(self._confd_client.agents.delete, agent)
         return agent
 
+    def add_skill(self, agent, skill, weight=None):
+        weight = int(weight) if weight is not None else None
+        with self._context.helpers.bus.wait_for_asterisk_reload(queue=True):
+            self._confd_client.agents(agent).add_skill(skill, weight=weight)
+
     def get_by(self, **kwargs):
         agent = self._find_by(**kwargs)
         if not agent:
