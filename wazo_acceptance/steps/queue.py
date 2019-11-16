@@ -8,11 +8,11 @@ from behave import when, given
 def given_there_are_queues(context):
     context.table.require_columns(['name', 'exten', 'context'])
     for row in context.table:
-        body = {'name': row['name'], 'label': row.get('label')}
+        body = row.as_dict()
         queue = context.helpers.queue.create(body)
 
-        body = {'exten': row['exten'], 'context': row['context']}
-        extension = context.helpers.extension.create(body)
+        extension_body = {'exten': body['exten'], 'context': body['context']}
+        extension = context.helpers.extension.create(extension_body)
         context.helpers.queue.add_extension(queue, extension)
 
         if row.get('agents'):
@@ -31,11 +31,11 @@ def given_there_are_queues(context):
 def when_i_create_the_following_queues(context):
     context.table.require_columns(['name', 'exten', 'context'])
     for row in context.table:
-        body = {'name': row['name'], 'label': row.get('label')}
+        body = row.as_dict()
         queue = context.helpers.queue.create(body)
 
-        body = {'exten': row['exten'], 'context': row['context']}
-        extension = context.helpers.extension.create(body)
+        extension_body = {'exten': body['exten'], 'context': body['context']}
+        extension = context.helpers.extension.create(extension_body)
         context.helpers.queue.add_extension(queue, extension)
 
         if row.get('agents'):
