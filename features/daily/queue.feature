@@ -2,8 +2,8 @@ Feature: Queues
 
   Scenario: Add a logged agent to a new queue and answer a call
     Given there are telephony users with infos:
-      | firstname | lastname | exten | context | agent_number | protocol |
-      | John      | Doe      | 1102  | default | 1102         | sip      |
+      | firstname | lastname | exten | context | agent_number |
+      | John      | Doe      | 1102  | default | 1102         |
     When I log agent "1102" from phone
     When I create the following queues:
       | name   | label   | exten | context | agents |
