@@ -22,9 +22,9 @@ class ConfdUser:
             self._confd_client.users(user).add_line(line)
         self._context.add_cleanup(self._confd_client.users(user).remove_line, line)
 
-    def add_voicemail(self, user, voicemail_id):
+    def add_voicemail(self, user, voicemail):
         confd_user = self._confd_client.users(user)
-        confd_user.add_voicemail(voicemail_id)
+        confd_user.add_voicemail(voicemail)
         self._context.add_cleanup(confd_user.remove_voicemail)
 
     def get_by(self, **kwargs):

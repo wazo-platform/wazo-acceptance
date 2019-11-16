@@ -10,5 +10,5 @@ class Pickup:
 
     def create(self, pickup_args):
         call_pickup = self._confd_client.call_pickups.create(pickup_args)
-        self._context.add_cleanup(self._confd_client.call_pickups.delete, call_pickup['id'])
+        self._context.add_cleanup(self._confd_client.call_pickups.delete, call_pickup)
         return call_pickup

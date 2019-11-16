@@ -18,7 +18,7 @@ class IVR:
             body['max_tries'] = int(max_tries)
 
         ivr = self._confd_client.ivr.create(body)
-        self._context.add_cleanup(self._confd_client.ivr.delete, ivr['id'])
+        self._context.add_cleanup(self._confd_client.ivr.delete, ivr)
         return ivr
 
     def get_by(self, **kwargs):

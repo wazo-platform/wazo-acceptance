@@ -10,7 +10,7 @@ class Schedule:
 
     def create(self, body):
         schedule = self._confd_client.schedules.create(body)
-        self._context.add_cleanup(self._confd_client.schedules.delete, schedule['id'])
+        self._context.add_cleanup(self._confd_client.schedules.delete, schedule)
         return schedule
 
     def get_by(self, **kwargs):
