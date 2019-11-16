@@ -19,6 +19,7 @@ from .incall import Incall
 from .ivr import IVR
 from .line import Line
 from .monit import Monit
+from .parking_lot import ParkingLot
 from .pickup import Pickup
 from .provd import Provd
 from .queue import Queue
@@ -50,6 +51,7 @@ __all__ = [
     'Line',
     'LineRegistrar',
     'Monit',
+    'ParkingLot',
     'Pickup',
     'Provd',
     'Queue',

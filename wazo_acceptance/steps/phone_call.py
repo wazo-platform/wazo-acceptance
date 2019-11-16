@@ -3,8 +3,9 @@
 
 import time
 
+from behave import step, when, then
+from hamcrest import assert_that, equal_to
 from xivo_test_helpers import until
-from behave import step, when
 
 CHAN_PREFIX = 'PJSIP'
 
@@ -31,6 +32,7 @@ def step_user_is_hungup(context, tracking_id):
 def step_user_is_talking(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_talking, tries=3)
+
 
 
 @step('"{tracking_id}" answers')
@@ -69,6 +71,38 @@ def step_a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time
 @when('I wait "{seconds}" seconds to simulate call center')
 def when_i_wait_n_seconds(context, seconds):
     _sleep(seconds)
+
+
+@then('chan_test is holding')
+def then_chan_test_is_holding(context):
+    pass  # TODO implement holding on chan_test
+
+
+@then('chan_test is ringing')
+def then_chan_test_is_ringing(context):
+    call = context.helpers.call.get_by(
+        caller_id_number='chan-test-num',
+        caller_id_name='chan-test-name',
+    )
+    assert_that(call['status'], equal_to('Ring'))
+
+
+@then('chan_test is hungup')
+def then_chan_test_is_hungup(context):
+    call = context.helpers.call.get_by(
+        caller_id_number='chan-test-num',
+        caller_id_name='chan-test-name',
+    )
+    assert_that(call['status'], equal_to('Down'))
+
+
+@then('chan_test is talking')
+def then_chan_test_is_talking(context):
+    call = context.helpers.call.get_by(
+        caller_id_number='chan-test-num',
+        caller_id_name='chan-test-name',
+    )
+    assert_that(call['status'], equal_to('Up'))
 
 
 @when('chan_test calls "{exten}@{exten_context}" with id "{channel_id}"')

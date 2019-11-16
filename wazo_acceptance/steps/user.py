@@ -238,3 +238,30 @@ def then_my_import_result_matches(context, line_number):
         if error['details']['row_number'] == int(line_number):
             return
     raise AssertionError('Line number not matched')
+
+
+@when('"{firstname} {lastname}" does an attended transfer to "{exten}@{exten_context}" with API')
+def when_user_does_an_attended_transfer_to_exten_with_api(context, firstname, lastname, exten, exten_context):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    initiator_call = context.helpers.call.get_by(user_uuid=confd_user['uuid'])
+    transferred_call_id = next(iter(initiator_call['talking_to']))
+    transfer = context.calld_client.transfers.make_transfer(
+        transferred=transferred_call_id,
+        initiator=initiator_call['call_id'],
+        context=exten_context,
+        exten=exten,
+        flow='attended'
+    )
+    context.transfer_id = transfer['id']
+
+
+@when('"{firstname} {lastname}" cancel the transfer with API')
+def when_user_cancel_the_transfer_with_api(context, firstname, lastname):
+    # NOTE: Use a user token to GET /users/me/transfers OR implement GET /transfers
+    context.calld_client.transfers.cancel_transfer(context.transfer_id)
+
+
+@when('"{firstname} {lastname}" complete the transfer with API')
+def when_user_complete_the_transfer_with_api(context, firstname, lastname):
+    # NOTE: Use a user token to GET /users/me/transfers OR implement GET /transfers
+    context.calld_client.transfers.complete_transfer(context.transfer_id)
