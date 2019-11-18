@@ -94,6 +94,9 @@ def run(config_dir, instance_name):
     logger.debug('Configuring wazo-calld')
     _configure_wazo_service(context, 'wazo-calld')
 
+    logger.debug('Configuring wazo-chatd')
+    _configure_wazo_service(context, 'wazo-chatd')
+
     logger.debug('Configuring wazo-dird')
     _configure_wazo_service(context, 'wazo-dird')
 
