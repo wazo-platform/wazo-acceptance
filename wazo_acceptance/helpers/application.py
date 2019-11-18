@@ -11,7 +11,7 @@ class Application:
 
     def create(self, body):
         application = self._confd_client.applications.create(body)
-        self._context.add_cleanup(self._confd_client.applications.delete, application['uuid'])
+        self._context.add_cleanup(self._confd_client.applications.delete, application)
         return application
 
     def get_by(self, **kwargs):

@@ -11,28 +11,26 @@ class Queue:
     def create(self, body):
         with self._context.helpers.bus.wait_for_asterisk_reload(queue=True):
             queue = self._confd_client.queues.create(body)
-        self._context.add_cleanup(self._confd_client.queues.delete, queue['id'])
+        self._context.add_cleanup(self._confd_client.queues.delete, queue)
         return queue
 
-    def add_extension(self, queue, extension_id):
-        self._context.confd_client.queues(queue).add_extension(extension_id)
+    def add_extension(self, queue, extension):
+        self._context.confd_client.queues(queue).add_extension(extension)
         self._context.add_cleanup(
-            self._confd_client.queues(queue['id']).remove_extension,
-            extension_id
+            self._confd_client.queues(queue).remove_extension,
+            extension
         )
 
-    def add_agent_member(self, queue, agent_id):
-        self._context.confd_client.queues(queue['id']).add_agent_member(agent_id)
+    def add_agent_member(self, queue, agent):
+        self._context.confd_client.queues(queue).add_agent_member(agent)
         self._context.add_cleanup(
-            self._confd_client.queues(queue['id']).remove_agent_member,
-            agent_id
+            self._confd_client.queues(queue).remove_agent_member, agent
         )
 
-    def add_user_member(self, queue, user_uuid):
-        self._context.confd_client.queues(queue['id']).add_user_member(user_uuid)
+    def add_user_member(self, queue, user):
+        self._context.confd_client.queues(queue).add_user_member(user)
         self._context.add_cleanup(
-            self._confd_client.queues(queue['id']).remove_user_member,
-            user_uuid
+            self._confd_client.queues(queue).remove_user_member, user
         )
 
     def get_by(self, **kwargs):
