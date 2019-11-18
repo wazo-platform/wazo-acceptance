@@ -4,7 +4,7 @@
 import random
 import string
 
-from behave import given, then
+from behave import given, then, when
 from hamcrest import assert_that, equal_to, is_
 
 
@@ -200,3 +200,17 @@ def then_user_has_no_unconditional_forward(context, firstname, lastname, forward
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = context.confd_client.users(confd_user).get_forward(forward_name)
     assert_that(forward['enabled'], is_(False))
+
+
+@when('"{firstname} {lastname}" does a blind transfer to "{exten}@{exten_context}" with API')
+def when_user_does_a_blind_transfer_to_exten_with_api(context, firstname, lastname, exten, exten_context):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    initiator_call = context.helpers.call.get_by(user_uuid=confd_user['uuid'])
+    transferred_call_id = next(iter(initiator_call['talking_to']))
+    context.calld_client.transfers.make_transfer(
+        transferred=transferred_call_id,
+        initiator=initiator_call['call_id'],
+        context=exten_context,
+        exten=exten,
+        flow='blind'
+    )

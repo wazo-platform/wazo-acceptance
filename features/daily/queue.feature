@@ -6,8 +6,8 @@ Feature: Queues
           | John      | Doe      | 1102  | default | 1102         | sip      |
         When I log agent "1102" from phone
         When I create the following queues:
-          | name   | display_name | exten | context | agents |
-          | queue2 | Queue 2      | 3102  | default | 1102   |
+          | name   | label   | exten | context | agents |
+          | queue2 | Queue 2 | 3102  | default | 1102   |
 
         Given there is an incall "3102@from-extern" to the queue "queue2"
 

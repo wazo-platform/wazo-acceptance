@@ -28,6 +28,13 @@ class Queue:
             agent_id
         )
 
+    def add_user_member(self, queue, user_uuid):
+        self._context.confd_client.queues(queue['id']).add_user_member(user_uuid)
+        self._context.add_cleanup(
+            self._confd_client.queues(queue['id']).remove_user_member,
+            user_uuid
+        )
+
     def get_by(self, **kwargs):
         queue = self.find_by(**kwargs)
         if not queue:
