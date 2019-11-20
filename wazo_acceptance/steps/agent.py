@@ -1,8 +1,17 @@
 # Copyright 2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from behave import when, then
+from behave import given, when, then
 from hamcrest import assert_that, not_
+
+
+@given('agent "{number}" is logged')
+def given_agent_is_logged(context, number):
+    user = context.helpers.agent.get_by(number=number)['users'][0]
+    user = context.confd_client.users.get(user)
+    exten = user['lines'][0]['extensions'][0]['exten']
+    exten_context = user['lines'][0]['extensions'][0]['context']
+    context.agentd_client.agents.login_agent_by_number(number, exten, exten_context)
 
 
 @when('I log agent "{number}" from phone')

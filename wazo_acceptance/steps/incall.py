@@ -30,6 +30,26 @@ def given_there_is_an_incall_to_the_ivr(context, exten, exten_context, ivr_name)
     context.helpers.incall.add_extension(incall, extension)
 
 
+@given('there is an incall "{exten}@{exten_context}" to the queue "{queue_name}" with skill "{skill_name}"')
+def given_there_is_an_incall_to_the_queue_with_skill(context, exten, exten_context, queue_name, skill_name):
+    queue = context.helpers.queue.get_by(name=queue_name)
+    skill_rule = context.helpers.queue_skill_rule.get_by(name=skill_name)
+
+    body = {
+        'destination': {
+            'type': 'queue',
+            'queue_id': queue['id'],
+            'skill_rule_id': skill_rule['id'],
+        }
+    }
+    incall = context.helpers.incall.create(body)
+
+    body = {'exten': exten, 'context': exten_context}
+    extension = context.helpers.extension.create(body)
+
+    context.helpers.incall.add_extension(incall, extension)
+
+
 @given('there is an incall "{exten}@{exten_context}" to the queue "{queue_name}"')
 def given_there_is_an_incall_to_the_queue(context, exten, exten_context, queue_name):
     queue = context.helpers.queue.get_by(name=queue_name)
