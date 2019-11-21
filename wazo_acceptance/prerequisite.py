@@ -97,6 +97,12 @@ def run(config_dir, instance_name):
     logger.debug('Configuring wazo-dird')
     _configure_wazo_service(context, 'wazo-dird')
 
+    logger.debug('Configuring wazo-webhookd')
+    _configure_wazo_service(context, 'wazo-webhookd')
+
+    logger.debug('Configuring wazo-websocketd')
+    _configure_wazo_service(context, 'wazo-websocketd')
+
 
 def _configure_rabbitmq(context):
     copy_asset_to_server_permanently(context, 'rabbitmq.config', '/etc/rabbitmq')

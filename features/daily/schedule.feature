@@ -23,7 +23,7 @@ Feature: Schedule call distribution
     | open    |      1 |          1 |         1 |       00:00 |     00:01 |
     Given "Clark Kent" has schedule "closed"
     When "Peter Parker" calls "1002"
-    When I wait "3" seconds
+    When I wait "4" seconds for the call to be forwarded
     Then "Bruce Wayne" is ringing
 
   Scenario: Call distribution when the schedule is closed during open period:
@@ -38,7 +38,7 @@ Feature: Schedule call distribution
     | exceptional |   1-12 |       1-31 |       1-7 |       00:01 |     23:58 | Bruce Wayne      |
     Given "Clark Kent" has schedule "closed_in_open"
     When "Peter Parker" calls "1002"
-    When I wait "3" seconds
+    When I wait "4" seconds for the call to be forwarded
     Then "Bruce Wayne" is ringing
 
   Scenario: Call distribution on group schedule
@@ -58,7 +58,7 @@ Feature: Schedule call distribution
     | Peter     | Parker   |
 
     When "Peter Parker" calls "2666"
-    When I wait "3" seconds
+    When I wait "4" seconds for the call to be forwarded
     Then "Bruce Wayne" is ringing
 
   Scenario: Call distribution on incall schedule
@@ -72,5 +72,5 @@ Feature: Schedule call distribution
     Given there is an incall "1002@from-extern" to the user "Clark Kent"
     Given I have a schedule "incall-closed" associated to incall "1002@from-extern"
     When chan_test calls "1002@from-extern"
-    When I wait "3" seconds
+    When I wait "4" seconds for the call to be forwarded
     Then "Bruce Wayne" is ringing
