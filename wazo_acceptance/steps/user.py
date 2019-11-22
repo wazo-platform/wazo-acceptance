@@ -141,7 +141,9 @@ def given_the_tlephony_user_has_lines(context, firstname, lastname):
         context.helpers.confd_user.add_line(confd_user, line)
 
         if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
-            _register_and_track_phone(context, body['name'], sip)
+            expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
+            with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
+                _register_and_track_phone(context, body['name'], sip)
 
 
 def _register_and_track_phone(context, tracking_id, endpoint_sip, nb_phone=1):
@@ -176,8 +178,11 @@ def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, ex
     )
     line = context.confd_client.lines.get(extension['lines'][0]['id'])
     endpoint_sip = context.confd_client.lines_sip.get(line['endpoint_sip']['id'])
+
     tracking_id = "{} {}".format(firstname, lastname)
-    _register_and_track_phone(context, tracking_id, endpoint_sip)
+    expected_event = {'line_state': 'available'}
+    with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
+        _register_and_track_phone(context, tracking_id, endpoint_sip)
 
 
 @given('"{firstname} {lastname}" has an "{forward_name}" forward set to "{exten}"')
