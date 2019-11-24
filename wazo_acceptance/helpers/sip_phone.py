@@ -124,12 +124,13 @@ class SIPPhone:
                    for device in response)
 
 
-class LineRegistrar:
+class PhoneFactory:
 
-    def __init__(self, debug):
+    def __init__(self, context, debug):
+        self._context = context
         self._debug = debug
 
-    def register_line(self, sip_config):
+    def _register_line(self, sip_config):
         logfile = None
         if self._debug:
             prefix = '[sip:{}]'.format(sip_config.sip_name)
@@ -137,4 +138,13 @@ class LineRegistrar:
 
         phone = SIPPhone(sip_config, logfile=logfile)
         phone.register()
+        return phone
+
+    def register_and_track_phone(self, tracking_id, endpoint_sip):
+        phone_config = self._context.helpers.sip_config.create(endpoint_sip)
+        phone = self._register_line(phone_config)
+        phone.sip_contact_uri = self._context.phone_register.find_new_sip_contact(
+            endpoint_sip['username'],
+        )
+        self._context.phone_register.add_registered_phone(phone, tracking_id)
         return phone

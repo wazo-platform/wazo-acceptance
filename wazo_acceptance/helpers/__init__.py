@@ -26,7 +26,7 @@ from .queue import Queue
 from .queue_skill_rule import QueueSkillRule
 from .schedule import Schedule
 from .sip_config import SIPConfigGenerator
-from .sip_phone import LineRegistrar
+from .sip_phone import PhoneFactory
 from .token import Token
 from .trunk import Trunk
 from .user import User
@@ -50,15 +50,15 @@ __all__ = [
     'IVR',
     'Incall',
     'Line',
-    'LineRegistrar',
     'Monit',
     'ParkingLot',
+    'PhoneFactory',
     'Pickup',
     'Provd',
     'Queue',
     'QueueSkillRule',
-    'Schedule',
     'SIPConfigGenerator',
+    'Schedule',
     'Token',
     'Trunk',
     'User',

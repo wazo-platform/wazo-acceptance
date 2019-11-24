@@ -173,7 +173,7 @@ def setup_remote_sysutils(context):
 
 def setup_phone(context, linphone_debug):
     context.phone_register = PhoneRegister(context)
-    context.helpers.sip_phone = helpers.LineRegistrar(linphone_debug)
+    context.helpers.sip_phone = helpers.PhoneFactory(context, linphone_debug)
     context.helpers.sip_config = helpers.SIPConfigGenerator(
         context.wazo_config['wazo_host'],
         context.wazo_config['linphone'],

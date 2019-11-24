@@ -110,7 +110,7 @@ def given_there_are_telephony_users_with_infos(context):
             tracking_id = "{} {}".format(body['firstname'], body.get('lastname', '')).strip()
             expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
             with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
-                _register_and_track_phone(context, tracking_id, sip)
+                context.helpers.sip_phone.register_and_track_phone(tracking_id, sip)
 
 
 @given('"{firstname} {lastname}" has lines')
@@ -143,17 +143,7 @@ def given_the_tlephony_user_has_lines(context, firstname, lastname):
         if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
             expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
             with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
-                _register_and_track_phone(context, body['name'], sip)
-
-
-def _register_and_track_phone(context, tracking_id, endpoint_sip, nb_phone=1):
-    for _ in range(nb_phone):
-        phone_config = context.helpers.sip_config.create(endpoint_sip)
-        phone = context.helpers.sip_phone.register_line(phone_config)
-        phone.sip_contact_uri = context.phone_register.find_new_sip_contact(
-            endpoint_sip['username'],
-        )
-        context.phone_register.add_registered_phone(phone, tracking_id)
+                context.helpers.sip_phone.register_and_track_phone(body['name'], sip)
 
 
 @given('"{firstname} {lastname}" has enabled "{dnd_name}" service')
@@ -182,7 +172,7 @@ def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, ex
     tracking_id = "{} {}".format(firstname, lastname)
     expected_event = {'line_state': 'available'}
     with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
-        _register_and_track_phone(context, tracking_id, endpoint_sip)
+        context.helpers.sip_phone.register_and_track_phone(tracking_id, endpoint_sip)
 
 
 @given('"{firstname} {lastname}" has an "{forward_name}" forward set to "{exten}"')

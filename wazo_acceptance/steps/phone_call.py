@@ -130,21 +130,10 @@ def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, 
     }
     sip = context.helpers.endpoint_sip.create(body)
     context.helpers.trunk.add_endpoint_sip(trunk, sip)
-    phone = _register_and_track_phone(context, incall_name, sip)
+    phone = context.helpers.sip_phone.register_and_track_phone(incall_name, sip)
     # TODO call linphone command to know this
     _sleep(2)  # wait before telephone is registered
     phone.call(exten)
-
-
-# TODO extract to helper
-def _register_and_track_phone(context, tracking_id, endpoint_sip):
-    phone_config = context.helpers.sip_config.create(endpoint_sip)
-    phone = context.helpers.sip_phone.register_line(phone_config)
-    phone.sip_contact_uri = context.phone_register.find_new_sip_contact(
-        endpoint_sip['username'],
-    )
-    context.phone_register.add_registered_phone(phone, tracking_id)
-    return phone
 
 
 def _sleep(seconds):
