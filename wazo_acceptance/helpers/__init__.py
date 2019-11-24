@@ -28,6 +28,7 @@ from .schedule import Schedule
 from .sip_config import SIPConfigGenerator
 from .sip_phone import LineRegistrar
 from .token import Token
+from .trunk import Trunk
 from .user import User
 from .voicemail import Voicemail
 
@@ -59,6 +60,7 @@ __all__ = [
     'Schedule',
     'SIPConfigGenerator',
     'Token',
+    'Trunk',
     'User',
     'Voicemail',
 ]

@@ -56,53 +56,53 @@ Feature: Call transfer
       | name     | slots_start | slots_end | exten | context |
       | parking1 | 1851        | 1851      | 1850  | default |
 
-    When chan_test calls "3801@from-extern"
+    When incoming call received from "incall" to "3801@from-extern"
     When I wait "2" seconds for the call processing
     Then "User A" is ringing
 
     When "User A" answers
     When "User A" does an attended transfer to "1802@default" with API
     Then "User A" is talking
-    Then chan_test is holding
+    Then "incall" is holding
     Then "User B" is ringing
 
     When "User A" cancel the transfer with API
     Then "User A" is talking
-    Then chan_test is talking
+    Then "incall" is talking
     Then "User B" is hungup
 
     When "User A" does an attended transfer to "1802@default" with API
     Then "User A" is talking
-    Then chan_test is holding
+    Then "incall" is holding
     Then "User B" is ringing
 
     When "User B" answers
     Then "User A" is talking
-    Then chan_test is holding
+    Then "incall" is holding
     Then "User B" is talking
 
     When "User B" hangs up
     Then "User A" is talking
-    Then chan_test is talking
+    Then "incall" is talking
     Then "User B" is hungup
 
     When "User A" does an attended transfer to "1850@default" with API
     When "User A" complete the transfer with API
     Then "User A" is hungup
-    Then chan_test is talking
+    Then "incall" is talking
     Then "User B" is hungup
 
     When "User A" calls "1851"
     Then "User A" is talking
-    Then chan_test is talking
+    Then "incall" is talking
 
     When "User A" does an attended transfer to "1802@default" with API
     When "User B" answers
     Then "User A" is talking
-    Then chan_test is talking
+    Then "incall" is talking
     Then "User B" is talking
 
     When "User A" complete the transfer with API
     Then "User A" is hungup
-    Then chan_test is talking
+    Then "incall" is talking
     Then "User B" is talking

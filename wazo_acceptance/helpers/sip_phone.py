@@ -56,6 +56,7 @@ class SIPPhone:
             config.rtp_port,
             logfile,
         )
+        self._name = config.sip_name
         self._call_result = None
         self.sip_port = config.sip_port
         self.rtp_port = config.rtp_port
@@ -115,6 +116,12 @@ class SIPPhone:
 
     def is_hungup(self):
         return self._session.call_status() == CallStatus.OFF
+
+    def is_holding(self, context):
+        response = context.amid_client.action('DeviceStateList')
+        device_name = 'PJSIP/{}'.format(self._name)
+        return any(device.get('Device') == device_name and device.get('State') == 'ONHOLD'
+                   for device in response)
 
 
 class LineRegistrar:

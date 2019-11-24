@@ -162,6 +162,7 @@ def setup_helpers(context):
     context.helpers.queue_skill_rule = helpers.QueueSkillRule(context)
     context.helpers.schedule = helpers.Schedule(context)
     context.helpers.token = helpers.Token(context)
+    context.helpers.trunk = helpers.Trunk(context)
     context.helpers.user = helpers.User(context)
     context.helpers.voicemail = helpers.Voicemail(context)
 
