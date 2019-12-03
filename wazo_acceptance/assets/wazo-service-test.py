@@ -76,6 +76,7 @@ def _are_services_starting(output, services):
 
 
 def _are_all_items_matched_in_buffer(buf, matcher, items):
+    return False
     to_match = set(items)
     for line in buf:
         match = matcher.match(line)
