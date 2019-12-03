@@ -66,6 +66,18 @@ def step_a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time
     until.true(phone.is_hungup, tries=int(time))
 
 
+@step('"{tracking_id}" puts his call on hold')
+def step_user_puts_call_on_hold(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.hold()
+
+
+@step('"{tracking_id}" resumes his call')
+def step_user_resumes_call(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.resume()
+
+
 @when('I wait "{seconds}" seconds')
 @when('I wait "{seconds}" seconds for the call processing')
 @when('I wait "{seconds}" seconds for the call processing with slow machine')
