@@ -30,9 +30,9 @@ BASE_SERVICES = [
 ALL_SERVICES = ['rabbitmq-server', 'consul', 'postgresql@11-main', 'nginx'] + BASE_SERVICES
 
 MONIT_RUNNING = re.compile(r'^\d+ monit$')
-RUNNING_SERVICE = re.compile(r'^\s+running\s+(\S+)$')
-STOPPED_SERVICE = re.compile(r'^\s+stopped\s+(\S+)$')
-STARTING_SERVICE = re.compile(r'^\s+starting (\S+) ... OK$')
+RUNNING_SERVICE = re.compile(r'^\s+(?:running|unknown)\s+(\S+)$')
+STOPPED_SERVICE = re.compile(r'^\s+(?:stopped|unknown)\s+(\S+)$')
+STARTING_SERVICE = re.compile(r'^\s+starting (\S+) ... (?:OK|ignored)$')
 
 
 def _exec(cmd):
