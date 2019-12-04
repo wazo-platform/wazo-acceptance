@@ -13,6 +13,7 @@ SERVICE_PIDFILES = {
     'wazo-amid': '/run/wazo-amid/wazo-amid.pid',
     'wazo-auth': '/run/wazo-auth/wazo-auth.pid',
     'wazo-calld': '/run/wazo-calld/wazo-calld.pid',
+    'wazo-chatd': '/run/wazo-chatd/wazo-chatd.pid',
     'wazo-confd': '/run/wazo-confd/wazo-confd.pid',
     'wazo-dird': '/run/wazo-dird/wazo-dird.pid',
     'wazo-webhookd': '/run/wazo-webhookd/wazo-webhookd.pid',

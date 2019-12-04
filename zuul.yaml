@@ -2,8 +2,8 @@
     check:
       jobs:
         - wazo-acceptance-job:
-            nodeset: debian10-vm
+            nodeset: debian10-vm-m2
     gate:
       jobs:
         - wazo-acceptance-job:
-            nodeset: debian10-vm
+            nodeset: debian10-vm-m2
