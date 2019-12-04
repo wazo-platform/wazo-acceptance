@@ -30,11 +30,13 @@ class ConfdGroup:
             return group
 
     def add_extension(self, group, extension):
-        self._confd_client.groups(group).add_extension(extension)
+        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
+            self._confd_client.groups(group).add_extension(extension)
         self._context.add_cleanup(self._confd_client.groups(group).remove_extension, extension)
 
     def update_fallbacks(self, group, fallbacks):
         self._confd_client.groups(group).update_fallbacks(fallbacks)
 
     def update_user_members(self, group, users):
-        self._confd_client.groups(group).update_user_members(users)
+        with self._context.helpers.bus.wait_for_asterisk_reload(pjsip=True, queue=True):
+            self._confd_client.groups(group).update_user_members(users)

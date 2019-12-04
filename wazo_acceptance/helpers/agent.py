@@ -9,7 +9,8 @@ class Agent:
         self._confd_client = context.confd_client
 
     def create(self, body):
-        agent = self._confd_client.agents.create(body)
+        with self._context.helpers.bus.wait_for_asterisk_reload(queue=True):
+            agent = self._confd_client.agents.create(body)
         self._context.add_cleanup(self._confd_client.agents.delete, agent)
         return agent
 

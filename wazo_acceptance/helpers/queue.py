@@ -15,7 +15,8 @@ class Queue:
         return queue
 
     def add_extension(self, queue, extension):
-        self._context.confd_client.queues(queue).add_extension(extension)
+        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
+            self._context.confd_client.queues(queue).add_extension(extension)
         self._context.add_cleanup(
             self._confd_client.queues(queue).remove_extension,
             extension
@@ -28,7 +29,8 @@ class Queue:
         )
 
     def add_user_member(self, queue, user):
-        self._context.confd_client.queues(queue).add_user_member(user)
+        with self._context.helpers.bus.wait_for_asterisk_reload(pjsip=True, queue=True):
+            self._context.confd_client.queues(queue).add_user_member(user)
         self._context.add_cleanup(
             self._confd_client.queues(queue).remove_user_member, user
         )
