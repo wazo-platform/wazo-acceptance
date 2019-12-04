@@ -7,6 +7,7 @@ import requests
 loggers = {
     'acceptance': logging.getLogger('acceptance'),
     'linphone': logging.getLogger('linphone'),
+    'stevedore': logging.getLogger('stevedore')
 }
 
 
