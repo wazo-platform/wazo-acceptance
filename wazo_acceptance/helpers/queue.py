@@ -39,8 +39,9 @@ class Queue:
             extension
         )
 
-    def add_agent_member(self, queue, agent):
-        self._context.confd_client.queues(queue).add_agent_member(agent)
+    def add_agent_member(self, queue, agent, penalty=0):
+        penalty = int(penalty)
+        self._context.confd_client.queues(queue).add_agent_member(agent, penalty=penalty)
         self._context.add_cleanup(
             self._confd_client.queues(queue).remove_agent_member, agent
         )
