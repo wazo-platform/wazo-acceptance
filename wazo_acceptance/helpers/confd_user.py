@@ -13,7 +13,8 @@ class ConfdUser:
         if ring_seconds:
             body['ring_seconds'] = int(ring_seconds)
 
-        user = self._confd_client.users.create(body)
+        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True, queue=True):
+            user = self._confd_client.users.create(body)
         self._context.add_cleanup(self._confd_client.users.delete, user)
         return user
 
@@ -24,7 +25,8 @@ class ConfdUser:
 
     def add_voicemail(self, user, voicemail):
         confd_user = self._confd_client.users(user)
-        confd_user.add_voicemail(voicemail)
+        with self._context.helpers.bus.wait_for_asterisk_reload(pjsip=True):
+            confd_user.add_voicemail(voicemail)
         self._context.add_cleanup(confd_user.remove_voicemail)
 
     def get_by(self, **kwargs):

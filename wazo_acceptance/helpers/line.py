@@ -9,7 +9,8 @@ class Line:
         self._confd_client = context.confd_client
 
     def create(self, body):
-        line = self._confd_client.lines.create(body)
+        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True):
+            line = self._confd_client.lines.create(body)
         self._context.add_cleanup(self._confd_client.lines.delete, line)
         return line
 
@@ -18,7 +19,8 @@ class Line:
         self._context.add_cleanup(self._confd_client.lines(line).remove_device, device)
 
     def add_endpoint_sip(self, line, sip):
-        self._confd_client.lines(line).add_endpoint_sip(sip)
+        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True):
+            self._confd_client.lines(line).add_endpoint_sip(sip)
         self._context.add_cleanup(self._confd_client.lines(line).remove_endpoint_sip, sip)
 
     def add_extension(self, line, extension):

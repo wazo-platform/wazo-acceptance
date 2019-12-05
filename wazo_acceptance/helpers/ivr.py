@@ -17,7 +17,8 @@ class IVR:
         if max_tries:
             body['max_tries'] = int(max_tries)
 
-        ivr = self._confd_client.ivr.create(body)
+        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
+            ivr = self._confd_client.ivr.create(body)
         self._context.add_cleanup(self._confd_client.ivr.delete, ivr)
         return ivr
 
