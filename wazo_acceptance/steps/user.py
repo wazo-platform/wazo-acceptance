@@ -177,7 +177,7 @@ def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, ex
         context=exten_context
     )
     line = context.confd_client.lines.get(extension['lines'][0]['id'])
-    endpoint_sip = context.confd_client.lines_sip.get(line['endpoint_sip']['id'])
+    endpoint_sip = context.confd_client.endpoints_sip.get(line['endpoint_sip']['id'])
 
     tracking_id = "{} {}".format(firstname, lastname)
     expected_event = {'line_state': 'available'}
