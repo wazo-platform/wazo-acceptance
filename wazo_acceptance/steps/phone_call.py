@@ -18,19 +18,19 @@ def step_a_calls_exten(context, tracking_id, exten):
 @step('"{tracking_id}" is ringing')
 def step_user_is_ringing(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
-    until.true(phone.is_ringing, tries=3)
+    until.true(phone.is_ringing, tries=4)
 
 
 @step('"{tracking_id}" is hungup')
 def step_user_is_hungup(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
-    until.true(phone.is_hungup, tries=3)
+    until.true(phone.is_hungup, tries=4)
 
 
 @step('"{tracking_id}" is talking')
 def step_user_is_talking(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
-    until.true(phone.is_talking, tries=3)
+    until.true(phone.is_talking, tries=4)
 
 @step('"{tracking_id}" answers')
 def step_user_answers(context, tracking_id):
