@@ -61,10 +61,10 @@ def run(config_dir, instance_name):
     logger.debug('Configuring Consul')
     _configure_consul(context)
 
-    logger.debug('Configuring RabbitMQ on Wazo')
+    logger.debug('Configuring RabbitMQ')
     _configure_rabbitmq(context)
 
-    logger.debug('Configuring wazo-agid on Wazo')
+    logger.debug('Configuring wazo-agid')
     _allow_agid_listen_on_all_interfaces(context)
 
     logger.debug('Installing chan_test (module for asterisk)')
