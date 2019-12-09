@@ -19,6 +19,7 @@ WAZO_SERVICE_PIDFILES = {
     'wazo-dird': '/run/wazo-dird/wazo-dird.pid',
     'wazo-phoned': '/run/wazo-phoned/wazo-phoned.pid',
     'wazo-plugind': '/run/wazo-plugind/wazo-plugind.pid',
+    'wazo-provd': '/run/wazo-provd/wazo-provd.pid',
     'wazo-webhookd': '/run/wazo-webhookd/wazo-webhookd.pid',
     'wazo-websocketd': '/run/wazo-websocketd/wazo-websocketd.pid',
 }
