@@ -8,12 +8,17 @@ from email.utils import parsedate
 
 WAZO_SERVICE_PIDFILES = {
     'wazo-agentd': '/run/wazo-agentd/wazo-agentd.pid',
+    'wazo-agid': '/run/wazo-agid/wazo-agid.pid',
     'wazo-amid': '/run/wazo-amid/wazo-amid.pid',
     'wazo-auth': '/run/wazo-auth/wazo-auth.pid',
+    'wazo-call-logd': '/run/wazo-call-logd/wazo-call-logd.pid',
     'wazo-calld': '/run/wazo-calld/wazo-calld.pid',
     'wazo-chatd': '/run/wazo-chatd/wazo-chatd.pid',
     'wazo-confd': '/run/wazo-confd/wazo-confd.pid',
+    'wazo-confgend': '/run/wazo-confgend/wazo-confgend.pid',
     'wazo-dird': '/run/wazo-dird/wazo-dird.pid',
+    'wazo-phoned': '/run/wazo-phoned/wazo-phoned.pid',
+    'wazo-plugind': '/run/wazo-plugind/wazo-plugind.pid',
     'wazo-webhookd': '/run/wazo-webhookd/wazo-webhookd.pid',
     'wazo-websocketd': '/run/wazo-websocketd/wazo-websocketd.pid',
 }
