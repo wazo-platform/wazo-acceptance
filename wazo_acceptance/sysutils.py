@@ -27,6 +27,7 @@ WAZO_SERVICE_PIDFILES = {
 SERVICE_PIDFILES = {
     'asterisk': '/run/asterisk/asterisk.pid',
     'consul': '/run/consul/consul.pid',
+    'postgresql': '/run/postgresql/11-main.pid',
     **WAZO_SERVICE_PIDFILES
 }
 
@@ -117,4 +118,8 @@ class RemoteSysUtils:
 
     def restart_service(self, service_name):
         command = ['systemctl', 'restart', service_name]
+        self._ssh_client.check_call(command)
+
+    def reload_service(self, service_name):
+        command = ['systemctl', 'reload', service_name]
         self._ssh_client.check_call(command)

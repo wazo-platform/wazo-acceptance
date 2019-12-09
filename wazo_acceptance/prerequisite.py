@@ -86,6 +86,9 @@ def run(config_dir, instance_name):
     logger.debug('Configuring wazo services debugging...')
     _enable_wazo_services_debug(context)
 
+    logger.debug('Configuring postgresql debug')
+    _configure_postgresql_debug(context)
+
 
 def _configure_rabbitmq(context):
     copy_asset_to_server_permanently(context, 'rabbitmq.config', '/etc/rabbitmq')
@@ -216,6 +219,21 @@ def _configure_consul(context):
     consul_is_running = context.remote_sysutils.is_process_running(consul_pidfile)
     if consul_is_running:
         context.remote_sysutils.restart_service('consul')
+
+
+def _configure_postgresql_debug(context):
+    config_file = '/etc/postgresql/11/main/postgresql.conf'
+    command = [
+        'sed',
+        '-i',
+        '"s/#log_min_duration_statement = -1/log_min_duration_statement = 0/"',
+        config_file,
+    ]
+    context.ssh_client.check_call(command)
+    pg_pidfile = context.remote_sysutils.get_pidfile_for_service_name('postgresql')
+    pg_is_running = context.remote_sysutils.is_process_running(pg_pidfile)
+    if pg_is_running:
+        context.remote_sysutils.reload_service('postgresql')
 
 
 def _enable_wazo_services_debug(context):
