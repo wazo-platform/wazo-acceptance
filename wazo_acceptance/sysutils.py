@@ -6,9 +6,7 @@ import datetime
 
 from email.utils import parsedate
 
-SERVICE_PIDFILES = {
-    'asterisk': '/run/asterisk/asterisk.pid',
-    'consul': '/run/consul/consul.pid',
+WAZO_SERVICE_PIDFILES = {
     'wazo-agentd': '/run/wazo-agentd/wazo-agentd.pid',
     'wazo-amid': '/run/wazo-amid/wazo-amid.pid',
     'wazo-auth': '/run/wazo-auth/wazo-auth.pid',
@@ -18,6 +16,12 @@ SERVICE_PIDFILES = {
     'wazo-dird': '/run/wazo-dird/wazo-dird.pid',
     'wazo-webhookd': '/run/wazo-webhookd/wazo-webhookd.pid',
     'wazo-websocketd': '/run/wazo-websocketd/wazo-websocketd.pid',
+}
+
+SERVICE_PIDFILES = {
+    'asterisk': '/run/asterisk/asterisk.pid',
+    'consul': '/run/consul/consul.pid',
+    **WAZO_SERVICE_PIDFILES
 }
 
 
