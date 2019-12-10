@@ -6,18 +6,29 @@ import datetime
 
 from email.utils import parsedate
 
-SERVICE_PIDFILES = {
-    'asterisk': '/run/asterisk/asterisk.pid',
-    'consul': '/run/consul/consul.pid',
+WAZO_SERVICE_PIDFILES = {
     'wazo-agentd': '/run/wazo-agentd/wazo-agentd.pid',
+    'wazo-agid': '/run/wazo-agid/wazo-agid.pid',
     'wazo-amid': '/run/wazo-amid/wazo-amid.pid',
     'wazo-auth': '/run/wazo-auth/wazo-auth.pid',
+    'wazo-call-logd': '/run/wazo-call-logd/wazo-call-logd.pid',
     'wazo-calld': '/run/wazo-calld/wazo-calld.pid',
     'wazo-chatd': '/run/wazo-chatd/wazo-chatd.pid',
     'wazo-confd': '/run/wazo-confd/wazo-confd.pid',
+    'wazo-confgend': '/run/wazo-confgend/wazo-confgend.pid',
     'wazo-dird': '/run/wazo-dird/wazo-dird.pid',
+    'wazo-phoned': '/run/wazo-phoned/wazo-phoned.pid',
+    'wazo-plugind': '/run/wazo-plugind/wazo-plugind.pid',
+    'wazo-provd': '/run/wazo-provd/wazo-provd.pid',
     'wazo-webhookd': '/run/wazo-webhookd/wazo-webhookd.pid',
     'wazo-websocketd': '/run/wazo-websocketd/wazo-websocketd.pid',
+}
+
+SERVICE_PIDFILES = {
+    'asterisk': '/run/asterisk/asterisk.pid',
+    'consul': '/run/consul/consul.pid',
+    'postgresql': '/run/postgresql/11-main.pid',
+    **WAZO_SERVICE_PIDFILES
 }
 
 
@@ -107,4 +118,8 @@ class RemoteSysUtils:
 
     def restart_service(self, service_name):
         command = ['systemctl', 'restart', service_name]
+        self._ssh_client.check_call(command)
+
+    def reload_service(self, service_name):
+        command = ['systemctl', 'reload', service_name]
         self._ssh_client.check_call(command)

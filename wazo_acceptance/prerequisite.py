@@ -11,6 +11,7 @@ from . import (
     setup,
 )
 from .config import load_config
+from .sysutils import WAZO_SERVICE_PIDFILES as WAZO_SERVICES
 
 logger = logging.getLogger(__name__)
 
@@ -60,10 +61,10 @@ def run(config_dir, instance_name):
     logger.debug('Configuring Consul')
     _configure_consul(context)
 
-    logger.debug('Configuring RabbitMQ on Wazo')
+    logger.debug('Configuring RabbitMQ')
     _configure_rabbitmq(context)
 
-    logger.debug('Configuring wazo-agid on Wazo')
+    logger.debug('Configuring wazo-agid')
     _allow_agid_listen_on_all_interfaces(context)
 
     logger.debug('Installing chan_test (module for asterisk)')
@@ -82,29 +83,14 @@ def run(config_dir, instance_name):
     context.helpers.context.update_contextnumbers_conference('default', 4000, 4999)
     context.helpers.context.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
-    logger.debug('Configuring wazo-auth')
-    _configure_wazo_service(context, 'wazo-auth')
+    logger.debug('Configuring asterisk')
+    _configure_asterisk(context)
 
-    logger.debug('Configuring wazo-amid')
-    _configure_wazo_service(context, 'wazo-amid')
+    logger.debug('Configuring wazo services debugging...')
+    _enable_wazo_services_debug(context)
 
-    logger.debug('Configuring wazo-confd')
-    _configure_wazo_service(context, 'wazo-confd')
-
-    logger.debug('Configuring wazo-calld')
-    _configure_wazo_service(context, 'wazo-calld')
-
-    logger.debug('Configuring wazo-chatd')
-    _configure_wazo_service(context, 'wazo-chatd')
-
-    logger.debug('Configuring wazo-dird')
-    _configure_wazo_service(context, 'wazo-dird')
-
-    logger.debug('Configuring wazo-webhookd')
-    _configure_wazo_service(context, 'wazo-webhookd')
-
-    logger.debug('Configuring wazo-websocketd')
-    _configure_wazo_service(context, 'wazo-websocketd')
+    logger.debug('Configuring postgresql debug')
+    _configure_postgresql_debug(context)
 
 
 def _configure_rabbitmq(context):
@@ -238,18 +224,42 @@ def _configure_consul(context):
         context.remote_sysutils.restart_service('consul')
 
 
-def _configure_wazo_service(context, service):
-    _copy_daemon_config_file(context, service)
-    service_pidfile = context.remote_sysutils.get_pidfile_for_service_name(service)
-    service_is_running = context.remote_sysutils.is_process_running(service_pidfile)
-    if service_is_running:
-        context.remote_sysutils.restart_service(service)
+def _configure_asterisk(context):
+    copy_asset_to_server_permanently(context, 'cli.conf', '/etc/asterisk/cli.conf')
+    asterisk_pidfile = context.remote_sysutils.get_pidfile_for_service_name('asterisk')
+    asterisk_is_running = context.remote_sysutils.is_process_running(asterisk_pidfile)
+    if asterisk_is_running:
+        context.remote_sysutils.restart_service('asterisk')
 
 
-def _copy_daemon_config_file(context, daemon_name):
-    asset_filename = '{}-acceptance.yml'.format(daemon_name)
-    remote_path = '/etc/{}/conf.d'.format(daemon_name)
-    copy_asset_to_server_permanently(context, asset_filename, remote_path)
+def _configure_postgresql_debug(context):
+    config_file = '/etc/postgresql/11/main/postgresql.conf'
+    command = [
+        'sed',
+        '-i',
+        '"s/#log_min_duration_statement = -1/log_min_duration_statement = 0/"',
+        config_file,
+    ]
+    context.ssh_client.check_call(command)
+    pg_pidfile = context.remote_sysutils.get_pidfile_for_service_name('postgresql')
+    pg_is_running = context.remote_sysutils.is_process_running(pg_pidfile)
+    if pg_is_running:
+        context.remote_sysutils.reload_service('postgresql')
+
+
+def _enable_wazo_services_debug(context):
+    for service in WAZO_SERVICES.keys():
+        logger.debug('Configuring %s debug', service)
+        if service == 'wazo-provd':
+            debug_content = 'general: {verbose: true}'
+        else:
+            debug_content = 'debug: true'
+        command = ['echo', debug_content, '>', f'/etc/{service}/conf.d/wazo-acceptance-debug.yml']
+        context.ssh_client.check_call(command)
+        service_pidfile = context.remote_sysutils.get_pidfile_for_service_name(service)
+        service_is_running = context.remote_sysutils.is_process_running(service_pidfile)
+        if service_is_running:
+            context.remote_sysutils.restart_service(service)
 
 
 def copy_asset_to_server_permanently(context, asset, serverpath):
