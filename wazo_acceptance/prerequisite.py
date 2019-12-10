@@ -83,6 +83,9 @@ def run(config_dir, instance_name):
     context.helpers.context.update_contextnumbers_conference('default', 4000, 4999)
     context.helpers.context.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
 
+    logger.debug('Configuring asterisk')
+    _configure_asterisk(context)
+
     logger.debug('Configuring wazo services debugging...')
     _enable_wazo_services_debug(context)
 
@@ -219,6 +222,14 @@ def _configure_consul(context):
     consul_is_running = context.remote_sysutils.is_process_running(consul_pidfile)
     if consul_is_running:
         context.remote_sysutils.restart_service('consul')
+
+
+def _configure_asterisk(context):
+    copy_asset_to_server_permanently(context, 'cli.conf', '/etc/asterisk/cli.conf')
+    asterisk_pidfile = context.remote_sysutils.get_pidfile_for_service_name('asterisk')
+    asterisk_is_running = context.remote_sysutils.is_process_running(asterisk_pidfile)
+    if asterisk_is_running:
+        context.remote_sysutils.restart_service('asterisk')
 
 
 def _configure_postgresql_debug(context):
