@@ -1,6 +1,8 @@
 # Copyright 2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from requests import HTTPError
+
 
 class ConfdUser:
 
@@ -34,6 +36,12 @@ class ConfdUser:
         if not user:
             raise Exception('Confd user not found: {}'.format(kwargs))
         return user
+
+    def import_users(self, csv):
+        try:
+            return self._confd_client.users.import_csv(csv)
+        except HTTPError as e:
+            return e.response
 
     def _find_by(self, **kwargs):
         users = self._confd_client.users.list(**kwargs)['items']
