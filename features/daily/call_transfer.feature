@@ -18,6 +18,7 @@ Feature: Call transfer
 
     When "User A" answers
     When "User A" does a blind transfer to "1802@default" with API
+    When I wait "3" seconds for wazo-calld load to drop
     Then "User B" is ringing
 
     When "User B" answers
@@ -28,6 +29,7 @@ Feature: Call transfer
 
     When "User A" answers
     When "User A" does a blind transfer to "1804@default" with API
+    When I wait "3" seconds for wazo-calld load to drop
     Then "User D" is ringing
 
     When "User D" answers
