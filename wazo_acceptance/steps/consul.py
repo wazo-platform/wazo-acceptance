@@ -16,11 +16,13 @@ def consul_returns_a_running_service(context, service_name):
     if service_name == 'wazo-setupd':
         _configure_consul(context)
 
-    consul_config = {'token': context.wazo_config['consul_token'],
-                     'scheme': 'https',
-                     'host': context.wazo_config['wazo_host'],
-                     'port': 8500,
-                     'verify': False}
+    consul_config = {
+        'token': context.wazo_config['consul_token'],
+        'scheme': 'http',
+        'host': context.wazo_config['wazo_host'],
+        'port': 8500,
+        'verify': False,
+    }
     finder = ServiceFinder(consul_config)
 
     def service_is_healthy(service_name):
