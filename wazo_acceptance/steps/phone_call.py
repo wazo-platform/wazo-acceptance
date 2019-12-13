@@ -32,6 +32,7 @@ def step_user_is_talking(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_talking, tries=3)
 
+
 @step('"{tracking_id}" answers')
 def step_user_answers(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
