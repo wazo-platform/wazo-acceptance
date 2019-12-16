@@ -7,7 +7,8 @@ import requests
 loggers = {
     'acceptance': logging.getLogger('acceptance'),
     'linphone': logging.getLogger('linphone'),
-    'stevedore': logging.getLogger('stevedore')
+    'stevedore': logging.getLogger('stevedore'),
+    'xivo_test_helpers': logging.getLogger('xivo_test_helpers'),
 }
 
 
