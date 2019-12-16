@@ -21,6 +21,7 @@ DEFAULT_GLOBAL_CONFIG = {
 
         'acceptance': False,
         'linphone': False,
+        'xivo_test_helpers': False,
     },
     'instances': {}
 }
