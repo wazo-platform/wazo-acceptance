@@ -236,6 +236,5 @@ def when_i_import_users_ignoring_errors(context):
 def then_my_import_result_matches(context, line_number):
     for error in context.import_response['errors']:
         if error['details']['row_number'] == int(line_number):
-            break
-    else:
-        assert False, 'Line number not matched'
+            return
+    raise AssertionError('Line number not matched')
