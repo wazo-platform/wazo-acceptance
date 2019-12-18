@@ -219,3 +219,22 @@ def when_user_does_a_blind_transfer_to_exten_with_api(context, firstname, lastna
         exten=exten,
         flow='blind'
     )
+
+
+@when('I import the following users ignoring errors')
+def when_i_import_users_ignoring_errors(context):
+    lines = [','.join(context.table.headings)]
+    for row in context.table:
+        lines.append(','.join(row))
+    csv = '\n'.join(lines)
+
+    response = context.helpers.confd_user.import_users(csv)
+    context.import_response = response
+
+
+@then('my import result has an error on line "{line_number}"')
+def then_my_import_result_matches(context, line_number):
+    for error in context.import_response['errors']:
+        if error['details']['row_number'] == int(line_number):
+            return
+    raise AssertionError('Line number not matched')
