@@ -9,6 +9,9 @@ def given_there_are_queues(context):
     context.table.require_columns(['name', 'exten', 'context'])
     for row in context.table:
         body = row.as_dict()
+        timeout = body.pop('option_timeout', None)
+        if timeout is not None:
+            body['options'] = [('timeout', timeout)]
         queue = context.helpers.queue.create(body)
 
         extension_body = {'exten': body['exten'], 'context': body['context']}

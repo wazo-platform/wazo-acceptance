@@ -13,6 +13,14 @@ def given_there_are_skill_rules_with_infos(context):
         context.helpers.queue_skill_rule.create(body)
 
 
+@given('there are "{skill_name}" skill rule with infos')
+def given_there_are_name_skill_rule_with_infos(context, skill_name):
+    context.table.require_columns(['definition'])
+    rules = [{'definition': row.get('definition')} for row in context.table]
+    body = {'name': skill_name, 'rules': rules}
+    context.helpers.queue_skill_rule.create(body)
+
+
 @given('agent "{number}" has skill "{skill_name}" with weight "{weight}"')
 def given_agent_number_has_skill_with_weight(context, number, skill_name, weight):
     agent = context.helpers.agent.get_by(number=number)
