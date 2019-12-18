@@ -56,6 +56,7 @@ class SIPPhone:
             config.rtp_port,
             logfile,
         )
+        self._name = config.sip_name
         self._call_result = None
         self.sip_port = config.sip_port
         self.rtp_port = config.rtp_port
@@ -116,13 +117,20 @@ class SIPPhone:
     def is_hungup(self):
         return self._session.call_status() == CallStatus.OFF
 
+    def is_holding(self, context):
+        response = context.amid_client.action('DeviceStateList')
+        device_name = 'PJSIP/{}'.format(self._name)
+        return any(device.get('Device') == device_name and device.get('State') == 'ONHOLD'
+                   for device in response)
 
-class LineRegistrar:
 
-    def __init__(self, debug):
+class PhoneFactory:
+
+    def __init__(self, context, debug):
+        self._context = context
         self._debug = debug
 
-    def register_line(self, sip_config):
+    def _register_line(self, sip_config):
         logfile = None
         if self._debug:
             prefix = '[sip:{}]'.format(sip_config.sip_name)
@@ -130,4 +138,13 @@ class LineRegistrar:
 
         phone = SIPPhone(sip_config, logfile=logfile)
         phone.register()
+        return phone
+
+    def register_and_track_phone(self, tracking_id, endpoint_sip):
+        phone_config = self._context.helpers.sip_config.create(endpoint_sip)
+        phone = self._register_line(phone_config)
+        phone.sip_contact_uri = self._context.phone_register.find_new_sip_contact(
+            endpoint_sip['username'],
+        )
+        self._context.phone_register.add_registered_phone(phone, tracking_id)
         return phone

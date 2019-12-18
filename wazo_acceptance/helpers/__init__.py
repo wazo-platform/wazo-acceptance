@@ -19,14 +19,16 @@ from .incall import Incall
 from .ivr import IVR
 from .line import Line
 from .monit import Monit
+from .parking_lot import ParkingLot
 from .pickup import Pickup
 from .provd import Provd
 from .queue import Queue
 from .queue_skill_rule import QueueSkillRule
 from .schedule import Schedule
 from .sip_config import SIPConfigGenerator
-from .sip_phone import LineRegistrar
+from .sip_phone import PhoneFactory
 from .token import Token
+from .trunk import Trunk
 from .user import User
 from .voicemail import Voicemail
 
@@ -48,15 +50,17 @@ __all__ = [
     'IVR',
     'Incall',
     'Line',
-    'LineRegistrar',
     'Monit',
+    'ParkingLot',
+    'PhoneFactory',
     'Pickup',
     'Provd',
     'Queue',
     'QueueSkillRule',
-    'Schedule',
     'SIPConfigGenerator',
+    'Schedule',
     'Token',
+    'Trunk',
     'User',
     'Voicemail',
 ]

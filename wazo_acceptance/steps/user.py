@@ -110,7 +110,7 @@ def given_there_are_telephony_users_with_infos(context):
             tracking_id = "{} {}".format(body['firstname'], body.get('lastname', '')).strip()
             expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
             with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
-                _register_and_track_phone(context, tracking_id, sip)
+                context.helpers.sip_phone.register_and_track_phone(tracking_id, sip)
 
 
 @given('"{firstname} {lastname}" has lines')
@@ -143,17 +143,7 @@ def given_the_tlephony_user_has_lines(context, firstname, lastname):
         if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
             expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
             with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
-                _register_and_track_phone(context, body['name'], sip)
-
-
-def _register_and_track_phone(context, tracking_id, endpoint_sip, nb_phone=1):
-    for _ in range(nb_phone):
-        phone_config = context.helpers.sip_config.create(endpoint_sip)
-        phone = context.helpers.sip_phone.register_line(phone_config)
-        phone.sip_contact_uri = context.phone_register.find_new_sip_contact(
-            endpoint_sip['username'],
-        )
-        context.phone_register.add_registered_phone(phone, tracking_id)
+                context.helpers.sip_phone.register_and_track_phone(body['name'], sip)
 
 
 @given('"{firstname} {lastname}" has enabled "{dnd_name}" service')
@@ -182,7 +172,7 @@ def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, ex
     tracking_id = "{} {}".format(firstname, lastname)
     expected_event = {'line_state': 'available'}
     with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
-        _register_and_track_phone(context, tracking_id, endpoint_sip)
+        context.helpers.sip_phone.register_and_track_phone(tracking_id, endpoint_sip)
 
 
 @given('"{firstname} {lastname}" has an "{forward_name}" forward set to "{exten}"')
@@ -238,3 +228,30 @@ def then_my_import_result_matches(context, line_number):
         if error['details']['row_number'] == int(line_number):
             return
     raise AssertionError('Line number not matched')
+
+
+@when('"{firstname} {lastname}" does an attended transfer to "{exten}@{exten_context}" with API')
+def when_user_does_an_attended_transfer_to_exten_with_api(context, firstname, lastname, exten, exten_context):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    initiator_call = context.helpers.call.get_by(user_uuid=confd_user['uuid'])
+    transferred_call_id = next(iter(initiator_call['talking_to']))
+    transfer = context.calld_client.transfers.make_transfer(
+        transferred=transferred_call_id,
+        initiator=initiator_call['call_id'],
+        context=exten_context,
+        exten=exten,
+        flow='attended'
+    )
+    context.transfer_id = transfer['id']
+
+
+@when('"{firstname} {lastname}" cancel the transfer with API')
+def when_user_cancel_the_transfer_with_api(context, firstname, lastname):
+    # NOTE: Use a user token to GET /users/me/transfers OR implement GET /transfers
+    context.calld_client.transfers.cancel_transfer(context.transfer_id)
+
+
+@when('"{firstname} {lastname}" complete the transfer with API')
+def when_user_complete_the_transfer_with_api(context, firstname, lastname):
+    # NOTE: Use a user token to GET /users/me/transfers OR implement GET /transfers
+    context.calld_client.transfers.complete_transfer(context.transfer_id)

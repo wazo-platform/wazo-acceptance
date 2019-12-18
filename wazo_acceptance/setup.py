@@ -155,12 +155,14 @@ def setup_helpers(context):
     context.helpers.ivr = helpers.IVR(context)
     context.helpers.line = helpers.Line(context)
     context.helpers.monit = helpers.Monit(context)
+    context.helpers.parking_lot = helpers.ParkingLot(context)
     context.helpers.pickup = helpers.Pickup(context)
     context.helpers.provd = helpers.Provd(context)
     context.helpers.queue = helpers.Queue(context)
     context.helpers.queue_skill_rule = helpers.QueueSkillRule(context)
     context.helpers.schedule = helpers.Schedule(context)
     context.helpers.token = helpers.Token(context)
+    context.helpers.trunk = helpers.Trunk(context)
     context.helpers.user = helpers.User(context)
     context.helpers.voicemail = helpers.Voicemail(context)
 
@@ -171,7 +173,7 @@ def setup_remote_sysutils(context):
 
 def setup_phone(context, linphone_debug):
     context.phone_register = PhoneRegister(context)
-    context.helpers.sip_phone = helpers.LineRegistrar(linphone_debug)
+    context.helpers.sip_phone = helpers.PhoneFactory(context, linphone_debug)
     context.helpers.sip_config = helpers.SIPConfigGenerator(
         context.wazo_config['wazo_host'],
         context.wazo_config['linphone'],

@@ -21,9 +21,8 @@ class Bus:
         self._received_events = None
 
     @contextmanager
-    def wait_for_asterisk_reload(
-        self, dialplan=False, pjsip=False, queue=False, confbridge=False, voicemail=False
-    ):
+    def wait_for_asterisk_reload(self, dialplan=False, pjsip=False, queue=False,
+                                 confbridge=False, voicemail=False, parking=False):
         commands = []
         if dialplan:
             commands.append('dialplan reload')
@@ -35,6 +34,8 @@ class Bus:
             commands.append('module reload app_confbridge.so')
         if voicemail:
             commands.append('voicemail reload')
+        if parking:
+            commands.append('module reload res_parking.so')
 
         if not commands:
             raise Exception('No wait module specified')

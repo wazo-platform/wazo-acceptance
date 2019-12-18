@@ -3,8 +3,8 @@
 
 import time
 
-from xivo_test_helpers import until
 from behave import step, when
+from xivo_test_helpers import until
 
 CHAN_PREFIX = 'PJSIP'
 
@@ -21,6 +21,12 @@ def step_user_is_ringing(context, tracking_id):
     until.true(phone.is_ringing, tries=3)
 
 
+@step('"{tracking_id}" is holding')
+def step_user_is_holding(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    until.true(phone.is_holding, context, tries=3)
+
+
 @step('"{tracking_id}" is hungup')
 def step_user_is_hungup(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
@@ -31,6 +37,7 @@ def step_user_is_hungup(context, tracking_id):
 def step_user_is_talking(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_talking, tries=3)
+
 
 
 @step('"{tracking_id}" answers')
@@ -109,6 +116,22 @@ def when_chan_test_hangs_up_channel_with_id(context, channel_id):
         channel_id=channel_id,
     )
     context.helpers.asterisk.send_to_asterisk_cli(cmd)
+
+
+@when('incoming call received from "{incall_name}" to "{exten}@{exten_context}"')
+def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, exten_context):
+    body = {'context': exten_context}
+    trunk = context.helpers.trunk.create(body)
+    body = {
+        'name': incall_name,
+        'username': incall_name,
+        'password': incall_name,
+        'options': [['max_contacts', '1']],
+    }
+    sip = context.helpers.endpoint_sip.create(body)
+    context.helpers.trunk.add_endpoint_sip(trunk, sip)
+    phone = context.helpers.sip_phone.register_and_track_phone(incall_name, sip)
+    phone.call(exten)
 
 
 def _sleep(seconds):
