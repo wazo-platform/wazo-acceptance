@@ -93,6 +93,7 @@ Feature: Call transfer
     Then "User B" is hungup
 
     When "User A" calls "1851"
+    When I wait "1" seconds for the call processing
     Then "User A" is talking
     Then "incall" is talking
 
