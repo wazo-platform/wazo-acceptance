@@ -131,6 +131,7 @@ def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, 
     sip = context.helpers.endpoint_sip.create(body)
     context.helpers.trunk.add_endpoint_sip(trunk, sip)
     phone = context.helpers.sip_phone.register_and_track_phone(incall_name, sip)
+    until.true(phone.is_registered, tries=3)
     phone.call(exten)
 
 
