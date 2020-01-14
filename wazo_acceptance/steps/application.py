@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import (
@@ -39,11 +39,10 @@ def step_impl(context, user_name, app_name):
     user = context.helpers.confd_user.get_by(firstname=user_name)
     user_exten = user['lines'][0]['extensions'][0]['exten']
     user_context = user['lines'][0]['extensions'][0]['context']
-    context.calld_client.applications.join_node(
+    context.calld_client.applications.make_call_to_node(
         application['uuid'],
         node['uuid'],
-        user_exten,
-        user_context,
+        {'exten': user_exten, 'context': user_context},
     )
 
     phone = context.phone_register.get_phone(user_name)
