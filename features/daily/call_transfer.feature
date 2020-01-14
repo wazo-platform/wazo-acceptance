@@ -78,7 +78,7 @@ Feature: Call transfer
 
     When "User B" answers
     Then "User A" is talking
-    Then "incall" is holding
+    # Then "incall" is holding  # issue WAZO-1470
     Then "User B" is talking
 
     When "User B" hangs up
