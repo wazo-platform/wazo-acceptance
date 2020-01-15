@@ -11,7 +11,7 @@ from linphonelib import (
     LinphoneException,
     Session,
 )
-from linphonelib.commands import CallStatus
+from linphonelib.commands import CallStatus, RegisterStatus
 
 logger = logging.getLogger('linphone')
 
@@ -116,6 +116,9 @@ class SIPPhone:
 
     def is_hungup(self):
         return self._session.call_status() == CallStatus.OFF
+
+    def is_registered(self):
+        return self._session.register_status() == RegisterStatus.REGISTERED
 
     def is_holding(self, context):
         response = context.amid_client.action('DeviceStateList')
