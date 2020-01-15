@@ -54,7 +54,8 @@ Feature: User multi lines
       | line2 | 1801  | default | yes        |
     Given "Multi Lines" has enabled "dnd" service
     When "Bob Field" calls "1801"
-    When I wait "5" seconds for the call processing
+    When I wait "2" seconds for the call processing
+    When I wait "5" seconds to play unreachable message
     Then "Bob Field" is hungup
 
   Scenario: Ringing time are respected on user multi lines

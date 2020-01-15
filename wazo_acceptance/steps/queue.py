@@ -30,6 +30,13 @@ def given_there_are_queues(context):
                 context.helpers.queue.add_user_member(queue, user)
 
 
+@given('queue "{queue_name}" has agent "{agent_number}" with penalty "{penalty}"')
+def given_queue_has_agent_with_penalty(context, queue_name, agent_number, penalty):
+    queue = context.helpers.queue.get_by(name=queue_name)
+    agent = context.helpers.agent.get_by(number=agent_number)
+    context.helpers.queue.add_agent_member(queue, agent, penalty=penalty)
+
+
 @when('I create the following queues')
 def when_i_create_the_following_queues(context):
     context.table.require_columns(['name', 'exten', 'context'])
