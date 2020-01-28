@@ -1,13 +1,13 @@
 # wazo-acceptance
 
-wazo-acceptance is a testing framework for running automated tests on wazo-platform.
-These tests are used for testing features before releasing a new version of wazo-platform.
+wazo-acceptance is a testing framework for running automated tests on Wazo Platform.
+These tests are used for testing features before releasing a new version of Wazo Platform.
 
 ## Getting Started
 
 ### Requirements
 
-* A fresh installation of wazo-platform
+* A fresh installation of Wazo Platform. See https://wazo-platform.org/install/unified-communication for details.
 * `pip install requirements.txt`
 * `docker pull wazopbx/wazo-linphone`
 
@@ -17,7 +17,7 @@ Then setup the environment:
 
 This command will:
 
-* create a configuration file for your wazo-platform
+* create a configuration file for your Wazo Platform
 * validate wazo-platform installation
 * configure your engine to be ready for testing
 
