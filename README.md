@@ -62,7 +62,14 @@ For example:
 
 ## Debugging
 
+### linphone
+
 To see linphone ouput, use behave flag `--no-capture`
+
+To inspect or send command to linphone:
+
+* Add sleep in your step
+* `nc -U /tmp/tmpxxxxxx/socket` and write linphone command
 
 ## Coverage
 

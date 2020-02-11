@@ -8,13 +8,14 @@ from behave import (
     given,
     then,
 )
-
 from hamcrest import (
     assert_that,
     empty,
     has_entries,
     has_key,
 )
+
+from xivo_test_helpers import until
 
 
 @given('I listen on the bus for "{event_name}" messages')
@@ -39,11 +40,13 @@ def then_i_receive_a_message(context, event_name):
 
 @then('I receive a "{event_name}" event with data')
 def then_i_receive_a_event_on_queue(context, event_name):
-    event = context.helpers.bus.pop_received_event()
-    assert_that(event, has_entries(name=event_name))
-    assert_that(event, has_key('data'))
-    result = _flatten_nested_dict(event['data'])
-    assert_that(result, has_entries(context.table[0].as_dict()))
+    def event_match():
+        event = context.helpers.bus.pop_received_event()
+        assert_that(event, has_entries(name=event_name))
+        assert_that(event, has_key('data'))
+        result = _flatten_nested_dict(event['data'])
+        assert_that(result, has_entries(context.table[0].as_dict()))
+    until.assert_(event_match, interval=0.1, tries=10)
 
 
 @then('I receive a "{event_name}" event with "{wrapper}" data')

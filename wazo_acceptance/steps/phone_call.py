@@ -39,6 +39,7 @@ def step_user_is_talking(context, tracking_id):
     until.true(phone.is_talking, tries=3)
 
 
+
 @step('"{tracking_id}" answers')
 def step_user_answers(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
@@ -63,6 +64,18 @@ def step_a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time
     phone = context.phone_register.get_phone(tracking_id)
     phone.call(exten)
     until.true(phone.is_hungup, tries=int(time))
+
+
+@step('"{tracking_id}" puts his call on hold')
+def step_user_puts_call_on_hold(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.hold()
+
+
+@step('"{tracking_id}" resumes his call')
+def step_user_resumes_call(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.resume()
 
 
 @when('I wait "{seconds}" seconds')

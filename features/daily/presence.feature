@@ -19,3 +19,22 @@ Feature: Presence updated
       | line_state |
       | talking    |
     Then "James Bond" has his line state to "talking"
+
+  Scenario: Presence line holding state
+    Given there are telephony users with infos:
+      | firstname | lastname | exten  | context |
+      | James     | Bond     | 1801   | default |
+      | Ti-Me     | Pare     | 1802   | default |
+    Given "James Bond" calls "1802"
+    Given "Ti-Me Pare" answers
+    Given I listen on the bus for "chatd_presence_updated" messages
+    When "Ti-Me Pare" puts his call on hold
+    Then I receive a "chatd_presence_updated" event with data:
+      | line_state |
+      | holding    |
+    Then "James Bond" has his line state to "holding"
+    When "Ti-Me Pare" resumes his call
+    Then I receive a "chatd_presence_updated" event with data:
+      | line_state |
+      | talking    |
+    Then "James Bond" has his line state to "talking"
