@@ -42,6 +42,13 @@ def step_user_is_hungup(context, tracking_id):
     until.true(phone.is_hungup, tries=3)
 
 
+@step('"{tracking_id}" is hungup immediately')
+def step_user_is_hungup_immediately(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    _sleep(1)
+    phone.is_hungup()
+
+
 @step('"{tracking_id}" is talking')
 def step_user_is_talking(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
