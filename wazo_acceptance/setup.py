@@ -1,4 +1,4 @@
-# Copyright 2015-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -30,43 +30,43 @@ logger = logging.getLogger(__name__)
 def setup_agentd_client(context):
     context.agentd_client = AgentdClient(**context.wazo_config['agentd'])
     context.agentd_client.set_token(context.token)
-    auth.register_for_token_renewal(context.agentd_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.agentd_client.set_token)
 
 
 def setup_amid_client(context):
     context.amid_client = AmidClient(**context.wazo_config['amid'])
     context.amid_client.set_token(context.token)
-    auth.register_for_token_renewal(context.amid_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.amid_client.set_token)
 
 
 def setup_call_logd_client(context):
     context.call_logd_client = CallLogdClient(**context.wazo_config['call_logd'])
     context.call_logd_client.set_token(context.token)
-    auth.register_for_token_renewal(context.call_logd_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.call_logd_client.set_token)
 
 
 def setup_calld_client(context):
     context.calld_client = CalldClient(**context.wazo_config['calld'])
     context.calld_client.set_token(context.token)
-    auth.register_for_token_renewal(context.calld_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.calld_client.set_token)
 
 
 def setup_chatd_client(context):
     context.chatd_client = ChatdClient(**context.wazo_config['chatd'])
     context.chatd_client.set_token(context.token)
-    auth.register_for_token_renewal(context.chatd_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.chatd_client.set_token)
 
 
 def setup_confd_client(context):
     context.confd_client = ConfdClient(**context.wazo_config['confd'])
     context.confd_client.set_token(context.token)
-    auth.register_for_token_renewal(context.confd_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.confd_client.set_token)
 
 
 def setup_dird_client(context):
     context.dird_client = DirdClient(**context.wazo_config['dird'])
     context.dird_client.set_token(context.token)
-    auth.register_for_token_renewal(context.dird_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.dird_client.set_token)
 
 
 def setup_auth_token(context):
@@ -77,25 +77,25 @@ def setup_auth_token(context):
     )
     context.token = auth.new_auth_token(context)
     context.auth_client.set_token(context.token)
-    auth.register_for_token_renewal(context.auth_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.auth_client.set_token)
 
 
 def setup_provd_client(context):
     context.provd_client = ProvdClient(**context.wazo_config['provd'])
     context.provd_client.set_token(context.token)
-    auth.register_for_token_renewal(context.provd_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.provd_client.set_token)
 
 
 def setup_setupd_client(context):
     context.setupd_client = SetupdClient(**context.wazo_config['setupd'])
     context.setupd_client.set_token(context.token)
-    auth.register_for_token_renewal(context.setupd_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.setupd_client.set_token)
 
 
 def setup_websocketd_client(context):
     context.websocketd_client = WebsocketdClient(**context.wazo_config['websocketd'])
     context.websocketd_client.set_token(context.token)
-    auth.register_for_token_renewal(context.websocketd_client.set_token)
+    context.token_pubsub.subscribe('new-token-id', context.websocketd_client.set_token)
 
 
 def setup_tenant(context):
