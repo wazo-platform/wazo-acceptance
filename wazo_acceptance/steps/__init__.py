@@ -11,6 +11,7 @@ from .bus import *  # noqa
 from .call import *  # noqa
 from .call_filter import *  # noqa
 from .call_permission import *  # noqa
+from .call_log import *  # noqa
 from .conference import *  # noqa
 from .consul import *  # noqa
 from .coredump import *  # noqa
