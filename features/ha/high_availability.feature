@@ -18,3 +18,11 @@ Feature: High availability
     Then there are cron jobs in "/etc/cron.d/xivo-ha-slave" on "slave"
     | cron job                                                                       |
     | * * * * * root /usr/sbin/xivo-check-master-status {{ master_voip_ip_address }} |
+
+  Scenario: HA database synchronisation
+    Given the HA is enabled as master on "master"
+    Given the HA is enabled as slave on "slave"
+    Given there is a user "test-replication" on "master"
+    Given there is no user "test-replication" on "slave"
+    When I start the replication from "master" to "slave"
+    Then there is a user "test-replication" on "slave"
