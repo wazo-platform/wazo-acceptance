@@ -454,3 +454,19 @@ def when_user_starts_call_recording(context, firstname, lastname):
     user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     call = context.helpers.call.get_by(user_uuid=user['uuid'])
     context.helpers.call.start_recording(call['call_id'])
+
+
+@given('"{firstname} {lastname}" has a "{fallback_name}" fallback to user "{destination_firstname} {destination_lastname}"')
+def given_user_has_a_fallback_to_user(context, firstname, lastname, fallback_name, destination_firstname, destination_lastname):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    destination_user_id = context.helpers.confd_user.get_by(firstname=destination_firstname, lastname=destination_lastname)['id']
+    destination_name = "{}_destination".format(fallback_name)
+    context.helpers.confd_user.update_fallback(
+        confd_user,
+        {
+            destination_name: {
+                'type': 'user',
+                'user_id': destination_user_id,
+            }
+        },
+    )
