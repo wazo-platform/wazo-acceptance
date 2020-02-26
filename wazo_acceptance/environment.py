@@ -1,8 +1,9 @@
-# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
 
+from xivo.pubsub import Pubsub
 from xivo.xivo_logging import setup_logging as wazo_setup_logging
 
 from . import (
@@ -69,6 +70,7 @@ def set_wazo_instances(context, instances_config, debug_config):
 
 def set_wazo_instance(context, instance_name, instance_config, debug_config):
     logger.info("Adding instance %s...", instance_name)
+    context.token_pubsub = Pubsub()
     setup.setup_config(context, instance_config)
 
     logger.info('wazo_host: %s', context.wazo_config['wazo_host'])
