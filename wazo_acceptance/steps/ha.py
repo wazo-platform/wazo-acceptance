@@ -6,7 +6,7 @@ import string
 
 from behave import given, when, then
 
-from wazo_acceptance import auth
+from wazo_acceptance import auth, setup
 
 
 def random_string(length, sample=string.ascii_lowercase):
@@ -83,6 +83,7 @@ def when_i_start_the_replication_from_instancemaster_to_instanceslave(context, i
     master_context.remote_sysutils.send_command(['xivo-master-slave-db-replication', slave_host], check=True)
     slave_context = getattr(context.instances, instance_slave)
     auth.renew_auth_token(slave_context)
+    setup.setup_tenant(slave_context)
 
 
 @then('there is a user "{username}" on "{instance}"')

@@ -100,6 +100,7 @@ def setup_websocketd_client(context):
 
 def setup_tenant(context):
     name = context.wazo_config['default_tenant']
+    context.auth_client.set_tenant(None)
     try:
         tenants = context.auth_client.tenants.list(name=name)['items']
     except HTTPError:
