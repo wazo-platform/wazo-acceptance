@@ -9,32 +9,32 @@ Feature: Call Generation
 
   Scenario: Call to existant extension with answer
     Given there are telephony users with infos:
-      | firstname | exten | context |
-      | Alice     | 1100  | default |
-      | Bob       | 1101  | default |
+      | firstname | lastname | exten | context |
+      | Alice     | 1100     | 1100  | default |
+      | Bob       | 1101     | 1101  | default |
     When a call is started:
-      | caller | dial | callee | talk_time | hangup |
-      | Alice  | 1101 | Bob    | 3         | callee |
+      | caller      | dial | callee      | talk_time | hangup |
+      | Alice 1100  | 1101 | Bob 1101    | 3         | callee |
     Then I have the last call log matching:
       | destination_extension | duration | answered |
       | 1101                  | 3        | True     |
 
   Scenario: No answer destination with disabled forward exten on no answer
-    Given the "forwarding on no-answer" extension is disabled
+    Given the "fwdrna" extension is disabled
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
       | James     | Bond     | 1101  | default |
       | Tiffany   | Case     | 1102  | default |
       | Pussy     | Galore   | 1103  | default |
-    Given "James Bond" has a "5" seconds ringing time
+    Given "James Bond" has a 5 seconds ringing time
     Given "James Bond" has a "noanswer" fallback to user "Pussy Galore"
     When "Tiffany Case" calls "1101"
     Then "James Bond" is ringing
-    When I wait "9" seconds for the call processing
+    When I wait 5 seconds for the call processing
     Then "Pussy Galore" is ringing
 
   Scenario: Busy destination with disabled forward exten on busy
-    Given the "forwarding on busy" extension is disabled
+    Given the "fwdbusy" extension is disabled
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
       | James     | Bond     | 1101  | default |
@@ -44,7 +44,7 @@ Feature: Call Generation
     When "Honey Ryder" calls "1101"
     Then "James Bond" is ringing
     When "James Bond" hangs up
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "Sylvia Trench" is ringing
 
   Scenario: Check that new calls are not marked as on_hold when GETTING calls
@@ -84,7 +84,7 @@ Feature: Call Generation
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | username | password | with_token |
       | Donald    | Trump    | 1001  | default | donald   | trump    | no         |
-      | Vladimir  | Poutine  | 1002  | default | vladimir | poutine  | yes        |
+      | Vladimir  | Poutine  |       |         | vladimir | poutine  | yes        |
     Given "Vladimir Poutine" has lines:
       | name  | exten | context | with_phone |
       | line1 | 1002  | default | yes        |

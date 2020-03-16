@@ -9,7 +9,6 @@ def given_the_extension_is_enabled(context, extension_name):
     context.helpers.extension_feature.enable(extension_name)
 
 
-
 @given('the "{extension_name}" extension is disabled')
 def given_the_extension_is_disabled(context, extension_name):
     context.helpers.extension_feature.disable(extension_name)

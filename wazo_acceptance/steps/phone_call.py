@@ -3,10 +3,14 @@
 
 import time
 
-from behave import step, when
+from behave import step, then, when
 from hamcrest import (
     assert_that,
+    calling,
+    not_,
+    raises,
 )
+from linphonelib import ExtensionNotFoundException
 from xivo_test_helpers import until
 
 CHAN_PREFIX = 'PJSIP'
@@ -30,6 +34,12 @@ def step_user_is_ringing_showing_callerid(context, tracking_id, callerid):
     until.true(phone.is_ringing_showing, callerid, tries=3)
 
 
+@step('"{tracking_id}" is ringing on its contact "{contact_number}"')
+def step_user_is_ringing_on_contact_number(context, tracking_id, contact_number):
+    phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
+    until.true(phone.is_ringing, tries=3)
+
+
 @step('"{tracking_id}" is holding')
 def step_user_is_holding(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
@@ -45,7 +55,7 @@ def step_user_is_hungup(context, tracking_id):
 @step('"{tracking_id}" is hungup immediately')
 def step_user_is_hungup_immediately(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
-    _sleep(1)
+    time.sleep(1)
     phone.is_hungup()
 
 
@@ -55,17 +65,17 @@ def step_user_is_talking(context, tracking_id):
     until.true(phone.is_talking, tries=3)
 
 
-@step('"{tracking_id}" is talking to "{callerid}"')
-def step_user_is_talking_to(context, tracking_id, callerid):
-    phone = context.phone_register.get_phone(tracking_id)
-    until.true(phone.is_talking_to, callerid, tries=3)
-
-
 @step('"{tracking_id}" is talking to "{other_party_id}" on its contact "{contact_number}"')
 def step_user_is_talking_to_other_party_with_contact(context, tracking_id, other_party_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     until.true(phone.is_talking, tries=3)
     assert_that(phone.is_talking_to(other_party_id))
+
+
+@step('"{tracking_id}" is talking to "{callerid}"')
+def step_user_is_talking_to(context, tracking_id, callerid):
+    phone = context.phone_register.get_phone(tracking_id)
+    until.true(phone.is_talking_to, callerid, tries=3)
 
 
 @step('"{tracking_id}" answers')
@@ -134,6 +144,14 @@ def when_a_call_is_started(context):
 
     for call_info in context.table:
         _call(**call_info.as_dict())
+
+
+@then('"{tracking_id}" last dialed extension was not found')
+def then_user_last_dialed_extension_was_not_found(context, tracking_id):
+    # XXX(afournier): phone.last_call_result does not work here - the fact that the extension does
+    # not exist is not a problem for linphone-daemon. It does not trigger an error.
+    phone = context.phone_register.get_phone(tracking_id)
+    assert_that(not_(phone.is_talking))
 
 
 @when('chan_test calls "{exten}@{exten_context}" with id "{channel_id}"')
