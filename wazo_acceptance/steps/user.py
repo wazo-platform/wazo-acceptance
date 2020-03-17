@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import random
@@ -255,3 +255,91 @@ def when_user_cancel_the_transfer_with_api(context, firstname, lastname):
 def when_user_complete_the_transfer_with_api(context, firstname, lastname):
     # NOTE: Use a user token to GET /users/me/transfers OR implement GET /transfers
     context.calld_client.transfers.complete_transfer(context.transfer_id)
+
+
+@given('"{firstname} {lastname}" has function keys')
+def given_the_user_has_function_keys(context, firstname, lastname):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    func_keys = {'keys': {}}
+    for row in context.table:
+        body = row.as_dict()
+        func_keys['keys'][f'{body["position"]}'] = _build_funckey(body)
+    context.helpers.confd_user.update_funckeys(confd_user, func_keys)
+
+
+def _build_funckey(row):
+    type_ = row['destination_type']
+    if type_ == 'forward':
+        destination = {
+            'type': type_,
+            'forward': row['destination_forward'],
+            'exten': row['destination_exten'] if row['destination_exten'] else None,
+        }
+    elif type_ == 'service':
+        destination = {'type': type_, 'service': row['destination_service']}
+
+    return {
+        'blf': row.get('blf') == 'true',
+        'label': row.get('label'),
+        'destination': destination,
+    }
+
+
+@when('"{firstname} {lastname}" disable all forwards')
+def when_the_user_disable_all_forwards(context, firstname, lastname):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    forwards = {
+        'busy': {'enabled': False},
+        'noanswer': {'enabled': False},
+        'unconditional': {'enabled': False},
+    }
+    context.confd_client.users(confd_user).update_forwards(forwards)
+
+
+@when('"{firstname} {lastname}" enable forwarding on no-answer to "{exten}"')
+def when_the_user_enable_forwarding_on_no_answer_to(context, firstname, lastname, exten):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    forward = {'destination': exten, 'enabled': True}
+    context.confd_client.users(confd_user).update_forward('noanswer', forward)
+
+
+@when('"{firstname} {lastname}" enable forwarding on busy to "{exten}"')
+def when_the_user_enable_forwarding_on_busy_to(context, firstname, lastname, exten):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    forward = {'destination': exten, 'enabled': True}
+    context.confd_client.users(confd_user).update_forward('busy', forward)
+
+
+@when('"{firstname} {lastname}" enable unconditional forwarding to "{exten}"')
+def when_the_user_enable_unconditional_forwarding_to(context, firstname, lastname, exten):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    forward = {'destination': exten, 'enabled': True}
+    context.confd_client.users(confd_user).update_forward('unconditional', forward)
+
+
+@when('"{firstname} {lastname}" enable DND')
+def when_the_user_enable_dnd(context, firstname, lastname):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    service = {'enabled': True}
+    context.confd_client.users(confd_user).update_service('dnd', service)
+
+
+@when('"{firstname} {lastname}" disable DND')
+def when_the_user_disable_dnd(context, firstname, lastname):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    service = {'enabled': False}
+    context.confd_client.users(confd_user).update_service('dnd', service)
+
+
+@when('"{firstname} {lastname}" enable incoming call filtering')
+def when_the_user_enable_incoming_call_filtering(context, firstname, lastname):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    service = {'enabled': True}
+    context.confd_client.users(confd_user).update_service('incallfilter', service)
+
+
+@when('"{firstname} {lastname}" disable incoming call filtering')
+def when_the_user_disable_incoming_call_filtering(context, firstname, lastname):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    service = {'enabled': False}
+    context.confd_client.users(confd_user).update_service('incallfilter', service)

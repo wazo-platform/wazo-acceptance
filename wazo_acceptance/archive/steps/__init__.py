@@ -21,7 +21,6 @@ from .entity_steps import *
 from .extensions_steps import *
 from .fail2ban_steps import *
 from .files_steps import *
-from .funckeys_steps import *
 from .general_settings_sccp_steps import *
 from .general_settings_xivo_steps import *
 from .group_steps import *

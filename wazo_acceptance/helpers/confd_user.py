@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from requests import HTTPError
@@ -47,3 +47,7 @@ class ConfdUser:
         users = self._confd_client.users.list(**kwargs)['items']
         for user in users:
             return user
+
+    def update_funckeys(self, user, func_keys):
+        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
+            self._confd_client.users(user).update_funckeys(func_keys)
