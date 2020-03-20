@@ -7,11 +7,11 @@ Feature: Function Key BLF
       | BLFMan    | Forward  | 1801  | default |
     Given "BLFMan Forward" has function keys:
       | position | blf  | destination_type | destination_forward | destination_exten |
-     #| 1        | true | forward          | noanswer            |                   |
+      | 1        | true | forward          | noanswer            |                   |
       | 2        | true | forward          | noanswer            | 1234              |
-     #| 3        | true | forward          | unconditional       |                   |
+      | 3        | true | forward          | unconditional       |                   |
       | 4        | true | forward          | unconditional       | 5678              |
-     #| 5        | true | forward          | busy                |                   |
+      | 5        | true | forward          | busy                |                   |
       | 6        | true | forward          | busy                | 9012              |
     When "BLFMan Forward" enable forwarding on no-answer to "1234"
     When "BLFMan Forward" enable unconditional forwarding to "5678"
@@ -21,15 +21,15 @@ Feature: Function Key BLF
     Then "BLFMan Forward" has all forwards hints disabled
 
     When "BLFMan Forward" enable forwarding on no-answer to "4321"
-    # Then "BLFMan Forward" has function key "1" hint enabled
+    Then "BLFMan Forward" has function key "1" hint enabled
     Then "BLFMan Forward" has function key "2" hint disabled
 
     When "BLFMan Forward" enable unconditional forwarding to "8765"
-    # Then "BLFMan Forward" has function key "3" hint enabled
+    Then "BLFMan Forward" has function key "3" hint enabled
     Then "BLFMan Forward" has function key "4" hint disabled
 
     When "BLFMan Forward" enable forwarding on busy to "2109"
-    # Then "BLFMan Forward" has function key "5" hint enabled
+    Then "BLFMan Forward" has function key "5" hint enabled
     Then "BLFMan Forward" has function key "6" hint disabled
 
   Scenario: Services

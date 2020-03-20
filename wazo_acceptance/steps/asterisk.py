@@ -5,14 +5,13 @@ from behave import then
 
 from hamcrest import (
     assert_that,
-    empty,
+    equal_to,
     has_entries,
     has_item,
     not_,
 )
 from xivo_test_helpers import until
 
-FORWARDS = ('unconditional', 'busy', 'noanswer')
 FUNCKEYS_EXTEN = {
     'unconditional': 21,
     'noanswer': 22,
@@ -49,6 +48,12 @@ def then_the_user_has_funckey_hint_disabled(context, firstname, lastname, positi
     until.true(_assert_idle_hints_state, context, prefix_exten, tries=10)
 
 
+def _should_get_exact_prefix_exten(funckey):
+    if not funckey['destination'].get('exten'):
+        return True
+    return False
+
+
 def _get_funckey_prefix_exten(user_id, funckey):
     if funckey['destination']['type'] == 'forward':
         funckey_exten = FUNCKEYS_EXTEN[funckey['destination']['forward']]
@@ -63,37 +68,32 @@ def _get_funckey_prefix_exten(user_id, funckey):
 
 
 def _assert_inuse_hints_state(context, prefix_exten):
-    hints_state = _get_hints_state(context, prefix_exten)
-    assert_that(hints_state, not_(empty()))
-    for state in hints_state:
-        if state != 'InUse':
-            return False
+    state = _get_hints_state(context, prefix_exten)
+    if state != 'InUse':
+        return False
     return True
 
 
 def _assert_idle_hints_state(context, prefix_exten):
-    hints_state = _get_hints_state(context, prefix_exten)
-    assert_that(hints_state, not_(empty()))
-    for state in hints_state:
-        if state != 'Idle':
-            return False
+    state = _get_hints_state(context, prefix_exten)
+    if state != 'Idle':
+        return False
     return True
 
 
 def _get_hints_state(context, prefix_exten):
-    asterisk_cmd = 'core show hint {}'.format(prefix_exten)
-    command = ['asterisk', '-rx', '"{}"'.format(asterisk_cmd)]
-
-    output = context.remote_sysutils.output_command(command).split('\n')
-    output = output[:-2]  # strip footer
-    return [line[50:66].strip() for line in output]
+    hint = context.amid_client.action(
+        'ExtensionState', {'Exten': prefix_exten, 'Context': 'default'}
+    )[0]
+    assert_that(hint['Status'], not_(equal_to('-1')), f"Hint {prefix_exten} doesn't exist")
+    return hint['StatusText']
 
 
 @then('"{firstname} {lastname}" has all forwards hints enabled')
 def then_the_user_has_all_forwards_hints_enabled(context, firstname, lastname):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
-    for forward in FORWARDS:
-        funckey = {'destination': {'type': 'forward', 'forward': forward, 'exten': None}}
+    funckeys = context.confd_client.users(confd_user).list_funckeys()['keys']
+    for funckey in funckeys.values():
         prefix_exten = _get_funckey_prefix_exten(confd_user['id'], funckey)
         until.true(_assert_inuse_hints_state, context, prefix_exten, tries=10)
 
@@ -101,7 +101,7 @@ def then_the_user_has_all_forwards_hints_enabled(context, firstname, lastname):
 @then('"{firstname} {lastname}" has all forwards hints disabled')
 def then_the_user_has_all_forwards_hints_disabled(context, firstname, lastname):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
-    for forward in FORWARDS:
-        funckey = {'destination': {'type': 'forward', 'forward': forward, 'exten': None}}
+    funckeys = context.confd_client.users(confd_user).list_funckeys()['keys']
+    for funckey in funckeys.values():
         prefix_exten = _get_funckey_prefix_exten(confd_user['id'], funckey)
         until.true(_assert_idle_hints_state, context, prefix_exten, tries=10)
