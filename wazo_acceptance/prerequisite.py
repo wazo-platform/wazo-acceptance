@@ -72,8 +72,8 @@ def run(config_dir, instance_name):
     logger.debug('Installing chan_test (module for asterisk)')
     _install_chan_test(context)
 
-    logger.debug('Installing core_dump program')
-    _install_core_dump(context)
+    logger.debug('Installing wazo-crash-test program')
+    _install_crash_test(context)
 
     logger.debug('Configuring helpers')
     setup.setup_helpers(context)
@@ -211,10 +211,10 @@ def _install_chan_test(context):
     context.ssh_client.check_call(command)
 
 
-def _install_core_dump(context):
-    copy_asset_to_server_permanently(context, 'core_dump.c', '/usr/src')
+def _install_crash_test(context):
+    copy_asset_to_server_permanently(context, 'wazo-crash-test.c', '/usr/src')
     _install_packages(context, ['gcc'])
-    command = ['gcc', '-o', '/usr/local/bin/core_dump', '/usr/src/core_dump.c']
+    command = ['gcc', '-o', '/usr/local/bin/wazo-crash-test', '/usr/src/wazo-crash-test.c']
     context.ssh_client.check_call(command)
 
 
