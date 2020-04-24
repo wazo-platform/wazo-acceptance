@@ -1,4 +1,4 @@
-# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -38,6 +38,11 @@ def step_user_is_talking(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_talking, tries=3)
 
+
+@step('"{tracking_id}" is talking to "{callerid}"')
+def step_user_is_talking_to(context, tracking_id, callerid):
+    phone = context.phone_register.get_phone(tracking_id)
+    until.true(phone.is_talking_to, callerid, tries=3)
 
 
 @step('"{tracking_id}" answers')
@@ -132,7 +137,8 @@ def when_chan_test_hangs_up_channel_with_id(context, channel_id):
 
 
 @when('incoming call received from "{incall_name}" to "{exten}@{exten_context}"')
-def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, exten_context):
+@when('incoming call received from "{incall_name}" to "{exten}@{exten_context}" with callerid "{callerid}"')
+def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, exten_context, callerid=None):
     body = {'context': exten_context}
     trunk = context.helpers.trunk.create(body)
     body = {
@@ -141,6 +147,8 @@ def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, 
         'password': incall_name,
         'options': [['max_contacts', '1']],
     }
+    if callerid:
+        body['options'].append(['callerid', callerid])
     sip = context.helpers.endpoint_sip.create(body)
     context.helpers.trunk.add_endpoint_sip(trunk, sip)
     phone = context.helpers.sip_phone.register_and_track_phone(incall_name, sip)

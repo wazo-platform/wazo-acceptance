@@ -6,12 +6,9 @@ import logging
 import json
 
 from hamcrest import (
-    all_of,
     assert_that,
     has_entries,
-    has_entry,
     has_item,
-    matches_regexp,
 )
 from mock import ANY
 from lettuce import step
@@ -32,17 +29,6 @@ def given_i_listen_on_the_bus_for_messages(step):
         queue_name = entry['queue'].encode('ascii')
         routing_key = entry['routing_key'].encode('ascii')
         bus_helper.add_binding(queue_name, routing_key)
-
-
-@step(u'Then I see an AMI message "([^"]*)" on the queue "([^"]*)":')
-def then_i_see_an_ami_message_on_the_queue(step, event_name, queue):
-    events = bus_helper.get_messages_from_bus(queue)
-
-    matcher_dict = dict((event_line['header'], matches_regexp(event_line['value']))
-                        for event_line in step.hashes)
-
-    assert_that(events, has_item(all_of(has_entry('name', event_name),
-                                        has_entry('data', has_entries(matcher_dict)))))
 
 
 @step(u'Then I receive a "([^"]*)" on the queue "([^"]*)" with data:')
