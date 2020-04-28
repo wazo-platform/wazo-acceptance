@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -14,7 +14,7 @@ from hamcrest import (
 
 @when('I generate a core dump')
 def when_generate_core_dump(context):
-    res = context.remote_sysutils.output_command(['ulimit -c 1024 && /usr/local/bin/core_dump'])
+    res = context.remote_sysutils.output_command(['ulimit -c 1024 && /usr/local/bin/wazo-crash-test'])
     separator = ': '
     for line in res.split('\n'):
         if separator not in line:
