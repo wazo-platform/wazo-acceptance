@@ -6,6 +6,7 @@ Feature: Incoming calls
       | Oscar     | Latrail  | 1801  | default | yes        |
     Given there is an incall "1801@from-extern" to the user "Oscar Latrail"
     When incoming call received from "incall" to "1801@from-extern" with callerid ""incall" <666>"
+    When I wait "3" seconds for the call processing
     When "Oscar Latrail" answers
     Then "Oscar Latrail" is talking to "incall"
 
@@ -16,5 +17,6 @@ Feature: Incoming calls
       | El        | Diablo   |       |         | 666                 | no         |
     Given there is an incall "1801@from-extern" to the user "Oscar Latrail"
     When incoming call received from "incall" to "1801@from-extern" with callerid ""666" <666>"
+    When I wait "3" seconds for the call processing
     When "Oscar Latrail" answers
     Then "Oscar Latrail" is talking to "El Diablo"
