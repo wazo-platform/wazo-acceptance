@@ -20,7 +20,7 @@ from xivo_acceptance.helpers import (
     sip_phone,
     user_helper,
 )
-from xivo_acceptance.lettuce import common, func
+from xivo_acceptance.lettuce import common
 
 from linphonelib import ExtensionNotFoundException
 
@@ -43,14 +43,6 @@ def when_a_call_is_started(step):
 
     for call_info in step.hashes:
         _call(**call_info)
-
-
-@step(u'When chan_test calls "([^"]*)" with id "([^"]*)" and calleridname "([^"]*)" and calleridnum "([^"]*)"$')
-def when_chan_test_calls_with_id_calleridname_calleridnum(step, extension, channelid, calleridname, calleridnum):
-    number, context = func.extract_number_and_context_from_extension(extension)
-    cmd = u'test newid {} {} {} {} {} {}'.format(
-        channelid, number, context, calleridnum, calleridname, CHAN_PREFIX)
-    asterisk_helper.send_to_asterisk_cli(cmd)
 
 
 @step(u'chan_test hangs up "([^"]*)"$')

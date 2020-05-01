@@ -27,7 +27,6 @@ from .group_steps import *
 from .ha_steps import *
 from .line_extension_steps import *
 from .line_steps import *
-from .phonebook_steps import *
 from .pickup_steps import *
 from .provd_plugins_steps import *
 from .queue_steps import *

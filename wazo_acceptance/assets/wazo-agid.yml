@@ -1,0 +1,2 @@
+dird:
+  timeout: 5  # reverse lookup is slow on zuul
