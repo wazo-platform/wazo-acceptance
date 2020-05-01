@@ -91,6 +91,9 @@ def run(config_dir, instance_name):
     logger.debug('Configuring wazo services debugging...')
     _enable_wazo_services_debug(context)
 
+    logger.debug('Configuring wazo-agid...')
+    _configure_wazo_service(context, 'wazo-agid')
+
     logger.debug('Configuring postgresql debug')
     _configure_postgresql_debug(context)
 
@@ -262,6 +265,18 @@ def _enable_wazo_services_debug(context):
         service_is_running = context.remote_sysutils.is_process_running(service_pidfile)
         if service_is_running:
             context.remote_sysutils.restart_service(service)
+
+
+def _configure_wazo_service(context, service):
+    copy_asset_to_server_permanently(
+        context,
+        f'{service}.yml',
+        f'/etc/{service}/conf.d/wazo-acceptance.yml',
+    )
+    service_pidfile = context.remote_sysutils.get_pidfile_for_service_name(service)
+    service_is_running = context.remote_sysutils.is_process_running(service_pidfile)
+    if service_is_running:
+        context.remote_sysutils.restart_service(service)
 
 
 def copy_asset_to_server_permanently(context, asset, serverpath):
