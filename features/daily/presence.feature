@@ -32,9 +32,11 @@ Feature: Presence updated
     Then I receive a "chatd_presence_updated" event with data:
       | line_state |
       | holding    |
-    Then "James Bond" has his line state to "holding"
+    Then "Ti-Me Pare" has his line state to "holding"
+    Then "James Bond" has his line state to "talking"
     When "Ti-Me Pare" resumes his call
     Then I receive a "chatd_presence_updated" event with data:
       | line_state |
       | talking    |
+    Then "Ti-Me Pare" has his line state to "talking"
     Then "James Bond" has his line state to "talking"
