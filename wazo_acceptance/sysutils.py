@@ -1,4 +1,4 @@
-# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -90,6 +90,13 @@ class RemoteSysUtils:
             return False
         pid = self.get_content_file(pidfile).strip()
         return self.path_exists("/proc/%s" % pid)
+
+    def process_priority(self, pidfile):
+        if not self.path_exists(pidfile):
+            raise Exception('{pidfile}: no such file or directory')
+        pid = self.get_content_file(pidfile).strip()
+        command = ['cut', '-d" "', '-f18', f'/proc/{pid}/stat']
+        return self._ssh_client.out_call(command).strip()
 
     def wait_service_successfully_stopped(self, pidfile, maxtries=16, wait_secs=10):
         return self._wait_for_the_service_state(pidfile, False, maxtries, wait_secs)
