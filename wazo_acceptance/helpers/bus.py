@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -48,8 +48,9 @@ class Bus:
         global tasks
         tasks = {command: None for command in reload_commands}
 
-        def asterisk_reload(data):
+        def asterisk_reload(event):
             global tasks
+            data = event['data']
             command = data['command']
             if command not in tasks:
                 return
@@ -102,8 +103,8 @@ class Bus:
         self._start()
         self._context.add_cleanup(self._stop)
 
-    def _save_event(self, name, data):
-        self._received_events.put({'name': name, 'data': data})
+    def _save_event(self, name, event):
+        self._received_events.put(event)
 
     def pop_received_event(self, timeout=5):
         if self._websocket_thread is None:
