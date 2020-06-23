@@ -48,8 +48,9 @@ class Bus:
         global tasks
         tasks = {command: None for command in reload_commands}
 
-        def asterisk_reload(data):
+        def asterisk_reload(event):
             global tasks
+            data = event['data']
             command = data['command']
             if command not in tasks:
                 return
