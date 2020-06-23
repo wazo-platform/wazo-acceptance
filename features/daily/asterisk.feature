@@ -6,3 +6,4 @@ Feature: Asterisk
     Then Asterisk owns /dev/dadhi
     Then MOH files are owned by asterisk:www-data
     Then the service "asterisk" is running
+    Then the service "asterisk" has priority "-11"
