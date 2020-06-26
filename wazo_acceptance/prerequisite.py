@@ -12,9 +12,26 @@ from . import (
     setup,
 )
 from .config import load_config
-from .sysutils import WAZO_SERVICE_PIDFILES as WAZO_SERVICES
 
 logger = logging.getLogger(__name__)
+
+WAZO_SERVICES = [
+    'wazo-agentd',
+    'wazo-agid',
+    'wazo-amid',
+    'wazo-auth',
+    'wazo-call-logd',
+    'wazo-calld',
+    'wazo-chatd',
+    'wazo-confd',
+    'wazo-confgend',
+    'wazo-dird',
+    'wazo-phoned',
+    'wazo-plugind',
+    'wazo-provd',
+    'wazo-webhookd',
+    'wazo-websocketd',
+]
 
 
 class Context:
@@ -223,16 +240,14 @@ def _install_crash_test(context):
 
 def _configure_consul(context):
     copy_asset_to_server_permanently(context, 'public_consul.json', '/etc/consul.d/zz-wazo-acceptance.json')
-    consul_pidfile = context.remote_sysutils.get_pidfile_for_service_name('consul')
-    consul_is_running = context.remote_sysutils.is_process_running(consul_pidfile)
+    consul_is_running = context.remote_sysutils.is_process_running('consul')
     if consul_is_running:
         context.remote_sysutils.restart_service('consul')
 
 
 def _configure_asterisk(context):
     copy_asset_to_server_permanently(context, 'cli.conf', '/etc/asterisk/cli.conf')
-    asterisk_pidfile = context.remote_sysutils.get_pidfile_for_service_name('asterisk')
-    asterisk_is_running = context.remote_sysutils.is_process_running(asterisk_pidfile)
+    asterisk_is_running = context.remote_sysutils.is_process_running('asterisk')
     if asterisk_is_running:
         context.remote_sysutils.restart_service('asterisk')
 
@@ -246,14 +261,13 @@ def _configure_postgresql_debug(context):
         config_file,
     ]
     context.ssh_client.check_call(command)
-    pg_pidfile = context.remote_sysutils.get_pidfile_for_service_name('postgresql')
-    pg_is_running = context.remote_sysutils.is_process_running(pg_pidfile)
+    pg_is_running = context.remote_sysutils.is_process_running('postgresql@11-main')
     if pg_is_running:
         context.remote_sysutils.reload_service('postgresql')
 
 
 def _enable_wazo_services_debug(context):
-    for service in WAZO_SERVICES.keys():
+    for service in WAZO_SERVICES:
         logger.debug('Configuring %s debug', service)
         if service == 'wazo-provd':
             debug_content = 'general: {verbose: true}'
@@ -261,8 +275,7 @@ def _enable_wazo_services_debug(context):
             debug_content = 'debug: true'
         command = ['echo', debug_content, '>', f'/etc/{service}/conf.d/wazo-acceptance-debug.yml']
         context.ssh_client.check_call(command)
-        service_pidfile = context.remote_sysutils.get_pidfile_for_service_name(service)
-        service_is_running = context.remote_sysutils.is_process_running(service_pidfile)
+        service_is_running = context.remote_sysutils.is_process_running(service)
         if service_is_running:
             context.remote_sysutils.restart_service(service)
 
@@ -273,8 +286,7 @@ def _configure_wazo_service(context, service):
         f'{service}.yml',
         f'/etc/{service}/conf.d/wazo-acceptance.yml',
     )
-    service_pidfile = context.remote_sysutils.get_pidfile_for_service_name(service)
-    service_is_running = context.remote_sysutils.is_process_running(service_pidfile)
+    service_is_running = context.remote_sysutils.is_process_running(service)
     if service_is_running:
         context.remote_sysutils.restart_service(service)
 
