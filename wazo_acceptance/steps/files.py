@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -106,15 +106,8 @@ def then_there_are_cron_jobs_in_file_name_on_instance(context, file_name, instan
 
 @then('Asterisk may open at most "{max_file_descriptors}" file descriptors')
 def then_asterisk_may_open_at_most_max_file_descriptors(context, max_file_descriptors):
-    pid_file = context.remote_sysutils.get_pidfile_for_service_name('asterisk')
-    command = ['cat', pid_file]
-    pid = context.ssh_client.out_call(command).strip()
-    command = ['grep', "'Max open files'", '/proc/{pid}/limits'.format(pid=pid)]
-    limit_row = context.ssh_client.out_call(command).strip()
-
-    limit = re.search(r'Max open files\s+(\d+)\s+\d+\s+\w+', limit_row).group(1)
-
-    assert_that(int(limit), equal_to(8192))
+    limit_number_of_file = context.remote_sysutils.process_limitnofile('asterisk')
+    assert_that(limit_number_of_file, equal_to('8192'))
 
 
 @then('Asterisk sound files are correctly installed')
