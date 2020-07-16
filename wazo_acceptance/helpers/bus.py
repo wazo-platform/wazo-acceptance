@@ -73,7 +73,7 @@ class Bus:
         def event_received(data):
 
             try:
-                assert_that(data, has_entries(**expected_data))
+                assert_that(data['data'], has_entries(**expected_data))
             except AssertionError:
                 return
             # TODO expose close method on wazo-websocketd-client
