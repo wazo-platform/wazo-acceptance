@@ -149,6 +149,7 @@ def setup_helpers(context):
     context.helpers.confd_user = helpers.ConfdUser(context)
     context.helpers.conference = helpers.Conference(context)
     context.helpers.context = helpers.Context(context.confd_client)
+    context.helpers.device = helpers.Device(context)
     context.helpers.endpoint_sip = helpers.EndpointSIP(context)
     context.helpers.extension = helpers.Extension(context)
     context.helpers.extension_feature = helpers.ExtensionFeature(context)

@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from .agent import Agent
@@ -12,6 +12,7 @@ from .confd_group import ConfdGroup
 from .confd_user import ConfdUser
 from .conference import Conference
 from .context import Context
+from .device import Device
 from .endpoint_sip import EndpointSIP
 from .extension import Extension
 from .extension_feature import ExtensionFeature
@@ -44,6 +45,7 @@ __all__ = [
     'ConfdUser',
     'Conference',
     'Context',
+    'Device',
     'EndpointSIP',
     'Extension',
     'ExtensionFeature',
