@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then
-from hamcrest import assert_that, has_entries
+from hamcrest import assert_that, equal_to
 
 STABLE_URL = 'http://provd.wazo.community/plugins/1/stable/'
 
@@ -13,8 +13,16 @@ def given_the_latest_plugin_is_installed(context, plugin):
     context.helpers.provd.install_latest_plugin(plugin)
 
 
-@then('the provd config "{config_id}" has the following values')
-def step_impl(context, config_id):
-    config = context.helpers.provd.get_config(config_id)
+@then('the provd config "{config_id}" has the following values on "{instance}"')
+def provd_config_has_the_following_values(context, config_id, instance):
+    instance_context = getattr(context.instances, instance)
+    config = instance_context.helpers.provd.get_config(config_id)
     for row in context.table:
-        assert_that(config, has_entries(**row.as_dict()))
+        expected = row.as_dict()
+        for key, value in expected.items():
+            if '{{ slave_voip_ip_address }}' in value:
+                rendered_value = value.replace(
+                    '{{ slave_voip_ip_address }}',
+                    instance_context.wazo_config.get('slave_host') or '<unknown>',
+                )
+                assert_that(config.get(key, ''), equal_to(rendered_value))
