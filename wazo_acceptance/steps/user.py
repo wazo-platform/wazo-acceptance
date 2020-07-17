@@ -89,7 +89,7 @@ def given_there_are_telephony_users_with_infos(context):
         context.helpers.confd_user.add_line(confd_user, line)
 
         if body.get('device'):
-            device = context.confd_client.devices.list(mac=body['device'])['items'][0]
+            device = context.helpers.device.get_by(mac=body['device'])
             context.helpers.line.add_device(line, device)
 
         if (body.get('voicemail_name')

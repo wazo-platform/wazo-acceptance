@@ -1,4 +1,4 @@
-# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import requests
@@ -47,10 +47,11 @@ class Provd:
                 self._operation_successful, operation_progress, tries=20, interval=0.5
             )
 
-    def create_device_via_http_request(self, mac, path, user_agent):
+    def create_device_via_http_request(self, path, user_agent, mac=None):
         url = 'http://{}:8667/{}'.format(self._context.wazo_config['wazo_host'], path)
         requests.get(url, headers={'User-Agent': user_agent})
-        self._context.add_cleanup(self.delete_device_with_mac, mac)
+        if mac:
+            self._context.add_cleanup(self.delete_device_with_mac, mac)
 
     def delete_device(self, device_id):
         device_manager = self._context.provd_client.devices

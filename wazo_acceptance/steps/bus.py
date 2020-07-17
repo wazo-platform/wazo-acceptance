@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import collections
@@ -68,3 +68,18 @@ def _flatten_nested_dict(dict_, parent_key='', separator='_'):
         else:
             items.append((new_key, value))
     return dict(items)
+
+
+@then('I see in the AMI that the line "{exten}@{exten_context}" has been synchronized')
+def then_i_receive_an_ami_event_that_the_line_has_been_synchronized(context, exten, exten_context):
+    extension = context.helpers.extension.get_by(exten=exten, context=exten_context)
+    line_name = extension['lines'][0]['name']
+    path = 'rawman'
+    action = 'action=PJSIPNotify'
+    variable = 'Variable=Event%3Dcheck-sync'
+    endpoint = f'Endpoint={line_name}'
+    expected = f'{path}?{action}\\&{variable}\\&{endpoint} HTTP/1.1\\" 200'
+    # NOTE(fblackburn): can be improved by scoping the log with timestamp
+    command = ['grep', '-q', expected, '/var/log/wazo-amid.log']
+
+    until.assert_(context.ssh_client.check_call, command, tries=3)
