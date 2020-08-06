@@ -263,11 +263,11 @@ def given_the_user_has_function_keys(context, firstname, lastname):
     func_keys = {'keys': {}}
     for row in context.table:
         body = row.as_dict()
-        func_keys['keys'][f'{body["position"]}'] = _build_funckey(body)
+        func_keys['keys'][f'{body["position"]}'] = _build_funckey(context, body)
     context.helpers.confd_user.update_funckeys(confd_user, func_keys)
 
 
-def _build_funckey(row):
+def _build_funckey(context, row):
     type_ = row['destination_type']
     if type_ == 'forward':
         destination = {
@@ -277,6 +277,13 @@ def _build_funckey(row):
         }
     elif type_ == 'service':
         destination = {'type': type_, 'service': row['destination_service']}
+    elif type_ == 'agent':
+        agent = context.helpers.agent.get_by(number=row['destination_agent'])
+        destination = {
+            'type': type_,
+            'agent_id': agent['id'],
+            'action': row['destination_action'],
+        }
 
     return {
         'blf': row.get('blf') == 'true',
@@ -343,3 +350,15 @@ def when_the_user_disable_incoming_call_filtering(context, firstname, lastname):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     service = {'enabled': False}
     context.confd_client.users(confd_user).update_service('incallfilter', service)
+
+
+@when('"{firstname} {lastname}" press function key "{position}"')
+def when_the_user_press_function_key(context, firstname, lastname, position):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    line = context.confd_client.lines.get(confd_user['lines'][0]['id'])
+    device = context.provd_client.devices.get(line['device_id'])
+    config = context.provd_client.configs.get(device['config'])
+    exten = config['raw_config']['funckeys'][position]['value']
+    tracking_id = f'{firstname} {lastname}'
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.call(exten)
