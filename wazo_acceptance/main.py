@@ -1,4 +1,4 @@
-# Copyright 2014-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2014-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import argparse
@@ -19,7 +19,7 @@ def main():
     parsed_args = _parse_args()
 
     config = load_config(config_dir=parsed_args.config)
-    setup_logging(log_file=config['log_file'], foreground=True, debug=parsed_args.verbose)
+    setup_logging(log_file=config['log_file'], debug=parsed_args.verbose)
 
     if parsed_args.prerequisite:
         prerequisite.run(parsed_args.config, parsed_args.instance)

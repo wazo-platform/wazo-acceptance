@@ -52,7 +52,7 @@ def after_scenario(context, scenario):
 
 def initialize(context):
     config = load_config(config_dir=context.config.userdata.get('acceptance_config_dir'))
-    wazo_setup_logging(config['log_file'], foreground=True, debug=config['debug']['global'])
+    wazo_setup_logging(config['log_file'], debug=config['debug']['global'])
     debug.setup_logging(config['log_file'], config['debug'])
 
     if config['instances'].get('default'):
