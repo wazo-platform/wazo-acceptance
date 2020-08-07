@@ -284,6 +284,16 @@ def _build_funckey(context, row):
             'agent_id': agent['id'],
             'action': row['destination_action'],
         }
+    elif type_ == 'bsfilter':
+        call_filter = context.helpers.call_filter.get_by(name=row['destination_filter_name'])
+        firstname, lastname = row['destination_filter_member'].split(' ', 1)
+        for user in call_filter['surrogates']['users']:
+            if user['firstname'] == firstname and user['lastname'] == lastname:
+                destination = {
+                    'type': type_,
+                    'filter_member_id': user['member_id'],
+                }
+                break
 
     return {
         'blf': row.get('blf') == 'true',

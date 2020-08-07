@@ -8,6 +8,7 @@ from .asset import Asset
 from .asterisk import Asterisk
 from .bus import Bus
 from .call import Call
+from .call_filter import CallFilter
 from .confd_group import ConfdGroup
 from .confd_user import ConfdUser
 from .conference import Conference
@@ -41,6 +42,7 @@ __all__ = [
     'Asterisk',
     'Bus',
     'Call',
+    'CallFilter',
     'ConfdGroup',
     'ConfdUser',
     'Conference',
