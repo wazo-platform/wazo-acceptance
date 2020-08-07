@@ -58,3 +58,107 @@ Feature: Boss Secretary Filter
     Then "Charlie Unknown" is ringing
     Then "Angel 001" is hungup
     
+  Scenario: Strategy "all"
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | with_phone |
+      | Charlie   | Unknown  | 1001  | default | yes        |
+      | Angel     | 001      | 1002  | default | yes        |
+      | Bad       | Guy      | 1010  | default | yes        |
+    Given there are call filters with infos:
+      | name             | strategy | recipients      | surrogates |
+      | Charlie's Angels | all      | Charlie Unknown | Angel 001  |
+    Given "Angel 001" enable call filter "Charlie's Angels"
+    When "Bad Guy" calls "1001"
+    When I wait "2" seconds for the call processing
+    Then "Charlie Unknown" is ringing
+    Then "Angel 001" is ringing
+
+  Scenario: Strategy "all-recipients-then-linear-surrogates"
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | with_phone |
+      | Charlie   | Unknown  | 1001  | default | yes        |
+      | Angel     | 001      | 1002  | default | yes        |
+      | Angel     | 002      | 1003  | default | yes        |
+      | Bad       | Guy      | 1010  | default | yes        |
+    Given there are call filters with infos:
+      | name             | strategy                              | recipients      | surrogates          |
+      | Charlie's Angels | all-recipients-then-linear-surrogates | Charlie Unknown | Angel 001,Angel 002 |
+    Given "Angel 001" enable call filter "Charlie's Angels"
+    Given "Angel 002" enable call filter "Charlie's Angels"
+    When "Bad Guy" calls "1001"
+    When I wait "2" seconds for the call processing
+    Then "Charlie Unknown" is ringing
+    Then "Angel 001" is hungup
+    Then "Angel 002" is hungup
+    When "Charlie Unknown" hangs up
+    Then "Charlie Unknown" is hungup
+    Then "Angel 001" is ringing
+    Then "Angel 002" is hungup
+    When "Angel 001" hangs up
+    Then "Charlie Unknown" is hungup
+    Then "Angel 001" is hungup
+    Then "Angel 002" is ringing
+
+  Scenario: Strategy "all-recipients-then-all-surrogates"
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | with_phone |
+      | Charlie   | Unknown  | 1001  | default | yes        |
+      | Angel     | 001      | 1002  | default | yes        |
+      | Angel     | 002      | 1003  | default | yes        |
+      | Bad       | Guy      | 1010  | default | yes        |
+    Given there are call filters with infos:
+      | name             | strategy                           | recipients      | surrogates          |
+      | Charlie's Angels | all-recipients-then-all-surrogates | Charlie Unknown | Angel 001,Angel 002 |
+    Given "Angel 001" enable call filter "Charlie's Angels"
+    Given "Angel 002" enable call filter "Charlie's Angels"
+    When "Bad Guy" calls "1001"
+    When I wait "2" seconds for the call processing
+    Then "Charlie Unknown" is ringing
+    Then "Angel 001" is hungup
+    Then "Angel 002" is hungup
+    When "Charlie Unknown" hangs up
+    Then "Charlie Unknown" is hungup
+    Then "Angel 001" is ringing
+    Then "Angel 002" is ringing
+
+  Scenario: Strategy "all-surrogates-then-all-recipients"
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | with_phone |
+      | Charlie   | Unknown  | 1001  | default | yes        |
+      | Angel     | 001      | 1002  | default | yes        |
+      | Angel     | 002      | 1003  | default | yes        |
+      | Bad       | Guy      | 1010  | default | yes        |
+    Given there are call filters with infos:
+      | name             | strategy                           | recipients      | surrogates          |
+      | Charlie's Angels | all-surrogates-then-all-recipients | Charlie Unknown | Angel 001,Angel 002 |
+    Given "Angel 001" enable call filter "Charlie's Angels"
+    Given "Angel 002" enable call filter "Charlie's Angels"
+    When "Bad Guy" calls "1001"
+    When I wait "2" seconds for the call processing
+    Then "Charlie Unknown" is hungup
+    Then "Angel 001" is ringing
+    Then "Angel 002" is ringing
+    # NOTE(fblackburn): if surrogates hangup, recipients will not ring
+
+  Scenario: Strategy "linear-surrogates-then-all-recipients"
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | with_phone |
+      | Charlie   | Unknown  | 1001  | default | yes        |
+      | Angel     | 001      | 1002  | default | yes        |
+      | Angel     | 002      | 1003  | default | yes        |
+      | Bad       | Guy      | 1010  | default | yes        |
+    Given there are call filters with infos:
+      | name             | strategy                              | recipients      | surrogates          |
+      | Charlie's Angels | linear-surrogates-then-all-recipients | Charlie Unknown | Angel 001,Angel 002 |
+    Given "Angel 001" enable call filter "Charlie's Angels"
+    Given "Angel 002" enable call filter "Charlie's Angels"
+    When "Bad Guy" calls "1001"
+    When I wait "2" seconds for the call processing
+    Then "Charlie Unknown" is hungup
+    Then "Angel 001" is ringing
+    Then "Angel 002" is hungup
+    When "Angel 001" hangs up
+    Then "Charlie Unknown" is hungup
+    Then "Angel 001" is hungup
+    Then "Angel 002" is ringing
+    # NOTE(fblackburn): if surrogates hangup, recipients will not ring
