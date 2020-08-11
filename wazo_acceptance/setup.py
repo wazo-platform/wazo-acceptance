@@ -181,4 +181,5 @@ def setup_phone(context, linphone_debug):
         context.wazo_config['wazo_host'],
         context.wazo_config['linphone'],
         context.phone_register,
+        context.helpers.endpoint_sip,
     )

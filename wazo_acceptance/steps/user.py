@@ -76,7 +76,18 @@ def given_there_are_telephony_users_with_infos(context):
 
         endpoint = body.get('endpoint', 'sip')
         if endpoint == 'sip':
-            sip = context.helpers.endpoint_sip.create(body)
+            template = context.helpers.endpoint_sip.get_template_by(label='global')
+            raw_name = f'{body["firstname"]}-{body["lastname"]}'
+            name = ''.join([c if ord(c) < 128 else 'X' for c in raw_name])
+            sip_body = {
+                'name': name,
+                'auth_section_options': [
+                    ['username', name],
+                    ['password', 'password'],
+                ],
+                'templates': [template],
+            }
+            sip = context.helpers.endpoint_sip.create(sip_body)
             context.helpers.line.add_endpoint_sip(line, sip)
         elif endpoint == 'sccp':
             raise NotImplementedError()
@@ -168,7 +179,7 @@ def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, ex
         context=exten_context
     )
     line = context.confd_client.lines.get(extension['lines'][0]['id'])
-    endpoint_sip = context.confd_client.endpoints_sip.get(line['endpoint_sip']['id'])
+    endpoint_sip = context.confd_client.endpoints_sip.get(line['endpoint_sip'])
 
     tracking_id = "{} {}".format(firstname, lastname)
     expected_event = {'line_state': 'available'}
