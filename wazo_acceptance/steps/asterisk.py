@@ -18,6 +18,7 @@ FUNCKEYS_EXTEN = {
     'busy': 23,
     'enablednd': 25,
     'incallfilter': 27,
+    'bsfilter': 37,
 }
 
 
@@ -61,6 +62,10 @@ def _get_funckey_prefix_exten(user_id, funckey):
             funckey_exten = '{}*{}'.format(funckey_exten, funckey['destination']['exten'])
     elif funckey['destination']['type'] == 'service':
         funckey_exten = FUNCKEYS_EXTEN[funckey['destination']['service']]
+    elif funckey['destination']['type'] == 'bsfilter':
+        funckey_exten = FUNCKEYS_EXTEN[funckey['destination']['type']]
+        member_id = funckey['destination']['filter_member_id']
+        return '*{}{}'.format(funckey_exten, member_id)
     else:
         raise Exception('Function key exten not found')
 

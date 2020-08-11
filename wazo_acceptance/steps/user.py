@@ -1,6 +1,7 @@
 # Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import time
 import random
 import string
 
@@ -284,6 +285,16 @@ def _build_funckey(context, row):
             'agent_id': agent['id'],
             'action': row['destination_action'],
         }
+    elif type_ == 'bsfilter':
+        call_filter = context.helpers.call_filter.get_by(name=row['destination_filter_name'])
+        firstname, lastname = row['destination_filter_member'].split(' ', 1)
+        for user in call_filter['surrogates']['users']:
+            if user['firstname'] == firstname and user['lastname'] == lastname:
+                destination = {
+                    'type': type_,
+                    'filter_member_id': user['member_id'],
+                }
+                break
 
     return {
         'blf': row.get('blf') == 'true',
@@ -362,3 +373,20 @@ def when_the_user_press_function_key(context, firstname, lastname, position):
     tracking_id = f'{firstname} {lastname}'
     phone = context.phone_register.get_phone(tracking_id)
     phone.call(exten)
+
+
+@given('"{firstname} {lastname}" enable call filter "{filter_name}"')
+def when_the_user_active_call_filter(context, firstname, lastname, filter_name):
+    call_filter = context.helpers.call_filter.get_by(name=filter_name)
+    member_id = None
+    for user in call_filter['surrogates']['users']:
+        if user['firstname'] == firstname and user['lastname'] == lastname:
+            member_id = user['member_id']
+            break
+    if not member_id:
+        raise Exception('Surrogate not found: {} {}'.format(firstname, lastname))
+
+    tracking_id = f'{firstname} {lastname}'
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.call(f'*37{member_id}')
+    time.sleep(5)  # call processing
