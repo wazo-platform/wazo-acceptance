@@ -1,4 +1,4 @@
-# Copyright 2018-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2018-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from collections import namedtuple
@@ -68,17 +68,18 @@ class _AvailableRTPPortFinder(_AbstractAvailablePortFinder):
 
 class SIPConfigGenerator:
 
-    def __init__(self, host, config, phone_register):
+    def __init__(self, host, config, phone_register, sip_helper):
         self._host = host
         self._rtp_port_range = config['rtp_port_range']
         self._sip_port_range = config['sip_port_range']
         self._phone_register = phone_register
+        self._sip_helper = sip_helper
 
     def create(self, endpoint_sip):
         existing_phones = self._phone_register.phones()
         sip_port = _AvailableSipPortFinder(self._sip_port_range).get_available_port(existing_phones)
         rtp_port = _AvailableRTPPortFinder(self._rtp_port_range).get_available_port(existing_phones)
-        sip_name = endpoint_sip['username']
-        sip_passwd = endpoint_sip['secret']
+        sip_name = self._sip_helper.get_auth_option(endpoint_sip, 'username')
+        sip_passwd = self._sip_helper.get_auth_option(endpoint_sip, 'password')
         sip_host = self._host
         return SIPConfig(sip_port, rtp_port, sip_name, sip_passwd, sip_host)

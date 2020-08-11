@@ -1,4 +1,4 @@
-# Copyright 2015-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
@@ -146,8 +146,7 @@ class PhoneFactory:
     def register_and_track_phone(self, tracking_id, endpoint_sip):
         phone_config = self._context.helpers.sip_config.create(endpoint_sip)
         phone = self._register_line(phone_config)
-        phone.sip_contact_uri = self._context.phone_register.find_new_sip_contact(
-            endpoint_sip['username'],
-        )
+        name = endpoint_sip['name']
+        phone.sip_contact_uri = self._context.phone_register.find_new_sip_contact(name)
         self._context.phone_register.add_registered_phone(phone, tracking_id)
         return phone
