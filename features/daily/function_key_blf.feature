@@ -1,6 +1,5 @@
 Feature: Function Key BLF
 
-  # Uncomment lines when WAZO-1646 will be fixed
   Scenario: Forwards
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |

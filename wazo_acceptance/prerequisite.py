@@ -71,6 +71,9 @@ def run(config_dir, instance_name):
     logger.debug("Configuring calld client")
     setup.setup_calld_client(context)
 
+    logger.debug("Configuring provd client")
+    setup.setup_provd_client(context)
+
     logger.debug('Creating default tenant')
     _configure_default_tenant(context)
 
