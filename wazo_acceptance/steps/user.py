@@ -76,17 +76,8 @@ def given_there_are_telephony_users_with_infos(context):
 
         endpoint = body.get('endpoint', 'sip')
         if endpoint == 'sip':
-            template = context.helpers.endpoint_sip.get_template_by(label='global')
-            raw_name = f'{body["firstname"]}-{body["lastname"]}'
-            name = ''.join([c if ord(c) < 128 else 'X' for c in raw_name])
-            sip_body = {
-                'name': name,
-                'auth_section_options': [
-                    ['username', name],
-                    ['password', 'password'],
-                ],
-                'templates': [template],
-            }
+            name = '-'.join([body['firstname'], body.get('lastname', '')])
+            sip_body = context.helpers.endpoint_sip.generate_form(name)
             sip = context.helpers.endpoint_sip.create(sip_body)
             context.helpers.line.add_endpoint_sip(line, sip)
         elif endpoint == 'sccp':
@@ -126,7 +117,7 @@ def given_there_are_telephony_users_with_infos(context):
 
 
 @given('"{firstname} {lastname}" has lines')
-def given_the_tlephony_user_has_lines(context, firstname, lastname):
+def given_user_has_lines(context, firstname, lastname):
     context.table.require_columns(['name', 'context'])
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     for row in context.table:
@@ -136,7 +127,9 @@ def given_the_tlephony_user_has_lines(context, firstname, lastname):
 
         endpoint = body.get('endpoint', 'sip')
         if endpoint == 'sip':
-            sip = context.helpers.endpoint_sip.create(body)
+            name = '-'.join([firstname, lastname, body['name']])
+            sip_body = context.helpers.endpoint_sip.generate_form(name)
+            sip = context.helpers.endpoint_sip.create(sip_body)
             context.helpers.line.add_endpoint_sip(line, sip)
         else:
             raise NotImplementedError()

@@ -41,3 +41,15 @@ class EndpointSIP:
         templates = self._confd_client.endpoints_sip_templates.list(**kwargs)['items']
         for template in templates:
             return template
+
+    def generate_form(self, raw_name):
+        template = self.get_template_by(label='global')
+        name = ''.join([c if ord(c) < 128 else 'X' for c in raw_name])
+        return {
+            'name': name,
+            'auth_section_options': [
+                ['username', name],
+                ['password', 'password'],
+            ],
+            'templates': [template],
+        }
