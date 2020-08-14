@@ -128,7 +128,7 @@ def given_user_has_lines(context, firstname, lastname):
         endpoint = body.get('endpoint', 'sip')
         if endpoint == 'sip':
             name = '-'.join([firstname, lastname, body['name']])
-            sip_body = context.helpers.endpoint_sip.generate_form(name)
+            sip_body = context.helpers.endpoint_sip.generate_form(name, body.get('webrtc'))
             sip = context.helpers.endpoint_sip.create(sip_body)
             context.helpers.line.add_endpoint_sip(line, sip)
         else:
