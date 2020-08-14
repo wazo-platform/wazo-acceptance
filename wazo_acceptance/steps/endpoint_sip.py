@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import when
@@ -14,9 +14,20 @@ def when_i_set_the_following_option_in_endpoint_sip(context, exten, exten_contex
         )
         line_id = extension['lines'][0]['id']
         line = context.confd_client.lines.get(line_id)
-        sip = {
-            "id": line['endpoint_sip']['id']
+        sip = context.confd_client.endpoints_sip.get(line['endpoint_sip'])
+
+        for option, value in sip['auth_section_options']:
+            if option in row.keys():
+                sip['auth_section_options'].remove([option, value])
+
+        body = {
+            'uuid': sip['uuid'],
+            'auth_section_options': sip['auth_section_options'],
         }
+
         for option, value in row.items():
-            sip[option] = value
-        context.helpers.endpoint_sip.update(sip)
+            if option == 'username':
+                body['name'] = value
+                body['auth_section_options'].append([option, value])
+
+        context.helpers.endpoint_sip.update(body)

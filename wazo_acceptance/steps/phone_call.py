@@ -141,14 +141,18 @@ def when_chan_test_hangs_up_channel_with_id(context, channel_id):
 def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, exten_context, callerid=None):
     body = {'context': exten_context}
     trunk = context.helpers.trunk.create(body)
+    template = context.helpers.endpoint_sip.get_template_by(label='global')
     body = {
         'name': incall_name,
-        'username': incall_name,
-        'password': incall_name,
-        'options': [['max_contacts', '1']],
+        'auth_section_options': [
+            ['username', incall_name],
+            ['password', incall_name],
+        ],
+        'endpoint_section_options': [],
+        'templates': [template],
     }
     if callerid:
-        body['options'].append(['callerid', callerid])
+        body['endpoint_section_options'].append(['callerid', callerid])
     sip = context.helpers.endpoint_sip.create(body)
     context.helpers.trunk.add_endpoint_sip(trunk, sip)
     phone = context.helpers.sip_phone.register_and_track_phone(incall_name, sip)

@@ -76,7 +76,9 @@ def given_there_are_telephony_users_with_infos(context):
 
         endpoint = body.get('endpoint', 'sip')
         if endpoint == 'sip':
-            sip = context.helpers.endpoint_sip.create(body)
+            name = '-'.join([body['firstname'], body.get('lastname', '')])
+            sip_body = context.helpers.endpoint_sip.generate_form(name)
+            sip = context.helpers.endpoint_sip.create(sip_body)
             context.helpers.line.add_endpoint_sip(line, sip)
         elif endpoint == 'sccp':
             raise NotImplementedError()
@@ -115,7 +117,7 @@ def given_there_are_telephony_users_with_infos(context):
 
 
 @given('"{firstname} {lastname}" has lines')
-def given_the_tlephony_user_has_lines(context, firstname, lastname):
+def given_user_has_lines(context, firstname, lastname):
     context.table.require_columns(['name', 'context'])
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     for row in context.table:
@@ -125,7 +127,9 @@ def given_the_tlephony_user_has_lines(context, firstname, lastname):
 
         endpoint = body.get('endpoint', 'sip')
         if endpoint == 'sip':
-            sip = context.helpers.endpoint_sip.create(body)
+            name = '-'.join([firstname, lastname, body['name']])
+            sip_body = context.helpers.endpoint_sip.generate_form(name, body.get('webrtc'))
+            sip = context.helpers.endpoint_sip.create(sip_body)
             context.helpers.line.add_endpoint_sip(line, sip)
         else:
             raise NotImplementedError()
@@ -168,7 +172,7 @@ def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, ex
         context=exten_context
     )
     line = context.confd_client.lines.get(extension['lines'][0]['id'])
-    endpoint_sip = context.confd_client.endpoints_sip.get(line['endpoint_sip']['id'])
+    endpoint_sip = context.confd_client.endpoints_sip.get(line['endpoint_sip'])
 
     tracking_id = "{} {}".format(firstname, lastname)
     expected_event = {'line_state': 'available'}
