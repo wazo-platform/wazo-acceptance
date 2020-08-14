@@ -144,9 +144,6 @@ def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, 
     template = context.helpers.endpoint_sip.get_template_by(label='global')
     body = {
         'name': incall_name,
-        'aor_section_options': [
-            ['max_contacts', '1']
-        ],
         'auth_section_options': [
             ['username', incall_name],
             ['password', incall_name],
