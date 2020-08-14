@@ -9,14 +9,6 @@ class EndpointSIP:
         self._confd_client = context.confd_client
 
     def create(self, body):
-        options = []
-        webrtc = body.get('webrtc')
-        if webrtc is not None:
-            options.append(('webrtc', webrtc))
-
-        if options:
-            body['options'] = options
-
         sip = self._confd_client.endpoints_sip.create(body)
         self._context.add_cleanup(self._confd_client.endpoints_sip.delete, sip)
         return sip
@@ -42,14 +34,16 @@ class EndpointSIP:
         for template in templates:
             return template
 
-    def generate_form(self, raw_name):
+    def generate_form(self, raw_name, webrtc=None):
         template = self.get_template_by(label='global')
         name = ''.join([c if ord(c) < 128 else 'X' for c in raw_name])
+        endpoint_section_options = [['webrtc', webrtc]] if webrtc is not None else []
         return {
             'name': name,
             'auth_section_options': [
                 ['username', name],
                 ['password', 'password'],
             ],
+            'endpoint_section_options': endpoint_section_options,
             'templates': [template],
         }
