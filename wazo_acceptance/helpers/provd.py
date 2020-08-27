@@ -22,6 +22,9 @@ class Provd:
         operation_ressource.update()
         assert_that(operation_ressource.state, is_(operation.OIP_SUCCESS))
 
+    def get_config(self, id_):
+        return self._context.provd_client.configs.get(id_)
+
     def update_plugin_list(self, url):
         self._provd_client.params.update('plugin_server', url)
         with self._provd_client.plugins.update() as operation_progress:
