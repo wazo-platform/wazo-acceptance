@@ -4,7 +4,7 @@
 import json
 
 from behave import given, then
-from hamcrest import assert_that, equal_to
+from hamcrest import assert_that, equal_to, has_entries
 
 STABLE_URL = 'http://provd.wazo.community/plugins/1/stable/'
 
@@ -37,13 +37,9 @@ def provd_offline_config_has_the_following_values(context, config_id, instance):
     file_content = instance_context.remote_sysutils.get_content_file(file_name)
     config = json.loads(file_content)
 
+    slave_host = instance_context.wazo_config.get('slave_host') or '<unknown>'
     for row in context.table:
         expected = row.as_dict()
-        for key, value in expected.items():
-            rendered_value = value or None
-            if '{{ slave_voip_ip_address }}' in value:
-                rendered_value = value.replace(
-                    '{{ slave_voip_ip_address }}',
-                    instance_context.wazo_config.get('slave_host') or '<unknown>',
-                )
-            assert_that(config.get(key, None), equal_to(rendered_value))
+        expected = {key: value.replace('{{ slave_voip_ip_address }}', slave_host) for key, value in expected.items()}
+        expected = {key: (value or None) for key, value in expected.items()}
+        assert_that(config, has_entries(expected))
