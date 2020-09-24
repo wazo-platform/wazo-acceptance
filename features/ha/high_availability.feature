@@ -21,7 +21,7 @@ Feature: High availability
     Then there are cron jobs in "/etc/cron.d/xivo-ha-slave" on "slave"
     | cron job                                                                       |
     | * * * * * root /usr/sbin/xivo-check-master-status {{ master_voip_ip_address }} |
-    Then the provd config "default" has the following values on "slave"
+    Then the provd offline config "default" has the following values on "slave"
     | X_type    | proxy_backup | registrar_backup |
     | registrar |              |                  |
 
