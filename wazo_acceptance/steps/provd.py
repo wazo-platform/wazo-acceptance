@@ -4,7 +4,15 @@
 import json
 
 from behave import given, then
-from hamcrest import assert_that, equal_to, has_entries
+from hamcrest import (
+    all_of,
+    any_of,
+    assert_that,
+    has_entries,
+    has_entry,
+    has_key,
+    not_,
+)
 
 STABLE_URL = 'http://provd.wazo.community/plugins/1/stable/'
 
@@ -37,7 +45,17 @@ def provd_offline_config_has_the_following_values(context, config_id, instance):
     for row in context.table:
         expected = row.as_dict()
         expected = _render_expected_config(expected, slave_host)
-        assert_that(config, has_entries(expected))
+        expected_none = {key: value for key, value in expected.items() if value is None}
+        expected_values = {key: value for key, value in expected.items() if value is not None}
+        assert_that(config, has_keys_absent_or_value_none(expected_none))
+        assert_that(config, has_entries(expected_values))
+
+
+def has_keys_absent_or_value_none(tested):
+    matchers = [
+        any_of(has_entry(key, None), not_(has_key(key))) for key in tested
+    ]
+    return all_of(*matchers)
 
 
 def _render_expected_config(expected, slave_host):
