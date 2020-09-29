@@ -60,5 +60,5 @@ def has_keys_absent_or_value_none(tested):
 
 def _render_expected_config(expected, slave_host):
     rendered = {key: value.replace('{{ slave_voip_ip_address }}', slave_host) for key, value in expected.items()}
-    rendered = {key: (value or None) for key, value in expected.items()}
+    rendered = {key: (value or None) for key, value in rendered.items()}
     return rendered
