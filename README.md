@@ -9,7 +9,7 @@ These tests are used for testing features before releasing a new version of Wazo
 
 * A fresh installation of Wazo Platform. See https://wazo-platform.org/install/unified-communication for details.
 * `pip install requirements.txt`
-* `docker pull wazopbx/wazo-linphone`
+* `docker pull wazoplatform/wazo-linphone`
 
 Then setup the environment:
 
