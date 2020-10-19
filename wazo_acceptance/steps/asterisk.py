@@ -49,12 +49,6 @@ def then_the_user_has_funckey_hint_disabled(context, firstname, lastname, positi
     until.true(_assert_idle_hints_state, context, prefix_exten, tries=10)
 
 
-def _should_get_exact_prefix_exten(funckey):
-    if not funckey['destination'].get('exten'):
-        return True
-    return False
-
-
 def _get_funckey_prefix_exten(user_id, funckey):
     if funckey['destination']['type'] == 'forward':
         funckey_exten = FUNCKEYS_EXTEN[funckey['destination']['forward']]
