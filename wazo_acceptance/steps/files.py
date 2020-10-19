@@ -17,7 +17,6 @@ from hamcrest import (
 BACKUP_DIR = '/var/backups/xivo'
 ASTERISK_VM_PATH = '/var/spool/asterisk/voicemail'
 MOH_PATH = '/usr/share/asterisk/moh/default'
-DAHDI_PATH = '/dev/dahdi'
 ASTERISK_SOUND_PATH = '/usr/share/asterisk/sounds/en'
 
 
@@ -113,17 +112,6 @@ def then_asterisk_may_open_at_most_max_file_descriptors(context, max_file_descri
 @then('Asterisk sound files are correctly installed')
 def then_asterisk_sound_files_correctly_installed(context):
     assert not context.remote_sysutils.dir_is_empty(ASTERISK_SOUND_PATH)
-
-
-@then('Asterisk owns /dev/dadhi')
-def then_asterisk_owns_dev_dadhi(context):
-    text = context.remote_sysutils.get_list_file(DAHDI_PATH)
-    lines = text.split("\n")
-    for line in lines:
-        if not line:
-            continue
-        file_ = '{}/{}'.format(DAHDI_PATH, line.strip())
-        assert context.remote_sysutils.file_owned_by_user(file_, 'asterisk')
 
 
 @then('MOH files are owned by asterisk:www-data')
