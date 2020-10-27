@@ -34,6 +34,5 @@ from .queue import *  # noqa
 from .schedule import *  # noqa
 from .setupd import *  # noqa
 from .skill import *  # noqa
-from .system import *  # noqa
 from .user import *  # noqa
 from .voicemail import *  # noqa
