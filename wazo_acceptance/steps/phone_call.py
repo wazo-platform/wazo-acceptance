@@ -83,15 +83,15 @@ def step_user_resumes_call(context, tracking_id):
     phone.resume()
 
 
-@when('I wait "{seconds}" seconds')
-@when('I wait "{seconds}" seconds for the call processing')
-@when('I wait "{seconds}" seconds for the call processing with slow machine')
-@when('I wait "{seconds}" seconds for the call to be forwarded')
-@when('I wait "{seconds}" seconds for the end of ringing time')
-@when('I wait "{seconds}" seconds for the timeout to not expire')
-@when('I wait "{seconds}" seconds for wazo-calld load to drop')
-@when('I wait "{seconds}" seconds to play unreachable message')
-@when('I wait "{seconds}" seconds to simulate call center')
+@when('I wait {seconds} seconds')
+@when('I wait {seconds} seconds for the call processing')
+@when('I wait {seconds} seconds for the call processing with slow machine')
+@when('I wait {seconds} seconds for the call to be forwarded')
+@when('I wait {seconds} seconds for the end of ringing time')
+@when('I wait {seconds} seconds for the timeout to not expire')
+@when('I wait {seconds} seconds for wazo-calld load to drop')
+@when('I wait {seconds} seconds to play unreachable message')
+@when('I wait {seconds} seconds to simulate call center')
 def when_i_wait_n_seconds(context, seconds):
     _sleep(seconds)
 

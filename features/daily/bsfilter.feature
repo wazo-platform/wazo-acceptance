@@ -20,41 +20,41 @@ Feature: Boss Secretary Filter
       | position | destination_type | destination_filter_name | destination_filter_member |
       | 1        | bsfilter         | Charlie's Angels        | Angel 001                 |
     When "Charlie Unknown" press function key "1"
-    When I wait "4" seconds for the call processing
+    When I wait 4 seconds for the call processing
     Then "Charlie Unknown" has function key "1" hint enabled
     Then "Angel 001" has function key "1" hint enabled
     When "Bad Guy" calls "1001"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is hungup
     Then "Angel 001" is ringing
     When "Bad Guy" hangs up
 
     When "Charlie Unknown" press function key "1"
-    When I wait "4" seconds for the call processing
+    When I wait 4 seconds for the call processing
     Then "Charlie Unknown" has function key "1" hint disabled
     Then "Angel 001" has function key "1" hint disabled
     When "Bad Guy" calls "1001"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing
     Then "Angel 001" is hungup
     When "Bad Guy" hangs up
     
     When "Angel 001" press function key "1"
-    When I wait "4" seconds for the call processing
+    When I wait 4 seconds for the call processing
     Then "Charlie Unknown" has function key "1" hint enabled
     Then "Angel 001" has function key "1" hint enabled
     When "Bad Guy" calls "1001"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is hungup
     Then "Angel 001" is ringing
     When "Bad Guy" hangs up
 
     When "Angel 001" press function key "1"
-    When I wait "4" seconds for the call processing
+    When I wait 4 seconds for the call processing
     Then "Charlie Unknown" has function key "1" hint disabled
     Then "Angel 001" has function key "1" hint disabled
     When "Bad Guy" calls "1001"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing
     Then "Angel 001" is hungup
     
@@ -69,7 +69,7 @@ Feature: Boss Secretary Filter
       | Charlie's Angels | all      | Charlie Unknown | Angel 001  |
     Given "Angel 001" enable call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing
     Then "Angel 001" is ringing
 
@@ -86,7 +86,7 @@ Feature: Boss Secretary Filter
     Given "Angel 001" enable call filter "Charlie's Angels"
     Given "Angel 002" enable call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing
     Then "Angel 001" is hungup
     Then "Angel 002" is hungup
@@ -112,7 +112,7 @@ Feature: Boss Secretary Filter
     Given "Angel 001" enable call filter "Charlie's Angels"
     Given "Angel 002" enable call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing
     Then "Angel 001" is hungup
     Then "Angel 002" is hungup
@@ -134,7 +134,7 @@ Feature: Boss Secretary Filter
     Given "Angel 001" enable call filter "Charlie's Angels"
     Given "Angel 002" enable call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is hungup
     Then "Angel 001" is ringing
     Then "Angel 002" is ringing
@@ -153,7 +153,7 @@ Feature: Boss Secretary Filter
     Given "Angel 001" enable call filter "Charlie's Angels"
     Given "Angel 002" enable call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is hungup
     Then "Angel 001" is ringing
     Then "Angel 002" is hungup

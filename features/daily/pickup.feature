@@ -76,7 +76,7 @@ Feature: Pickup
       | name   | user_interceptor | user_target |
       | second | User 102         | User 101    |
     When "User 100" calls "2001"
-    When I wait "2" seconds for the call processing with slow machine
+    When I wait 2 seconds for the call processing with slow machine
     Then "User 101" is ringing
     When "User 102" calls "*8"
     Then "User 100" is talking

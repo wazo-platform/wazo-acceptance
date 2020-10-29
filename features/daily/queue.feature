@@ -12,9 +12,9 @@ Feature: Queues
     Given there is an incall "3102@from-extern" to the queue "queue2"
 
     When chan_test calls "3102@from-extern" with id "3102-1"
-    When I wait "1" seconds for the call processing
+    When I wait 1 seconds for the call processing
     When "John Doe" answers
-    When I wait "1" seconds for the call processing
+    When I wait 1 seconds for the call processing
     When "John Doe" hangs up
     When chan_test hangs up channel with id "3102-1"
-    When I wait "1" seconds for the call processing
+    When I wait 1 seconds for the call processing

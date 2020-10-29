@@ -13,7 +13,7 @@ Feature: IVR
       | 2     | none             |                 |
     Given there is an incall "1801@from-extern" to the IVR "ivr1"
     When chan_test calls "1801@from-extern" with id "1337"
-    When I wait "5" seconds for the call processing
+    When I wait 5 seconds for the call processing
     When chan_test queues DTMF "1" on channel with id "1337"
-    When I wait "1" seconds
+    When I wait 1 seconds
     Then "Jake Gittes" is ringing

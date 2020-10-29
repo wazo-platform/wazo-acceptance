@@ -12,7 +12,7 @@ Feature: Stats generation
         When chan_test calls "3501@default" with id "3501-2"
         When chan_test calls "3501@default" with id "3501-3"
         When chan_test calls "3501@default" with id "3501-4"
-        When I wait "3" seconds for the call processing
+        When I wait 3 seconds for the call processing
         Then queue_log contains 3 "FULL" events for queue "q01"
 
     Scenario: 02 Generation of event ABANDON
@@ -26,9 +26,9 @@ Feature: Stats generation
         When chan_test calls "3502@default" with id "3502-1"
         When chan_test calls "3502@default" with id "3502-2"
         When chan_test calls "3502@default" with id "3502-3"
-        When I wait "3" seconds to simulate call center
+        When I wait 3 seconds to simulate call center
         When chan_test hangs up channel with id "3502-1"
         When chan_test hangs up channel with id "3502-2"
         When chan_test hangs up channel with id "3502-3"
-        When I wait "3" seconds for the call processing
+        When I wait 3 seconds for the call processing
         Then queue_log contains 3 "ABANDON" events for queue "q02"
