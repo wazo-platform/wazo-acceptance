@@ -95,6 +95,9 @@ def run(config_dir, instance_name):
     logger.debug('Installing wazo-crash-test program')
     _install_crash_test(context)
 
+    logger.debug('Installing queue_log helpers')
+    _install_queue_log_helpers(context)
+
     logger.debug('Configuring helpers')
     setup.setup_helpers(context)
 
@@ -239,6 +242,11 @@ def _install_crash_test(context):
     _install_packages(context, ['gcc'])
     command = ['gcc', '-o', '/usr/local/bin/wazo-crash-test', '/usr/src/wazo-crash-test.c']
     context.ssh_client.check_call(command)
+
+
+def _install_queue_log_helpers(context):
+    copy_asset_to_server_permanently(context, 'queue-log-clear-one-queue.sh', '/usr/local/bin')
+    copy_asset_to_server_permanently(context, 'queue-log-count-events.sh', '/usr/local/bin')
 
 
 def _configure_consul(context):

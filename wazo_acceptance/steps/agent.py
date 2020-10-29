@@ -1,8 +1,17 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, when, then
 from hamcrest import assert_that, not_
+
+
+@given('there are agents with infos')
+def given_there_are_agents_with_infos(context):
+    context.table.require_columns(['number'])
+    for row in context.table:
+        body = row.as_dict()
+
+        context.helpers.agent.create(body)
 
 
 @given('agent "{number}" is logged')

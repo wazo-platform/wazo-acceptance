@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import when, given
@@ -9,9 +9,13 @@ def given_there_are_queues(context):
     context.table.require_columns(['name', 'exten', 'context'])
     for row in context.table:
         body = row.as_dict()
+        body['options'] = []
         timeout = body.pop('option_timeout', None)
         if timeout is not None:
-            body['options'] = [('timeout', timeout)]
+            body['options'].append(('timeout', timeout))
+        maxlen = body.pop('maxlen', None)
+        if maxlen is not None:
+            body['options'].append(('maxlen', maxlen))
         queue = context.helpers.queue.create(body)
 
         extension_body = {'exten': body['exten'], 'context': body['context']}
