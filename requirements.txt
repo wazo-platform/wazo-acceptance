@@ -18,7 +18,7 @@ https://github.com/wazo-platform/xivo-test-helpers/archive/master.zip
 PyHamcrest
 SQLAlchemy
 behave
-kombu==4.2.1
+kombu==4.6.11
 psycopg2
 python-consul==0.7.1
 pyyaml==3.13
