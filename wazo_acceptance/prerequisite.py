@@ -246,7 +246,7 @@ def _install_crash_test(context):
 
 def _install_queue_log_helpers(context):
     copy_asset_to_server_permanently(context, 'queue-log-clear-one-queue.sh', '/usr/local/bin')
-    copy_asset_to_server_permanently(context, 'queue-log-count-events.sh', '/usr/local/bin')
+    copy_asset_to_server_permanently(context, 'queue-log-count-queue-events.sh', '/usr/local/bin')
     copy_asset_to_server_permanently(context, 'queue-log-clear-one-agent.sh', '/usr/local/bin')
     copy_asset_to_server_permanently(context, 'queue-log-count-agent-events.sh', '/usr/local/bin')
 
