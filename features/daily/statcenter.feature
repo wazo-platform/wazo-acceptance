@@ -122,3 +122,36 @@ Feature: Stats generation
         When I unlog agent "008" from phone
         When I wait 3 seconds for the call processing
         Then queue_log contains 1 "AGENTCALLBACKLOGOFF" events for agent "008"
+
+    Scenario: 09 Generation of event COMPLETECALLER
+        Given there is no queue_log for queue "q09"
+        Given there are telephony users with infos:
+          | firstname | lastname | exten | context | with_phone | agent_number |
+          | Agent     | 009      | 1509  | default | yes        | 009          |
+        Given there are queues with infos:
+          | name | exten | context | agents |
+          | q09  | 3509  | default | 009    |
+        Given agent "009" is logged
+        When chan_test calls "3509@default" with id "3509-1"
+        When I wait 2 seconds to simulate call center
+        When "Agent 009" answers
+        When chan_test hangs up channel with id "3509-1"
+        When I wait 3 seconds for the call processing
+        Then queue_log contains 1 "COMPLETECALLER" events for queue "q09"
+
+    Scenario: 10 Generation of event COMPLETEAGENT
+        Given there is no queue_log for queue "q10"
+        Given there are telephony users with infos:
+          | firstname | lastname | exten | context | with_phone | agent_number |
+          | Agent     | 010      | 1510  | default | yes        | 010          |
+        Given there are queues with infos:
+          | name | exten | context | agents |
+          | q10  | 3510  | default | 010    |
+        Given agent "010" is logged
+        When chan_test calls "3510@default" with id "3510-1"
+        When I wait 1 seconds to simulate call center
+        When "Agent 010" answers
+        When I wait 1 seconds to simulate call center
+        When "Agent 010" hangs up
+        When I wait 3 seconds for the call processing
+        Then queue_log contains 1 "COMPLETEAGENT" events for queue "q10"
