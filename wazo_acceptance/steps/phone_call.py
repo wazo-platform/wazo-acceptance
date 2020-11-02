@@ -88,6 +88,7 @@ def step_user_resumes_call(context, tracking_id):
 @when('I wait {seconds} seconds for the call processing with slow machine')
 @when('I wait {seconds} seconds for the call to be forwarded')
 @when('I wait {seconds} seconds for the end of ringing time')
+@when('I wait {seconds} seconds for the timeout to expire')
 @when('I wait {seconds} seconds for the timeout to not expire')
 @when('I wait {seconds} seconds for wazo-calld load to drop')
 @when('I wait {seconds} seconds to play unreachable message')

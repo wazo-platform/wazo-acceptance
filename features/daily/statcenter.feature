@@ -6,8 +6,8 @@ Feature: Stats generation
           | number |
           | 001    |
         Given there are queues with infos:
-          | name | exten | context | maxlen | agents |
-          | q01  | 3501  | default | 1      | 001    |
+          | name | exten | context | option_maxlen | agents |
+          | q01  | 3501  | default | 1             | 001    |
         When chan_test calls "3501@default" with id "3501-1"
         When chan_test calls "3501@default" with id "3501-2"
         When chan_test calls "3501@default" with id "3501-3"
@@ -48,3 +48,18 @@ Feature: Stats generation
         When chan_test hangs up channel with id "3503-1"
         When I wait 3 seconds for the call processing
         Then queue_log contains 1 "CONNECT" events for queue "q03"
+
+    Scenario: 04 Generation of event RINGNOANSWER
+        Given there is no queue_log for queue "q04"
+        Given there are telephony users with infos:
+          | firstname | lastname | exten | context | with_phone | agent_number |
+          | Agent     | 004      | 1504  | default | yes        | 004          |
+        Given there are queues with infos:
+          | name | exten | context | agents | option_timeout |
+          | q04  | 3504  | default | 004    | 5                           |
+        Given agent "004" is logged
+        When chan_test calls "3504@default" with id "3504-1"
+        When I wait 6 seconds for the timeout to expire
+        When chan_test hangs up channel with id "3504-1"
+        When I wait 3 seconds for the call processing
+        Then queue_log contains 1 "RINGNOANSWER" events for queue "q04"

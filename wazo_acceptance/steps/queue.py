@@ -10,12 +10,11 @@ def given_there_are_queues(context):
     for row in context.table:
         body = row.as_dict()
         body['options'] = []
-        timeout = body.pop('option_timeout', None)
-        if timeout is not None:
-            body['options'].append(('timeout', timeout))
-        maxlen = body.pop('maxlen', None)
-        if maxlen is not None:
-            body['options'].append(('maxlen', maxlen))
+        for option in ('option_timeout', 'option_maxlen', 'option_timeout'):
+            value = body.pop(option, None)
+            if value is not None:
+                option_name = option[7:]
+                body['options'].append((option_name, value))
         queue = context.helpers.queue.create(body)
 
         extension_body = {'exten': body['exten'], 'context': body['context']}
