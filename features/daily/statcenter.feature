@@ -81,3 +81,18 @@ Feature: Stats generation
         When chan_test hangs up channel with id "3505-3"
         When I wait 3 seconds for the call processing
         Then queue_log contains 3 "ENTERQUEUE" events for queue "q05"
+
+    Scenario: 06 Generation of event JOINEMPTY
+        Given there is no queue_log for queue "q06"
+        Given there are queues with infos:
+          | name | exten | context | option_joinempty |
+          | q06  | 3506  | default | unavailable      |
+        When chan_test calls "3506@default" with id "3506-1"
+        When chan_test calls "3506@default" with id "3506-2"
+        When chan_test calls "3506@default" with id "3506-3"
+        When I wait 3 seconds to simulate call center
+        When chan_test hangs up channel with id "3506-1"
+        When chan_test hangs up channel with id "3506-2"
+        When chan_test hangs up channel with id "3506-3"
+        When I wait 3 seconds for the call processing
+        Then queue_log contains 3 "JOINEMPTY" events for queue "q06"

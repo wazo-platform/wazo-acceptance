@@ -10,7 +10,7 @@ def given_there_are_queues(context):
     for row in context.table:
         body = row.as_dict()
         body['options'] = []
-        for option in ('option_timeout', 'option_maxlen', 'option_timeout'):
+        for option in ('option_timeout', 'option_maxlen', 'option_timeout', 'option_joinempty'):
             value = body.pop(option, None)
             if value is not None:
                 option_name = option[7:]
