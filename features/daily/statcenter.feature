@@ -108,3 +108,17 @@ Feature: Stats generation
         When I log agent "007" from phone
         When I wait 3 seconds for the call processing
         Then queue_log contains 1 "AGENTCALLBACKLOGIN" events for agent "007"
+
+    Scenario: 08 Generation of event AGENTCALLBACKLOGOFF
+        Given there is no queue_log for agent "008"
+        Given there are telephony users with infos:
+          | firstname | lastname | exten | context | with_phone | agent_number |
+          | Agent     | 008      | 1508  | default | yes        | 008          |
+        When I log agent "008" from phone
+        When I wait 3 seconds for the call processing
+        When I unlog agent "008" from phone
+        When I wait 3 seconds for the call processing
+        # Logoff twice = failure = only one event
+        When I unlog agent "008" from phone
+        When I wait 3 seconds for the call processing
+        Then queue_log contains 1 "AGENTCALLBACKLOGOFF" events for agent "008"
