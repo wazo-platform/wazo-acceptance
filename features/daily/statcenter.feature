@@ -96,3 +96,15 @@ Feature: Stats generation
         When chan_test hangs up channel with id "3506-3"
         When I wait 3 seconds for the call processing
         Then queue_log contains 3 "JOINEMPTY" events for queue "q06"
+
+    Scenario: 07 Generation of event AGENTCALLBACKLOGIN
+        Given there is no queue_log for agent "007"
+        Given there are telephony users with infos:
+          | firstname | lastname | exten | context | with_phone | agent_number |
+          | Agent     | 007      | 1507  | default | yes        | 007          |
+        When I log agent "007" from phone
+        When I wait 3 seconds for the call processing
+        # Login twice = failure = only one event
+        When I log agent "007" from phone
+        When I wait 3 seconds for the call processing
+        Then queue_log contains 1 "AGENTCALLBACKLOGIN" events for agent "007"

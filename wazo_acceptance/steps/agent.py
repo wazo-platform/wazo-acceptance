@@ -23,6 +23,11 @@ def given_agent_is_logged(context, number):
     context.agentd_client.agents.login_agent_by_number(number, exten, exten_context)
 
 
+@given('there is no queue_log for agent "{agent_number}"')
+def given_no_queue_log_for_agent_1(context, agent_number):
+    context.ssh_client.check_call(['queue-log-clear-one-agent.sh', agent_number])
+
+
 @when('I log agent "{number}" from phone')
 def when_i_log_agent_from_the_phone(context, number):
     user = context.helpers.agent.get_by(number=number)['users'][0]
@@ -57,3 +62,9 @@ def then_the_agent_is_logged(context, number):
 def then_the_agent_is_not_logged(context, number):
     logged = context.agentd_client.agents.get_agent_status_by_number(number).logged
     assert_that(not_(logged))
+
+
+@then('queue_log contains {expected_count} "{event_name}" events for agent "{agent_number}"')
+def queue_log_contains_1_2_events_for_agent_3(context, expected_count, event_name, agent_number):
+    actual_count = context.ssh_client.out_call(['queue-log-count-agent-events.sh', agent_number, event_name]).strip()
+    assert actual_count == expected_count, f'expected {repr(expected_count)}, got {repr(actual_count)}'
