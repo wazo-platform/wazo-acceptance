@@ -155,3 +155,19 @@ Feature: Stats generation
         When "Agent 010" hangs up
         When I wait 3 seconds for the call processing
         Then queue_log contains 1 "COMPLETEAGENT" events for queue "q10"
+
+    Scenario: 11 Generation of event CLOSED
+        Given there is no queue_log for queue "q11"
+        Given I have a schedule "always_closed" in "America/Montreal" with the following schedules:
+          | periods | months | month_days | week_days | hours_start | hours_end |
+          | open    |      1 |          1 |         1 |       00:00 |     00:01 |
+        Given there are queues with infos:
+          | name | exten | context | schedule      |
+          | q11  | 3511  | default | always_closed |
+        When chan_test calls "3511@default" with id "3511-1"
+        When chan_test calls "3511@default" with id "3511-2"
+        When I wait 2 seconds to simulate call center
+        When chan_test hangs up channel with id "3511-1"
+        When chan_test hangs up channel with id "3511-2"
+        When I wait 3 seconds for the call processing
+        Then queue_log contains 2 "CLOSED" events for queue "q11"

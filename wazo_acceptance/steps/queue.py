@@ -32,6 +32,10 @@ def given_there_are_queues(context):
                 user = context.helpers.confd_user.get_by(exten=exten, context=exten_context)
                 context.helpers.queue.add_user_member(queue, user)
 
+        if row.get('schedule'):
+            schedule = context.helpers.schedule.get_by(name=row['schedule'])
+            context.confd_client.queues(queue).add_schedule(schedule['id'])
+
 
 @given('queue "{queue_name}" has agent "{agent_number}" with penalty "{penalty}"')
 def given_queue_has_agent_with_penalty(context, queue_name, agent_number, penalty):
