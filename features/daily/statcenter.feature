@@ -63,3 +63,21 @@ Feature: Stats generation
         When chan_test hangs up channel with id "3504-1"
         When I wait 3 seconds for the call processing
         Then queue_log contains 1 "RINGNOANSWER" events for queue "q04"
+
+    Scenario: 05 Generation of event ENTERQUEUE
+        Given there is no queue_log for queue "q05"
+        Given there are agents with infos:
+          | number |
+          | 005    |
+        Given there are queues with infos:
+          | name | exten | context | agents |
+          | q05  | 3505  | default | 005    |
+        When chan_test calls "3505@default" with id "3505-1"
+        When chan_test calls "3505@default" with id "3505-2"
+        When chan_test calls "3505@default" with id "3505-3"
+        When I wait 3 seconds to simulate call center
+        When chan_test hangs up channel with id "3505-1"
+        When chan_test hangs up channel with id "3505-2"
+        When chan_test hangs up channel with id "3505-3"
+        When I wait 3 seconds for the call processing
+        Then queue_log contains 3 "ENTERQUEUE" events for queue "q05"
