@@ -192,3 +192,17 @@ Feature: Stats generation
         Given there are corrupt entries in queue_log
         When I execute the command wazo-stat
         Then the command wazo-stat did not return any error
+
+    Scenario: 14 Generation of event PAUSEALL and UNPAUSEALL
+        Given there is no queue_log for agent "014"
+        Given there are telephony users with infos:
+          | firstname | lastname | exten | context | with_phone | agent_number |
+          | Agent     | 014      | 1514  | default | yes        | 014          |
+        Given there are queues with infos:
+          | name | exten | context | timeout | option_timeout | agents | 
+          | q14  | 3514  | default | 10      | 5              | 014    |
+        Given agent "014" is logged
+        When I pause agent "014"
+        When I unpause agent "014"
+        Then queue_log contains 1 "PAUSEALL" events for agent "014"
+        Then queue_log contains 1 "UNPAUSEALL" events for agent "014"

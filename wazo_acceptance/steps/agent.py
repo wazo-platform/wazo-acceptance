@@ -52,6 +52,16 @@ def when_i_toggle_agent_status_from_the_phone(context, number):
     phone.call('*30{number}'.format(number=number))
 
 
+@when('I pause agent "{number}"')
+def when_i_pause_agent_1(context, number):
+    context.agentd_client.agents.pause_agent_by_number(number)
+
+
+@when('I unpause agent "{number}"')
+def when_i_unpause_agent_1(context, number):
+    context.agentd_client.agents.unpause_agent_by_number(number)
+
+
 @then('the agent "{number}" is logged')
 def then_the_agent_is_logged(context, number):
     logged = context.agentd_client.agents.get_agent_status_by_number(number).logged
