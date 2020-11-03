@@ -187,3 +187,8 @@ Feature: Stats generation
         When chan_test hangs up channel with id "3512-1"
         When chan_test hangs up channel with id "3512-2"
         Then queue_log contains 2 "EXITWITHTIMEOUT" events for queue "q12"
+
+    Scenario: 13 Generate corrupt stats
+        Given there are corrupt entries in queue_log
+        When I execute the command wazo-stat
+        Then the command wazo-stat did not return any error

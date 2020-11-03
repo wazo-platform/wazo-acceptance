@@ -249,6 +249,7 @@ def _install_queue_log_helpers(context):
     copy_asset_to_server_permanently(context, 'queue-log-count-queue-events.sh', '/usr/local/bin')
     copy_asset_to_server_permanently(context, 'queue-log-clear-one-agent.sh', '/usr/local/bin')
     copy_asset_to_server_permanently(context, 'queue-log-count-agent-events.sh', '/usr/local/bin')
+    copy_asset_to_server_permanently(context, 'queue-log-insert-corrupt-entries.sh', '/usr/local/bin')
 
 
 def _configure_consul(context):
