@@ -206,3 +206,20 @@ Feature: Stats generation
         When I unpause agent "014"
         Then queue_log contains 1 "PAUSEALL" events for agent "014"
         Then queue_log contains 1 "UNPAUSEALL" events for agent "014"
+
+    Scenario: 15 Generation of event WRAPUPSTART
+        Given there is no queue_log for agent "015"
+        Given there are telephony users with infos:
+          | firstname | lastname | exten | context | with_phone | agent_number |
+          | Agent     | 015      | 1515  | default | yes        | 015          |
+        Given there are queues with infos:
+          | name | exten | context | option_wrapuptime | agents | 
+          | q15  | 3515  | default | 5                 | 015    |
+        Given agent "015" is logged
+        When chan_test calls "3515@default" with id "3515-1"
+        When I wait 1 seconds for the call processing
+        When "Agent 015" answers
+        When I wait 1 seconds to simulate call center
+        When chan_test hangs up channel with id "3515-1"
+        When I wait 3 seconds for the call processing
+        Then queue_log contains 1 "WRAPUPSTART" events for agent "015"
