@@ -171,3 +171,19 @@ Feature: Stats generation
         When chan_test hangs up channel with id "3511-2"
         When I wait 3 seconds for the call processing
         Then queue_log contains 2 "CLOSED" events for queue "q11"
+
+    Scenario: 12 Generation of event EXITWITHTIMEOUT
+        Given there is no queue_log for queue "q12"
+        Given there are telephony users with infos:
+          | firstname | lastname | exten | context | with_phone | agent_number |
+          | Agent     | 012      | 1512  | default | yes        | 012          |
+        Given there are queues with infos:
+          | name | exten | context | timeout | option_timeout | agents | 
+          | q12  | 3512  | default | 10      | 5              | 012    |
+        Given agent "012" is logged
+        When chan_test calls "3512@default" with id "3512-1"
+        When chan_test calls "3512@default" with id "3512-2"
+        When I wait 12 seconds for the timeout to expire
+        When chan_test hangs up channel with id "3512-1"
+        When chan_test hangs up channel with id "3512-2"
+        Then queue_log contains 2 "EXITWITHTIMEOUT" events for queue "q12"

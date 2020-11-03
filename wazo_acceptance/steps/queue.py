@@ -18,6 +18,8 @@ def given_there_are_queues(context):
         queue = context.helpers.queue.create(body)
 
         extension_body = {'exten': body['exten'], 'context': body['context']}
+        if row.get('timeout') is not None:
+            extension_body['timeout'] = int(row['timeout'])
         extension = context.helpers.extension.create(extension_body)
         context.helpers.queue.add_extension(queue, extension)
 
