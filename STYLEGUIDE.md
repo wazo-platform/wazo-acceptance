@@ -34,4 +34,4 @@ You should write helper files if:
 
 ## Step files
 
-* the function name must be prefixed by the decorator name (`step`/`give`/`when`/`then`)
+* the function name must be prefixed by the decorator name (`step`/`given`/`when`/`then`)
