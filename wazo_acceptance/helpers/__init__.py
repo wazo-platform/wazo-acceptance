@@ -32,6 +32,7 @@ from .sip_phone import PhoneFactory
 from .token import Token
 from .trunk import Trunk
 from .user import User
+from .utils import Utils
 from .voicemail import Voicemail
 
 __all__ = [
@@ -66,5 +67,6 @@ __all__ = [
     'Token',
     'Trunk',
     'User',
+    'Utils',
     'Voicemail',
 ]

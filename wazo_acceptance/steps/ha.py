@@ -1,16 +1,11 @@
 # Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import random
 import string
 
 from behave import given, when, then
 
 from wazo_acceptance import auth, setup
-
-
-def random_string(length, sample=string.ascii_lowercase):
-    return ''.join(random.choice(sample) for _ in range(length))
 
 
 @given('the HA is enabled as master on "{instance}"')
@@ -36,7 +31,7 @@ def given_there_is_a_user_username_on_instance(context, username, instance):
     context = getattr(context.instances, instance)
     body = {
         'username': username,
-        'password': random_string(10, sample=string.printable),
+        'password': context.helpers.utils.random_string(10, sample=string.printable),
     }
     context.helpers.user.create(body)
 
