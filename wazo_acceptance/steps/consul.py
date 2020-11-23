@@ -1,4 +1,4 @@
-# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from hamcrest import assert_that, empty, not_
@@ -11,7 +11,7 @@ from ..prerequisite import _configure_consul
 
 
 @then('consul returns a running "{service_name}" service')
-def consul_returns_a_running_service(context, service_name):
+def then_consul_returns_a_running_service(context, service_name):
     # FIXME(afournier): the following should be done differently
     if service_name == 'wazo-setupd':
         _configure_consul(context)

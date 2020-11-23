@@ -25,6 +25,6 @@ def when_the_following_devices_are_created_via_http_requets_to_the_provisioning_
 
 
 @when('I synchronize the device with mac "{mac}"')
-def i_synchronize_the_device_with_mac(context, mac):
+def when_i_synchronize_the_device_with_mac(context, mac):
     device = context.helpers.device.get_by(mac=mac)
     context.confd_client.devices.synchronize(device['id'])

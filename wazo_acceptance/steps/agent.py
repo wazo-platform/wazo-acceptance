@@ -75,6 +75,6 @@ def then_the_agent_is_not_logged(context, number):
 
 
 @then('queue_log contains {expected_count} "{event_name}" events for agent "{agent_number}"')
-def queue_log_contains_1_2_events_for_agent_3(context, expected_count, event_name, agent_number):
+def then_queue_log_contains_1_2_events_for_agent_3(context, expected_count, event_name, agent_number):
     actual_count = context.ssh_client.out_call(['queue-log-count-agent-events.sh', agent_number, event_name]).strip()
     assert actual_count == expected_count, f'expected {repr(expected_count)}, got {repr(actual_count)}'
