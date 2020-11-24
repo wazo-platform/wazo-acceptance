@@ -5,10 +5,10 @@ Feature: Agent
       | firstname | lastname | exten | context | agent_number |
       | User      | 003      | 1003  | default | 1003         |
     When I log agent "1003" from phone
-    When I wait "3" seconds for the call processing
+    When I wait 3 seconds for the call processing
     Then the agent "1003" is logged
     When I unlog agent "1003" from phone
-    When I wait "3" seconds for the call processing
+    When I wait 3 seconds for the call processing
     Then the agent "1003" is not logged
 
   Scenario: Toggle agent status from the phone
@@ -16,10 +16,10 @@ Feature: Agent
       | firstname | lastname | exten | context | agent_number |
       | User      | 003      | 1003  | default | 1003         |
     When I toggle agent "1003" status from phone
-    When I wait "3" seconds for the call processing
+    When I wait 3 seconds for the call processing
     Then the agent "1003" is logged
     When I toggle agent "1003" status from phone
-    When I wait "3" seconds for the call processing
+    When I wait 3 seconds for the call processing
     Then the agent "1003" is not logged
 
   Scenario: Login and logout an agent from function keys
@@ -34,10 +34,10 @@ Feature: Agent
       | 1        | agent            | 1003              | login              |
       | 2        | agent            | 1003              | logout             |
     When "User 003" press function key "1"
-    When I wait "3" seconds for the call processing
+    When I wait 3 seconds for the call processing
     Then the agent "1003" is logged
     When "User 003" press function key "2"
-    When I wait "3" seconds for the call processing
+    When I wait 3 seconds for the call processing
     Then the agent "1003" is not logged
 
   Scenario: Toggle agent status from the function key
@@ -51,10 +51,10 @@ Feature: Agent
       | position | destination_type | destination_agent | destination_action |
       | 1        | agent            | 1003              | toggle             |
     When "User 003" press function key "1"
-    When I wait "3" seconds for the call processing
+    When I wait 3 seconds for the call processing
     Then the agent "1003" is logged
     When "User 003" press function key "1"
-    When I wait "3" seconds for the call processing
+    When I wait 3 seconds for the call processing
     Then the agent "1003" is not logged
 
   Scenario: Assign agent penalty
@@ -71,16 +71,16 @@ Feature: Agent
     Given agent "1802" is logged
     Given agent "1803" is logged
     When "James Bond" calls "3801"
-    When I wait "1" seconds for the call processing
+    When I wait 1 seconds for the call processing
     Then "Ti-Me Pare" is ringing
     Then "Moman Pare" is hungup
     When "Ti-Me Pare" hangs up
     Then "Moman Pare" is ringing
     Given "James Bond" hangs up
     When "James Bond" calls "3801"
-    When I wait "1" seconds for the call processing
+    When I wait 1 seconds for the call processing
     When "Ti-Me Pare" answers
     When "James Bond" calls "3801"
-    When I wait "1" seconds for the call processing
+    When I wait 1 seconds for the call processing
     Then "Ti-Me Pare" is talking
     Then "Moman Pare" is ringing

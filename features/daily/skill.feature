@@ -51,7 +51,7 @@ Feature: Skill
     Then "English High" is ringing
     Then "English Medium" is hungup
     Then "English Low" is hungup
-    When I wait "11" seconds to simulate call center
+    When I wait 11 seconds to simulate call center
     Then "English High" is ringing
     Then "English Medium" is hungup
     Then "English Low" is hungup
@@ -61,7 +61,7 @@ Feature: Skill
     Then "English High" is talking
     Then "English Medium" is hungup
     Then "English Low" is hungup
-    When I wait "10" seconds to simulate call center
+    When I wait 10 seconds to simulate call center
     Then "English High" is talking
     Then "English Medium" is ringing
     Then "English Low" is hungup
@@ -71,11 +71,11 @@ Feature: Skill
     Then "English High" is talking
     Then "English Medium" is talking
     Then "English Low" is hungup
-    When I wait "10" seconds to simulate call center
+    When I wait 10 seconds to simulate call center
     Then "English High" is talking
     Then "English Medium" is talking
     Then "English Low" is hungup
-    When I wait "10" seconds to simulate call center
+    When I wait 10 seconds to simulate call center
     Then "English High" is talking
     Then "English Medium" is talking
     Then "English Low" is ringing
@@ -86,7 +86,7 @@ Feature: Skill
     Then "English Medium" is talking
     Then "English Low" is talking
     Then "English Medium" hangs up
-    When I wait "5" seconds to simulate call center
+    When I wait 5 seconds to simulate call center
     Then "English Medium" is hungup
-    When I wait "5" seconds to simulate call center
+    When I wait 5 seconds to simulate call center
     Then "English Medium" is ringing

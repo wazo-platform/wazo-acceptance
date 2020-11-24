@@ -167,6 +167,7 @@ def setup_helpers(context):
     context.helpers.token = helpers.Token(context)
     context.helpers.trunk = helpers.Trunk(context)
     context.helpers.user = helpers.User(context)
+    context.helpers.utils = helpers.Utils(context)
     context.helpers.voicemail = helpers.Voicemail(context)
 
 

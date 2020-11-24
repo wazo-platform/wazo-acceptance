@@ -13,7 +13,7 @@ Feature: Groups
       | firstname | lastname |
       | Andrew    | Wiggin   |
     When "Valentine Wiggin" calls "2966"
-    When I wait "6" seconds for the call to be forwarded
+    When I wait 6 seconds for the call to be forwarded
     Then "Andrew Wiggin" is ringing
-    When I wait "6" seconds for the timeout to not expire
+    When I wait 6 seconds for the timeout to not expire
     Then "Andrew Wiggin" is ringing

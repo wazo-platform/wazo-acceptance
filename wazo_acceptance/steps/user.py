@@ -2,24 +2,19 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
-import random
 import string
 
 from behave import given, then, when
 from hamcrest import assert_that, equal_to, is_
 
 
-def random_string(length, sample=string.ascii_lowercase):
-    return ''.join(random.choice(sample) for _ in range(length))
-
-
 @given('there is an authentication user')
 def given_there_is_a_user(context):
-    context.username = random_string(10)
-    context.password = random_string(10, sample=string.printable)
+    context.username = context.helpers.utils.random_string(10)
+    context.password = context.helpers.utils.random_string(10, sample=string.printable)
 
     body = {
-        'firstname': random_string(10),
+        'firstname': context.helpers.utils.random_string(10),
         'username': context.username,
         'password': context.password,
     }
@@ -63,8 +58,8 @@ def given_there_are_telephony_users_with_infos(context):
             'uuid': confd_user['uuid'],
             'firstname': body['firstname'],
             'lastname': body.get('lastname'),
-            'username': body.get('username') or random_string(10),
-            'password': body.get('password') or random_string(10, sample=string.printable),
+            'username': body.get('username') or context.helpers.utils.random_string(10),
+            'password': body.get('password') or context.helpers.utils.random_string(10, sample=string.printable),
         }
         context.helpers.user.create(user_body)
 

@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import when, given
@@ -9,12 +9,23 @@ def given_there_are_queues(context):
     context.table.require_columns(['name', 'exten', 'context'])
     for row in context.table:
         body = row.as_dict()
-        timeout = body.pop('option_timeout', None)
-        if timeout is not None:
-            body['options'] = [('timeout', timeout)]
+        body['options'] = []
+        for option in (
+                'option_timeout',
+                'option_maxlen',
+                'option_timeout',
+                'option_joinempty',
+                'option_wrapuptime'
+        ):
+            value = body.pop(option, None)
+            if value is not None:
+                option_name = option[7:]
+                body['options'].append((option_name, value))
         queue = context.helpers.queue.create(body)
 
         extension_body = {'exten': body['exten'], 'context': body['context']}
+        if row.get('timeout') is not None:
+            extension_body['timeout'] = int(row['timeout'])
         extension = context.helpers.extension.create(extension_body)
         context.helpers.queue.add_extension(queue, extension)
 
@@ -28,6 +39,10 @@ def given_there_are_queues(context):
                 exten, exten_context = user_extension.split('@')
                 user = context.helpers.confd_user.get_by(exten=exten, context=exten_context)
                 context.helpers.queue.add_user_member(queue, user)
+
+        if row.get('schedule'):
+            schedule = context.helpers.schedule.get_by(name=row['schedule'])
+            context.confd_client.queues(queue).add_schedule(schedule['id'])
 
 
 @given('queue "{queue_name}" has agent "{agent_number}" with penalty "{penalty}"')

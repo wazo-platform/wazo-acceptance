@@ -40,7 +40,7 @@ Feature: User multi lines
       | line2 | 1801  | default | yes        |
     Given "Multi Lines" has an "unconditional" forward set to "1803"
     When "Bob Field" calls "1801"
-    When I wait "4" seconds for the call to be forwarded
+    When I wait 4 seconds for the call to be forwarded
     Then "Forward Unc" is ringing
 
   Scenario: Activate dnd on user multi lines
@@ -54,8 +54,8 @@ Feature: User multi lines
       | line2 | 1801  | default | yes        |
     Given "Multi Lines" has enabled "dnd" service
     When "Bob Field" calls "1801"
-    When I wait "2" seconds for the call processing
-    When I wait "5" seconds to play unreachable message
+    When I wait 2 seconds for the call processing
+    When I wait 5 seconds to play unreachable message
     Then "Bob Field" is hungup
 
   Scenario: Ringing time are respected on user multi lines
@@ -70,10 +70,10 @@ Feature: User multi lines
     When "Bob Field" calls "1801"
     Then "line1" is ringing
     Then "line2" is ringing
-    When I wait "5" seconds for the end of ringing time
+    When I wait 5 seconds for the end of ringing time
     Then "line1" is hungup
     Then "line2" is hungup
-    When I wait "5" seconds for the call processing
+    When I wait 5 seconds for the call processing
     Then "Bob Field" is hungup
 
   Scenario: Incoming call rings all lines that have the same extension as the main line

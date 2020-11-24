@@ -13,12 +13,12 @@ Feature: Call transfer
     Given there is an incall "3801@from-extern" to the queue "queue_a"
 
     When chan_test calls "3801@from-extern"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "User A" is ringing
 
     When "User A" answers
     When "User A" does a blind transfer to "1802@default" with API
-    When I wait "3" seconds for wazo-calld load to drop
+    When I wait 3 seconds for wazo-calld load to drop
     Then "User B" is ringing
 
     When "User B" answers
@@ -29,7 +29,7 @@ Feature: Call transfer
 
     When "User A" answers
     When "User A" does a blind transfer to "1804@default" with API
-    When I wait "3" seconds for wazo-calld load to drop
+    When I wait 3 seconds for wazo-calld load to drop
     Then "User D" is ringing
 
     When "User D" answers
@@ -57,7 +57,7 @@ Feature: Call transfer
       | parking1 | 1851        | 1851      | 1850  | default |
 
     When incoming call received from "incall" to "3801@from-extern"
-    When I wait "2" seconds for the call processing
+    When I wait 2 seconds for the call processing
     Then "User A" is ringing
 
     When "User A" answers
@@ -93,7 +93,7 @@ Feature: Call transfer
     Then "User B" is hungup
 
     When "User A" calls "1851"
-    When I wait "1" seconds for the call processing
+    When I wait 1 seconds for the call processing
     Then "User A" is talking
     Then "incall" is talking
 

@@ -24,7 +24,7 @@ def given_the_latest_plugin_is_installed(context, plugin):
 
 
 @then('the provd config "{config_id}" has the following values on "{instance}"')
-def provd_config_has_the_following_values(context, config_id, instance):
+def then_provd_config_has_the_following_values(context, config_id, instance):
     instance_context = getattr(context.instances, instance)
     config = instance_context.helpers.provd.get_config(config_id)
     slave_host = instance_context.wazo_config.get('slave_host') or '<unknown>'
@@ -35,7 +35,7 @@ def provd_config_has_the_following_values(context, config_id, instance):
 
 
 @then('the provd offline config "{config_id}" has the following values on "{instance}"')
-def provd_offline_config_has_the_following_values(context, config_id, instance):
+def then_provd_offline_config_has_the_following_values(context, config_id, instance):
     instance_context = getattr(context.instances, instance)
     file_name = f'/var/lib/wazo-provd/jsondb/configs/{config_id}'
     file_content = instance_context.remote_sysutils.get_content_file(file_name)

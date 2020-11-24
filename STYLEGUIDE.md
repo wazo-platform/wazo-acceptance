@@ -8,7 +8,8 @@
 * some table columns are optional; it's preferable to omit them if not necessary (for example, the `protocol` column)
 * there must be an empty line after a `Feature` definition and around `Scenario` blocks
 * there must be no empty lines between steps
-* variable must be surrounded by double quote (`"`)
+* variable must be surrounded by double quote (e.g. `"John"`) except for numbers (e.g. `3 seconds`, not `"3" seconds`)
+* integration tests that can't go elsewhere than `wazo-acceptance` should be in a file `integration-*.feature`
 * for other rules, please refer to feature files and then write them here
 
 ### Example
@@ -33,4 +34,4 @@ You should write helper files if:
 
 ## Step files
 
-* the function name must be prefixed by the decorator name (`step`/`give`/`when`/`then`)
+* the function name must be prefixed by the decorator name (`step`/`given`/`when`/`then`)

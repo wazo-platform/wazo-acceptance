@@ -31,8 +31,11 @@ from .presence import *  # noqa
 from .process import *  # noqa
 from .provd import *  # noqa
 from .queue import *  # noqa
+from .queuelog import *  # noqa
 from .schedule import *  # noqa
 from .setupd import *  # noqa
 from .skill import *  # noqa
+from .stats import *  # noqa
+from .time import *  # noqa
 from .user import *  # noqa
 from .voicemail import *  # noqa
