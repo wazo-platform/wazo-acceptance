@@ -54,8 +54,23 @@ def then_contact_center_stats_for_agent(context, agent_number):
     for row in context.table:
         expected_stats = row.as_dict()
 
+    fuzzy_statistics = ['conversation_time']
+    fuzziness = 1
     for stat_name, expected_value in expected_stats.items():
-        expected_value = int(expected_value)  # I'm only testing against time in seconds
-        actual_value = total_stats[stat_name]
-        assert actual_value == expected_value, \
-            f'expected {stat_name} = {expected_value}, got {actual_value}'
+        if stat_name in fuzzy_statistics:
+            expected_value = int(expected_value)
+            lower_bound = expected_value - fuzziness
+            higher_bound = expected_value + fuzziness
+            actual_value = total_stats[stat_name]
+            assert lower_bound <= actual_value <= higher_bound, \
+                'expected {} to be between {} and {}, got {}'.format(
+                    stat_name,
+                    lower_bound,
+                    higher_bound,
+                    actual_value,
+                )
+        else:
+            expected_value = int(expected_value)  # I'm only testing against time in seconds
+            actual_value = total_stats[stat_name]
+            assert actual_value == expected_value, \
+                f'expected {stat_name} = {expected_value}, got {actual_value}'
