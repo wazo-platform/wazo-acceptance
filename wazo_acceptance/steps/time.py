@@ -26,6 +26,7 @@ def given_no_hour_change_in_next_1_seconds(context, seconds):
 @when('I wait {seconds} seconds for wazo-calld load to drop')
 @when('I wait {seconds} seconds to play unreachable message')
 @when('I wait {seconds} seconds to simulate call center')
+@when('I wait {seconds} seconds until the wrapup completes')
 @when('I wait {seconds} seconds while being logged on')
 @when('I wait {seconds} seconds')
 def when_i_wait_n_seconds(context, seconds):
