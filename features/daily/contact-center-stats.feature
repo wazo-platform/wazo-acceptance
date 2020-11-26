@@ -15,19 +15,19 @@ Feature: Stats generation
     When chan_test calls "3521@default" with id "3521-answered"
     When I wait 3 seconds to simulate call center
     When "Stat Agent" answers
-    When I wait 1 seconds to simulate call center
+    When I wait 2 seconds to simulate call center
     When chan_test hangs up channel with id "3521-answered"
 
     # Abandoned call
     When chan_test calls "3521@default" with id "3521-abandoned"
-    When I wait 1 seconds to simulate call center
+    When I wait 2 seconds to simulate call center
     When chan_test hangs up channel with id "3521-abandoned"
 
     # Blocked call
     When I unlog agent "021" from phone
     When I wait 3 seconds for the call processing
     When chan_test calls "3521@default" with id "3521-blocked"
-    When I wait 1 seconds to simulate call center
+    When I wait 2 seconds to simulate call center
     When chan_test hangs up channel with id "3521-blocked"
 
     When I wait 3 seconds for the call processing
