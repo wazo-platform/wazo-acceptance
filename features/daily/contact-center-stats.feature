@@ -52,3 +52,24 @@ Feature: Stats generation
     Then contact center stats for agent "1003" in the current hour are:
       | login_time |
       |          8 |
+
+  Scenario: Agent pause time
+    Given there is no queue_log for agent "1003"
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | agent_number |
+      | Stat      | Agent    | 1003  | default | 1003         |
+    Given there are queues with infos:
+      | name       | exten | context | agents |
+      | stat-queue | 3521  | default | 1003   |
+    Given there are no hour change in the next 30 seconds
+    When agent "1003" is logged
+    When I pause agent "1003"
+    When I wait 2 seconds during my pause
+    WHen I unpause agent "1003"
+    When I pause agent "1003"
+    When I wait 3 seconds during my pause
+    WHen I unpause agent "1003"
+    When I generate contact center stats
+    Then contact center stats for agent "1003" in the current hour are:
+      | pause_time |
+      |          5 |
