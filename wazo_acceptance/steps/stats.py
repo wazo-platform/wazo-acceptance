@@ -22,7 +22,7 @@ def then_contact_center_stats_for_queue_1(context, queue_name):
 
     queue_id = context.helpers.queue.find_by(name=queue_name)['id']
     queue_stats = context.call_logd_client.queue_statistics.get_by_id(
-        queue_id=queue_id, from_=last_hour.isoformat(),
+        queue_id=queue_id, from_=last_hour.isoformat(), timezone='America/Montreal'
     )
     total_stats = queue_stats['items'][-1]
 
