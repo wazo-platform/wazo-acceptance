@@ -1,13 +1,18 @@
 # Copyright 2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import logging
+
 from behave import when, then
 from datetime import datetime
+
+logger = logging.getLogger('acceptance')
 
 
 @when('I generate contact center stats')
 def when_generate_contact_center_stats(context):
-    context.ssh_client.check_call(['wazo-stat fill_db'])
+    std_out_err = context.ssh_client.out_err_call(['wazo-stat fill_db'])
+    logger.debug(std_out_err)
 
 
 @then('contact center stats for queue "{queue_name}" in the current hour are')
