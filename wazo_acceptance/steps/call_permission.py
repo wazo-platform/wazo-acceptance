@@ -16,4 +16,4 @@ def given_there_are_call_permissions_with_infos(context):
         if body.get('users'):
             for name in body.get('users').split(','):
                 user = context.helpers.confd_user.get_by(search=name)
-                context.helpers.call_permission.add_user(call_permission, user)
+                context.confd_client.call_permissions(call_permission).add_user(user)
