@@ -10,6 +10,7 @@ Feature: Call Permissions
       | name       | extensions | users            |
       | permission | 1002       | Lagherta Unknown |
     When "Lagherta Unknown" calls "1002"
+    When I wait 2 seconds for the call processing
     Then "Ragnar Lodbrok" is hungup
     When "Björn Ironside" calls "1002"
     Then "Ragnar Lodbrok" is ringing
