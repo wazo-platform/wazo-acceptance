@@ -93,6 +93,7 @@ def step_user_resumes_call(context, tracking_id):
 @when('I wait {seconds} seconds for wazo-calld load to drop')
 @when('I wait {seconds} seconds to play unreachable message')
 @when('I wait {seconds} seconds to simulate call center')
+@when('I wait {seconds} seconds for the no permission message to complete')
 def when_i_wait_n_seconds(context, seconds):
     _sleep(seconds)
 

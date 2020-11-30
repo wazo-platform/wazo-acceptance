@@ -12,5 +12,7 @@ Feature: Call Permissions
     When "Lagherta Unknown" calls "1002"
     When I wait 2 seconds for the call processing
     Then "Ragnar Lodbrok" is hungup
+    When I wait 4 seconds for the no permission message to complete
+    Then "Lagherta Unknown" is hungup
     When "Björn Ironside" calls "1002"
     Then "Ragnar Lodbrok" is ringing
