@@ -146,6 +146,7 @@ def setup_helpers(context):
     context.helpers.bus = helpers.Bus(context)
     context.helpers.call = helpers.Call(context)
     context.helpers.call_filter = helpers.CallFilter(context)
+    context.helpers.call_permission = helpers.CallPermission(context)
     context.helpers.confd_group = helpers.ConfdGroup(context)
     context.helpers.confd_user = helpers.ConfdUser(context)
     context.helpers.conference = helpers.Conference(context)

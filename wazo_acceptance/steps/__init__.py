@@ -9,6 +9,7 @@ from .auth import *  # noqa
 from .backup import *  # noqa
 from .bus import *  # noqa
 from .call_filter import *  # noqa
+from .call_permission import *  # noqa
 from .conference import *  # noqa
 from .consul import *  # noqa
 from .coredump import *  # noqa

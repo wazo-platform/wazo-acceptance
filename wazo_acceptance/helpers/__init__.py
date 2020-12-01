@@ -9,6 +9,7 @@ from .asterisk import Asterisk
 from .bus import Bus
 from .call import Call
 from .call_filter import CallFilter
+from .call_permission import CallPermission
 from .confd_group import ConfdGroup
 from .confd_user import ConfdUser
 from .conference import Conference
@@ -44,6 +45,7 @@ __all__ = [
     'Bus',
     'Call',
     'CallFilter',
+    'CallPermission',
     'ConfdGroup',
     'ConfdUser',
     'Conference',
