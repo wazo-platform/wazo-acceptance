@@ -21,6 +21,7 @@ behave
 kombu==4.6.11
 psycopg2
 python-consul==0.7.1
+pytz==2019.1
 pyyaml==3.13
 requests==2.21.0
 stevedore==1.29.0
