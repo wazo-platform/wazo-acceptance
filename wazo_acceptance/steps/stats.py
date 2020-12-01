@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
+import pytz
 
 from behave import when, then
 from datetime import datetime
@@ -17,12 +18,14 @@ def when_generate_contact_center_stats(context):
 
 @then('contact center stats for queue "{queue_name}" in the current hour are')
 def then_contact_center_stats_for_queue_1(context, queue_name):
-    now = datetime.now()
+    timezone = pytz.timezone('America/Montreal')
+    utcnow = datetime.utcnow()
+    now = pytz.utc.localize(utcnow).astimezone(timezone)
     last_hour = datetime(now.year, now.month, now.day, now.hour, 0, 0)
 
     queue_id = context.helpers.queue.find_by(name=queue_name)['id']
     queue_stats = context.call_logd_client.queue_statistics.get_by_id(
-        queue_id=queue_id, from_=last_hour.isoformat(), timezone='America/Montreal'
+        queue_id=queue_id, from_=last_hour.isoformat(), timezone=str(timezone)
     )
     total_stats = queue_stats['items'][-1]
 
