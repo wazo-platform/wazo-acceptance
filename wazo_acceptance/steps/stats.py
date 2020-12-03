@@ -37,3 +37,43 @@ def then_contact_center_stats_for_queue_1(context, queue_name):
         actual_value = total_stats[stat_name]
         assert actual_value == expected_value, \
             f'expected {stat_name} = {expected_value}, got {actual_value}'
+
+
+@then('contact center stats for agent "{agent_number}" in the current hour are')
+def then_contact_center_stats_for_agent(context, agent_number):
+    timezone = pytz.timezone('America/Montreal')
+    utcnow = datetime.utcnow()
+    now = pytz.utc.localize(utcnow).astimezone(timezone)
+    last_hour = datetime(now.year, now.month, now.day, now.hour, 0, 0)
+
+    agent_id = context.helpers.agent.get_by(number=agent_number)['id']
+    agent_stats = context.call_logd_client.agent_statistics.get_by_id(
+        agent_id=agent_id,
+        from_=last_hour.isoformat(),
+        timezone=str(timezone),
+    )
+    total_stats = agent_stats['items'][-1]
+
+    for row in context.table:
+        expected_stats = row.as_dict()
+
+    fuzzy_statistics = ['conversation_time']
+    fuzziness = 1
+    for stat_name, expected_value in expected_stats.items():
+        if stat_name in fuzzy_statistics:
+            expected_value = int(expected_value)
+            lower_bound = expected_value - fuzziness
+            higher_bound = expected_value + fuzziness
+            actual_value = total_stats[stat_name]
+            assert lower_bound <= actual_value <= higher_bound, \
+                'expected {} to be between {} and {}, got {}'.format(
+                    stat_name,
+                    lower_bound,
+                    higher_bound,
+                    actual_value,
+                )
+        else:
+            expected_value = int(expected_value)  # I'm only testing against time in seconds
+            actual_value = total_stats[stat_name]
+            assert actual_value == expected_value, \
+                f'expected {stat_name} = {expected_value}, got {actual_value}'

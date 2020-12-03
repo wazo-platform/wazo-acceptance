@@ -1,8 +1,6 @@
 # Copyright 2013-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import time
-
 from behave import step, when
 from xivo_test_helpers import until
 
@@ -83,21 +81,6 @@ def step_user_resumes_call(context, tracking_id):
     phone.resume()
 
 
-@when('I wait {seconds} seconds')
-@when('I wait {seconds} seconds for the call processing')
-@when('I wait {seconds} seconds for the call processing with slow machine')
-@when('I wait {seconds} seconds for the call to be forwarded')
-@when('I wait {seconds} seconds for the end of ringing time')
-@when('I wait {seconds} seconds for the timeout to expire')
-@when('I wait {seconds} seconds for the timeout to not expire')
-@when('I wait {seconds} seconds for wazo-calld load to drop')
-@when('I wait {seconds} seconds to play unreachable message')
-@when('I wait {seconds} seconds to simulate call center')
-@when('I wait {seconds} seconds for the no permission message to complete')
-def when_i_wait_n_seconds(context, seconds):
-    _sleep(seconds)
-
-
 @when('chan_test calls "{exten}@{exten_context}" with id "{channel_id}"')
 def when_chan_test_calls_with_id(context, exten, exten_context, channel_id):
     cmd = 'test newid {channel_id} {exten} {context} chan-test-num chan-test-name {prefix}'.format(
@@ -160,7 +143,3 @@ def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, 
     phone = context.helpers.sip_phone.register_and_track_phone(incall_name, sip)
     until.true(phone.is_registered, tries=3)
     phone.call(exten)
-
-
-def _sleep(seconds):
-    time.sleep(float(seconds))
