@@ -39,7 +39,7 @@ def then_contact_center_stats_for_queue_1(context, queue_name):
             f'expected {stat_name} = {expected_value}, got {actual_value}'
 
 
-@then(u'contact center stats for agent "{agent_number}" in the current hour are')
+@then('contact center stats for agent "{agent_number}" in the current hour are')
 def then_contact_center_stats_for_agent(context, agent_number):
     now = datetime.now()
     last_hour = datetime(now.year, now.month, now.day, now.hour, 0, 0)

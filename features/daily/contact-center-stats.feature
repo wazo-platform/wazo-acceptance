@@ -65,10 +65,10 @@ Feature: Stats generation
     When agent "1003" is logged
     When I pause agent "1003"
     When I wait 2 seconds during my pause
-    WHen I unpause agent "1003"
+    When I unpause agent "1003"
     When I pause agent "1003"
     When I wait 3 seconds during my pause
-    WHen I unpause agent "1003"
+    When I unpause agent "1003"
     When I generate contact center stats
     Then contact center stats for agent "1003" in the current hour are:
       | pause_time |
