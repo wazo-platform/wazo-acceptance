@@ -41,13 +41,16 @@ def then_contact_center_stats_for_queue_1(context, queue_name):
 
 @then('contact center stats for agent "{agent_number}" in the current hour are')
 def then_contact_center_stats_for_agent(context, agent_number):
-    now = datetime.now()
+    timezone = pytz.timezone('America/Montreal')
+    utcnow = datetime.utcnow()
+    now = pytz.utc.localize(utcnow).astimezone(timezone)
     last_hour = datetime(now.year, now.month, now.day, now.hour, 0, 0)
 
     agent_id = context.helpers.agent.get_by(number=agent_number)['id']
     agent_stats = context.call_logd_client.agent_statistics.get_by_id(
         agent_id=agent_id,
         from_=last_hour.isoformat(),
+        timezone=str(timezone),
     )
     total_stats = agent_stats['items'][-1]
 
