@@ -9,9 +9,10 @@ from datetime import datetime, timedelta
 
 @given('there are no hour change in the next {seconds} seconds')
 def given_no_hour_change_in_next_1_seconds(context, seconds):
+    seconds = int(seconds)
     now = datetime.now()
     delta_until_next_hour = timedelta(hours=1) - timedelta(minutes=now.minute, seconds=now.second)
-    if delta_until_next_hour.total_seconds() < int(seconds):
+    if delta_until_next_hour.total_seconds() < seconds:
         time.sleep(seconds)
 
 
