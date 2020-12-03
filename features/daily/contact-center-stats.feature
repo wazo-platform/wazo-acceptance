@@ -48,6 +48,7 @@ Feature: Stats generation
     When agent "1003" is logged
     When I wait 3 seconds while being logged on
     When agent "1003" is unlogged
+    When I wait 1 seconds for the call processing
     When I generate contact center stats
     Then contact center stats for agent "1003" in the current hour are:
       | login_time |
