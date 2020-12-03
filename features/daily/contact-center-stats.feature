@@ -44,18 +44,23 @@ Feature: Stats generation
       | name       | exten | context | agents |
       | stat-queue | 3521  | default | 1003   |
     Given there are no hour change in the next 30 seconds
-    When agent "1003" is logged
+    
+    # First cycle
+    When I log agent "1003" from API
     When I pause agent "1003"
     When I wait 2 seconds during my pause
     When I unpause agent "1003"
     When I wait 3 seconds while being logged on
-    When agent "1003" is unlogged
-    When agent "1003" is logged
+    When I unlog agent "1003" from API
+
+    # Second cycle
+    When I log agent "1003" from API
     When I pause agent "1003"
     When I wait 2 seconds during my pause
     When I unpause agent "1003"
     When I wait 1 seconds while being logged on
-    When agent "1003" is unlogged
+    When I unlog agent "1003" from API
+
     When I wait 1 seconds for the call processing
     When I generate contact center stats
     Then contact center stats for agent "1003" in the current hour are:
@@ -73,7 +78,7 @@ Feature: Stats generation
       | stat-queue_1 | 3521  | default | 1003   | 2                 |
       | stat-queue_2 | 3522  | default | 1003   | 0                 |
     Given there are no hour change in the next 30 seconds
-    When agent "1003" is logged
+    Given agent "1003" is logged
 
     # First call 2 seconds in conversation 2 seconds wrapup
     When chan_test calls "3521@default" with id "3521-answered"
