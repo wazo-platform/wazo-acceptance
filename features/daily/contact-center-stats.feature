@@ -24,8 +24,7 @@ Feature: Stats generation
     When chan_test hangs up channel with id "3521-abandoned"
 
     # Blocked call
-    When I unlog agent "021" from phone
-    When I wait 3 seconds for the call processing
+    When I unlog agent "021" from API
     When chan_test calls "3521@default" with id "3521-blocked"
     When I wait 2 seconds to simulate call center
     When chan_test hangs up channel with id "3521-blocked"
@@ -51,7 +50,6 @@ Feature: Stats generation
     When I unpause agent "1003"
     When I wait 3 seconds while being logged on
     When agent "1003" is unlogged
-    When I wait 1 seconds for the call processing
     When agent "1003" is logged
     When I pause agent "1003"
     When I wait 2 seconds during my pause

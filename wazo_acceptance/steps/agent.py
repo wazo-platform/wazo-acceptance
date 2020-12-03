@@ -14,19 +14,30 @@ def given_there_are_agents_with_infos(context):
         context.helpers.agent.create(body)
 
 
-@when('agent "{number}" is logged')
 @given('agent "{number}" is logged')
-def given_agent_is_logged(context, number):
+@when('agent "{number}" is logged')
+@when('I log agent "{number}" from API')
+def agent_is_logged(context, number):
     user = context.helpers.agent.get_by(number=number)['users'][0]
     user = context.confd_client.users.get(user)
     exten = user['lines'][0]['extensions'][0]['exten']
     exten_context = user['lines'][0]['extensions'][0]['context']
-    context.agentd_client.agents.login_agent_by_number(number, exten, exten_context)
+
+    expected_event = {
+        'status': 'logged_in',
+    }
+    with context.helpers.bus.wait_for_event('agent_status_update', expected_event):
+        context.agentd_client.agents.login_agent_by_number(number, exten, exten_context)
 
 
 @when('agent "{number}" is unlogged')
+@when('I unlog agent "{number}" from API')
 def when_agent_is_unlogged(context, number):
-    context.agentd_client.agents.logoff_agent_by_number(number)
+    expected_event = {
+        'status': 'logged_out',
+    }
+    with context.helpers.bus.wait_for_event('agent_status_update', expected_event):
+        context.agentd_client.agents.logoff_agent_by_number(number)
 
 
 @given('there is no queue_log for agent "{agent_number}"')
