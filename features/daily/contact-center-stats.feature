@@ -36,25 +36,7 @@ Feature: Stats generation
       | answered | received | abandoned | blocked |
       |        1 |        3 |         1 |       1 |
 
-  Scenario: Agent login time
-    Given there is no queue_log for agent "1003"
-    Given there are telephony users with infos:
-      | firstname | lastname | exten | context | agent_number |
-      | Stat      | Agent    | 1003  | default | 1003         |
-    Given there are no hour change in the next 30 seconds
-    When agent "1003" is logged
-    When I wait 5 seconds while being logged on
-    When agent "1003" is unlogged
-    When agent "1003" is logged
-    When I wait 3 seconds while being logged on
-    When agent "1003" is unlogged
-    When I wait 1 seconds for the call processing
-    When I generate contact center stats
-    Then contact center stats for agent "1003" in the current hour are:
-      | login_time |
-      |          8 |
-
-  Scenario: Agent pause time
+  Scenario: Agent pause and login time
     Given there is no queue_log for agent "1003"
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | agent_number |
@@ -67,13 +49,20 @@ Feature: Stats generation
     When I pause agent "1003"
     When I wait 2 seconds during my pause
     When I unpause agent "1003"
+    When I wait 3 seconds while being logged on
+    When agent "1003" is unlogged
+    When I wait 1 seconds for the call processing
+    When agent "1003" is logged
     When I pause agent "1003"
-    When I wait 3 seconds during my pause
+    When I wait 2 seconds during my pause
     When I unpause agent "1003"
+    When I wait 1 seconds while being logged on
+    When agent "1003" is unlogged
+    When I wait 1 seconds for the call processing
     When I generate contact center stats
     Then contact center stats for agent "1003" in the current hour are:
-      | pause_time |
-      |          5 |
+      | login_time | pause_time |
+      |          8 |          4 |
 
 
   Scenario: Agent wrapup and conversation time
