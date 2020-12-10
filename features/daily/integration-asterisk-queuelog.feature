@@ -59,7 +59,7 @@ Feature: Stats generation
           | q04  | 3504  | default | 004    | 5                           |
         Given agent "004" is logged
         When chan_test calls "3504@default" with id "3504-1"
-        When I wait 6 seconds for the timeout to expire
+        When I wait 7 seconds for the timeout to expire
         When chan_test hangs up channel with id "3504-1"
         When I wait 3 seconds for the call processing
         Then queue_log contains 1 "RINGNOANSWER" events for queue "q04"
