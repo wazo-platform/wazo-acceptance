@@ -132,3 +132,10 @@ def then_moh_files_are_owned_by_asterisk_www_data(context):
 def given_the_file_is_empty(context, path):
     # if the file already exist on the fs, it will be truncated to 0
     context.ssh_client.check_call(['truncate', '-s0', path])
+
+
+@then('the file "{path}" is not empty')
+def then_the_file_is_not_empty(context, path):
+    command = ['stat', '-c', '%s', path]
+    output = context.remote_sysutils.output_command(command).strip()
+    assert int(output) > 0

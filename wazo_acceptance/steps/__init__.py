@@ -24,6 +24,7 @@ from .http import *  # noqa
 from .incall import *  # noqa
 from .info import *  # noqa
 from .ivr import *  # noqa
+from .logrotate import *  # noqa
 from .monit import *  # noqa
 from .parking_lot import *  # noqa
 from .phone_call import *  # noqa
