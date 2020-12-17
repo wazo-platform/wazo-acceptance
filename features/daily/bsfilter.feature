@@ -1,6 +1,6 @@
 Feature: Boss Secretary Filter
 
-  Scenario: Login and logout an agent from function keys
+  Scenario: bsfilter function key workflow
     Given there are devices with infos:
       | mac               |
       | 00:11:22:33:44:00 |
