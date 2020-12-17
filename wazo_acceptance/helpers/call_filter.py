@@ -9,6 +9,10 @@ class CallFilter:
         self._confd_client = context.confd_client
 
     def create(self, body):
+        surrogates_timeout = body.pop('surrogates_timeout', None)
+        if surrogates_timeout:
+            body['surrogates_timeout'] = int(surrogates_timeout)
+
         call_filter = self._confd_client.call_filters.create(body)
         self._context.add_cleanup(self._confd_client.call_filters.delete, call_filter)
         return call_filter

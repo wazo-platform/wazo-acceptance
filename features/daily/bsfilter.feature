@@ -129,8 +129,8 @@ Feature: Boss Secretary Filter
       | Angel     | 002      | 1003  | default | yes        |
       | Bad       | Guy      | 1010  | default | yes        |
     Given there are call filters with infos:
-      | name             | strategy                           | recipients      | surrogates          |
-      | Charlie's Angels | all-surrogates-then-all-recipients | Charlie Unknown | Angel 001,Angel 002 |
+      | name             | strategy                           | recipients      | surrogates          | surrogates_timeout |
+      | Charlie's Angels | all-surrogates-then-all-recipients | Charlie Unknown | Angel 001,Angel 002 | 5                  |
     Given "Angel 001" enable call filter "Charlie's Angels"
     Given "Angel 002" enable call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
@@ -138,6 +138,10 @@ Feature: Boss Secretary Filter
     Then "Charlie Unknown" is hungup
     Then "Angel 001" is ringing
     Then "Angel 002" is ringing
+    When I wait 5 seconds for the timeout to expire
+    Then "Charlie Unknown" is hungup
+    Then "Angel 001" is hungup
+    Then "Angel 002" is hungup
     # NOTE(fblackburn): if surrogates hangup, recipients will not ring
 
   Scenario: Strategy "linear-surrogates-then-all-recipients"
