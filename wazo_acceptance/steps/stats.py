@@ -35,8 +35,8 @@ def then_contact_center_stats_for_queue_1(context, queue_name):
     for stat_name, expected_value in expected_stats.items():
         expected_value = float(expected_value)
         actual_value = total_stats[stat_name]
-        assert actual_value == expected_value, \
-            f'expected {stat_name} = {expected_value}, got {actual_value}'
+        msg = f'expected {stat_name} = {expected_value}, got {actual_value}'
+        assert actual_value == expected_value, msg
 
 
 @then('contact center stats for agent "{agent_number}" in the current hour are')
@@ -75,8 +75,8 @@ def then_contact_center_stats_for_agent(context, agent_number):
         else:
             expected_value = int(expected_value)  # I'm only testing against time in seconds
             actual_value = total_stats[stat_name]
-            assert actual_value == expected_value, \
-                f'expected {stat_name} = {expected_value}, got {actual_value}'
+            msg = f'expected {stat_name} = {expected_value}, got {actual_value}'
+            assert actual_value == expected_value, msg
 
 
 @then('contact center qos stats for queue "{queue_name}" in the current hour are')
@@ -104,7 +104,7 @@ def then_contact_center_qos_stats_for_queue_1(context, queue_name):
         expected['abandoned'] = int(expected['abandoned'])
         actual = results[row['qos_threshold']]
 
-        assert actual['abandoned'] == expected['abandoned'], \
-            f'qos {expected["qos_threshold"]}: expected {expected["abandoned"]}, got {actual["abandoned"]} abandoned calls'
-        assert actual['answered'] == expected['answered'], \
-            f'qos {expected["qos_threshold"]}: expected {expected["answered"]}, got {actual["answered"]} answered calls'
+        msg = f'qos {expected["qos_threshold"]}: expected {expected["abandoned"]}, got {actual["abandoned"]} abandoned calls'
+        assert actual['abandoned'] == expected['abandoned'], msg
+        msg = f'qos {expected["qos_threshold"]}: expected {expected["answered"]}, got {actual["answered"]} answered calls'
+        assert actual['answered'] == expected['answered'], msg
