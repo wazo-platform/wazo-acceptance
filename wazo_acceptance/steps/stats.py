@@ -57,8 +57,8 @@ def then_contact_center_stats_for_agent(context, agent_number):
     for row in context.table:
         expected_stats = row.as_dict()
 
-    fuzzy_statistics = ['conversation_time']
-    fuzziness = 1
+    fuzzy_statistics = ['conversation_time', 'login_time']
+    fuzziness = 2
     for stat_name, expected_value in expected_stats.items():
         if stat_name in fuzzy_statistics:
             expected_value = int(expected_value)
