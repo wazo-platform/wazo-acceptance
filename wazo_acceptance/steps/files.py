@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -18,6 +18,7 @@ BACKUP_DIR = '/var/backups/xivo'
 ASTERISK_VM_PATH = '/var/spool/asterisk/voicemail'
 MOH_PATH = '/usr/share/asterisk/moh/default'
 ASTERISK_SOUND_PATH = '/usr/share/asterisk/sounds/en'
+CALL_RECORD_PATH = '/var/lib/wazo/sounds/tenants/*/monitor/'
 
 
 @then('the mirror list contains a line matching "{mirror}"')
@@ -139,3 +140,18 @@ def then_the_file_is_not_empty(context, path):
     command = ['stat', '-c', '%s', path]
     output = context.remote_sysutils.output_command(command).strip()
     assert int(output) > 0
+
+
+@given('call record directories are empty')
+def given_call_record_directories_are_empty(context):
+    if not context.remote_sysutils.path_exists(CALL_RECORD_PATH):
+        return
+    command = ['find', CALL_RECORD_PATH, '-type', 'f', '-delete']
+    context.ssh_client.check_call(command)
+
+
+@then('call record directories are empty')
+def then_call_record_directories_are_empty(context):
+    if not context.remote_sysutils.path_exists(CALL_RECORD_PATH):
+        return
+    assert context.remote_sysutils.dir_is_empty(CALL_RECORD_PATH)
