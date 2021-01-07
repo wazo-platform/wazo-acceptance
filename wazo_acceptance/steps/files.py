@@ -155,3 +155,10 @@ def then_call_record_directories_are_empty(context):
     if not context.remote_sysutils.path_exists(CALL_RECORD_PATH):
         return
     assert context.remote_sysutils.dir_is_empty(CALL_RECORD_PATH)
+
+
+@then('call record directories are not empty')
+def then_call_record_directories_are_not_empty(context):
+    if not context.remote_sysutils.path_exists(CALL_RECORD_PATH):
+        return
+    assert not context.remote_sysutils.dir_is_empty(CALL_RECORD_PATH)
