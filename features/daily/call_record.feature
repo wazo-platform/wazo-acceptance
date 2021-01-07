@@ -15,9 +15,9 @@ Feature: Call Record
   Scenario: Call recorded when call record is enabled
     Given call record directories are empty
     Given there are telephony users with infos:
-      | firstname | lastname | call_record_enabled | exten | context | with_phone |
-      | User      | 800      | yes                 | 1800  | default | yes        |
-      | User      | 801      | no                  | 1801  | default | yes        |
+      | firstname | lastname | call_record_outgoing_internal_enabled | exten | context | with_phone |
+      | User      | 800      | yes                                   | 1800  | default | yes        |
+      | User      | 801      | no                                    | 1801  | default | yes        |
     When a call is started:
       | caller   | dial | callee   | talk_time | hangup |
       | User 800 | 1801 | User 801 | 3         | callee |
