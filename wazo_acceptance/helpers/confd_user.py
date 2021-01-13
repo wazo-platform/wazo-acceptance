@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from requests import HTTPError
@@ -14,6 +14,10 @@ class ConfdUser:
         ring_seconds = body.pop('ring_seconds', None)
         if ring_seconds:
             body['ring_seconds'] = int(ring_seconds)
+
+        record_enabled = body.pop('call_record_outgoing_internal_enabled', None)
+        if record_enabled:
+            body['call_record_outgoing_internal_enabled'] = record_enabled == 'yes'
 
         with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True, queue=True):
             user = self._confd_client.users.create(body)

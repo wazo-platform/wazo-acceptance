@@ -19,17 +19,6 @@ Feature: Call Generation
          | destination_extension | duration | answered |
          | 1101                  | 3        | True     |
 
-    Scenario: Call with extension call recording activated
-        Given the "Call recording" extension is enabled
-        Given there are users with infos:
-         | firstname | lastname | number | context | protocol |
-         | User      | 100      |   1100 | default | sip      |
-         | User      | 101      |   1101 | default | sip      |
-        When a call is started:
-         | caller   | dial | callee   | talk_time | hangup |
-         | User 100 | 1101 | User 101 | 3         | callee |
-        Then I see no recording file of this call in monitoring audio files page
-
     Scenario: Call to line that is disabled
         Given there are users with infos:
             | firstname | lastname | number | context | protocol | with_phone |

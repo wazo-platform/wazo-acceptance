@@ -1,4 +1,4 @@
-# Copyright 2013-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -14,10 +14,7 @@ class RemoteSysUtils:
 
     def path_exists(self, path):
         command = ['ls', path]
-        try:
-            return self._ssh_client.check_call(command) == 0
-        except Exception:
-            return False
+        return self._ssh_client.call(command) == 0
 
     def dir_is_empty(self, path):
         command = ['ls', '-1A', path, '|', 'wc', '-l']

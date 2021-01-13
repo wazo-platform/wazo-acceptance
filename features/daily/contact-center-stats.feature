@@ -120,6 +120,7 @@ Feature: Stats generation
       |  3523 | default | 3523-abandoned-qos10-1 |
       |  3523 | default | 3523-abandoned-qos10-2 |
       |  3523 | default | 3523-abandoned-qos20   |
+    When I wait 1 seconds for the call processing
 
     # QoS 5 seconds
     When "Stat Agent" answers
