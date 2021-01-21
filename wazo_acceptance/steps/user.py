@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -69,7 +69,7 @@ def given_there_are_telephony_users_with_infos(context):
 
         line = context.helpers.line.create(body)
 
-        endpoint = body.get('endpoint', 'sip')
+        endpoint = body.get('protocol', 'sip')
         if endpoint == 'sip':
             name = '-'.join([body['firstname'], body.get('lastname', '')])
             sip_body = context.helpers.endpoint_sip.generate_form(name)
