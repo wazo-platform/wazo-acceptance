@@ -1,4 +1,4 @@
-# Copyright 2015-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
@@ -94,6 +94,11 @@ class SIPPhone:
 
     def resume(self):
         self._session.resume()
+
+    def send_dtmf(self, digit):
+        self._session.send_dtmf(digit)
+        # NOTE(fblackburn): linphone DTMF length is 100ms
+        time.sleep(0.150)
 
     def transfer(self, exten):
         self._session.transfer(exten)
