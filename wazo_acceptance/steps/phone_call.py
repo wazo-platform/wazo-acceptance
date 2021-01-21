@@ -83,6 +83,12 @@ def step_user_resumes_call(context, tracking_id):
     phone.resume()
 
 
+@step('"{tracking_id}" sends DTMF "{digit}"')
+def when_user_sends_dtmf(context, tracking_id, digit):
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.send_dtmf(digit)
+
+
 @when('a call is started')
 def when_a_call_is_started(context):
 
