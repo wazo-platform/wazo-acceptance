@@ -1,4 +1,4 @@
-# Copyright 2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -15,8 +15,10 @@ def given_there_are_call_filters_with_infos(context):
 
         if body.get('recipients'):
             users = []
+            timeout = body.pop('recipients_timeout', None)
             for recipient in body['recipients'].split(','):
                 user = context.helpers.confd_user.get_by(search=recipient)
+                user['timeout'] = timeout
                 users.append(user)
             context.confd_client.call_filters(call_filter).update_user_recipients(users)
 
