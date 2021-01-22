@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import subprocess
@@ -100,8 +100,8 @@ def main():
 
     output = _wazo_service('start')
     assert _are_services_starting(output, BASE_SERVICES)
-    assert _is_monit_running()
     assert _are_services_running(BASE_SERVICES)
+    assert _is_monit_running()
 
     output = _wazo_service('restart', 'all')
     assert _are_services_starting(output, ALL_SERVICES)
