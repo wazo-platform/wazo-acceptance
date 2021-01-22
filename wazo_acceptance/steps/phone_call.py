@@ -21,6 +21,12 @@ def step_user_is_ringing(context, tracking_id):
     until.true(phone.is_ringing, tries=3)
 
 
+@step('"{tracking_id}" is ringing showing "{callerid}"')
+def step_user_is_ringing_showing_callerid(context, tracking_id, callerid):
+    phone = context.phone_register.get_phone(tracking_id)
+    until.true(phone.is_ringing_showing, callerid, tries=3)
+
+
 @step('"{tracking_id}" is holding')
 def step_user_is_holding(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)

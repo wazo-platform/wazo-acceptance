@@ -119,6 +119,9 @@ class SIPPhone:
     def is_ringing(self):
         return self._session.call_status() == CallStatus.RINGING
 
+    def is_ringing_showing(self, name):
+        return self._session.is_ringing_showing(name)
+
     def is_hungup(self):
         return self._session.call_status() == CallStatus.OFF
 

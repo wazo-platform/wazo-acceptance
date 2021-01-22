@@ -1,6 +1,6 @@
 Feature: Boss Secretary Filter
 
-  Scenario: Login and logout an agent from function keys
+  Scenario: bsfilter function key workflow
     Given there are devices with infos:
       | mac               |
       | 00:11:22:33:44:00 |
@@ -65,13 +65,13 @@ Feature: Boss Secretary Filter
       | Angel     | 001      | 1002  | default | yes        |
       | Bad       | Guy      | 1010  | default | yes        |
     Given there are call filters with infos:
-      | name             | strategy | recipients      | surrogates |
-      | Charlie's Angels | all      | Charlie Unknown | Angel 001  |
+      | name             | strategy | recipients      | surrogates | caller_id_mode | caller_id_name |
+      | Charlie's Angels | all      | Charlie Unknown | Angel 001  | prepend        | FILTER         |
     Given "Angel 001" enable call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
-    Then "Charlie Unknown" is ringing
-    Then "Angel 001" is ringing
+    Then "Charlie Unknown" is ringing showing "FILTER - Bad Guy"
+    Then "Angel 001" is ringing showing "FILTER - Bad Guy"
 
   Scenario: Strategy "all-recipients-then-linear-surrogates"
     Given there are telephony users with infos:
@@ -81,23 +81,23 @@ Feature: Boss Secretary Filter
       | Angel     | 002      | 1003  | default | yes        |
       | Bad       | Guy      | 1010  | default | yes        |
     Given there are call filters with infos:
-      | name             | strategy                              | recipients      | surrogates          |
-      | Charlie's Angels | all-recipients-then-linear-surrogates | Charlie Unknown | Angel 001,Angel 002 |
+      | name             | strategy                              | recipients      | surrogates          | caller_id_mode | caller_id_name |
+      | Charlie's Angels | all-recipients-then-linear-surrogates | Charlie Unknown | Angel 001,Angel 002 | append         | FILTER         |
     Given "Angel 001" enable call filter "Charlie's Angels"
     Given "Angel 002" enable call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
-    Then "Charlie Unknown" is ringing
+    Then "Charlie Unknown" is ringing showing "Bad Guy - FILTER"
     Then "Angel 001" is hungup
     Then "Angel 002" is hungup
     When "Charlie Unknown" hangs up
     Then "Charlie Unknown" is hungup
-    Then "Angel 001" is ringing
+    Then "Angel 001" is ringing showing "Bad Guy - FILTER"
     Then "Angel 002" is hungup
     When "Angel 001" hangs up
     Then "Charlie Unknown" is hungup
     Then "Angel 001" is hungup
-    Then "Angel 002" is ringing
+    Then "Angel 002" is ringing showing "Bad Guy - FILTER"
 
   Scenario: Strategy "all-recipients-then-all-surrogates"
     Given there are telephony users with infos:
@@ -107,8 +107,8 @@ Feature: Boss Secretary Filter
       | Angel     | 002      | 1003  | default | yes        |
       | Bad       | Guy      | 1010  | default | yes        |
     Given there are call filters with infos:
-      | name             | strategy                           | recipients      | surrogates          |
-      | Charlie's Angels | all-recipients-then-all-surrogates | Charlie Unknown | Angel 001,Angel 002 |
+      | name             | strategy                           | recipients      | surrogates          | recipients_timeout |
+      | Charlie's Angels | all-recipients-then-all-surrogates | Charlie Unknown | Angel 001,Angel 002 | 5                  |
     Given "Angel 001" enable call filter "Charlie's Angels"
     Given "Angel 002" enable call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
@@ -116,7 +116,7 @@ Feature: Boss Secretary Filter
     Then "Charlie Unknown" is ringing
     Then "Angel 001" is hungup
     Then "Angel 002" is hungup
-    When "Charlie Unknown" hangs up
+    When I wait 5 seconds for the timeout to expire
     Then "Charlie Unknown" is hungup
     Then "Angel 001" is ringing
     Then "Angel 002" is ringing
@@ -129,15 +129,19 @@ Feature: Boss Secretary Filter
       | Angel     | 002      | 1003  | default | yes        |
       | Bad       | Guy      | 1010  | default | yes        |
     Given there are call filters with infos:
-      | name             | strategy                           | recipients      | surrogates          |
-      | Charlie's Angels | all-surrogates-then-all-recipients | Charlie Unknown | Angel 001,Angel 002 |
+      | name             | strategy                           | recipients      | surrogates          | surrogates_timeout | caller_id_mode | caller_id_name |
+      | Charlie's Angels | all-surrogates-then-all-recipients | Charlie Unknown | Angel 001,Angel 002 | 5                  | overwrite      | FILTER         |
     Given "Angel 001" enable call filter "Charlie's Angels"
     Given "Angel 002" enable call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is hungup
-    Then "Angel 001" is ringing
-    Then "Angel 002" is ringing
+    Then "Angel 001" is ringing showing "FILTER"
+    Then "Angel 002" is ringing showing "FILTER"
+    When I wait 5 seconds for the timeout to expire
+    Then "Charlie Unknown" is hungup
+    Then "Angel 001" is hungup
+    Then "Angel 002" is hungup
     # NOTE(fblackburn): if surrogates hangup, recipients will not ring
 
   Scenario: Strategy "linear-surrogates-then-all-recipients"
