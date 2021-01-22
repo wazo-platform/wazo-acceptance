@@ -14,3 +14,12 @@ Feature: Line
     Then I have the following hints:
       | exten        | line              |
       | 1603@default | PJSIP/newusername |
+
+  Scenario: Custom line
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | protocol | interface          | with_phone |
+      | User      | SIP      | 1801  | default | sip      |                    | yes        |
+      | User      | Custom   | 1802  | default | custom   | Local/1801@default | no        |
+    Given there is an incall "1802@from-extern" to the user "User Custom"
+    When incoming call received from "incall" to "1802@from-extern"
+    Then "User SIP" is ringing
