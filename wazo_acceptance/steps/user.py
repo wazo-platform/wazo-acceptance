@@ -301,6 +301,13 @@ def _build_funckey(context, row):
                     'filter_member_id': user['member_id'],
                 }
                 break
+    elif type_ == 'groupmember':
+        group = context.helpers.confd_group.get_by(name=row['destination_group_name'])
+        destination = {
+            'type': type_,
+            'group_id': group['id'],
+            'action': row['destination_action'],
+        }
 
     return {
         'blf': row.get('blf') == 'true',
