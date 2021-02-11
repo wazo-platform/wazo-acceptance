@@ -17,3 +17,29 @@ Feature: Groups
     Then "Andrew Wiggin" is ringing
     When I wait 6 seconds for the timeout to not expire
     Then "Andrew Wiggin" is ringing
+
+  Scenario: Dynamic group member
+    Given there are devices with infos:
+      | mac               |
+      | 00:11:22:33:44:00 |
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | device            | with_phone |
+      | Flash     | McQueen  | 1801  | default | 00:11:22:33:44:00 | yes        |
+      | Tow       | Mater    | 1802  | default |                   | yes        |
+    Given there are telephony groups with infos:
+      | name        | exten | context |
+      | Dynamic     | 2801  | default |
+    Given "Flash McQueen" has function keys:
+      | position | destination_type | destination_group_name | destination_action |
+      | 1        | groupmember      | Dynamic                | toggle             |
+    When "Flash McQueen" press function key "1"
+    When I wait 4 seconds for the call processing
+    When "Tow Mater" calls "2801"
+    When I wait 2 seconds for the call processing
+    Then "Flash McQueen" is ringing
+    Then "Tow Mater" hangs up
+    When "Flash McQueen" press function key "1"
+    When I wait 4 seconds for the call processing
+    When "Tow Mater" calls "2801"
+    When I wait 2 seconds for the call processing
+    Then "Flash McQueen" is hungup
