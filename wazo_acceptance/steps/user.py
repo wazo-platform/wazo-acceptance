@@ -396,3 +396,21 @@ def when_the_user_active_call_filter(context, firstname, lastname, filter_name):
     phone = context.phone_register.get_phone(tracking_id)
     phone.call(f'*37{member_id}')
     time.sleep(5)  # call processing
+
+
+@then('"{firstname} {lastname}" has no call recording')
+def then_user_has_no_call_recording(context, firstname, lastname):
+    user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    cdr = context.call_logd_client.cdr.list(user_uuid=user['uuid'])['items']
+    assert cdr[0]['source_user_uuid'] == user['uuid']
+    assert not cdr[0]['recordings']
+
+
+@then('"{firstname_src} {lastname_src}" has a call recording with "{firstname_dst} {lastname_dst}"')
+def then_user_src_has_a_call_recording_with_user_dst(context, firstname_src, lastname_src, firstname_dst, lastname_dst):
+    user_src = context.helpers.confd_user.get_by(firstname=firstname_src, lastname=lastname_src)
+    user_dst = context.helpers.confd_user.get_by(firstname=firstname_dst, lastname=lastname_dst)
+    cdr = context.call_logd_client.cdr.list(user_uuid=user_src['uuid'])['items']
+    assert cdr[0]['source_user_uuid'] == user_src['uuid']
+    assert cdr[0]['destination_user_uuid'] == user_dst['uuid']
+    assert len(cdr[0]['recordings']) == 1
