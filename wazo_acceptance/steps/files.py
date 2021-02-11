@@ -157,24 +157,16 @@ def given_user_has_no_call_recording(context, firstname, lastname):
 @then('"{firstname} {lastname}" has no call recording')
 def then_user_has_no_call_recording(context, firstname, lastname):
     user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
-    exten = user['lines'][0]['extensions'][0]['exten']
-    tenant_uuid = user['tenant_uuid']
-    path = os.path.join(SOUNDS_PATH, tenant_uuid, 'monitor')
-    if not context.remote_sysutils.path_exists(path):
-        return
-    file_path = os.path.join(path, f'*-{exten}-*')
-    assert not context.remote_sysutils.path_exists(file_path)
+    cdr = context.call_logd_client.cdr.list(user_uuid=user['uuid'])['items']
+    assert cdr[0]['source_user_uuid'] == user['uuid']
+    assert not cdr[0]['recordings']
 
 
 @then('"{firstname_src} {lastname_src}" has a call recording with "{firstname_dst} {lastname_dst}"')
 def then_user_src_has_a_call_recording_with_user_dst(context, firstname_src, lastname_src, firstname_dst, lastname_dst):
     user_src = context.helpers.confd_user.get_by(firstname=firstname_src, lastname=lastname_src)
     user_dst = context.helpers.confd_user.get_by(firstname=firstname_dst, lastname=lastname_dst)
-    exten_src = user_src['lines'][0]['extensions'][0]['exten']
-    exten_dst = user_dst['lines'][0]['extensions'][0]['exten']
-    tenant_uuid = user_src['tenant_uuid']
-    path = os.path.join(SOUNDS_PATH, tenant_uuid, 'monitor')
-    if not context.remote_sysutils.path_exists(path):
-        return
-    file_path = os.path.join(path, f'*-{exten_src}-{exten_dst}-*')
-    assert context.remote_sysutils.path_exists(file_path)
+    cdr = context.call_logd_client.cdr.list(user_uuid=user_src['uuid'])['items']
+    assert cdr[0]['source_user_uuid'] == user_src['uuid']
+    assert cdr[0]['destination_user_uuid'] == user_dst['uuid']
+    assert len(cdr[0]['recordings']) == 1
