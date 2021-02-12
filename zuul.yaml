@@ -1,7 +1,23 @@
+- job:
+    name: wazo-acceptance-job-custom
+    description: install Wazo platform and run acceptance tests
+    required-projects:
+      - wazo-platform/wazo-ansible
+      - wazo-platform/wazo-acceptance
+      - wazo-platform/xivo-ci
+    timeout: 10800
+    pre-run: zuul.d/pre.yaml
+    run: zuul.d/run.yaml
+    post-run: zuul.d/fetch-logs.yaml
+
 - project:
     check:
       jobs:
-        - wazo-acceptance-job:
+        - wazo-acceptance-job-custom:
+            nodeset: debian10-vm-m2
+    experimental:
+      jobs:
+        - wazo-acceptance-job-custom:
             nodeset: debian10-vm-m2
     gate:
       jobs:
