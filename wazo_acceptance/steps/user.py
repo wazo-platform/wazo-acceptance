@@ -431,11 +431,11 @@ def then_user_src_has_n_calls_recording_with_user_dst(context, firstname_src, la
     assert cdr[0]['source_user_uuid'] == user_src['uuid']
     assert cdr[0]['destination_user_uuid'] == user_dst['uuid']
     assert len(cdr[0]['recordings']) == int(count)
-    files = set()
+    unique_media = set()
     for recording in cdr[0]['recordings']:
         media = context.call_logd_client.cdr.get_recording_media(cdr[0]['id'], recording['uuid'])
-        files.add(media)
-    assert len(files) == int(count)
+        unique_media.add(media)
+    assert len(unique_media) == int(count), 'The same has been used for multiple recordings'
 
 
 @when('"{firstname} {lastname}" stops call recording')
