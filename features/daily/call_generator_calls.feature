@@ -30,7 +30,8 @@ Feature: Call Generation
     Given "James Bond" has a "noanswer" fallback to user "Pussy Galore"
     When "Tiffany Case" calls "1101"
     Then "James Bond" is ringing
-    When I wait 5 seconds for the call processing
+    When I wait 5 seconds for the end of ringing time
+    When I wait 4 seconds for the call processing
     Then "Pussy Galore" is ringing
 
   Scenario: Busy destination with disabled forward exten on busy
