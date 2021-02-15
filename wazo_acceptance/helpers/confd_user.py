@@ -43,10 +43,9 @@ class ConfdUser:
         self._context.add_cleanup(self._confd_client.users(user).update_fallbacks, old_fallbacks)
 
     def set_ringing_time(self, user, ringing_time):
-        old_confd_user = user.copy()
+        user.pop('call_record_enabled', None)
         user.update({'ring_seconds': ringing_time})
         self._confd_client.users.update(user)
-        self._context.add_cleanup(self._confd_client.users.update, old_confd_user)
 
     def get_by(self, **kwargs):
         user = self._find_by(**kwargs)
