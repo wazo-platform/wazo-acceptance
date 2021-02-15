@@ -421,3 +421,32 @@ def then_user_src_has_a_call_recording_with_user_dst(context, firstname_src, las
     assert cdr[0]['source_user_uuid'] == user_src['uuid']
     assert cdr[0]['destination_user_uuid'] == user_dst['uuid']
     assert len(cdr[0]['recordings']) == 1
+
+
+@then('"{firstname_src} {lastname_src}" has {count} call recordings with "{firstname_dst} {lastname_dst}"')
+def then_user_src_has_n_calls_recording_with_user_dst(context, firstname_src, lastname_src, count, firstname_dst, lastname_dst):
+    user_src = context.helpers.confd_user.get_by(firstname=firstname_src, lastname=lastname_src)
+    user_dst = context.helpers.confd_user.get_by(firstname=firstname_dst, lastname=lastname_dst)
+    cdr = context.call_logd_client.cdr.list(user_uuid=user_src['uuid'])['items']
+    assert cdr[0]['source_user_uuid'] == user_src['uuid']
+    assert cdr[0]['destination_user_uuid'] == user_dst['uuid']
+    assert len(cdr[0]['recordings']) == int(count)
+    unique_media = set()
+    for recording in cdr[0]['recordings']:
+        media = context.call_logd_client.cdr.get_recording_media(cdr[0]['id'], recording['uuid'])
+        unique_media.add(media)
+    assert len(unique_media) == int(count), 'The same has been used for multiple recordings'
+
+
+@when('"{firstname} {lastname}" stops call recording')
+def when_user_stops_call_recording(context, firstname, lastname):
+    user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    call = context.helpers.call.get_by(user_uuid=user['uuid'])
+    context.helpers.call.stop_recording(call['call_id'])
+
+
+@when('"{firstname} {lastname}" starts call recording')
+def when_user_starts_call_recording(context, firstname, lastname):
+    user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    call = context.helpers.call.get_by(user_uuid=user['uuid'])
+    context.helpers.call.start_recording(call['call_id'])

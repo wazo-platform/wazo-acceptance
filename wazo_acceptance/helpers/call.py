@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -13,6 +13,12 @@ class Call:
         if not call:
             raise Exception('Call not found: {}'.format(kwargs))
         return call
+
+    def stop_recording(self, call_id):
+        self._calld_client.calls.stop_record(call_id)
+
+    def start_recording(self, call_id):
+        self._calld_client.calls.start_record(call_id)
 
     def _find_by(self, **kwargs):
         user_uuid = kwargs.pop('user_uuid', None)
