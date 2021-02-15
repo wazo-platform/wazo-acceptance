@@ -459,7 +459,7 @@ def when_user_starts_call_recording(context, firstname, lastname):
 @given('"{firstname} {lastname}" has a "{fallback_name}" fallback to user "{destination_firstname} {destination_lastname}"')
 def given_user_has_a_fallback_to_user(context, firstname, lastname, fallback_name, destination_firstname, destination_lastname):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
-    dst_user = context.helpers.confd_user.get_by(firstname=dst_firstname, lastname=dst_lastname)
+    dst_user = context.helpers.confd_user.get_by(firstname=destination_firstname, lastname=destination_lastname)
     dst_name = "{}_destination".format(fallback_name)
     context.helpers.confd_user.update_fallback(
         confd_user,
@@ -467,7 +467,7 @@ def given_user_has_a_fallback_to_user(context, firstname, lastname, fallback_nam
     )
 
 
-@given('"{firstname} {lastname}" has a "{seconds}" seconds ringing time')
+@given('"{firstname} {lastname}" has a {seconds} seconds ringing time')
 def given_user_has_x_seconds_ringing_time(context, firstname, lastname, seconds):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     context.helpers.confd_user.set_ringing_time(confd_user, int(seconds))
