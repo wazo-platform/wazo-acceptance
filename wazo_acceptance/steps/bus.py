@@ -1,8 +1,9 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import collections
 import queue
+import time
 
 from behave import (
     given,
@@ -46,7 +47,13 @@ def then_i_receive_a_event_on_queue(context, event_name):
         assert_that(event, has_key('data'))
         result = _flatten_nested_dict(event['data'])
         assert_that(result, has_entries(context.table[0].as_dict()))
+
     until.assert_(event_match, interval=0.1, tries=10)
+
+    # NOTE(fblackburn): When an event is triggered, the database is not committed. Sometime, a
+    # race condition can occur (mostly on single core host) between the event sent and the
+    # database commit. Adding delay help to avoid this race condition.
+    time.sleep(0.1)
 
 
 @then('I receive a "{event_name}" event with "{wrapper}" data')
