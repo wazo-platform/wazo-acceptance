@@ -112,3 +112,15 @@ Feature: Call Generation
   When "George McFly" resumes his call
   Then I receive a "call_resumed" event
 
+  Scenario: Transfer timeout is respected
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context |
+      | Marty     | McFly    | 1001  | default |
+      | George    | McFly    | 1002  | default |
+      | Zzyxz     | Axalotl  | 1003  | default |
+    Given "Marty McFly" calls "1002"
+    Given "George McFly" answers
+    When "George McFly" does a blind transfer to "1003@default" with timeout 3 using API
+    Then "Zzyxz Axalotl" is ringing
+    When I wait 4 seconds
+    Then "Zzyxz Axalotl" is hungup

@@ -222,6 +222,22 @@ def when_user_does_a_blind_transfer_to_exten_with_api(context, firstname, lastna
     )
 
 
+@when('"{firstname} {lastname}" does a blind transfer to "{exten}@{exten_context}" with timeout {timeout} using API')
+def when_user_does_a_blind_transfer_to_exten_with_timeout_using_api(context, firstname, lastname, exten, exten_context, timeout):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    initiator_call = context.helpers.call.get_by(user_uuid=confd_user['uuid'])
+    transferred_call_id = next(iter(initiator_call['talking_to']))
+    transfer = context.calld_client.transfers.make_transfer(
+        transferred=transferred_call_id,
+        initiator=initiator_call['call_id'],
+        context=exten_context,
+        exten=exten,
+        timeout=timeout,
+        flow='blind'
+    )
+    context.transfer_id = transfer['id']
+
+
 @when('I import the following users ignoring errors')
 def when_i_import_users_ignoring_errors(context):
     lines = [','.join(context.table.headings)]
