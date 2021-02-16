@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from wazo_auth_client import Client as AuthClient
@@ -12,8 +12,8 @@ class Token:
 
     def create(self, username, password, tracking_id=None, **kwargs):
         auth_client = AuthClient(
-            username=username,
-            password=password,
+            username=username if tracking_id else self._context.username,
+            password=password if tracking_id else self._context.password,
             **self._context.wazo_config['auth']
         )
 
