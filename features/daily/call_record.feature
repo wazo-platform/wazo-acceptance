@@ -55,12 +55,16 @@ Feature: Call Record
       | firstname | lastname | call_record_incoming_internal_enabled | exten | context | with_phone |
       | User      | 800      | yes                                   | 1800  | default | yes        |
       | User      | 801      | no                                    | 1801  | default | yes        |
+      | User      | 802      | yes                                   | 1802  | default | yes        |
     Given there are telephony groups with infos:
       | name       | exten | context |
       | incoming   |  2514 | default |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | 800      |
+    Given the telephony group "incoming" has extensions:
+      | context | exten |
+      | default | 1802  |
     Given "User 800" has no call recording
     Given I listen on the bus for "call_log_created" messages
     When "User 801" calls "2514"
@@ -71,3 +75,12 @@ Feature: Call Record
       | source_name | destination_name |
       | User 801    | User 800         |
     Then "User 801" has a call recording with "User 800"
+    Given "User 802" has no call recording
+    When "User 801" calls "2514"
+    When "User 802" answers
+    When I wait 1 seconds for the call processing
+    When "User 801" hangs up
+    Then I receive a "call_log_created" event:
+      | source_name | destination_name |
+      | User 801    | User 802         |
+    Then "User 801" has a call recording with "User 802"

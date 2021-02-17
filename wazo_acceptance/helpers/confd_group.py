@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -40,3 +40,7 @@ class ConfdGroup:
     def update_user_members(self, group, users):
         with self._context.helpers.bus.wait_for_asterisk_reload(pjsip=True, queue=True):
             self._confd_client.groups(group).update_user_members(users)
+
+    def update_extension_members(self, group, extensions):
+        with self._context.helpers.bus.wait_for_asterisk_reload(pjsip=True, queue=True):
+            self._confd_client.groups(group).update_extension_members(extensions)

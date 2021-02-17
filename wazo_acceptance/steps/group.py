@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -48,3 +48,14 @@ def given_the_telephony_group_have_user(context, name):
         user_members.append({'uuid': user['uuid']})
 
     context.helpers.confd_group.update_user_members(group, user_members)
+
+
+@given('the telephony group "{name}" has extensions')
+def given_the_telephony_group_have_extensions(context, name):
+    context.table.require_columns(['context', 'exten'])
+    extension_members = []
+    group = context.helpers.confd_group.get_by(name=name)
+    for row in context.table:
+        extension_members.append(row.as_dict())
+
+    context.helpers.confd_group.update_extension_members(group, extension_members)
