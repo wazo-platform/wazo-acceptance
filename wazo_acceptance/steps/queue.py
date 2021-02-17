@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import when, given
@@ -67,3 +67,30 @@ def when_i_create_the_following_queues(context):
             for agent_number in row['agents'].split(','):
                 agent = context.helpers.agent.get_by(number=agent_number)
                 context.helpers.queue.add_agent_member(queue, agent)
+
+
+@given('the queue "{name}" has users')
+def given_queue_has_user_members(context, name):
+    context.table.require_columns(['firstname', 'lastname'])
+    queue = context.helpers.queue.get_by(name=name)
+    for row in context.table:
+        body = row.as_dict()
+
+        user = context.helpers.user.get_by(
+            firstname=body['firstname'],
+            lastname=body['lastname'],
+        )
+        context.helpers.queue.add_user_member(queue, user)
+
+
+@given('the queue "{name}" has agents')
+def given_queue_has_agent_members(context, name):
+    context.table.require_columns(['agent_number'])
+    queue = context.helpers.queue.get_by(name=name)
+    for row in context.table:
+        body = row.as_dict()
+
+        agent = context.helpers.agent.get_by(
+            number=body['agent_number'],
+        )
+        context.helpers.queue.add_agent_member(queue, agent)
