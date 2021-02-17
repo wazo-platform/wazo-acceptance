@@ -24,6 +24,11 @@ def given_i_listen_on_the_bus_for_messages(context, event_name):
     context.helpers.bus.subscribe([event_name])
 
 
+@given('I listen on the bus for the following events')
+def given_i_listen_on_the_bus_for_messages(context):
+    context.helpers.bus.subscribe([event['event'] for event in context.table])
+
+
 @then('I receive no "{event_name}" event')
 def then_i_receive_no_event_on_queue(context, event_name):
     try:

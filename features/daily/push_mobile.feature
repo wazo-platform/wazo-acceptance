@@ -10,7 +10,7 @@ Feature: Push mobile
       | rick1 | 1801  | default | yes        |
     Given I listen on the bus for "call_push_notification" messages
     When "Daryl Dixon" calls "1801"
-    Then "rick1" is ringing
+    Then "Rick Grimes" is ringing on its contact "1"
     Then I receive no "call_push_notification" event
 
   Scenario: Push notification is triggered with WebRTC line and mobile session one line
@@ -37,7 +37,7 @@ Feature: Push mobile
     Given I create a mobile session with username "rick" password "gR1m3"
     Given I listen on the bus for "call_push_notification" messages
     When "Daryl Dixon" calls "1801"
-    Then "rick1" is ringing
+    Then "Rick Grimes" is ringing on its contact "1"
     Then I receive a "call_push_notification" event
 
   Scenario: Push notification is not triggered by a WebRTC line with no mobile session
@@ -51,5 +51,5 @@ Feature: Push mobile
       | rick2 | 1801  | default | no         | yes    |
     Given I listen on the bus for "call_push_notification" messages
     When "Daryl Dixon" calls "1801"
-    Then "rick1" is ringing
+    Then "Rick Grimes" is ringing on its contact "1"
     Then I receive no "call_push_notification" event

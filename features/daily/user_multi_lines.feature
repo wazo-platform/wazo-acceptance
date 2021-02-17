@@ -11,9 +11,9 @@ Feature: User multi lines
       | line2 | 1801  | default | yes        |
       | line3 |       | default | yes        |
     When "Bob Field" calls "1801"
-    Then "line1" is ringing
-    Then "line2" is ringing
-    Then "line3" is hungup
+    Then "Multi Lines" is ringing on its contact "1"
+    Then "Multi Lines" is ringing on its contact "2"
+    Then "Multi Lines" is hungup on its contact "3"
 
   Scenario: User multi lines multi extensions
     Given there are telephony users with infos:
@@ -25,8 +25,8 @@ Feature: User multi lines
       | line1 | 1801  | default | yes        |
       | line2 | 1802  | default | yes        |
     When "Bob Field" calls "1801"
-    Then "line1" is ringing
-    Then "line2" is hungup
+    Then "Multi Lines" is ringing on its contact "1"
+    Then "Multi Lines" is hungup on its contact "2"
 
   Scenario: Activate a forward on user multi lines
     Given there are telephony users with infos:
@@ -68,11 +68,11 @@ Feature: User multi lines
       | line1 | 1801  | default | yes        |
       | line2 | 1801  | default | yes        |
     When "Bob Field" calls "1801"
-    Then "line1" is ringing
-    Then "line2" is ringing
+    Then "Multi Lines" is ringing on its contact "1"
+    Then "Multi Lines" is ringing on its contact "2"
     When I wait 5 seconds for the end of ringing time
-    Then "line1" is hungup
-    Then "line2" is hungup
+    Then "Multi Lines" is hungup on its contact "1"
+    Then "Multi Lines" is hungup on its contact "2"
     When I wait 5 seconds for the call processing
     Then "Bob Field" is hungup
 
@@ -87,6 +87,6 @@ Feature: User multi lines
       | line3 | 1802  | default | yes        |
     Given there is an incall "1801@from-extern" to the user "Multi Lines"
     When chan_test calls "1801@from-extern"
-    Then "line1" is ringing
-    Then "line2" is ringing
-    Then "line3" is hungup
+    Then "Multi Lines" is ringing on its contact "1"
+    Then "Multi Lines" is ringing on its contact "2"
+    Then "Multi Lines" is hungup on its contact "3"

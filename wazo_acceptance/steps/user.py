@@ -62,6 +62,10 @@ def given_there_are_telephony_users_with_infos(context):
             'password': body.get('password') or context.helpers.utils.random_string(10, sample=string.printable),
         }
         context.helpers.user.create(user_body)
+        tracking_id = "{} {}".format(body['firstname'], body.get('lastname', '')).strip()
+
+        if body.get('with_token', 'no') == 'yes':
+            context.helpers.token.create(user_body['username'], user_body['password'], tracking_id)
 
         if not body.get('context'):
             # User has no line
@@ -112,7 +116,6 @@ def given_there_are_telephony_users_with_infos(context):
             context.confd_client.users(confd_user).add_agent(agent)
 
         if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
-            tracking_id = "{} {}".format(body['firstname'], body.get('lastname', '')).strip()
             expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
             with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
                 context.helpers.sip_phone.register_and_track_phone(tracking_id, sip)
@@ -122,6 +125,7 @@ def given_there_are_telephony_users_with_infos(context):
 def given_user_has_lines(context, firstname, lastname):
     context.table.require_columns(['name', 'context'])
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    tracking_id = "{} {}".format(firstname, lastname)
     for row in context.table:
         body = row.as_dict()
 
@@ -150,7 +154,7 @@ def given_user_has_lines(context, firstname, lastname):
         if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
             expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
             with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
-                context.helpers.sip_phone.register_and_track_phone(body['name'], sip)
+                context.helpers.sip_phone.register_and_track_phone(tracking_id, sip)
 
 
 @given('"{firstname} {lastname}" has enabled "{dnd_name}" service')
@@ -216,6 +220,22 @@ def when_user_does_a_blind_transfer_to_exten_with_api(context, firstname, lastna
         exten=exten,
         flow='blind'
     )
+
+
+@when('"{firstname} {lastname}" does a blind transfer to "{exten}@{exten_context}" with timeout {timeout} using API')
+def when_user_does_a_blind_transfer_to_exten_with_timeout_using_api(context, firstname, lastname, exten, exten_context, timeout):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    initiator_call = context.helpers.call.get_by(user_uuid=confd_user['uuid'])
+    transferred_call_id = next(iter(initiator_call['talking_to']))
+    transfer = context.calld_client.transfers.make_transfer(
+        transferred=transferred_call_id,
+        initiator=initiator_call['call_id'],
+        context=exten_context,
+        exten=exten,
+        timeout=timeout,
+        flow='blind'
+    )
+    context.transfer_id = transfer['id']
 
 
 @when('I import the following users ignoring errors')
@@ -450,3 +470,20 @@ def when_user_starts_call_recording(context, firstname, lastname):
     user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     call = context.helpers.call.get_by(user_uuid=user['uuid'])
     context.helpers.call.start_recording(call['call_id'])
+
+
+@given('"{firstname} {lastname}" has a "{fallback_name}" fallback to user "{destination_firstname} {destination_lastname}"')
+def given_user_has_a_fallback_to_user(context, firstname, lastname, fallback_name, destination_firstname, destination_lastname):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    dst_user = context.helpers.confd_user.get_by(firstname=destination_firstname, lastname=destination_lastname)
+    dst_name = "{}_destination".format(fallback_name)
+    context.helpers.confd_user.update_fallback(
+        confd_user,
+        {dst_name: {'type': 'user', 'user_id': dst_user['id']}},
+    )
+
+
+@given('"{firstname} {lastname}" has a {seconds} seconds ringing time')
+def given_user_has_x_seconds_ringing_time(context, firstname, lastname, seconds):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+    context.helpers.confd_user.set_ringing_time(confd_user, int(seconds))
