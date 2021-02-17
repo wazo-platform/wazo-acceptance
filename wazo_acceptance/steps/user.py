@@ -468,10 +468,8 @@ def given_user_has_a_fallback_to_user(context, firstname, lastname, fallback_nam
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     dst_user = context.helpers.confd_user.get_by(firstname=destination_firstname, lastname=destination_lastname)
     dst_name = "{}_destination".format(fallback_name)
-    context.helpers.confd_user.update_fallback(
-        confd_user,
-        {dst_name: {'type': 'user', 'user_id': dst_user['id']}},
-    )
+    fallback = {dst_name: {'type': 'user', 'user_id': dst_user['id']}}
+    context.helpers.confd_user.update_fallback(confd_user, fallback)
 
 
 @given('"{firstname} {lastname}" has a {seconds} seconds ringing time')
