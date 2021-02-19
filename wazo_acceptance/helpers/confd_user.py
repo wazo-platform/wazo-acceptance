@@ -37,10 +37,8 @@ class ConfdUser:
 
     def update_fallback(self, user, fallback):
         fallbacks = self._confd_client.users(user).list_fallbacks()
-        old_fallbacks = fallbacks.copy()
         fallbacks.update(fallback)
         self._confd_client.users(user).update_fallbacks(fallbacks)
-        self._context.add_cleanup(self._confd_client.users(user).update_fallbacks, old_fallbacks)
 
     def set_ringing_time(self, user, ringing_time):
         user.pop('call_record_enabled', None)

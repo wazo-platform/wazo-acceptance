@@ -434,17 +434,8 @@ def then_user_has_no_call_recording(context, firstname, lastname):
 
 
 @then('"{firstname_src} {lastname_src}" has a call recording with "{firstname_dst} {lastname_dst}"')
-def then_user_src_has_a_call_recording_with_user_dst(context, firstname_src, lastname_src, firstname_dst, lastname_dst):
-    user_src = context.helpers.confd_user.get_by(firstname=firstname_src, lastname=lastname_src)
-    user_dst = context.helpers.confd_user.get_by(firstname=firstname_dst, lastname=lastname_dst)
-    cdr = context.call_logd_client.cdr.list(user_uuid=user_src['uuid'])['items']
-    assert cdr[0]['source_user_uuid'] == user_src['uuid']
-    assert cdr[0]['destination_user_uuid'] == user_dst['uuid']
-    assert len(cdr[0]['recordings']) == 1
-
-
 @then('"{firstname_src} {lastname_src}" has {count} call recordings with "{firstname_dst} {lastname_dst}"')
-def then_user_src_has_n_calls_recording_with_user_dst(context, firstname_src, lastname_src, count, firstname_dst, lastname_dst):
+def then_user_src_has_n_calls_recording_with_user_dst(context, firstname_src, lastname_src, firstname_dst, lastname_dst, count=1):
     user_src = context.helpers.confd_user.get_by(firstname=firstname_src, lastname=lastname_src)
     user_dst = context.helpers.confd_user.get_by(firstname=firstname_dst, lastname=lastname_dst)
     cdr = context.call_logd_client.cdr.list(user_uuid=user_src['uuid'])['items']
@@ -477,10 +468,8 @@ def given_user_has_a_fallback_to_user(context, firstname, lastname, fallback_nam
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     dst_user = context.helpers.confd_user.get_by(firstname=destination_firstname, lastname=destination_lastname)
     dst_name = "{}_destination".format(fallback_name)
-    context.helpers.confd_user.update_fallback(
-        confd_user,
-        {dst_name: {'type': 'user', 'user_id': dst_user['id']}},
-    )
+    fallback = {dst_name: {'type': 'user', 'user_id': dst_user['id']}}
+    context.helpers.confd_user.update_fallback(confd_user, fallback)
 
 
 @given('"{firstname} {lastname}" has a {seconds} seconds ringing time')

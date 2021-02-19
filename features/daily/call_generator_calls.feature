@@ -97,20 +97,20 @@ Feature: Call Generation
     Then "Vladimir Poutine" is talking to "Donald Trump" on its contact "2"
 
   Scenario: Bus messages on hold and resume
-  Given there are telephony users with infos:
-    | firstname | lastname | exten | context |
-    | Marty     | McFly    | 1001  | default |
-    | George    | McFly    | 1002  | default |
-  Given I listen on the bus for the following events:
-    | event        |
-    | call_held    |
-    | call_resumed |
-  Given "Marty McFly" calls "1002"
-  Given "George McFly" answers
-  When "George McFly" puts his call on hold
-  Then I receive a "call_held" event
-  When "George McFly" resumes his call
-  Then I receive a "call_resumed" event
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context |
+      | Marty     | McFly    | 1001  | default |
+      | George    | McFly    | 1002  | default |
+    Given I listen on the bus for the following events:
+      | event        |
+      | call_held    |
+      | call_resumed |
+    Given "Marty McFly" calls "1002"
+    Given "George McFly" answers
+    When "George McFly" puts his call on hold
+    Then I receive a "call_held" event
+    When "George McFly" resumes his call
+    Then I receive a "call_resumed" event
 
   Scenario: Transfer timeout is respected
     Given there are telephony users with infos:
