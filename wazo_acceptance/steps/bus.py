@@ -25,7 +25,7 @@ def given_i_listen_on_the_bus_for_messages(context, event_name):
 
 
 @given('I listen on the bus for the following events')
-def given_i_listen_on_the_bus_for_messages(context):
+def given_i_listen_on_the_bus_for_the_following_events(context):
     context.helpers.bus.subscribe([event['event'] for event in context.table])
 
 
