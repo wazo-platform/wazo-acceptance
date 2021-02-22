@@ -43,6 +43,11 @@ def then_i_receive_a_message(context, event_name):
     events = context.helpers.bus.pop_received_event()
     assert_that(events, has_entries(name=event_name))
 
+    # NOTE(fblackburn): When an event is triggered, the database is not committed. Sometime, a
+    # race condition can occur (mostly on single core host) between the event sent and the
+    # database commit. Adding delay help to avoid this race condition.
+    time.sleep(0.1)
+
 
 @then('I receive a "{event_name}" event with data')
 def then_i_receive_a_event_on_queue(context, event_name):
@@ -67,6 +72,11 @@ def then_i_receive_a_event_with_wrapper_on_queue(context, event_name, wrapper):
     assert_that(event, has_entries(name=event_name, data=has_key(wrapper)))
     result = _flatten_nested_dict(event['data'][wrapper])
     assert_that(result, has_entries(context.table[0].as_dict()))
+
+    # NOTE(fblackburn): When an event is triggered, the database is not committed. Sometime, a
+    # race condition can occur (mostly on single core host) between the event sent and the
+    # database commit. Adding delay help to avoid this race condition.
+    time.sleep(0.1)
 
 
 def _flatten_nested_dict(dict_, parent_key='', separator='_'):
