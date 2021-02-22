@@ -11,7 +11,7 @@ Feature: Call Record
     When a call is started:
       | caller   | dial | callee   | talk_time | hangup |
       | User 800 | 1801 | User 801 | 3         | callee |
-    Then I receive a "call_log_created" event:
+    Then I receive a "call_log_created" event with data:
       | source_name | destination_name |
       | User 800    | User 801         |
     Then "User 800" has no call recording
@@ -26,7 +26,7 @@ Feature: Call Record
     When a call is started:
       | caller   | dial | callee   | talk_time | hangup |
       | User 800 | 1801 | User 801 | 3         | callee |
-    Then I receive a "call_log_created" event:
+    Then I receive a "call_log_created" event with data:
       | source_name | destination_name |
       | User 800    | User 801         |
     Then "User 800" has a call recording with "User 801"
@@ -45,7 +45,7 @@ Feature: Call Record
     When "User 800" starts call recording
     When I wait 1 seconds for the call processing
     When "User 801" hangs up
-    Then I receive a "call_log_created" event:
+    Then I receive a "call_log_created" event with data:
       | source_name | destination_name |
       | User 800    | User 801         |
     Then "User 800" has 2 call recordings with "User 801"
