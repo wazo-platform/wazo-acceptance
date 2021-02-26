@@ -15,9 +15,16 @@ class ConfdUser:
         if ring_seconds:
             body['ring_seconds'] = int(ring_seconds)
 
-        record_enabled = body.pop('call_record_outgoing_internal_enabled', None)
-        if record_enabled:
-            body['call_record_outgoing_internal_enabled'] = record_enabled == 'yes'
+        recording_fields = [
+            'call_record_outgoing_internal_enabled',
+            'call_record_incoming_internal_enabled',
+            'call_record_outgoing_external_enabled',
+            'call_record_incoming_external_enabled',
+        ]
+        for field in recording_fields:
+            record_enabled = body.pop(field, None)
+            if record_enabled:
+                body[field] = record_enabled == 'yes'
 
         with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True, queue=True):
             user = self._confd_client.users.create(body)
