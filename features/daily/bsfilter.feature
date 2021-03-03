@@ -20,7 +20,8 @@ Feature: Boss Secretary Filter
       | position | destination_type | destination_filter_name | destination_filter_member |
       | 1        | bsfilter         | Charlie's Angels        | Angel 001                 |
     When "Charlie Unknown" press function key "1"
-    When I wait 4 seconds for the call processing
+    When I wait 2 seconds for the call processing
+    When I wait 3 seconds to play message
     Then "Charlie Unknown" has function key "1" hint enabled
     Then "Angel 001" has function key "1" hint enabled
     When "Bad Guy" calls "1001"
@@ -30,7 +31,8 @@ Feature: Boss Secretary Filter
     When "Bad Guy" hangs up
 
     When "Charlie Unknown" press function key "1"
-    When I wait 4 seconds for the call processing
+    When I wait 2 seconds for the call processing
+    When I wait 3 seconds to play message
     Then "Charlie Unknown" has function key "1" hint disabled
     Then "Angel 001" has function key "1" hint disabled
     When "Bad Guy" calls "1001"
@@ -40,7 +42,8 @@ Feature: Boss Secretary Filter
     When "Bad Guy" hangs up
     
     When "Angel 001" press function key "1"
-    When I wait 4 seconds for the call processing
+    When I wait 2 seconds for the call processing
+    When I wait 3 seconds to play message
     Then "Charlie Unknown" has function key "1" hint enabled
     Then "Angel 001" has function key "1" hint enabled
     When "Bad Guy" calls "1001"
@@ -50,7 +53,8 @@ Feature: Boss Secretary Filter
     When "Bad Guy" hangs up
 
     When "Angel 001" press function key "1"
-    When I wait 4 seconds for the call processing
+    When I wait 2 seconds for the call processing
+    When I wait 3 seconds to play message
     Then "Charlie Unknown" has function key "1" hint disabled
     Then "Angel 001" has function key "1" hint disabled
     When "Bad Guy" calls "1001"
