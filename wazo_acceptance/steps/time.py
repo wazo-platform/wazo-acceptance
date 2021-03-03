@@ -1,4 +1,4 @@
-# Copyright 2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -26,6 +26,7 @@ def given_no_hour_change_in_next_1_seconds(context, seconds):
 @when('I wait {seconds} seconds for the timeout to not expire')
 @when('I wait {seconds} seconds for wazo-calld load to drop')
 @when('I wait {seconds} seconds to play unreachable message')
+@when('I wait {seconds} seconds to play message')
 @when('I wait {seconds} seconds to simulate call center')
 @when('I wait {seconds} seconds until the wrapup completes')
 @when('I wait {seconds} seconds while being logged on')
