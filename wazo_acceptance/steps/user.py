@@ -7,6 +7,8 @@ import string
 from behave import given, then, when
 from hamcrest import assert_that, equal_to, is_
 
+from xivo_test_helpers import until
+
 
 @given('there is an authentication user')
 def given_there_is_a_user(context):
@@ -465,6 +467,17 @@ def when_user_starts_call_recording(context, firstname, lastname):
     user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     call = context.helpers.call.get_by(user_uuid=user['uuid'])
     context.helpers.call.start_recording(call['call_id'])
+
+
+@then('"{firstname} {lastname}" call is recording status is "{status}"')
+def then_user_call_recording_is(context, firstname, lastname, status):
+    user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+
+    def status_matches():
+        call = context.helpers.call.get_by(user_uuid=user['uuid'])
+        assert call['record_state'] == status
+
+    until.assert_(status_matches, tries=4, interval=0.25)
 
 
 @given('"{firstname} {lastname}" has a "{fallback_name}" fallback to user "{destination_firstname} {destination_lastname}"')
