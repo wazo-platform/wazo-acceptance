@@ -227,7 +227,12 @@ def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, 
     if callerid:
         body['endpoint_section_options'].append(['callerid', callerid])
     sip = context.helpers.endpoint_sip.create(body)
-    context.helpers.trunk.add_endpoint_sip(trunk, sip)
+
+    # NOTE(fblackburn): We do not wait on pjsip reload inside this step
+    # to be able to listen events before this step in the scenario
+    context.confd_client.trunks(trunk).add_endpoint_sip(sip)
+    time.sleep(1)
+
     phone = context.helpers.sip_phone.register_and_track_phone(incall_name, sip)
     until.true(phone.is_registered, tries=3)
     phone.call(exten)
