@@ -166,6 +166,7 @@ def setup_helpers(context):
     context.helpers.queue = helpers.Queue(context)
     context.helpers.queue_skill_rule = helpers.QueueSkillRule(context)
     context.helpers.schedule = helpers.Schedule(context)
+    context.helpers.switchboard = helpers.Switchboard(context)
     context.helpers.token = helpers.Token(context)
     context.helpers.trunk = helpers.Trunk(context)
     context.helpers.user = helpers.User(context)
