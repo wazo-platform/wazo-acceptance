@@ -273,3 +273,29 @@ Feature: Call Record
       | destination_name |
       | User 800         |
     Then "User 800" has 2 call recordings from incoming call "5551231234"
+
+  Scenario: Incoming call to queue
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled |
+      | User      | 800      | 1800  | default | yes        | yes                                   |
+    Given there are queues with infos:
+      | name       | exten | context |
+      | incoming   |  3123 | default |
+    Given the queue "incoming" has users:
+      | firstname | lastname |
+      | User      | 800      |
+    Given there is an incall "3123@from-extern" to the queue "incoming"
+    Given "User 800" has no call recording
+    When incoming call received from "5551231234" to "3123@from-extern"
+    Given I listen on the bus for "call_log_created" messages
+    When "User 800" answers
+    Then "User 800" call is recording status is "active"
+    When "User 800" stops call recording
+    Then "User 800" call is recording status is "inactive"
+    When "User 800" starts call recording
+    Then "User 800" call is recording status is "active"
+    When "User 800" hangs up
+    Then I receive a "call_log_created" event:
+      | destination_name |
+      | User 800         |
+    Then "User 800" has 2 call recordings from incoming call "5551231234"
