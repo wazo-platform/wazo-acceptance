@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then, when
-from wazo_calld_client import Client as CalldClient
 
 
 @given('there are switchboards with infos')
@@ -42,13 +41,11 @@ def when_user_answer_queued_call_from_switchboard(context, firstname, lastname, 
 
     tracking_id = "{} {}".format(firstname, lastname)
     token = context.helpers.token.get(tracking_id)['token']
-    calld_client = CalldClient(**context.wazo_config['calld'])
-    calld_client.set_token(token)
-
-    calld_client.switchboards.answer_queued_call_from_user(
-        switchboard['uuid'],
-        call['id'],
-    )
+    with context.helpers.utils.set_token(context.calld_client, token):
+        context.calld_client.switchboards.answer_queued_call_from_user(
+            switchboard['uuid'],
+            call['id'],
+        )
 
 
 @when('"{firstname} {lastname}" answer held call "{caller_name}" from switchboard "{name}"')
@@ -58,16 +55,13 @@ def when_user_answer_held_call_from_switchboard(context, firstname, lastname, ca
         switchboard['uuid'],
         caller_id_number=caller_name,
     )
-
     tracking_id = "{} {}".format(firstname, lastname)
     token = context.helpers.token.get(tracking_id)['token']
-    calld_client = CalldClient(**context.wazo_config['calld'])
-    calld_client.set_token(token)
-
-    calld_client.switchboards.answer_held_call_from_user(
-        switchboard['uuid'],
-        call['id']
-    )
+    with context.helpers.utils.set_token(context.calld_client, token):
+        context.calld_client.switchboards.answer_held_call_from_user(
+            switchboard['uuid'],
+            call['id']
+        )
 
 
 @when('"{firstname} {lastname}" put call "{caller_name}" from switchboard "{name}" on hold')
