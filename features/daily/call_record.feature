@@ -227,3 +227,23 @@ Feature: Call Record
     When "User 800" stops call recording
     Then "User 800" call is recording status is "inactive"
     Then "User 801" call is recording status is "active"
+
+  Scenario: Incoming call to user
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled |
+      | User      | 800      | 1800  | default | yes        | yes                                   |
+    Given there is an incall "1800@from-extern" to the user "User 800"
+    Given "User 800" has no call recording
+    When incoming call received from "5551231234" to "1800@from-extern"
+    Given I listen on the bus for "call_log_created" messages
+    When "User 800" answers
+    Then "User 800" call is recording status is "active"
+    When "User 800" stops call recording
+    Then "User 800" call is recording status is "inactive"
+    When "User 800" starts call recording
+    Then "User 800" call is recording status is "active"
+    When "User 800" hangs up
+    Then I receive a "call_log_created" event:
+      | destination_name |
+      | User 800         |
+    Then "User 800" has 2 call recordings from incoming call "5551231234"
