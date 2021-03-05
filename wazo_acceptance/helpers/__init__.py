@@ -18,6 +18,7 @@ from .device import Device
 from .endpoint_sip import EndpointSIP
 from .extension import Extension
 from .extension_feature import ExtensionFeature
+from .group import Group
 from .incall import Incall
 from .ivr import IVR
 from .line import Line
@@ -55,6 +56,7 @@ __all__ = [
     'EndpointSIP',
     'Extension',
     'ExtensionFeature',
+    'Group',
     'IVR',
     'Incall',
     'Line',
