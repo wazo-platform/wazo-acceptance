@@ -181,3 +181,26 @@ Feature: Call Record
     When "User 800" stops call recording
     Then "User 800" call is recording status is "inactive"
     Then "User 801" call is recording status is "active"
+
+  Scenario: User to group recording status
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | with_phone |
+      | User      | 800      | 1800  | default | yes        |
+      | User      | 801      | 1801  | default | yes        |
+    Given there are telephony groups with infos:
+      | name       | exten | context |
+      | incoming   |  2514 | default |
+    Given the telephony group "incoming" has users:
+      | firstname | lastname |
+      | User      | 801      |
+    When "User 800" calls "2514"
+    When "User 801" answers
+    When "User 800" starts call recording
+    Then "User 800" call is recording status is "active"
+    Then "User 801" call is recording status is "inactive"
+    When "User 801" starts call recording
+    Then "User 800" call is recording status is "active"
+    Then "User 801" call is recording status is "active"
+    When "User 800" stops call recording
+    Then "User 800" call is recording status is "inactive"
+    Then "User 801" call is recording status is "active"
