@@ -131,6 +131,13 @@ def when_user_sends_dtmf(context, tracking_id, digit):
     phone.send_dtmf(digit)
 
 
+@step('"{tracking_id}" sends multiple DTMF "{digits}"')
+def when_user_sends_multiple_dtmf(context, tracking_id, digits):
+    phone = context.phone_register.get_phone(tracking_id)
+    for digit in digits:
+        phone.send_dtmf(digit)
+
+
 @when('a call is started')
 def when_a_call_is_started(context):
 

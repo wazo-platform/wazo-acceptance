@@ -21,6 +21,7 @@ def given_no_hour_change_in_next_1_seconds(context, seconds):
 @when('I wait {seconds} seconds for the call processing')
 @when('I wait {seconds} seconds for the call to be forwarded')
 @when('I wait {seconds} seconds for the end of ringing time')
+@when('I wait {seconds} seconds for the password input message to complete')
 @when('I wait {seconds} seconds for the no permission message to complete')
 @when('I wait {seconds} seconds for the timeout to expire')
 @when('I wait {seconds} seconds for the timeout to not expire')
