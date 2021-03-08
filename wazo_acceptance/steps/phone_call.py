@@ -6,11 +6,8 @@ import time
 from behave import step, then, when
 from hamcrest import (
     assert_that,
-    calling,
     not_,
-    raises,
 )
-from linphonelib import ExtensionNotFoundException
 from xivo_test_helpers import until
 
 CHAN_PREFIX = 'PJSIP'
@@ -53,7 +50,7 @@ def step_user_is_hungup(context, tracking_id):
 
 
 @step('"{tracking_id}" is hungup on its contact "{contact_number}"')
-def step_user_is_hungup(context, tracking_id, contact_number):
+def step_user_is_hungup_on_its_contact(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     until.true(phone.is_hungup, tries=3)
 
@@ -230,7 +227,12 @@ def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, 
     if callerid:
         body['endpoint_section_options'].append(['callerid', callerid])
     sip = context.helpers.endpoint_sip.create(body)
-    context.helpers.trunk.add_endpoint_sip(trunk, sip)
+
+    # NOTE(fblackburn): We do not wait on pjsip reload inside this step
+    # to be able to listen events before this step in the scenario
+    context.confd_client.trunks(trunk).add_endpoint_sip(sip)
+    time.sleep(1)
+
     phone = context.helpers.sip_phone.register_and_track_phone(incall_name, sip)
     until.true(phone.is_registered, tries=3)
     phone.call(exten)

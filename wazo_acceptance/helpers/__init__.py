@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from .agent import Agent
@@ -30,6 +30,7 @@ from .queue_skill_rule import QueueSkillRule
 from .schedule import Schedule
 from .sip_config import SIPConfigGenerator
 from .sip_phone import PhoneFactory
+from .switchboard import Switchboard
 from .token import Token
 from .trunk import Trunk
 from .user import User
@@ -66,6 +67,7 @@ __all__ = [
     'QueueSkillRule',
     'SIPConfigGenerator',
     'Schedule',
+    'Switchboard',
     'Token',
     'Trunk',
     'User',

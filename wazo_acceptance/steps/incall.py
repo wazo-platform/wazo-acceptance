@@ -82,6 +82,24 @@ def given_there_is_an_incall_to_the_application(context, exten, exten_context, a
     context.helpers.incall.add_extension(incall, extension)
 
 
+@given('there is an incall "{exten}@{exten_context}" to the switchboard "{name}"')
+def given_there_is_an_incall_to_the_switchboard(context, exten, exten_context, name):
+    switchboard = context.helpers.switchboard.get_by(name=name)
+
+    body = {
+        'destination': {
+            'type': 'switchboard',
+            'switchboard_uuid': switchboard['uuid']
+        }
+    }
+    incall = context.helpers.incall.create(body)
+
+    body = {'exten': exten, 'context': exten_context}
+    extension = context.helpers.extension.create(body)
+
+    context.helpers.incall.add_extension(incall, extension)
+
+
 @given('there is an incall "{exten}@{exten_context}" to DISA redirected to "{disa_context}" with pin "{pin}"')
 def given_there_is_an_incall_to_DISA_with_context_and_pin(context, exten, exten_context, disa_context, pin):
     body = {

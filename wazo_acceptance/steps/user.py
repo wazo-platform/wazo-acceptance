@@ -54,18 +54,22 @@ def given_there_are_telephony_users_with_infos(context):
 
         confd_user = context.helpers.confd_user.create(body)
 
+        username = body.get('username') or context.helpers.utils.random_string(10)
+        password = body.get('password') or context.helpers.utils.random_string(10, sample=string.printable)
+        firstname = body['firstname']
+        lastname = body.get('lastname', '')
         user_body = {
             'uuid': confd_user['uuid'],
-            'firstname': body['firstname'],
-            'lastname': body.get('lastname'),
-            'username': body.get('username') or context.helpers.utils.random_string(10),
-            'password': body.get('password') or context.helpers.utils.random_string(10, sample=string.printable),
+            'firstname': firstname,
+            'lastname': lastname or None,
+            'username': username,
+            'password': password,
         }
         context.helpers.user.create(user_body)
-        tracking_id = "{} {}".format(body['firstname'], body.get('lastname', '')).strip()
+        tracking_id = "{} {}".format(firstname, lastname).strip()
 
         if body.get('with_token', 'no') == 'yes':
-            context.helpers.token.create(user_body['username'], user_body['password'], tracking_id)
+            context.helpers.token.create(username, password, tracking_id)
 
         if not body.get('context'):
             # User has no line
@@ -75,7 +79,7 @@ def given_there_are_telephony_users_with_infos(context):
 
         endpoint = body.get('protocol', 'sip')
         if endpoint == 'sip':
-            name = '-'.join([body['firstname'], body.get('lastname', '')])
+            name = '-'.join([firstname, lastname])
             sip_body = context.helpers.endpoint_sip.generate_form(name)
             sip = context.helpers.endpoint_sip.create(sip_body)
             context.helpers.line.add_endpoint_sip(line, sip)

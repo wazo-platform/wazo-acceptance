@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from hamcrest import assert_that, is_not, none
@@ -34,20 +34,14 @@ def given_i_create_a_mobile_session(context, username, password):
 
 
 @when('"{username}" changes its password from "{old_password}" to "{new_password}"')
-def step_impl(context, username, old_password, new_password):
-    auth = AuthClient(
-        username=username,
-        password=old_password,
-        **context.wazo_config['auth']
-    )
-    result = auth.token.new()
-    auth.set_token(result['token'])
-
-    auth.users.change_password(
-        result['metadata']['uuid'],
-        old_password=old_password,
-        new_password=new_password,
-    )
+def user_changes_its_password_from_old_to_new(context, username, old_password, new_password):
+    token = _create_token(context, username, old_password)
+    with context.helpers.utils.set_token(context.auth_client, token['token']):
+        context.auth_client.users.change_password(
+            token['metadata']['uuid'],
+            old_password=old_password,
+            new_password=new_password,
+        )
 
 
 def _create_token(context, username, password, **kwargs):
