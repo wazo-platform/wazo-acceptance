@@ -36,3 +36,26 @@ Feature: Call Permissions
     When "Gerard Tremblay" sends multiple DTMF "1234#"
     When I wait 2 seconds for the call processing
     Then "Sylvie Duquette" is ringing
+
+  Scenario: Group call permission
+    Given there are telephony users with infos:
+      | firstname | lastname  | exten | context | with_phone |
+      | Sonia     | Champoux  | 1201  | default | yes        |
+      | Charles   | Patenaude | 1202  | default | yes        |
+      | Flavien   | Bouchard  | 1203  | default | yes        |
+    Given there are telephony groups with infos:
+      | name         | exten | context |
+      | RomanoFafard | 2000  | default |
+    Given the telephony group "RomanoFafard" has users:
+      | firstname | lastname  |
+      | Sonia     | Champoux  |
+    Given there are call permissions with infos:
+      | name       | extensions | groups            |
+      | permission | 1202       | RomanoFafard      |
+    When "Sonia Champoux" calls "1202"
+    When I wait 2 seconds for the call processing
+    Then "Charles Patenaude" is hungup
+    When I wait 4 seconds for the no permission message to complete
+    Then "Sonia Champoux" is hungup
+    When "Flavien Bouchard" calls "1202"
+    Then "Charles Patenaude" is ringing
