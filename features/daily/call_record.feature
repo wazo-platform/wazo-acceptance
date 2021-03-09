@@ -85,6 +85,28 @@ Feature: Call Record
       | User 801    | User 802         |
     Then "User 801" has a call recording with "User 802"
 
+  Scenario: Group calls should be recorded if the caller is configured to be recorded
+    Given there are telephony users with infos:
+      | firstname | lastname | call_record_outgoing_internal_enabled | exten | context | with_phone |
+      | User      | 800      | no                                    | 1800  | default | yes        |
+      | User      | 801      | yes                                   | 1801  | default | yes        |
+    Given there are telephony groups with infos:
+      | name       | exten | context |
+      | incoming   |  2514 | default |
+    Given the telephony group "incoming" has users:
+      | firstname | lastname |
+      | User      | 800      |
+    Given "User 800" has no call recording
+    Given I listen on the bus for "call_log_created" messages
+    When "User 801" calls "2514"
+    When "User 800" answers
+    When I wait 1 seconds for the call processing
+    When "User 801" hangs up
+    Then I receive a "call_log_created" event:
+      | source_name | destination_name |
+      | User 801    | User 800         |
+    Then "User 801" has a call recording with "User 800"
+
   Scenario: Queue calls should be recorded if the answerer is configured to be recorded
     Given there are telephony users with infos:
       | firstname | lastname | call_record_incoming_internal_enabled | exten | context | with_phone | agent_number |
@@ -120,3 +142,25 @@ Feature: Call Record
       | source_name | destination_name |
       | User 801    | User 802         |
     Then "User 801" has a call recording with "User 802"
+
+  Scenario: Queue calls should be recorded if the caller is configured to be recorded
+    Given there are telephony users with infos:
+      | firstname | lastname | call_record_outgoing_internal_enabled | exten | context | with_phone |
+      | User      | 800      | no                                    | 1800  | default | yes        |
+      | User      | 801      | yes                                   | 1801  | default | yes        |
+    Given there are queues with infos:
+      | name       | exten | context |
+      | incoming   |  3123 | default |
+    Given the queue "incoming" has users:
+      | firstname | lastname |
+      | User      | 800      |
+    Given "User 800" has no call recording
+    Given I listen on the bus for "call_log_created" messages
+    When "User 801" calls "3123"
+    When "User 800" answers
+    When I wait 1 seconds for the call processing
+    When "User 801" hangs up
+    Then I receive a "call_log_created" event:
+      | source_name | destination_name |
+      | User 801    | User 800         |
+    Then "User 801" has a call recording with "User 800"
