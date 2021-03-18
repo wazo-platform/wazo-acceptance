@@ -17,6 +17,7 @@ def given_no_hour_change_in_next_1_seconds(context, seconds):
 
 
 @when('I wait {seconds} seconds during my pause')
+@when('I wait {seconds} seconds for the call hangs up for everyone')
 @when('I wait {seconds} seconds for the call processing with slow machine')
 @when('I wait {seconds} seconds for the call processing')
 @when('I wait {seconds} seconds for the call to be forwarded')
