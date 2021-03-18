@@ -158,8 +158,8 @@ def when_a_call_is_started(context):
 
 @then('"{tracking_id}" last dialed extension was not found')
 def then_user_last_dialed_extension_was_not_found(context, tracking_id):
-    # XXX(afournier): phone.last_call_result does not work here - the fact that the extension does
-    # not exist is not a problem for linphone-daemon. It does not trigger an error.
+    # XXX(afournier): the fact that the extension does not exist is not a problem for
+    # linphone-daemon. It does not trigger an error.
     phone = context.phone_register.get_phone(tracking_id)
     assert_that(not_(phone.is_talking))
 
