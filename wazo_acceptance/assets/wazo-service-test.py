@@ -24,7 +24,7 @@ BASE_SERVICES = [
     'wazo-provd',
     'wazo-webhookd',
     'wazo-websocketd',
-    'xivo-sysconfd',
+    'wazo-sysconfd',
 ]
 
 ALL_SERVICES = ['rabbitmq-server', 'consul', 'postgresql@11-main', 'nginx'] + BASE_SERVICES
