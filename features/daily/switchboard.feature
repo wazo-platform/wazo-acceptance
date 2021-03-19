@@ -25,6 +25,7 @@ Feature: Switchboards
     When "Reception Clerk" answers
     Then "Reception Clerk" is talking to "incall"
 
+    When I wait 1 seconds for the call processing
     When "Reception Clerk" does a blind transfer to "1802@default" with API
     When I wait 3 seconds for wazo-calld load to drop
     Given I listen on the bus for "call_updated" messages
