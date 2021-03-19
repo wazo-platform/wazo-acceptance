@@ -38,6 +38,7 @@ Feature: Groups
     When I wait 2 seconds for the call processing
     Then "Flash McQueen" is ringing
     Then "Tow Mater" hangs up
+    When I wait 1 seconds for the call hangs up for everyone
     When "Flash McQueen" press function key "1"
     When I wait 4 seconds for the call processing
     When "Tow Mater" calls "2801"
