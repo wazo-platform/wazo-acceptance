@@ -326,7 +326,7 @@ def _build_funckey(context, row):
                 }
                 break
     elif type_ == 'groupmember':
-        group = context.helpers.confd_group.get_by(name=row['destination_group_name'])
+        group = context.helpers.confd_group.get_by(label=row['destination_group_label'])
         destination = {
             'type': type_,
             'group_id': group['id'],

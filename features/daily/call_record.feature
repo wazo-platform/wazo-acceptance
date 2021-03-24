@@ -57,7 +57,7 @@ Feature: Call Record
       | User      | 801      | no                                    | 1801  | default | yes        |
       | User      | 802      | yes                                   | 1802  | default | yes        |
     Given there are telephony groups with infos:
-      | name       | exten | context |
+      | label      | exten | context |
       | incoming   |  2514 | default |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
@@ -91,7 +91,7 @@ Feature: Call Record
       | User      | 800      | no                                    | 1800  | default | yes        |
       | User      | 801      | yes                                   | 1801  | default | yes        |
     Given there are telephony groups with infos:
-      | name       | exten | context |
+      | label      | exten | context |
       | incoming   |  2514 | default |
     Given the telephony group "incoming" has users:
       | firstname | lastname |

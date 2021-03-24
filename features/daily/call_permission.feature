@@ -44,7 +44,7 @@ Feature: Call Permissions
       | Charles   | Patenaude | 1202  | default | yes        |
       | Flavien   | Bouchard  | 1203  | default | yes        |
     Given there are telephony groups with infos:
-      | name         | exten | context |
+      | label        | exten | context |
       | RomanoFafard | 2000  | default |
     Given the telephony group "RomanoFafard" has users:
       | firstname | lastname  |
