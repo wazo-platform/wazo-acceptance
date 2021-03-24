@@ -6,7 +6,7 @@ from behave import given
 
 @given('there are telephony groups with infos')
 def given_there_are_telephony_groups_with_infos(context):
-    context.table.require_columns(['name'])
+    context.table.require_columns(['label'])
     for row in context.table:
         body = row.as_dict()
 
@@ -24,7 +24,7 @@ def given_there_are_telephony_groups_with_infos(context):
             type_, name = body['noanswer_destination'].split(':')
             fallbacks_body = {'noanswer_destination': {'type': type_}}
             if type_ == 'group':
-                group_dest = context.helpers.confd_group.get_by(name=name)
+                group_dest = context.helpers.confd_group.get_by(label=name)
                 fallbacks_body['noanswer_destination']['group_id'] = group_dest['id']
             else:
                 raise NotImplementedError('Destination not implemented: {}'.format(type_))
@@ -32,11 +32,11 @@ def given_there_are_telephony_groups_with_infos(context):
             context.helpers.confd_group.update_fallbacks(group, fallbacks_body)
 
 
-@given('the telephony group "{name}" has users')
-def given_the_telephony_group_have_user(context, name):
+@given('the telephony group "{label}" has users')
+def given_the_telephony_group_have_user(context, label):
     context.table.require_columns(['firstname', 'lastname'])
     user_members = []
-    group = context.helpers.confd_group.get_by(name=name)
+    group = context.helpers.confd_group.get_by(label=label)
     for row in context.table:
         body = row.as_dict()
 
@@ -50,11 +50,11 @@ def given_the_telephony_group_have_user(context, name):
     context.helpers.confd_group.update_user_members(group, user_members)
 
 
-@given('the telephony group "{name}" has extensions')
-def given_the_telephony_group_have_extensions(context, name):
+@given('the telephony group "{label}" has extensions')
+def given_the_telephony_group_have_extensions(context, label):
     context.table.require_columns(['context', 'exten'])
     extension_members = []
-    group = context.helpers.confd_group.get_by(name=name)
+    group = context.helpers.confd_group.get_by(label=label)
     for row in context.table:
         extension_members.append(row.as_dict())
 

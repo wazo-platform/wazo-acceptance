@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -20,7 +20,7 @@ def given_there_are_pickup(context):
             with context.helpers.bus.wait_for_asterisk_reload(pjsip=True):
                 context.confd_client.call_pickups(call_pickup['id']).update_user_interceptors([user])
 
-        group = _find_group_by_name(context, data.get('group_interceptor'))
+        group = _find_group_by_label(context, data.get('group_interceptor'))
         if group:
             with context.helpers.bus.wait_for_asterisk_reload(pjsip=True):
                 context.confd_client.call_pickups(call_pickup['id']).update_group_interceptors([group])
@@ -30,7 +30,7 @@ def given_there_are_pickup(context):
             with context.helpers.bus.wait_for_asterisk_reload(pjsip=True):
                 context.confd_client.call_pickups(call_pickup['id']).update_user_targets([user])
 
-        group = _find_group_by_name(context, data.get('group_target'))
+        group = _find_group_by_label(context, data.get('group_target'))
         if group:
             with context.helpers.bus.wait_for_asterisk_reload(pjsip=True):
                 context.confd_client.call_pickups(call_pickup['id']).update_group_targets([group])
@@ -41,11 +41,11 @@ def given_the_direct_pickup_is_enabled_with_extension(context, extension):
     context.helpers.extension_feature.enable('pickup', extension=extension)
 
 
-def _find_group_by_name(context, name):
-    if not name:
+def _find_group_by_label(context, label):
+    if not label:
         return
 
-    return context.helpers.confd_group.get_by(name=name)
+    return context.helpers.confd_group.get_by(label=label)
 
 
 def _find_user_by_name(context, name):

@@ -51,7 +51,7 @@ Feature: Schedule call distribution
     | periods | months | month_days | week_days | hours_start | hours_end |
     | open    |      1 |          1 |         1 |       00:00 |     00:01 |
     Given there are telephony groups with infos:
-    | name   | exten | context | schedule     |
+    | label  | exten | context | schedule     |
     | league |  2666 | default | group-closed |
     Given the telephony group "league" has users:
     | firstname | lastname |
