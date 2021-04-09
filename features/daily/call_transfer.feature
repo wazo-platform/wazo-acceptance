@@ -89,6 +89,7 @@ Feature: Call transfer
     Then "incall" is talking
     Then "User B" is hungup
 
+    When I wait 0.5 seconds for the transfer lock release
     When "User A" does an attended transfer to "1850@default" with API
     When "User A" complete the transfer with API
     Then "User A" is hungup

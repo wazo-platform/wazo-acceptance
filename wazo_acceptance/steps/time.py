@@ -26,6 +26,7 @@ def given_no_hour_change_in_next_1_seconds(context, seconds):
 @when('I wait {seconds} seconds for the no permission message to complete')
 @when('I wait {seconds} seconds for the timeout to expire')
 @when('I wait {seconds} seconds for the timeout to not expire')
+@when('I wait {seconds} seconds for the transfer lock release')
 @when('I wait {seconds} seconds for wazo-calld load to drop')
 @when('I wait {seconds} seconds to play unreachable message')
 @when('I wait {seconds} seconds to play message')
