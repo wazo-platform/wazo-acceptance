@@ -136,7 +136,7 @@ def _configure_auth_users(context):
         context,
         username='wazo-acceptance',
         password='hidden',
-        acl_templates=[
+        acl=[
             'agentd.#',
             'amid.action.*.create',
             'auth.#',
@@ -162,7 +162,7 @@ def _auth_user_exists(context, username):
     return return_code == 0
 
 
-def _create_auth_user(context, username, password, acl_templates):
+def _create_auth_user(context, username, password, acl):
     cmd = [
         'wazo-auth-cli',
         '--config', '/root/.config/wazo-auth-cli',
@@ -175,9 +175,9 @@ def _create_auth_user(context, username, password, acl_templates):
     user_uuid = context.ssh_client.out_call(cmd).strip()
 
     args = []
-    if acl_templates:
+    if acl:
         args = ['--acl']
-        args.extend(acl_templates)
+        args.extend(acl)
 
     cmd = [
         'wazo-auth-cli',
