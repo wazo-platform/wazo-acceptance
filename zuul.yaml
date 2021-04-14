@@ -7,3 +7,7 @@
       jobs:
         - wazo-acceptance-job:
             nodeset: debian10-vm-m2
+    periodic:
+      jobs:
+        - wazo-acceptance-job:
+            nodeset: debian10-vm-m2
