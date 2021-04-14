@@ -7,7 +7,6 @@ import sys
 import time
 
 from linphonelib import (
-    ExtensionNotFoundException,
     LinphoneException,
     Session,
 )
@@ -57,7 +56,6 @@ class SIPPhone:
             logfile,
         )
         self._name = config.sip_name
-        self._call_result = None
         self.sip_port = config.sip_port
         self.rtp_port = config.rtp_port
 
@@ -75,13 +73,7 @@ class SIPPhone:
             raise exception
 
     def call(self, exten):
-        try:
-            self._session.call(exten)
-            self._call_result = None
-        except ExtensionNotFoundException as e:
-            self._call_result = e
-        except LinphoneException as e:
-            logger.exception(e)
+        self._session.call(exten)
 
     def hangup(self):
         self._session.hangup()
@@ -105,10 +97,6 @@ class SIPPhone:
 
     def unregister(self):
         self._session.unregister()
-
-    def last_call_result(self):
-        if self._call_result:
-            raise self._call_result
 
     def is_talking(self):
         return self._session.call_status() == CallStatus.ANSWERED
