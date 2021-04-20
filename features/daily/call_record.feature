@@ -188,7 +188,7 @@ Feature: Call Record
       | User      | 800      | 1800  | default | yes        |
       | User      | 801      | 1801  | default | yes        |
     Given there are telephony groups with infos:
-      | name       | exten | context |
+      | label      | exten | context |
       | incoming   |  2514 | default |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
@@ -253,7 +253,7 @@ Feature: Call Record
       | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled |
       | User      | 800      | 1800  | default | yes        | yes                                   |
     Given there are telephony groups with infos:
-      | name       | exten | context |
+      | label      | exten | context |
       | incoming   |  2514 | default |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
