@@ -1,9 +1,7 @@
 - project:
     check:
       jobs:
-        - wazo-acceptance-job:
-            nodeset: debian10-vm-m2
+        - wazo-acceptance
     gate:
       jobs:
-        - wazo-acceptance-job:
-            nodeset: debian10-vm-m2
+        - wazo-acceptance

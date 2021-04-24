@@ -18,6 +18,7 @@ Feature: Switchboards
     When "Reception Clerk" answers
     Then "Reception Clerk" is talking to "incall"
 
+    When I wait 1 seconds for the call processing
     When "Reception Clerk" put call "incall" from switchboard "Inn" on hold
     Then switchboard "Inn" has "incall" in held calls
     When "Reception Clerk" answer held call "incall" from switchboard "Inn"
