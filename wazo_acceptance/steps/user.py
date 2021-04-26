@@ -7,6 +7,8 @@ import string
 from behave import given, then, when
 from hamcrest import assert_that, equal_to, is_
 
+from xivo_test_helpers import until
+
 
 @given('there is an authentication user')
 def given_there_is_a_user(context):
@@ -453,6 +455,21 @@ def then_user_src_has_n_calls_recording_with_user_dst(context, firstname_src, la
     assert len(unique_media) == int(count), 'The same has been used for multiple recordings'
 
 
+@then('"{firstname_dst} {lastname_dst}" has {count} call recordings from incoming call "{incall}"')
+def then_user_dst_has_n_calls_recording_from_incall(context, firstname_dst, lastname_dst, incall, count):
+    user_dst = context.helpers.confd_user.get_by(firstname=firstname_dst, lastname=lastname_dst)
+    cdr = context.call_logd_client.cdr.list(user_uuid=user_dst['uuid'])['items']
+    print(cdr)
+    assert cdr[0]['destination_user_uuid'] == user_dst['uuid']
+    assert cdr[0]['source_extension'] == incall
+    assert len(cdr[0]['recordings']) == int(count)
+    unique_media = set()
+    for recording in cdr[0]['recordings']:
+        media = context.call_logd_client.cdr.get_recording_media(cdr[0]['id'], recording['uuid'])
+        unique_media.add(media)
+    assert len(unique_media) == int(count), 'The same has been used for multiple recordings'
+
+
 @when('"{firstname} {lastname}" stops call recording')
 def when_user_stops_call_recording(context, firstname, lastname):
     user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
@@ -465,6 +482,17 @@ def when_user_starts_call_recording(context, firstname, lastname):
     user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     call = context.helpers.call.get_by(user_uuid=user['uuid'])
     context.helpers.call.start_recording(call['call_id'])
+
+
+@then('"{firstname} {lastname}" call is recording status is "{status}"')
+def then_user_call_recording_is(context, firstname, lastname, status):
+    user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
+
+    def status_matches():
+        call = context.helpers.call.get_by(user_uuid=user['uuid'])
+        assert call['record_state'] == status
+
+    until.assert_(status_matches, tries=4, interval=0.25)
 
 
 @given('"{firstname} {lastname}" has a "{fallback_name}" fallback to user "{destination_firstname} {destination_lastname}"')
