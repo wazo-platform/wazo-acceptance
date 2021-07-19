@@ -71,7 +71,7 @@ def _sleep_to_avoid_race_condition():
     # NOTE(fblackburn): When an event is triggered, the database is not committed. Sometime, a
     # race condition can occur (mostly on single core host) between the event sent and the
     # database commit. Adding delay help to avoid this race condition.
-    time.sleep(0.2)
+    time.sleep(0.5)
 
 
 def _flatten_nested_dict(dict_, parent_key='', separator='_'):
