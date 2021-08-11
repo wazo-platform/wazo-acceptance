@@ -44,3 +44,22 @@ Feature: Groups
     When "Tow Mater" calls "2801"
     When I wait 2 seconds for the call processing
     Then "Flash McQueen" is hungup
+
+Scenario: Group member does not ring when in DND
+    Given there are telephony users with infos:
+      | firstname  | lastname | exten | context |
+      | Leticia    | Gendron  | 1949  | default |
+      | Bernandine | Gignac   | 1950  | default |
+      | Arnie      | Douglas  | 1951  | default |
+    Given there are telephony groups with infos:
+      | label       | exten | context |
+      | pretonians  | 2515  | default |
+    Given the telephony group "pretonians" has users:
+      | firstname  | lastname  |
+      | Leticia    | Gendron   |
+      | Bernandine | Gignac    |
+    When "Leticia Gendron" enable DND
+    When "Arnie Douglas" calls "2515"
+    When I wait 2 seconds for the call processing
+    Then "Leticia Gendron" is hungup
+    Then "Bernandine Gignac" is ringing
