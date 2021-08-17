@@ -14,16 +14,12 @@ Feature: Switchboards
     Then I receive a "switchboard_queued_calls_updated" event
     Then switchboard "Inn" has "incall" in queued calls
     When "Reception Clerk" answer queued call "incall" from switchboard "Inn"
-    # NOTE(fblackburn): Ideally, the phone will support auto answer headers
-    When "Reception Clerk" answers
     Then "Reception Clerk" is talking to "incall"
 
     When I wait 1 seconds for the call processing
     When "Reception Clerk" put call "incall" from switchboard "Inn" on hold
     Then switchboard "Inn" has "incall" in held calls
     When "Reception Clerk" answer held call "incall" from switchboard "Inn"
-    # NOTE(fblackburn): Ideally, the phone will support auto answer headers
-    When "Reception Clerk" answers
     Then "Reception Clerk" is talking to "incall"
 
     When I wait 1 seconds for the call processing
@@ -63,8 +59,6 @@ Feature: Switchboards
     # Transfer call to another switchboard
     Then switchboard "timeout" has "i-will-be-transferred-to-switchboard" in queued calls
     When "Reception Clerk" answer queued call "i-will-be-transferred-to-switchboard" from switchboard "timeout"
-    # NOTE(fblackburn): Ideally, the phone will support auto answer headers
-    When "Reception Clerk" answers
     Then "Reception Clerk" is talking to "i-will-be-transferred-to-switchboard"
     When I wait 1 seconds for the call processing
     When "Reception Clerk" does a blind transfer to "1004@from-extern" with API
@@ -72,8 +66,6 @@ Feature: Switchboards
     # Answer next call
     Then switchboard "timeout" has "i-will-be-answered" in queued calls
     When "Reception Clerk" answer queued call "i-will-be-answered" from switchboard "timeout"
-    # NOTE(fblackburn): Ideally, the phone will support auto answer headers
-    When "Reception Clerk" answers
 
     When I wait 10 seconds for the timeout to expire
 

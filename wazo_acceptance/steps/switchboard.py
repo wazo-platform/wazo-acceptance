@@ -61,6 +61,10 @@ def when_user_answer_queued_call_from_switchboard(context, firstname, lastname, 
             call['id'],
         )
 
+    # NOTE(fblackburn): Ideally, the phone will support auto answer headers
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.answer()
+
 
 @when('"{firstname} {lastname}" answer held call "{caller_name}" from switchboard "{name}"')
 def when_user_answer_held_call_from_switchboard(context, firstname, lastname, caller_name, name):
@@ -76,6 +80,10 @@ def when_user_answer_held_call_from_switchboard(context, firstname, lastname, ca
             switchboard['uuid'],
             call['id']
         )
+
+    # NOTE(fblackburn): Ideally, the phone will support auto answer headers
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.answer()
 
 
 @when('"{firstname} {lastname}" put call "{caller_name}" from switchboard "{name}" on hold')
