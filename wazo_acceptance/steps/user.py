@@ -72,6 +72,8 @@ def given_there_are_telephony_users_with_infos(context):
 
         if body.get('with_token', 'no') == 'yes':
             context.helpers.token.create(username, password, tracking_id)
+        elif body.get('with_token', 'mobile') == 'mobile':
+            context.helpers.token.create(username, password, tracking_id, session_type='mobile')
 
         if not body.get('context'):
             # User has no line
