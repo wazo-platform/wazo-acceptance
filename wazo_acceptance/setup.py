@@ -100,7 +100,7 @@ def setup_websocketd_client(context):
 
 def setup_tenant(context):
     name = context.wazo_config['default_tenant']
-    context.auth_client.set_tenant(None)
+    context.auth_client.tenant_uuid = None
     try:
         tenants = context.auth_client.tenants.list(name=name)['items']
     except HTTPError:
@@ -111,9 +111,9 @@ def setup_tenant(context):
         logger.exception('failed to get default tenant')
         return
 
-    context.auth_client.set_tenant(tenants[0]['uuid'])
-    context.confd_client.set_tenant(tenants[0]['uuid'])
-    context.call_logd_client.set_tenant(tenants[0]['uuid'])
+    context.auth_client.tenant_uuid = tenants[0]['uuid']
+    context.confd_client.tenant_uuid = tenants[0]['uuid']
+    context.call_logd_client.tenant_uuid = tenants[0]['uuid']
 
 
 def setup_config(context, config):
