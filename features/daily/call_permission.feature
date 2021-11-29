@@ -59,3 +59,18 @@ Feature: Call Permissions
     Then "Sonia Champoux" is hungup
     When "Flavien Bouchard" calls "1202"
     Then "Charles Patenaude" is ringing
+
+  Scenario: Outcall call permission
+    Given there are telephony users with infos:
+      | firstname | lastname  | exten | context | with_phone |
+      | Bill      | Gates     | 1201  | default | yes        |
+      | Steve     | Ballmer   | 1202  | default | yes        |
+    Given there is an outcall using extension "11234@to-extern"
+    Given there are call permissions with infos:
+      | name       | extensions  | outcalls      |
+      | permission | 1202        | outcall-11234 |
+    When "Steve Ballmer" calls "11234"
+    When I wait 4 seconds for the no permission message to complete
+    When "Bill Gates" calls "11234"
+    When I wait 2 seconds for the call processing
+    Then "outcall-11234" is ringing

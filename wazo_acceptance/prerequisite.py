@@ -110,6 +110,7 @@ def run(config_dir, instance_name):
     context.helpers.context.update_contextnumbers_queue('default', 3000, 3999)
     context.helpers.context.update_contextnumbers_conference('default', 4000, 4999)
     context.helpers.context.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
+    context.helpers.context.create_outcall_context('to-extern', 'default')
 
     logger.debug('Configuring asterisk')
     _configure_asterisk(context)

@@ -22,3 +22,8 @@ def given_there_are_call_permissions_with_infos(context):
             for name in body.get('groups').split(','):
                 group = context.helpers.confd_group.get_by(search=name)
                 context.confd_client.groups(group).add_call_permission(call_permission)
+
+        if body.get('outcall'):
+            for name in body.get('outcall').split(','):
+                outcall = context.helpers.confd_outcall.get_by(search=name)
+                context.confd_client.outcall(outcall).add_call_permission(call_permission)

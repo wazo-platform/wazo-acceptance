@@ -23,6 +23,7 @@ from .incall import Incall
 from .ivr import IVR
 from .line import Line
 from .monit import Monit
+from .outcall import Outcall
 from .parking_lot import ParkingLot
 from .pickup import Pickup
 from .provd import Provd
@@ -61,6 +62,7 @@ __all__ = [
     'Incall',
     'Line',
     'Monit',
+    'Outcall',
     'ParkingLot',
     'PhoneFactory',
     'Pickup',
