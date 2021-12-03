@@ -18,5 +18,7 @@ class Utils:
     def set_token(self, client, token):
         old_token = client._token_id
         client.set_token(token)
-        yield
-        client.set_token(old_token)
+        try:
+            yield
+        finally:
+            client.set_token(old_token)
