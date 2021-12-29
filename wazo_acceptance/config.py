@@ -1,4 +1,4 @@
-# Copyright 2014-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2014-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -21,7 +21,7 @@ DEFAULT_GLOBAL_CONFIG = {
 
         'acceptance': False,
         'linphone': False,
-        'xivo_test_helpers': False,
+        'wazo_test_helpers': False,
     },
     'instances': {}
 }

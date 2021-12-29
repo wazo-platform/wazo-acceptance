@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then
@@ -10,7 +10,7 @@ from hamcrest import (
     has_item,
     not_,
 )
-from xivo_test_helpers import until
+from wazo_test_helpers import until
 
 FUNCKEYS_EXTEN = {
     'unconditional': 21,

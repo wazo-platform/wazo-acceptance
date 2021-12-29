@@ -8,7 +8,7 @@ from hamcrest import (
     assert_that,
     not_,
 )
-from xivo_test_helpers import until
+from wazo_test_helpers import until
 
 CHAN_PREFIX = 'PJSIP'
 
