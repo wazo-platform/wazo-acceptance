@@ -1,4 +1,4 @@
-# Copyright 2015-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -8,7 +8,7 @@ loggers = {
     'acceptance': logging.getLogger('acceptance'),
     'linphone': logging.getLogger('linphone'),
     'stevedore': logging.getLogger('stevedore'),
-    'xivo_test_helpers': logging.getLogger('xivo_test_helpers'),
+    'wazo_test_helpers': logging.getLogger('xivo_test_helpers'),
 }
 
 

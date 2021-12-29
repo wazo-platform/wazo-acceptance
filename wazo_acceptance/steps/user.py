@@ -7,7 +7,7 @@ import string
 from behave import given, then, when
 from hamcrest import assert_that, equal_to, is_
 
-from xivo_test_helpers import until
+from wazo_test_helpers import until
 
 
 @given('there is an authentication user')

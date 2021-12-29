@@ -16,7 +16,7 @@ from hamcrest import (
     has_key,
 )
 
-from xivo_test_helpers import until
+from wazo_test_helpers import until
 
 
 @given('I listen on the bus for "{event_name}" messages')

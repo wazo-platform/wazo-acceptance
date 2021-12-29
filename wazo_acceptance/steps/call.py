@@ -3,7 +3,7 @@
 
 from behave import then, when
 from hamcrest import assert_that, is_, equal_to
-from xivo_test_helpers import until
+from wazo_test_helpers import until
 
 
 @then('"{firstname} {lastname}" call is "{status}"')
