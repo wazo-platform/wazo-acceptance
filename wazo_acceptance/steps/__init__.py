@@ -29,6 +29,7 @@ from .info import *  # noqa
 from .ivr import *  # noqa
 from .logrotate import *  # noqa
 from .monit import *  # noqa
+from .outcall import *  # noqa
 from .parking_lot import *  # noqa
 from .phone_call import *  # noqa
 from .pickup import *  # noqa

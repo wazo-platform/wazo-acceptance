@@ -1,4 +1,4 @@
-# Copyright 2013-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -56,6 +56,15 @@ class Context:
         else:
             context['incall_ranges'] = ranges
             self._confd_client.contexts.update(context)
+
+    def create_outcall_context(self, external_name, internal_name):
+        context = self._find_by(name=external_name)
+        internal_context = self._find_by(name=internal_name)
+        if not context:
+            context_data = {'name': 'to-extern', 'label': 'to-extern', 'type': 'outcall'}
+            context = self._confd_client.contexts.create(context_data)
+
+        self._confd_client.contexts(internal_context).update_contexts([{'id': context['id']}])
 
     def _find_by(self, **kwargs):
         contexts = self._confd_client.contexts.list(recurse=True, **kwargs)['items']

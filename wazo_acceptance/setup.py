@@ -161,6 +161,7 @@ def setup_helpers(context):
     context.helpers.ivr = helpers.IVR(context)
     context.helpers.line = helpers.Line(context)
     context.helpers.monit = helpers.Monit(context)
+    context.helpers.outcall = helpers.Outcall(context)
     context.helpers.parking_lot = helpers.ParkingLot(context)
     context.helpers.pickup = helpers.Pickup(context)
     context.helpers.provd = helpers.Provd(context)
