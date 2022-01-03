@@ -1,4 +1,4 @@
-# Copyright 2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2021-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -26,12 +26,12 @@ class Outcall:
         self._context.add_cleanup(self._confd_client.outcalls(outcall).update_trunks, trunks)
 
     def get_by(self, **kwargs):
-        user = self._find_by(**kwargs)
-        if not user:
+        outcall = self._find_by(**kwargs)
+        if not outcall:
             raise Exception('Confd outcall not found: {}'.format(kwargs))
-        return user
+        return outcall
 
     def _find_by(self, **kwargs):
-        users = self._confd_client.outcalls.list(**kwargs)['items']
-        for user in users:
-            return user
+        outcalls = self._confd_client.outcalls.list(**kwargs)['items']
+        for outcall in outcalls:
+            return outcall
