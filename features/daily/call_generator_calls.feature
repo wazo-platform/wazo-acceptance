@@ -85,16 +85,16 @@ Feature: Call Generation
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | username | password | with_token |
       | Donald    | Trump    | 1001  | default | donald   | trump    | no         |
-      | Vladimir  | Poutine  |       |         | vladimir | poutine  | yes        |
-    Given "Vladimir Poutine" has lines:
+      | Darth     | Vader    |       |         | darth    | vader    | yes        |
+    Given "Darth Vader" has lines:
       | name  | exten | context | with_phone |
       | line1 | 1002  | default | yes        |
       | line2 | 1002  | default | yes        |
     Given "Donald Trump" calls "1002"
-    When "Vladimir Poutine" answers on its contact "1"
-    When "Vladimir Poutine" relocates its call to its contact "2"
-    When "Vladimir Poutine" answers on its contact "2"
-    Then "Vladimir Poutine" is talking to "Donald Trump" on its contact "2"
+    When "Darth Vader" answers on its contact "1"
+    When "Darth Vader" relocates its call to its contact "2"
+    When "Darth Vader" answers on its contact "2"
+    Then "Darth Vader" is talking to "Donald Trump" on its contact "2"
 
   Scenario: Bus messages on hold and resume
     Given there are telephony users with infos:
