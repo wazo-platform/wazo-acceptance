@@ -1,4 +1,4 @@
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -98,6 +98,11 @@ def step_user_hangs_up(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     phone.hangup()
 
+
+@step('"{tracking_id}" hangs up on its contact "{contact_number}"')
+def step_user_hangs_up(context, tracking_id, contact_number):
+    phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
+    phone.hangup()
 
 @step('"{tracking_id}" calls "{exten}" and waits until the end')
 def step_a_calls_exten_and_waits_until_the_end(context, tracking_id, exten):
