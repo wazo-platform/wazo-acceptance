@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -81,7 +81,8 @@ def given_there_are_telephony_users_with_infos(context):
 
         endpoint = body.get('protocol', 'sip')
         if endpoint == 'sip':
-            name = '-'.join([firstname, lastname])
+            random_suffix = context.helpers.utils.random_string(4)
+            name = '-'.join([firstname, lastname, random_suffix])
             sip_body = context.helpers.endpoint_sip.generate_form(name)
             sip = context.helpers.endpoint_sip.create(sip_body)
             context.helpers.line.add_endpoint_sip(line, sip)
@@ -139,7 +140,8 @@ def given_user_has_lines(context, firstname, lastname):
 
         endpoint = body.get('endpoint', 'sip')
         if endpoint == 'sip':
-            name = '-'.join([firstname, lastname, body['name']])
+            random_suffix = context.helpers.utils.random_string(4)
+            name = '-'.join([firstname, lastname, body['name'], random_suffix])
             sip_body = context.helpers.endpoint_sip.generate_form(name, body.get('webrtc'))
             sip = context.helpers.endpoint_sip.create(sip_body)
             context.helpers.line.add_endpoint_sip(line, sip)
