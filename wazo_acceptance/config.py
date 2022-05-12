@@ -1,4 +1,4 @@
-# Copyright 2014-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2014-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -35,6 +35,10 @@ DEFAULT_INSTANCE_CONFIG = {
     },
     'amid': {
         'verify_certificate': False,
+    },
+    'ari': {
+        'username': 'xivo',
+        'password': 'Nasheow8Eag',
     },
     'auth': {
         'verify_certificate': False,
@@ -135,3 +139,5 @@ def _config_update_host(config):
     )
     for service in services:
         config[service].setdefault('host', wazo_host)
+
+    config['ari']['base_url'] = f'http://{wazo_host}:5039'

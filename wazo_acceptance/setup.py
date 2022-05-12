@@ -1,6 +1,7 @@
-# Copyright 2015-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import ari
 import logging
 
 from requests.exceptions import HTTPError
@@ -37,6 +38,10 @@ def setup_amid_client(context):
     context.amid_client = AmidClient(**context.wazo_config['amid'])
     context.amid_client.set_token(context.token)
     context.token_pubsub.subscribe('new-token-id', context.amid_client.set_token)
+
+
+def setup_ari_client(context):
+    context.ari_client = ari.connect(**context.wazo_config['ari'])
 
 
 def setup_call_logd_client(context):
