@@ -28,6 +28,29 @@ from .sysutils import RemoteSysUtils
 logger = logging.getLogger(__name__)
 
 
+class ARIClientLazy:
+    def __init__(self, *args, **kwargs):
+        self._client = None
+        self._connect_args = args
+        self._connect_kwargs = kwargs
+
+    @classmethod
+    def connect(cls, *args, **kwargs):
+        return cls(*args, **kwargs)
+
+    def __getattr__(self, attr):
+        if self._client is None:
+            self._client = self._create_client()
+
+        return getattr(self._client, attr)
+
+    def _create_client(self):
+        return ari.connect(*self._connect_args, **self._connect_kwargs)
+
+    def _reset(self):
+        self._client = None
+
+
 def setup_agentd_client(context):
     context.agentd_client = AgentdClient(**context.wazo_config['agentd'])
     context.agentd_client.set_token(context.token)
@@ -41,7 +64,7 @@ def setup_amid_client(context):
 
 
 def setup_ari_client(context):
-    context.ari_client = ari.connect(**context.wazo_config['ari'])
+    context.ari_client = ARIClientLazy.connect(**context.wazo_config['ari'])
 
 
 def setup_call_logd_client(context):
