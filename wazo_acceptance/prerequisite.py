@@ -1,4 +1,4 @@
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -123,6 +123,9 @@ def run(config_dir, instance_name):
 
     logger.debug('Configuring postgresql debug')
     _configure_postgresql_debug(context)
+
+    logger.debug('Configuring ARI...')
+    _allow_ari_listen_on_all_interfaces(context)
 
 
 def _configure_rabbitmq(context):
@@ -282,6 +285,11 @@ def _configure_postgresql_debug(context):
     pg_is_running = context.remote_sysutils.is_process_running('postgresql@11-main')
     if pg_is_running:
         context.remote_sysutils.reload_service('postgresql')
+
+
+def _allow_ari_listen_on_all_interfaces(context):
+    copy_asset_to_server_permanently(context, '02-ari-listen-all.conf', '/etc/asterisk/http.d')
+    context.helpers.asterisk.send_to_asterisk_cli('module reload http')
 
 
 def _enable_wazo_services_debug(context):

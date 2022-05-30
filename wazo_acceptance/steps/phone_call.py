@@ -6,6 +6,8 @@ import time
 from behave import step, then, when
 from hamcrest import (
     assert_that,
+    has_entries,
+    has_length,
     not_,
 )
 from wazo_test_helpers import until
@@ -243,3 +245,33 @@ def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, 
     phone = context.helpers.sip_phone.register_and_track_phone(incall_name, sip)
     until.true(phone.is_registered, tries=3)
     phone.call(exten)
+
+
+@then('"{tracking_id}" hears the sound file "{sound_file_name}"')
+def then_user_hears_the_sound_file(context, tracking_id, sound_file_name):
+    phone = context.phone_register.get_phone(tracking_id)
+    channel_id = until.return_(_phone_has_one_channel, context, tracking_id, phone, timeout=5)
+    until.assert_(
+        _sound_is_playing, context, channel_id, sound_file_name,
+        timeout=8,
+        message='The sound {sound_file_name} is not playing'
+    )
+
+
+def _phone_has_one_channel(context, tracking_id, phone):
+    channel_ids = context.ari_client.endpoints.get(tech='PJSIP', resource=phone.sip_username).json['channel_ids']
+    assert_that(
+        channel_ids,
+        has_length(1),
+        f'Cannot choose an active channel for "{tracking_id}" (sip:{phone.sip_username})'
+    )
+    channel_id = channel_ids[0]
+    return channel_id
+
+
+def _sound_is_playing(context, channel_id, sound_file_name):
+    channel = context.ari_client.channels.get(channelId=channel_id)
+    assert_that(channel.json['dialplan'], has_entries({
+        'app_name': 'Playback',
+        'app_data': sound_file_name
+    }))

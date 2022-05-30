@@ -5,9 +5,11 @@ Feature: Agent
       | firstname | lastname | exten | context | agent_number |
       | User      | 003      | 1003  | default | 1003         |
     When I log agent "1003" from phone
+    Then "User 003" hears the sound file "agent-loginok"
     When I wait 3 seconds for the call processing
     Then the agent "1003" is logged
     When I unlog agent "1003" from phone
+    Then "User 003" hears the sound file "vm-goodbye"
     When I wait 3 seconds for the call processing
     Then the agent "1003" is not logged
 

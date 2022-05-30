@@ -1,6 +1,7 @@
-# Copyright 2015-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import ari
 import logging
 
 from requests.exceptions import HTTPError
@@ -27,6 +28,29 @@ from .sysutils import RemoteSysUtils
 logger = logging.getLogger(__name__)
 
 
+class ARIClientLazy:
+    def __init__(self, *args, **kwargs):
+        self._client = None
+        self._connect_args = args
+        self._connect_kwargs = kwargs
+
+    @classmethod
+    def connect(cls, *args, **kwargs):
+        return cls(*args, **kwargs)
+
+    def __getattr__(self, attr):
+        if self._client is None:
+            self._client = self._create_client()
+
+        return getattr(self._client, attr)
+
+    def _create_client(self):
+        return ari.connect(*self._connect_args, **self._connect_kwargs)
+
+    def _reset(self):
+        self._client = None
+
+
 def setup_agentd_client(context):
     context.agentd_client = AgentdClient(**context.wazo_config['agentd'])
     context.agentd_client.set_token(context.token)
@@ -37,6 +61,10 @@ def setup_amid_client(context):
     context.amid_client = AmidClient(**context.wazo_config['amid'])
     context.amid_client.set_token(context.token)
     context.token_pubsub.subscribe('new-token-id', context.amid_client.set_token)
+
+
+def setup_ari_client(context):
+    context.ari_client = ARIClientLazy.connect(**context.wazo_config['ari'])
 
 
 def setup_call_logd_client(context):

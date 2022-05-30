@@ -1,4 +1,4 @@
-# Copyright 2013-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -79,10 +79,12 @@ def set_wazo_instance(context, instance_name, instance_config, debug_config):
     setup.setup_ssh_client(context)
     logger.debug("setup auth token...")
     setup.setup_auth_token(context)
-    logger.debug("setup amid client...")
-    setup.setup_amid_client(context)
     logger.debug("setup agentd client...")
     setup.setup_agentd_client(context)
+    logger.debug("setup amid client...")
+    setup.setup_amid_client(context)
+    logger.debug("setup ari client...")
+    setup.setup_ari_client(context)
     logger.debug("setup call logd client...")
     setup.setup_call_logd_client(context)
     logger.debug("setup calld client...")
