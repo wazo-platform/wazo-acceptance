@@ -35,7 +35,7 @@ wazo_restore() {
 wazo_backup_db() {
     wazo-service stop
     service postgresql restart
-    xivo-backup db db
+    wazo-backup db db
     wazo-service start
 }
 

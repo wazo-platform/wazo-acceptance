@@ -142,7 +142,7 @@ def _configure_auth_users(context):
         password='hidden',
         acl=[
             'agentd.#',
-            'amid.action.*.create',
+            'amid.#',
             'auth.#',
             'call-logd.#',
             'calld.#',

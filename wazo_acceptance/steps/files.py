@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -55,7 +55,7 @@ def then_backup_files_successfully_rotated(context):
     ]
 
     context.remote_sysutils.send_command(
-        ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup']
+        ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/wazo-backup']
     )
 
     expected_files = [file_.format(num='1') for file_ in rotated_files]
@@ -68,7 +68,7 @@ def then_backup_files_successfully_rotated(context):
         )
 
     context.remote_sysutils.send_command(
-        ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/xivo-backup']
+        ['/usr/sbin/logrotate', '-f', '/etc/logrotate.d/wazo-backup']
     )
 
     expected_files = [file_.format(num='2') for file_ in rotated_files]
