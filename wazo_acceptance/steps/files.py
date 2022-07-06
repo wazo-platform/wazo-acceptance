@@ -14,7 +14,7 @@ from hamcrest import (
     none,
 )
 
-BACKUP_DIR = '/var/backups/xivo'
+BACKUP_DIR = '/var/backups/wazo'
 ASTERISK_VM_PATH = '/var/spool/asterisk/voicemail'
 MOH_PATH = '/usr/share/asterisk/moh/default'
 ASTERISK_SOUND_PATH = '/usr/share/asterisk/sounds/en'
