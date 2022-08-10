@@ -1,12 +1,14 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
 import functools
 import queue
 import threading
+
 from contextlib import contextmanager
 from hamcrest import assert_that, has_entries
+from wazo_test_helpers import until
 
 logger = logging.getLogger(__name__)
 tasks = None
@@ -104,6 +106,8 @@ class Bus:
                 functools.partial(self._save_event, event)
             )
         self._start()
+        until.true(lambda: self._websocketd_client._is_running, interval=0.5, tries=10)
+
         self._context.add_cleanup(self._stop)
 
     def _save_event(self, name, event):
