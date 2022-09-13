@@ -170,3 +170,36 @@ Feature: Boss Secretary Filter
     Then "Angel 001" is hungup
     Then "Angel 002" is ringing
     # NOTE(fblackburn): if surrogates hangup, recipients will not ring
+
+  Scenario: Strategy "all" with multi-lines
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | with_phone |
+      | Charlie   | Unknown  |       |         |            |
+      | Angel     | 001      |       |         |            |
+      | Angel     | 002      |       |         |            |
+      | Bad       | Guy      |  1010 | default | yes        |
+    Given "Charlie Unknown" has lines:
+      | name  | exten | context | with_phone |
+      | charlieline1 | 1001  | default | yes        |
+      | charlieline2 | 1001  | default | yes        |
+    Given "Angel 001" has lines:
+      | name        | exten | context | with_phone |
+      | angel1line1 |  1002 | default | yes        |
+      | angel1line2 |  1002 | default | yes        |
+    Given "Angel 002" has lines:
+      | name        | exten | context | with_phone |
+      | angel2line1 |  1003 | default | yes        |
+      | angel2line2 |  1003 | default | yes        |
+    Given there are call filters with infos:
+        | name             | strategy | recipients      | surrogates          |
+        | Charlie's Angels | all      | Charlie Unknown | Angel 001,Angel 002 |
+    Given "Angel 001" enable call filter "Charlie's Angels"
+    Given "Angel 002" enable call filter "Charlie's Angels"
+    When "Bad Guy" calls "1001"
+    When I wait 2 seconds for the call processing
+    Then "Charlie Unknown" is ringing on its contact "1"
+    Then "Charlie Unknown" is ringing on its contact "2"
+    Then "Angel 001" is ringing on its contact "1"
+    Then "Angel 001" is ringing on its contact "2"
+    Then "Angel 002" is ringing on its contact "1"
+    Then "Angel 002" is ringing on its contact "2"
