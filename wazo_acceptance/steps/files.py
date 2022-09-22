@@ -14,6 +14,7 @@ from hamcrest import (
     none,
 )
 
+AUTOPROV_WIZARD_FILE = '/etc/asterisk/pjsip.d/05-autoprov-wizard.conf'
 BACKUP_DIR = '/var/backups/wazo'
 ASTERISK_VM_PATH = '/var/spool/asterisk/voicemail'
 MOH_PATH = '/usr/share/asterisk/moh/default'
@@ -152,3 +153,18 @@ def given_user_has_no_call_recording(context, firstname, lastname):
         return
     command = ['find', path, '-name', f'*-{exten}-*', '-type', 'f', '-delete']
     context.ssh_client.check_call(command)
+
+
+@then('autoprov endpoint language should be correctly configured as "{expected_language}"')
+def then_the_autoprov_language_is_setup_correctly(context, expected_language):
+    _check = _check_language_is_setup_correctly(context, expected_language)
+    assert_that(
+        _check,
+        equal_to(True),
+    )
+
+
+def _check_language_is_setup_correctly(context, expected_language):
+    file_content = context.remote_sysutils.get_content_file(AUTOPROV_WIZARD_FILE)
+    pattern = f'language = {expected_language}'
+    return True if pattern in file_content else False

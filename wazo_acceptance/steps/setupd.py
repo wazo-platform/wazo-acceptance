@@ -13,3 +13,13 @@ def when_i_pass_the_setup(context):
         'engine_license': True,
     }
     context.setupd_client.setup.create(body)
+
+@when('I pass the setup with "{setup_language}" as default language')
+def when_i_pass_the_setup_with_specific_language(context, setup_language):
+    body = {
+        'engine_internal_address': '192.168.32.240',
+        'engine_language': setup_language,
+        'engine_password': 'wazosecret',
+        'engine_license': True,
+    }
+    context.setupd_client.setup.create(body)
