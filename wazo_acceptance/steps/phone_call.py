@@ -13,6 +13,7 @@ from hamcrest import (
 from wazo_test_helpers import until
 
 CHAN_PREFIX = 'PJSIP'
+NB_RETRY = 5
 
 
 @step('"{tracking_id}" calls "{exten}"')
@@ -24,37 +25,37 @@ def step_a_calls_exten(context, tracking_id, exten):
 @step('"{tracking_id}" is ringing')
 def step_user_is_ringing(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
-    until.true(phone.is_ringing, tries=3)
+    until.true(phone.is_ringing, tries=NB_RETRY)
 
 
 @step('"{tracking_id}" is ringing showing "{callerid}"')
 def step_user_is_ringing_showing_callerid(context, tracking_id, callerid):
     phone = context.phone_register.get_phone(tracking_id)
-    until.true(phone.is_ringing_showing, callerid, tries=3)
+    until.true(phone.is_ringing_showing, callerid, tries=NB_RETRY)
 
 
 @step('"{tracking_id}" is ringing on its contact "{contact_number}"')
 def step_user_is_ringing_on_contact_number(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
-    until.true(phone.is_ringing, tries=3)
+    until.true(phone.is_ringing, tries=NB_RETRY)
 
 
 @step('"{tracking_id}" is holding')
 def step_user_is_holding(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
-    until.true(phone.is_holding, context, tries=3)
+    until.true(phone.is_holding, context, tries=NB_RETRY)
 
 
 @step('"{tracking_id}" is hungup')
 def step_user_is_hungup(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
-    until.true(phone.is_hungup, tries=3)
+    until.true(phone.is_hungup, tries=NB_RETRY)
 
 
 @step('"{tracking_id}" is hungup on its contact "{contact_number}"')
 def step_user_is_hungup_on_its_contact(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
-    until.true(phone.is_hungup, tries=3)
+    until.true(phone.is_hungup, tries=NB_RETRY)
 
 
 @step('"{tracking_id}" is hungup immediately')
@@ -67,20 +68,20 @@ def step_user_is_hungup_immediately(context, tracking_id):
 @step('"{tracking_id}" is talking')
 def step_user_is_talking(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
-    until.true(phone.is_talking, tries=3)
+    until.true(phone.is_talking, tries=NB_RETRY)
 
 
 @step('"{tracking_id}" is talking to "{other_party_id}" on its contact "{contact_number}"')
 def step_user_is_talking_to_other_party_with_contact(context, tracking_id, other_party_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
-    until.true(phone.is_talking, tries=3)
+    until.true(phone.is_talking, tries=NB_RETRY)
     assert_that(phone.is_talking_to(other_party_id))
 
 
 @step('"{tracking_id}" is talking to "{callerid}"')
 def step_user_is_talking_to(context, tracking_id, callerid):
     phone = context.phone_register.get_phone(tracking_id)
-    until.true(phone.is_talking_to, callerid, tries=3)
+    until.true(phone.is_talking_to, callerid, tries=NB_RETRY)
 
 
 @step('"{tracking_id}" answers')
@@ -243,7 +244,7 @@ def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, 
     time.sleep(1)
 
     phone = context.helpers.sip_phone.register_and_track_phone(incall_name, sip)
-    until.true(phone.is_registered, tries=3)
+    until.true(phone.is_registered, tries=NB_RETRY)
     phone.call(exten)
 
 
