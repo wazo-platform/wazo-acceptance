@@ -16,7 +16,7 @@ Feature: Voicemail
   Scenario: Check voicemail message
     Given there are telephony users with infos:
       | firstname | lastname | number | context | voicemail_name | voicemail_number | voicemail_context |
-      | George    | Hanson   | 1801   | default | George Hanson  | 1801             | default           |
+      | Georgi    | Hanson   | 1801   | default | Georgi Hanson  | 1801             | default           |
     Given I listen on the bus for "user_voicemail_message_updated" messages
     When a message is left on voicemail "1801@default" by "Billy"
     When a message is checked and kept on voicemail "1801@default"
@@ -30,7 +30,7 @@ Feature: Voicemail
   Scenario: Delete voicemail message
     Given there are telephony users with infos:
       | firstname | lastname | number | context | voicemail_name | voicemail_number | voicemail_context |
-      | George    | Hanson   | 1801   | default | George Hanson  | 1801             | default           |
+      | Georgio   | Hanson   | 1801   | default | Georgio Hanson | 1801             | default           |
     Given I listen on the bus for "user_voicemail_message_deleted" messages
     When a message is left on voicemail "1801@default" by "Billy"
     When a message is checked and deleted on voicemail "1801@default"
