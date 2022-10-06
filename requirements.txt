@@ -20,6 +20,7 @@ https://github.com/wazo-platform/xivo-lib-python/archive/master.zip
 PyHamcrest
 SQLAlchemy
 behave
+importlib_metadata==1.6.0  # from kombu
 kombu==4.6.11
 psycopg2
 python-consul==0.7.1
