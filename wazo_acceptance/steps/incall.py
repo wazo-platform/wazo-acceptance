@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -65,7 +65,7 @@ def given_there_is_an_incall_to_the_queue(context, exten, exten_context, queue_n
 
 @given('there is an incall "{exten}@{exten_context}" to the group "{group_name}"')
 def given_there_is_an_incall_to_the_group(context, exten, exten_context, group_name):
-    group = context.helpers.group.get_by(label=group_name)
+    group = context.helpers.confd_group.get_by(label=group_name)
 
     body = {'destination': {'type': 'group', 'group_id': group['id']}}
     incall = context.helpers.incall.create(body)
