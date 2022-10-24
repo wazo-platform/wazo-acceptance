@@ -95,10 +95,12 @@ Feature: Boss Secretary Filter
     Then "Angel 001" is hungup
     Then "Angel 002" is hungup
     When "Charlie Unknown" hangs up
+    When I wait 1 seconds for the call processing
     Then "Charlie Unknown" is hungup
     Then "Angel 001" is ringing showing "Bad Guy - FILTER"
     Then "Angel 002" is hungup
     When "Angel 001" hangs up
+    When I wait 1 seconds for the call processing
     Then "Charlie Unknown" is hungup
     Then "Angel 001" is hungup
     Then "Angel 002" is ringing showing "Bad Guy - FILTER"
