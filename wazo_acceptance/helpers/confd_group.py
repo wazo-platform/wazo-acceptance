@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -13,9 +13,13 @@ class ConfdGroup:
         if timeout:
             body['timeout'] = int(timeout)
 
-        with self._context.helpers.bus.wait_for_asterisk_reload(queue=True):
+        modules = {'queue': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             group = self._confd_client.groups.create(body)
-        self._context.add_cleanup(self._confd_client.groups.delete, group)
+
+        delete = self._confd_client.groups.delete
+        self._context.add_cleanup(wait_reload(**modules)(delete), group)
         return group
 
     def get_by(self, **kwargs):
@@ -30,9 +34,13 @@ class ConfdGroup:
             return group
 
     def add_extension(self, group, extension):
-        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
+        modules = {'dialplan': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             self._confd_client.groups(group).add_extension(extension)
-        self._context.add_cleanup(self._confd_client.groups(group).remove_extension, extension)
+
+        remove = self._confd_client.groups(group).remove_extension
+        self._context.add_cleanup(wait_reload(**modules)(remove), extension)
 
     def update_fallbacks(self, group, fallbacks):
         self._confd_client.groups(group).update_fallbacks(fallbacks)

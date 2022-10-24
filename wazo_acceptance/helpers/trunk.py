@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -14,6 +14,10 @@ class Trunk:
         return trunk
 
     def add_endpoint_sip(self, trunk, sip):
-        with self._context.helpers.bus.wait_for_asterisk_reload(pjsip=True):
+        modules = {'pjsip': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             self._confd_client.trunks(trunk).add_endpoint_sip(sip)
-        self._context.add_cleanup(self._confd_client.trunks(trunk).remove_endpoint_sip, sip)
+
+        remove = self._confd_client.trunks(trunk).remove_endpoint_sip
+        self._context.add_cleanup(wait_reload(**modules)(remove), sip)
