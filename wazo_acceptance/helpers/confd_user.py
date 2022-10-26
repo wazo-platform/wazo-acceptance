@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from requests import HTTPError
@@ -26,21 +26,32 @@ class ConfdUser:
             if record_enabled:
                 body[field] = record_enabled == 'yes'
 
-        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True, queue=True):
+        modules = {'dialplan': True, 'pjsip': True, 'queue': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             user = self._confd_client.users.create(body)
-        self._context.add_cleanup(self._confd_client.users.delete, user)
+
+        delete = self._confd_client.users.delete
+        self._context.add_cleanup(wait_reload(**modules)(delete), user)
         return user
 
     def add_line(self, user, line):
-        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True):
+        modules = {'dialplan': True, 'pjsip': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             self._confd_client.users(user).add_line(line)
-        self._context.add_cleanup(self._confd_client.users(user).remove_line, line)
+
+        remove = self._confd_client.users(user).remove_line
+        self._context.add_cleanup(wait_reload(**modules)(remove), line)
 
     def add_voicemail(self, user, voicemail):
-        confd_user = self._confd_client.users(user)
-        with self._context.helpers.bus.wait_for_asterisk_reload(pjsip=True):
-            confd_user.add_voicemail(voicemail)
-        self._context.add_cleanup(confd_user.remove_voicemail)
+        modules = {'pjsip': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
+            self._confd_client.users(user).add_voicemail(voicemail)
+
+        remove = self._confd_client.users(user).remove_voicemail
+        self._context.add_cleanup(wait_reload(**modules)(remove))
 
     def update_fallback(self, user, fallback):
         fallbacks = self._confd_client.users(user).list_fallbacks()

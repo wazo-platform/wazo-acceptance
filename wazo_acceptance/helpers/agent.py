@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -9,9 +9,13 @@ class Agent:
         self._confd_client = context.confd_client
 
     def create(self, body):
-        with self._context.helpers.bus.wait_for_asterisk_reload(queue=True):
+        modules = {'queue': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             agent = self._confd_client.agents.create(body)
-        self._context.add_cleanup(self._confd_client.agents.delete, agent)
+
+        delete = self._confd_client.agents.delete
+        self._context.add_cleanup(wait_reload(**modules)(delete), agent)
         return agent
 
     def add_skill(self, agent, skill, weight=None):

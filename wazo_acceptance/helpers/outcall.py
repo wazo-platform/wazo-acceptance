@@ -14,16 +14,24 @@ class Outcall:
         return outcall
 
     def add_extension(self, outcall, extension):
-        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
+        modules = {'dialplan': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             self._confd_client.outcalls(outcall).add_extension(extension)
-        self._context.add_cleanup(self._confd_client.outcalls(outcall).remove_extension, extension)
+
+        remove = self._confd_client.outcalls(outcall).remove_extension
+        self._context.add_cleanup(wait_reload(**modules)(remove), extension)
 
     def add_trunk(self, outcall, trunk):
-        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
+        modules = {'dialplan': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             trunks = self._confd_client.outcalls.get(outcall)['trunks']
             new_trunks = [{'id': trunk['id']}, *trunks]
             self._confd_client.outcalls(outcall).update_trunks(new_trunks)
-        self._context.add_cleanup(self._confd_client.outcalls(outcall).update_trunks, trunks)
+
+        update = self._confd_client.outcalls(outcall).update_trunks
+        self._context.add_cleanup(wait_reload(**modules)(update), trunks)
 
     def get_by(self, **kwargs):
         outcall = self._find_by(**kwargs)

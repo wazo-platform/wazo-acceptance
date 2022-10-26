@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -17,9 +17,13 @@ class IVR:
         if max_tries:
             body['max_tries'] = int(max_tries)
 
-        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
+        modules = {'dialplan': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             ivr = self._confd_client.ivr.create(body)
-        self._context.add_cleanup(self._confd_client.ivr.delete, ivr)
+
+        delete = self._confd_client.ivr.delete
+        self._context.add_cleanup(wait_reload(**modules)(delete), ivr)
         return ivr
 
     def get_by(self, **kwargs):

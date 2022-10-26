@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -9,9 +9,13 @@ class Line:
         self._confd_client = context.confd_client
 
     def create(self, body):
-        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True):
+        modules = {'dialplan': True, 'pjsip': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             line = self._confd_client.lines.create(body)
-        self._context.add_cleanup(self._confd_client.lines.delete, line)
+
+        delete = self._confd_client.lines.delete
+        self._context.add_cleanup(wait_reload(**modules)(delete), line)
         return line
 
     def add_application(self, line, application):
@@ -23,11 +27,19 @@ class Line:
         self._context.add_cleanup(self._confd_client.lines(line).remove_device, device)
 
     def add_endpoint_sip(self, line, sip):
-        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True):
+        modules = {'dialplan': True, 'pjsip': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             self._confd_client.lines(line).add_endpoint_sip(sip)
-        self._context.add_cleanup(self._confd_client.lines(line).remove_endpoint_sip, sip)
+
+        remove = self._confd_client.lines(line).remove_endpoint_sip
+        self._context.add_cleanup(wait_reload(**modules)(remove), sip)
 
     def add_extension(self, line, extension):
-        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True, pjsip=True, queue=True):
+        modules = {'dialplan': True, 'pjsip': True, 'queue': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             self._confd_client.lines(line).add_extension(extension)
-        self._context.add_cleanup(self._confd_client.lines(line).remove_extension, extension)
+
+        remove = self._confd_client.lines(line).remove_extension
+        self._context.add_cleanup(wait_reload(**modules)(remove), extension)

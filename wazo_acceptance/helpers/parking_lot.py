@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -9,9 +9,13 @@ class ParkingLot:
         self._confd_client = context.confd_client
 
     def create(self, body):
-        with self._context.helpers.bus.wait_for_asterisk_reload(parking=True):
+        modules = {'parking': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             parking_lot = self._confd_client.parking_lots.create(body)
-        self._context.add_cleanup(self._confd_client.parking_lots.delete, parking_lot)
+
+        delete = self._confd_client.parking_lots.delete
+        self._context.add_cleanup(wait_reload(**modules)(delete), parking_lot)
         return parking_lot
 
     def add_extension(self, parking_lot, extension):

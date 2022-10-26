@@ -3,6 +3,7 @@
 
 import time
 
+from ari.exceptions import ARINotFound
 from behave import step, then, when
 from hamcrest import (
     assert_that,
@@ -271,7 +272,11 @@ def _phone_has_one_channel(context, tracking_id, phone):
 
 
 def _sound_is_playing(context, channel_id, sound_file_name):
-    channel = context.ari_client.channels.get(channelId=channel_id)
+    try:
+        channel = context.ari_client.channels.get(channelId=channel_id)
+    except ARINotFound as e:
+        raise AssertionError(e)
+
     assert_that(channel.json['dialplan'], has_entries({
         'app_name': 'Playback',
         'app_data': sound_file_name

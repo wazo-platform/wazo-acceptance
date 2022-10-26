@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -26,18 +26,23 @@ class Queue:
         if options:
             body['options'] = options
 
-        with self._context.helpers.bus.wait_for_asterisk_reload(queue=True):
+        modules = {'queue': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             queue = self._confd_client.queues.create(body)
-        self._context.add_cleanup(self._confd_client.queues.delete, queue)
+
+        delete = self._confd_client.queues.delete
+        self._context.add_cleanup(wait_reload(**modules)(delete), queue)
         return queue
 
     def add_extension(self, queue, extension):
-        with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
+        modules = {'dialplan': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             self._context.confd_client.queues(queue).add_extension(extension)
-        self._context.add_cleanup(
-            self._confd_client.queues(queue).remove_extension,
-            extension
-        )
+
+        remove = self._confd_client.queues(queue).remove_extension
+        self._context.add_cleanup(wait_reload(**modules)(remove), extension)
 
     def add_agent_member(self, queue, agent, penalty=0):
         penalty = int(penalty)
@@ -47,11 +52,13 @@ class Queue:
         )
 
     def add_user_member(self, queue, user):
-        with self._context.helpers.bus.wait_for_asterisk_reload(pjsip=True, queue=True):
+        modules = {'pjsip': True, 'queue': True}
+        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
+        with wait_reload(**modules):
             self._context.confd_client.queues(queue).add_user_member(user)
-        self._context.add_cleanup(
-            self._confd_client.queues(queue).remove_user_member, user
-        )
+
+        remove = self._confd_client.queues(queue).remove_user_member
+        self._context.add_cleanup(wait_reload(**modules)(remove), user)
 
     def get_by(self, **kwargs):
         queue = self.find_by(**kwargs)
