@@ -43,6 +43,9 @@ def before_scenario(context, scenario):
         with context._use_with_behave_mode():
             context.fail_on_cleanup_errors = True
 
+    if hasattr(context, 'helpers'):
+        context.helpers.asterisk.wait_until_reload_completed()
+
 
 # Implicitly defined by behave
 def after_scenario(context, scenario):
