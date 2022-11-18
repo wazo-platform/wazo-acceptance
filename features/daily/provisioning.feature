@@ -1,7 +1,7 @@
 Feature: Provisioning
 
   Scenario: Fail2ban test for wazo-provd
-    Given the latest plugin "xivo-aastra" is installed
+    Given the latest plugin "wazo-aastra" is installed
     Given the file "/var/log/wazo-provd-fail2ban.log" is empty
     When the following devices are created via HTTP requests to the provisioning server:
       | mac               | path                    | user-agent                                        |
@@ -9,11 +9,11 @@ Feature: Provisioning
     Then fail2ban-regex for "wazo-provd" matches 2 lines
 
   Scenario: Synchronize two devices behind NAT
-    Given the latest plugin "xivo-aastra" is installed
+    Given the latest plugin "wazo-aastra" is installed
     Given there are devices with infos:
       | mac               | latest plugin of |
-      | 00:11:22:33:44:01 | xivo-aastra      |
-      | 00:11:22:33:44:02 | xivo-aastra      |
+      | 00:11:22:33:44:01 | wazo-aastra      |
+      | 00:11:22:33:44:02 | wazo-aastra      |
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | protocol | device            |
       | User      | 01       | 1001  | default | sip      | 00:11:22:33:44:01 |
