@@ -1,4 +1,4 @@
-# Copyright 2013-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, step, when
@@ -9,7 +9,7 @@ def given_there_are_devices_with_infos(context):
     context.table.require_columns(['mac'])
     for row in context.table:
         body = row.as_dict()
-        plugin_type = body.pop('latest plugin of', None)
+        plugin_type = body.pop('plugin version', None)
         if plugin_type:
             body['plugin'] = context.helpers.provd.get_latest_plugin_name(plugin_type)
 

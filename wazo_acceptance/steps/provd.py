@@ -1,4 +1,4 @@
-# Copyright 2013-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -14,13 +14,13 @@ from hamcrest import (
     not_,
 )
 
-STABLE_URL = 'http://provd.wazo.community/plugins/1/stable/'
+STABLE_URL = 'http://provd.wazo.community/plugins/2/stable/'
 
 
-@given('the latest plugin "{plugin}" is installed')
-def given_the_latest_plugin_is_installed(context, plugin):
+@given('the plugin "{plugin}" version "{version}" is installed')
+def given_the_latest_plugin_is_installed(context, plugin, version):
     context.helpers.provd.update_plugin_list(STABLE_URL)
-    context.helpers.provd.install_latest_plugin(plugin)
+    context.helpers.provd.install_latest_plugin(f'{plugin}-{version}')
 
 
 @then('the provd config "{config_id}" has the following values on "{instance}"')
