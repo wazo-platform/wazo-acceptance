@@ -21,7 +21,7 @@ Feature: Provisioning
       | User      | 02       | 1002  | default | sip      | 00:11:22:33:44:02 |
     Given the following devices are created via HTTP requests to the provisioning server:
       | path                    | user-agent                                                      |
-      | Aastra/001122334401.cfg | Aastra6731i MAC:00-11-22-33-44-01 V:5.0.0.1018-SIP              |
+      | Aastra/001122334401.cfg | Aastra6873i MAC:00-11-22-33-44-01 V:5.0.0.1018-SIP              |
       | 001122334402-user.cfg   | FileTransport PolycomVVX-VVX_101-UA/5.4.3.1014 Type/Application |
     When I synchronize the device with mac "00:11:22:33:44:01"
     Then I see in the AMI that the line "1001@default" has been synchronized
