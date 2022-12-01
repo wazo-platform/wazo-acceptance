@@ -148,11 +148,6 @@ def setup_config(context, config):
     context.wazo_config = config
 
 
-def setup_consul(context):
-    command = 'cat /var/lib/consul/master_token'.split()
-    context.wazo_config['consul_token'] = context.ssh_client.out_call(command).strip()
-
-
 @debug.logcall
 def setup_ssh_client(context):
     context.ssh_client = SSHClient(

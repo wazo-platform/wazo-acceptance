@@ -103,8 +103,6 @@ def set_wazo_instance(context, instance_name, instance_config, debug_config):
     setup.setup_websocketd_client(context)
     logger.debug("setup tenant...")
     setup.setup_tenant(context)
-    logger.debug("setup consul...")
-    setup.setup_consul(context)
     logger.debug("setup remote sysutils...")
     setup.setup_remote_sysutils(context)
     logger.debug("setup helpers...")
