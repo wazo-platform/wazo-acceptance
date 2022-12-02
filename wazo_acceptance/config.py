@@ -80,12 +80,11 @@ DEFAULT_INSTANCE_CONFIG = {
         'username': 'guest',
         'password': 'guest',
     },
-    'prerequisites': {
-        'nat': {
-            'enabled': False,
-            'local_net': '10.0.0.0/16'
-        },
-    }
+    'nat': {
+        'enabled': False,
+        'local_net': '10.0.0.0/16',
+        'external_ip': None,
+    },
 }
 
 

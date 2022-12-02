@@ -270,12 +270,12 @@ def _configure_consul(context):
 
 
 def _configure_nat(context):
-    if not context.wazo_config['prerequisites']['nat']['enabled']:
+    if not context.wazo_config['nat']['enabled']:
         logger.debug('Skipping NAT configuration')
 
     transport_udp = context.helpers.sip_transport.get_by(name='transport-udp')
-    external_ip = context.wazo_config['wazo_host']
-    local_net = context.wazo_config['prerequisites']['nat']['local_net']
+    external_ip = context.wazo_config['nat']['external_ip']
+    local_net = context.wazo_config['nat']['local_net']
     context.helpers.sip_transport.update_options(
         transport_udp, 'external_media_address', external_ip
     )

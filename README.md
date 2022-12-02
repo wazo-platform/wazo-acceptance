@@ -71,10 +71,10 @@ You can configure NAT support with configuration file:
 ```yaml
 instances:
   default:
-    prerequisites:
-      nat:
-        enabled: true
-        local_net: 10.0.0.0/16
+    nat:
+      enabled: true
+      local_net: 10.0.0.0/16
+      external_ip: 192.168.1.1
 ```
 
 ### linphone
