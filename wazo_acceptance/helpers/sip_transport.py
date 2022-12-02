@@ -25,6 +25,6 @@ class SIPTransport:
 
     def update_options(self, sip_transport, new_option, value):
         options = sip_transport['options']
-        new_options = [option for option in options if option[0] != new_option]
+        new_options = [[name, value] for name, value in options if name != new_option]
         new_options.append([new_option, value])
         sip_transport['options'] = new_options
