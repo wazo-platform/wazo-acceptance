@@ -112,6 +112,9 @@ def run(config_dir, instance_name):
     context.helpers.context.update_contextnumbers_incall('from-extern', 1000, 4999, 4)
     context.helpers.context.create_outcall_context('to-extern', 'default')
 
+    logger.debug('Configuring NAT')
+    _configure_nat(context)
+
     logger.debug('Configuring asterisk')
     _configure_asterisk(context)
 
@@ -264,6 +267,26 @@ def _configure_consul(context):
     consul_is_running = context.remote_sysutils.is_process_running('consul')
     if consul_is_running:
         context.remote_sysutils.restart_service('consul')
+
+
+def _configure_nat(context):
+    external_ip = context.wazo_config['nat']['external_ip']
+    local_net = context.wazo_config['nat']['local_net']
+    if not external_ip or not local_net:
+        logger.debug('Skipping NAT configuration: Missing "external_ip" or "local_net" setting')
+        return
+
+    transport_udp = context.helpers.sip_transport.get_by(name='transport-udp')
+    context.helpers.sip_transport.update_options(
+        transport_udp, 'external_media_address', external_ip
+    )
+    context.helpers.sip_transport.update_options(
+        transport_udp, 'external_signaling_address', external_ip
+    )
+    context.helpers.sip_transport.update_options(
+        transport_udp, 'local_net', local_net
+    )
+    context.helpers.sip_transport.update(transport_udp)
 
 
 def _configure_asterisk(context):

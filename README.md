@@ -50,17 +50,31 @@ values can be found in `wazo_acceptance/config.py`.
 
 For example:
 
-    log_file: /tmp/wazo-acceptance.log
-    debug:
-      global: true
-      acceptance: false
-      linphone: true
-    instances:
-        default:
-          # IP address of the Wazo server
-          wazo_host: 192.168.0.10
+```yaml
+log_file: /tmp/wazo-acceptance.log
+debug:
+  global: true
+  acceptance: false
+  linphone: true
+instances:
+  default:
+    # IP address of the Wazo server
+    wazo_host: 192.168.0.10
 
 ## Debugging
+
+### Behind NAT
+
+If all tests with phone don't work. Verify if your server is behind a NAT.
+You can configure NAT support with configuration file:
+
+```yaml
+instances:
+  default:
+    nat:
+      local_net: 10.0.0.0/16
+      external_ip: 172.16.1.1
+```
 
 ### linphone
 
@@ -75,6 +89,8 @@ To inspect or send command to linphone:
 
 To get code coverage of wazo_acceptance:
 
-    pip install coverage
-    coverage run --source=wazo_acceptance $(which behave) ...
-    coverage html
+```bash
+pip install coverage
+coverage run --source=wazo_acceptance $(which behave) ...
+coverage html
+```
