@@ -72,9 +72,8 @@ You can configure NAT support with configuration file:
 instances:
   default:
     nat:
-      enabled: true
       local_net: 10.0.0.0/16
-      external_ip: 192.168.1.1
+      external_ip: 172.16.1.1
 ```
 
 ### linphone

@@ -81,8 +81,7 @@ DEFAULT_INSTANCE_CONFIG = {
         'password': 'guest',
     },
     'nat': {
-        'enabled': False,
-        'local_net': '10.0.0.0/16',
+        'local_net': None,
         'external_ip': None,
     },
 }
