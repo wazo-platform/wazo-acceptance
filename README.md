@@ -74,7 +74,7 @@ instances:
     prerequisites:
       nat:
         enabled: true
-        local_net: 10.0.0.0/8
+        local_net: 10.0.0.0/16
 ```
 
 ### linphone
