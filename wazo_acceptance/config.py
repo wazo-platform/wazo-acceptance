@@ -81,6 +81,10 @@ DEFAULT_INSTANCE_CONFIG = {
         'password': 'guest',
     },
     'prerequisites': {
+        'nat': {
+            'enabled': False,
+            'local_net': '10.0.0.0/16'
+        },
         'subnets': [
             '10.0.0.0/8',
             '192.168.0.0/16',

@@ -62,6 +62,20 @@ For example:
 
 ## Debugging
 
+### Behind NAT
+
+If all tests with phone don't work. Verify if your server is behind a NAT.
+You can configure NAT support with configuration file:
+
+```yaml
+instances:
+  default:
+    prerequisites:
+      nat:
+        enabled: true
+        local_net: 10.0.0.0/8
+```
+
 ### linphone
 
 To see linphone ouput, use behave flag `--no-capture`
