@@ -1,4 +1,4 @@
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -31,12 +31,10 @@ class PhoneRegister:
         self._sip_phones[tracking_id].append(phone)
         self._context.add_cleanup(self.remove, tracking_id)
 
-    def clear(self):
-        self._sip_phones.clear()
-        self._registered_contacts = set()
-
     def remove(self, tracking_id):
-        self._sip_phones.pop(tracking_id, None)
+        phones = self._sip_phones.pop(tracking_id, [])
+        for phone in phones:
+            phone.disconnect()
 
     def get_phone(self, tracking_id, position=0):
         return self._sip_phones.get(tracking_id)[position]

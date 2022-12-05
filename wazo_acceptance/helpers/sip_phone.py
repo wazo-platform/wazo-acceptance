@@ -1,4 +1,4 @@
-# Copyright 2015-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
@@ -58,6 +58,9 @@ class SIPPhone:
         self._name = config.sip_name
         self.sip_port = config.sip_port
         self.rtp_port = config.rtp_port
+
+    def disconnect(self):
+        self._session.close()
 
     def answer(self, timeout=5):
         start = time.time()
