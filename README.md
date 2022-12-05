@@ -78,7 +78,7 @@ instances:
 
 ### linphone
 
-To see linphone ouput, use behave flag `--no-capture`
+To see linphone ouput, use behave flag `--no-capture` and `--no-color`
 
 To inspect or send command to linphone:
 
