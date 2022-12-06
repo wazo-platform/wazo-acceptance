@@ -22,7 +22,7 @@ SQLAlchemy
 behave
 importlib_metadata==1.6.0  # from kombu
 kombu==4.6.11
-psycopg2
+psycopg2-binary
 python-consul==0.7.1
 pytz==2019.1
 pyyaml==3.13
