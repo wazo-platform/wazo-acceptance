@@ -256,7 +256,7 @@ def then_user_hears_the_sound_file(context, tracking_id, sound_file_name):
     until.assert_(
         _sound_is_playing, context, channel_id, sound_file_name,
         timeout=8,
-        message='The sound {sound_file_name} is not playing'
+        message=f'The sound {sound_file_name} is not playing'
     )
 
 
