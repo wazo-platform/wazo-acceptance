@@ -25,6 +25,7 @@ DEFAULT_GLOBAL_CONFIG = {
     },
     'instances': {}
 }
+
 DEFAULT_INSTANCE_CONFIG = {
     'master_host': None,
     'slave_host': None,
@@ -42,6 +43,8 @@ DEFAULT_INSTANCE_CONFIG = {
     },
     'auth': {
         'verify_certificate': False,
+        'username': 'wazo-acceptance',
+        'password': 'hidden'
     },
     'call_logd': {
         'verify_certificate': False,

@@ -141,8 +141,8 @@ def _configure_auth_users(context):
         return
     _create_auth_user(
         context,
-        username='wazo-acceptance',
-        password='hidden',
+        username=context.wazo_config['auth']['username'],
+        password=context.wazo_config['auth']['password'],
         acl=[
             'agentd.#',
             'amid.#',

@@ -25,6 +25,7 @@ from .phone_register import PhoneRegister
 from .ssh import SSHClient
 from .sysutils import RemoteSysUtils
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -99,8 +100,6 @@ def setup_dird_client(context):
 
 def setup_auth_token(context):
     context.auth_client = AuthClient(
-        username='wazo-acceptance',
-        password='hidden',
         **context.wazo_config['auth']
     )
     context.token = auth.new_auth_token(context)
