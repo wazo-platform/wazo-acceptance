@@ -143,7 +143,12 @@ class PhoneFactory:
             logfile = _LinphoneLogWrapper(sys.stdout, prefix=prefix)
 
         phone = SIPPhone(sip_config, logfile=logfile)
-        phone.register()
+        try:
+            phone.register()
+        except LinphoneException:
+            phone.disconnect()
+            raise
+
         return phone
 
     def register_and_track_phone(self, tracking_id, endpoint_sip):
