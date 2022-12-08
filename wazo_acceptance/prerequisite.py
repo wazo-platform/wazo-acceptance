@@ -83,9 +83,6 @@ def run(config_dir, instance_name):
     logger.debug('Configuring python clients tenant')
     setup.setup_tenant(context)
 
-    logger.debug('Configuring Consul')
-    _configure_consul(context)
-
     logger.debug('Configuring RabbitMQ')
     _configure_rabbitmq(context)
 
@@ -260,13 +257,6 @@ def _install_queue_log_helpers(context):
     copy_asset_to_server_permanently(context, 'queue-log-clear-one-agent.sh', '/usr/local/bin')
     copy_asset_to_server_permanently(context, 'queue-log-count-agent-events.sh', '/usr/local/bin')
     copy_asset_to_server_permanently(context, 'queue-log-insert-corrupt-entries.sh', '/usr/local/bin')
-
-
-def _configure_consul(context):
-    copy_asset_to_server_permanently(context, 'public_consul.json', '/etc/consul.d/zz-wazo-acceptance.json')
-    consul_is_running = context.remote_sysutils.is_process_running('consul')
-    if consul_is_running:
-        context.remote_sysutils.restart_service('consul')
 
 
 def _configure_nat(context):

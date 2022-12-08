@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2016-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import subprocess
@@ -27,7 +27,7 @@ BASE_SERVICES = [
     'wazo-sysconfd',
 ]
 
-ALL_SERVICES = ['rabbitmq-server', 'consul', 'postgresql@11-main', 'nginx'] + BASE_SERVICES
+ALL_SERVICES = ['rabbitmq-server', 'postgresql@11-main', 'nginx'] + BASE_SERVICES
 
 MONIT_RUNNING = re.compile(r'^\d+ monit$')
 RUNNING_SERVICE = re.compile(r'^\s+(?:running|unknown)\s+(\S+)$')
