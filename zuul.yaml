@@ -5,3 +5,6 @@
     gate:
       jobs:
         - wazo-acceptance
+    auto-merge:
+      jobs:
+        - noop
