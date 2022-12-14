@@ -27,13 +27,9 @@ class Line:
         self._context.add_cleanup(self._confd_client.lines(line).remove_device, device)
 
     def add_endpoint_sip(self, line, sip):
-        modules = {'dialplan': True, 'pjsip': True}
-        wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
-        with wait_reload(**modules):
-            self._confd_client.lines(line).add_endpoint_sip(sip)
-
+        self._confd_client.lines(line).add_endpoint_sip(sip)
         remove = self._confd_client.lines(line).remove_endpoint_sip
-        self._context.add_cleanup(wait_reload(**modules)(remove), sip)
+        self._context.add_cleanup(remove, sip)
 
     def add_extension(self, line, extension):
         modules = {'dialplan': True, 'pjsip': True, 'queue': True}

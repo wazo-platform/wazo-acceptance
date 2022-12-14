@@ -157,14 +157,6 @@ def given_user_has_no_call_recording(context, firstname, lastname):
 
 @then('autoprov endpoint language should be correctly configured as "{expected_language}"')
 def then_the_autoprov_language_is_setup_correctly(context, expected_language):
-    _check = _check_language_is_setup_correctly(context, expected_language)
-    assert_that(
-        _check,
-        equal_to(True),
-    )
-
-
-def _check_language_is_setup_correctly(context, expected_language):
     file_content = context.remote_sysutils.get_content_file(AUTOPROV_WIZARD_FILE)
-    pattern = f'language = {expected_language}'
-    return True if pattern in file_content else False
+    language_setting = f'language = {expected_language}'
+    assert_that(file_content, contains_string(language_setting))
