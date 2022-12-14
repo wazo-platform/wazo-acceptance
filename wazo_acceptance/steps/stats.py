@@ -1,18 +1,23 @@
-# Copyright 2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
 import pytz
 
 from behave import when, then
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 logger = logging.getLogger('acceptance')
 
 
 @when('I generate contact center stats')
 def when_generate_contact_center_stats(context):
-    std_out_err = context.ssh_client.out_err_call(['wazo-stat fill_db'])
+    now = datetime.now(tz=timezone.utc)
+    # NOTE: Add one second to include calls from the current second
+    end = now + timedelta(seconds=1)
+    end_arg = end.strftime('%Y-%m-%dT%H:%M:%S%z')
+    command = ['wazo-stat', 'fill_db', f'--end={end_arg}']
+    std_out_err = context.ssh_client.out_err_call(command)
     logger.debug(std_out_err)
 
 
