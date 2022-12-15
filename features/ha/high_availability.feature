@@ -25,7 +25,7 @@ Feature: High availability
     | X_type    | proxy_backup | registrar_backup |
     | registrar |              |                  |
 
-  Scenario: HA database synchronisation
+  Scenario: HA database synchronization
     Given the HA is enabled as master on "master"
     Given the HA is enabled as slave on "slave"
     Given there is a user "test-replication" on "master"
