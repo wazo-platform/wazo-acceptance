@@ -4,6 +4,12 @@ Feature: Agent
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | agent_number |
       | User      | 003      | 1003  | default | 1003         |
+    Given there are queues with infos:
+      | name     | label | exten | context |
+      | my-queue | Queue | 3801  | default |
+    Given the queue "my-queue" has agents:
+      | agent_number |
+      | 1003         |
     When I log agent "1003" from phone
     Then "User 003" hears the sound file "agent-loginok"
     When I wait 3 seconds for the call processing

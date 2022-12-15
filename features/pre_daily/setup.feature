@@ -4,6 +4,7 @@ Feature: Setup freshly installed machine
         Then the mirror list contains a line matching "mirror.wazo.community"
 
     Scenario: Wizard is setup successfully when provided with another language
+        Given the "asterisk-sounds-wav-fr-fr" Debian package is installed
         When I pass the setup with "fr_FR" as default language
         Then I can create an admin token
         Then monit does not monitor the service "isc-dhcp-server"

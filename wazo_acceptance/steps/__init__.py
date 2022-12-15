@@ -14,6 +14,7 @@ from .call_permission import *  # noqa
 from .call_log import *  # noqa
 from .conference import *  # noqa
 from .coredump import *  # noqa
+from .debian import *  # noqa
 from .device import *  # noqa
 from .dhcp import *  # noqa
 from .endpoint_sip import *  # noqa
