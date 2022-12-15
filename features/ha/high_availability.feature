@@ -30,5 +30,7 @@ Feature: High availability
     Given the HA is enabled as slave on "slave"
     Given there is a user "test-replication" on "master"
     Given there is no user "test-replication" on "slave"
+    When I start the replication from "master" to unknown
+    Then there is a mail with content "Slave replication failed" on "master"
     When I start the replication from "master" to "slave"
     Then there is a user "test-replication" on "slave"
