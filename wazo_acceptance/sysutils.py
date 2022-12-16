@@ -36,6 +36,10 @@ class RemoteSysUtils:
         command = ['cat', path]
         return self._ssh_client.out_call(command)
 
+    def write_content_file(self, path, content):
+        command = ['echo', '-en', f"'{content}'", '>', path]
+        self._ssh_client.check_call(command)
+
     def wazo_current_datetime(self):
         # The main problem here is the timezone: `date` must give us the date in
         # localtime, because the log files are using localtime dates.

@@ -87,6 +87,41 @@ def then_the_file_filename_does_not_exist(context, file_name, instance):
     assert_that(context.remote_sysutils.path_exists(file_name), is_(False))
 
 
+@then('the file "{file_name}" exists on "{instance}"')
+def then_the_file_filename_exists(context, file_name, instance):
+    context = getattr(context.instances, instance)
+    assert_that(context.remote_sysutils.path_exists(file_name), is_(True))
+
+
+@given('the file "{file_name}" does not exist on "{instance}"')
+def given_the_file_filename_does_not_exist(context, file_name, instance):
+    context = getattr(context.instances, instance)
+    command = ['rm', '-f', file_name]
+    context.remote_sysutils.send_command(command)
+
+
+@given('the file "{file_name}" exists on "{instance}"')
+def given_the_file_filename_exists(context, file_name, instance):
+    context = getattr(context.instances, instance)
+    command = ['touch', file_name]
+    context.remote_sysutils.send_command(command)
+
+
+@then('the file "{file_name}" contains "{expected_line}" on "{instance}"')
+def then_the_file_contains_on_instance(context, file_name, expected_line, instance):
+    context = getattr(context.instances, instance)
+    file_content = context.remote_sysutils.get_content_file(file_name)
+    assert_that(file_content, contains_string(expected_line))
+
+
+@given('the file "{file_name}" does not contain "{content}" on "{instance}"')
+def given_the_file_does_not_contain(context, file_name, content, instance):
+    context = getattr(context.instances, instance)
+    file_content = context.remote_sysutils.get_content_file(file_name)
+    new_content = '\n'.join([x for x in file_content.split('\n') if content not in x])
+    context.remote_sysutils.write_content_file(file_name, new_content)
+
+
 @then('there are cron jobs in "{file_name}" on "{instance}"')
 def then_there_are_cron_jobs_in_file_name_on_instance(context, file_name, instance):
     step_context = context

@@ -111,3 +111,20 @@ def then_there_is_a_mail_with_content_on_instance(context, content, instance):
     mails = host_context.remote_sysutils.get_mails(since=mail_start_time)
     assert len(mails) == 1, f'Invalid mail count: {len(mails)}'
     assert content in mails[0]['body']
+
+
+@when('I execute "{command}" command on "{instance}"')
+def when_i_execute_command_on_instance(context, command, instance):
+    host_context = getattr(context.instances, instance)
+    host_context.remote_sysutils.send_command(command.split())
+
+
+@when('I initialize xivo-sync on "{instance_master}" to "{instance_slave}"')
+def when_i_initialize_xivo_sync_on_instance(context, instance_master, instance_slave):
+    master_context = getattr(context.instances, instance_master)
+    slave_context = getattr(context.instances, instance_slave)
+    password = slave_context.wazo_config['system_password']
+    if not password:
+        raise Exception('Missing "system_password" configuration')
+    command = ['sshpass', '-p', password, 'xivo-sync', '-i']
+    master_context.remote_sysutils.send_command(command)

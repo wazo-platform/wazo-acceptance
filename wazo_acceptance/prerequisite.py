@@ -127,6 +127,9 @@ def run(config_dir, instance_name):
     logger.debug('Configuring ARI...')
     _allow_ari_listen_on_all_interfaces(context)
 
+    logger.debug('Configuring SSH...')
+    _configure_ssh_client(context)
+
 
 def _configure_rabbitmq(context):
     copy_asset_to_server_permanently(context, 'rabbitmq.config', '/etc/rabbitmq')
@@ -333,3 +336,11 @@ def _configure_wazo_service(context, service):
 def copy_asset_to_server_permanently(context, asset, serverpath):
     assetpath = os.path.join(context.wazo_config['assets_dir'], asset)
     context.ssh_client.send_files(assetpath, serverpath)
+
+
+def _configure_ssh_client(context):
+    # For HA tests (xivo-sync -i)
+    _install_packages(context, ['sshpass'])
+    content = 'Host *\\\\n  StrictHostKeyChecking no'
+    command = ['echo', '-e', content, '>', '/root/.ssh/config']
+    context.ssh_client.check_call(command)
