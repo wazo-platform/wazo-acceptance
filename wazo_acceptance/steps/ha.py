@@ -1,7 +1,9 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import string
+
+from datetime import datetime, timezone
 
 from behave import given, when, then
 
@@ -81,7 +83,48 @@ def when_i_start_the_replication_from_instancemaster_to_instanceslave(context, i
     setup.setup_tenant(slave_context)
 
 
+@when('I start the replication from "{instance_master}" to unknown')
+def when_i_start_the_replication_from_instancemaster_to_unknown(context, instance_master):
+    master_context = getattr(context.instances, instance_master)
+    context.mail_start_time = datetime.now(tz=timezone.utc)
+    invalid_ip = '198.51.100.1'
+    command = ['xivo-master-slave-db-replication', invalid_ip]
+    master_context.remote_sysutils.send_command(command, check=False)
+
+
 @then('there is a user "{username}" on "{instance}"')
 def then_there_is_a_user_username_on_instance(context, username, instance):
     context = getattr(context.instances, instance)
     assert context.helpers.user.get_by(username=username)
+
+
+@then('there is a mail with content "{content}" on "{instance}"')
+def then_there_is_a_mail_with_content_on_instance(context, content, instance):
+    try:
+        mail_start_time = context.mail_start_time
+    except AttributeError:
+        raise Exception(
+            'Missing "mail_start_time" context variable. Assign it in a step before'
+        )
+
+    host_context = getattr(context.instances, instance)
+    mails = host_context.remote_sysutils.get_mails(since=mail_start_time)
+    assert len(mails) == 1, f'Invalid mail count: {len(mails)}'
+    assert content in mails[0]['body']
+
+
+@when('I execute "{command}" command on "{instance}"')
+def when_i_execute_command_on_instance(context, command, instance):
+    host_context = getattr(context.instances, instance)
+    host_context.remote_sysutils.send_command(command.split())
+
+
+@when('I initialize xivo-sync on "{instance_master}" to "{instance_slave}"')
+def when_i_initialize_xivo_sync_on_instance(context, instance_master, instance_slave):
+    master_context = getattr(context.instances, instance_master)
+    slave_context = getattr(context.instances, instance_slave)
+    password = slave_context.wazo_config['system_password']
+    if not password:
+        raise Exception('Missing "system_password" configuration')
+    command = ['sshpass', '-p', password, 'xivo-sync', '-i']
+    master_context.remote_sysutils.send_command(command)

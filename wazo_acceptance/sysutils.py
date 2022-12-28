@@ -1,4 +1,4 @@
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -35,6 +35,10 @@ class RemoteSysUtils:
     def get_content_file(self, path):
         command = ['cat', path]
         return self._ssh_client.out_call(command)
+
+    def write_content_file(self, path, content):
+        command = ['echo', '-en', f"'{content}'", '>', path]
+        self._ssh_client.check_call(command)
 
     def wazo_current_datetime(self):
         # The main problem here is the timezone: `date` must give us the date in
@@ -93,3 +97,32 @@ class RemoteSysUtils:
     def reload_service(self, service_name):
         command = ['systemctl', 'reload', service_name]
         self._ssh_client.check_call(command)
+
+    def get_mails(self, since=None):
+        command = ['cat', '/var/spool/mail/root']
+        output = self.output_command(command)
+        mails = self._extract_mails(output)
+        if since:
+            since = since.replace(microsecond=0)  # mail doesn't have microsecond
+            mails = [mail for mail in mails if mail['Date'] >= since]
+        return mails
+
+    def _extract_mails(self, content):
+        mails = []
+        mails_raw = content.split('Return-Path:')[1:]
+        for mail_raw in mails_raw:
+            mail_raw = f'Return-Path:{mail_raw}'
+            mail = {'body': ''}
+
+            headers_raw, body = mail_raw.split('\n\n', 1)
+            headers_raw = headers_raw.replace('\n        ', ' ')  # wrap multi-lines
+            mail['body'] = body.strip()
+            for header_raw in headers_raw.split('\n'):
+                key, value = header_raw.split(':', 1)
+                value = value.strip()
+                if key == 'Date':
+                    value = value.split(',')[1].strip()
+                    value = datetime.datetime.strptime(value, '%d %b %Y %H:%M:%S %z')
+                mail[key] = value
+            mails.append(mail)
+        return mails

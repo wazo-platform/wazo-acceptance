@@ -84,6 +84,7 @@ DEFAULT_INSTANCE_CONFIG = {
         'local_net': None,
         'external_ip': None,
     },
+    'system_password': None,
 }
 
 
