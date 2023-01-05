@@ -1,11 +1,11 @@
-# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import string
 
 from datetime import datetime, timezone
 
-from behave import given, when, then
+from behave import given, when, then, step
 
 from wazo_acceptance import auth, setup
 
@@ -113,7 +113,7 @@ def then_there_is_a_mail_with_content_on_instance(context, content, instance):
     assert content in mails[0]['body']
 
 
-@when('I execute "{command}" command on "{instance}"')
+@step('I execute "{command}" command on "{instance}"')
 def when_i_execute_command_on_instance(context, command, instance):
     host_context = getattr(context.instances, instance)
     host_context.remote_sysutils.send_command(command.split())

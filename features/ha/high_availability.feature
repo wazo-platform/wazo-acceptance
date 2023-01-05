@@ -35,6 +35,9 @@ Feature: High availability
     When I start the replication from "master" to "slave"
     Then there is a user "test-replication" on "slave"
 
+    # Workaround WAZO-2999
+    Then I execute "wazo-service restart" command on "slave"
+
   Scenario: HA files synchronization
     Given the HA is enabled as master on "master"
     Given the HA is enabled as slave on "slave"
