@@ -6,6 +6,7 @@ import string
 from datetime import datetime, timezone
 
 from behave import given, when, then, step
+from wazo_test_helpers import until
 
 from wazo_acceptance import auth, setup
 
@@ -117,6 +118,22 @@ def then_there_is_a_mail_with_content_on_instance(context, content, instance):
 def when_i_execute_command_on_instance(context, command, instance):
     host_context = getattr(context.instances, instance)
     host_context.remote_sysutils.send_command(command.split())
+
+
+@then('I wait until services are ready on "{instance}"')
+def then_i_wait_until_services_are_ready_on_instance(context, instance):
+    context = getattr(context.instances, instance)
+    context.confd_client.status()
+
+    # NOTE: For HA, this check is enough, but feel free to add more services
+    def confd_is_ready():
+        status = context.confd_client.status()
+        assert status['rest_api']['status'] == 'ok'
+        assert status['master_tenant']['status'] == 'ok'
+        assert status['bus_consumer']['status'] == 'ok'
+        assert status['service_token']['status'] == 'ok'
+
+    until.assert_(confd_is_ready, timeout=90)
 
 
 @when('I initialize xivo-sync on "{instance_master}" to "{instance_slave}"')

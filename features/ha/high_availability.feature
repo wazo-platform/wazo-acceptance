@@ -37,6 +37,7 @@ Feature: High availability
 
     # Workaround WAZO-2999
     Then I execute "wazo-service restart" command on "slave"
+    Then I wait until services are ready on "slave"
 
   Scenario: HA files synchronization
     Given the HA is enabled as master on "master"
