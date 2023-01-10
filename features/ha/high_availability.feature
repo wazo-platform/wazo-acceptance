@@ -25,7 +25,7 @@ Feature: High availability
     | X_type    | proxy_backup | registrar_backup |
     | registrar |              |                  |
 
-  Scenario: HA database synchronization
+  Scenario: HA synchronization
     Given the HA is enabled as master on "master"
     Given the HA is enabled as slave on "slave"
     Given there is a user "test-replication" on "master"
@@ -34,14 +34,6 @@ Feature: High availability
     Then there is a mail with content "Slave replication failed" on "master"
     When I start the replication from "master" to "slave"
     Then there is a user "test-replication" on "slave"
-
-    # Workaround WAZO-2999
-    Then I execute "wazo-service restart" command on "slave"
-    Then I wait until services are ready on "slave"
-
-  Scenario: HA files synchronization
-    Given the HA is enabled as master on "master"
-    Given the HA is enabled as slave on "slave"
 
     Given the file "/root/.ssh/xivo_id_rsa" does not exist on "master"
     Given the file "/root/.ssh/xivo_id_rsa.pub" does not exist on "master"
@@ -55,3 +47,7 @@ Feature: High availability
     Given the file "/etc/asterisk/extensions_extra.d/acceptance.conf" does not exist on "slave"
     When I execute "xivo-sync" command on "master"
     Then the file "/etc/asterisk/extensions_extra.d/acceptance.conf" exists on "slave"
+
+    # Workaround WAZO-2999
+    Then I execute "wazo-service restart" command on "slave"
+    Then I wait until services are ready on "slave"
