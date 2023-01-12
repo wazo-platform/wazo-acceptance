@@ -1,4 +1,4 @@
-# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -121,6 +121,8 @@ def step_a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time
 def step_user_puts_call_on_hold(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     phone.hold()
+    # Leave time to asterisk to switch RTP to music
+    time.sleep(0.5)
 
 
 @step('"{tracking_id}" resumes his call')
