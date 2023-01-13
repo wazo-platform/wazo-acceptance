@@ -130,6 +130,9 @@ def run(config_dir, instance_name):
     logger.debug('Configuring SSH...')
     _configure_ssh_client(context)
 
+    logger.debug('Touching service key files - Fix WAZO-3011...')
+    _touch_service_key_files(context)
+
 
 def _configure_rabbitmq(context):
     copy_asset_to_server_permanently(context, 'rabbitmq.config', '/etc/rabbitmq')
@@ -343,4 +346,9 @@ def _configure_ssh_client(context):
     _install_packages(context, ['sshpass'])
     content = 'Host *\\\\n  StrictHostKeyChecking no'
     command = ['echo', '-e', content, '>', '/root/.ssh/config']
+    context.ssh_client.check_call(command)
+
+
+def _touch_service_key_files(context):
+    command = ['touch', '/var/lib/wazo-auth-keys/*']
     context.ssh_client.check_call(command)
