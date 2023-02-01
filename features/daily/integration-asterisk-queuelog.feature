@@ -182,6 +182,8 @@ Feature: Stats generation
           | q12  | 3512  | default | 10      | 5              | 012    |
         Given agent "012" is logged
         When chan_test calls "3512@default" with id "3512-1"
+        # Only the first call needs time to be processed to reach the agent
+        When I wait 2 seconds for the call processing
         When chan_test calls "3512@default" with id "3512-2"
         When I wait 12 seconds for the timeout to expire
         When chan_test hangs up channel with id "3512-1"
