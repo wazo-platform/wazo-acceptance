@@ -18,6 +18,7 @@ Feature: HTTP
     | GET    | /api/provd/0.2/configure     |
     | GET    | /api/webhookd/1.0/config     |
     | GET    | /api/websocketd/             |
+    | GET    | :9499/0.1/config             |
 
   Scenario Outline: Unauthenticated HTTP resources are throttled
     Then "<method>" "<url>" eventually receive the answer 429 instead of "<status_code>"
