@@ -1,8 +1,12 @@
-# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
-
 import logging
+import signal
+from datetime import datetime
+from subprocess import Popen
 
+from behave.model import Scenario
+from behave.runner import Context
 from xivo.pubsub import Pubsub
 from xivo.xivo_logging import setup_logging as wazo_setup_logging
 
@@ -16,12 +20,12 @@ logger = logging.getLogger('acceptance')
 
 
 class Instances:
-    '''Container for InstanceContext. Each attribute is an InstanceContext'''
+    """Container for InstanceContext. Each attribute is an InstanceContext"""
     pass
 
 
 class InstanceContext:
-    '''Substitute for behave's context, one per instance'''
+    """Substitute for Behave's context, one per instance"""
 
     def __init__(self, global_context):
         self._global_context = global_context
@@ -39,6 +43,7 @@ def before_all(context):
 # Implicitly defined by behave
 def before_scenario(context, scenario):
     scenario.user_tokens = {}
+    context.helpers.sngrep.start(scenario.name)
     if 'no_cleanup_errors_fail' not in context.tags:
         with context._use_with_behave_mode():
             context.fail_on_cleanup_errors = True
@@ -48,6 +53,7 @@ def before_scenario(context, scenario):
 def after_scenario(context, scenario):
     if hasattr(context, 'helpers'):
         context.helpers.asterisk.send_to_asterisk_cli('channel request hangup all')
+        context.helpers.sngrep.stop()
 
 
 def initialize(context):

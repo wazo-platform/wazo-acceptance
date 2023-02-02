@@ -11,7 +11,7 @@ These tests are used for testing features before releasing a new version of Wazo
 * `pip install requirements.txt`
 * `docker pull wazoplatform/wazo-linphone`
 
-Then setup the environment:
+Then set up the environment:
 
     tox -e setup -- <wazo_platform_ip_address>
 
@@ -60,6 +60,7 @@ instances:
   default:
     # IP address of the Wazo server
     wazo_host: 192.168.0.10
+```
 
 ## Debugging
 
@@ -78,7 +79,7 @@ instances:
 
 ### linphone
 
-To see linphone ouput, use behave flag `--no-capture` and `--no-color`
+To see linphone output, use behave flag `--no-capture` and `--no-color`
 
 To inspect or send command to linphone:
 

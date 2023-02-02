@@ -1,4 +1,4 @@
-# Copyright 2015-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import ari
@@ -191,6 +191,7 @@ def setup_helpers(context):
     context.helpers.queue_skill_rule = helpers.QueueSkillRule(context)
     context.helpers.schedule = helpers.Schedule(context)
     context.helpers.sip_transport = helpers.SIPTransport(context)
+    context.helpers.sngrep = helpers.SNGrep(context.ssh_client)
     context.helpers.switchboard = helpers.Switchboard(context)
     context.helpers.token = helpers.Token(context)
     context.helpers.trunk = helpers.Trunk(context)
