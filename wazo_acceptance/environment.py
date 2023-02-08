@@ -1,12 +1,7 @@
 # Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 import logging
-import signal
-from datetime import datetime
-from subprocess import Popen
 
-from behave.model import Scenario
-from behave.runner import Context
 from xivo.pubsub import Pubsub
 from xivo.xivo_logging import setup_logging as wazo_setup_logging
 

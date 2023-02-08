@@ -19,7 +19,7 @@ class SNGrep:
 
     @property
     def is_running(self) -> bool:
-        return self._current_process is None or self._current_process.poll() is None
+        return self._current_process is not None and self._current_process.poll() is None
 
     def setup(self) -> None:
         self._ssh_client.check_call(['mkdir', '-p', SNGREP_OUTPUT_DIR])
@@ -42,6 +42,7 @@ class SNGrep:
         if self.is_running:
             self._current_process.send_signal(signal.SIGINT)
             if self.is_running:
-                self._current_process.kill()
+                self._current_process.terminate()
+                self._current_process.wait()
             self._current_process = None
 
