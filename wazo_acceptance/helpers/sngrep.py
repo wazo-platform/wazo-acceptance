@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import signal
 from datetime import datetime
-from subprocess import Popen
+from subprocess import Popen, TimeoutExpired
 
 from ..ssh import SSHClient
 
@@ -41,8 +41,10 @@ class SNGrep:
     def stop(self) -> None:
         if self.is_running:
             self._current_process.send_signal(signal.SIGINT)
-            if self.is_running:
-                self._current_process.terminate()
-                self._current_process.wait()
+            try:
+                self._current_process.wait(timeout=1)
+            except TimeoutExpired:
+                self._current_process.send_signal(signal.SIGTERM)
+                self._current_process.wait(timeout=10)
             self._current_process = None
 
