@@ -24,18 +24,18 @@ class SNGrep:
     def setup(self) -> None:
         self._ssh_client.check_call(['mkdir', '-p', SNGREP_OUTPUT_DIR])
 
-    def start(self, log_prefix: str) -> None:
-        if self._current_process is not None:
+    def start(self, log_name: str) -> None:
+        if self.is_running:
             raise RuntimeError('Already running')
 
         timestamp = datetime.now().timestamp()
-        prefix = log_prefix.replace(' ', '_').lower()
+        name = log_name.replace(' ', '_').lower()
         self._current_process = self._ssh_client.new_process([
             '/usr/bin/sngrep',
             '--no-interface',
             '--quiet',
             '--output',
-            f'/{SNGREP_OUTPUT_DIR}/{prefix}_{timestamp}.pcap',
+            f'/{SNGREP_OUTPUT_DIR}/{timestamp}_{name}.pcap',
         ])
 
     def stop(self) -> None:
@@ -47,4 +47,3 @@ class SNGrep:
                 self._current_process.send_signal(signal.SIGTERM)
                 self._current_process.wait(timeout=10)
             self._current_process = None
-
