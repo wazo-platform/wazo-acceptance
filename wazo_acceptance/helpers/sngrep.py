@@ -30,13 +30,14 @@ class SNGrep:
 
         timestamp = datetime.now().timestamp()
         name = log_name.replace(' ', '_').lower()
-        self._current_process = self._ssh_client.new_process([
+        command = [
             '/usr/bin/sngrep',
             '--no-interface',
             '--quiet',
             '--output',
             f'/{SNGREP_OUTPUT_DIR}/{timestamp}_{name}.pcap',
-        ])
+        ]
+        self._current_process = self._ssh_client.new_process(command, force_tty=True)
 
     def stop(self) -> None:
         if self.is_running:

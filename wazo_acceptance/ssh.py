@@ -1,4 +1,4 @@
-# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -66,11 +66,15 @@ class SSHClient:
         command_result = self._exec_ssh_command(remote_command, err_in_out=True)
         return command_result.stdout_result
 
-    def new_process(self, remote_command, *args, **kwargs):
+    def new_process(self, remote_command, *args, force_tty=False, **kwargs):
         kwargs.setdefault('close_fds', True)
-        command = self._format_ssh_command(remote_command)
+        ssh_options = []
+        if force_tty:
+            ssh_options = ['-o', 'RequestTTY=force']
+        command = self._format_ssh_command(remote_command, *ssh_options)
 
-        return subprocess.Popen(command, *args, **kwargs)
+        process = subprocess.Popen(command, *args, **kwargs)
+        return process
 
     def _exec_ssh_command(self, remote_command, err_in_out=False):
         command = self._format_ssh_command(remote_command)
@@ -86,9 +90,10 @@ class SSHClient:
         p.stdout_result, p.stderr_result = p.communicate()
         return p
 
-    def _format_ssh_command(self, remote_command):
+    def _format_ssh_command(self, remote_command, *extended_options):
         ssh_command = ['ssh']
         ssh_command.extend(SSH_OPTIONS)
+        ssh_command.extend(extended_options)
         ssh_command.extend(['-l', self._login, self._hostname])
         ssh_command.extend([s.encode('utf-8') for s in remote_command])
         return ssh_command
