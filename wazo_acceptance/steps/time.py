@@ -19,13 +19,10 @@ def given_no_hour_change_in_next_1_seconds(context, seconds):
 
 
 @when('I wait until call with caller ID name "{cid_name}" to be over')
-def step_impl(context, cid_name):
+def when_i_wait_until_call_with_caller_id_name_to_be_over(context, cid_name):
     def call_is_up():
-        calls = context.calld_client.calls.list_calls()
-        for call in calls['items']:
-            if call['caller_id_name'] == cid_name:
-                return True
-        return False
+        call = context.helpers.call.find_by(caller_id_name=cid_name)
+        return call is not None
 
     until.false(
         call_is_up,

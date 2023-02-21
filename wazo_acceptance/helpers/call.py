@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 _UNDEFINED = object()
@@ -11,7 +11,7 @@ class Call:
         self._calld_client = context.calld_client
 
     def get_by(self, **kwargs):
-        call = self._find_by(**kwargs)
+        call = self.find_by(**kwargs)
         if not call:
             raise Exception('Call not found: {}'.format(kwargs))
         return call
@@ -22,7 +22,7 @@ class Call:
     def start_recording(self, call_id):
         self._calld_client.calls.start_record(call_id)
 
-    def _find_by(self, **kwargs):
+    def find_by(self, **kwargs):
         user_uuid = kwargs.pop('user_uuid', _UNDEFINED)
         caller_id_number = kwargs.pop('caller_id_number', _UNDEFINED)
         caller_id_name = kwargs.pop('caller_id_name', _UNDEFINED)
