@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 
 from behave.model import Scenario
-from behave.runner import Context
+from behave.runner import Context, use_context_with_mode
 from xivo.pubsub import Pubsub
 from xivo.xivo_logging import setup_logging as wazo_setup_logging
 
@@ -45,7 +45,7 @@ def before_scenario(context: Context, scenario: Scenario) -> None:
     if hasattr(context, 'helpers'):
         context.helpers.sngrep.start(scenario.name)
     if 'no_cleanup_errors_fail' not in context.tags:
-        with context._use_with_behave_mode():
+        with use_context_with_mode(context, Context.BEHAVE):
             context.fail_on_cleanup_errors = True
 
 
@@ -71,7 +71,7 @@ def set_wazo_instances(context: Context, instances_config, debug_config) -> None
     for instance_name, instance_config in instances_config.items():
         instance_context = InstanceContext(context)
         set_wazo_instance(instance_context, instance_name, instance_config, debug_config)
-        context.instances.__setattr__(instance_name, instance_context)
+        setattr(context.instances, instance_name, instance_context)
 
 
 def set_wazo_instance(context, instance_name, instance_config, debug_config):
