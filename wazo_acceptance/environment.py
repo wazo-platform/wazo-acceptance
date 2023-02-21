@@ -1,7 +1,11 @@
 # Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
+from __future__ import annotations
+
 import logging
 
+from behave.model import Scenario
+from behave.runner import Context
 from xivo.pubsub import Pubsub
 from xivo.xivo_logging import setup_logging as wazo_setup_logging
 
@@ -30,28 +34,29 @@ class InstanceContext:
 
 
 # Implicitly defined by behave
-def before_all(context):
+def before_all(context: Context) -> None:
     initialize(context)
     context.fail_on_cleanup_errors = False
 
 
 # Implicitly defined by behave
-def before_scenario(context, scenario):
+def before_scenario(context: Context, scenario: Scenario) -> None:
     scenario.user_tokens = {}
-    context.helpers.sngrep.start(scenario.name)
+    if hasattr(context, 'helpers'):
+        context.helpers.sngrep.start(scenario.name)
     if 'no_cleanup_errors_fail' not in context.tags:
         with context._use_with_behave_mode():
             context.fail_on_cleanup_errors = True
 
 
 # Implicitly defined by behave
-def after_scenario(context, scenario):
+def after_scenario(context: Context, scenario: Scenario) -> None:
     if hasattr(context, 'helpers'):
         context.helpers.asterisk.send_to_asterisk_cli('channel request hangup all')
         context.helpers.sngrep.stop()
 
 
-def initialize(context):
+def initialize(context: Context) -> None:
     config = load_config(config_dir=context.config.userdata.get('acceptance_config_dir'))
     wazo_setup_logging(config['log_file'], debug=config['debug']['global'])
     debug.setup_logging(config['log_file'], config['debug'])
@@ -61,7 +66,7 @@ def initialize(context):
     set_wazo_instances(context, config['instances'], config['debug'])
 
 
-def set_wazo_instances(context, instances_config, debug_config):
+def set_wazo_instances(context: Context, instances_config, debug_config) -> None:
     context.instances = Instances()
     for instance_name, instance_config in instances_config.items():
         instance_context = InstanceContext(context)
