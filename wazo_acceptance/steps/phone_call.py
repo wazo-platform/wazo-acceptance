@@ -181,6 +181,12 @@ def when_chan_test_calls_with_id(context, exten, exten_context, channel_id):
     context.helpers.asterisk.send_to_asterisk_cli(cmd)
 
 
+@when('chan_test calls "{exten}@{exten_context}" with caller ID name "{cid_name}"')
+def when_chan_test_calls_with_id(context, exten, exten_context, cid_name):
+    cmd = f'test new {exten} {exten_context} chan-test-num {cid_name} {CHAN_PREFIX}'
+    context.helpers.asterisk.send_to_asterisk_cli(cmd)
+
+
 @when('chan_test places calls in order')
 def when_chan_test_places_calls_in_order(context):
     for call in context.table:
