@@ -7,7 +7,7 @@ These tests are used for testing features before releasing a new version of Wazo
 
 ### Requirements
 
-* A fresh installation of Wazo Platform. See https://wazo-platform.org/install/unified-communication for details.
+* A fresh installation of Wazo Platform. See https://wazo-platform.org/uc-doc/installation/install-system for details.
 * `pip install requirements.txt`
 * `docker pull wazoplatform/wazo-linphone`
 
