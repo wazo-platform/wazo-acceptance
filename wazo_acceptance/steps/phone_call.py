@@ -110,11 +110,18 @@ def step_a_calls_exten_and_waits_until_the_end(context, tracking_id, exten):
     until.true(phone.is_hungup, tries=10)
 
 
-@step('"{tracking_id}" calls "{exten}" and waits for "{time}" seconds')
+@step('"{tracking_id}" calls "{exten}" and waits "{time}" seconds to be hung up')
 def step_a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time):
     phone = context.phone_register.get_phone(tracking_id)
     phone.call(exten)
     until.true(phone.is_hungup, tries=int(time))
+
+
+@step('"{tracking_id}" calls "{exten}" and waits for "{wait_time}" seconds')
+def step_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, wait_time):
+    phone = context.phone_register.get_phone(tracking_id)
+    phone.call(exten)
+    time.sleep(int(wait_time))
 
 
 @step('"{tracking_id}" puts his call on hold')
