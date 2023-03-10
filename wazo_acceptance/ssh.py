@@ -1,10 +1,18 @@
 # Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
+from __future__ import annotations
 
 import logging
 import os
 import subprocess
 from subprocess import PIPE, STDOUT
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    class PatchedPopen(subprocess.Popen):
+        stdout_result: str
+        stderr_result: str
+
 
 SSH_OPTIONS = [
     '-o', 'PreferredAuthentications=publickey',
@@ -23,8 +31,8 @@ class SSHClient:
         self._login = login
 
     def send_files(self, path_from, path_to):
-        wazo_ssh = '%s@%s' % (self._login, self._hostname)
-        cmd = ['%s' % path_from, '%s:%s' % (wazo_ssh, path_to)]
+        wazo_ssh = f'{self._login}@{self._hostname}'
+        cmd = [f'{path_from}', f'{wazo_ssh}:{path_to}']
         scp_command = [
             'scp',
             '-o', 'PreferredAuthentications=publickey',
@@ -76,7 +84,7 @@ class SSHClient:
         process = subprocess.Popen(command, *args, **kwargs)
         return process
 
-    def _exec_ssh_command(self, remote_command, err_in_out=False):
+    def _exec_ssh_command(self, remote_command: str, err_in_out: bool = False) -> PatchedPopen:
         command = self._format_ssh_command(remote_command)
         stderr = STDOUT if err_in_out else PIPE
         p = subprocess.Popen(
@@ -85,7 +93,7 @@ class SSHClient:
             stdout=PIPE,
             stderr=stderr,
             close_fds=True,
-            universal_newlines=True,  # python3.7: use text=True
+            text=True,
         )
         p.stdout_result, p.stderr_result = p.communicate()
         return p

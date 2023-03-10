@@ -2,7 +2,6 @@ https://github.com/rsichny/swagger-py/archive/master.zip  # the digium release d
 https://github.com/wazo-platform/ari-py/archive/master.zip
 https://github.com/wazo-platform/pylinphonelib/archive/master.zip
 https://github.com/wazo-platform/wazo-agentd-client/archive/master.zip
-https://github.com/wazo-platform/wazo-agentd-client/archive/master.zip
 https://github.com/wazo-platform/wazo-amid-client/archive/master.zip
 https://github.com/wazo-platform/wazo-auth-client/archive/master.zip
 https://github.com/wazo-platform/wazo-call-logd-client/archive/master.zip
@@ -20,11 +19,10 @@ https://github.com/wazo-platform/xivo-lib-python/archive/master.zip
 PyHamcrest
 SQLAlchemy
 behave
-importlib_metadata==1.6.0  # from kombu
-kombu==4.6.11
+kombu==5.0.2
 psycopg2-binary
-pytz==2019.1
-pyyaml==3.13
-requests==2.21.0
-stevedore==1.29.0
+pytz==2021.1
+pyyaml==5.3.1
+requests==2.25.1
+stevedore==3.2.2
 websocket-client==0.57.0

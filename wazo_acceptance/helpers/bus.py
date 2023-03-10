@@ -1,5 +1,6 @@
-# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
+from __future__ import annotations
 
 import logging
 import functools
@@ -11,7 +12,7 @@ from hamcrest import assert_that, has_entries
 from wazo_test_helpers import until
 
 logger = logging.getLogger(__name__)
-tasks = None
+tasks: dict[str, str | None] = None  # type: ignore[assignment]
 
 
 class Bus:

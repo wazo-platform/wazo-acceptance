@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then
@@ -11,4 +11,5 @@ def then_the_service_name_is_running(context, service_name):
 
 @then('the service "{service_name}" has priority "{priority}"')
 def then_the_service_name_has_priority(context, service_name, priority):
-    assert context.remote_sysutils.process_priority('asterisk') == '-11'
+    actual_priority = context.remote_sysutils.process_priority('asterisk')
+    assert actual_priority == priority, f'{actual_priority=} is not equal to {priority=}'

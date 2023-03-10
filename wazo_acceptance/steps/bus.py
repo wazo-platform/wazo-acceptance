@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import collections
@@ -80,7 +80,7 @@ def _flatten_nested_dict(dict_, parent_key='', separator='_'):
         new_key = '{parent_key}{separator}{key}'.format(
             parent_key=parent_key, separator=separator, key=key
         ) if parent_key else key
-        if isinstance(value, collections.MutableMapping):
+        if isinstance(value, collections.abc.MutableMapping):
             items.extend(_flatten_nested_dict(value, new_key, separator=separator).items())
         else:
             items.append((new_key, value))
