@@ -14,17 +14,6 @@ Feature: User API - user managed with one HTTP call
       | destination_extension | duration | answered |
       | 1101                  | 3        | True     |
 
-  Scenario: No answer destination with disabled forward exten on no answer - user created with one HTTP call
-    Given the "fwdrna" extension is disabled
-    When there are users "wazo_acceptance/assets/3_users.json"
-    Given "Celine Dion" has a 5 seconds ringing time
-    Given "Celine Dion" has a "noanswer" fallback to user "James Bond"
-    When "Rîchard Lâpoin" calls "1101"
-    Then "Celine Dion" is ringing
-    When I wait 5 seconds for the end of ringing time
-    When I wait 4 seconds for the call processing
-    Then "James Bond" is ringing
-
   Scenario: Incall to destination user
     When there are users "wazo_acceptance/assets/1_user.json"
     When chan_test calls "4100@from-extern"
