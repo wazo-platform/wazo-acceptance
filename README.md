@@ -8,7 +8,7 @@ These tests are used for testing features before releasing a new version of Wazo
 ### Requirements
 
 * A fresh installation of Wazo Platform. See https://wazo-platform.org/uc-doc/installation/install-system for details.
-* `pip install requirements.txt`
+* `pip install -r requirements.txt`
 * `docker pull wazoplatform/wazo-linphone`
 
 Then set up the environment:

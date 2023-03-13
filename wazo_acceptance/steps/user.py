@@ -1,6 +1,8 @@
 # Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import json
+import time
 import string
 import time
 
@@ -522,3 +524,75 @@ def given_user_has_a_fallback_to_user(context, firstname, lastname, fallback_nam
 def given_user_has_x_seconds_ringing_time(context, firstname, lastname, seconds):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     context.helpers.confd_user.set_ringing_time(confd_user, int(seconds))
+
+@given('ring group is "{group_name}"')
+def given_ring_group_name(context, group_name):
+    group = context.helpers.confd_group.get_by(label=group_name)
+    context.ring_group = group
+
+@when('there are users "{json_file}"')
+def when_there_are_users(context, json_file):
+    with open(json_file) as f:
+        users = json.load(f)
+        context.users = users
+
+        for body in users:
+            try:
+                body['groups'][0]['uuid'] = context.ring_group['uuid']
+            except (KeyError, AttributeError):
+                body.pop('groups', None)
+            try:
+                body['switchboards'][0]['uuid'] = context.switchboard['uuid']
+            except (KeyError, AttributeError):
+                body.pop('switchboards', None)
+
+            for line in body['lines']:
+                random_suffix = context.helpers.utils.random_string(4)
+                name = '-'.join([body['firstname'], body['lastname'], random_suffix])
+                sip_body = context.helpers.endpoint_sip.generate_form(name)
+                line['endpoint_sip'] = sip_body
+
+            confd_user = context.helpers.confd_user.create(
+                body,
+                # params={'recursive':True}
+            )
+            tracking_id = "{} {}".format(
+                confd_user['firstname'], confd_user['lastname']
+            ).strip()
+
+            context.helpers.token.create(
+                confd_user['username'], confd_user['password'], tracking_id
+            )
+
+            sips = []
+            sips.append(confd_user['lines'][0]['endpoint_sip'])
+            expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
+
+            # add extra deletion
+            context.add_cleanup(
+                context.confd_client.lines.delete, confd_user['lines'][0]
+            )
+            context.add_cleanup(
+                context.confd_client.extensions.delete,
+                confd_user['lines'][0]['extensions'][0],
+            )
+            context.add_cleanup(
+                context.confd_client.extensions.delete,
+                confd_user['incalls'][0]['extensions'][0],
+            )
+            context.add_cleanup(
+                context.confd_client.incalls.delete, confd_user['incalls'][0]
+            )
+            context.add_cleanup(context.auth_client.users.delete, confd_user['uuid'])
+            for sip in sips:
+                context.add_cleanup(context.confd_client.endpoints_sip.delete, sip)
+
+            with context.helpers.bus.wait_for_event(
+                'chatd_presence_updated', expected_event
+            ):
+                for sip in sips:
+                    context.helpers.sip_phone.register_and_track_phone(tracking_id, sip)
+
+@given('switchboard is "{name}"')
+def given_there_are_switchboards_with_infos(context, name):
+    context.switchboard = context.helpers.switchboard.create({'name': name})
