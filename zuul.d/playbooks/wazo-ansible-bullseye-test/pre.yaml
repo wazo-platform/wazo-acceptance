@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+    - name: Install Ansible
+      become: yes
+      apt:
+        name: ansible
+        state: present
+
+    - name: Install postgresql ansible module from galaxy # noqa 301
+      become: yes
+      command: "ansible-galaxy install -r requirements-postgresql.yml"
+      args:
+        chdir: "{{ zuul.project.src_dir }}/zuul.d/playbooks/wazo-ansible-bullseye-test"

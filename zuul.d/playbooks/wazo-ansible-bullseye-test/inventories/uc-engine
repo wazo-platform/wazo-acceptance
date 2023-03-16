@@ -1,0 +1,41 @@
+# -*- conf -*-
+# You only have to change [uc_engine_host] and set variables according
+# to your needs (e.g. remove localhost line and add the IP on which
+# wazo-platform will be installed)
+
+[all:vars]
+ansible_python_interpreter = /usr/bin/python3
+
+[uc_engine_host]
+localhost ansible_connection=local
+
+[database:children]
+uc_engine_host
+
+[engine_api:children]
+uc_engine_host
+
+[b2bua:children]
+uc_engine_host
+
+[uc_engine:children]
+b2bua
+database
+engine_api
+
+# Uncomment the 2 following lines if you want to deploy wazo-ui too:
+# [uc_ui:children]
+# uc_engine_host
+
+[uc_engine:vars]
+# Variables are defined in ../roles/wazo-vars/defaults/main.yml
+
+# Uncomment the 2 following lines to install the stable version (default is
+# development version)
+# wazo_distribution = wazo-dev-wip-bullseye
+# wazo_distribution_upgrade = wazo-dev-wip-bullseye
+
+# PostgreSQL settings
+# postgresql_port = 5432
+# postgresql_superuser_password =
+# postgresql_listen_addresses = 127.0.0.1

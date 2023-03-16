@@ -1,0 +1,46 @@
+---
+- hosts: all
+  vars:
+    do_not_install_packages_after_build: true
+  roles:
+    - debian-packaging
+  tasks:
+    - name: Test variables
+      debug:
+        msg: >
+          wazo_distribution={{ wazo_distribution | default('wazo-dev-buster') }}
+          wazo_distribution_upgrade={{ wazo_distribution_upgrade | default('wazo-dev-buster') }}
+
+    - name: Run the installation script
+      become: yes
+      command: >
+          ansible-playbook -i inventories/uc-engine uc-engine.yml
+          --extra-vars wazo_distribution={{ wazo_distribution | default('wazo-dev-buster') }}
+          --extra-vars wazo_distribution_upgrade={{ wazo_distribution_upgrade | default('wazo-dev-buster') }}
+      args:
+        chdir: "{{ zuul.project.src_dir }}/zuul.d/playbooks/wazo-ansible-bullseye-test"
+
+    - name: create acceptance config
+      blockinfile:
+        create: yes
+        path: ~/.wazo-acceptance/config.yml
+        block: |
+          debug:
+            global: True
+
+            acceptance: True
+            linphone: True
+            xivo_test_helpers: True
+          instances:
+            default:
+              wazo_host: "{{ ansible_docker0.ipv4.address }}"
+
+    - name: Setup acceptance tests
+      shell: "tox -e setup"
+      args:
+        chdir: "{{ zuul.project.src_dir }}/zuul.d/playbooks/wazo-acceptance-bullseye-test"
+
+    - name: Run acceptance tests
+      shell: "tox -e behave -- --no-capture --no-color features/daily"
+      args:
+        chdir: "{{ zuul.project.src_dir }}/zuul.d/playbooks/wazo-acceptance-bullseye-test"

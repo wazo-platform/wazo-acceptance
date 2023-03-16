@@ -1,0 +1,35 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Upload logs
+      synchronize:
+        src: "/var/log"
+        dest: "{{ zuul.executor.log_root }}"
+        mode: pull
+        copy_links: true
+        verify_host: true
+        rsync_opts: []
+
+    - name: Upload configuration
+      synchronize:
+        src: "/etc"
+        dest: "{{ zuul.executor.log_root }}"
+        mode: pull
+        copy_links: true
+        verify_host: true
+        rsync_opts: []
+      # broken symlink cause rsync return code 23
+      ignore_errors: yes
+
+    - name: Get some commands output
+      script: collect_commands.sh
+
+    - name: Upload commands
+      synchronize:
+        src: "/tmp/commands"
+        dest: "{{ zuul.executor.log_root }}"
+        mode: pull
+        copy_links: true
+        verify_host: true
+        rsync_opts: []

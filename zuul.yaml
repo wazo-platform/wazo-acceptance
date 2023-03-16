@@ -1,10 +1,24 @@
+- job:
+    name: wazo-acceptance-bullseye-test
+    description: install Wazo platform and run acceptance tests on Bullseye
+    required-projects:
+      - wazo-platform/xivo-ci
+    vars:
+      wazo_distribution: wazo-dev-wip-bullseye
+      wazo_distribution_upgrade: wazo-dev-wip-bullseye
+    timeout: 10800
+    pre-run: zuul.d/playbooks/wazo-acceptance-bullseye-test/pre.yaml
+    run: zuul.d/playbooks/wazo-acceptance-bullseye-test/run.yaml
+    post-run: zuul.d/playbooks/wazo-acceptance-bullseye-test/fetch-logs.yaml
+    nodeset: vm-debian-11-m1m
+
 - project:
     check:
       jobs:
-        - wazo-acceptance-bullseye
+        - wazo-acceptance-bullseye-test
     gate:
       jobs:
-        - wazo-acceptance-bullseye
+        - wazo-acceptance-bullseye-test
     auto-merge:
       jobs:
         - noop
