@@ -1,5 +1,5 @@
 Feature: Do Not Disturb
-  Scenario: Test
+  Scenario: Call to user in DND status hangs up quickly
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | ring_seconds |
       | Alice     | 1100     | 1100  | default |      5       |
@@ -8,7 +8,7 @@ Feature: Do Not Disturb
     When "Alice 1100" calls "1101"
     Then "Alice 1100" is hungup immediately
 
-  Scenario: Direct call to user in DND status
+  Scenario: Direct call to user in DND status with voicemail
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | ring_seconds | voicemail_name | voicemail_number | voicemail_context |
       | Alice     | 1100     | 1100  | default |      5       |                |                  |                   |
@@ -21,7 +21,7 @@ Feature: Do Not Disturb
       | Mailbox      | Waiting |
       | 1101@default | 1       |
 
-  Scenario: call to user in DND status with no-answer forwarding enabled
+  Scenario: call to user in DND status with no-answer forwarding redirects to correct voicemail
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | ring_seconds | voicemail_name | voicemail_number | voicemail_context |
       | Alice     | 1100     | 1100  | default |      5       |                |                  |                   |
@@ -36,7 +36,7 @@ Feature: Do Not Disturb
       | Mailbox      | Waiting |
       | 1101@default | 1       |
 
-  Scenario: call to user with no-answer forwarding enabled with forwarded callee in DND status
+  Scenario: call to user with no-answer forwarding to user in DND status redirects to correct voicemail
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | ring_seconds | voicemail_name | voicemail_number | voicemail_context |
       | Alice     | 1100     | 1100  | default |      5       |                |                  |                   |
