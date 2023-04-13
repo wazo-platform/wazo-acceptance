@@ -1,4 +1,4 @@
-# Copyright 2014-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2014-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -113,7 +113,7 @@ def load_config(config_dir=None):
 
 def _config_post_processor(config):
     if 'db_uri' not in config:
-        config['db_uri'] = 'postgresql://asterisk:proformatique@{}/asterisk'.format(config['wazo_host'])
+        config['db_uri'] = f'postgresql://asterisk:proformatique@{config["wazo_host"]}/asterisk'
     config['bus_url'] = 'amqp://{username}:{password}@{host}:{port}//'.format(**config['bus'])
 
 

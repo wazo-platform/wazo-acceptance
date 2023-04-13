@@ -35,7 +35,7 @@ class SNGrep:
             '--no-interface',
             '--quiet',
             '--output',
-            f'/{SNGREP_OUTPUT_DIR}/{timestamp}_{name}.pcap',
+            f'{SNGREP_OUTPUT_DIR}/{timestamp}_{name}.pcap',
         ]
         self._current_process = self._ssh_client.new_process(command, force_tty=True)
 

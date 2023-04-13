@@ -1,4 +1,4 @@
-# Copyright 2018-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2018-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from collections import namedtuple
@@ -8,7 +8,7 @@ import subprocess
 SIPConfig = namedtuple('SIPConfig', ('sip_port', 'rtp_port', 'sip_name', 'sip_passwd', 'sip_host'))
 
 
-class _AbstractAvailablePortFinder(object):
+class _AbstractAvailablePortFinder:
 
     def _port_range(self, port_range):
         start, _, end = port_range.partition(',')

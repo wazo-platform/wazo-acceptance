@@ -26,7 +26,7 @@ BASE_SERVICES = [
     'wazo-sysconfd',
 ]
 
-ALL_SERVICES = ['rabbitmq-server', 'postgresql@11-main', 'nginx'] + BASE_SERVICES
+ALL_SERVICES = ['rabbitmq-server', 'postgresql@13-main', 'nginx'] + BASE_SERVICES
 
 MONIT_RUNNING = re.compile(r'^\d+ monit$')
 RUNNING_SERVICE = re.compile(r'^\s+(?:running|unknown)\s+(\S+)$')

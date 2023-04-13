@@ -1,4 +1,4 @@
-# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -39,7 +39,7 @@ class Context:
         self.token_pubsub = Pubsub()
 
 
-def run(config_dir, instance_name):
+def run(config_dir: str, instance_name: str):
     context = Context()
 
     logger.debug('Initializing ...')
@@ -194,7 +194,7 @@ def _create_auth_user(context, username, password, acl):
         '--config', '/root/.config/wazo-auth-cli',
         'policy',
         'create',
-        '{}-policy'.format(username),
+        f'{username}-policy',
     ]
     cmd.extend(args)
     policy_uuid = context.ssh_client.out_call(cmd).strip()
@@ -222,7 +222,7 @@ def _configure_default_tenant(context):
 
 
 def _add_line_to_remote_file(context, line_text, file_name):
-    command = ['grep', '-F', '"%s"' % line_text, file_name, '||', '$(echo "%s" >> %s)' % (line_text, file_name)]
+    command = ['grep', '-F', f'"{line_text}"', file_name, '||', f'$(echo "{line_text}" >> {file_name})']
     context.ssh_client.check_call(command)
 
 
@@ -293,7 +293,7 @@ def _configure_asterisk(context):
 
 
 def _configure_postgresql_debug(context):
-    config_file = '/etc/postgresql/11/main/postgresql.conf'
+    config_file = '/etc/postgresql/13/main/postgresql.conf'
     command = [
         'sed',
         '-i',
@@ -301,7 +301,7 @@ def _configure_postgresql_debug(context):
         config_file,
     ]
     context.ssh_client.check_call(command)
-    pg_is_running = context.remote_sysutils.is_process_running('postgresql@11-main')
+    pg_is_running = context.remote_sysutils.is_process_running('postgresql@13-main')
     if pg_is_running:
         context.remote_sysutils.reload_service('postgresql')
 

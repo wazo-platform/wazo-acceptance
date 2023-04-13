@@ -1,10 +1,10 @@
 - project:
     check:
       jobs:
-        - wazo-acceptance
+        - wazo-acceptance-bullseye
     gate:
       jobs:
-        - wazo-acceptance
+        - wazo-acceptance-bullseye
     auto-merge:
       jobs:
         - noop
