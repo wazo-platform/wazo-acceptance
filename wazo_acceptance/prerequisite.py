@@ -306,7 +306,8 @@ def _configure_postgresql_debug(context):
     command = [
         'sed',
         '-i',
-        '"s/#jit = on/jit = off/"',
+        '-E',
+        '"s/#jit = (on|off)/jit = off/"',
         config_file,
     ]
     context.ssh_client.check_call(command)
