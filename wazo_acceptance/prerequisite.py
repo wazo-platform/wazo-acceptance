@@ -301,6 +301,16 @@ def _configure_postgresql_debug(context):
         config_file,
     ]
     context.ssh_client.check_call(command)
+    # FIXME(fblackburn): Temporary disable JIT to try to improve performance
+    # Should be disable on the whole wazo if it fix performance issue
+    command = [
+        'sed',
+        '-i',
+        '-E',
+        '"s/#jit = (on|off)/jit = off/"',
+        config_file,
+    ]
+    context.ssh_client.check_call(command)
     pg_is_running = context.remote_sysutils.is_process_running('postgresql@13-main')
     if pg_is_running:
         context.remote_sysutils.reload_service('postgresql')
