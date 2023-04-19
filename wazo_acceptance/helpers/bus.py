@@ -64,8 +64,7 @@ class Bus:
             elif data['status'] == 'completed' and task_uuid in tasks.values():
                 tasks.pop(command)
                 if not tasks:
-                    # TODO expose close method on wazo-websocketd-client
-                    self._websocketd_client._ws_app.close()
+                    self._websocketd_client.close()
 
         self._websocketd_client.on('asterisk_reload_progress', asterisk_reload)
         with self._managed_bus_connection(reload_commands):
@@ -79,8 +78,7 @@ class Bus:
                 assert_that(data['data'], has_entries(**expected_data))
             except AssertionError:
                 return
-            # TODO expose close method on wazo-websocketd-client
-            self._websocketd_client._ws_app.close()
+            self._websocketd_client.close()
 
         self._websocketd_client.on(event_name, event_received)
         with self._managed_bus_connection(event_name):
@@ -107,7 +105,7 @@ class Bus:
                 functools.partial(self._save_event, event)
             )
         self._start()
-        until.true(lambda: self._websocketd_client._is_running, interval=0.5, timeout=5)
+        until.true(lambda: self._websocketd_client.is_running, interval=0.5, timeout=5)
 
         self._context.add_cleanup(self._stop)
 
@@ -129,11 +127,7 @@ class Bus:
 
     def _stop(self):
         if self._websocket_thread.is_alive():
-            self._websocketd_client._ws_app.close()
+            self._websocketd_client.stop()
             self._websocket_thread.join()
-        # TODO allow to remove callback on wazo-websocketd-client
-        self._websocketd_client._callbacks.clear()
-        self._websocketd_client._ws_app = None
-        self._websocketd_client._is_running = False
         self._received_events = None
         self._websocket_thread = None
