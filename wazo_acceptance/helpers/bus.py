@@ -64,7 +64,7 @@ class Bus:
             elif data['status'] == 'completed' and task_uuid in tasks.values():
                 tasks.pop(command)
                 if not tasks:
-                    self._websocketd_client.close()
+                    self._websocketd_client.stop()
 
         self._websocketd_client.on('asterisk_reload_progress', asterisk_reload)
         with self._managed_bus_connection(reload_commands):
@@ -78,7 +78,7 @@ class Bus:
                 assert_that(data['data'], has_entries(**expected_data))
             except AssertionError:
                 return
-            self._websocketd_client.close()
+            self._websocketd_client.stop()
 
         self._websocketd_client.on(event_name, event_received)
         with self._managed_bus_connection(event_name):
