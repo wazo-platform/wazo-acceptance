@@ -120,7 +120,9 @@ class Bus:
 
     def _start(self):
         if self._websocket_thread:
-            raise RuntimeError("websocket thread already started")
+            logger.error("websocket thread already started. Stopping.")
+            self._stop()
+            # raise RuntimeError("websocket thread already started")
         self._received_events = queue.Queue()
         self._websocket_thread = threading.Thread(target=self._websocketd_client.run)
         logger.debug('Starting websocketd client thread...')
