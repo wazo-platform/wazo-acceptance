@@ -1,4 +1,4 @@
-# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -63,7 +63,7 @@ class Queue:
     def get_by(self, **kwargs):
         queue = self.find_by(**kwargs)
         if not queue:
-            raise Exception('Queue not found: {}'.format(kwargs))
+            raise Exception(f'Queue not found: {kwargs}')
         return queue
 
     def find_by(self, **kwargs):

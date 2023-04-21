@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then
@@ -59,11 +59,11 @@ def _get_funckey_prefix_exten(user_id, funckey):
     elif funckey['destination']['type'] == 'bsfilter':
         funckey_exten = FUNCKEYS_EXTEN[funckey['destination']['type']]
         member_id = funckey['destination']['filter_member_id']
-        return '*{}{}'.format(funckey_exten, member_id)
+        return f'*{funckey_exten}{member_id}'
     else:
         raise Exception('Function key exten not found')
 
-    return '*735{}***2{}'.format(user_id, funckey_exten)
+    return f'*735{user_id}***2{funckey_exten}'
 
 
 def _assert_inuse_hints_state(context, prefix_exten):

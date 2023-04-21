@@ -1,4 +1,4 @@
-# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -22,7 +22,7 @@ class PhoneRegister:
                     continue
 
                 self._registered_contacts.add(contact)
-                return 'PJSIP/{}'.format(contact)
+                return f'PJSIP/{contact}'
 
     def add_registered_phone(self, phone, tracking_id):
         if tracking_id not in self._sip_phones:

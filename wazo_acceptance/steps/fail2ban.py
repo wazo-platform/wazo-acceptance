@@ -1,4 +1,4 @@
-# Copyright 2016-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then
@@ -26,4 +26,4 @@ def then_fail2banregex_for_name_matches_x_lines(context, name, match_count):
 
     expected_line = 'Lines: {0} lines, 0 ignored, {0} matched, 0 missed'.format(match_count)
     assert_that(last_lines, has_item(expected_line),
-                'output did not match: command was {}'.format(command))
+                f'output did not match: command was {command}')

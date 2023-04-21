@@ -1,4 +1,4 @@
-# Copyright 2013-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -16,5 +16,5 @@ class Asset:
         self._ssh_client.send_files(assetpath, serverpath)
         self._context.add_cleanup(
             self._ssh_client.check_call,
-            ['rm {}'.format(os.path.join(serverpath, asset))],
+            [f'rm {os.path.join(serverpath, asset)}'],
         )

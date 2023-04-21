@@ -1,4 +1,4 @@
-# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -26,7 +26,7 @@ class Agent:
     def get_by(self, **kwargs):
         agent = self._find_by(**kwargs)
         if not agent:
-            raise Exception('Agent not found: {}'.format(kwargs))
+            raise Exception(f'Agent not found: {kwargs}')
         return agent
 
     def _find_by(self, **kwargs):

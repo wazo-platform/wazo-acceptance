@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -11,7 +11,7 @@ class ExtensionFeature:
     def _get_by(self, **kwargs):
         user = self._find_by(**kwargs)
         if not user:
-            raise Exception('ExtensionFeature not found: {}'.format(kwargs))
+            raise Exception(f'ExtensionFeature not found: {kwargs}')
         return user
 
     def _find_by(self, **kwargs):
@@ -36,7 +36,7 @@ class ExtensionFeature:
             'enabled': True,
         }
         if extension:
-            feature['exten'] = '_{}.'.format(extension)
+            feature['exten'] = f'_{extension}.'
         self._update(feature)
 
     def disable(self, feature_name, extension=None):
@@ -45,5 +45,5 @@ class ExtensionFeature:
             'enabled': False,
         }
         if extension:
-            feature['exten'] = '_{}.'.format(extension)
+            feature['exten'] = f'_{extension}.'
         self._update(feature)

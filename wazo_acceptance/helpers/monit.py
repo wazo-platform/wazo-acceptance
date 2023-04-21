@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from wazo_test_helpers import until
@@ -13,7 +13,7 @@ class Monit:
         until.true(self.is_monit_started, timeout=60, interval=10, message='Monit is unreachable')
         result = self.get_monit_status()
         for line in result:
-            if line == "Process '{}'".format(process_name):
+            if line == f"Process '{process_name}'":
                 return True
         return False
 

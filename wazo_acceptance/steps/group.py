@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -27,7 +27,7 @@ def given_there_are_telephony_groups_with_infos(context):
                 group_dest = context.helpers.confd_group.get_by(label=name)
                 fallbacks_body['noanswer_destination']['group_id'] = group_dest['id']
             else:
-                raise NotImplementedError('Destination not implemented: {}'.format(type_))
+                raise NotImplementedError(f'Destination not implemented: {type_}')
 
             context.helpers.confd_group.update_fallbacks(group, fallbacks_body)
 

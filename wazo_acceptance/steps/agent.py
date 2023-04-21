@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, when, then
@@ -48,7 +48,7 @@ def when_i_log_agent_from_the_phone(context, number):
     user = context.helpers.agent.get_by(number=number)['users'][0]
     tracking_id = "{} {}".format(user['firstname'], user['lastname'])
     phone = context.phone_register.get_phone(tracking_id)
-    phone.call('*31{number}'.format(number=number))
+    phone.call(f'*31{number}')
 
 
 @when('I unlog agent "{number}" from phone')
@@ -56,7 +56,7 @@ def when_i_unlog_agent_from_the_phone(context, number):
     user = context.helpers.agent.get_by(number=number)['users'][0]
     tracking_id = "{} {}".format(user['firstname'], user['lastname'])
     phone = context.phone_register.get_phone(tracking_id)
-    phone.call('*32{number}'.format(number=number))
+    phone.call(f'*32{number}')
 
 
 @when('I toggle agent "{number}" status from phone')
@@ -64,7 +64,7 @@ def when_i_toggle_agent_status_from_the_phone(context, number):
     user = context.helpers.agent.get_by(number=number)['users'][0]
     tracking_id = "{} {}".format(user['firstname'], user['lastname'])
     phone = context.phone_register.get_phone(tracking_id)
-    phone.call('*30{number}'.format(number=number))
+    phone.call(f'*30{number}')
 
 
 @when('I pause agent "{number}"')

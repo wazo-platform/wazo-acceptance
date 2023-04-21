@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -14,4 +14,4 @@ class Asterisk:
         return response
 
     def _format_command(self, asterisk_command):
-        return ['asterisk', '-rx', '"{}"'.format(asterisk_command)]
+        return ['asterisk', '-rx', f'"{asterisk_command}"']

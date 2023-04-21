@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -16,7 +16,7 @@ class User:
     def get_by(self, **kwargs):
         user = self.find_by(**kwargs)
         if not user:
-            raise Exception('User not found: {}'.format(kwargs))
+            raise Exception(f'User not found: {kwargs}')
         return user
 
     def find_by(self, **kwargs):

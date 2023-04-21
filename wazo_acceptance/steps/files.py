@@ -1,4 +1,4 @@
-# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -44,7 +44,7 @@ def given_there_are_backup_files(context):
         context.remote_sysutils.send_command(['touch', file_])
         context.add_cleanup(
             context.remote_sysutils.send_command,
-            ['rm', '-f', '{file_}'.format(file_=file_)]
+            ['rm', '-f', f'{file_}']
         )
 
 
@@ -65,7 +65,7 @@ def then_backup_files_successfully_rotated(context):
         assert context.remote_sysutils.path_exists(expected_file)
         context.add_cleanup(
             context.remote_sysutils.send_command,
-            ['rm', '-f', '{expected_file}'.format(expected_file=expected_file)]
+            ['rm', '-f', f'{expected_file}']
         )
 
     context.remote_sysutils.send_command(
@@ -77,7 +77,7 @@ def then_backup_files_successfully_rotated(context):
         assert context.remote_sysutils.path_exists(expected_file)
         context.add_cleanup(
             context.remote_sysutils.send_command,
-            ['rm', '-f', '{expected_file}'.format(expected_file=expected_file)]
+            ['rm', '-f', f'{expected_file}']
         )
 
 
@@ -160,7 +160,7 @@ def then_moh_files_are_owned_by_asterisk_www_data(context):
     for line in lines:
         if not line:
             continue
-        file_ = '{}/{}'.format(MOH_PATH, line.strip())
+        file_ = f'{MOH_PATH}/{line.strip()}'
         assert context.remote_sysutils.file_owned_by_user(file_, 'asterisk')
         assert context.remote_sysutils.file_owned_by_group(file_, 'www-data')
 

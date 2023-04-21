@@ -1,4 +1,4 @@
-# Copyright 2021-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2021-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -36,7 +36,7 @@ class Outcall:
     def get_by(self, **kwargs):
         outcall = self._find_by(**kwargs)
         if not outcall:
-            raise Exception('Confd outcall not found: {}'.format(kwargs))
+            raise Exception(f'Confd outcall not found: {kwargs}')
         return outcall
 
     def _find_by(self, **kwargs):

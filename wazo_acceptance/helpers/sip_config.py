@@ -60,7 +60,7 @@ class _AvailableRTPPortFinder(_AbstractAvailablePortFinder):
 
     def _port_in_use(self, port):
         try:
-            subprocess.check_call(['lsof', '-i', ':{rtp_port},{rtcp_port}'.format(rtp_port=port, rtcp_port=port + 1)])
+            subprocess.check_call(['lsof', '-i', f':{port},{port + 1}'])
             return True
         except subprocess.CalledProcessError:
             return False

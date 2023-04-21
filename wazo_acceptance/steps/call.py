@@ -1,4 +1,4 @@
-# Copyright 2020-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then, when
@@ -22,7 +22,7 @@ def then_firstname_lastname_call_is_not_status(context, firstname, lastname, sta
 def when_firstname_lastname_relocates_its_call_to_its_contact_number(
     context, firstname, lastname, contact_number
 ):
-    tracking_id = "{} {}".format(firstname, lastname)
+    tracking_id = f"{firstname} {lastname}"
 
     contact = int(contact_number) - 1
     dst_line_sip = context.phone_register.get_phone(tracking_id, contact)
@@ -45,7 +45,7 @@ def when_firstname_lastname_relocates_its_call_to_its_contact_number(
 def then_firstname_lastname_is_talking_to_caller_id_from_api(
     context, firstname, lastname, caller_id
 ):
-    tracking_id = "{} {}".format(firstname, lastname)
+    tracking_id = f"{firstname} {lastname}"
     token = context.helpers.token.get(tracking_id)['token']
     with context.helpers.utils.set_token(context.calld_client, token):
         calls = context.calld_client.calls.list_calls_from_user()['items']

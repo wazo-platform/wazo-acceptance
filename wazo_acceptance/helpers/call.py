@@ -13,7 +13,7 @@ class Call:
     def get_by(self, **kwargs):
         call = self.find_by(**kwargs)
         if not call:
-            raise Exception('Call not found: {}'.format(kwargs))
+            raise Exception(f'Call not found: {kwargs}')
         return call
 
     def stop_recording(self, call_id):

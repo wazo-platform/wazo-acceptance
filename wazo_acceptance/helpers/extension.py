@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -18,7 +18,7 @@ class Extension:
     def get_by(self, **kwargs):
         extension = self.find_by(**kwargs)
         if not extension:
-            raise Exception('Extension not found: {}'.format(kwargs))
+            raise Exception(f'Extension not found: {kwargs}')
         return extension
 
     def find_by(self, **kwargs):
