@@ -1,4 +1,4 @@
-# Copyright 2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2021-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -17,7 +17,7 @@ class Switchboard:
     def get_by(self, **kwargs):
         switchboard = self._find_by(**kwargs)
         if not switchboard:
-            raise Exception('Switchboard not found: {}'.format(kwargs))
+            raise Exception(f'Switchboard not found: {kwargs}')
         return switchboard
 
     def _find_by(self, **kwargs):

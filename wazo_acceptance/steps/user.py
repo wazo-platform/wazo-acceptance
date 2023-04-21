@@ -1,4 +1,4 @@
-# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -68,7 +68,7 @@ def given_there_are_telephony_users_with_infos(context):
             'password': password,
         }
         context.helpers.user.create(user_body)
-        tracking_id = "{} {}".format(firstname, lastname).strip()
+        tracking_id = f"{firstname} {lastname}".strip()
 
         if body.get('with_token', 'no') == 'yes':
             context.helpers.token.create(username, password, tracking_id)
@@ -132,7 +132,7 @@ def given_there_are_telephony_users_with_infos(context):
 def given_user_has_lines(context, firstname, lastname):
     context.table.require_columns(['name', 'context'])
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
-    tracking_id = "{} {}".format(firstname, lastname)
+    tracking_id = f"{firstname} {lastname}"
     for row in context.table:
         body = row.as_dict()
 
@@ -188,7 +188,7 @@ def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, ex
     line = context.confd_client.lines.get(extension['lines'][0]['id'])
     endpoint_sip = context.confd_client.endpoints_sip.get(line['endpoint_sip'])
 
-    tracking_id = "{} {}".format(firstname, lastname)
+    tracking_id = f"{firstname} {lastname}"
     expected_event = {'line_state': 'available'}
     with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
         context.helpers.sip_phone.register_and_track_phone(tracking_id, endpoint_sip)
@@ -425,7 +425,7 @@ def when_the_user_active_call_filter(context, firstname, lastname, filter_name):
             member_id = user['member_id']
             break
     if not member_id:
-        raise Exception('Surrogate not found: {} {}'.format(firstname, lastname))
+        raise Exception(f'Surrogate not found: {firstname} {lastname}')
 
     tracking_id = f'{firstname} {lastname}'
     phone = context.phone_register.get_phone(tracking_id)
@@ -501,7 +501,7 @@ def then_user_call_recording_is(context, firstname, lastname, status):
 def given_user_has_a_fallback_to_user(context, firstname, lastname, fallback_name, destination_firstname, destination_lastname):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     dst_user = context.helpers.confd_user.get_by(firstname=destination_firstname, lastname=destination_lastname)
-    dst_name = "{}_destination".format(fallback_name)
+    dst_name = f"{fallback_name}_destination"
     fallback = {dst_name: {'type': 'user', 'user_id': dst_user['id']}}
     context.helpers.confd_user.update_fallback(confd_user, fallback)
 

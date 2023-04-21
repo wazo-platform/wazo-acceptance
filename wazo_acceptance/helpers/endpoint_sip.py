@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -26,7 +26,7 @@ class EndpointSIP:
     def get_template_by(self, **kwargs):
         template = self._find_template_by(**kwargs)
         if not template:
-            raise Exception('EndpointSIPTemplate not found: {}'.format(kwargs))
+            raise Exception(f'EndpointSIPTemplate not found: {kwargs}')
         return template
 
     def _find_template_by(self, **kwargs):

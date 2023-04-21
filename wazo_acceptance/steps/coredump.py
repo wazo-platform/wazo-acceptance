@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -27,7 +27,7 @@ def when_generate_core_dump(context):
 
     context.add_cleanup(
         context.remote_sysutils.output_command,
-        ['rm', '-f', '~/core.{}.{}'.format(context.pid, context.epoch)],
+        ['rm', '-f', f'~/core.{context.pid}.{context.epoch}'],
     )
 
 
@@ -36,9 +36,9 @@ def then_there_should_by_a_file(context):
     assert_that(context.pid, is_not(empty()))
     assert_that(context.epoch, is_not(empty()))
 
-    filename = 'core.{}.{}'.format(context.pid, context.epoch)
+    filename = f'core.{context.pid}.{context.epoch}'
     path = os.path.join('~', filename)
     assert_that(
         context.remote_sysutils.path_exists(path), is_(True),
-        'No such file or directory {}'.format(path),
+        f'No such file or directory {path}',
     )

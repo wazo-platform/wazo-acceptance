@@ -1,4 +1,4 @@
-# Copyright 2015-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
@@ -36,7 +36,7 @@ class _LinphoneLogWrapper:
 
     def _prefix_line(self, line):
         now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
-        return '{date} {prefix} {line}'.format(date=now, prefix=self._prefix, line=line)
+        return f'{now} {self._prefix} {line}'
 
     def _add_last_newline(self, data):
         if not data.endswith('\n'):
@@ -121,7 +121,7 @@ class SIPPhone:
 
     def is_holding(self, context):
         response = context.amid_client.action('DeviceStateList')
-        device_name = 'PJSIP/{}'.format(self._name)
+        device_name = f'PJSIP/{self._name}'
         return any(device.get('Device') == device_name and device.get('State') == 'ONHOLD'
                    for device in response)
 
@@ -139,7 +139,7 @@ class PhoneFactory:
     def _register_line(self, sip_config):
         logfile = None
         if self._debug:
-            prefix = '[sip:{}]'.format(sip_config.sip_name)
+            prefix = f'[sip:{sip_config.sip_name}]'
             logfile = _LinphoneLogWrapper(sys.stdout, prefix=prefix)
 
         phone = SIPPhone(sip_config, logfile=logfile)

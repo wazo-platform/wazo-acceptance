@@ -1,4 +1,4 @@
-# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -29,7 +29,7 @@ class IVR:
     def get_by(self, **kwargs):
         ivr = self._find_by(**kwargs)
         if not ivr:
-            raise Exception('IVR not found: {}'.format(kwargs))
+            raise Exception(f'IVR not found: {kwargs}')
         return ivr
 
     def _find_by(self, **kwargs):

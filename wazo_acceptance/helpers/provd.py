@@ -1,4 +1,4 @@
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import requests
@@ -36,7 +36,7 @@ class Provd:
         all_plugins = self._provd_client.plugins.list_installable()['pkgs']
         matching_plugins = [plugin for plugin in all_plugins if plugin_name in plugin]
         if not matching_plugins:
-            raise Exception('no matching plugins for {}'.format(plugin_name))
+            raise Exception(f'no matching plugins for {plugin_name}')
         return max(matching_plugins)
 
     def install_latest_plugin(self, plugin):

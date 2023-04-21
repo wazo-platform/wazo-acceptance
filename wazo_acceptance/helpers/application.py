@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -17,7 +17,7 @@ class Application:
     def get_by(self, **kwargs):
         application = self._find_by(**kwargs)
         if not application:
-            raise Exception('Application not found: {}'.format(kwargs))
+            raise Exception(f'Application not found: {kwargs}')
         return application
 
     def _find_by(self, **kwargs):
@@ -28,7 +28,7 @@ class Application:
     def get_first_call(self, application_uuid):
         call = self._find_first_call(application_uuid)
         if not call:
-            raise Exception('Call not found from application: {}'.format(application_uuid))
+            raise Exception(f'Call not found from application: {application_uuid}')
         return call
 
     def _find_first_call(self, application_uuid):

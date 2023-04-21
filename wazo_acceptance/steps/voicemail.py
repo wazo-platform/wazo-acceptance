@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -19,7 +19,7 @@ from behave import (
 def when_a_message_is_left_on_voicemail(context, vm_number, vm_context, cid_name):
     # start the call to the voicemail
     context.helpers.asterisk.send_to_asterisk_cli(
-        'test newid leavevm *97{} {} 555 {} SIP'.format(vm_number, vm_context, cid_name)
+        f'test newid leavevm *97{vm_number} {vm_context} 555 {cid_name} SIP'
     )
     # press '#' to leave a message right away
     time.sleep(2)
@@ -37,7 +37,7 @@ def when_a_message_is_left_on_voicemail(context, vm_number, vm_context, cid_name
 def when_a_message_is_checked_and_kept_on_voicemail(context, vm_number, vm_context):
     # start the call to the voicemail
     context.helpers.asterisk.send_to_asterisk_cli(
-        'test newid checkvm *99{} {} 555 Test SIP'.format(vm_number, vm_context)
+        f'test newid checkvm *99{vm_number} {vm_context} 555 Test SIP'
     )
     # press '1' to listen to first message
     time.sleep(2)
@@ -60,7 +60,7 @@ def when_a_message_is_checked_and_kept_on_voicemail(context, vm_number, vm_conte
 def when_a_message_is_checked_and_deleted_on_voicemail(context, vm_number, vm_context):
     # start the call to the voicemail
     context.helpers.asterisk.send_to_asterisk_cli(
-        'test newid checkvm *99{} {} 555 Test SIP'.format(vm_number, vm_context)
+        f'test newid checkvm *99{vm_number} {vm_context} 555 Test SIP'
     )
     # press '1' to listen to first message
     time.sleep(2)

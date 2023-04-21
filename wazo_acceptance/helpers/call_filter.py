@@ -1,4 +1,4 @@
-# Copyright 2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -20,7 +20,7 @@ class CallFilter:
     def get_by(self, **kwargs):
         call_filter = self._find_by(**kwargs)
         if not call_filter:
-            raise Exception('Call Filter not found: {}'.format(kwargs))
+            raise Exception(f'Call Filter not found: {kwargs}')
         return call_filter
 
     def _find_by(self, **kwargs):

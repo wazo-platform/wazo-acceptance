@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -16,7 +16,7 @@ class Schedule:
     def get_by(self, **kwargs):
         schedule = self._find_by(**kwargs)
         if not schedule:
-            raise Exception('Schedule not found: {}'.format(kwargs))
+            raise Exception(f'Schedule not found: {kwargs}')
         return schedule
 
     def _find_by(self, **kwargs):

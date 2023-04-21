@@ -1,4 +1,4 @@
-# Copyright 2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2021-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then, when
@@ -23,7 +23,7 @@ def given_there_are_switchboards_with_infos(context):
             if type_ == 'hangup':
                 fallbacks_body['noanswer_destination']['cause'] = 'normal'
             else:
-                raise NotImplementedError('Destination not implemented: {}'.format(type_))
+                raise NotImplementedError(f'Destination not implemented: {type_}')
             context.confd_client.switchboards(switchboard).update_fallbacks(fallbacks_body)
 
 
@@ -53,7 +53,7 @@ def when_user_answer_queued_call_from_switchboard(context, firstname, lastname, 
         caller_id_number=caller_name,
     )
 
-    tracking_id = "{} {}".format(firstname, lastname)
+    tracking_id = f"{firstname} {lastname}"
     token = context.helpers.token.get(tracking_id)['token']
     with context.helpers.utils.set_token(context.calld_client, token):
         context.calld_client.switchboards.answer_queued_call_from_user(
@@ -73,7 +73,7 @@ def when_user_answer_held_call_from_switchboard(context, firstname, lastname, ca
         switchboard['uuid'],
         caller_id_number=caller_name,
     )
-    tracking_id = "{} {}".format(firstname, lastname)
+    tracking_id = f"{firstname} {lastname}"
     token = context.helpers.token.get(tracking_id)['token']
     with context.helpers.utils.set_token(context.calld_client, token):
         context.calld_client.switchboards.answer_held_call_from_user(

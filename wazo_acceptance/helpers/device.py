@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -16,7 +16,7 @@ class Device:
     def get_by(self, **kwargs):
         device = self._find_by(**kwargs)
         if not device:
-            raise Exception('Device not found: {}'.format(kwargs))
+            raise Exception(f'Device not found: {kwargs}')
         return device
 
     def _find_by(self, **kwargs):
