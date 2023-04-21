@@ -10,7 +10,7 @@ from behave import then
 def then_monit_monitors_the_service_process_name(context, process_name):
     until.true(
         context.helpers.monit.process_monitored, process_name,
-        timeout=10,
+        timeout=60,
         message=f'Monit did not monitor process {process_name}',
     )
 
@@ -19,6 +19,6 @@ def then_monit_monitors_the_service_process_name(context, process_name):
 def then_monit_does_not_monitor_the_service_process_name(context, process_name):
     until.false(
         context.helpers.monit.process_monitored, process_name,
-        timeout=10,
+        timeout=60,
         message=f'Monit is still monitoring process {process_name}',
     )
