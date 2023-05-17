@@ -29,6 +29,7 @@ WAZO_SERVICES = [
     'wazo-phoned',
     'wazo-plugind',
     'wazo-provd',
+    'wazo-sysconfd',
     'wazo-webhookd',
     'wazo-websocketd',
 ]
