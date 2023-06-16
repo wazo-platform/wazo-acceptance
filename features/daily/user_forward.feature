@@ -22,5 +22,5 @@ Feature: User Forward
       | Vincent   | Vega     | 1002  | default |
     Given "Mia Wallace" has an "unconditional" forward set to "1002"
     Given "Vincent Vega" has an "unconditional" forward set to "1001"
-    When "Mia Wallace" calls "1002" and waits for "120" seconds
+    When "Mia Wallace" calls "1002" and waits "120" seconds to be hung up
     Then "Mia Wallace" is hungup
