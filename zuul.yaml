@@ -1,8 +1,8 @@
 - project:
-    check:
+    wazo-check:
       jobs:
         - wazo-acceptance-bullseye
-    gate:
+    wazo-gate:
       jobs:
         - wazo-acceptance-bullseye
     auto-merge:
