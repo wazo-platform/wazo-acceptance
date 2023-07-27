@@ -69,4 +69,5 @@ class Context:
     def _find_by(self, **kwargs):
         contexts = self._confd_client.contexts.list(recurse=True, **kwargs)['items']
         for context in contexts:
+            del context['uuid']
             return context
