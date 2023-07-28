@@ -13,7 +13,9 @@ def given_there_are_telephony_groups_with_infos(context):
         group = context.helpers.confd_group.create(body)
 
         if body.get('exten') and body.get('context'):
-            extension = context.helpers.extension.create(body)
+            context_name = context.helpers.context.get_by(label=body['context'])['name']
+            extension_body = {'exten': body['exten'], 'context': context_name}
+            extension = context.helpers.extension.create(extension_body)
             context.helpers.confd_group.add_extension(group, extension)
 
         if body.get('schedule'):

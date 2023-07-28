@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import when, given
@@ -23,7 +23,8 @@ def given_there_are_queues(context):
                 body['options'].append((option_name, value))
         queue = context.helpers.queue.create(body)
 
-        extension_body = {'exten': body['exten'], 'context': body['context']}
+        context_name = context.helpers.context.get_by(label=body['context'])['name']
+        extension_body = {'exten': body['exten'], 'context': context_name}
         if row.get('timeout') is not None:
             extension_body['timeout'] = int(row['timeout'])
         extension = context.helpers.extension.create(extension_body)
@@ -37,7 +38,8 @@ def given_there_are_queues(context):
         if row.get('users'):
             for user_extension in row['users'].split(','):
                 exten, exten_context = user_extension.split('@')
-                user = context.helpers.confd_user.get_by(exten=exten, context=exten_context)
+                context_name = context.helpers.context.get_by(label=exten_context)['name']
+                user = context.helpers.confd_user.get_by(exten=exten, context=context_name)
                 context.helpers.queue.add_user_member(queue, user)
 
         if row.get('schedule'):
@@ -59,7 +61,8 @@ def when_i_create_the_following_queues(context):
         body = row.as_dict()
         queue = context.helpers.queue.create(body)
 
-        extension_body = {'exten': body['exten'], 'context': body['context']}
+        context_name = context.helpers.context.get_by(label=body['context'])['name']
+        extension_body = {'exten': body['exten'], 'context': context_name}
         extension = context.helpers.extension.create(extension_body)
         context.helpers.queue.add_extension(queue, extension)
 

@@ -71,3 +71,9 @@ class Context:
         for context in contexts:
             del context['uuid']
             return context
+
+    def get_by(self, **kwargs):
+        context = self._find_by(**kwargs)
+        if not context:
+            raise Exception(f'Context not found: {kwargs}')
+        return context
