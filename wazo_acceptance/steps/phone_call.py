@@ -179,10 +179,11 @@ def then_user_last_dialed_extension_was_not_found(context, tracking_id):
 
 @when('chan_test calls "{exten}@{exten_context}" with id "{channel_id}"')
 def when_chan_test_calls_with_id(context, exten, exten_context, channel_id):
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
     cmd = 'test newid {channel_id} {exten} {context} chan-test-num chan-test-name {prefix}'.format(
         channel_id=channel_id,
         exten=exten,
-        context=exten_context,
+        context=context_name,
         prefix=CHAN_PREFIX,
     )
     context.helpers.asterisk.send_to_asterisk_cli(cmd)
@@ -190,17 +191,19 @@ def when_chan_test_calls_with_id(context, exten, exten_context, channel_id):
 
 @when('chan_test calls "{exten}@{exten_context}" with caller ID name "{cid_name}"')
 def when_chan_test_calls_with_id(context, exten, exten_context, cid_name):
-    cmd = f'test new {exten} {exten_context} chan-test-num {cid_name} {CHAN_PREFIX}'
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    cmd = f'test new {exten} {context_name} chan-test-num {cid_name} {CHAN_PREFIX}'
     context.helpers.asterisk.send_to_asterisk_cli(cmd)
 
 
 @when('chan_test places calls in order')
 def when_chan_test_places_calls_in_order(context):
     for call in context.table:
+        context_name = context.helpers.context.get_by(label=call['context'])['name']
         cmd = 'test newid {channel_id} {exten} {context} chan-test-num chan-test-name {prefix}'.format(
             channel_id=call['call_id'],
             exten=call['exten'],
-            context=call['context'],
+            context=context_name,
             prefix=CHAN_PREFIX,
         )
         context.helpers.asterisk.send_to_asterisk_cli(cmd)
@@ -208,9 +211,10 @@ def when_chan_test_places_calls_in_order(context):
 
 @when('chan_test calls "{exten}@{exten_context}"')
 def when_chan_test_calls(context, exten, exten_context):
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
     cmd = 'test new {exten} {context} chan-test-num chan-test-name {prefix}'.format(
         exten=exten,
-        context=exten_context,
+        context=context_name,
         prefix=CHAN_PREFIX,
     )
     context.helpers.asterisk.send_to_asterisk_cli(cmd)
@@ -238,7 +242,8 @@ def when_chan_test_hangs_up_channel_with_id(context, channel_id):
 @when('incoming call received from "{incall_name}" to "{exten}@{exten_context}"')
 @when('incoming call received from "{incall_name}" to "{exten}@{exten_context}" with callerid "{callerid}"')
 def when_incoming_call_received_from_name_to_exten(context, incall_name, exten, exten_context, callerid=None):
-    body = {'context': exten_context}
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    body = {'context': context_name}
     trunk = context.helpers.trunk.create(body)
     template = context.helpers.endpoint_sip.get_template_by(label='global')
     body = {
