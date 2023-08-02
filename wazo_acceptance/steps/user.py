@@ -183,9 +183,10 @@ def given_user_1_has_schedule_2(context, firstname, lastname, schedule):
 
 @given('"{firstname} {lastname}" has reconfigured the line "{exten}@{exten_context}"')
 def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, exten_context):
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
     extension = context.helpers.extension.find_by(
         exten=exten,
-        context=exten_context
+        context=context_name
     )
     line = context.confd_client.lines.get(extension['lines'][0]['id'])
     endpoint_sip = context.confd_client.endpoints_sip.get(line['endpoint_sip'])
@@ -220,13 +221,14 @@ def then_user_has_no_unconditional_forward(context, firstname, lastname, forward
 
 @when('"{firstname} {lastname}" does a blind transfer to "{exten}@{exten_context}" with API')
 def when_user_does_a_blind_transfer_to_exten_with_api(context, firstname, lastname, exten, exten_context):
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     initiator_call = context.helpers.call.get_by(user_uuid=confd_user['uuid'])
     transferred_call_id = next(iter(initiator_call['talking_to']))
     context.calld_client.transfers.make_transfer(
         transferred=transferred_call_id,
         initiator=initiator_call['call_id'],
-        context=exten_context,
+        context=context_name,
         exten=exten,
         flow='blind'
     )
@@ -234,13 +236,14 @@ def when_user_does_a_blind_transfer_to_exten_with_api(context, firstname, lastna
 
 @when('"{firstname} {lastname}" does a blind transfer to "{exten}@{exten_context}" with timeout {timeout} using API')
 def when_user_does_a_blind_transfer_to_exten_with_timeout_using_api(context, firstname, lastname, exten, exten_context, timeout):
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     initiator_call = context.helpers.call.get_by(user_uuid=confd_user['uuid'])
     transferred_call_id = next(iter(initiator_call['talking_to']))
     transfer = context.calld_client.transfers.make_transfer(
         transferred=transferred_call_id,
         initiator=initiator_call['call_id'],
-        context=exten_context,
+        context=context_name,
         exten=exten,
         timeout=timeout,
         flow='blind'
@@ -269,13 +272,14 @@ def then_my_import_result_matches(context, line_number):
 
 @when('"{firstname} {lastname}" does an attended transfer to "{exten}@{exten_context}" with API')
 def when_user_does_an_attended_transfer_to_exten_with_api(context, firstname, lastname, exten, exten_context):
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     initiator_call = context.helpers.call.get_by(user_uuid=confd_user['uuid'])
     transferred_call_id = next(iter(initiator_call['talking_to']))
     transfer = context.calld_client.transfers.make_transfer(
         transferred=transferred_call_id,
         initiator=initiator_call['call_id'],
-        context=exten_context,
+        context=context_name,
         exten=exten,
         flow='attended'
     )
