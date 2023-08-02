@@ -122,11 +122,12 @@ def given_there_is_an_incall_to_the_switchboard(context, exten, exten_context, n
 
 @given('there is an incall "{exten}@{exten_context}" to DISA redirected to "{disa_context}" with pin "{pin}"')
 def given_there_is_an_incall_to_DISA_with_context_and_pin(context, exten, exten_context, disa_context, pin):
+    disa_context_name = context.helpers.context.get_by(label=disa_context)['name']
     body = {
         'destination': {
             'type': 'application',
             'application': 'disa',
-            'context': disa_context,
+            'context': disa_context_name,
             'pin': pin,
         }
     }
