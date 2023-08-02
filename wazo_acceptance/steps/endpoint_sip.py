@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import when
@@ -6,11 +6,12 @@ from behave import when
 
 @when('I set the following options in endpoint sip "{exten}@{exten_context}"')
 def when_i_set_the_following_option_in_endpoint_sip(context, exten, exten_context):
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
     for row in context.table:
         row = row.as_dict()
         extension = context.helpers.extension.find_by(
             exten=exten,
-            context=exten_context
+            context=context_name
         )
         line_id = extension['lines'][0]['id']
         line = context.confd_client.lines.get(line_id)
