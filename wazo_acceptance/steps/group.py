@@ -58,6 +58,8 @@ def given_the_telephony_group_have_extensions(context, label):
     extension_members = []
     group = context.helpers.confd_group.get_by(label=label)
     for row in context.table:
-        extension_members.append(row.as_dict())
+        body = row.as_dict()
+        body['context'] = context.helpers.context.get_by(label=row['context'])['name']
+        extension_members.append(body)
 
     context.helpers.confd_group.update_extension_members(group, extension_members)
