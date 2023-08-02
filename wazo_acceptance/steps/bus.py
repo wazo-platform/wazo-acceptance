@@ -89,7 +89,8 @@ def _flatten_nested_dict(dict_, parent_key='', separator='_'):
 
 @then('I see in the AMI that the line "{exten}@{exten_context}" has been synchronized')
 def then_i_receive_an_ami_event_that_the_line_has_been_synchronized(context, exten, exten_context):
-    extension = context.helpers.extension.get_by(exten=exten, context=exten_context)
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    extension = context.helpers.extension.get_by(exten=exten, context=context_name)
     line_name = extension['lines'][0]['name']
     path = 'rawman'
     action = 'action=PJSIPNotify'
