@@ -53,7 +53,8 @@ def given_there_are_telephony_users_with_infos(context):
     context.table.require_columns(['firstname'])
     for row in context.table:
         body = row.as_dict()
-        body['context'] = context.helpers.context.get_by(label=body['context'])['name']
+        if body.get('context'):
+            body['context'] = context.helpers.context.get_by(label=body['context'])['name']
 
         confd_user = context.helpers.confd_user.create(body)
 
@@ -112,9 +113,10 @@ def given_there_are_telephony_users_with_infos(context):
         if (body.get('voicemail_name')
                 and body.get('voicemail_number')
                 and body.get('voicemail_context')):
+            voicemail_context = context.helpers.context.get_by(label=body['voicemail_context'])['name']
             voicemail = context.helpers.voicemail.create({
                 'name': body['voicemail_name'],
-                'context': body['voicemail_context'],
+                'context': voicemail_context,
                 'number': body['voicemail_number']
             })
             context.helpers.confd_user.add_voicemail(confd_user, voicemail)
@@ -136,7 +138,7 @@ def given_user_has_lines(context, firstname, lastname):
     tracking_id = f"{firstname} {lastname}"
     for row in context.table:
         body = row.as_dict()
-
+        body['context'] = context.helpers.context.get_by(label=body['context'])['name']
         line = context.helpers.line.create(body)
 
         endpoint = body.get('endpoint', 'sip')
@@ -150,10 +152,9 @@ def given_user_has_lines(context, firstname, lastname):
             raise NotImplementedError()
 
         if body.get('exten') and body['context']:
-            context_name = context.helpers.context.get_by(label=body['context'])['name']
             extension = context.helpers.extension.find_by(
                 exten=body['exten'],
-                context=context_name,
+                context=body['context'],
             )
             if not extension:
                 extension = context.helpers.extension.create(body)
