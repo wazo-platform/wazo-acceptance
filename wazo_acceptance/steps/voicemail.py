@@ -17,9 +17,10 @@ from behave import (
 
 @when('a message is left on voicemail "{vm_number}@{vm_context}" by "{cid_name}"')
 def when_a_message_is_left_on_voicemail(context, vm_number, vm_context, cid_name):
+    context_name = context.helpers.context.get_by(label=vm_context)['name']
     # start the call to the voicemail
     context.helpers.asterisk.send_to_asterisk_cli(
-        f'test newid leavevm *97{vm_number} {vm_context} 555 {cid_name} SIP'
+        f'test newid leavevm *97{vm_number} {context_name} 555 {cid_name} SIP'
     )
     # press '#' to leave a message right away
     time.sleep(2)
@@ -35,9 +36,10 @@ def when_a_message_is_left_on_voicemail(context, vm_number, vm_context, cid_name
 
 @when('a message is checked and kept on voicemail "{vm_number}@{vm_context}"')
 def when_a_message_is_checked_and_kept_on_voicemail(context, vm_number, vm_context):
+    context_name = context.helpers.context.get_by(label=vm_context)['name']
     # start the call to the voicemail
     context.helpers.asterisk.send_to_asterisk_cli(
-        f'test newid checkvm *99{vm_number} {vm_context} 555 Test SIP'
+        f'test newid checkvm *99{vm_number} {context_name} 555 Test SIP'
     )
     # press '1' to listen to first message
     time.sleep(2)
@@ -58,9 +60,10 @@ def when_a_message_is_checked_and_kept_on_voicemail(context, vm_number, vm_conte
 
 @when('a message is checked and deleted on voicemail "{vm_number}@{vm_context}"')
 def when_a_message_is_checked_and_deleted_on_voicemail(context, vm_number, vm_context):
+    context_name = context.helpers.context.get_by(label=vm_context)['name']
     # start the call to the voicemail
     context.helpers.asterisk.send_to_asterisk_cli(
-        f'test newid checkvm *99{vm_number} {vm_context} 555 Test SIP'
+        f'test newid checkvm *99{vm_number} {context_name} 555 Test SIP'
     )
     # press '1' to listen to first message
     time.sleep(2)
@@ -86,9 +89,10 @@ def when_a_message_is_checked_and_deleted_on_voicemail(context, vm_number, vm_co
 
 @then('there\'s the following messages in voicemail "{vm_number}@{vm_context}"')
 def then_there_is_the_following_messages_in_voicemail(context, vm_number, vm_context):
+    context_name = context.helpers.context.get_by(label=vm_context)['name']
     vm_conf = context.confd_client.voicemails.list(
         number=vm_number,
-        context=vm_context,
+        context=context_name,
         recurse=True
     )['items'][0]
     voicemail = context.calld_client.voicemails.get_voicemail(vm_conf['id'])
@@ -99,9 +103,10 @@ def then_there_is_the_following_messages_in_voicemail(context, vm_number, vm_con
 
 @then('there\'s no message in voicemail "{vm_number}@{vm_context}"')
 def then_there_is_no_message_in_voicemail(context, vm_number, vm_context):
+    context_name = context.helpers.context.get_by(label=vm_context)['name']
     vm_conf = context.confd_client.voicemails.list(
         number=vm_number,
-        context=vm_context,
+        context=context_name,
         recurse=True
     )['items'][0]
     voicemail = context.calld_client.voicemails.get_voicemail(vm_conf['id'])
