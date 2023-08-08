@@ -1,4 +1,4 @@
-# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -121,7 +121,9 @@ class RemoteSysUtils:
                 key, value = header_raw.split(':', 1)
                 value = value.strip()
                 if key == 'Date':
+                    # Mon, 7 Aug 2023 22:53:21 +0000 (UTC)
                     value = value.split(',')[1].strip()
+                    value = value.split('(')[0].strip()  # only munin mail have timezone name
                     value = datetime.datetime.strptime(value, '%d %b %Y %H:%M:%S %z')
                 mail[key] = value
             mails.append(mail)
