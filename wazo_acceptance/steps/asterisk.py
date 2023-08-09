@@ -30,6 +30,9 @@ def then_i_have_the_following_hints(context):
 
     for row in context.table:
         row = row.as_dict()
+        exten, exten_context = row['exten'].split('@')
+        exten_context = context.helpers.context.get_by(label=exten_context)['name']
+        row['exten'] = f'{exten}@{exten_context}'
         assert_that(hints, has_item(has_entries(row)))
 
 
@@ -81,8 +84,9 @@ def _assert_idle_hints_state(context, prefix_exten):
 
 
 def _get_hints_state(context, prefix_exten):
+    default_context = context.helpers.context.get_by(label='default')['name']
     hint = context.amid_client.action(
-        'ExtensionState', {'Exten': prefix_exten, 'Context': 'default'}
+        'ExtensionState', {'Exten': prefix_exten, 'Context': default_context}
     )[0]
     assert_that(hint['Status'], not_(equal_to('-1')), f"Hint {prefix_exten} doesn't exist")
     return hint['StatusText']
