@@ -17,9 +17,7 @@ Feature: Do Not Disturb
     Given I listen on the bus for "MessageWaiting" messages
     When "Alice 1100" calls "1101" and waits for "30" seconds
     When "Alice 1100" hangs up
-    Then I receive a "MessageWaiting" event with data:
-      | Mailbox      | Waiting |
-      | 1101@default | 1       |
+    Then I receive a MessageWaiting event with "1" messages for mailbox "1101@default"
 
   Scenario: call to user in DND status with no-answer forwarding redirects to correct voicemail
     Given there are telephony users with infos:
@@ -32,9 +30,7 @@ Feature: Do Not Disturb
     When "Bob 1101" enable forwarding on no-answer to "1102"
     When "Alice 1100" calls "1101" and waits for "30" seconds
     When "Alice 1100" hangs up
-    Then I receive a "MessageWaiting" event with data:
-      | Mailbox      | Waiting |
-      | 1101@default | 1       |
+    Then I receive a MessageWaiting event with "1" messages for mailbox "1101@default"
 
   Scenario: call to user with no-answer forwarding to user in DND status redirects to correct voicemail
     Given there are telephony users with infos:
@@ -47,6 +43,4 @@ Feature: Do Not Disturb
     When "Bob 1101" enable forwarding on no-answer to "1102"
     When "Alice 1100" calls "1101" and waits for "30" seconds
     When "Alice 1100" hangs up
-    Then I receive a "MessageWaiting" event with data:
-      | Mailbox      | Waiting |
-      | 1101@default | 1       |
+    Then I receive a MessageWaiting event with "1" messages for mailbox "1101@default"

@@ -58,6 +58,27 @@ def then_i_receive_a_event_on_queue(context, event_name):
     _sleep_to_avoid_race_condition()
 
 
+@then('I receive a MessageWaiting event with "{nb_msg}" messages for mailbox "{mailbox}@{mb_context}"')
+def then_i_receive_a_messagewaiting_event(context, nb_msg, mailbox, mb_context):
+    def event_match():
+        context_name = context.helpers.context.get_by(label=mb_context)['name']
+
+        event = context.helpers.bus.pop_received_event()
+        assert_that(event, has_entries(name='MessageWaiting'))
+        assert_that(event, has_key('data'))
+        result = _flatten_nested_dict(event['data'])
+
+        assert_that(
+            result,
+            has_entries(
+                {'Mailbox': f'{mailbox}@{context_name}', 'Waiting': nb_msg},
+            )
+        )
+
+    until.assert_(event_match, interval=0.1, tries=10)
+    _sleep_to_avoid_race_condition()
+
+
 @then('I receive a "{event_name}" event with "{wrapper}" data')
 def then_i_receive_a_event_with_wrapper_on_queue(context, event_name, wrapper):
     event = context.helpers.bus.pop_received_event()
