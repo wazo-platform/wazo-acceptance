@@ -31,7 +31,7 @@ def then_i_have_the_following_hints(context):
     for row in context.table:
         row = row.as_dict()
         exten, exten_context = row['exten'].split('@')
-        exten_context = context.helpers.context.get_by(label=exten_context)['name']
+        exten_context = context.helpers.context.get_by(label=exten_context)['name'][:15]
         row['exten'] = f'{exten}@{exten_context}'
         assert_that(hints, has_item(has_entries(row)))
 
