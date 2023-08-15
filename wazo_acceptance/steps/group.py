@@ -13,7 +13,9 @@ def given_there_are_telephony_groups_with_infos(context):
         group = context.helpers.confd_group.create(body)
 
         if body.get('exten') and body.get('context'):
-            extension = context.helpers.extension.create(body)
+            context_name = context.helpers.context.get_by(label=body['context'])['name']
+            extension_body = {'exten': body['exten'], 'context': context_name}
+            extension = context.helpers.extension.create(extension_body)
             context.helpers.confd_group.add_extension(group, extension)
 
         if body.get('schedule'):
@@ -56,6 +58,8 @@ def given_the_telephony_group_have_extensions(context, label):
     extension_members = []
     group = context.helpers.confd_group.get_by(label=label)
     for row in context.table:
-        extension_members.append(row.as_dict())
+        body = row.as_dict()
+        body['context'] = context.helpers.context.get_by(label=row['context'])['name']
+        extension_members.append(body)
 
     context.helpers.confd_group.update_extension_members(group, extension_members)

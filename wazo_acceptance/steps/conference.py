@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from hamcrest import (
@@ -18,6 +18,8 @@ from behave import (
 def given_there_are_conference_rooms(context):
     for row in context.table:
         body = row.as_dict()
+        if body.get('context'):
+            body['context'] = context.helpers.context.get_by(label=body['context'])['name']
         conference = context.helpers.conference.create(body)
         extension = context.helpers.extension.create(body)
         context.helpers.conference.add_extension(conference, extension)

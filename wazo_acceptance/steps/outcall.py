@@ -1,4 +1,4 @@
-# Copyright 2021-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2021-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -14,7 +14,8 @@ def given_there_is_an_outcall_using_extension(context, exten, exten_context):
     }
     outcall = context.helpers.outcall.create(body)
 
-    body = {'context': exten_context}
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    body = {'context': context_name}
     trunk = context.helpers.trunk.create(body)
     context.helpers.outcall.add_trunk(outcall, trunk)
 
@@ -31,7 +32,7 @@ def given_there_is_an_outcall_using_extension(context, exten, exten_context):
     sip = context.helpers.endpoint_sip.create(body)
 
     context.helpers.trunk.add_endpoint_sip(trunk, sip)
-    body = {'exten': exten, 'context': exten_context}
+    body = {'exten': exten, 'context': context_name}
     extension = context.helpers.extension.create(body)
 
     context.helpers.outcall.add_extension(outcall, extension)

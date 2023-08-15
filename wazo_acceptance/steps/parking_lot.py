@@ -1,4 +1,4 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -11,6 +11,7 @@ def given_there_are_parking_lots_with_infos(context):
         body = row.as_dict()
         parking_lot = context.helpers.parking_lot.create(body)
 
-        extension_body = {'exten': body['exten'], 'context': body['context']}
+        context_name = context.helpers.context.get_by(label=body['context'])['name']
+        extension_body = {'exten': body['exten'], 'context': context_name}
         extension = context.helpers.extension.create(extension_body)
         context.helpers.parking_lot.add_extension(parking_lot, extension)

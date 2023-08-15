@@ -1,4 +1,4 @@
-# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -11,7 +11,8 @@ def given_there_is_an_incall_to_the_user(context, exten, exten_context, firstnam
     body = {'destination': {'type': 'user', 'user_id': confd_user['id']}}
     incall = context.helpers.incall.create(body)
 
-    body = {'exten': exten, 'context': exten_context}
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    body = {'exten': exten, 'context': context_name}
     extension = context.helpers.extension.create(body)
 
     context.helpers.incall.add_extension(incall, extension)
@@ -24,7 +25,8 @@ def given_there_is_an_incall_to_the_ivr(context, exten, exten_context, ivr_name)
     body = {'destination': {'type': 'ivr', 'ivr_id': ivr['id']}}
     incall = context.helpers.incall.create(body)
 
-    body = {'exten': exten, 'context': exten_context}
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    body = {'exten': exten, 'context': context_name}
     extension = context.helpers.extension.create(body)
 
     context.helpers.incall.add_extension(incall, extension)
@@ -44,7 +46,8 @@ def given_there_is_an_incall_to_the_queue_with_skill(context, exten, exten_conte
     }
     incall = context.helpers.incall.create(body)
 
-    body = {'exten': exten, 'context': exten_context}
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    body = {'exten': exten, 'context': context_name}
     extension = context.helpers.extension.create(body)
 
     context.helpers.incall.add_extension(incall, extension)
@@ -57,7 +60,8 @@ def given_there_is_an_incall_to_the_queue(context, exten, exten_context, queue_n
     body = {'destination': {'type': 'queue', 'queue_id': queue['id']}}
     incall = context.helpers.incall.create(body)
 
-    body = {'exten': exten, 'context': exten_context}
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    body = {'exten': exten, 'context': context_name}
     extension = context.helpers.extension.create(body)
 
     context.helpers.incall.add_extension(incall, extension)
@@ -70,7 +74,8 @@ def given_there_is_an_incall_to_the_group(context, exten, exten_context, group_n
     body = {'destination': {'type': 'group', 'group_id': group['id']}}
     incall = context.helpers.incall.create(body)
 
-    body = {'exten': exten, 'context': exten_context}
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    body = {'exten': exten, 'context': context_name}
     extension = context.helpers.extension.create(body)
 
     context.helpers.incall.add_extension(incall, extension)
@@ -89,7 +94,8 @@ def given_there_is_an_incall_to_the_application(context, exten, exten_context, a
     }
     incall = context.helpers.incall.create(body)
 
-    body = {'exten': exten, 'context': exten_context}
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    body = {'exten': exten, 'context': context_name}
     extension = context.helpers.extension.create(body)
 
     context.helpers.incall.add_extension(incall, extension)
@@ -107,7 +113,8 @@ def given_there_is_an_incall_to_the_switchboard(context, exten, exten_context, n
     }
     incall = context.helpers.incall.create(body)
 
-    body = {'exten': exten, 'context': exten_context}
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    body = {'exten': exten, 'context': context_name}
     extension = context.helpers.extension.create(body)
 
     context.helpers.incall.add_extension(incall, extension)
@@ -115,17 +122,19 @@ def given_there_is_an_incall_to_the_switchboard(context, exten, exten_context, n
 
 @given('there is an incall "{exten}@{exten_context}" to DISA redirected to "{disa_context}" with pin "{pin}"')
 def given_there_is_an_incall_to_DISA_with_context_and_pin(context, exten, exten_context, disa_context, pin):
+    disa_context_name = context.helpers.context.get_by(label=disa_context)['name']
     body = {
         'destination': {
             'type': 'application',
             'application': 'disa',
-            'context': disa_context,
+            'context': disa_context_name,
             'pin': pin,
         }
     }
     incall = context.helpers.incall.create(body)
 
-    body = {'exten': exten, 'context': exten_context}
+    context_name = context.helpers.context.get_by(label=exten_context)['name']
+    body = {'exten': exten, 'context': context_name}
     extension = context.helpers.extension.create(body)
 
     context.helpers.incall.add_extension(incall, extension)

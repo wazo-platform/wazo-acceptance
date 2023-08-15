@@ -9,7 +9,8 @@ class Extension:
         self._confd_client = context.confd_client
 
     def create(self, body):
-        body.setdefault('context', 'default')
+        if not body.get('context'):
+            body['context'] = self._context.helpers.context.get_by(label='default')['name']
         with self._context.helpers.bus.wait_for_asterisk_reload(dialplan=True):
             extension = self._confd_client.extensions.create(body)
         self._context.add_cleanup(self._confd_client.extensions.delete, extension)
