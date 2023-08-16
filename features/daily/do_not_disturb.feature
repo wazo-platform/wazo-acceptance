@@ -30,7 +30,7 @@ Feature: Do Not Disturb
       | Charlie   | 1102     | 1102  | default |      5       | Charlie        |  1102            | default           |
     Given "Bob 1101" has enabled "dnd" service
     Given I listen on the bus for "MessageWaiting" messages
-    When "Bob 1101" enable forwarding on no-answer to "1102"
+    Given "Bob 1101" enable forwarding on no-answer to "1102"
     When "Alice 1100" calls "1101"
     When I wait 5 seconds for the timeout to expire
     When I wait 2 seconds for the call processing
@@ -46,7 +46,7 @@ Feature: Do Not Disturb
       | Charlie   | 1102     | 1102  | default |      5       | Charlie        |  1102            | default           |
     Given "Charlie 1102" has enabled "dnd" service
     Given I listen on the bus for "MessageWaiting" messages
-    When "Bob 1101" enable forwarding on no-answer to "1102"
+    Given "Bob 1101" enable forwarding on no-answer to "1102"
     When "Alice 1100" calls "1101"
     When I wait 5 seconds for the timeout to expire
     When I wait 2 seconds for the call processing
