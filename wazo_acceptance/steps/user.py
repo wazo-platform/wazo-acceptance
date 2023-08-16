@@ -4,7 +4,7 @@
 import time
 import string
 
-from behave import given, then, when
+from behave import given, then, when, step
 from hamcrest import assert_that, equal_to, is_
 
 from wazo_test_helpers import until
@@ -368,7 +368,7 @@ def when_the_user_disable_all_forwards(context, firstname, lastname):
     context.confd_client.users(confd_user).update_forwards(forwards)
 
 
-@when('"{firstname} {lastname}" enable forwarding on no-answer to "{exten}"')
+@step('"{firstname} {lastname}" enable forwarding on no-answer to "{exten}"')
 def when_the_user_enable_forwarding_on_no_answer_to(context, firstname, lastname, exten):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = {'destination': exten, 'enabled': True}
