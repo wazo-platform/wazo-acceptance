@@ -53,6 +53,10 @@ Feature: Call Generation
       | firstname | lastname | exten | context |
       | Bruce     | Wayne    | 1001  | default |
       | Clark     | Kent     | 1002  | default |
+    Given I listen on the bus for the following events:
+      | event            |
+      | MusicOnHoldStop  |
+      | MusicOnHoldStart |
     Given "Bruce Wayne" calls "1002"
     Given "Clark Kent" answers
     Then "Clark Kent" call is not "on_hold"
@@ -61,10 +65,13 @@ Feature: Call Generation
     When "Clark Kent" puts his call on hold
     Then "Clark Kent" call is "on_hold"
     Then "Bruce Wayne" call is not "on_hold"
+    Then I receive a "MusicOnHoldStart" event
+    Then I receive no "MusicOnHoldStop" event
 
     When "Clark Kent" resumes his call
     Then "Clark Kent" call is not "on_hold"
     Then "Bruce Wayne" call is not "on_hold"
+    Then I receive a "MusicOnHoldStop" event
 
   Scenario: Relocate with multiple contacts
     Given there are telephony users with infos:
