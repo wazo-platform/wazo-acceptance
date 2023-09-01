@@ -85,6 +85,7 @@ DEFAULT_INSTANCE_CONFIG = {
         'external_ip': None,
     },
     'system_password': None,
+    'reload_timeout': 5,
 }
 
 
