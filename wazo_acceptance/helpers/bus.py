@@ -92,7 +92,7 @@ class Bus:
         try:
             yield
         finally:
-            self._websocket_thread.join(timeout=5)
+            self._websocket_thread.join(timeout=self._context.wazo_config['reload_timeout'])
             if self._websocket_thread.is_alive():
                 logger.warning('No event received for %s', event_name)
             self._stop()
@@ -107,14 +107,15 @@ class Bus:
                 functools.partial(self._save_event, event)
             )
         self._start()
-        until.true(lambda: self._websocketd_client._is_running, interval=0.5, tries=10)
+        until.true(lambda: self._websocketd_client._is_running, interval=0.5, timeout=5)
 
         self._context.add_cleanup(self._stop)
 
     def _save_event(self, name, event):
         self._received_events.put(event)
 
-    def pop_received_event(self, timeout=5):
+    def pop_received_event(self, timeout=None):
+        timeout = timeout or self._context.wazo_config['reload_timeout']
         if self._websocket_thread is None:
             raise RuntimeError("websocket thread not started")
         return self._received_events.get(timeout=timeout)

@@ -48,38 +48,30 @@ Feature: Call Generation
     When I wait 2 seconds for the call processing
     Then "Sylvia Trench" is ringing
 
-  Scenario: Check that new calls are not marked as on_hold when GETTING calls
-    Given there are telephony users with infos:
-      | firstname | lastname | exten | context |
-      | Oliver    | Queen    | 1001  | default |
-      | Thea      | Queen    | 1002  | default |
-    Given "Oliver Queen" calls "1002"
-    When "Thea Queen" answers
-    Then "Oliver Queen" call is not "on_hold"
-    Then "Thea Queen" call is not "on_hold"
-
-  Scenario: Call on hold are marked as on_hold when GETTING calls
+  Scenario: Call on hold are marked as on_hold when listing calls
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
       | Bruce     | Wayne    | 1001  | default |
       | Clark     | Kent     | 1002  | default |
+    Given I listen on the bus for the following events:
+      | event            |
+      | MusicOnHoldStop  |
+      | MusicOnHoldStart |
     Given "Bruce Wayne" calls "1002"
     Given "Clark Kent" answers
+    Then "Clark Kent" call is not "on_hold"
+    Then "Bruce Wayne" call is not "on_hold"
+
     When "Clark Kent" puts his call on hold
     Then "Clark Kent" call is "on_hold"
     Then "Bruce Wayne" call is not "on_hold"
+    Then I receive a "MusicOnHoldStart" event
+    Then I receive no "MusicOnHoldStop" event
 
-  Scenario: Resumed calls are not marked as on_hold when GETTING calls
-    Given there are telephony users with infos:
-      | firstname | lastname | exten | context |
-      | Maggie    | Greene   | 1001  | default |
-      | Rick      | Grimes   | 1002  | default |
-    Given "Maggie Greene" calls "1002"
-    Given "Rick Grimes" answers
-    When "Maggie Greene" puts his call on hold
-    When "Maggie Greene" resumes his call
-    Then "Maggie Greene" call is not "on_hold"
-    Then "Rick Grimes" call is not "on_hold"
+    When "Clark Kent" resumes his call
+    Then "Clark Kent" call is not "on_hold"
+    Then "Bruce Wayne" call is not "on_hold"
+    Then I receive a "MusicOnHoldStop" event
 
   Scenario: Relocate with multiple contacts
     Given there are telephony users with infos:
