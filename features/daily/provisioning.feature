@@ -27,3 +27,15 @@ Feature: Provisioning
     Then I see in the AMI that the line "1001@default" has been synchronized
     When I synchronize the device with mac "00:11:22:33:44:02"
     Then I see in the AMI that the line "1002@default" has been synchronized
+
+  Scenario: HTTPS provisioning
+    Given the plugin "wazo-polycom" version "5.8.2" is installed
+    Given there are devices with infos:
+      | mac               | plugin version         |
+      | 00:11:22:33:44:55 | wazo-polycom-5.8.2     |
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | protocol | device            |
+      | User      | 02       | 1002  | default | sip      | 00:11:22:33:44:55 |
+    Then the following provisioning files are available over HTTPS:
+      | path                  | user-agent                                                      | expected_content |
+      | 001122334455-user.cfg | FileTransport PolycomVVX-VVX_101-UA/5.4.3.1014 Type/Application | <polycomConfig   |

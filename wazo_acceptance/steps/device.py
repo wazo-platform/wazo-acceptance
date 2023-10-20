@@ -1,7 +1,8 @@
-# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from behave import given, step, when
+from behave import given, step, when, then
+import requests
 
 
 @given('there are devices with infos')
@@ -28,3 +29,16 @@ def when_the_following_devices_are_created_via_http_requets_to_the_provisioning_
 def when_i_synchronize_the_device_with_mac(context, mac):
     device = context.helpers.device.get_by(mac=mac)
     context.confd_client.devices.synchronize(device['id'])
+
+
+@then('the following provisioning files are available over HTTPS')
+def then_the_following_provisioning_files_are_available_over_https(context):
+    for row in context.table:
+        file_ = row.as_dict()
+        url = f"https://{context.wazo_config['wazo_host']}/device/provisioning/{file_['path']}"
+        headers = {
+            'User-Agent': file_['user-agent']
+        }
+        response = requests.get(url, headers=headers, verify=False)
+        response.raise_for_status()
+        assert file_['expected_content'] in response.text
