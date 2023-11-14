@@ -24,7 +24,7 @@ def when_the_following_devices_are_created_via_http_requets_to_the_provisioning_
         body['user_agent'] = body.pop('user-agent')
         context.helpers.provd.create_device_via_http_request(**body)
 
-@then('the following provisioning files are available over HTTPS using secure key "{secure_key}"')
+@then('the following provisioning files are available over HTTPS using provisioning key "{secure_key}"')
 def then_the_following_provisioning_files_are_available_over_https_with_url_key(context, secure_key):
     for row in context.table:
         file_ = row.as_dict()
