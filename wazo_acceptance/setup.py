@@ -142,6 +142,7 @@ def setup_tenant(context):
     context.auth_client.tenant_uuid = tenants[0]['uuid']
     context.confd_client.tenant_uuid = tenants[0]['uuid']
     context.call_logd_client.tenant_uuid = tenants[0]['uuid']
+    context.provd_client.tenant_uuid = tenants[0]['uuid']
 
 
 def setup_config(context, config):

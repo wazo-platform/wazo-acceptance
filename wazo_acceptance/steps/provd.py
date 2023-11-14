@@ -71,10 +71,9 @@ def given_provd_http_auth_strategy_is(context, auth_strategy):
         'wazo-provd'
     )
 
-@given('the provd tenant provisioning key is "{provisioning_key}')
+@given('the provisioning key is "{provisioning_key}"')
 def given_provd_tenant_provisioning_key_is(context, provisioning_key):
-    tenant_uuid = context.wazo_config['default_tenant']
-    context.provd_client.params.update('provisioning_key', provisioning_key, tenant_uuid=tenant_uuid)
+    context.provd_client.params.update('provisioning_key', provisioning_key)
 
 
 def has_keys_absent_or_value_none(tested):
