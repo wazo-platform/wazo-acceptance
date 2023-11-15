@@ -1,4 +1,4 @@
-# Copyright 2013-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -49,6 +49,31 @@ def then_provd_offline_config_has_the_following_values(context, config_id, insta
         expected_values = {key: value for key, value in expected.items() if value is not None}
         assert_that(config, has_keys_absent_or_value_none(expected_none))
         assert_that(config, has_entries(expected_values))
+
+
+@given('the provd HTTP auth strategy is set to "{auth_strategy}"')
+def given_provd_http_auth_strategy_is(context, auth_strategy):
+    file_name = f'/etc/wazo-provd/conf.d/00-url-key.yml'
+    file_content = f'''general:
+    http_auth_strategy: {auth_strategy}
+    '''
+    context.remote_sysutils.write_content_file(file_name, file_content)
+
+    if context.remote_sysutils.is_process_running('wazo-provd'):
+        context.remote_sysutils.restart_service('wazo-provd')
+
+    context.add_cleanup(
+            context.remote_sysutils.send_command,
+            ['rm', '-f', f'{file_name}']
+        )
+    context.add_cleanup(
+        context.remote_sysutils.restart_service,
+        'wazo-provd'
+    )
+
+@given('the provisioning key is "{provisioning_key}"')
+def given_provd_tenant_provisioning_key_is(context, provisioning_key):
+    context.provd_client.params.update('provisioning_key', provisioning_key)
 
 
 def has_keys_absent_or_value_none(tested):

@@ -39,3 +39,17 @@ Feature: Provisioning
     Then the following provisioning files are available over HTTPS:
       | path                  | user-agent                                                      | expected_content |
       | 001122334455-user.cfg | FileTransport PolycomVVX-VVX_101-UA/5.4.3.1014 Type/Application | <polycomConfig   |
+
+  Scenario: URL Key provisioning
+    Given the provd HTTP auth strategy is set to "url_key"
+    Given the provisioning key is "secure123"
+    Given the plugin "wazo-polycom" version "5.8.2" is installed
+    Given there are devices with infos:
+      | mac               | plugin version         |
+      | 00:11:22:33:44:99 | wazo-polycom-5.8.2     |
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | protocol | device            |
+      | User      | 02       | 1002  | default | sip      | 00:11:22:33:44:99 |
+    Then the following provisioning files are available over HTTPS using provisioning key "secure123":
+      | path                  | user-agent                                                      | expected_content |
+      | 001122334499-user.cfg | FileTransport PolycomVVX-VVX_101-UA/5.4.3.1014 Type/Application | <polycomConfig   |
