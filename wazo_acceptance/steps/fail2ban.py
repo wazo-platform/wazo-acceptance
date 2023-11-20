@@ -24,6 +24,9 @@ def then_fail2banregex_for_name_matches_x_lines(context, name, match_count):
     output = context.ssh_client.out_call(command)
     last_lines = output.splitlines()[-5:]
 
-    expected_line = 'Lines: {0} lines, 0 ignored, {0} matched, 0 missed'.format(match_count)
-    assert_that(last_lines, has_item(expected_line),
-                f'output did not match: command was {command}')
+    expected = f'Lines: {match_count} lines, 0 ignored, {match_count} matched, 0 missed'
+    assert_that(
+        last_lines,
+        has_item(expected),
+        f'output did not match: command was {command}',
+    )

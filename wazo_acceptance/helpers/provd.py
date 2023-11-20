@@ -52,7 +52,8 @@ class Provd:
             )
 
     def create_device_via_http_request(self, path, user_agent, mac=None):
-        url = 'http://{}:8667/{}'.format(self._context.wazo_config['wazo_host'], path)
+        host = self._context.wazo_config['wazo_host']
+        url = f'http://{host}:8667/{path}'
         requests.get(url, headers={'User-Agent': user_agent})
         if mac:
             self._context.add_cleanup(self.delete_device_with_mac, mac)
