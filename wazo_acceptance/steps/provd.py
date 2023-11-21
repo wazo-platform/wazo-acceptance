@@ -53,7 +53,7 @@ def then_provd_offline_config_has_the_following_values(context, config_id, insta
 
 @given('the provd HTTP auth strategy is set to "{auth_strategy}"')
 def given_provd_http_auth_strategy_is(context, auth_strategy):
-    file_name = f'/etc/wazo-provd/conf.d/00-url-key.yml'
+    file_name = '/etc/wazo-provd/conf.d/00-url-key.yml'
     file_content = f'''general:
     http_auth_strategy: {auth_strategy}
     '''
@@ -62,18 +62,45 @@ def given_provd_http_auth_strategy_is(context, auth_strategy):
     if context.remote_sysutils.is_process_running('wazo-provd'):
         context.remote_sysutils.restart_service('wazo-provd')
 
-    context.add_cleanup(
-            context.remote_sysutils.send_command,
-            ['rm', '-f', f'{file_name}']
-        )
-    context.add_cleanup(
-        context.remote_sysutils.restart_service,
-        'wazo-provd'
-    )
+    def rm_config_file():
+        context.remote_sysutils.send_command(['rm', '-f', f'{file_name}'])
+        context.remote_sysutils.restart_service('wazo-provd')
+
+    context.add_cleanup(rm_config_file)
+
 
 @given('the provisioning key is "{provisioning_key}"')
 def given_provd_tenant_provisioning_key_is(context, provisioning_key):
     context.provd_client.params.update('provisioning_key', provisioning_key)
+    context.add_cleanup(
+        context.provd_client.params.update,
+        'provisioning_key',
+        None,
+    )
+
+
+@given('the provisioning http base url is "{base_url}"')
+def given_provd_tenant_provisioning_http_base_url_is(context, base_url):
+    body = {'provision_http_base_url': base_url}
+    context.confd_client.provisioning_networking.update(body)
+
+    reset_body = {'provision_http_base_url': None}
+    context.add_cleanup(
+        context.confd_client.provisioning_networking.update,
+        reset_body,
+    )
+
+
+@given('the provisioning port is "{port}"')
+def given_provd_tenant_provisioning_port_is(context, port):
+    body = {'provision_http_port': port}
+    context.confd_client.provisioning_networking.update(body)
+
+    reset_body = {'provision_http_port': 8667}
+    context.add_cleanup(
+        context.confd_client.provisioning_networking.update,
+        reset_body,
+    )
 
 
 def has_keys_absent_or_value_none(tested):
