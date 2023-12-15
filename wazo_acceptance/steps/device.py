@@ -59,4 +59,8 @@ def _provisioning_files_are_available(context, base_url):
         headers = {'User-Agent': file_['user-agent']}
         response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
-        assert file_['expected_content'] in response.text
+        expected_content = file_['expected_content'].replace(
+            '{{ wazo_ip_address }}',
+            context.wazo_config.get('wazo_host') or '<unknown>'
+        )
+        assert expected_content in response.text, f'Could not find "{expected_content}" in response "{response.text}"'
