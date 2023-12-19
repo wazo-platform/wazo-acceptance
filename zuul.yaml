@@ -1,4 +1,6 @@
 - project:
+    templates:
+      - wazo-tox-linters-310
     wazo-check:
       jobs:
         - wazo-acceptance-bullseye
