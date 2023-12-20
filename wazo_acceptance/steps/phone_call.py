@@ -183,7 +183,7 @@ def when_chan_test_calls_with_id(context, exten, exten_context, channel_id):
 
 
 @when('chan_test calls "{exten}@{exten_context}" with caller ID name "{cid_name}"')
-def when_chan_test_calls_with_id(context, exten, exten_context, cid_name):
+def when_chan_test_calls_with_id_name(context, exten, exten_context, cid_name):
     context_name = context.helpers.context.get_by(label=exten_context)['name']
     cmd = f'test new {exten} {context_name} chan-test-num {cid_name} {CHAN_PREFIX}'
     context.helpers.asterisk.send_to_asterisk_cli(cmd)
