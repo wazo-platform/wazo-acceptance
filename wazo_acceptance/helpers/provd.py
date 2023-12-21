@@ -1,4 +1,4 @@
-# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import requests
@@ -83,3 +83,8 @@ class Provd:
     def _find_by(self, key, value):
         devices = self._provd_client.devices.list({key: value})['devices']
         return devices[0] if devices else None
+
+    def get_default_advertised_ip_address(self):
+        server_path = '/tmp'
+        self._context.helpers.asset.copy_asset_to_server('provd-get-default-ip-address.sh', server_path)
+        return self._context.ssh_client.out_call(['bash', f'{server_path}/provd-get-default-ip-address.sh']).strip()

@@ -1,4 +1,4 @@
-# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import requests
@@ -59,8 +59,9 @@ def _provisioning_files_are_available(context, base_url):
         headers = {'User-Agent': file_['user-agent']}
         response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
+        provd_ip_address = context.helpers.provd.get_default_advertised_ip_address()
         expected_content = file_['expected_content'].replace(
-            '{{ wazo_ip_address }}',
-            context.wazo_config.get('wazo_host') or '<unknown>'
+            '{{ provd_ip_address }}',
+            provd_ip_address or '<unknown>'
         )
         assert expected_content in response.text, f'Could not find "{expected_content}" in response "{response.text}"'

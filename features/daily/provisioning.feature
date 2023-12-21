@@ -38,7 +38,7 @@ Feature: Provisioning
       | User      | 02       | 1002  | default | sip      | 80:5e:c0:d5:7d:57 |
     Then the following provisioning files are available over HTTP using port "8667":
       | path             | user-agent                                     | expected_content                   |
-      | 805ec0d57d57.cfg | Yealink SIP-T31G 124.86.0.75 80:5e:c0:d5:7d:57 | http://{{ wazo_ip_address }}:8667/ |
+      | 805ec0d57d57.cfg | Yealink SIP-T31G 124.86.0.75 80:5e:c0:d5:7d:57 | http://{{ provd_ip_address }}:8667/ |
 
   Scenario: HTTP provisioning with custom port
     Given the plugin "wazo-yealink" version "v86" is installed
@@ -51,7 +51,7 @@ Feature: Provisioning
       | User      | 02       | 1002  | default | sip      | 80:5e:c0:d5:7d:58 |
     Then the following provisioning files are available over HTTP using port "8642":
       | path             | user-agent                                     | expected_content                   |
-      | 805ec0d57d58.cfg | Yealink SIP-T31G 124.86.0.75 80:5e:c0:d5:7d:58 | http://{{ wazo_ip_address }}:8642/ |
+      | 805ec0d57d58.cfg | Yealink SIP-T31G 124.86.0.75 80:5e:c0:d5:7d:58 | http://{{ provd_ip_address }}:8642/ |
 
   Scenario: HTTPS provisioning with base URL
     Given the plugin "wazo-yealink" version "v86" is installed
