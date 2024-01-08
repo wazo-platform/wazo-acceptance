@@ -343,7 +343,7 @@ def copy_asset_to_server_permanently(context, asset, serverpath):
 
 
 def _configure_ssh_client(context):
-    # For HA tests (xivo-sync -i)
+    # For HA tests (wazo-sync -i)
     _install_packages(context, ['sshpass'])
     content = 'Host *\\\\n  StrictHostKeyChecking no'
     command = ['echo', '-e', content, '>', '/root/.ssh/config']
