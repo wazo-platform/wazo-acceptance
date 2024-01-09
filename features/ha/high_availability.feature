@@ -8,7 +8,7 @@ Feature: High availability
     Then there are cron jobs in "/etc/cron.d/xivo-ha-master" on "master"
       | cron job                                                                              |
       | 0 * * * * root /usr/sbin/xivo-master-slave-db-replication {{ slave_voip_ip_address }} |
-      | 0 * * * * root /usr/bin/xivo-sync                                                     |
+      | 0 * * * * root /usr/bin/wazo-sync                                                     |
     Then the provd config "default" has the following values on "master"
       | X_type    | proxy_backup                | registrar_backup            |
       | registrar | {{ slave_voip_ip_address }} | {{ slave_voip_ip_address }} |
@@ -38,14 +38,14 @@ Feature: High availability
     Given the file "/root/.ssh/xivo_id_rsa" does not exist on "master"
     Given the file "/root/.ssh/xivo_id_rsa.pub" does not exist on "master"
     Given the file "/root/.ssh/authorized_keys" does not contain "XiVO HA" on "slave"
-    When I initialize xivo-sync on "master" to "slave"
+    When I initialize wazo-sync on "master" to "slave"
     Then the file "/root/.ssh/xivo_id_rsa" exists on "master"
     Then the file "/root/.ssh/xivo_id_rsa.pub" exists on "master"
     Then the file "/root/.ssh/authorized_keys" contains "XiVO HA" on "slave"
 
     Given the file "/etc/asterisk/extensions_extra.d/acceptance.conf" exists on "master"
     Given the file "/etc/asterisk/extensions_extra.d/acceptance.conf" does not exist on "slave"
-    When I execute "xivo-sync" command on "master"
+    When I execute "wazo-sync" command on "master"
     Then the file "/etc/asterisk/extensions_extra.d/acceptance.conf" exists on "slave"
 
     # Workaround WAZO-2999

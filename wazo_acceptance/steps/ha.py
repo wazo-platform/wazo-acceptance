@@ -136,12 +136,12 @@ def then_i_wait_until_services_are_ready_on_instance(context, instance):
     until.assert_(confd_is_ready, timeout=90)
 
 
-@when('I initialize xivo-sync on "{instance_master}" to "{instance_slave}"')
+@when('I initialize wazo-sync on "{instance_master}" to "{instance_slave}"')
 def when_i_initialize_xivo_sync_on_instance(context, instance_master, instance_slave):
     master_context = getattr(context.instances, instance_master)
     slave_context = getattr(context.instances, instance_slave)
     password = slave_context.wazo_config['system_password']
     if not password:
         raise Exception('Missing "system_password" configuration')
-    command = ['sshpass', '-p', password, 'xivo-sync', '-i']
+    command = ['sshpass', '-p', password, 'wazo-sync', '-i']
     master_context.remote_sysutils.send_command(command)
