@@ -4,6 +4,7 @@ https://github.com/wazo-platform/pylinphonelib/archive/master.zip
 https://github.com/wazo-platform/wazo-agentd-client/archive/master.zip
 https://github.com/wazo-platform/wazo-amid-client/archive/master.zip
 https://github.com/wazo-platform/wazo-auth-client/archive/master.zip
+https://github.com/wazo-platform/wazo-bus/archive/master.zip
 https://github.com/wazo-platform/wazo-call-logd-client/archive/master.zip
 https://github.com/wazo-platform/wazo-calld-client/archive/master.zip
 https://github.com/wazo-platform/wazo-chatd-client/archive/master.zip
@@ -14,7 +15,6 @@ https://github.com/wazo-platform/wazo-provd-client/archive/master.zip
 https://github.com/wazo-platform/wazo-setupd-client/archive/master.zip
 https://github.com/wazo-platform/wazo-test-helpers/archive/master.zip
 https://github.com/wazo-platform/wazo-websocketd-client/archive/master.zip
-https://github.com/wazo-platform/xivo-bus/archive/master.zip
 https://github.com/wazo-platform/xivo-lib-python/archive/master.zip
 PyHamcrest
 SQLAlchemy
