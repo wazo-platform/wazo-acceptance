@@ -44,7 +44,7 @@ Feature: Stats generation
       | name       | exten | context | agents |
       | stat-queue | 3521  | default | 1003   |
     Given there are no hour change in the next 30 seconds
-    
+
     # First cycle
     When I log agent "1003" from API
     When I pause agent "1003"

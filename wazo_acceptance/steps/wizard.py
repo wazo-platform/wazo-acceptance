@@ -1,11 +1,8 @@
-# Copyright 2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2022-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then
-from hamcrest import (
-    assert_that,
-    has_entries,
-)
+from hamcrest import assert_that, has_entries
 
 
 @then('the wizard is correctly setup')

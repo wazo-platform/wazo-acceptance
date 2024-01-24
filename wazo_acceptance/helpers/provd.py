@@ -2,11 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import requests
-from hamcrest import (
-    assert_that,
-    is_,
-)
-
+from hamcrest import assert_that, is_
 from wazo_provd_client import operation
 from wazo_provd_client.exceptions import ProvdError
 from wazo_test_helpers import until

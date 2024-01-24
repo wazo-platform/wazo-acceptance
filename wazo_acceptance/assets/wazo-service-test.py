@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-# Copyright 2016-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2016-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import subprocess
 import re
+import subprocess
 
 BASE_SERVICES = [
     'asterisk',

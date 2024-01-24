@@ -1,15 +1,9 @@
-# Copyright 2017-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import requests
-
 from behave import then
-
-from hamcrest import (
-    assert_that,
-    equal_to,
-    not_,
-)
+from hamcrest import assert_that, equal_to, not_
 
 
 @then('"{method}" "{url_path}" does not answer 404')

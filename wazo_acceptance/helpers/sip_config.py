@@ -1,9 +1,8 @@
-# Copyright 2018-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2018-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from collections import namedtuple
 import subprocess
-
+from collections import namedtuple
 
 SIPConfig = namedtuple('SIPConfig', ('sip_port', 'rtp_port', 'sip_name', 'sip_passwd', 'sip_host'))
 

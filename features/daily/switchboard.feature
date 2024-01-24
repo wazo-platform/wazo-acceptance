@@ -74,6 +74,6 @@ Feature: Switchboards
     Then switchboard "no-timeout" has "i-will-not-timeout-1" in queued calls
     Then switchboard "no-fallback" has "i-will-not-timeout-2" in queued calls
 
-    # Should be Caller ID "i-will-be-transferred-to-switchboard", 
+    # Should be Caller ID "i-will-be-transferred-to-switchboard",
     # but is "Reception Clerk" due to an Asterisk bug on Local channels
     Then switchboard "transfer-destination" has "Reception Clerk" in queued calls

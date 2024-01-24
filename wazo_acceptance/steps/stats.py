@@ -1,11 +1,11 @@
-# Copyright 2020-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
-import pytz
-
-from behave import when, then
 from datetime import datetime, timedelta, timezone
+
+import pytz
+from behave import then, when
 
 logger = logging.getLogger('acceptance')
 

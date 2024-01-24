@@ -1,12 +1,11 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import time
 import string
+import time
 
-from behave import given, then, when, step
+from behave import given, step, then, when
 from hamcrest import assert_that, equal_to, is_
-
 from wazo_test_helpers import until
 
 

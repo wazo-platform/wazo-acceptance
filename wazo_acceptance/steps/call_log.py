@@ -1,14 +1,8 @@
-# Copyright 2013-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then
-from hamcrest import (
-    assert_that,
-    all_of,
-    greater_than,
-    has_entries,
-    less_than,
-)
+from hamcrest import all_of, assert_that, greater_than, has_entries, less_than
 from wazo_test_helpers import until
 
 

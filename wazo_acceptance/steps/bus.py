@@ -1,21 +1,12 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import collections
 import queue
 import time
 
-from behave import (
-    given,
-    then,
-)
-from hamcrest import (
-    assert_that,
-    empty,
-    has_entries,
-    has_key,
-)
-
+from behave import given, then
+from hamcrest import assert_that, empty, has_entries, has_key
 from wazo_test_helpers import until
 
 

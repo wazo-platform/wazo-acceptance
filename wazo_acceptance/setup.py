@@ -1,13 +1,12 @@
-# Copyright 2015-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import ari
 import logging
 
+import ari
 from requests.exceptions import HTTPError
-
-from wazo_amid_client import Client as AmidClient
 from wazo_agentd_client import Client as AgentdClient
+from wazo_amid_client import Client as AmidClient
 from wazo_auth_client import Client as AuthClient
 from wazo_call_logd_client import Client as CallLogdClient
 from wazo_calld_client import Client as CalldClient
@@ -18,9 +17,7 @@ from wazo_provd_client import Client as ProvdClient
 from wazo_setupd_client import Client as SetupdClient
 from wazo_websocketd_client import Client as WebsocketdClient
 
-from . import auth
-from . import debug
-from . import helpers
+from . import auth, debug, helpers
 from .phone_register import PhoneRegister
 from .ssh import SSHClient
 from .sysutils import RemoteSysUtils
