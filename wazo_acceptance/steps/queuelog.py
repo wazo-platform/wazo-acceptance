@@ -1,7 +1,7 @@
-# Copyright 2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from behave import given, when, then
+from behave import given, then, when
 
 
 @given('there is no queue_log for queue "{queue_name}"')

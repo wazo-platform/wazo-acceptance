@@ -178,7 +178,7 @@ Feature: Stats generation
           | firstname | lastname | exten | context | with_phone | agent_number |
           | Agent     | 012      | 1512  | default | yes        | 012          |
         Given there are queues with infos:
-          | name | exten | context | timeout | option_timeout | agents | 
+          | name | exten | context | timeout | option_timeout | agents |
           | q12  | 3512  | default | 10      | 5              | 012    |
         Given agent "012" is logged
         When chan_test calls "3512@default" with caller ID name "3512-1"
@@ -200,7 +200,7 @@ Feature: Stats generation
           | firstname | lastname | exten | context | with_phone | agent_number |
           | Agent     | 014      | 1514  | default | yes        | 014          |
         Given there are queues with infos:
-          | name | exten | context | timeout | option_timeout | agents | 
+          | name | exten | context | timeout | option_timeout | agents |
           | q14  | 3514  | default | 10      | 5              | 014    |
         Given agent "014" is logged
         When I pause agent "014"
@@ -214,7 +214,7 @@ Feature: Stats generation
           | firstname | lastname | exten | context | with_phone | agent_number |
           | Agent     | 015      | 1515  | default | yes        | 015          |
         Given there are queues with infos:
-          | name | exten | context | option_wrapuptime | agents | 
+          | name | exten | context | option_wrapuptime | agents |
           | q15  | 3515  | default | 5                 | 015    |
         Given agent "015" is logged
         When chan_test calls "3515@default" with id "3515-1"

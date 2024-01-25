@@ -1,16 +1,11 @@
-# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
 
 from ari.exceptions import ARINotFound
 from behave import step, then, when
-from hamcrest import (
-    assert_that,
-    has_entries,
-    has_length,
-    not_,
-)
+from hamcrest import assert_that, has_entries, has_length, not_
 from wazo_test_helpers import until
 
 CHAN_PREFIX = 'PJSIP'

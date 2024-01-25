@@ -1,11 +1,10 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import string
-
 from datetime import datetime, timezone
 
-from behave import given, when, then, step
+from behave import given, step, then, when
 from wazo_test_helpers import until
 
 from wazo_acceptance import auth, setup

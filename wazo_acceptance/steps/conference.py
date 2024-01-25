@@ -1,17 +1,8 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from hamcrest import (
-    assert_that,
-    contains_inanyorder,
-    has_entries,
-)
-
-from behave import (
-    given,
-    then,
-    when,
-)
+from behave import given, then, when
+from hamcrest import assert_that, contains_inanyorder, has_entries
 
 
 @given('there are conference rooms with infos')

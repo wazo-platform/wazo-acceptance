@@ -1,4 +1,4 @@
-# Copyright 2019-2022 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from .agent import *  # noqa
@@ -10,8 +10,8 @@ from .backup import *  # noqa
 from .bus import *  # noqa
 from .call import *  # noqa
 from .call_filter import *  # noqa
-from .call_permission import *  # noqa
 from .call_log import *  # noqa
+from .call_permission import *  # noqa
 from .conference import *  # noqa
 from .coredump import *  # noqa
 from .debian import *  # noqa

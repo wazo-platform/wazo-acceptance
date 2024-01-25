@@ -10,3 +10,7 @@ ignore = [
 exclude = [
     ".tox",
 ]
+
+[tool.isort]
+profile = "black"
+py_version = 39

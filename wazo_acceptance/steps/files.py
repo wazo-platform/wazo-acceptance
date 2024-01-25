@@ -1,18 +1,11 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
 import re
 
-from behave import then, given
-from hamcrest import (
-    assert_that,
-    contains_string,
-    equal_to,
-    is_,
-    is_not,
-    none,
-)
+from behave import given, then
+from hamcrest import assert_that, contains_string, equal_to, is_, is_not, none
 
 AUTOPROV_WIZARD_FILE = '/etc/asterisk/pjsip.d/05-autoprov-wizard.conf'
 BACKUP_DIR = '/var/backups/wazo'

@@ -1,15 +1,10 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
 
-from behave import when, then
-from hamcrest import (
-    assert_that,
-    empty,
-    is_,
-    is_not,
-)
+from behave import then, when
+from hamcrest import assert_that, empty, is_, is_not
 
 
 @when('I generate a core dump')

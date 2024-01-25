@@ -40,7 +40,7 @@ Feature: Boss Secretary Filter
     Then "Charlie Unknown" is ringing
     Then "Angel 001" is hungup
     When "Bad Guy" hangs up
-    
+
     When "Angel 001" press function key "1"
     When I wait 2 seconds for the call processing
     When I wait 3 seconds to play message
@@ -61,7 +61,7 @@ Feature: Boss Secretary Filter
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing
     Then "Angel 001" is hungup
-    
+
   Scenario: Strategy "all"
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | with_phone |

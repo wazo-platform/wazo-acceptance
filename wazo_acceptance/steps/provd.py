@@ -1,18 +1,10 @@
-# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
 
 from behave import given, then
-from hamcrest import (
-    all_of,
-    any_of,
-    assert_that,
-    has_entries,
-    has_entry,
-    has_key,
-    not_,
-)
+from hamcrest import all_of, any_of, assert_that, has_entries, has_entry, has_key, not_
 
 STABLE_URL = 'http://provd.wazo.community/plugins/2/stable/'
 

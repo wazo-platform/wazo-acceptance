@@ -1,18 +1,10 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
 
-from hamcrest import (
-    assert_that,
-    contains_inanyorder,
-    empty,
-    has_entries,
-)
-from behave import (
-    then,
-    when,
-)
+from behave import then, when
+from hamcrest import assert_that, contains_inanyorder, empty, has_entries
 
 
 @when('a message is left on voicemail "{vm_number}@{vm_context}" by "{cid_name}"')
