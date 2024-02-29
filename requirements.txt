@@ -14,7 +14,7 @@ https://github.com/wazo-platform/wazo-lib-rest-client/archive/master.zip
 https://github.com/wazo-platform/wazo-provd-client/archive/master.zip
 https://github.com/wazo-platform/wazo-setupd-client/archive/master.zip
 https://github.com/wazo-platform/wazo-test-helpers/archive/master.zip
-https://github.com/wazo-platform/wazo-websocketd-client/archive/master.zip
+https://github.com/wazo-platform/wazo-websocketd-client/archive/fix-client-close.zip
 https://github.com/wazo-platform/xivo-lib-python/archive/master.zip
 PyHamcrest
 SQLAlchemy
