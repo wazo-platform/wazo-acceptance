@@ -17,6 +17,7 @@ pipeline {
   stages {
     stage ('Prepare') {
       steps {
+        cleanWs()
         script {
           helpers = load('./jenkins/helpers.groovy')
         }

@@ -23,11 +23,11 @@ debug:
   wazo_test_helpers: True
 EOF
 
-set -xe -o pipefail
-
 VENV=wazo-acceptance-venv
-python3.9 -m venv $VENV
+python3.9 -m venv --clear $VENV
+set +x
 source $VENV/bin/activate
+set -x
 pip install wheel
 
 pip install -r requirements.txt
