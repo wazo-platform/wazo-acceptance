@@ -26,7 +26,7 @@ EOF
 set -xe -o pipefail
 
 VENV=wazo-acceptance-venv
-python3.9 -m venv $VENV
+python3.9 -m venv --clear $VENV
 source $VENV/bin/activate
 pip install wheel
 
