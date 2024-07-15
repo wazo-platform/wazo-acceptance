@@ -1,4 +1,4 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 _UNDEFINED = object()
@@ -26,7 +26,7 @@ class Call:
         user_uuid = kwargs.pop('user_uuid', _UNDEFINED)
         caller_id_number = kwargs.pop('caller_id_number', _UNDEFINED)
         caller_id_name = kwargs.pop('caller_id_name', _UNDEFINED)
-        calls = self._calld_client.calls.list_calls(**kwargs)['items']
+        calls = self._calld_client.calls.list_calls(recurse=True, **kwargs)['items']
         for call in calls:
             if user_uuid is not _UNDEFINED:
                 if user_uuid != call['user_uuid']:
