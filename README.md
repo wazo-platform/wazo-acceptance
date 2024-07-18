@@ -95,3 +95,4 @@ pip install coverage
 coverage run --source=wazo_acceptance $(which behave) ...
 coverage html
 ```
+WHY DID YOU MERGE THIS???
