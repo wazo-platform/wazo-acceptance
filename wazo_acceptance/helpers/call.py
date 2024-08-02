@@ -16,11 +16,11 @@ class Call:
             raise Exception(f'Call not found: {kwargs}')
         return call
 
-    def stop_recording(self, call_id):
-        self._calld_client.calls.stop_record(call_id)
+    def stop_recording(self, call_id, tenant_uuid):
+        self._calld_client.calls.stop_record(call_id, tenant_uuid=tenant_uuid)
 
-    def start_recording(self, call_id):
-        self._calld_client.calls.start_record(call_id)
+    def start_recording(self, call_id, tenant_uuid):
+        self._calld_client.calls.start_record(call_id, tenant_uuid=tenant_uuid)
 
     def find_by(self, **kwargs):
         user_uuid = kwargs.pop('user_uuid', _UNDEFINED)

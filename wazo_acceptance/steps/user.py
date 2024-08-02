@@ -488,14 +488,14 @@ def then_user_dst_has_n_calls_recording_from_incall(context, firstname_dst, last
 def when_user_stops_call_recording(context, firstname, lastname):
     user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     call = context.helpers.call.get_by(user_uuid=user['uuid'])
-    context.helpers.call.stop_recording(call['call_id'])
+    context.helpers.call.stop_recording(call['call_id'], user['tenant_uuid'])
 
 
 @when('"{firstname} {lastname}" starts call recording')
 def when_user_starts_call_recording(context, firstname, lastname):
     user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     call = context.helpers.call.get_by(user_uuid=user['uuid'])
-    context.helpers.call.start_recording(call['call_id'])
+    context.helpers.call.start_recording(call['call_id'], user['tenant_uuid'])
 
 
 @then('"{firstname} {lastname}" call is recording status is "{status}"')
