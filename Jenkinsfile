@@ -46,8 +46,7 @@ pipeline {
   }
   post {
     success {
-      cobertura coberturaReportFile: '**/coverage.xml'
-      junit testResults: 'junit/*/*.xml'
+      recordCoverage(tools: [[parser: 'COBERTURA', pattern: '**/coverage.xml']])
     }
     failure {
       mattermostSend color: "danger", channel: "#dev-failed-tests", message: "Daily Acceptance Tests [failed :nuke:](${JOB_URL})"
