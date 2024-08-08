@@ -64,13 +64,17 @@ Feature: Call Permissions
     Given there are telephony users with infos:
       | firstname | lastname  | exten | context | with_phone |
       | Bill      | Gates     | 1201  | default | yes        |
-      | Steve     | Ballmer   | 1202  | default | yes        |
-    Given there is an outcall using extension "11234@to-extern"
+    Given there is an outcall "outcall-1123" in context "to-extern" with extensions:
+      | exten  |
+      | _1123X |
     Given there are call permissions with infos:
-      | name       | extensions  | outcalls      |
-      | permission | 1202        | outcall-11234 |
-    When "Steve Ballmer" calls "11234"
-    When I wait 4 seconds for the no permission message to complete
+      | name       | extensions  | outcall       |
+      | permission | 11234       | outcall-1123  |
     When "Bill Gates" calls "11234"
+    Then "Bill Gates" hears the sound file "noright"
+    Then "outcall-1123" is not ringing
+    When I wait 5 seconds for the no permission message to complete
+    Then "Bill Gates" is hungup
+    When "Bill Gates" calls "11235"
     When I wait 2 seconds for the call processing
-    Then "outcall-11234" is ringing
+    Then "outcall-1123" is ringing

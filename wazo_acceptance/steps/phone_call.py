@@ -5,7 +5,7 @@ import time
 
 from ari.exceptions import ARINotFound
 from behave import step, then, when
-from hamcrest import assert_that, has_entries, has_length, not_
+from hamcrest import assert_that, has_length, not_
 from wazo_test_helpers import until
 
 CHAN_PREFIX = 'PJSIP'
@@ -34,6 +34,12 @@ def step_user_is_ringing_showing_callerid(context, tracking_id, callerid):
 def step_user_is_ringing_on_contact_number(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     until.true(phone.is_ringing, tries=NB_RETRY)
+
+
+@step('"{tracking_id}" is not ringing')
+def step_user_is_not_ringing(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    until.true(phone.is_hungup, tries=NB_RETRY)
 
 
 @step('"{tracking_id}" is holding')
@@ -286,7 +292,5 @@ def _sound_is_playing(context, channel_id, sound_file_name):
     except ARINotFound as e:
         raise AssertionError(e)
 
-    assert_that(channel.json['dialplan'], has_entries({
-        'app_name': 'Playback',
-        'app_data': sound_file_name
-    }))
+    assert channel.json['dialplan']['app_name'] == 'Playback', f"Wrong Asterisk app: {channel.json['dialplan']}"
+    assert channel.json['dialplan']['app_data'] == sound_file_name, f"Wrong Asterisk app data: {channel.json['dialplan']}"
