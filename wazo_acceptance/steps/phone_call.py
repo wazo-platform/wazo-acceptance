@@ -294,3 +294,24 @@ def _sound_is_playing(context, channel_id, sound_file_name):
 
     assert channel.json['dialplan']['app_name'] == 'Playback', f"Wrong Asterisk app: {channel.json['dialplan']}"
     assert channel.json['dialplan']['app_data'] == sound_file_name, f"Wrong Asterisk app data: {channel.json['dialplan']}"
+
+
+@then('"{tracking_id}" hears an authentication message')
+def then_user_hears_an_authentication_message(context, tracking_id):
+    phone = context.phone_register.get_phone(tracking_id)
+    channel_id = until.return_(_phone_has_one_channel, context, tracking_id, phone, timeout=5)
+    until.assert_(
+        _authenticate_sound_is_playing, context, channel_id,
+        timeout=8,
+        interval=0.5,
+        message='The user is not being asked to authenticate',
+    )
+
+
+def _authenticate_sound_is_playing(context, channel_id):
+    try:
+        channel = context.ari_client.channels.get(channelId=channel_id)
+    except ARINotFound as e:
+        raise AssertionError(e)
+
+    assert channel.json['dialplan']['app_name'] == 'Authenticate', f"Wrong Asterisk app: {channel.json['dialplan']}"

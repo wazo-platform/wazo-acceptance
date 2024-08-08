@@ -10,8 +10,8 @@ Feature: Call Permissions
       | name       | extensions | users            |
       | permission | 1002       | Lagherta Unknown |
     When "Lagherta Unknown" calls "1002"
-    When I wait 2 seconds for the call processing
-    Then "Ragnar Lodbrok" is hungup
+    Then "Lagherta Unknown" hears the sound file "noright"
+    Then "Ragnar Lodbrok" is not ringing
     When I wait 4 seconds for the no permission message to complete
     Then "Lagherta Unknown" is hungup
     When "Björn Ironside" calls "1002"
@@ -26,13 +26,13 @@ Feature: Call Permissions
       | name       | extensions | users            | password |
       | perm-pwd   | 1102       | Gerard Tremblay  | 1234     |
     When "Gerard Tremblay" calls "1102"
-    When I wait 2 seconds for the call processing
-    Then "Sylvie Duquette" is hungup
+    Then "Gerard Tremblay" hears an authentication message
+    Then "Sylvie Duquette" is not ringing
     When I wait 4 seconds for the password input message to complete
     When "Gerard Tremblay" sends multiple DTMF "2222#"
-    When I wait 4 seconds for the no permission message to complete
-    Then "Sylvie Duquette" is hungup
-    When I wait 4 seconds for the password input message to complete
+    Then "Gerard Tremblay" hears an authentication message
+    Then "Sylvie Duquette" is not ringing
+    When I wait 5 seconds for the password input message to complete
     When "Gerard Tremblay" sends multiple DTMF "1234#"
     When I wait 2 seconds for the call processing
     Then "Sylvie Duquette" is ringing
@@ -53,9 +53,9 @@ Feature: Call Permissions
       | name       | extensions | groups            |
       | permission | 1202       | RomanoFafard      |
     When "Sonia Champoux" calls "1202"
-    When I wait 2 seconds for the call processing
-    Then "Charles Patenaude" is hungup
-    When I wait 4 seconds for the no permission message to complete
+    Then "Sonia Champoux" hears the sound file "noright"
+    Then "Charles Patenaude" is not ringing
+    When I wait 5 seconds for the no permission message to complete
     Then "Sonia Champoux" is hungup
     When "Flavien Bouchard" calls "1202"
     Then "Charles Patenaude" is ringing
