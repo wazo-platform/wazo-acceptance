@@ -35,7 +35,7 @@ def given_there_is_an_outcall_using_extension(context, outcall_name, outcall_con
     for row in context.table:
         row = row.as_dict()
 
-        body = {'exten': row['exten'], 'context': outcall_context}
+        body = {'exten': row['exten'], 'context': context_name}
         extension = context.helpers.extension.create(body)
         context.helpers.outcall.add_extension(outcall, extension)
 
