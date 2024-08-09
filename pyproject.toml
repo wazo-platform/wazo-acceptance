@@ -14,3 +14,13 @@ exclude = [
 [tool.isort]
 profile = "black"
 py_version = 39
+
+[tool.coverage.report]
+exclude_also = [
+    "if command_result.returncode != 0:",
+    "if exception:",
+    "if TYPE_CHECKING:",
+    "except LinphoneException",
+    "raise Exception",
+    "raise NotImplementedError",
+]

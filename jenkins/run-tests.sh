@@ -32,7 +32,7 @@ pip install wheel
 
 pip install -r requirements.txt
 pip install coverage
-python setup.py install
+pip install -e .  # use source files for coverage report
 docker pull wazoplatform/wazo-linphone
 
 coverage run --source=wazo_acceptance $(which behave) features/pre_daily --verbose --junit --junit-directory=junit/pre_daily 2>&1 | tee --append acceptance.log
