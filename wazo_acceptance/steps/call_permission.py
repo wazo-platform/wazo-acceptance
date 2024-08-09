@@ -1,4 +1,4 @@
-# Copyright 2020-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -25,5 +25,5 @@ def given_there_are_call_permissions_with_infos(context):
 
         if body.get('outcall'):
             for name in body.get('outcall').split(','):
-                outcall = context.helpers.confd_outcall.get_by(search=name)
-                context.confd_client.outcall(outcall).add_call_permission(call_permission)
+                outcall = context.helpers.outcall.get_by(search=name)
+                context.confd_client.outcalls(outcall).add_call_permission(call_permission)
