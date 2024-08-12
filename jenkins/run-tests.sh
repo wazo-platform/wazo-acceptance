@@ -31,7 +31,7 @@ set -x
 pip install wheel
 
 pip install -r requirements.txt
-pip install coverage
+pip install coverage[toml]
 pip install -e .  # use source files for coverage report
 docker pull wazoplatform/wazo-linphone
 
