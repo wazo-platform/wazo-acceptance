@@ -21,6 +21,7 @@ exclude_also = [
     "if exception:",
     "if TYPE_CHECKING:",
     "except LinphoneException",
+    "raise AssertionError",
     "raise Exception",
     "raise NotImplementedError",
 ]
