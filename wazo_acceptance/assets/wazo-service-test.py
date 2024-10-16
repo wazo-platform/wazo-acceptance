@@ -51,14 +51,23 @@ def _retry(timeout: float, interval: float):
         time.sleep(interval)
 
 
-def _is_monit_running(expected: bool):
+def _monit_is_running():
     for _ in _retry(timeout=5, interval=1):
         lines = _exec(['pgrep', '-l', 'monit'])
         is_running = any(MONIT_RUNNING.match(line) for line in lines)
-        if is_running is expected:
-            return is_running
+        if is_running:
+            return True
+    return False
+
+
+def _monit_is_not_running():
+    for _ in _retry(timeout=5, interval=1):
+        lines = _exec(['pgrep', '-l', 'monit'])
+        is_running = any(MONIT_RUNNING.match(line) for line in lines)
+        if not is_running:
+            return True
     else:
-        return is_running
+        return False
 
 
 def _wazo_service(*args):
@@ -99,21 +108,21 @@ def _are_all_items_matched_in_buffer(buf, matcher, items):
 
 
 def main():
-    assert _is_monit_running(expected=True)
+    assert _monit_is_running()
     assert _are_services_running(BASE_SERVICES)
 
     _wazo_service('stop')
-    assert not _is_monit_running(expected=False)
+    assert _monit_is_not_running()
     assert _are_services_stopped(BASE_SERVICES)
 
     output = _wazo_service('start')
     assert _are_services_starting(output, BASE_SERVICES)
     assert _are_services_running(BASE_SERVICES)
-    assert _is_monit_running(expected=True)
+    assert _monit_is_running()
 
     output = _wazo_service('restart', 'all')
     assert _are_services_starting(output, ALL_SERVICES)
-    assert _is_monit_running(expected=True)
+    assert _monit_is_running()
 
 
 if __name__ == '__main__':
