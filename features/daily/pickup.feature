@@ -109,3 +109,20 @@ Feature: Pickup
     Then "Wally Lasagna" is hungup
     Then "Dilbert Bologna" is talking
     Then "Alice Wonder" is talking
+
+  Scenario: Directed pickup with mobile
+    Given the direct pickup is enabled with "*8"
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context | with_token |
+      | Dilbert   | Bologna  | 1001  | default |            |
+      | Wally     | Lasagna  |       |         | mobile     |
+      | Alice     | Wonder   | 1003  | default |            |
+    Given "Wally Lasagna" has lines:
+      | name  | exten | context | with_phone | webrtc |
+      | wally | 1002  | default | yes        | yes    |
+    When "Dilbert Bologna" calls "1002"
+    Then "Wally Lasagna" is ringing
+    When "Alice Wonder" calls "*81002"
+    Then "Wally Lasagna" is hungup
+    Then "Dilbert Bologna" is talking
+    Then "Alice Wonder" is talking
