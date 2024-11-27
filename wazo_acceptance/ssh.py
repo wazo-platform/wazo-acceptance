@@ -27,8 +27,8 @@ class SSHClient:
 
     _fobj_devnull = open(os.devnull, 'r+')
 
-    def __init__(self, hostname, login):
-        self._hostname = hostname
+    def __init__(self, host, login):
+        self._hostname = host
         self._login = login
 
     def send_files(self, path_from, path_to):
