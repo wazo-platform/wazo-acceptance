@@ -48,7 +48,7 @@ class Provd:
             )
 
     def create_device_via_http_request(self, path, user_agent, mac=None):
-        host = self._context.wazo_config['wazo_host']
+        host = self._context.wazo_config['provd']['provisioning_host']
         url = f'http://{host}:8667/{path}'
         requests.get(url, headers={'User-Agent': user_agent})
         if mac:

@@ -33,21 +33,21 @@ def when_the_following_devices_are_created_via_http_requets_to_the_provisioning_
 
 @then('the following provisioning files are available over HTTP using port "{port}"')
 def then_the_following_provisioning_files_are_available_over_http_using_port(context, port):
-    host = context.wazo_config['wazo_host']
+    host = context.wazo_config['provd']['provisioning_host']
     base_url = f"http://{host}:{port}"
     _provisioning_files_are_available(context, base_url)
 
 
 @then('the following provisioning files are available over HTTPS')
 def then_the_following_provisioning_files_are_available_over_https(context):
-    host = context.wazo_config['wazo_host']
+    host = context.wazo_config['provd']['provisioning_host']
     base_url = f"https://{host}/device/provisioning"
     _provisioning_files_are_available(context, base_url)
 
 
 @then('the following provisioning files are available over HTTPS using provisioning key "{provisioning_key}"')
 def then_the_following_provisioning_files_are_available_over_https_using_key(context, provisioning_key):
-    host = context.wazo_config['wazo_host']
+    host = context.wazo_config['provd']['provisioning_host']
     base_url = f"https://{host}/device/provisioning/{provisioning_key}"
     _provisioning_files_are_available(context, base_url)
 

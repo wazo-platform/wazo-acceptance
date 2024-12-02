@@ -143,5 +143,8 @@ def _config_update_host(config):
     for service in services:
         config[service].setdefault('host', wazo_host)
 
+    # Useful when HTTP are proxied by not provisioning server
+    config['provd'].setdefault('provisioning_host', wazo_host)
+
     ari_host = config['ari'].pop('host')
     config['ari']['base_url'] = f"http://{ari_host}:5039"
