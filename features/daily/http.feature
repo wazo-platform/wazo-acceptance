@@ -19,6 +19,7 @@ Feature: HTTP
     | GET    | /api/webhookd/1.0/config     |
     | GET    | /api/websocketd/             |
 
+  @rate-limit
   Scenario Outline: Unauthenticated HTTP resources are throttled
     Then "<method>" "<url>" eventually receive the answer 429 instead of "<status_code>"
 
