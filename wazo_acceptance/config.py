@@ -66,7 +66,9 @@ DEFAULT_INSTANCE_CONFIG = {
     'websocketd': {
         'verify_certificate': False,
     },
-    'ssh_login': 'root',
+    'ssh': {
+        'login': 'root',
+    },
     'linphone': {
         'sip_port_range': '5001,5009',
         'rtp_port_range': '5100,5120',
@@ -126,6 +128,7 @@ def _config_update_host(config):
         'agentd',
         'amid',
         'auth',
+        'ari',
         'call_logd',
         'calld',
         'chatd',
@@ -133,10 +136,15 @@ def _config_update_host(config):
         'dird',
         'provd',
         'setupd',
+        'ssh',
         'bus',
         'websocketd',
     )
     for service in services:
         config[service].setdefault('host', wazo_host)
 
-    config['ari']['base_url'] = f'http://{wazo_host}:5039'
+    # Useful when HTTP are proxied by not provisioning server
+    config['provd'].setdefault('provisioning_host', wazo_host)
+
+    ari_host = config['ari'].pop('host')
+    config['ari']['base_url'] = f"http://{ari_host}:5039"

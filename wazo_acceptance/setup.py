@@ -148,10 +148,7 @@ def setup_config(context, config):
 
 @debug.logcall
 def setup_ssh_client(context):
-    context.ssh_client = SSHClient(
-        hostname=context.wazo_config['wazo_host'],
-        login=context.wazo_config['ssh_login'],
-    )
+    context.ssh_client = SSHClient(**context.wazo_config['ssh'])
 
 
 class Helpers:
