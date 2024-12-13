@@ -125,15 +125,13 @@ class Bus:
             raise RuntimeError("websocket thread already started")
         self._received_events = queue.Queue()
         self._websocket_thread = threading.Thread(target=self._websocketd_client.run)
+        logger.debug('Starting websocketd client thread...')
         self._websocket_thread.start()
 
     def _stop(self):
         if self._websocket_thread.is_alive():
             self._websocketd_client._ws_app.close()
             self._websocket_thread.join()
-        # TODO allow to remove callback on wazo-websocketd-client
-        self._websocketd_client._callbacks.clear()
-        self._websocketd_client._ws_app = None
-        self._websocketd_client._is_running = False
+        self._websocketd_client.stop()
         self._received_events = None
         self._websocket_thread = None
