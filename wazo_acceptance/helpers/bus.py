@@ -108,9 +108,8 @@ class Bus:
                 functools.partial(self._save_event, event)
             )
         self._start()
-        until.true(lambda: self._websocketd_client._is_running, interval=0.5, timeout=5)
-
         self._context.add_cleanup(self._stop)
+        until.true(lambda: self._websocketd_client._is_running, interval=0.5, timeout=5)
 
     def _save_event(self, name, event):
         self._received_events.put(event)
