@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
-import time
 import string
 import time
 
@@ -525,10 +524,12 @@ def given_user_has_x_seconds_ringing_time(context, firstname, lastname, seconds)
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     context.helpers.confd_user.set_ringing_time(confd_user, int(seconds))
 
+
 @given('ring group is "{group_name}"')
 def given_ring_group_name(context, group_name):
     group = context.helpers.confd_group.get_by(label=group_name)
     context.ring_group = group
+
 
 @when('there are users "{json_file}"')
 def when_there_are_users(context, json_file):
@@ -592,6 +593,7 @@ def when_there_are_users(context, json_file):
             ):
                 for sip in sips:
                     context.helpers.sip_phone.register_and_track_phone(tracking_id, sip)
+
 
 @given('switchboard is "{name}"')
 def given_there_are_switchboards_with_infos(context, name):
