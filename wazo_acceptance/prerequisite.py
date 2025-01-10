@@ -1,4 +1,4 @@
-# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -291,7 +291,7 @@ def _configure_asterisk(context):
 
 
 def _configure_postgresql_debug(context):
-    config_file = '/etc/postgresql/13/main/postgresql.conf'
+    config_file = '/etc/postgresql/15/main/postgresql.conf'
     command = [
         'sed',
         '-i',
@@ -299,7 +299,7 @@ def _configure_postgresql_debug(context):
         config_file,
     ]
     context.ssh_client.check_call(command)
-    pg_is_running = context.remote_sysutils.is_process_running('postgresql@13-main')
+    pg_is_running = context.remote_sysutils.is_process_running('postgresql@15-main')
     if pg_is_running:
         context.remote_sysutils.reload_service('postgresql')
 
