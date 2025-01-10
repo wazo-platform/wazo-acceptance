@@ -1,9 +1,14 @@
+- job:
+    name: wazo-acceptance-bullseye-pg15
+    parent: wazo-acceptance-bullseye
+    pre-run: zuul.d/pre-run-pg15.yaml
+
 - project:
     templates:
       - wazo-tox-linters-310
     wazo-check:
       jobs:
-        - wazo-acceptance-bullseye
+        - wazo-acceptance-bullseye-pg15
     wazo-gate:
       jobs:
         - wazo-acceptance-bullseye

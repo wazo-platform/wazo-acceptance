@@ -1,0 +1,25 @@
+---
+- hosts: all
+  tasks:
+    - name: Install requirements
+      become: yes
+      apt:
+        name:
+          - curl
+          - ca-certificates
+        state: present
+    - name: step1
+      become: yes
+      ansible.builtin.shell: install -d /usr/share/postgresql-common/pgdg
+    - name: step2
+      become: yes
+      ansible.builtin.shell: curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    - name: step3
+      become: yes
+      ansible.builtin.shell: sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+    - name: step4
+      become: yes
+      ansible.builtin.shell: apt update
+    - name: step5
+      become: yes
+      ansible.builtin.shell: apt -y install postgresql-15
