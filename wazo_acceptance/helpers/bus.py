@@ -1,4 +1,4 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import annotations
@@ -122,7 +122,6 @@ class Bus:
         if self._websocket_thread:
             logger.error("websocket thread already started. Stopping.")
             self._stop()
-            # raise RuntimeError("websocket thread already started")
         self._received_events = queue.Queue()
         self._websocket_thread = threading.Thread(target=self._websocketd_client.run)
         logger.debug('Starting websocketd client thread...')
