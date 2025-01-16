@@ -1,4 +1,4 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import annotations
@@ -65,8 +65,7 @@ class Bus:
             elif data['status'] == 'completed' and task_uuid in tasks.values():
                 tasks.pop(command)
                 if not tasks:
-                    # TODO expose close method on wazo-websocketd-client
-                    self._websocketd_client._ws_app.close()
+                    self._websocketd_client.stop()
 
         self._websocketd_client.on('asterisk_reload_progress', asterisk_reload)
         with self._managed_bus_connection(reload_commands):
@@ -80,8 +79,7 @@ class Bus:
                 assert_that(data['data'], has_entries(**expected_data))
             except AssertionError:
                 return
-            # TODO expose close method on wazo-websocketd-client
-            self._websocketd_client._ws_app.close()
+            self._websocketd_client.stop()
 
         self._websocketd_client.on(event_name, event_received)
         with self._managed_bus_connection(event_name):
@@ -109,7 +107,7 @@ class Bus:
             )
         self._start()
         self._context.add_cleanup(self._stop)
-        until.true(lambda: self._websocketd_client._is_running, interval=0.5, timeout=5)
+        until.true(lambda: self._websocketd_client.is_running, interval=0.5, timeout=5)
 
     def _save_event(self, name, event):
         self._received_events.put(event)
@@ -122,7 +120,8 @@ class Bus:
 
     def _start(self):
         if self._websocket_thread:
-            raise RuntimeError("websocket thread already started")
+            logger.error("websocket thread already started. Stopping.")
+            self._stop()
         self._received_events = queue.Queue()
         self._websocket_thread = threading.Thread(target=self._websocketd_client.run)
         logger.debug('Starting websocketd client thread...')
@@ -130,8 +129,7 @@ class Bus:
 
     def _stop(self):
         if self._websocket_thread.is_alive():
-            self._websocketd_client._ws_app.close()
+            self._websocketd_client.stop()
             self._websocket_thread.join()
-        self._websocketd_client.stop()
         self._received_events = None
         self._websocket_thread = None
