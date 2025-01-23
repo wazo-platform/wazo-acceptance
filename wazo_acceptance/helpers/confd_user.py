@@ -20,6 +20,7 @@ class ConfdUser:
             'call_record_incoming_internal_enabled',
             'call_record_outgoing_external_enabled',
             'call_record_incoming_external_enabled',
+            'online_call_record_enabled',
         ]
         for field in recording_fields:
             record_enabled = body.pop(field, None)

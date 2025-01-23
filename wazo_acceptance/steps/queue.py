@@ -1,4 +1,4 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, when
@@ -21,6 +21,11 @@ def given_there_are_queues(context):
             if value is not None:
                 option_name = option[7:]
                 body['options'].append((option_name, value))
+
+        record_toggle = body.pop('dtmf_record_toggle', None)
+        if record_toggle:
+            body['dtmf_record_toggle'] = record_toggle == 'yes'
+
         queue = context.helpers.queue.create(body)
 
         context_name = context.helpers.context.get_by(label=body['context'])['name']
