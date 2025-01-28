@@ -1,11 +1,11 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import string
 import time
 
 from behave import given, step, then, when
-from hamcrest import assert_that, equal_to, is_
+from hamcrest import assert_that, equal_to, has_length, is_
 from wazo_test_helpers import until
 
 
@@ -461,7 +461,7 @@ def then_user_src_has_n_calls_recording_with_user_dst(context, firstname_src, la
     cdr = context.call_logd_client.cdr.list(user_uuid=user_src['uuid'])['items']
     assert cdr[0]['source_user_uuid'] == user_src['uuid']
     assert cdr[0]['destination_user_uuid'] == user_dst['uuid']
-    assert len(cdr[0]['recordings']) == int(count)
+    assert_that(cdr[0]['recordings'], has_length(int(count)))
     unique_media = set()
     for recording in cdr[0]['recordings']:
         media = context.call_logd_client.cdr.get_recording_media(cdr[0]['id'], recording['uuid'])
@@ -473,10 +473,9 @@ def then_user_src_has_n_calls_recording_with_user_dst(context, firstname_src, la
 def then_user_dst_has_n_calls_recording_from_incall(context, firstname_dst, lastname_dst, incall, count):
     user_dst = context.helpers.confd_user.get_by(firstname=firstname_dst, lastname=lastname_dst)
     cdr = context.call_logd_client.cdr.list(user_uuid=user_dst['uuid'])['items']
-    print(cdr)
     assert cdr[0]['destination_user_uuid'] == user_dst['uuid']
     assert cdr[0]['source_extension'] == incall
-    assert len(cdr[0]['recordings']) == int(count)
+    assert_that(cdr[0]['recordings'], has_length(int(count)))
     unique_media = set()
     for recording in cdr[0]['recordings']:
         media = context.call_logd_client.cdr.get_recording_media(cdr[0]['id'], recording['uuid'])
