@@ -33,9 +33,9 @@ Feature: Call Record
 
   Scenario: Stopping and Starting the recording results in multiple files
     Given there are telephony users with infos:
-      | firstname | lastname   | call_record_outgoing_internal_enabled | exten | context | with_phone |
-      | User      | Desjardins | yes                                   | 1800  | default | yes        |
-      | User      | 801        | no                                    | 1801  | default | yes        |
+      | firstname | lastname   | call_record_outgoing_internal_enabled | exten | context | with_phone | online_call_record_enabled |
+      | User      | Desjardins | yes                                   | 1800  | default | yes        | yes                        |
+      | User      | 801        | no                                    | 1801  | default | yes        | no                         |
     Given "User Desjardins" has no call recording
     Given I listen on the bus for "call_log_created" messages
     When "User Desjardins" calls "1801"
@@ -167,9 +167,9 @@ Feature: Call Record
 
   Scenario: User to user recording status
     Given there are telephony users with infos:
-      | firstname | lastname | exten | context | with_phone |
-      | User      | Brown    | 1800  | default | yes        |
-      | User      | 801      | 1801  | default | yes        |
+      | firstname | lastname | exten | context | with_phone | online_call_record_enabled |
+      | User      | Brown    | 1800  | default | yes        | yes                        |
+      | User      | 801      | 1801  | default | yes        | yes                        |
     When "User Brown" calls "1801"
     When "User 801" answers
     When "User Brown" starts call recording
@@ -184,12 +184,12 @@ Feature: Call Record
 
   Scenario: User to group recording status
     Given there are telephony users with infos:
-      | firstname | lastname | exten | context | with_phone |
-      | User      | Smith    | 1800  | default | yes        |
-      | User      | 801      | 1801  | default | yes        |
+      | firstname | lastname | exten | context | with_phone | online_call_record_enabled |
+      | User      | Smith    | 1800  | default | yes        | yes                        |
+      | User      | 801      | 1801  | default | yes        | yes                        |
     Given there are telephony groups with infos:
-      | label      | exten | context |
-      | incoming   |  2514 | default |
+      | label      | exten | context | dtmf_record_toggle |
+      | incoming   |  2514 | default | yes                |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | 801      |
@@ -207,12 +207,12 @@ Feature: Call Record
 
   Scenario: User to queue recording status
     Given there are telephony users with infos:
-      | firstname | lastname | exten | context | with_phone |
-      | User      | Ray      | 1800  | default | yes        |
-      | User      | 801      | 1801  | default | yes        |
+      | firstname | lastname | exten | context | with_phone | online_call_record_enabled |
+      | User      | Ray      | 1800  | default | yes        | yes                        |
+      | User      | 801      | 1801  | default | yes        | yes                        |
     Given there are queues with infos:
-      | name       | exten | context |
-      | incoming   |  3123 | default |
+      | name       | exten | context | dtmf_record_toggle |
+      | incoming   |  3123 | default | yes                |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | 801      |
@@ -230,8 +230,8 @@ Feature: Call Record
 
   Scenario: Incoming call to user
     Given there are telephony users with infos:
-      | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled |
-      | User      | Boucher  | 1800  | default | yes        | yes                                   |
+      | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled | online_call_record_enabled |
+      | User      | Boucher  | 1800  | default | yes        | yes                                   | yes                        |
     Given there is an incall "1800@from-extern" to the user "User Boucher"
     Given "User Boucher" has no call recording
     When incoming call received from "5551231234" to "1800@from-extern"
@@ -253,8 +253,8 @@ Feature: Call Record
       | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled |
       | User      | Baker    | 1800  | default | yes        | yes                                   |
     Given there are telephony groups with infos:
-      | label      | exten | context |
-      | incoming   |  2514 | default |
+      | label      | exten | context | dtmf_record_toggle |
+      | incoming   |  2514 | default | yes                |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | Baker    |
@@ -279,8 +279,8 @@ Feature: Call Record
       | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled |
       | User      | Anderson | 1800  | default | yes        | yes                                   |
     Given there are queues with infos:
-      | name       | exten | context |
-      | incoming   |  3123 | default |
+      | name       | exten | context | dtmf_record_toggle |
+      | incoming   |  3123 | default | yes                |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | Anderson |
