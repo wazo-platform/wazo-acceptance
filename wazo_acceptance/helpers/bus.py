@@ -21,6 +21,7 @@ class Bus:
     def __init__(self, context):
         self._context = context
         self._websocketd_client = context.websocketd_client
+        self._websocket_ready = False
         self._websocket_thread = None
         self._received_events = None
 
@@ -53,6 +54,10 @@ class Bus:
         tasks = {command: None for command in reload_commands}
 
         def asterisk_reload(event):
+            if not self._websocket_ready:
+                # event was triggered by a previous action
+                return
+
             global tasks
             data = event['data']
             command = data['command']
@@ -74,6 +79,9 @@ class Bus:
     @contextmanager
     def wait_for_event(self, event_name, expected_data):
         def event_received(data):
+            if not self._websocket_ready:
+                # event was triggered by a previous action
+                return
 
             try:
                 assert_that(data['data'], has_entries(**expected_data))
@@ -107,7 +115,6 @@ class Bus:
             )
         self._start()
         self._context.add_cleanup(self._stop)
-        until.true(lambda: self._websocketd_client.is_running, interval=0.5, timeout=5)
 
     def _save_event(self, name, event):
         self._received_events.put(event)
@@ -127,9 +134,20 @@ class Bus:
         logger.debug('Starting websocketd client thread...')
         self._websocket_thread.start()
 
+        logger.debug('Waiting for websocket to be ready...')
+        try:
+            until.true(lambda: self._websocketd_client.is_running, interval=0.5, timeout=5)
+        except until.NoMoreTries:
+            self._websocketd_client.stop()
+            self._websocket_thread.join()
+            raise
+        self._websocket_ready = True
+        logger.debug('Websocket ready')
+
     def _stop(self):
         if self._websocket_thread.is_alive():
             self._websocketd_client.stop()
             self._websocket_thread.join()
         self._received_events = None
         self._websocket_thread = None
+        self._websocket_ready = False
