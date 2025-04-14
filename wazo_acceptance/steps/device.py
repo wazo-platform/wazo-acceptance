@@ -3,6 +3,7 @@
 
 import requests
 from behave import given, step, then, when
+from scapy.all import BOOTP, DHCP, IP, UDP, Ether, conf, srp1
 
 
 @given('there are devices with infos')
@@ -31,6 +32,23 @@ def when_the_following_devices_are_created_via_http_requets_to_the_provisioning_
         context.helpers.provd.create_device_via_http_request(**body)
 
 
+@step('the following devices are created via DHCP requests')
+def when_the_following_devices_are_created_via_dhcp_requests(context):
+    conf.checkIPaddr = False
+    dhcp_discover = Ether(dst='ff:ff:ff:ff:ff:ff') / IP(src='0.0.0.0', dst='255.255.255.255') / UDP(sport=68, dport=67)
+    for row in context.table:
+        body = row.as_dict()
+        vci = body['vci']
+        mac = body['mac']
+
+        mac_parts = mac.split(':')
+        mac_binary = bytes([int(part, base=16) for part in mac_parts])
+
+        dhcp_discover_device = dhcp_discover / BOOTP(chaddr=mac_binary) / DHCP(options=[('message-type', 'discover'), ('vendor_class_id', vci), 'end'])
+        result = srp1(dhcp_discover_device)
+        assert result is not None
+
+
 @then('the following provisioning files are available over HTTP using port "{port}"')
 def then_the_following_provisioning_files_are_available_over_http_using_port(context, port):
     host = context.wazo_config['provd']['provisioning_host']
@@ -43,6 +61,15 @@ def then_the_following_provisioning_files_are_available_over_https(context):
     host = context.wazo_config['provd']['provisioning_host']
     base_url = f"https://{host}/device/provisioning"
     _provisioning_files_are_available(context, base_url)
+
+
+@then('the following devices exist on wazo-provd')
+def then_the_following_devices_exist_on_wazo_provd(context):
+    for row in context.table:
+        body = row.as_dict()
+        mac = body['mac']
+        provd_result = context.helpers.provd.get_by_mac(mac)
+        assert provd_result is not None
 
 
 @then('the following provisioning files are available over HTTPS using provisioning key "{provisioning_key}"')
