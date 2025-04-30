@@ -29,6 +29,7 @@ set +x
 source $VENV/bin/activate
 set -x
 pip install wheel
+pip install -U pip
 
 pip install -r requirements.txt
 pip install coverage[toml]
