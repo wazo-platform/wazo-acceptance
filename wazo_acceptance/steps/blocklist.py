@@ -2,13 +2,11 @@ from behave import given, step, then
 from hamcrest import assert_that, contains_inanyorder, has_entries
 
 
-# e.g. When the user "Charlie Unknown" adds number "+15555555555" with label "bad" to their blocklist
 @step('the user "{firstname} {lastname}" adds number "{number}" with label "{label}" to their blocklist')
 def step_user_adds_number_with_label_to_blocklist(context, firstname, lastname, number, label):
     tracking_id = f"{firstname} {lastname}".strip()
-    # get user token
-    token = context.helpers.token.get(tracking_id)['token']
-    with context.helpers.utils.set_token(context.confd_client, token):
+    user_token = context.helpers.token.get(tracking_id)['token']
+    with context.helpers.utils.set_token(context.confd_client, user_token):
         context.confd_client.users.my_blocklist.numbers.create(dict(
             number=number,
             label=label,
