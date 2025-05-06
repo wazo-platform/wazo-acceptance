@@ -6,8 +6,8 @@ Feature: user blocklist
       | Charlie   | Blocker  | 1001  | default | yes        | yes        | sip      |
     Given there is an incall "1001@from-extern" to the user "Charlie Blocker"
     Given the user "Charlie Blocker" has a blocklist with:
-      | label | number         |
-      | bad   | +15555555555   |
+      | label | number       |
+      | bad   | +15555555555 |
     When incoming call received from "trunk" to "1001@from-extern" with callerid ""Bad" <+15555555555>"
     When I wait 1 seconds for the call processing
     Then "Charlie Blocker" is not ringing
@@ -22,8 +22,8 @@ Feature: user blocklist
       | Charlie   | Blocker  | 1001  | default | yes        | yes        | sip      |
     Given there is an incall "1001@from-extern" to the user "Charlie Blocker"
     Given the user "Charlie Blocker" has a blocklist with:
-      | label | number         |
-      | bad   | +15555555551   |
+      | label | number       |
+      | bad   | +15555555551 |
     When incoming call received from "trunk" to "1001@from-extern" with callerid ""Good" <+15555555555>"
     When I wait 1 seconds for the call processing
     Then "Charlie Blocker" is ringing showing "Good"
