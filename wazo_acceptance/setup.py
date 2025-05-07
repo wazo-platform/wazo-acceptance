@@ -1,4 +1,4 @@
-# Copyright 2015-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -140,6 +140,7 @@ def setup_tenant(context):
     context.confd_client.tenant_uuid = tenants[0]['uuid']
     context.call_logd_client.tenant_uuid = tenants[0]['uuid']
     context.provd_client.tenant_uuid = tenants[0]['uuid']
+    context.default_auth_tenant = tenants[0]
 
 
 def setup_config(context, config):
