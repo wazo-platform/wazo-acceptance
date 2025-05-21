@@ -1,4 +1,4 @@
-# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import annotations
@@ -42,6 +42,7 @@ def before_scenario(context: Context, scenario: Scenario) -> None:
     scenario.user_tokens = {}
     if hasattr(context, 'helpers'):
         context.helpers.sngrep.start(scenario.name)
+        context.helpers.tcpdump.start(scenario.name)
     if 'no_cleanup_errors_fail' not in context.tags:
         with use_context_with_mode(context, Context.BEHAVE):
             context.fail_on_cleanup_errors = True
@@ -52,6 +53,7 @@ def after_scenario(context: Context, scenario: Scenario) -> None:
     if hasattr(context, 'helpers'):
         context.helpers.asterisk.send_to_asterisk_cli('channel request hangup all')
         context.helpers.sngrep.stop()
+        context.helpers.tcpdump.stop()
 
 
 def initialize(context: Context) -> None:
