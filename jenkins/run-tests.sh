@@ -16,11 +16,15 @@ instances:
     #   local_net: 10.27.0.0/16
     #   external_ip: 172.16.43.37
 debug:
-  global: True
+  global: true
 
-  acceptance: True
-  linphone: True
-  wazo_test_helpers: True
+  acceptance: true
+  linphone: true
+  wazo_test_helpers: true
+  wazo_websocketd_client: true
+
+websocketd:
+    debug: true
 EOF
 
 VENV=wazo-acceptance-venv
