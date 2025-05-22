@@ -151,3 +151,5 @@ class Bus:
         self._received_events = None
         self._websocket_thread = None
         self._websocket_ready = False
+        import time
+        time.sleep(0.5)
