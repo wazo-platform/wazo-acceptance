@@ -145,11 +145,9 @@ class Bus:
         logger.debug('Websocket ready')
 
     def _stop(self):
+        self._websocketd_client.stop()
         if self._websocket_thread.is_alive():
-            self._websocketd_client.stop()
             self._websocket_thread.join()
         self._received_events = None
         self._websocket_thread = None
         self._websocket_ready = False
-        import time
-        time.sleep(0.5)

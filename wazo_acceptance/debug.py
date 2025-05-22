@@ -6,9 +6,9 @@ import logging
 import requests
 
 loggers = {
-    'acceptance': logging.getLogger('acceptance'),
     'linphone': logging.getLogger('linphone'),
     'stevedore': logging.getLogger('stevedore'),
+    'wazo_acceptance': logging.getLogger('wazo_acceptance'),
     'wazo_test_helpers': logging.getLogger('wazo_test_helpers'),
     'wazo_websocketd_client': logging.getLogger('wazo_websocketd_client'),
 }
@@ -28,6 +28,6 @@ def setup_logging(log_file, debug_config):
 
 def logcall(func):
     def decorated(*args, **kwargs):
-        loggers['acceptance'].debug("calling %s(%s, %s)", func.__name__, args, kwargs)
+        loggers['wazo_acceptance'].debug("calling %s(%s, %s)", func.__name__, args, kwargs)
         func(*args, **kwargs)
     return decorated

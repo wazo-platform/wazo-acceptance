@@ -18,8 +18,8 @@ DEFAULT_GLOBAL_CONFIG = {
     'debug': {
         'global': False,
 
-        'acceptance': False,
         'linphone': False,
+        'wazo_acceptance': False,
         'wazo_test_helpers': False,
         'wazo_websocketd_client': False,
     },
