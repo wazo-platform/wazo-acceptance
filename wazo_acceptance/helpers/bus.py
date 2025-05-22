@@ -135,6 +135,8 @@ class Bus:
         self._websocket_thread.start()
 
         logger.debug('Waiting for websocket to be ready...')
+        import time
+        time.sleep(1)
         try:
             until.true(lambda: self._websocketd_client.is_running, interval=0.5, timeout=5)
         except until.NoMoreTries:
