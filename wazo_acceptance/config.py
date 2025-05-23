@@ -21,6 +21,7 @@ DEFAULT_GLOBAL_CONFIG = {
         'linphone': False,
         'wazo_acceptance': False,
         'wazo_test_helpers': False,
+        'wazo_websocketd_client': False,
     },
     'instances': {}
 }

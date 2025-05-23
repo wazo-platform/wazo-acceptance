@@ -10,6 +10,7 @@ loggers = {
     'stevedore': logging.getLogger('stevedore'),
     'wazo_acceptance': logging.getLogger('wazo_acceptance'),
     'wazo_test_helpers': logging.getLogger('wazo_test_helpers'),
+    'wazo_websocketd_client': logging.getLogger('wazo_websocketd_client'),
 }
 
 

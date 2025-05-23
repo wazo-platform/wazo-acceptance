@@ -16,12 +16,17 @@ instances:
     # nat:
     #   local_net: 10.27.0.0/16
     #   external_ip: 172.16.43.37
+
+    # Enable trace (disabled: too much verbose)
+    # websocketd:
+    #   debug: true
 debug:
   global: true
 
   linphone: true
   wazo_acceptance: true
   wazo_test_helpers: true
+  # wazo_websocketd_client: true  # Disabled: too much verbose
 EOF
 
 VENV=wazo-acceptance-venv

@@ -86,6 +86,19 @@ To inspect or send command to linphone:
 * Add sleep in your step
 * `nc -U /tmp/tmpxxxxxx/socket` and write linphone command
 
+### Websocket
+
+To enable trace log for websocket:
+
+```yaml
+instances:
+  default:
+    websocketd:
+      debug: true
+debug:
+  wazo_websocketd_client: true
+```
+
 ## Coverage
 
 To get code coverage of wazo_acceptance:
