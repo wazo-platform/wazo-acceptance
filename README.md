@@ -54,7 +54,7 @@ For example:
 log_file: /tmp/wazo-acceptance.log
 debug:
   global: true
-  acceptance: false
+  wazo_acceptance: false
   linphone: true
 instances:
   default:

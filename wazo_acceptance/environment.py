@@ -13,7 +13,7 @@ from xivo.xivo_logging import setup_logging as wazo_setup_logging
 from . import debug, setup
 from .config import load_config
 
-logger = logging.getLogger('acceptance')
+logger = logging.getLogger(__name__)
 
 
 class Instances:

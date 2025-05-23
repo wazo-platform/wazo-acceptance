@@ -10,17 +10,18 @@ instances:
   default:
     # When running on acceptance-ci worker
     wazo_host: 10.27.5.35
+
     # When running directly on jenkins
     # wazo_host: daily-wazo-rolling-dev.lan.wazo.io
     # nat:
     #   local_net: 10.27.0.0/16
     #   external_ip: 172.16.43.37
 debug:
-  global: True
+  global: true
 
-  acceptance: True
-  linphone: True
-  wazo_test_helpers: True
+  linphone: true
+  wazo_acceptance: true
+  wazo_test_helpers: true
 EOF
 
 VENV=wazo-acceptance-venv
