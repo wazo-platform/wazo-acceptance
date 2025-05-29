@@ -1,4 +1,4 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from .agent import Agent
@@ -23,6 +23,7 @@ from .ivr import IVR
 from .line import Line
 from .monit import Monit
 from .outcall import Outcall
+from .packet_capture import SNGrep, TCPDump
 from .parking_lot import ParkingLot
 from .pickup import Pickup
 from .provd import Provd
@@ -32,7 +33,6 @@ from .schedule import Schedule
 from .sip_config import SIPConfigGenerator
 from .sip_phone import PhoneFactory
 from .sip_transport import SIPTransport
-from .sngrep import SNGrep
 from .switchboard import Switchboard
 from .token import Token
 from .trunk import Trunk
@@ -74,6 +74,7 @@ __all__ = [
     'Schedule',
     'SNGrep',
     'Switchboard',
+    'TCPDump',
     'Token',
     'Trunk',
     'User',

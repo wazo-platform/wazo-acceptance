@@ -1,4 +1,4 @@
-# Copyright 2014-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2014-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -18,9 +18,10 @@ DEFAULT_GLOBAL_CONFIG = {
     'debug': {
         'global': False,
 
-        'acceptance': False,
         'linphone': False,
+        'wazo_acceptance': False,
         'wazo_test_helpers': False,
+        'wazo_websocketd_client': False,
     },
     'instances': {}
 }
@@ -87,6 +88,8 @@ DEFAULT_INSTANCE_CONFIG = {
     },
     'system_password': None,
     'reload_timeout': 5,
+    'sngrep': True,
+    'tcpdump': False,
 }
 
 

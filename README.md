@@ -54,7 +54,7 @@ For example:
 log_file: /tmp/wazo-acceptance.log
 debug:
   global: true
-  acceptance: false
+  wazo_acceptance: false
   linphone: true
 instances:
   default:
@@ -85,6 +85,19 @@ To inspect or send command to linphone:
 
 * Add sleep in your step
 * `nc -U /tmp/tmpxxxxxx/socket` and write linphone command
+
+### Websocket
+
+To enable trace log for websocket:
+
+```yaml
+instances:
+  default:
+    websocketd:
+      debug: true
+debug:
+  wazo_websocketd_client: true
+```
 
 ## Coverage
 

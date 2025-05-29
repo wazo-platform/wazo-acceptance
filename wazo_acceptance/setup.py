@@ -188,6 +188,7 @@ def setup_helpers(context):
     context.helpers.schedule = helpers.Schedule(context)
     context.helpers.sip_transport = helpers.SIPTransport(context)
     context.helpers.sngrep = helpers.SNGrep(context.ssh_client)
+    context.helpers.tcpdump = helpers.TCPDump(context.ssh_client)
     context.helpers.switchboard = helpers.Switchboard(context)
     context.helpers.token = helpers.Token(context)
     context.helpers.trunk = helpers.Trunk(context)
