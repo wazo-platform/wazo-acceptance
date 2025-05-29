@@ -88,6 +88,8 @@ DEFAULT_INSTANCE_CONFIG = {
     },
     'system_password': None,
     'reload_timeout': 5,
+    'sngrep': True,
+    'tcpdump': False,
 }
 
 

@@ -41,8 +41,10 @@ def before_all(context: Context) -> None:
 def before_scenario(context: Context, scenario: Scenario) -> None:
     scenario.user_tokens = {}
     if hasattr(context, 'helpers'):
-        context.helpers.sngrep.start(scenario.name)
-        context.helpers.tcpdump.start(scenario.name)
+        if context.wazo_config['sngrep']:
+            context.helpers.sngrep.start(scenario.name)
+        if context.wazo_config['tcpdump']:
+            context.helpers.tcpdump.start(scenario.name)
     if 'no_cleanup_errors_fail' not in context.tags:
         with use_context_with_mode(context, Context.BEHAVE):
             context.fail_on_cleanup_errors = True
@@ -52,8 +54,10 @@ def before_scenario(context: Context, scenario: Scenario) -> None:
 def after_scenario(context: Context, scenario: Scenario) -> None:
     if hasattr(context, 'helpers'):
         context.helpers.asterisk.send_to_asterisk_cli('channel request hangup all')
-        context.helpers.sngrep.stop()
-        context.helpers.tcpdump.stop()
+        if context.wazo_config['sngrep']:
+            context.helpers.sngrep.stop()
+        if context.wazo_config['tcpdump']:
+            context.helpers.tcpdump.stop()
 
 
 def initialize(context: Context) -> None:
