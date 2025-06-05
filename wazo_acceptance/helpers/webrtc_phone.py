@@ -2,13 +2,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import docker
-import socket
 from playwright.sync_api import Browser, Page
-from wazo_acceptance.helpers.phone import Phone
 from wazo_test_helpers import until
+
+from wazo_acceptance.helpers.phone import Phone
 
 CONTAINER_NAME = 'acceptance-webrtc-test-helper'
 EXPOSED_PORT = 3000
+
 
 class WebRTCPhone(Phone):
 
@@ -17,50 +18,49 @@ class WebRTCPhone(Phone):
         self._browser = browser
         self._client = docker.from_env()
 
-        containers = self._client.containers.list(all = True, filters = { 'name': CONTAINER_NAME})
+        containers = self._client.containers.list(all=True, filters={'name': CONTAINER_NAME})
         for container in containers:
             if container.status == 'running':
                 container.kill()
                 # kill is enough, container is started with auto-remove, see below
 
         until.true(
-            function = lambda: len(self._client.containers.list(all = True, filters = { 'name': CONTAINER_NAME})) == 0,
-            message = "Timeout when waiting for webrtc docker container to stop/remove",
-            timeout = 10,
-            tries = 3,
-            interval = 1
+            function=lambda: len(self._client.containers.list(all=True, filters={'name': CONTAINER_NAME})) == 0,
+            message="Timeout when waiting for webrtc docker container to stop/remove",
+            timeout=10,
+            tries=3,
+            interval=1
         )
 
         self._phoneContainer = self._client.containers.run(
             'wazoplatform/wazo-webrtc-test-helper',
-            auto_remove = True,
-            detach = True,
-            name = CONTAINER_NAME,
-            ports = {'3000/tcp': ('127.0.0.1', EXPOSED_PORT)}
+            auto_remove=True,
+            detach=True,
+            name=CONTAINER_NAME,
+            ports={'3000/tcp': ('127.0.0.1', EXPOSED_PORT)}
         )
-
 
         def openPage(dst):
             try:
-                s = self.page.goto(dst)
+                self.page.goto(dst)
                 return True
-            except: 
+            except Exception:
                 return False
 
         until.true(
             openPage, f"https://{context.wazo_config['wazo_host']}/api/auth/0.1/tokens",
-            message = "Timeout when waiting to open Wazo page to accept self signed certificate",
-            timeout = 10,
-            tries = 3,
-            interval = 1
+            message="Timeout when waiting to open Wazo page to accept self signed certificate",
+            timeout=10,
+            tries=3,
+            interval=1
         )
 
         until.true(
             openPage, f'http://localhost:{EXPOSED_PORT}',
-            message = "Timeout when waiting for WebRTC docker container to start",
-            timeout = 15,
-            tries = 5,
-            interval = 2
+            message="Timeout when waiting for WebRTC docker container to start",
+            timeout=15,
+            tries=5,
+            interval=2
         )
 
         self.page.wait_for_selector('#sipServerHost')
@@ -80,8 +80,8 @@ class WebRTCPhone(Phone):
         outgoingLocator = self.page.locator('#outgoing')
         incomingLocator.wait_for(state='visible')
         outgoingLocator.wait_for(state='visible')
-        incoming = incomingLocator.text_content().replace('audio/','')
-        outgoing = outgoingLocator.text_content().replace('audio/','')
+        incoming = incomingLocator.text_content().replace('audio/', '')
+        outgoing = outgoingLocator.text_content().replace('audio/', '')
         return (incoming, outgoing)
 
     def hangup(self):

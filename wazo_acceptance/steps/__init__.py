@@ -47,4 +47,5 @@ from .switchboard import *  # noqa
 from .time import *  # noqa
 from .user import *  # noqa
 from .voicemail import *  # noqa
+from .webrtc_call import *  # noqa
 from .wizard import *  # noqa

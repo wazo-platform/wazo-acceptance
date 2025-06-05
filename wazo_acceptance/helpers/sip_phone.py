@@ -6,9 +6,10 @@ import logging
 import sys
 import time
 
-from wazo_acceptance.helpers.phone import Phone
 from linphonelib import LinphoneException, Session
 from linphonelib.commands import CallStatus, RegisterStatus
+
+from wazo_acceptance.helpers.phone import Phone
 
 logger = logging.getLogger('linphone')
 
