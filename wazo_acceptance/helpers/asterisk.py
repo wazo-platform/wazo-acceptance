@@ -23,8 +23,8 @@ class Asterisk:
                 return channel
         return None
 
-    def get_current_call_codec(peer_name):
-        channel = _find_channel(peer_name)
+    def get_current_call_codec(self, peer_name):
+        channel = self._find_channel(peer_name)
         details = self.send_to_asterisk_cli('core show channel ' + channel)
         for line in details.splitlines:
             # example: '     NativeFormats: (opus)'
