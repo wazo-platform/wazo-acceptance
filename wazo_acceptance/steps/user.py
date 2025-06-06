@@ -6,7 +6,10 @@ import time
 
 from behave import given, step, then, when
 from hamcrest import assert_that, equal_to, has_length, is_
+from playwright.sync_api import sync_playwright
 from wazo_test_helpers import until
+
+from wazo_acceptance.helpers.webrtc_phone import WebRTCPhone
 
 
 @given('there is an authentication user')
@@ -84,7 +87,7 @@ def given_there_are_telephony_users_with_infos(context):
         if endpoint == 'sip':
             random_suffix = context.helpers.utils.random_string(4)
             name = '-'.join([firstname, lastname, random_suffix])
-            sip_body = context.helpers.endpoint_sip.generate_form(name)
+            sip_body = context.helpers.endpoint_sip.generate_form(name, body.get('webrtc'))
             sip = context.helpers.endpoint_sip.create(sip_body)
             context.helpers.line.add_endpoint_sip(line, sip)
         elif endpoint == 'sccp':
@@ -134,6 +137,24 @@ def given_there_are_telephony_users_with_infos(context):
             expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
             with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
                 context.helpers.sip_phone.register_and_track_phone(tracking_id, sip)
+
+        if body.get('webrtc') == 'yes':
+            playwright = sync_playwright().start()
+            context.browser = playwright.chromium.launch(
+                headless=True,
+                args=["--use-fake-device-for-media-stream"]
+            )
+            context.page = context.browser.new_page(
+                ignore_https_errors=True,
+                permissions=['microphone']
+            )
+            context.webrtc = WebRTCPhone(
+                context,
+                context.browser,
+                context.page,
+                next(x for x in sip_body.get('auth_section_options') if x[0] == 'username')[1],
+                next(x for x in sip_body.get('auth_section_options') if x[0] == 'password')[1]
+            )
 
 
 @given('"{firstname} {lastname}" has lines')
