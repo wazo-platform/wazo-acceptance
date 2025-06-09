@@ -28,7 +28,7 @@ pipeline {
       }
       steps {
         script {
-          remote = helpers.buildSSHRemote(host: VM_FQDN, allowAnyHosts: true)
+          def remote = helpers.buildSSHRemote(host: VM_FQDN, allowAnyHosts: true)
           sshScript(remote: remote, script: "jenkins/reset-server.sh")
         }
       }
