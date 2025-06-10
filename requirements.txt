@@ -14,7 +14,7 @@ https://github.com/wazo-platform/wazo-lib-rest-client/archive/master.zip
 https://github.com/wazo-platform/wazo-provd-client/archive/master.zip
 https://github.com/wazo-platform/wazo-setupd-client/archive/master.zip
 https://github.com/wazo-platform/wazo-test-helpers/archive/master.zip
-https://github.com/wazo-platform/wazo-websocketd-client/archive/master.zip
+https://github.com/wazo-platform/wazo-websocketd-client/archive/bump-version.zip
 https://github.com/wazo-platform/xivo-lib-python/archive/master.zip
 PyHamcrest
 SQLAlchemy
@@ -25,4 +25,4 @@ pytz==2021.1
 pyyaml==5.3.1
 requests==2.25.1
 stevedore==4.0.2
-websocket-client==0.57.0
+websocket-client==1.8.0
