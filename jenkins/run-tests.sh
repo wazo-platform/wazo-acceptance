@@ -40,7 +40,9 @@ pip install -U pip
 pip install -r requirements.txt
 pip install coverage[toml]
 pip install -e .  # use source files for coverage report
+playwright install
 docker pull wazoplatform/wazo-linphone
+docker pull wazoplatform/wazo-webrtc-test-helper
 
 coverage run --source=wazo_acceptance $(which behave) features/pre_daily --verbose --junit --junit-directory=junit/pre_daily 2>&1 | tee --append acceptance.log
 coverage run -a --source=wazo_acceptance $(which wazo-acceptance) -v -p 2>&1
