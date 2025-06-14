@@ -80,3 +80,12 @@ Feature: Provisioning
     Then the following provisioning files are available over HTTPS using provisioning key "secure123":
       | path             | user-agent                                     | expected_content                                |
       | 805ec0d57d57.cfg | Yealink SIP-T31G 124.86.0.75 80:5e:c0:d5:7d:57 | https://wazo.example.com/provisioning/secure123 |
+
+  Scenario: DHCP request creates a device
+    Given the plugin "wazo-yealink" version "v86" is installed
+    When the following devices are created via DHCP requests:
+      | mac               | vci          |
+      | 80:5e:c0:ee:dd:ff | Yealink T42S |
+    Then the following devices exist on wazo-provd:
+      | mac               |
+      | 80:5e:c0:ee:dd:ff |
