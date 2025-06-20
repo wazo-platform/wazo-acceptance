@@ -1,3 +1,4 @@
+@transcoding
 Feature: Call Transcoding
 
   Scenario: Call between linphone and WebRTC

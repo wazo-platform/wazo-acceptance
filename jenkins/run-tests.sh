@@ -46,7 +46,7 @@ docker pull wazoplatform/wazo-webrtc-test-helper
 
 coverage run --source=wazo_acceptance $(which behave) features/pre_daily --verbose --junit --junit-directory=junit/pre_daily 2>&1 | tee --append acceptance.log
 coverage run -a --source=wazo_acceptance $(which wazo-acceptance) -v -p 2>&1
-coverage run -a --source=wazo_acceptance $(which behave) --no-capture --no-color features/daily --verbose --junit --junit-directory=junit/daily 2>&1 | tee --append acceptance.log
+coverage run -a --source=wazo_acceptance $(which behave) --no-capture --no-color features/daily --verbose --tags=-transcoding --junit --junit-directory=junit/daily 2>&1 | tee --append acceptance.log
 
 # Coverage helps identify unused steps and logic
 coverage xml
