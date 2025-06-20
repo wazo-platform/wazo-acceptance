@@ -17,6 +17,7 @@ class WebRTCPhone(Phone):
         self.page = page
         self._browser = browser
         self._client = docker.from_env()
+        self.sipUsername = sipUsername
 
         containers = self._client.containers.list(all=True, filters={'name': CONTAINER_NAME})
         for container in containers:

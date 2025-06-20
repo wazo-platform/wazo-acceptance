@@ -1,4 +1,4 @@
-# Copyright 2015-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2015-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
@@ -108,7 +108,6 @@ class SIPPhone(Phone):
 
     def get_codec(self):
         stats = self._session.call_stats()
-        print(stats)
         return stats
 
     def is_talking_to(self, name):

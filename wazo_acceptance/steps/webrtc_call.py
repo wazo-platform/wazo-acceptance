@@ -1,9 +1,10 @@
-# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
 
 from behave import then, when
+from hamcrest import assert_that, equal_to
 
 
 @when('a webrtc endpoint calls sip one')
@@ -22,6 +23,7 @@ def when_a_webrtc_endpoint_calls_sip_one(context):
 
 @then('WebRTC channel uses "{asterisk_codec}" on the asterisk side and "{browser_codec}" on the browser')
 def WebRTC_call_channel_codecs(context, asterisk_codec, browser_codec):
-    # TODO get asterisk channel codecs
-    context.webrtc.get_codecs() == (browser_codec, browser_codec)
+    (incoming, outgoing) = context.webrtc.get_codecs()
+    assert_that((incoming, outgoing), equal_to((browser_codec, browser_codec)))
+    assert_that(context.helpers.asterisk.get_current_call_codec(context.webrtc.sipUsername), equal_to(asterisk_codec))
     context.webrtc.hangup()
