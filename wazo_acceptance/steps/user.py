@@ -142,7 +142,7 @@ def given_there_are_telephony_users_with_infos(context):
             playwright = sync_playwright().start()
             context.browser = playwright.chromium.launch(
                 headless=True,
-                args=["--use-fake-device-for-media-stream"]
+                args=["--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream"]
             )
             context.page = context.browser.new_page(
                 ignore_https_errors=True,
