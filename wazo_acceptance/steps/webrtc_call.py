@@ -25,5 +25,5 @@ def when_a_webrtc_endpoint_calls_sip_one(context):
 def WebRTC_call_channel_codecs(context, asterisk_codec, browser_codec):
     (incoming, outgoing) = context.webrtc.get_codecs()
     assert_that((incoming, outgoing), equal_to((browser_codec, browser_codec)))
-    assert_that(context.helpers.asterisk.get_current_call_codec(context.webrtc.sipUsername), equal_to(asterisk_codec))
+    assert_that(context.helpers.asterisk.get_current_call_codec(context.webrtc.sip_username), equal_to(asterisk_codec))
     context.webrtc.hangup()

@@ -13,11 +13,11 @@ EXPOSED_PORT = 3000
 
 class WebRTCPhone(Phone):
 
-    def __init__(self, context, browser: Browser, page: Page, sipUsername: str, sipPassword: str):
+    def __init__(self, context, browser: Browser, page: Page, sip_username: str, sip_password: str):
         self.page = page
         self._browser = browser
         self._client = docker.from_env()
-        self.sipUsername = sipUsername
+        self.sip_username = sip_username
 
         containers = self._client.containers.list(all=True, filters={'name': CONTAINER_NAME})
         for container in containers:
@@ -33,7 +33,7 @@ class WebRTCPhone(Phone):
             interval=1
         )
 
-        self._phoneContainer = self._client.containers.run(
+        self._phone_container = self._client.containers.run(
             'wazoplatform/wazo-webrtc-test-helper',
             auto_remove=True,
             detach=True,
@@ -41,7 +41,7 @@ class WebRTCPhone(Phone):
             ports={'3000/tcp': ('127.0.0.1', EXPOSED_PORT)}
         )
 
-        def openPage(dst):
+        def open_page(dst):
             try:
                 self.page.goto(dst)
                 return True
@@ -49,7 +49,7 @@ class WebRTCPhone(Phone):
                 return False
 
         until.true(
-            openPage, f"https://{context.wazo_config['wazo_host']}/api/auth/0.1/tokens",
+            open_page, f"https://{context.wazo_config['wazo_host']}/api/auth/0.1/tokens",
             message="Timeout when waiting to open Wazo page to accept self signed certificate",
             timeout=10,
             tries=3,
@@ -57,7 +57,7 @@ class WebRTCPhone(Phone):
         )
 
         until.true(
-            openPage, f'http://localhost:{EXPOSED_PORT}',
+            open_page, f'http://localhost:{EXPOSED_PORT}',
             message="Timeout when waiting for WebRTC docker container to start",
             timeout=15,
             tries=5,
@@ -67,8 +67,8 @@ class WebRTCPhone(Phone):
         self.page.wait_for_selector('#sipServerHost')
         self.page.locator('#sipServerHost').fill(context.wazo_config['wazo_host'])
         self.page.locator('#sipDomain').fill(context.wazo_config['wazo_host'])
-        self.page.locator('#sipUser').fill(sipUsername)
-        self.page.locator('#sipPassword').fill(sipPassword)
+        self.page.locator('#sipUser').fill(sip_username)
+        self.page.locator('#sipPassword').fill(sip_password)
 
         context.add_cleanup(self.terminate)
 
@@ -77,12 +77,12 @@ class WebRTCPhone(Phone):
         self.page.get_by_role("button", name="Call").click()
 
     def get_codecs(self):
-        incomingLocator = self.page.locator('#incoming')
-        outgoingLocator = self.page.locator('#outgoing')
-        incomingLocator.wait_for(state='visible')
-        outgoingLocator.wait_for(state='visible')
-        incoming = incomingLocator.text_content().replace('audio/', '')
-        outgoing = outgoingLocator.text_content().replace('audio/', '')
+        incoming_locator = self.page.locator('#incoming')
+        outgoing_locator = self.page.locator('#outgoing')
+        incoming_locator.wait_for(state='visible')
+        outgoing_locator.wait_for(state='visible')
+        incoming = incoming_locator.text_content().replace('audio/', '')
+        outgoing = outgoing_locator.text_content().replace('audio/', '')
         return (incoming, outgoing)
 
     def hangup(self):
@@ -92,6 +92,6 @@ class WebRTCPhone(Phone):
         if self._browser:
             self._browser.close()
             self._browser = None
-        if self._phoneContainer:
-            self._phoneContainer.stop()
-            self._phoneContainer = None
+        if self._phone_container:
+            self._phone_container.stop()
+            self._phone_container = None
