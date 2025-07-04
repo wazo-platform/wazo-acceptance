@@ -9,8 +9,6 @@ import time
 from linphonelib import LinphoneException, Session
 from linphonelib.commands import CallStatus, RegisterStatus
 
-from wazo_acceptance.helpers.phone import Phone
-
 logger = logging.getLogger('linphone')
 
 
@@ -43,7 +41,7 @@ class _LinphoneLogWrapper:
         return data
 
 
-class SIPPhone(Phone):
+class SIPPhone():
 
     def __init__(self, config, logfile=None):
         self._session = Session(
@@ -77,9 +75,6 @@ class SIPPhone(Phone):
     def call(self, exten):
         self._session.call(exten)
 
-    def call_stats(self):
-        return self._session.call_stats()
-
     def hangup(self):
         self._session.hangup()
 
@@ -105,10 +100,6 @@ class SIPPhone(Phone):
 
     def is_talking(self):
         return self._session.call_status() == CallStatus.ANSWERED
-
-    def get_codec(self):
-        stats = self._session.call_stats()
-        return stats
 
     def is_talking_to(self, name):
         return self._session.is_talking_to(name)
