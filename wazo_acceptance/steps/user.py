@@ -133,11 +133,6 @@ def given_there_are_telephony_users_with_infos(context):
             agent = context.helpers.agent.create({'number': body['agent_number']})
             context.confd_client.users(confd_user).add_agent(agent)
 
-        if endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
-            expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
-            with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
-                context.helpers.sip_phone.register_and_track_phone(tracking_id, sip)
-
         if body.get('webrtc') == 'yes':
             playwright = sync_playwright().start()
             context.browser = playwright.chromium.launch(
@@ -155,6 +150,10 @@ def given_there_are_telephony_users_with_infos(context):
                 next(x for x in sip_body.get('auth_section_options') if x[0] == 'username')[1],
                 next(x for x in sip_body.get('auth_section_options') if x[0] == 'password')[1]
             )
+        elif endpoint == 'sip' and body.get('with_phone', 'yes') == 'yes':
+            expected_event = {'uuid': confd_user['uuid'], 'line_state': 'available'}
+            with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
+                context.helpers.sip_phone.register_and_track_phone(tracking_id, sip)
 
 
 @given('"{firstname} {lastname}" has lines')
