@@ -21,9 +21,19 @@ def when_a_webrtc_endpoint_calls_sip_one(context):
         _call(**call_info.as_dict())
 
 
-@then('WebRTC channel uses "{asterisk_codec}" on the asterisk side and "{browser_codec}" on the browser')
-def WebRTC_call_channel_codecs(context, asterisk_codec, browser_codec):
-    (incoming, outgoing) = context.webrtc.get_codecs()
-    assert_that((incoming, outgoing), equal_to((browser_codec, browser_codec)))
-    assert_that(context.helpers.asterisk.get_current_call_codec(context.webrtc.sip_username), equal_to(asterisk_codec))
+@then('WebRTC channel uses following codecs')
+def WebRTC_channel_uses_following_codecs(context):
+    context.table.require_columns(['asterisk_codec', 'direct_client_codec', 'sbc_client_codec'])
+    sbc = context.config.userdata.get('sbc', 'False')
+    for row in context.table:
+        body = row.as_dict()
+
+        browser_codec = body['sbc_client_codec'] if sbc == "True" else body['direct_client_codec']
+        (incoming, outgoing) = context.webrtc.get_codecs()
+        assert_that((incoming, outgoing), equal_to((browser_codec, browser_codec)))
+
+        current_asterisk_codec = context.helpers.asterisk.get_current_call_codec(context.webrtc.sip_username)
+        expected_asterisk_codec = body['asterisk_codec']
+        assert_that(current_asterisk_codec, equal_to(expected_asterisk_codec))
+
     context.webrtc.hangup()

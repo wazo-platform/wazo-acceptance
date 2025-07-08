@@ -41,7 +41,7 @@ class _LinphoneLogWrapper:
         return data
 
 
-class SIPPhone():
+class SIPPhone:
 
     def __init__(self, config, logfile=None):
         self._session = Session(

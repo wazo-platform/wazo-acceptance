@@ -20,13 +20,13 @@ class Asterisk:
         channels = self.send_to_asterisk_cli('core show channels')
         for channel in channels.splitlines():
             if channel.startswith('PJSIP/' + peer_name):
-                return channel
+                return channel.split(' ')[0]
         return None
 
     def get_current_call_codec(self, peer_name):
         channel = self._find_channel(peer_name)
         details = self.send_to_asterisk_cli('core show channel ' + channel)
-        for line in details.splitlines:
+        for line in details.splitlines():
             # example: '     NativeFormats: (opus)'
             if line.lstrip().startswith('NativeFormats:'):
                 return line.split(': ')[1][1:-1]
