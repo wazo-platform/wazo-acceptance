@@ -21,14 +21,14 @@ def when_a_webrtc_endpoint_calls_sip_one(context):
         _call(**call_info.as_dict())
 
 
-@then('WebRTC channel uses following codecs')
+@then('webrtc channel uses following codecs')
 def WebRTC_channel_uses_following_codecs(context):
     context.table.require_columns(['asterisk_codec', 'direct_client_codec', 'sbc_client_codec'])
-    sbc = context.config.userdata.get('sbc', 'False')
+    sbc = context.config.userdata.get('sbc', 'false').lower()
     for row in context.table:
         body = row.as_dict()
 
-        browser_codec = body['sbc_client_codec'] if sbc == "True" else body['direct_client_codec']
+        browser_codec = body['sbc_client_codec'] if sbc == "true" else body['direct_client_codec']
         (incoming, outgoing) = context.webrtc.get_codecs()
         assert_that((incoming, outgoing), equal_to((browser_codec, browser_codec)))
 

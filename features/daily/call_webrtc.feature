@@ -1,7 +1,6 @@
-@transcoding
-Feature: Call Transcoding
+Feature: Call WebRTC
 
-  Scenario: Call between linphone and WebRTC
+  Scenario: Call between linphone and webrtc
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | webrtc |
       | Alice     | 1100     | 1100  | default | no     |
@@ -9,6 +8,6 @@ Feature: Call Transcoding
     When a webrtc endpoint calls sip one:
       | caller      | dial | callee      |
       | Wayne 1120  | 1100 | Alice 1100  |
-    Then WebRTC channel uses following codecs:
+    Then webrtc channel uses following codecs:
       | asterisk_codec | direct_client_codec | sbc_client_codec |
-      | ulaw           | PCMU                | Opus             |
+      | ulaw           | PCMU                | opus             |
