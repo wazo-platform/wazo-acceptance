@@ -20,6 +20,7 @@ PyHamcrest
 SQLAlchemy
 behave
 kombu==5.0.2
+playwright
 psycopg2-binary
 pytz==2021.1
 pyyaml==5.3.1

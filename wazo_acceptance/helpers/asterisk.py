@@ -1,4 +1,4 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -15,3 +15,18 @@ class Asterisk:
 
     def _format_command(self, asterisk_command):
         return ['asterisk', '-rx', f'"{asterisk_command}"']
+
+    def _find_channel(self, peer_name):
+        channels = self.send_to_asterisk_cli('core show channels')
+        for channel in channels.splitlines():
+            if channel.startswith('PJSIP/' + peer_name):
+                return channel.split(' ')[0]
+        return None
+
+    def get_current_call_codec(self, peer_name):
+        channel = self._find_channel(peer_name)
+        details = self.send_to_asterisk_cli('core show channel ' + channel)
+        for line in details.splitlines():
+            # example: '     NativeFormats: (opus)'
+            if line.lstrip().startswith('NativeFormats:'):
+                return line.split(': ')[1][1:-1]

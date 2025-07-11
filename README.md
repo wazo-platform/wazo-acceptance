@@ -10,6 +10,8 @@ These tests are used for testing features before releasing a new version of Wazo
 * A fresh installation of Wazo Platform. See https://wazo-platform.org/uc-doc/installation/install-system for details.
 * `pip install requirements.txt`
 * `docker pull wazoplatform/wazo-linphone`
+* `docker pull wazoplatform/wazo-webrtc-test-helper`
+* `playwright install`
 
 Then set up the environment:
 
