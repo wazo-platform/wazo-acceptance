@@ -40,6 +40,7 @@ pip install -U pip
 pip install -r requirements.txt
 pip install coverage[toml]
 pip install -e .  # use source files for coverage report
+playwright install-deps
 playwright install
 docker pull wazoplatform/wazo-linphone
 docker pull wazoplatform/wazo-webrtc-test-helper
