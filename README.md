@@ -1,3 +1,5 @@
+# DO NOT MERGE
+
 # wazo-acceptance
 
 wazo-acceptance is a testing framework for running automated tests on Wazo Platform.
