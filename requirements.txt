@@ -18,7 +18,7 @@ https://github.com/wazo-platform/wazo-websocketd-client/archive/master.zip
 https://github.com/wazo-platform/xivo-lib-python/archive/master.zip
 PyHamcrest
 SQLAlchemy
-behave==1.2.6
+behave>=1.3.0
 kombu==5.0.2
 playwright
 psycopg2-binary
