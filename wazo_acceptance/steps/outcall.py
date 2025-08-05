@@ -1,11 +1,11 @@
-# Copyright 2021-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2021-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
 from wazo_test_helpers import until
 
 
-@given('there is an outcall "{outcall_name}" in context "{outcall_context}" with extensions')
+@given('there is an outcall "{outcall_name}" in context "{outcall_context}" with extensions:')
 def given_there_is_an_outcall_using_extension(context, outcall_name, outcall_context):
     context.table.require_columns(['exten'])
     body = {

@@ -1,10 +1,10 @@
-# Copyright 2013-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
 
 
-@given('there are pickups')
+@given('there are pickups:')
 def given_there_are_pickup(context):
     for row in context.table:
         data = row.as_dict()

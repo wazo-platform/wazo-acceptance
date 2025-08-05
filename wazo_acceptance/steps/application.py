@@ -1,4 +1,4 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then, when
@@ -6,7 +6,7 @@ from hamcrest import assert_that, equal_to
 from wazo_test_helpers import until
 
 
-@given('there are applications with infos')
+@given('there are applications with infos:')
 def given_there_are_application_with_info(context):
     for row in context.table:
         config = row.as_dict()

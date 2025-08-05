@@ -1,11 +1,11 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then, when
 from hamcrest import assert_that, contains_inanyorder, has_entries
 
 
-@given('there are conference rooms with infos')
+@given('there are conference rooms with infos:')
 def given_there_are_conference_rooms(context):
     for row in context.table:
         body = row.as_dict()
@@ -37,7 +37,7 @@ def when_user_list_conference_rooms(context):
             context.conference_contacts.append(contact)
 
 
-@then('the conference rooms list contains')
+@then('the conference rooms list contains:')
 def then_the_conference_rooms_list_contains(context):
     name_numbers = []
     for row in context.conference_contacts:

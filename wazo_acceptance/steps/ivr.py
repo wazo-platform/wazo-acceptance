@@ -1,17 +1,17 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
 
 
-@given('there are IVR with infos')
+@given('there are IVR with infos:')
 def given_there_are_ivr_with_infos(context):
     for row in context.table:
         body = row.as_dict()
         context.helpers.ivr.create(body)
 
 
-@given('the IVR "{name}" choices are')
+@given('the IVR "{name}" choices are:')
 def given_the_ivr_choices_are(context, name):
     choices = []
     for row in context.table:
