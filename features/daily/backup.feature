@@ -9,7 +9,7 @@ Feature: Backup
     Given the backup manager asset is copied on the server
     When I execute database backup command
 
-    Given there are authentication users with info
+    Given there are authentication users with infos:
       | firstname | username | password |
       | Greg      | greg     | 123test  |
     Then I see a user with username "greg"

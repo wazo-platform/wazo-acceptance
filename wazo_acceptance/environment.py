@@ -6,7 +6,7 @@ from __future__ import annotations
 import logging
 
 from behave.model import Scenario
-from behave.runner import Context, use_context_with_mode
+from behave.runner import Context, ContextMode, use_context_with_mode
 from xivo.pubsub import Pubsub
 from xivo.xivo_logging import setup_logging as wazo_setup_logging
 
@@ -46,7 +46,7 @@ def before_scenario(context: Context, scenario: Scenario) -> None:
         if context.wazo_config['tcpdump']:
             context.helpers.tcpdump.start(scenario.name)
     if 'no_cleanup_errors_fail' not in context.tags:
-        with use_context_with_mode(context, Context.BEHAVE):
+        with use_context_with_mode(context, ContextMode.BEHAVE):
             context.fail_on_cleanup_errors = True
 
 

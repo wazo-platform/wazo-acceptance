@@ -1,10 +1,10 @@
-# Copyright 2021-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2021-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then, when
 
 
-@given('there are switchboards with infos')
+@given('there are switchboards with infos:')
 def given_there_are_switchboards_with_infos(context):
     context.table.require_columns(['name'])
     for row in context.table:

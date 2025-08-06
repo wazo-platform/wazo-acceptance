@@ -1,4 +1,4 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -115,7 +115,7 @@ def given_the_file_does_not_contain(context, file_name, content, instance):
     context.remote_sysutils.write_content_file(file_name, new_content)
 
 
-@then('there are cron jobs in "{file_name}" on "{instance}"')
+@then('there are cron jobs in "{file_name}" on "{instance}":')
 def then_there_are_cron_jobs_in_file_name_on_instance(context, file_name, instance):
     step_context = context
     instance_context = getattr(context.instances, instance)

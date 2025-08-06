@@ -7,7 +7,7 @@ from behave import then, when
 from hamcrest import assert_that, equal_to
 
 
-@when('a webrtc endpoint calls sip one')
+@when('a webrtc endpoint calls sip one:')
 def when_a_webrtc_endpoint_calls_sip_one(context):
     def _call(caller, dial, callee, ring_time=10):
         caller_phone = context.webrtc
@@ -21,7 +21,7 @@ def when_a_webrtc_endpoint_calls_sip_one(context):
         _call(**call_info.as_dict())
 
 
-@then('webrtc channel uses following codecs')
+@then('webrtc channel uses following codecs:')
 def WebRTC_channel_uses_following_codecs(context):
     context.table.require_columns(['asterisk_codec', 'direct_client_codec', 'sbc_client_codec'])
     sbc = context.config.userdata.get('sbc', 'false').lower()

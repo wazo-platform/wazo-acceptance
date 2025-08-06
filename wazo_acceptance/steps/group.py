@@ -1,10 +1,10 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
 
 
-@given('there are telephony groups with infos')
+@given('there are telephony groups with infos:')
 def given_there_are_telephony_groups_with_infos(context):
     context.table.require_columns(['label'])
     for row in context.table:
@@ -34,7 +34,7 @@ def given_there_are_telephony_groups_with_infos(context):
             context.helpers.confd_group.update_fallbacks(group, fallbacks_body)
 
 
-@given('the telephony group "{label}" has users')
+@given('the telephony group "{label}" has users:')
 def given_the_telephony_group_have_user(context, label):
     context.table.require_columns(['firstname', 'lastname'])
     user_members = []
@@ -52,7 +52,7 @@ def given_the_telephony_group_have_user(context, label):
     context.helpers.confd_group.update_user_members(group, user_members)
 
 
-@given('the telephony group "{label}" has extensions')
+@given('the telephony group "{label}" has extensions:')
 def given_the_telephony_group_have_extensions(context, label):
     context.table.require_columns(['context', 'exten'])
     extension_members = []

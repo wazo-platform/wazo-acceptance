@@ -21,7 +21,7 @@ def when_generate_contact_center_stats(context):
     logger.debug(std_out_err)
 
 
-@then('contact center stats for queue "{queue_name}" in the current hour are')
+@then('contact center stats for queue "{queue_name}" in the current hour are:')
 def then_contact_center_stats_for_queue_1(context, queue_name):
     timezone = pytz.timezone('America/Montreal')
     utcnow = datetime.utcnow()
@@ -44,7 +44,7 @@ def then_contact_center_stats_for_queue_1(context, queue_name):
         assert actual_value == expected_value, msg
 
 
-@then('contact center stats for agent "{agent_number}" in the current hour are')
+@then('contact center stats for agent "{agent_number}" in the current hour are:')
 def then_contact_center_stats_for_agent(context, agent_number):
     timezone = pytz.timezone('America/Montreal')
     utcnow = datetime.utcnow()
@@ -84,7 +84,7 @@ def then_contact_center_stats_for_agent(context, agent_number):
             assert actual_value == expected_value, msg
 
 
-@then('contact center qos stats for queue "{queue_name}" in the current hour are')
+@then('contact center qos stats for queue "{queue_name}" in the current hour are:')
 def then_contact_center_qos_stats_for_queue_1(context, queue_name):
     thresholds = [row['qos_threshold'] for row in context.table if row['qos_threshold'] != 'remainder']
     timezone = pytz.timezone('America/Montreal')

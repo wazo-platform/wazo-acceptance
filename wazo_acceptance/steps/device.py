@@ -1,11 +1,11 @@
-# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import requests
 from behave import given, step, then, when
 
 
-@given('there are devices with infos')
+@given('there are devices with infos:')
 def given_there_are_devices_with_infos(context):
     context.table.require_columns(['mac'])
     for row in context.table:
@@ -23,7 +23,7 @@ def when_i_synchronize_the_device_with_mac(context, mac):
     context.confd_client.devices.synchronize(device['id'])
 
 
-@step('the following devices are created via HTTP requests to the provisioning server')
+@step('the following devices are created via HTTP requests to the provisioning server:')
 def when_the_following_devices_are_created_via_http_requets_to_the_provisioning_server(context):
     for row in context.table:
         body = row.as_dict()
@@ -31,21 +31,21 @@ def when_the_following_devices_are_created_via_http_requets_to_the_provisioning_
         context.helpers.provd.create_device_via_http_request(**body)
 
 
-@then('the following provisioning files are available over HTTP using port "{port}"')
+@then('the following provisioning files are available over HTTP using port "{port}":')
 def then_the_following_provisioning_files_are_available_over_http_using_port(context, port):
     host = context.wazo_config['provd']['provisioning_host']
     base_url = f"http://{host}:{port}"
     _provisioning_files_are_available(context, base_url)
 
 
-@then('the following provisioning files are available over HTTPS')
+@then('the following provisioning files are available over HTTPS:')
 def then_the_following_provisioning_files_are_available_over_https(context):
     host = context.wazo_config['provd']['provisioning_host']
     base_url = f"https://{host}/device/provisioning"
     _provisioning_files_are_available(context, base_url)
 
 
-@then('the following provisioning files are available over HTTPS using provisioning key "{provisioning_key}"')
+@then('the following provisioning files are available over HTTPS using provisioning key "{provisioning_key}":')
 def then_the_following_provisioning_files_are_available_over_https_using_key(context, provisioning_key):
     host = context.wazo_config['provd']['provisioning_host']
     base_url = f"https://{host}/device/provisioning/{provisioning_key}"

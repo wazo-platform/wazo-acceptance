@@ -1,7 +1,7 @@
 Feature: CSV import of users
 
   Scenario: wazo-auth users are not leaked on error
-    Given there are authentication users with info:
+    Given there are authentication users with infos:
       | firstname | lastname | username | password |
       | John      | Doe      | john     | lonen0   |
     When I import the following users ignoring errors:

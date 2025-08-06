@@ -1,4 +1,4 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import collections
@@ -15,7 +15,7 @@ def given_i_listen_on_the_bus_for_messages(context, event_name):
     context.helpers.bus.subscribe([event_name])
 
 
-@given('I listen on the bus for the following events')
+@given('I listen on the bus for the following events:')
 def given_i_listen_on_the_bus_for_the_following_events(context):
     context.helpers.bus.subscribe([event['event'] for event in context.table])
 
@@ -36,7 +36,7 @@ def then_i_receive_a_message(context, event_name):
     _sleep_to_avoid_race_condition()
 
 
-@then('I receive a "{event_name}" event with data')
+@then('I receive a "{event_name}" event with data:')
 def then_i_receive_a_event_on_queue(context, event_name):
     def event_match():
         event = context.helpers.bus.pop_received_event()
@@ -70,7 +70,7 @@ def then_i_receive_a_messagewaiting_event(context, nb_msg, mailbox, mb_context):
     _sleep_to_avoid_race_condition()
 
 
-@then('I receive a "{event_name}" event with "{wrapper}" data')
+@then('I receive a "{event_name}" event with "{wrapper}" data:')
 def then_i_receive_a_event_with_wrapper_on_queue(context, event_name, wrapper):
     event = context.helpers.bus.pop_received_event()
     assert_that(event, has_entries(name=event_name, data=has_key(wrapper)))

@@ -1,10 +1,10 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
 
 
-@given('there are parking lots with infos')
+@given('there are parking lots with infos:')
 def given_there_are_parking_lots_with_infos(context):
     context.table.require_columns(['name', 'exten', 'context'])
     for row in context.table:

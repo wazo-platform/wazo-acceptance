@@ -1,10 +1,10 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
 
 
-@given('there are skill rules with infos')
+@given('there are skill rules with infos:')
 def given_there_are_skill_rules_with_infos(context):
     context.table.require_columns(['name', 'definition'])
     for row in context.table:
@@ -13,7 +13,7 @@ def given_there_are_skill_rules_with_infos(context):
         context.helpers.queue_skill_rule.create(body)
 
 
-@given('there are "{skill_name}" skill rule with infos')
+@given('there are "{skill_name}" skill rule with infos:')
 def given_there_are_name_skill_rule_with_infos(context, skill_name):
     context.table.require_columns(['definition'])
     rules = [{'definition': row.get('definition')} for row in context.table]

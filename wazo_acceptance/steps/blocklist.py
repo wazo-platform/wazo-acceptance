@@ -11,7 +11,7 @@ def step_user_adds_number_with_label_to_blocklist(context, firstname, lastname, 
         context.confd_client.users.my_blocklist.numbers.create(body)
 
 
-@given('the user "{firstname} {lastname}" has a blocklist with')
+@given('the user "{firstname} {lastname}" has a blocklist with:')
 def given_user_has_blocklist_with(context, firstname, lastname):
     context.table.require_columns(['label', 'number'])
     tracking_id = f"{firstname} {lastname}".strip()
@@ -22,7 +22,7 @@ def given_user_has_blocklist_with(context, firstname, lastname):
             context.confd_client.users.my_blocklist.numbers.create(body)
 
 
-@then('the user "{firstname} {lastname}" has a blocklist with')
+@then('the user "{firstname} {lastname}" has a blocklist with:')
 def step_user_has_blocklist_with(context, firstname, lastname):
     context.table.require_columns(['label', 'number'])
     expected_blocklist = [row.as_dict() for row in context.table]
