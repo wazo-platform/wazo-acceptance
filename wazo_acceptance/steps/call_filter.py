@@ -1,10 +1,10 @@
-# Copyright 2020-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
 
 
-@given('there are call filters with infos')
+@given('there are call filters with infos:')
 def given_there_are_call_filters_with_infos(context):
     context.table.require_columns(['name', 'strategy'])
     for row in context.table:

@@ -1,4 +1,4 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then
@@ -15,7 +15,7 @@ FUNCKEYS_EXTEN = {
 }
 
 
-@then('I have the following hints')
+@then('I have the following hints:')
 def then_i_have_the_following_hints(context):
     output = context.helpers.asterisk.send_to_asterisk_cli('core show hints').split('\n')
     output = output[2:-3]  # strip header and footer

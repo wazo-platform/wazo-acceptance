@@ -1,4 +1,4 @@
-# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then
@@ -12,7 +12,7 @@ def close_to(target, delta):
     return all_of(greater_than(minimum), less_than(maximum))
 
 
-@then('I have the last call log matching')
+@then('I have the last call log matching:')
 def then_i_have_the_last_call_log_matching(context):
     expected = context.table[0].as_dict()
     expected_duration = int(expected.pop('duration', 0))

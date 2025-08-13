@@ -1,4 +1,4 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -53,12 +53,12 @@ def _table_to_body(context, name, timezone, table, destination=None):
     return schedule
 
 
-@given('I have a schedule "{name}" in "{timezone}" with the following schedules')
+@given('I have a schedule "{name}" in "{timezone}" with the following schedules:')
 def given_i_have_a_schedule_in_certain_timezeon_with_the_following_schedules(context, name, timezone):
     context.helpers.schedule.create(_table_to_body(context, name, timezone, context.table))
 
 
-@given('I have a schedule "{name}" in "{timezone}" with the following schedules towards user "{firstname} {lastname}"')
+@given('I have a schedule "{name}" in "{timezone}" with the following schedules towards user "{firstname} {lastname}":')
 def given_i_have_a_schedule_in_timezone_towards_a_user_with_the_following_schedules(context, name, timezone, firstname, lastname):
     confd_user = context.helpers.confd_user.get_by(firtname=firstname, lastname=lastname)
     destination = {'type': 'user', 'user_id': confd_user['id']}

@@ -4,7 +4,7 @@
 from behave import given, when
 
 
-@given('there are queues with infos')
+@given('there are queues with infos:')
 def given_there_are_queues(context):
     context.table.require_columns(['name', 'exten', 'context'])
     for row in context.table:
@@ -59,7 +59,7 @@ def given_queue_has_agent_with_penalty(context, queue_name, agent_number, penalt
     context.helpers.queue.add_agent_member(queue, agent, penalty=penalty)
 
 
-@when('I create the following queues')
+@when('I create the following queues:')
 def when_i_create_the_following_queues(context):
     context.table.require_columns(['name', 'exten', 'context'])
     for row in context.table:
@@ -77,7 +77,7 @@ def when_i_create_the_following_queues(context):
                 context.helpers.queue.add_agent_member(queue, agent)
 
 
-@given('the queue "{name}" has users')
+@given('the queue "{name}" has users:')
 def given_queue_has_user_members(context, name):
     context.table.require_columns(['firstname', 'lastname'])
     queue = context.helpers.queue.get_by(name=name)
@@ -91,7 +91,7 @@ def given_queue_has_user_members(context, name):
         context.helpers.queue.add_user_member(queue, user)
 
 
-@given('the queue "{name}" has agents')
+@given('the queue "{name}" has agents:')
 def given_queue_has_agent_members(context, name):
     context.table.require_columns(['agent_number'])
     queue = context.helpers.queue.get_by(name=name)

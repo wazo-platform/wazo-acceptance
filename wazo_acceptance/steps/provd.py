@@ -1,4 +1,4 @@
-# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -15,7 +15,7 @@ def given_the_latest_plugin_is_installed(context, plugin, version):
     context.helpers.provd.install_latest_plugin(f'{plugin}-{version}')
 
 
-@then('the provd config "{config_id}" has the following values on "{instance}"')
+@then('the provd config "{config_id}" has the following values on "{instance}":')
 def then_provd_config_has_the_following_values(context, config_id, instance):
     instance_context = getattr(context.instances, instance)
     config = instance_context.helpers.provd.get_config(config_id)
@@ -26,7 +26,7 @@ def then_provd_config_has_the_following_values(context, config_id, instance):
         assert_that(config, has_entries(expected))
 
 
-@then('the provd offline config "{config_id}" has the following values on "{instance}"')
+@then('the provd offline config "{config_id}" has the following values on "{instance}":')
 def then_provd_offline_config_has_the_following_values(context, config_id, instance):
     instance_context = getattr(context.instances, instance)
     file_name = f'/var/lib/wazo-provd/jsondb/configs/{config_id}'

@@ -1,4 +1,4 @@
-# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -145,7 +145,7 @@ def when_user_sends_multiple_dtmf(context, tracking_id, digits):
         phone.send_dtmf(digit)
 
 
-@when('a call is started')
+@when('a call is started:')
 def when_a_call_is_started(context):
 
     def _call(caller, callee, hangup, dial, talk_time=0, ring_time=0):
@@ -190,7 +190,7 @@ def when_chan_test_calls_with_id_name(context, exten, exten_context, cid_name):
     context.helpers.asterisk.send_to_asterisk_cli(cmd)
 
 
-@when('chan_test places calls in order')
+@when('chan_test places calls in order:')
 def when_chan_test_places_calls_in_order(context):
     for call in context.table:
         context_name = context.helpers.context.get_by(label=call['context'])['name']
