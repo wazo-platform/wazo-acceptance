@@ -112,7 +112,9 @@ def given_there_are_telephony_users_with_infos(context):
             application = context.helpers.application.get_by(name=application_name)
             context.helpers.line.add_application(line, application)
 
-        context.helpers.confd_user.add_line(confd_user, line)
+        expected_event = {'uuid': confd_user['uuid']}
+        with context.helpers.bus.wait_for_event('chatd_presence_updated', expected_event):
+            context.helpers.confd_user.add_line(confd_user, line)
 
         if body.get('device'):
             device = context.helpers.device.get_by(mac=body['device'])
