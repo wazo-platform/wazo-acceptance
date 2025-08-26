@@ -69,6 +69,7 @@ DEFAULT_INSTANCE_CONFIG = {
     },
     'ssh': {
         'login': 'root',
+        'sudo': False,
     },
     'linphone': {
         'sip_port_range': '5001,5009',
