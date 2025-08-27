@@ -27,10 +27,11 @@ class SSHClient:
 
     _fobj_devnull = open(os.devnull, 'r+')
 
-    def __init__(self, host, login, sudo):
+    def __init__(self, host, login, sudo, sudo_shell):
         self._hostname = host
         self._login = login
         self._sudo = sudo
+        self._sudo_shell = sudo_shell
 
     def send_files(self, path_from, path_to):
         wazo_ssh = f'{self._login}@{self._hostname}'
@@ -90,7 +91,7 @@ class SSHClient:
 
     def _exec_ssh_command(self, remote_command: [str], err_in_out: bool = False) -> PatchedPopen:
         if self._sudo:
-            remote_command = ["sudo "] + remote_command
+            remote_command = ["sudo", self._sudo_shell, "-c", " ".join(remote_command)]
         command = self._format_ssh_command(remote_command)
         stderr = STDOUT if err_in_out else PIPE
         p = subprocess.Popen(
