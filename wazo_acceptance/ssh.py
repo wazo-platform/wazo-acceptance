@@ -52,15 +52,21 @@ class SSHClient:
         ]
         scp_command.extend(cmd)
 
+        logger.debug(f'Copying {path_from} to {scp_dest}')
         scp_result = subprocess.call(
             scp_command,
             stdout=PIPE,
             stderr=STDOUT,
             close_fds=True,
         )
+        logger.debug(scp_result)
         if self._sudo:
-            self._exec_ssh_command(["mv", scp_dest, path_to], err_in_out=True)
-            self._exec_ssh_command(["chown", "root:root", path_to], err_in_out=True)
+            logger.debug(f'Sudo mode. Moving {scp_dest} to {path_to}')
+            cmd_result = self._exec_ssh_command(["mv", scp_dest, path_to], err_in_out=True)
+            logger.debug(cmd_result)
+            logger.debug(f'Sudo mode. Setting ownership of {path_to}')
+            cmd_result = self._exec_ssh_command(["chown", "root:root", path_to], err_in_out=True)
+            logger.debug(cmd_result)
         return scp_result
 
     def call(self, remote_command):
