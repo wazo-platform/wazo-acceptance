@@ -35,7 +35,10 @@ class SSHClient:
 
     def send_files(self, path_from, path_to):
         wazo_ssh = f'{self._login}@{self._hostname}'
-        cmd = [f'{path_from}', f'{wazo_ssh}:{path_to}']
+        scp_dest = path_to
+        if self._sudo:
+            scp_dest = f"/tmp/{"".join()}"
+        cmd = [f'{path_from}', f'{wazo_ssh}:{scp_dest}']
         scp_command = [
             'scp',
             '-o', 'PreferredAuthentications=publickey',
@@ -44,12 +47,16 @@ class SSHClient:
         ]
         scp_command.extend(cmd)
 
-        return subprocess.call(
+        scp_result = subprocess.call(
             scp_command,
             stdout=PIPE,
             stderr=STDOUT,
             close_fds=True,
         )
+        if self._sudo:
+            self._exec_ssh_command(["mv", scp_dest, path_to], err_in_out=True)
+            self._exec_ssh_command(["chown", "root:root", path_to], err_in_out=True)
+        return scp_result
 
     def call(self, remote_command):
         command_result = self._exec_ssh_command(remote_command)
