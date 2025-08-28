@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import logging
 import os
+import random
+import string
 import subprocess
 from subprocess import PIPE, STDOUT
 from typing import TYPE_CHECKING
@@ -27,13 +29,21 @@ class SSHClient:
 
     _fobj_devnull = open(os.devnull, 'r+')
 
-    def __init__(self, host, login):
+    def __init__(self, host, login, sudo, sudo_shell):
         self._hostname = host
         self._login = login
+        self._sudo = sudo
+        self._sudo_shell = sudo_shell
 
     def send_files(self, path_from, path_to):
         wazo_ssh = f'{self._login}@{self._hostname}'
-        cmd = [f'{path_from}', f'{wazo_ssh}:{path_to}']
+        scp_dest = path_to
+        if self._sudo:
+            random_str = "".join(
+                random.choice(string.ascii_letters + string.digits) for _ in range(12)
+            )
+            scp_dest = f'/tmp/{random_str}'
+        cmd = [f'{path_from}', f'{wazo_ssh}:{scp_dest}']
         scp_command = [
             'scp',
             '-o', 'PreferredAuthentications=publickey',
@@ -42,12 +52,23 @@ class SSHClient:
         ]
         scp_command.extend(cmd)
 
-        return subprocess.call(
+        logger.debug(f'Copying {path_from} to {scp_dest}')
+        scp_result = subprocess.call(
             scp_command,
             stdout=PIPE,
             stderr=STDOUT,
             close_fds=True,
         )
+        logger.debug(scp_result)
+        if self._sudo:
+            dest_full_path = os.path.join(path_to, os.path.basename(path_from))
+            logger.debug(f'Sudo mode. Moving {scp_dest} to {dest_full_path}')
+            cmd_result = self._exec_ssh_command(["mv", scp_dest, dest_full_path], err_in_out=True)
+            logger.debug(cmd_result)
+            logger.debug(f'Sudo mode. Setting ownership of {dest_full_path}')
+            cmd_result = self._exec_ssh_command(["chown", "root:root", dest_full_path], err_in_out=True)
+            logger.debug(cmd_result)
+        return scp_result
 
     def call(self, remote_command):
         command_result = self._exec_ssh_command(remote_command)
@@ -80,12 +101,16 @@ class SSHClient:
         ssh_options = []
         if force_tty:
             ssh_options = ['-o', 'RequestTTY=force']
+        if self._sudo:
+            remote_command = ["sudo"] + remote_command
         command = self._format_ssh_command(remote_command, *ssh_options)
 
         process = subprocess.Popen(command, *args, **kwargs)
         return process
 
-    def _exec_ssh_command(self, remote_command: str, err_in_out: bool = False) -> PatchedPopen:
+    def _exec_ssh_command(self, remote_command: [str], err_in_out: bool = False) -> PatchedPopen:
+        if self._sudo:
+            remote_command = ["sudo", self._sudo_shell, "-c", "'" + " ".join(remote_command) + "'"]
         command = self._format_ssh_command(remote_command)
         stderr = STDOUT if err_in_out else PIPE
         p = subprocess.Popen(
