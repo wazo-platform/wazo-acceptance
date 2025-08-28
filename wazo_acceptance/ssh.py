@@ -90,7 +90,7 @@ class SSHClient:
         if force_tty:
             ssh_options = ['-o', 'RequestTTY=force']
         if self._sudo:
-            remote_command = ["sudo "] + remote_command
+            remote_command = ["sudo"] + remote_command
         command = self._format_ssh_command(remote_command, *ssh_options)
 
         process = subprocess.Popen(command, *args, **kwargs)
