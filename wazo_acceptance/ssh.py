@@ -61,11 +61,12 @@ class SSHClient:
         )
         logger.debug(scp_result)
         if self._sudo:
-            logger.debug(f'Sudo mode. Moving {scp_dest} to {path_to}')
-            cmd_result = self._exec_ssh_command(["mv", scp_dest, path_to], err_in_out=True)
+            dest_full_path = os.path.join(path_to, os.path.basename(path_from))
+            logger.debug(f'Sudo mode. Moving {scp_dest} to {dest_full_path}')
+            cmd_result = self._exec_ssh_command(["mv", scp_dest, dest_full_path], err_in_out=True)
             logger.debug(cmd_result)
-            logger.debug(f'Sudo mode. Setting ownership of {path_to}')
-            cmd_result = self._exec_ssh_command(["chown", "root:root", path_to], err_in_out=True)
+            logger.debug(f'Sudo mode. Setting ownership of {dest_full_path}')
+            cmd_result = self._exec_ssh_command(["chown", "root:root", dest_full_path], err_in_out=True)
             logger.debug(cmd_result)
         return scp_result
 
