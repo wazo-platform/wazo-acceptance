@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import logging
 import os
+import random
+import string
 import subprocess
 from subprocess import PIPE, STDOUT
 from typing import TYPE_CHECKING
@@ -37,7 +39,10 @@ class SSHClient:
         wazo_ssh = f'{self._login}@{self._hostname}'
         scp_dest = path_to
         if self._sudo:
-            scp_dest = f"/tmp/{"".join()}"
+            random = "".join(
+                random.choice(string.ascii_letters + string.digits) for _ in range(12)
+            )
+            scp_dest = f'/tmp/{random}'
         cmd = [f'{path_from}', f'{wazo_ssh}:{scp_dest}']
         scp_command = [
             'scp',
