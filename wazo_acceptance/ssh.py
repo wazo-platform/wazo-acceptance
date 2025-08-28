@@ -39,10 +39,10 @@ class SSHClient:
         wazo_ssh = f'{self._login}@{self._hostname}'
         scp_dest = path_to
         if self._sudo:
-            random = "".join(
+            random_str = "".join(
                 random.choice(string.ascii_letters + string.digits) for _ in range(12)
             )
-            scp_dest = f'/tmp/{random}'
+            scp_dest = f'/tmp/{random_str}'
         cmd = [f'{path_from}', f'{wazo_ssh}:{scp_dest}']
         scp_command = [
             'scp',
