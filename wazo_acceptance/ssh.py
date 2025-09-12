@@ -110,7 +110,8 @@ class SSHClient:
 
     def _exec_ssh_command(self, remote_command: [str], err_in_out: bool = False) -> PatchedPopen:
         if self._sudo:
-            remote_command = ["sudo", self._sudo_shell, "-c", "\"" + " ".join([c.replace('\"', '\\"') for c in remote_command]) + "\""]
+            remote_command = ["sudo", self._sudo_shell, "-c", '"' + " ".join([c.replace('"', '\\"') for c in remote_command]) + '"']
+            logger.debug(" ".join(remote_command))
         command = self._format_ssh_command(remote_command)
         stderr = STDOUT if err_in_out else PIPE
         p = subprocess.Popen(
