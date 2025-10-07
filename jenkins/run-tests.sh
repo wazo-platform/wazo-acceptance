@@ -30,7 +30,7 @@ debug:
 EOF
 
 VENV=wazo-acceptance-venv
-python3.9 -m venv --clear $VENV
+python3.11 -m venv --clear $VENV
 set +x
 source $VENV/bin/activate
 set -x
