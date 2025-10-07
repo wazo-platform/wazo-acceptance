@@ -291,10 +291,10 @@ def _configure_asterisk(context):
 
 
 def _configure_postgresql_debug(context):
-    config_file = '/etc/postgresql/13/main/conf.d/wazo-acceptance-debug.conf'
+    config_file = '/etc/postgresql/15/main/conf.d/wazo-acceptance-debug.conf'
     command = ['echo', 'log_min_duration_statement = 0', '>', config_file]
     context.ssh_client.check_call(command)
-    pg_is_running = context.remote_sysutils.is_process_running('postgresql@13-main')
+    pg_is_running = context.remote_sysutils.is_process_running('postgresql@15-main')
     if pg_is_running:
         context.remote_sysutils.reload_service('postgresql')
 
