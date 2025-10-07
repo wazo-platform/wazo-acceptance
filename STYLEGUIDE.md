@@ -13,7 +13,8 @@
 * for other rules, please refer to feature files and then write them here
 
 ### Example
-```
+
+```gherkin
 Feature: Scenarios to test
 
   Scenario: Description of the scenario
