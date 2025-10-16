@@ -1,4 +1,4 @@
-# Copyright 2013-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import annotations
@@ -80,6 +80,7 @@ class SSHClient:
         ssh_options = []
         if force_tty:
             ssh_options = ['-o', 'RequestTTY=force']
+            remote_command = ['trap', '\'kill 0\'', 'EXIT', ';', *remote_command]
         command = self._format_ssh_command(remote_command, *ssh_options)
 
         process = subprocess.Popen(command, *args, **kwargs)

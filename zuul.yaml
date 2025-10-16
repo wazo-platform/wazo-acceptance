@@ -1,12 +1,12 @@
 - project:
     templates:
-      - wazo-tox-linters-310
+      - wazo-tox-linters-py311
     wazo-check:
       jobs:
-        - wazo-acceptance-bullseye
+        - wazo-acceptance-bookworm
     wazo-gate:
       jobs:
-        - wazo-acceptance-bullseye
+        - wazo-acceptance-bookworm
     auto-merge:
       jobs:
         - noop
