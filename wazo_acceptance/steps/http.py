@@ -1,4 +1,4 @@
-# Copyright 2017-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import requests
@@ -18,11 +18,12 @@ def then_url_does_not_answer_404(context, method, url_path):
 def then_url_answer_429(context, method, url_path, status_code):
     host = context.wazo_config['wazo_host']
     url = f'https://{host}{url_path}'
-    response = requests.request(method, url, verify=False)
+    session = requests.Session()
+    response = session.request(method, url, verify=False)
     assert_that(response.status_code, equal_to(int(status_code)))
 
     for _ in range(1000):
-        response = requests.request(method, url, verify=False)
+        response = session.request(method, url, verify=False)
         if response.status_code == 429:
             return
 
