@@ -59,7 +59,7 @@ class WebRTCPhone(Phone):
         until.true(
             open_page, f'http://localhost:{EXPOSED_PORT}',
             message="Timeout when waiting for WebRTC docker container to start",
-            timeout=15,
+            timeout=30,
             tries=5,
             interval=2
         )
