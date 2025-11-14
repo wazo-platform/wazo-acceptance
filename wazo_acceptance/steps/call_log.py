@@ -21,7 +21,10 @@ def then_i_have_the_last_call_log_matching(context):
 
     def _assert():
         cdr = context.call_logd_client.cdr.list(direction='desc', limit=1, recurse=True)
-        last_call_log = cdr['items'][0]
+        try:
+            last_call_log = cdr['items'][0]
+        except IndexError:
+            return False
         assert_that(last_call_log, has_entries(expected))
         if expected_duration:
             assert_that(last_call_log['duration'], close_to(expected_duration, 2))
