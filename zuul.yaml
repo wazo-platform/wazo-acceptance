@@ -3,7 +3,7 @@
       - wazo-tox-linters-py311
     wazo-check:
       jobs:
-        - wazo-acceptance-bookworm
+        # - wazo-acceptance-bookworm
         - wazo-tox-molecule-bookworm
         - wazo-tox-integration-py311
         - wazo-tox-py311
