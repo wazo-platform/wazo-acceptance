@@ -63,12 +63,12 @@ def then_the_following_provisioning_files_are_available_over_https(context):
     _provisioning_files_are_available(context, base_url)
 
 
-@then('the following devices exist on wazo-provd')
+@then('the following devices exist on wazo-provd:')
 def then_the_following_devices_exist_on_wazo_provd(context):
     for row in context.table:
         body = row.as_dict()
         mac = body['mac']
-        provd_result = context.helpers.provd.get_by_mac(mac)
+        provd_result = context.helpers.provd.get_device_by_mac(mac)
         assert provd_result is not None
 
 
