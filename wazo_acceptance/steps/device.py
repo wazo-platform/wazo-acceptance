@@ -32,7 +32,7 @@ def when_the_following_devices_are_created_via_http_requets_to_the_provisioning_
         context.helpers.provd.create_device_via_http_request(**body)
 
 
-@step('the following devices are created via DHCP requests')
+@step('the following devices are created via DHCP requests:')
 def when_the_following_devices_are_created_via_dhcp_requests(context):
     conf.checkIPaddr = False
     dhcp_discover = Ether(dst='ff:ff:ff:ff:ff:ff') / IP(src='0.0.0.0', dst='255.255.255.255') / UDP(sport=68, dport=67)
