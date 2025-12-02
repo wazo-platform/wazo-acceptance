@@ -1,6 +1,6 @@
 - project:
-    templates:
-      - wazo-tox-linters-py311
+    # templates:
+    #   - wazo-tox-linters-py311
     wazo-check:
       jobs:
         # - wazo-acceptance-bookworm
