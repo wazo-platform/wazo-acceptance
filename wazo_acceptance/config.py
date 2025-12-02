@@ -10,7 +10,7 @@ from xivo.config_helper import parse_config_dir
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_ASSETS_DIR = os.path.join(__package__ or 'wazo_acceptance', 'assets')
+DEFAULT_ASSETS_DIR = os.path.join(__spec__.parent or 'wazo_acceptance', 'assets')
 DEFAULT_CONFIG_DIR = os.path.join(os.path.expanduser("~"), '.wazo-acceptance')
 
 DEFAULT_GLOBAL_CONFIG = {
