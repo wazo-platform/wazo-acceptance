@@ -110,3 +110,5 @@ pip install coverage
 coverage run --source=wazo_acceptance $(which behave) ...
 coverage html
 ```
+
+## DO NOT MERGE
