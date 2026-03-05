@@ -137,7 +137,7 @@ Feature: Stats generation
     When "Stat Agent" hangs up
     When "Stat Agent" answers
     When "Stat Agent" hangs up
-    When I wait 5 seconds to simulate call center
+    When I wait 10 seconds to simulate call center
 
     # QoS 20 seconds
     When "Stat Agent" answers
