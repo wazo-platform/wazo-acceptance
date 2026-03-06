@@ -1,10 +1,10 @@
-# Copyright 2020-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
-import pytz
 from behave import then, when
 
 logger = logging.getLogger(__name__)
@@ -23,14 +23,13 @@ def when_generate_contact_center_stats(context):
 
 @then('contact center stats for queue "{queue_name}" in the current hour are:')
 def then_contact_center_stats_for_queue_1(context, queue_name):
-    timezone = pytz.timezone('America/Montreal')
-    utcnow = datetime.utcnow()
-    now = pytz.utc.localize(utcnow).astimezone(timezone)
+    tz = ZoneInfo('America/Montreal')
+    now = datetime.now(tz=tz)
     last_hour = datetime(now.year, now.month, now.day, now.hour, 0, 0)
 
     queue_id = context.helpers.queue.find_by(name=queue_name)['id']
     queue_stats = context.call_logd_client.queue_statistics.get_by_id(
-        queue_id=queue_id, from_=last_hour.isoformat(), timezone=str(timezone)
+        queue_id=queue_id, from_=last_hour.isoformat(), timezone=str(tz)
     )
     total_stats = queue_stats['items'][-1]
 
@@ -46,16 +45,15 @@ def then_contact_center_stats_for_queue_1(context, queue_name):
 
 @then('contact center stats for agent "{agent_number}" in the current hour are:')
 def then_contact_center_stats_for_agent(context, agent_number):
-    timezone = pytz.timezone('America/Montreal')
-    utcnow = datetime.utcnow()
-    now = pytz.utc.localize(utcnow).astimezone(timezone)
+    tz = ZoneInfo('America/Montreal')
+    now = datetime.now(tz=tz)
     last_hour = datetime(now.year, now.month, now.day, now.hour, 0, 0)
 
     agent_id = context.helpers.agent.get_by(number=agent_number)['id']
     agent_stats = context.call_logd_client.agent_statistics.get_by_id(
         agent_id=agent_id,
         from_=last_hour.isoformat(),
-        timezone=str(timezone),
+        timezone=str(tz),
     )
     total_stats = agent_stats['items'][-1]
 
@@ -87,15 +85,14 @@ def then_contact_center_stats_for_agent(context, agent_number):
 @then('contact center qos stats for queue "{queue_name}" in the current hour are:')
 def then_contact_center_qos_stats_for_queue_1(context, queue_name):
     thresholds = [row['qos_threshold'] for row in context.table if row['qos_threshold'] != 'remainder']
-    timezone = pytz.timezone('America/Montreal')
-    utcnow = datetime.utcnow()
-    now = pytz.utc.localize(utcnow).astimezone(timezone)
+    tz = ZoneInfo('America/Montreal')
+    now = datetime.now(tz=tz)
     last_hour = datetime(now.year, now.month, now.day, now.hour, 0, 0)
     queue_id = context.helpers.queue.find_by(name=queue_name)['id']
     queue_stats = context.call_logd_client.queue_statistics.get_qos_by_id(
         queue_id=queue_id,
         from_=last_hour.isoformat(),
-        timezone=str(timezone),
+        timezone=str(tz),
         qos_thresholds=','.join(thresholds)
     )
     total_stats = queue_stats['items'][-1]
