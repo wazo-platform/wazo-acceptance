@@ -122,24 +122,24 @@ Feature: Stats generation
       |  3523 | default | 3523-abandoned-qos20   |
     When I wait 1 seconds for the call processing
 
-    # QoS 5 seconds
+    # QoS 5s bucket: answer at ~3s holdtime
     When "Stat Agent" answers
     When "Stat Agent" hangs up
     When I wait 5 seconds to simulate call center
 
-    # QoS 10 seconds
+    # QoS 10s bucket: abandon at ~6s holdtime
     When chan_test hangs up channel with id "3523-abandoned-qos10-1"
     When chan_test hangs up channel with id "3523-abandoned-qos10-2"
-    When I wait 5 seconds to simulate call center
+    When I wait 3 seconds to simulate call center
 
-    # QoS 15 seconds
+    # QoS 15s bucket: answer at ~11-13s holdtime
     When "Stat Agent" answers
     When "Stat Agent" hangs up
     When "Stat Agent" answers
     When "Stat Agent" hangs up
-    When I wait 5 seconds to simulate call center
+    When I wait 7 seconds to simulate call center
 
-    # QoS 20 seconds
+    # Remainder bucket: handle at ~17-19s holdtime
     When "Stat Agent" answers
     When chan_test hangs up channel with id "3523-abandoned-qos20"
     When "Stat Agent" hangs up
