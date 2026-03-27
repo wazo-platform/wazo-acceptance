@@ -109,4 +109,5 @@ To get code coverage of wazo_acceptance:
 pip install coverage
 coverage run --source=wazo_acceptance $(which behave) ...
 coverage html
+
 ```
