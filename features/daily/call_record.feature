@@ -57,8 +57,8 @@ Feature: Call Record
       | User      | 801      | no                                    | 1801  | default | yes        |
       | User      | 802      | yes                                   | 1802  | default | yes        |
     Given there are telephony groups with infos:
-      | label      | exten | context | dtmf_record_toggle |
-      | incoming   |  2514 | default | yes                |
+      | label      | exten | context |
+      | incoming   |  2514 | default |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | Hall     |
@@ -115,8 +115,8 @@ Feature: Call Record
       | User      | 802      | yes                                   | 1802  | default | yes        | 1234         |
     Given agent "1234" is logged
     Given there are queues with infos:
-      | name       | exten | context | dtmf_record_toggle |
-      | incoming   |  3123 | default | yes                |
+      | name       | exten | context |
+      | incoming   |  3123 | default |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | Lee      |
