@@ -1,4 +1,4 @@
-# Copyright 2019-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from requests import HTTPError
@@ -26,6 +26,10 @@ class ConfdUser:
             record_enabled = body.pop(field, None)
             if record_enabled:
                 body[field] = record_enabled == 'yes'
+
+        mobile_fallback_enabled = body.pop('mobile_fallback_enabled', None)
+        if mobile_fallback_enabled is not None:
+            body['mobile_fallback_enabled'] = mobile_fallback_enabled == 'yes'
 
         modules = {'dialplan': True, 'pjsip': True, 'queue': True}
         wait_reload = self._context.helpers.bus.wait_for_asterisk_reload
