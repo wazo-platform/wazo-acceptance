@@ -28,7 +28,7 @@ class ConfdUser:
                 body[field] = record_enabled == 'yes'
 
         mobile_fallback_enabled = body.pop('mobile_fallback_enabled', None)
-        if mobile_fallback_enabled is not None:
+        if mobile_fallback_enabled:
             body['mobile_fallback_enabled'] = mobile_fallback_enabled == 'yes'
 
         modules = {'dialplan': True, 'pjsip': True, 'queue': True}

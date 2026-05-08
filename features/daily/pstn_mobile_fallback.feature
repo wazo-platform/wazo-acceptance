@@ -18,10 +18,10 @@ Feature: PSTN mobile fallback
 
   Scenario: PSTN fallback is not triggered when mobile_fallback_enabled is false
     Given there are telephony users with infos:
-      | firstname | lastname | exten | context | with_phone | username | password | ring_seconds |
-      | Rick      | Grimes   |       |         |            | rick     | gR1m3    | 20           |
-      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |              |
-      | Carol     | Peletier | 1803  | default | yes        |          |          |              |
+      | firstname | lastname | exten | context | with_phone | username | password | ring_seconds | mobile_phone_number | mobile_fallback_enabled |
+      | Rick      | Grimes   |       |         |            | rick     | gR1m3    | 20           | 1803                | no                      |
+      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |              |                     |                         |
+      | Carol     | Peletier | 1803  | default | yes        |          |          |              |                     |                         |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | yes        | no     |
