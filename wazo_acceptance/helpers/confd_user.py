@@ -27,6 +27,10 @@ class ConfdUser:
             if record_enabled:
                 body[field] = record_enabled == 'yes'
 
+        mobile_phone_number = body.pop('mobile_phone_number', None)
+        if mobile_phone_number:
+            body['mobile_phone_number'] = mobile_phone_number
+
         mobile_fallback_enabled = body.pop('mobile_fallback_enabled', None)
         if mobile_fallback_enabled:
             body['mobile_fallback_enabled'] = mobile_fallback_enabled == 'yes'
