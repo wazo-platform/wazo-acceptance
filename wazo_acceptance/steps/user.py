@@ -1,4 +1,4 @@
-# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import string
@@ -58,10 +58,10 @@ def given_there_are_telephony_users_with_infos(context):
         if body.get('context'):
             body['context'] = context.helpers.context.get_by(label=body['context'])['name']
 
-        confd_user = context.helpers.confd_user.create(body)
+        username = body.pop('username', None) or context.helpers.utils.random_string(10)
+        password = body.pop('password', None) or context.helpers.utils.random_string(10, sample=string.printable)
 
-        username = body.get('username') or context.helpers.utils.random_string(10)
-        password = body.get('password') or context.helpers.utils.random_string(10, sample=string.printable)
+        confd_user = context.helpers.confd_user.create(body)
         firstname = body['firstname']
         lastname = body.get('lastname', '')
         user_body = {
