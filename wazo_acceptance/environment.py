@@ -1,4 +1,4 @@
-# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import annotations
@@ -10,7 +10,7 @@ from behave.runner import Context, ContextMode, use_context_with_mode
 from xivo.pubsub import Pubsub
 from xivo.xivo_logging import setup_logging as wazo_setup_logging
 
-from . import debug, setup
+from . import auth_worker, debug, setup
 from .config import load_config
 
 logger = logging.getLogger(__name__)
@@ -35,6 +35,19 @@ class InstanceContext:
 def before_all(context: Context) -> None:
     initialize(context)
     context.fail_on_cleanup_errors = False
+    if auth_worker.is_available(context):
+        auth_worker.enable(context)
+    else:
+        logger.warning(
+            'wazo-auth does not ship the HTTP worker unit; '
+            'running the suite without a worker'
+        )
+
+
+# Implicitly defined by behave
+def after_all(context: Context) -> None:
+    if getattr(context, 'remote_sysutils', None) and auth_worker.is_available(context):
+        auth_worker.disable(context)
 
 
 # Implicitly defined by behave
