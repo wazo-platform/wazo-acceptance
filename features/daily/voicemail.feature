@@ -13,6 +13,19 @@ Feature: Voicemail
       | caller_id_name | folder_name | folder_type |
       | Billy          | inbox       | new         |
 
+  Scenario: Leave voicemail message with email on voicemail
+    Given there are telephony users with infos:
+      | firstname | lastname | number | context | voicemail_name | voicemail_number | voicemail_context | voicemail_email  |
+      | George    | Hanson   | 1801   | default | George Hanson  | 1801             | default           | test@example.com |
+    Given I listen on the bus for "user_voicemail_message_created" messages
+    When a message is left on voicemail "1801@default" by "Billy"
+    Then I receive a "user_voicemail_message_created" event with "message" data:
+      | caller_id_name | folder_name | folder_type |
+      | Billy          | inbox       | new         |
+    Then there's the following messages in voicemail "1801@default"
+      | caller_id_name | folder_name | folder_type |
+      | Billy          | inbox       | new         |
+
   Scenario: Check voicemail message
     Given there are telephony users with infos:
       | firstname | lastname | number | context | voicemail_name | voicemail_number | voicemail_context |

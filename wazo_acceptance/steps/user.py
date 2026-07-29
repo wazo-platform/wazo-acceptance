@@ -121,11 +121,13 @@ def given_there_are_telephony_users_with_infos(context):
         if (body.get('voicemail_name')
                 and body.get('voicemail_number')
                 and body.get('voicemail_context')):
+            voicemail_email_address = body.get('voicemail_email')
             voicemail_context = context.helpers.context.get_by(label=body['voicemail_context'])['name']
             voicemail = context.helpers.voicemail.create({
                 'name': body['voicemail_name'],
                 'context': voicemail_context,
-                'number': body['voicemail_number']
+                'number': body['voicemail_number'],
+                'email': voicemail_email_address,
             })
             context.helpers.confd_user.add_voicemail(confd_user, voicemail)
 
