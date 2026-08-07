@@ -71,6 +71,9 @@ class Provd:
             except ProvdError:
                 pass
 
+    def get_device_by_mac(self, mac):
+        return self._find_by('mac', mac)
+
     def delete_device_with_mac(self, mac):
         device = self._find_by('mac', mac)
         if device:
