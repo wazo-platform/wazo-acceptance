@@ -1,4 +1,4 @@
-# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -53,6 +53,9 @@ def run(config_dir: str, instance_name: str):
 
     logger.debug('Configuring remote sysutils')
     setup.setup_remote_sysutils(context)
+
+    logger.debug('Disabling monit')
+    context.remote_sysutils.stop_service('monit')
 
     logger.debug('Configuring users external_api')
     _configure_auth_users(context)
@@ -130,6 +133,9 @@ def run(config_dir: str, instance_name: str):
 
     logger.debug('Touching service key files - Fix WAZO-3011...')
     _touch_service_key_files(context)
+
+    logger.debug('Enabling monit')
+    context.remote_sysutils.start_service('monit')
 
 
 def _configure_rabbitmq(context):
