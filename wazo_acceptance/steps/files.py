@@ -171,6 +171,11 @@ def then_the_file_does_not_contain(context, path, content):
     assert returncode == 1, f'"{content}" found in {path} (grep exit status {returncode})'
 
 
+@then('the file "{path}" does not contain the invalid provisioning key')
+def then_the_file_does_not_contain_the_invalid_provisioning_key(context, path):
+    then_the_file_does_not_contain(context, path, context.invalid_provisioning_key)
+
+
 @then('the file "{path}" is not empty')
 def then_the_file_is_not_empty(context, path):
     command = ['stat', '-c', '%s', path]

@@ -12,12 +12,17 @@ Feature: Provisioning
     Given the provd HTTP auth strategy is set to "url_key"
     Given the provisioning key is "validkey-123"
     Given the file "/var/log/wazo-provd-fail2ban.log" is empty
-    When I request 5 provisioning files over HTTPS using provisioning key "INVALIDKEY000"
+    Given the fail2ban jails are overridden with:
+      | jail           | maxretry | bantime |
+      | wazo-provd     | 1000     | 20      |
+      | wazo-provd-key | 1000     | 20      |
+    When I request 4 provisioning files with method "GET" over HTTPS using an invalid provisioning key
+    When I request 1 provisioning files with method "HEAD" over HTTPS using an invalid provisioning key
     Then fail2ban-regex for "wazo-provd-key" matches 5 lines
     Then fail2ban-regex for "wazo-provd" matches 5 lines
-    Then the file "/var/log/wazo-provd.log" does not contain "INVALIDKEY000"
-    Then the file "/var/log/wazo-provd-fail2ban.log" does not contain "INVALIDKEY000"
-    Then the file "/var/log/nginx/wazo.access.log" does not contain "INVALIDKEY000"
+    Then the file "/var/log/wazo-provd.log" does not contain the invalid provisioning key
+    Then the file "/var/log/wazo-provd-fail2ban.log" does not contain the invalid provisioning key
+    Then the file "/var/log/nginx/wazo.access.log" does not contain the invalid provisioning key
 
   Scenario: Fail2ban bans IP addresses guessing provisioning keys
     Given the provd HTTP auth strategy is set to "url_key"
@@ -28,7 +33,7 @@ Feature: Provisioning
       | jail           | maxretry | bantime |
       | wazo-provd     | 1000     | 20      |
       | wazo-provd-key | 20       | 20      |
-    When I request 21 provisioning files over HTTPS using provisioning key "INVALIDKEY000"
+    When I request 21 provisioning files with method "GET" over HTTPS using an invalid provisioning key
     Then the provisioning server refuses my connections
     When I wait until the provisioning server accepts my connections
     Then fail2ban banned an IP address in jail "wazo-provd-key"
