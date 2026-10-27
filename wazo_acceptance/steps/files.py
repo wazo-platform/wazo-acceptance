@@ -1,4 +1,4 @@
-# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -162,6 +162,13 @@ def then_moh_files_are_owned_by_asterisk_www_data(context):
 def given_the_file_is_empty(context, path):
     # if the file already exist on the fs, it will be truncated to 0
     context.ssh_client.check_call(['truncate', '-s0', path])
+
+
+@then('the file "{path}" does not contain "{content}"')
+def then_the_file_does_not_contain(context, path, content):
+    # grep exit status: 0 found, 1 not found, 2 error (e.g. missing file)
+    returncode = context.ssh_client.call(['grep', '-qF', '--', f"'{content}'", path])
+    assert returncode == 1, f'"{content}" found in {path} (grep exit status {returncode})'
 
 
 @then('the file "{path}" is not empty')

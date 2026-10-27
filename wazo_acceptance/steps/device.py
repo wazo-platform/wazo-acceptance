@@ -1,4 +1,4 @@
-# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import requests
@@ -50,6 +50,19 @@ def then_the_following_provisioning_files_are_available_over_https_using_key(con
     host = context.wazo_config['provd']['provisioning_host']
     base_url = f"https://{host}/device/provisioning/{provisioning_key}"
     _provisioning_files_are_available(context, base_url)
+
+
+@when('I request {count:d} provisioning files over HTTPS using provisioning key "{provisioning_key}"')
+def when_i_request_provisioning_files_over_https_using_key(context, count, provisioning_key):
+    host = context.wazo_config['provd']['provisioning_host']
+    base_url = f"https://{host}/device/provisioning/{provisioning_key}"
+    for i in range(count):
+        try:
+            response = requests.get(f"{base_url}/{i:012x}.cfg", verify=False, timeout=5)
+        except requests.exceptions.ConnectionError:
+            # the IP address is already banned by fail2ban
+            break
+        assert response.status_code == 404, f'Unexpected status code {response.status_code} for an invalid key'
 
 
 def _provisioning_files_are_available(context, base_url):
