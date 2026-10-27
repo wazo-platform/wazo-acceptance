@@ -86,7 +86,8 @@ def then_fail2ban_banned_an_ip_address_in_jail(context, jail):
 def _provisioning_server_is_reachable(context):
     host = context.wazo_config['provd']['provisioning_host']
     try:
-        requests.get(f'https://{host}/device/provisioning/', verify=False, timeout=3)
+        # not a provisioning URL: it would count as one more key failure
+        requests.get(f'https://{host}/', verify=False, timeout=3)
     except requests.exceptions.RequestException:
         return False
     return True
