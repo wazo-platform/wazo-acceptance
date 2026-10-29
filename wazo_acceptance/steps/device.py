@@ -26,7 +26,7 @@ def when_i_synchronize_the_device_with_mac(context, mac):
 
 
 @step('the following devices are created via HTTP requests to the provisioning server:')
-def when_the_following_devices_are_created_via_http_requets_to_the_provisioning_server(context):
+def step_the_following_devices_are_created_via_http_requests_to_the_provisioning_server(context):
     for row in context.table:
         body = row.as_dict()
         body['user_agent'] = body.pop('user-agent')

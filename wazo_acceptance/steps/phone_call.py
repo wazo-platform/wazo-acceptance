@@ -133,13 +133,13 @@ def step_user_resumes_call(context, tracking_id):
 
 
 @step('"{tracking_id}" sends DTMF "{digit}"')
-def when_user_sends_dtmf(context, tracking_id, digit):
+def step_user_sends_dtmf(context, tracking_id, digit):
     phone = context.phone_register.get_phone(tracking_id)
     phone.send_dtmf(digit)
 
 
 @step('"{tracking_id}" sends multiple DTMF "{digits}"')
-def when_user_sends_multiple_dtmf(context, tracking_id, digits):
+def step_user_sends_multiple_dtmf(context, tracking_id, digits):
     phone = context.phone_register.get_phone(tracking_id)
     for digit in digits:
         phone.send_dtmf(digit)

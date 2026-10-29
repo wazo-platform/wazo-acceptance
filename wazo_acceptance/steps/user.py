@@ -196,21 +196,21 @@ def given_user_has_lines(context, firstname, lastname):
 
 
 @given('"{firstname} {lastname}" has enabled "{dnd_name}" service')
-def then_the_user_has_enabled_service(context, firstname, lastname, dnd_name):
+def given_the_user_has_enabled_service(context, firstname, lastname, dnd_name):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     service = {'enabled': True}
     context.confd_client.users(confd_user).update_service(dnd_name, service)
 
 
 @given('"{firstname} {lastname}" has schedule "{schedule}"')
-def given_user_1_has_schedule_2(context, firstname, lastname, schedule):
+def given_user_has_schedule(context, firstname, lastname, schedule):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     schedule = context.helpers.schedule.get_by(name=schedule)
     context.confd_client.users(confd_user).add_schedule(schedule['id'])
 
 
 @given('"{firstname} {lastname}" has reconfigured the line "{exten}@{exten_context}"')
-def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, exten_context):
+def given_user_has_reconfigured_the_line(context, firstname, lastname, exten, exten_context):
     context_name = context.helpers.context.get_by(label=exten_context)['name']
     extension = context.helpers.extension.find_by(
         exten=exten,
@@ -390,7 +390,7 @@ def when_the_user_disable_all_forwards(context, firstname, lastname):
 
 
 @step('"{firstname} {lastname}" enable forwarding on no-answer to "{exten}"')
-def when_the_user_enable_forwarding_on_no_answer_to(context, firstname, lastname, exten):
+def step_the_user_enable_forwarding_on_no_answer_to(context, firstname, lastname, exten):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = {'destination': exten, 'enabled': True}
     context.confd_client.users(confd_user).update_forward('noanswer', forward)
@@ -451,7 +451,7 @@ def when_the_user_press_function_key(context, firstname, lastname, position):
 
 
 @given('"{firstname} {lastname}" enable call filter "{filter_name}"')
-def when_the_user_active_call_filter(context, firstname, lastname, filter_name):
+def given_the_user_enables_call_filter(context, firstname, lastname, filter_name):
     call_filter = context.helpers.call_filter.get_by(name=filter_name)
     member_id = None
     for user in call_filter['surrogates']['users']:

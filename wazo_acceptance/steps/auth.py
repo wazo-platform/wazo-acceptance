@@ -1,4 +1,4 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then, when
@@ -36,7 +36,7 @@ def given_i_create_a_refresh_token(context, username, password):
 
 
 @when('"{username}" changes its password from "{old_password}" to "{new_password}"')
-def user_changes_its_password_from_old_to_new(context, username, old_password, new_password):
+def when_user_changes_its_password_from_old_to_new(context, username, old_password, new_password):
     token = _create_token(context, username, old_password)
     with context.helpers.utils.set_token(context.auth_client, token['token']):
         context.auth_client.users.change_password(

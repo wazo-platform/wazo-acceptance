@@ -1,4 +1,4 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import string
@@ -114,7 +114,7 @@ def then_there_is_a_mail_with_content_on_instance(context, content, instance):
 
 
 @step('I execute "{command}" command on "{instance}"')
-def when_i_execute_command_on_instance(context, command, instance):
+def step_i_execute_command_on_instance(context, command, instance):
     host_context = getattr(context.instances, instance)
     host_context.remote_sysutils.send_command(command.split())
 

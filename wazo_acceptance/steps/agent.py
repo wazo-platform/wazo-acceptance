@@ -1,4 +1,4 @@
-# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then, when
@@ -16,7 +16,7 @@ def given_there_are_agents_with_infos(context):
 
 @given('agent "{number}" is logged')
 @when('I log agent "{number}" from API')
-def agent_is_logged(context, number):
+def step_agent_is_logged(context, number):
     user = context.helpers.agent.get_by(number=number)['users'][0]
     user = context.confd_client.users.get(user)
     exten = user['lines'][0]['extensions'][0]['exten']
