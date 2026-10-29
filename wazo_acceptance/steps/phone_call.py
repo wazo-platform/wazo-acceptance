@@ -1,11 +1,11 @@
-# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
 
 from ari.exceptions import ARINotFound
 from behave import step, then, when
-from hamcrest import assert_that, has_length, not_
+from hamcrest import assert_that, has_length
 from wazo_test_helpers import until
 
 CHAN_PREFIX = 'PJSIP'
@@ -161,14 +161,6 @@ def when_a_call_is_started(context):
 
     for call_info in context.table:
         _call(**call_info.as_dict())
-
-
-@then('"{tracking_id}" last dialed extension was not found')
-def then_user_last_dialed_extension_was_not_found(context, tracking_id):
-    # XXX(afournier): the fact that the extension does not exist is not a problem for
-    # linphone-daemon. It does not trigger an error.
-    phone = context.phone_register.get_phone(tracking_id)
-    assert_that(not_(phone.is_talking))
 
 
 @when('chan_test calls "{exten}@{exten_context}" with id "{channel_id}"')
