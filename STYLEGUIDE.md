@@ -5,15 +5,21 @@
 * indent using 2 spaces
 * indent tables
 * in tables, align values to the left
-* some table columns are optional; it's preferable to omit them if not necessary (for example, the `protocol` column)
-* there must be an empty line after a `Feature` definition and around `Scenario` blocks
-* there must be no empty lines between steps, except a single one to separate logical groups of steps in a workflow
-* variable must be surrounded by double quote (e.g. `"John"`) except for numbers (e.g. `3 seconds`, not `"3" seconds`)
-* integration tests that can't go elsewhere than `wazo-acceptance` should be in a file `integration-*.feature`
+* some table columns are optional; it's preferable to omit them if not
+  necessary (for example, the `protocol` column)
+* there must be an empty line after a `Feature` definition and around
+  `Scenario` blocks
+* there must be no empty lines between steps, except a single one to separate
+  logical groups of steps in a workflow
+* variable must be surrounded by double quote (e.g. `"John"`) except for
+  numbers (e.g. `3 seconds`, not `"3" seconds`)
+* integration tests that can't go elsewhere than `wazo-acceptance` should be
+  in a file `integration-*.feature`
 * for other rules, please refer to feature files and then write them here
 
 ### Example
-```
+
+```gherkin
 Feature: Scenarios to test
 
   Scenario: Description of the scenario
@@ -28,10 +34,13 @@ Feature: Scenarios to test
 ## Helper files
 
 You should write helper files if:
+
 * you need to have some cleanup
 * you have to wait for asterisk events
 * they can be useful for other tests
 
 ## Step files
 
-* the function name must be prefixed by the decorator name (`step`/`given`/`when`/`then`); when its decorators mix keywords, use the `step_` prefix
+* the function name must be prefixed by the decorator name
+  (`step`/`given`/`when`/`then`); when its decorators mix keywords, use the
+  `step_` prefix
