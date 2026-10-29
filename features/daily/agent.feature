@@ -81,7 +81,7 @@ Feature: Agent
     When "James Bond" calls "3801"
     When I wait 1 seconds for the call processing
     Then "Ti-Me Pare" is ringing
-    Then "Moman Pare" is hungup
+    Then "Moman Pare" is hung up
     When "Ti-Me Pare" hangs up
     Then "Moman Pare" is ringing
     Given "James Bond" hangs up

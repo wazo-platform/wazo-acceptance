@@ -70,7 +70,7 @@ Feature: Switchboards
     When I wait 10 seconds for the timeout to expire
 
     Then "Reception Clerk" is talking to "i-will-be-answered" from API
-    Then "i-will-timeout" is hungup
+    Then "i-will-timeout" is hung up
     Then switchboard "no-timeout" has "i-will-not-timeout-1" in queued calls
     Then switchboard "no-fallback" has "i-will-not-timeout-2" in queued calls
 

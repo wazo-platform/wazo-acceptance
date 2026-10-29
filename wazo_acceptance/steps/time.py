@@ -1,4 +1,4 @@
-# Copyright 2020-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -8,7 +8,7 @@ from behave import given, when
 from wazo_test_helpers import until
 
 
-@given('there are no hour change in the next {seconds} seconds')
+@given('there is no hour change in the next {seconds} seconds')
 def given_no_hour_change_in_next_1_seconds(context, seconds):
     seconds = int(seconds)
     now = datetime.now()
@@ -17,7 +17,7 @@ def given_no_hour_change_in_next_1_seconds(context, seconds):
         time.sleep(seconds)
 
 
-@when('I wait until call with caller ID name "{cid_name}" to be over')
+@when('I wait until the call with caller ID name "{cid_name}" is over')
 def when_i_wait_until_call_with_caller_id_name_to_be_over(context, cid_name):
     def call_is_up():
         call = context.helpers.call.find_by(caller_id_name=cid_name)
@@ -31,7 +31,7 @@ def when_i_wait_until_call_with_caller_id_name_to_be_over(context, cid_name):
 
 
 @when('I wait {seconds} seconds during my pause')
-@when('I wait {seconds} seconds for the call hangs up for everyone')
+@when('I wait {seconds} seconds for the call to hang up for everyone')
 @when('I wait {seconds} seconds for the call processing with slow machine')
 @when('I wait {seconds} seconds for the call processing')
 @when('I wait {seconds} seconds for the call to be forwarded')

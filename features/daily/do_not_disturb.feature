@@ -6,7 +6,7 @@ Feature: Do Not Disturb
       | Bob       | 1101     | 1101  | default |      10      |
     Given "Bob 1101" has enabled "dnd" service
     When "Alice 1100" calls "1101"
-    Then "Alice 1100" is hungup immediately
+    Then "Alice 1100" is hung up immediately
 
   Scenario: Direct call to user in DND status with voicemail
     Given there are telephony users with infos:

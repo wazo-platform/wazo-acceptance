@@ -8,7 +8,7 @@ Feature: Stats generation
     Given there are queues with infos:
       | name       | exten | context | agents | option_joinempty |
       | stat-queue | 3521  | default | 021    | unavailable      |
-    Given there are no hour change in the next 30 seconds
+    Given there is no hour change in the next 30 seconds
     Given agent "021" is logged
 
     # Answered call
@@ -43,7 +43,7 @@ Feature: Stats generation
     Given there are queues with infos:
       | name       | exten | context | agents |
       | stat-queue | 3521  | default | 1003   |
-    Given there are no hour change in the next 30 seconds
+    Given there is no hour change in the next 30 seconds
 
     # First cycle
     When I log agent "1003" from API
@@ -76,7 +76,7 @@ Feature: Stats generation
       | name         | exten | context | agents | option_wrapuptime |
       | stat-queue_1 | 3521  | default | 1003   | 2                 |
       | stat-queue_2 | 3522  | default | 1003   | 0                 |
-    Given there are no hour change in the next 30 seconds
+    Given there is no hour change in the next 30 seconds
     Given agent "1003" is logged
 
     # First call 2 seconds in conversation 2 seconds wrapup
@@ -107,7 +107,7 @@ Feature: Stats generation
     Given there are queues with infos:
       | name       | exten | context | agents |
       | stat-queue | 3523  | default | 023    |
-    Given there are no hour change in the next 30 seconds
+    Given there is no hour change in the next 30 seconds
     Given agent "023" is logged
 
     When chan_test places calls in order:

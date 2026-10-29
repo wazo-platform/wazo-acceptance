@@ -13,7 +13,7 @@ Feature: User multi lines
     When "Bob Field" calls "1801"
     Then "Multi Lines" is ringing on its contact "1"
     Then "Multi Lines" is ringing on its contact "2"
-    Then "Multi Lines" is hungup on its contact "3"
+    Then "Multi Lines" is hung up on its contact "3"
 
   Scenario: User multi lines multi extensions
     Given there are telephony users with infos:
@@ -26,7 +26,7 @@ Feature: User multi lines
       | line2 | 1802  | default | yes        |
     When "Bob Field" calls "1801"
     Then "Multi Lines" is ringing on its contact "1"
-    Then "Multi Lines" is hungup on its contact "2"
+    Then "Multi Lines" is hung up on its contact "2"
 
   Scenario: Activate a forward on user multi lines
     Given there are telephony users with infos:
@@ -56,7 +56,7 @@ Feature: User multi lines
     When "Bob Field" calls "1801"
     When I wait 2 seconds for the call processing
     When I wait 5 seconds to play unreachable message
-    Then "Bob Field" is hungup
+    Then "Bob Field" is hung up
 
   Scenario: Ringing time are respected on user multi lines
     Given there are telephony users with infos:
@@ -71,10 +71,10 @@ Feature: User multi lines
     Then "Multi Lines" is ringing on its contact "1"
     Then "Multi Lines" is ringing on its contact "2"
     When I wait 5 seconds for the end of ringing time
-    Then "Multi Lines" is hungup on its contact "1"
-    Then "Multi Lines" is hungup on its contact "2"
+    Then "Multi Lines" is hung up on its contact "1"
+    Then "Multi Lines" is hung up on its contact "2"
     When I wait 5 seconds for the call processing
-    Then "Bob Field" is hungup
+    Then "Bob Field" is hung up
 
   Scenario: Incoming call rings all lines that have the same extension as the main line
     Given there are telephony users with infos:
@@ -89,4 +89,4 @@ Feature: User multi lines
     When chan_test calls "1801@from-extern"
     Then "Multi Lines" is ringing on its contact "1"
     Then "Multi Lines" is ringing on its contact "2"
-    Then "Multi Lines" is hungup on its contact "3"
+    Then "Multi Lines" is hung up on its contact "3"

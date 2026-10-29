@@ -1,4 +1,4 @@
-# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -79,7 +79,7 @@ def when_a_message_is_checked_and_deleted_on_voicemail(context, vm_number, vm_co
     )
 
 
-@then('there\'s the following messages in voicemail "{vm_number}@{vm_context}"')
+@then('there are the following messages in voicemail "{vm_number}@{vm_context}"')
 def then_there_is_the_following_messages_in_voicemail(context, vm_number, vm_context):
     context_name = context.helpers.context.get_by(label=vm_context)['name']
     vm_conf = context.confd_client.voicemails.list(

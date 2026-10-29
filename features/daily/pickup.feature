@@ -12,7 +12,7 @@ Feature: Pickup
     When "Dilbert Bologna" calls "1002"
     Then "Wally Lasagna" is ringing
     When "Alice Wonder" calls "*8"
-    Then "Wally Lasagna" is hungup
+    Then "Wally Lasagna" is hung up
     Then "Dilbert Bologna" is talking
     Then "Alice Wonder" is talking
 
@@ -34,7 +34,7 @@ Feature: Pickup
     When "Dilbert Bologna" calls "1002"
     Then "Wally Lasagna" is ringing
     When "Dogbert Canine" calls "*8"
-    Then "Wally Lasagna" is hungup
+    Then "Wally Lasagna" is hung up
     Then "Dilbert Bologna" is talking
     Then "Dogbert Canine" is talking
 
@@ -56,7 +56,7 @@ Feature: Pickup
     When "Dilbert Bologna" calls "1003"
     Then "Dogbert Canine" is ringing
     When "Wally Lasagna" calls "*8"
-    Then "Dogbert Canine" is hungup
+    Then "Dogbert Canine" is hung up
     Then "Dilbert Bologna" is talking
     Then "Wally Lasagna" is talking
 
@@ -106,6 +106,6 @@ Feature: Pickup
     When "Dilbert Bologna" calls "1002"
     Then "Wally Lasagna" is ringing
     When "Alice Wonder" calls "*81002"
-    Then "Wally Lasagna" is hungup
+    Then "Wally Lasagna" is hung up
     Then "Dilbert Bologna" is talking
     Then "Alice Wonder" is talking

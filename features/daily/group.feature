@@ -38,12 +38,12 @@ Feature: Groups
     When I wait 2 seconds for the call processing
     Then "Flash McQueen" is ringing
     Then "Tow Mater" hangs up
-    When I wait 1 seconds for the call hangs up for everyone
+    When I wait 1 seconds for the call to hang up for everyone
     When "Flash McQueen" presses function key "1"
     When I wait 4 seconds for the call processing
     When "Tow Mater" calls "2801"
     When I wait 2 seconds for the call processing
-    Then "Flash McQueen" is hungup
+    Then "Flash McQueen" is hung up
 
   Scenario: Group member does not ring when in DND
     Given there are telephony users with infos:
@@ -62,5 +62,5 @@ Feature: Groups
     When I wait 2 seconds
     When "Arnie Douglas" calls "2515"
     When I wait 2 seconds for the call processing
-    Then "Leticia Gendron" is hungup
+    Then "Leticia Gendron" is hung up
     Then "Bernandine Gignac" is ringing

@@ -26,7 +26,7 @@ Feature: Boss Secretary Filter
     Then "Angel 001" has function key "1" hint enabled
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
-    Then "Charlie Unknown" is hungup
+    Then "Charlie Unknown" is hung up
     Then "Angel 001" is ringing
     When "Bad Guy" hangs up
 
@@ -38,7 +38,7 @@ Feature: Boss Secretary Filter
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing
-    Then "Angel 001" is hungup
+    Then "Angel 001" is hung up
     When "Bad Guy" hangs up
 
     When "Angel 001" presses function key "1"
@@ -48,7 +48,7 @@ Feature: Boss Secretary Filter
     Then "Angel 001" has function key "1" hint enabled
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
-    Then "Charlie Unknown" is hungup
+    Then "Charlie Unknown" is hung up
     Then "Angel 001" is ringing
     When "Bad Guy" hangs up
 
@@ -60,7 +60,7 @@ Feature: Boss Secretary Filter
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing
-    Then "Angel 001" is hungup
+    Then "Angel 001" is hung up
 
   Scenario: Strategy "all"
     Given there are telephony users with infos:
@@ -92,17 +92,17 @@ Feature: Boss Secretary Filter
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing showing "Bad Guy - FILTER"
-    Then "Angel 001" is hungup
-    Then "Angel 002" is hungup
+    Then "Angel 001" is hung up
+    Then "Angel 002" is hung up
     When "Charlie Unknown" hangs up
     When I wait 1 seconds for the call processing
-    Then "Charlie Unknown" is hungup
+    Then "Charlie Unknown" is hung up
     Then "Angel 001" is ringing showing "Bad Guy - FILTER"
-    Then "Angel 002" is hungup
+    Then "Angel 002" is hung up
     When "Angel 001" hangs up
     When I wait 1 seconds for the call processing
-    Then "Charlie Unknown" is hungup
-    Then "Angel 001" is hungup
+    Then "Charlie Unknown" is hung up
+    Then "Angel 001" is hung up
     Then "Angel 002" is ringing showing "Bad Guy - FILTER"
 
   Scenario: Strategy "all-recipients-then-all-surrogates"
@@ -120,10 +120,10 @@ Feature: Boss Secretary Filter
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing
-    Then "Angel 001" is hungup
-    Then "Angel 002" is hungup
+    Then "Angel 001" is hung up
+    Then "Angel 002" is hung up
     When I wait 5 seconds for the timeout to expire
-    Then "Charlie Unknown" is hungup
+    Then "Charlie Unknown" is hung up
     Then "Angel 001" is ringing
     Then "Angel 002" is ringing
 
@@ -141,13 +141,13 @@ Feature: Boss Secretary Filter
     Given "Angel 002" enables call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
-    Then "Charlie Unknown" is hungup
+    Then "Charlie Unknown" is hung up
     Then "Angel 001" is ringing showing "FILTER"
     Then "Angel 002" is ringing showing "FILTER"
     When I wait 5 seconds for the timeout to expire
-    Then "Charlie Unknown" is hungup
-    Then "Angel 001" is hungup
-    Then "Angel 002" is hungup
+    Then "Charlie Unknown" is hung up
+    Then "Angel 001" is hung up
+    Then "Angel 002" is hung up
     # NOTE(fblackburn): if surrogates hangup, recipients will not ring
 
   Scenario: Strategy "linear-surrogates-then-all-recipients"
@@ -164,12 +164,12 @@ Feature: Boss Secretary Filter
     Given "Angel 002" enables call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
-    Then "Charlie Unknown" is hungup
+    Then "Charlie Unknown" is hung up
     Then "Angel 001" is ringing
-    Then "Angel 002" is hungup
+    Then "Angel 002" is hung up
     When "Angel 001" hangs up
-    Then "Charlie Unknown" is hungup
-    Then "Angel 001" is hungup
+    Then "Charlie Unknown" is hung up
+    Then "Angel 001" is hung up
     Then "Angel 002" is ringing
     # NOTE(fblackburn): if surrogates hangup, recipients will not ring
 

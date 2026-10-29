@@ -5,7 +5,7 @@ Feature: Call Generation
       | firstname | exten | context |
       | Alice     | 1100  | default |
     When "Alice" calls "1190"
-    Then "Alice" is hungup immediately
+    Then "Alice" is hung up immediately
 
   Scenario: Call to existant extension with answer
     Given there are telephony users with infos:
@@ -115,4 +115,4 @@ Feature: Call Generation
     When "Morty Smith" does a blind transfer to "1003@default" with timeout 3 using API
     Then "Mister Meeseeks" is ringing
     When I wait 4 seconds
-    Then "Mister Meeseeks" is hungup
+    Then "Mister Meeseeks" is hung up

@@ -13,7 +13,7 @@ Feature: Call Permissions
     Then "Lagherta Unknown" hears the sound file "noright"
     Then "Ragnar Lodbrok" is not ringing
     When I wait 4 seconds for the no permission message to complete
-    Then "Lagherta Unknown" is hungup
+    Then "Lagherta Unknown" is hung up
     When "Björn Ironside" calls "1002"
     Then "Ragnar Lodbrok" is ringing
 
@@ -56,7 +56,7 @@ Feature: Call Permissions
     Then "Sonia Champoux" hears the sound file "noright"
     Then "Charles Patenaude" is not ringing
     When I wait 5 seconds for the no permission message to complete
-    Then "Sonia Champoux" is hungup
+    Then "Sonia Champoux" is hung up
     When "Flavien Bouchard" calls "1202"
     Then "Charles Patenaude" is ringing
 
@@ -74,7 +74,7 @@ Feature: Call Permissions
     Then "Bill Gates" hears the sound file "noright"
     Then "outcall-1123" is not ringing
     When I wait 5 seconds for the no permission message to complete
-    Then "Bill Gates" is hungup
+    Then "Bill Gates" is hung up
     When "Bill Gates" calls "11235"
     When I wait 2 seconds for the call processing
     Then "outcall-1123" is ringing

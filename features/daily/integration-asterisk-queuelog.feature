@@ -185,8 +185,8 @@ Feature: Stats generation
     # Only the first call needs time to be processed to reach the agent
     When I wait 2 seconds for the call processing
     When chan_test calls "3512@default" with caller ID name "3512-2"
-    When I wait until call with caller ID name "3512-1" to be over
-    When I wait until call with caller ID name "3512-2" to be over
+    When I wait until the call with caller ID name "3512-1" is over
+    When I wait until the call with caller ID name "3512-2" is over
     Then queue_log contains 2 "EXITWITHTIMEOUT" events for queue "q12"
 
   Scenario: 13 Generate corrupt stats

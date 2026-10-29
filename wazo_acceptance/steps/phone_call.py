@@ -48,20 +48,20 @@ def step_user_is_holding(context, tracking_id):
     until.true(phone.is_holding, context, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is hungup')
-def step_user_is_hungup(context, tracking_id):
+@step('"{tracking_id}" is hung up')
+def step_user_is_hung_up(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_hungup, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is hungup on its contact "{contact_number}"')
-def step_user_is_hungup_on_its_contact(context, tracking_id, contact_number):
+@step('"{tracking_id}" is hung up on its contact "{contact_number}"')
+def step_user_is_hung_up_on_its_contact(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     until.true(phone.is_hungup, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is hungup immediately')
-def step_user_is_hungup_immediately(context, tracking_id):
+@step('"{tracking_id}" is hung up immediately')
+def step_user_is_hung_up_immediately(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     time.sleep(1)
     phone.is_hungup()

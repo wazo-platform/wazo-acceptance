@@ -519,7 +519,7 @@ def when_user_starts_call_recording(context, firstname, lastname):
     context.helpers.call.start_recording(call['call_id'], user['tenant_uuid'])
 
 
-@then('"{firstname} {lastname}" call is recording status is "{status}"')
+@then('"{firstname} {lastname}" call recording status is "{status}"')
 def then_user_call_recording_is(context, firstname, lastname, status):
     user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
 

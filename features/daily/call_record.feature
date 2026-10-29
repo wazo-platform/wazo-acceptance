@@ -173,14 +173,14 @@ Feature: Call Record
     When "User Brown" calls "1801"
     When "User 801" answers
     When "User Brown" starts call recording
-    Then "User Brown" call is recording status is "active"
-    Then "User 801" call is recording status is "inactive"
+    Then "User Brown" call recording status is "active"
+    Then "User 801" call recording status is "inactive"
     When "User 801" starts call recording
-    Then "User Brown" call is recording status is "active"
-    Then "User 801" call is recording status is "active"
+    Then "User Brown" call recording status is "active"
+    Then "User 801" call recording status is "active"
     When "User Brown" stops call recording
-    Then "User Brown" call is recording status is "inactive"
-    Then "User 801" call is recording status is "active"
+    Then "User Brown" call recording status is "inactive"
+    Then "User 801" call recording status is "active"
 
   Scenario: User to group recording status
     Given there are telephony users with infos:
@@ -196,14 +196,14 @@ Feature: Call Record
     When "User Smith" calls "2514"
     When "User 801" answers
     When "User Smith" starts call recording
-    Then "User Smith" call is recording status is "active"
-    Then "User 801" call is recording status is "inactive"
+    Then "User Smith" call recording status is "active"
+    Then "User 801" call recording status is "inactive"
     When "User 801" starts call recording
-    Then "User Smith" call is recording status is "active"
-    Then "User 801" call is recording status is "active"
+    Then "User Smith" call recording status is "active"
+    Then "User 801" call recording status is "active"
     When "User Smith" stops call recording
-    Then "User Smith" call is recording status is "inactive"
-    Then "User 801" call is recording status is "active"
+    Then "User Smith" call recording status is "inactive"
+    Then "User 801" call recording status is "active"
 
   Scenario: User to queue recording status
     Given there are telephony users with infos:
@@ -219,14 +219,14 @@ Feature: Call Record
     When "User Ray" calls "3123"
     When "User 801" answers
     When "User Ray" starts call recording
-    Then "User Ray" call is recording status is "active"
-    Then "User 801" call is recording status is "inactive"
+    Then "User Ray" call recording status is "active"
+    Then "User 801" call recording status is "inactive"
     When "User 801" starts call recording
-    Then "User Ray" call is recording status is "active"
-    Then "User 801" call is recording status is "active"
+    Then "User Ray" call recording status is "active"
+    Then "User 801" call recording status is "active"
     When "User Ray" stops call recording
-    Then "User Ray" call is recording status is "inactive"
-    Then "User 801" call is recording status is "active"
+    Then "User Ray" call recording status is "inactive"
+    Then "User 801" call recording status is "active"
 
   Scenario: Incoming call to user
     Given there are telephony users with infos:
@@ -237,11 +237,11 @@ Feature: Call Record
     When incoming call received from "5551231234" to "1800@from-extern"
     Given I listen on the bus for "call_log_created" messages
     When "User Boucher" answers
-    Then "User Boucher" call is recording status is "active"
+    Then "User Boucher" call recording status is "active"
     When "User Boucher" stops call recording
-    Then "User Boucher" call is recording status is "inactive"
+    Then "User Boucher" call recording status is "inactive"
     When "User Boucher" starts call recording
-    Then "User Boucher" call is recording status is "active"
+    Then "User Boucher" call recording status is "active"
     When "User Boucher" hangs up
     Then I receive a "call_log_created" event with data:
       | destination_name |
@@ -263,11 +263,11 @@ Feature: Call Record
     When incoming call received from "5551231234" to "2514@from-extern"
     Given I listen on the bus for "call_log_created" messages
     When "User Baker" answers
-    Then "User Baker" call is recording status is "active"
+    Then "User Baker" call recording status is "active"
     When "User Baker" stops call recording
-    Then "User Baker" call is recording status is "inactive"
+    Then "User Baker" call recording status is "inactive"
     When "User Baker" starts call recording
-    Then "User Baker" call is recording status is "active"
+    Then "User Baker" call recording status is "active"
     When "User Baker" hangs up
     Then I receive a "call_log_created" event with data:
       | destination_name |
@@ -289,11 +289,11 @@ Feature: Call Record
     When incoming call received from "5551231234" to "3123@from-extern"
     Given I listen on the bus for "call_log_created" messages
     When "User Anderson" answers
-    Then "User Anderson" call is recording status is "active"
+    Then "User Anderson" call recording status is "active"
     When "User Anderson" stops call recording
-    Then "User Anderson" call is recording status is "inactive"
+    Then "User Anderson" call recording status is "inactive"
     When "User Anderson" starts call recording
-    Then "User Anderson" call is recording status is "active"
+    Then "User Anderson" call recording status is "active"
     When "User Anderson" hangs up
     Then I receive a "call_log_created" event with data:
       | destination_name |

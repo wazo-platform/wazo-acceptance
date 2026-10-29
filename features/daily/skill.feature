@@ -20,11 +20,11 @@ Feature: Skill
     Given agent "1802" is logged
     When chan_test calls "3851@from-extern"
     Then "English Man" is ringing
-    Then "French Potato" is hungup
+    Then "French Potato" is hung up
     Given "English Man" hangs up
     When chan_test calls "3852@from-extern"
     Then "French Potato" is ringing
-    Then "English Man" is hungup
+    Then "English Man" is hung up
 
   Scenario: Skill rules based routing
     Given there are telephony users with infos:
@@ -49,32 +49,32 @@ Feature: Skill
     Given agent "1803" is logged
     When chan_test calls "3801@from-extern"
     Then "English High" is ringing
-    Then "English Medium" is hungup
-    Then "English Low" is hungup
+    Then "English Medium" is hung up
+    Then "English Low" is hung up
     When I wait 11 seconds to simulate call center
     Then "English High" is ringing
-    Then "English Medium" is hungup
-    Then "English Low" is hungup
+    Then "English Medium" is hung up
+    Then "English Low" is hung up
     Then "English High" answers
 
     When chan_test calls "3801@from-extern"
     Then "English High" is talking
-    Then "English Medium" is hungup
-    Then "English Low" is hungup
+    Then "English Medium" is hung up
+    Then "English Low" is hung up
     When I wait 10 seconds to simulate call center
     Then "English High" is talking
     Then "English Medium" is ringing
-    Then "English Low" is hungup
+    Then "English Low" is hung up
     Then "English Medium" answers
 
     When chan_test calls "3801@from-extern"
     Then "English High" is talking
     Then "English Medium" is talking
-    Then "English Low" is hungup
+    Then "English Low" is hung up
     When I wait 10 seconds to simulate call center
     Then "English High" is talking
     Then "English Medium" is talking
-    Then "English Low" is hungup
+    Then "English Low" is hung up
     When I wait 10 seconds to simulate call center
     Then "English High" is talking
     Then "English Medium" is talking
@@ -87,6 +87,6 @@ Feature: Skill
     Then "English Low" is talking
     Then "English Medium" hangs up
     When I wait 5 seconds to simulate call center
-    Then "English Medium" is hungup
+    Then "English Medium" is hung up
     When I wait 5 seconds to simulate call center
     Then "English Medium" is ringing
