@@ -1,5 +1,7 @@
-# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
+
+import uuid
 
 import requests
 from behave import given, step, then, when
@@ -50,6 +52,22 @@ def then_the_following_provisioning_files_are_available_over_https_using_key(con
     host = context.wazo_config['provd']['provisioning_host']
     base_url = f"https://{host}/device/provisioning/{provisioning_key}"
     _provisioning_files_are_available(context, base_url)
+
+
+@when('I request {count:d} provisioning files with method "{method}" over HTTPS using an invalid provisioning key')
+def when_i_request_provisioning_files_using_an_invalid_key(context, count, method):
+    if not hasattr(context, 'invalid_provisioning_key'):
+        # unique per run: a key left in a log by a previous run can't hide a leak
+        context.invalid_provisioning_key = f'invalidkey-{uuid.uuid4().hex}'
+    host = context.wazo_config['provd']['provisioning_host']
+    base_url = f"https://{host}/device/provisioning/{context.invalid_provisioning_key}"
+    for i in range(count):
+        try:
+            response = requests.request(method, f"{base_url}/{i:012x}.cfg", verify=False, timeout=5)
+        except requests.exceptions.RequestException:
+            # the IP address is banned by fail2ban, possibly during this request
+            break
+        assert response.status_code == 404, f'Unexpected status code {response.status_code} for an invalid key'
 
 
 def _provisioning_files_are_available(context, base_url):
