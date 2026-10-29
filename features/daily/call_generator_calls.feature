@@ -1,13 +1,13 @@
 Feature: Call Generation
 
-  Scenario: Call to inexistant extension
+  Scenario: Call to nonexistent extension
     Given there are telephony users with infos:
       | firstname | exten | context |
       | Alice     | 1100  | default |
     When "Alice" calls "1190"
     Then "Alice" is hung up immediately
 
-  Scenario: Call to existant extension with answer
+  Scenario: Call to existing extension with answer
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
       | Alice     | 1100     | 1100  | default |
