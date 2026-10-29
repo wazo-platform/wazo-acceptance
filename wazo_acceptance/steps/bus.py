@@ -1,4 +1,4 @@
-# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import collections
@@ -49,7 +49,7 @@ def then_i_receive_a_event_on_queue(context, event_name):
     _sleep_to_avoid_race_condition()
 
 
-@then('I receive a MessageWaiting event with "{nb_msg}" messages for mailbox "{mailbox}@{mb_context}"')
+@then('I receive a MessageWaiting event with {nb_msg} messages for mailbox "{mailbox}@{mb_context}"')
 def then_i_receive_a_messagewaiting_event(context, nb_msg, mailbox, mb_context):
     def event_match():
         context_name = context.helpers.context.get_by(label=mb_context)['name']

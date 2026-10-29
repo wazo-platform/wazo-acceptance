@@ -1,4 +1,4 @@
-# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then, when
@@ -42,7 +42,7 @@ def when_1_picks_up_the_call_from_the_application_2(context, user_name, app_name
     phone.answer()
 
 
-@then('"{app_name}" contains a node with "{n}" calls')
+@then('"{app_name}" contains a node with {n} calls')
 def then_application_contains_node_with_n_calls(context, app_name, n):
     application = context.helpers.application.get_by(name=app_name, recurse=True)
     calls = context.calld_client.applications.list_calls(application['uuid'])['items']

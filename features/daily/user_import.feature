@@ -8,5 +8,5 @@ Feature: CSV import of users
       | firstname | lastname | username | password |
       | One       | Un       | one      | love     |
       | Two       | Deux     | john     | drag0n   |
-    Then my import result has an error on line "2"
+    Then my import result has an error on line 2
     Then the user with username "one" does not exist

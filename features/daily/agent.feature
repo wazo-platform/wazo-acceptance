@@ -74,8 +74,8 @@ Feature: Agent
     Given there are queues with infos:
       | name | label | exten | context |
       | Pare | House | 3801  | default |
-    Given queue "Pare" has agent "1802" with penalty "1"
-    Given queue "Pare" has agent "1803" with penalty "5"
+    Given queue "Pare" has agent "1802" with penalty 1
+    Given queue "Pare" has agent "1803" with penalty 5
     Given agent "1802" is logged
     Given agent "1803" is logged
     When "James Bond" calls "3801"

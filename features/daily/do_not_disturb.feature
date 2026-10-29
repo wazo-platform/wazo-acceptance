@@ -20,7 +20,7 @@ Feature: Do Not Disturb
     When I wait 2 seconds for the call processing
     When I wait 20 seconds to play message
     When "Alice 1100" hangs up
-    Then I receive a MessageWaiting event with "1" messages for mailbox "1101@default"
+    Then I receive a MessageWaiting event with 1 messages for mailbox "1101@default"
 
   Scenario: call to user in DND status with no-answer forwarding redirects to correct voicemail
     Given there are telephony users with infos:
@@ -36,7 +36,7 @@ Feature: Do Not Disturb
     When I wait 2 seconds for the call processing
     When I wait 20 seconds to play message
     When "Alice 1100" hangs up
-    Then I receive a MessageWaiting event with "1" messages for mailbox "1101@default"
+    Then I receive a MessageWaiting event with 1 messages for mailbox "1101@default"
 
   Scenario: call to user with no-answer forwarding to user in DND status redirects to correct voicemail
     Given there are telephony users with infos:
@@ -52,4 +52,4 @@ Feature: Do Not Disturb
     When I wait 2 seconds for the call processing
     When I wait 20 seconds to play message
     When "Alice 1100" hangs up
-    Then I receive a MessageWaiting event with "1" messages for mailbox "1101@default"
+    Then I receive a MessageWaiting event with 1 messages for mailbox "1101@default"

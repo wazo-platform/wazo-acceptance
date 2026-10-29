@@ -290,7 +290,7 @@ def when_i_import_users_ignoring_errors(context):
     context.import_response = response
 
 
-@then('my import result has an error on line "{line_number}"')
+@then('my import result has an error on line {line_number}')
 def then_my_import_result_matches(context, line_number):
     for error in context.import_response['errors']:
         if error['details']['row_number'] == int(line_number):

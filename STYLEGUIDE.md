@@ -27,7 +27,7 @@ Feature: Scenarios to test
     Given a precondition with table
       | long_key_with_a_small_value | key2 |
       | left_align                  | val2 |
-    When something happen with "12" parameters
+    When something happen with 12 parameters
     Then I assert something
 ```
 

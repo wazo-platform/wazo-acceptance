@@ -12,8 +12,8 @@ Feature: Skill
       | name    | definition                 |
       | english | english > 90               |
       | french  | french > 0 \| french < 100 |
-    Given agent "1801" has skill "english" with weight "95"
-    Given agent "1802" has skill "french" with weight "50"
+    Given agent "1801" has skill "english" with weight 95
+    Given agent "1802" has skill "french" with weight 50
     Given there is an incall "3851@from-extern" to the queue "lobby" with skill "english"
     Given there is an incall "3852@from-extern" to the queue "lobby" with skill "french"
     Given agent "1801" is logged
@@ -40,9 +40,9 @@ Feature: Skill
       | WT < 10, english > 89 |
       | WT < 20, english > 79 |
       | english > 69          |
-    Given agent "1801" has skill "english" with weight "90"
-    Given agent "1802" has skill "english" with weight "80"
-    Given agent "1803" has skill "english" with weight "70"
+    Given agent "1801" has skill "english" with weight 90
+    Given agent "1802" has skill "english" with weight 80
+    Given agent "1803" has skill "english" with weight 70
     Given there is an incall "3801@from-extern" to the queue "lobby" with skill "waiting"
     Given agent "1801" is logged
     Given agent "1802" is logged

@@ -10,7 +10,7 @@ Feature: Application
     Given there is an incall "1700@from-extern" to the application "zeapp"
     When chan_test calls "1700@from-extern"
     When "Alice" picks up the call from the application "zeapp"
-    Then "zeapp" contains a node with "2" calls
+    Then "zeapp" contains a node with 2 calls
 
   Scenario: Line application
     Given there are applications with infos:
@@ -22,4 +22,4 @@ Feature: Application
       | Bob       |  1002 | default | MyApp       | yes        |
     When "Bob" calls "123"
     When "Alice" picks up the call from the application "MyApp"
-    Then "MyApp" contains a node with "2" calls
+    Then "MyApp" contains a node with 2 calls
