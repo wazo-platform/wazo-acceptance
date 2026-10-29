@@ -1,4 +1,4 @@
-Feature: Stats generation
+Feature: Queue log event generation
 
   Scenario: 01 Generation of event FULL
     Given there is no queue_log for queue "q01"
