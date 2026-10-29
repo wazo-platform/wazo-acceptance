@@ -45,7 +45,7 @@ Feature: Groups
     When I wait 2 seconds for the call processing
     Then "Flash McQueen" is hungup
 
-Scenario: Group member does not ring when in DND
+  Scenario: Group member does not ring when in DND
     Given there are telephony users with infos:
       | firstname  | lastname | exten | context |
       | Leticia    | Gendron  | 1949  | default |

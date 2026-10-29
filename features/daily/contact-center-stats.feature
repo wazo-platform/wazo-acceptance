@@ -67,9 +67,8 @@ Feature: Stats generation
       | login_time | pause_time |
       |          8 |          4 |
 
-
   Scenario: Agent wrapup and conversation time
-      Given there is no queue_log for agent "1003"
+    Given there is no queue_log for agent "1003"
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | agent_number |
       | Stat      | Agent    | 1003  | default | 1003         |
