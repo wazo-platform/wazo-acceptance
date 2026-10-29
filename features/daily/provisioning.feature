@@ -42,9 +42,9 @@ Feature: Provisioning
     Given the plugin "wazo-aastra" version "5.0.0" is installed
     Given the plugin "wazo-polycom" version "5.8.2" is installed
     Given there are devices with infos:
-      | mac               | plugin version         |
-      | 00:11:22:33:44:01 | wazo-aastra-5.0.0      |
-      | 00:11:22:33:44:02 | wazo-polycom-5.8.2     |
+      | mac               | plugin version     |
+      | 00:11:22:33:44:01 | wazo-aastra-5.0.0  |
+      | 00:11:22:33:44:02 | wazo-polycom-5.8.2 |
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | protocol | device            |
       | User      | 01       | 1001  | default | sip      | 00:11:22:33:44:01 |
@@ -67,7 +67,7 @@ Feature: Provisioning
       | firstname | lastname | exten | context | protocol | device            |
       | User      | 02       | 1002  | default | sip      | 80:5e:c0:d5:7d:57 |
     Then the following provisioning files are available over HTTP using port "8667":
-      | path             | user-agent                                     | expected_content                   |
+      | path             | user-agent                                     | expected_content                    |
       | 805ec0d57d57.cfg | Yealink SIP-T31G 124.86.0.75 80:5e:c0:d5:7d:57 | http://{{ provd_ip_address }}:8667/ |
 
   Scenario: HTTP provisioning with custom port
@@ -80,7 +80,7 @@ Feature: Provisioning
       | firstname | lastname | exten | context | protocol | device            |
       | User      | 02       | 1002  | default | sip      | 80:5e:c0:d5:7d:58 |
     Then the following provisioning files are available over HTTP using port "8642":
-      | path             | user-agent                                     | expected_content                   |
+      | path             | user-agent                                     | expected_content                    |
       | 805ec0d57d58.cfg | Yealink SIP-T31G 124.86.0.75 80:5e:c0:d5:7d:58 | http://{{ provd_ip_address }}:8642/ |
 
   Scenario: HTTPS provisioning with base URL

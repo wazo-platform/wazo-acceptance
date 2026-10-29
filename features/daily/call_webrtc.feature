@@ -6,8 +6,8 @@ Feature: Call WebRTC
       | Alice     | 1100     | 1100  | default | no     |
       | Wayne     | 1120     | 1120  | default | yes    |
     When a webrtc endpoint calls sip one:
-      | caller      | dial | callee      |
-      | Wayne 1120  | 1100 | Alice 1100  |
+      | caller     | dial | callee     |
+      | Wayne 1120 | 1100 | Alice 1100 |
     Then webrtc channel uses following codecs:
       | asterisk_codec | direct_client_codec | sbc_client_codec |
       | ulaw           | PCMU                | opus             |

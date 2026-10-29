@@ -57,8 +57,8 @@ Feature: Call Record
       | User      | 801      | no                                    | 1801  | default | yes        |
       | User      | 802      | yes                                   | 1802  | default | yes        |
     Given there are telephony groups with infos:
-      | label      | exten | context |
-      | incoming   |  2514 | default |
+      | label    | exten | context |
+      | incoming | 2514  | default |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | Hall     |
@@ -91,8 +91,8 @@ Feature: Call Record
       | User      | Pan      | no                                    | 1800  | default | yes        |
       | User      | 801      | yes                                   | 1801  | default | yes        |
     Given there are telephony groups with infos:
-      | label      | exten | context |
-      | incoming   |  2514 | default |
+      | label    | exten | context |
+      | incoming | 2514  | default |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | Pan      |
@@ -115,8 +115,8 @@ Feature: Call Record
       | User      | 802      | yes                                   | 1802  | default | yes        | 1234         |
     Given agent "1234" is logged
     Given there are queues with infos:
-      | name       | exten | context |
-      | incoming   |  3123 | default |
+      | name     | exten | context |
+      | incoming | 3123  | default |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | Lee      |
@@ -149,8 +149,8 @@ Feature: Call Record
       | User      | Poe      | no                                    | 1800  | default | yes        |
       | User      | 801      | yes                                   | 1801  | default | yes        |
     Given there are queues with infos:
-      | name       | exten | context |
-      | incoming   |  3123 | default |
+      | name     | exten | context |
+      | incoming | 3123  | default |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | Poe      |
@@ -188,8 +188,8 @@ Feature: Call Record
       | User      | Smith    | 1800  | default | yes        | yes                        |
       | User      | 801      | 1801  | default | yes        | yes                        |
     Given there are telephony groups with infos:
-      | label      | exten | context | dtmf_record_toggle |
-      | incoming   |  2514 | default | yes                |
+      | label    | exten | context | dtmf_record_toggle |
+      | incoming | 2514  | default | yes                |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | 801      |
@@ -211,8 +211,8 @@ Feature: Call Record
       | User      | Ray      | 1800  | default | yes        | yes                        |
       | User      | 801      | 1801  | default | yes        | yes                        |
     Given there are queues with infos:
-      | name       | exten | context | dtmf_record_toggle |
-      | incoming   |  3123 | default | yes                |
+      | name     | exten | context | dtmf_record_toggle |
+      | incoming | 3123  | default | yes                |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | 801      |
@@ -253,8 +253,8 @@ Feature: Call Record
       | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled |
       | User      | Baker    | 1800  | default | yes        | yes                                   |
     Given there are telephony groups with infos:
-      | label      | exten | context | dtmf_record_toggle |
-      | incoming   |  2514 | default | yes                |
+      | label    | exten | context | dtmf_record_toggle |
+      | incoming | 2514  | default | yes                |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | Baker    |
@@ -279,8 +279,8 @@ Feature: Call Record
       | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled |
       | User      | Anderson | 1800  | default | yes        | yes                                   |
     Given there are queues with infos:
-      | name       | exten | context | dtmf_record_toggle |
-      | incoming   |  3123 | default | yes                |
+      | name     | exten | context | dtmf_record_toggle |
+      | incoming | 3123  | default | yes                |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | Anderson |

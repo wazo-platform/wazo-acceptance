@@ -56,7 +56,7 @@ Feature: Queue log event generation
       | Agent     | 004      | 1504  | default | yes        | 004          |
     Given there are queues with infos:
       | name | exten | context | agents | option_timeout |
-      | q04  | 3504  | default | 004    | 5                           |
+      | q04  | 3504  | default | 004    | 5              |
     Given agent "004" is logged
     When chan_test calls "3504@default" with id "3504-1"
     When I wait 7 seconds for the timeout to expire
@@ -160,7 +160,7 @@ Feature: Queue log event generation
     Given there is no queue_log for queue "q11"
     Given I have a schedule "always_closed" in "America/Montreal" with the following schedules:
       | periods | months | month_days | week_days | hours_start | hours_end |
-      | open    |      1 |          1 |         1 |       00:00 |     00:01 |
+      | open    | 1      | 1          | 1         | 00:00       | 00:01     |
     Given there are queues with infos:
       | name | exten | context | schedule      |
       | q11  | 3511  | default | always_closed |

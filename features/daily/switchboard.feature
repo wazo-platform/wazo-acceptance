@@ -39,9 +39,9 @@ Feature: Switchboards
       | Reception | Clerk    | 1801  | default | yes        | yes        |
     Given there are switchboards with infos:
         | name                 | members         | timeout | noanswer_destination |
-        | timeout              | Reception Clerk |      15 | hangup:              |
+        | timeout              | Reception Clerk | 15      | hangup:              |
         | no-timeout           |                 |         | hangup:              |
-        | no-fallback          |                 |       1 |                      |
+        | no-fallback          |                 | 1       |                      |
         | transfer-destination |                 |         |                      |
 
     Given there is an incall "1001@from-extern" to the switchboard "timeout"

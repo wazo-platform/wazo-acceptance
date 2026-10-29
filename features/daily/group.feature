@@ -3,12 +3,12 @@ Feature: Groups
   Scenario: Group ring timeout is reset when no timeout
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
-      | Andrew    | Wiggin   |  1684 | default |
-      | Valentine | Wiggin   |  1438 | default |
+      | Andrew    | Wiggin   | 1684  | default |
+      | Valentine | Wiggin   | 1438  | default |
     Given there are telephony groups with infos:
       | label       | exten | context | timeout | noanswer_destination |
-      | lusitania   |  2514 | default |         |                      |
-      | descoladors |  2966 | default | 5       | group:lusitania      |
+      | lusitania   | 2514  | default |         |                      |
+      | descoladors | 2966  | default | 5       | group:lusitania      |
     Given the telephony group "lusitania" has users:
       | firstname | lastname |
       | Andrew    | Wiggin   |
@@ -27,8 +27,8 @@ Feature: Groups
       | Flash     | McQueen  | 1801  | default | 00:11:22:33:44:00 | yes        |
       | Tow       | Mater    | 1802  | default |                   | yes        |
     Given there are telephony groups with infos:
-      | label       | exten | context |
-      | Dynamic     | 2801  | default |
+      | label   | exten | context |
+      | Dynamic | 2801  | default |
     Given "Flash McQueen" has function keys:
       | position | destination_type | destination_group_label | destination_action |
       | 1        | groupmember      | Dynamic                 | toggle             |
@@ -52,12 +52,12 @@ Feature: Groups
       | Bernandine | Gignac   | 1950  | default |
       | Arnie      | Douglas  | 1951  | default |
     Given there are telephony groups with infos:
-      | label       | exten | context |
-      | pretonians  | 2515  | default |
+      | label      | exten | context |
+      | pretonians | 2515  | default |
     Given the telephony group "pretonians" has users:
-      | firstname  | lastname  |
-      | Leticia    | Gendron   |
-      | Bernandine | Gignac    |
+      | firstname  | lastname |
+      | Leticia    | Gendron  |
+      | Bernandine | Gignac   |
     When "Leticia Gendron" enables DND
     When I wait 2 seconds
     When "Arnie Douglas" calls "2515"

@@ -33,7 +33,7 @@ Feature: Stats generation
     When I generate contact center stats
     Then contact center stats for queue "stat-queue" in the current hour are:
       | answered | received | abandoned | blocked |
-      |        1 |        3 |         1 |       1 |
+      | 1        | 3        | 1         | 1       |
 
   Scenario: Agent pause and login time
     Given there is no queue_log for agent "1003"
@@ -65,7 +65,7 @@ Feature: Stats generation
     When I generate contact center stats
     Then contact center stats for agent "1003" in the current hour are:
       | login_time | pause_time |
-      |          8 |          4 |
+      | 8          | 4          |
 
   Scenario: Agent wrapup and conversation time
     Given there is no queue_log for agent "1003"
@@ -97,7 +97,7 @@ Feature: Stats generation
     When I generate contact center stats
     Then contact center stats for agent "1003" in the current hour are:
       | wrapup_time | conversation_time |
-      |           2 |                 5 |
+      | 2           | 5                 |
 
   Scenario: Placing calls make new qos stats
     Given there is no queue_log for queue "stat-queue"
@@ -112,13 +112,13 @@ Feature: Stats generation
 
     When chan_test places calls in order:
       | exten | context | call_id                |
-      |  3523 | default | 3523-answered-qos5     |
-      |  3523 | default | 3523-answered-qos15-1  |
-      |  3523 | default | 3523-answered-qos15-2  |
-      |  3523 | default | 3523-answered-qos20    |
-      |  3523 | default | 3523-abandoned-qos10-1 |
-      |  3523 | default | 3523-abandoned-qos10-2 |
-      |  3523 | default | 3523-abandoned-qos20   |
+      | 3523  | default | 3523-answered-qos5     |
+      | 3523  | default | 3523-answered-qos15-1  |
+      | 3523  | default | 3523-answered-qos15-2  |
+      | 3523  | default | 3523-answered-qos20    |
+      | 3523  | default | 3523-abandoned-qos10-1 |
+      | 3523  | default | 3523-abandoned-qos10-2 |
+      | 3523  | default | 3523-abandoned-qos20   |
     When I wait 1 seconds for the call processing
 
     # QoS 5s bucket: answer at ~3s holdtime
@@ -147,7 +147,7 @@ Feature: Stats generation
     When I generate contact center stats
     Then contact center qos stats for queue "stat-queue" in the current hour are:
       | qos_threshold | answered | abandoned |
-      |             5 |        1 |         0 |
-      |            10 |        0 |         2 |
-      |            15 |        2 |         0 |
-      |     remainder |        1 |         1 |
+      | 5             | 1        | 0         |
+      | 10            | 0        | 2         |
+      | 15            | 2        | 0         |
+      | remainder     | 1        | 1         |

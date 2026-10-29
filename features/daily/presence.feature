@@ -11,8 +11,8 @@ Feature: Presence updated
 
   Scenario: Presence line state is updated
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context |
-      | James     | Bond     | 1801   | default |
+      | firstname | lastname | exten | context |
+      | James     | Bond     | 1801  | default |
     Given I listen on the bus for "chatd_presence_updated" messages
     When "James Bond" calls "*10"
     Then I receive a "chatd_presence_updated" event with data:
@@ -22,9 +22,9 @@ Feature: Presence updated
 
   Scenario: Presence line holding state
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context |
-      | James     | Bond     | 1801   | default |
-      | Ti-Me     | Pare     | 1802   | default |
+      | firstname | lastname | exten | context |
+      | James     | Bond     | 1801  | default |
+      | Ti-Me     | Pare     | 1802  | default |
     Given "James Bond" calls "1802"
     Given "Ti-Me Pare" answers
     Given I listen on the bus for "chatd_presence_updated" messages

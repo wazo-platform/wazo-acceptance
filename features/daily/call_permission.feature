@@ -23,8 +23,8 @@ Feature: Call Permissions
       | Gerard    | Tremblay | 1101  | default | yes        |
       | Sylvie    | Duquette | 1102  | default | yes        |
     Given there are call permissions with infos:
-      | name       | extensions | users            | password |
-      | perm-pwd   | 1102       | Gerard Tremblay  | 1234     |
+      | name     | extensions | users           | password |
+      | perm-pwd | 1102       | Gerard Tremblay | 1234     |
     When "Gerard Tremblay" calls "1102"
     Then "Gerard Tremblay" hears an authentication message
     Then "Sylvie Duquette" is not ringing
@@ -47,11 +47,11 @@ Feature: Call Permissions
       | label        | exten | context |
       | RomanoFafard | 2000  | default |
     Given the telephony group "RomanoFafard" has users:
-      | firstname | lastname  |
-      | Sonia     | Champoux  |
+      | firstname | lastname |
+      | Sonia     | Champoux |
     Given there are call permissions with infos:
-      | name       | extensions | groups            |
-      | permission | 1202       | RomanoFafard      |
+      | name       | extensions | groups       |
+      | permission | 1202       | RomanoFafard |
     When "Sonia Champoux" calls "1202"
     Then "Sonia Champoux" hears the sound file "noright"
     Then "Charles Patenaude" is not ringing
@@ -62,14 +62,14 @@ Feature: Call Permissions
 
   Scenario: Outcall call permission
     Given there are telephony users with infos:
-      | firstname | lastname  | exten | context | with_phone |
-      | Bill      | Gates     | 1201  | default | yes        |
+      | firstname | lastname | exten | context | with_phone |
+      | Bill      | Gates    | 1201  | default | yes        |
     Given there is an outcall "outcall-1123" in context "to-extern" with extensions:
       | exten  |
       | _1123X |
     Given there are call permissions with infos:
-      | name       | extensions  | outcall       |
-      | permission | 11234       | outcall-1123  |
+      | name       | extensions | outcall      |
+      | permission | 11234      | outcall-1123 |
     When "Bill Gates" calls "11234"
     Then "Bill Gates" hears the sound file "noright"
     Then "outcall-1123" is not ringing

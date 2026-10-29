@@ -11,8 +11,8 @@ Feature: Boss Secretary Filter
       | Angel     | 001      | 1002  | default | 00:11:22:33:44:01 | yes        |
       | Bad       | Guy      | 1010  | default |                   | yes        |
     Given there are call filters with infos:
-      | name             | strategy                               | recipients      | surrogates |
-      | Charlie's Angels | linear-surrogates-then-all-recipients  | Charlie Unknown | Angel 001  |
+      | name             | strategy                              | recipients      | surrogates |
+      | Charlie's Angels | linear-surrogates-then-all-recipients | Charlie Unknown | Angel 001  |
     Given "Charlie Unknown" has function keys:
       | position | destination_type | destination_filter_name | destination_filter_member |
       | 1        | bsfilter         | Charlie's Angels        | Angel 001                 |
@@ -179,19 +179,19 @@ Feature: Boss Secretary Filter
       | Charlie   | Unknown  |       |         |            |
       | Angel     | 001      |       |         |            |
       | Angel     | 002      |       |         |            |
-      | Bad       | Guy      |  1010 | default | yes        |
+      | Bad       | Guy      | 1010  | default | yes        |
     Given "Charlie Unknown" has lines:
-      | name  | exten | context | with_phone |
+      | name         | exten | context | with_phone |
       | charlieline1 | 1001  | default | yes        |
       | charlieline2 | 1001  | default | yes        |
     Given "Angel 001" has lines:
       | name        | exten | context | with_phone |
-      | angel1line1 |  1002 | default | yes        |
-      | angel1line2 |  1002 | default | yes        |
+      | angel1line1 | 1002  | default | yes        |
+      | angel1line2 | 1002  | default | yes        |
     Given "Angel 002" has lines:
       | name        | exten | context | with_phone |
-      | angel2line1 |  1003 | default | yes        |
-      | angel2line2 |  1003 | default | yes        |
+      | angel2line1 | 1003  | default | yes        |
+      | angel2line2 | 1003  | default | yes        |
     Given there are call filters with infos:
         | name             | strategy | recipients      | surrogates          |
         | Charlie's Angels | all      | Charlie Unknown | Angel 001,Angel 002 |

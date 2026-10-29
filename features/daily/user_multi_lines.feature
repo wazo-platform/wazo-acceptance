@@ -2,9 +2,9 @@ Feature: User multi lines
 
   Scenario: Ring all lines of a user
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context |
-      | Multi     | Lines    |        |         |
-      | Bob       | Field    | 1802   | default |
+      | firstname | lastname | exten | context |
+      | Multi     | Lines    |       |         |
+      | Bob       | Field    | 1802  | default |
     Given "Multi Lines" has lines:
       | name  | exten | context | with_phone |
       | line1 | 1801  | default | yes        |

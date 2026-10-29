@@ -2,9 +2,9 @@ Feature: Push mobile
 
   Scenario: No push when no WebRTC line
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone |
-      | Rick      | Grimes   |        |         |            |
-      | Daryl     | Dixon    | 1802   | default | yes        |
+      | firstname | lastname | exten | context | with_phone |
+      | Rick      | Grimes   |       |         |            |
+      | Daryl     | Dixon    | 1802  | default | yes        |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone |
       | rick1 | 1801  | default | yes        |
@@ -15,9 +15,9 @@ Feature: Push mobile
 
   Scenario: Push notification is triggered with WebRTC line and mobile session one line
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone |
-      | Rick      | Grimes   |        |         |            |
-      | Daryl     | Dixon    | 1802   | default | yes        |
+      | firstname | lastname | exten | context | with_phone |
+      | Rick      | Grimes   |       |         |            |
+      | Daryl     | Dixon    | 1802  | default | yes        |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | no         | yes    |
@@ -27,9 +27,9 @@ Feature: Push mobile
 
   Scenario: Push notification is triggered by mobile session and WebRTC line
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone | username | password |
-      | Rick      | Grimes   |        |         |            | rick     | gR1m3    |
-      | Daryl     | Dixon    | 1802   | default | yes        | daryl    | d1x0N    |
+      | firstname | lastname | exten | context | with_phone | username | password |
+      | Rick      | Grimes   |       |         |            | rick     | gR1m3    |
+      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | yes        | no     |
@@ -42,9 +42,9 @@ Feature: Push mobile
 
   Scenario: Push notification is triggered by mobile refresh token and WebRTC line
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone | username | password |
-      | Rick      | Grimes   |        |         |            | rick     | gR1m3    |
-      | Daryl     | Dixon    | 1802   | default | yes        | daryl    | d1x0N    |
+      | firstname | lastname | exten | context | with_phone | username | password |
+      | Rick      | Grimes   |       |         |            | rick     | gR1m3    |
+      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | yes        | no     |
@@ -57,9 +57,9 @@ Feature: Push mobile
 
   Scenario: Push notification is not triggered by a WebRTC line with no mobile session or mobile refresh token
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone | username | password |
-      | Rick      | Grimes   |        |         |            | rick     | gR1m3    |
-      | Daryl     | Dixon    | 1802   | default | yes        | daryl    | d1x0N    |
+      | firstname | lastname | exten | context | with_phone | username | password |
+      | Rick      | Grimes   |       |         |            | rick     | gR1m3    |
+      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | yes        | no     |
@@ -71,9 +71,9 @@ Feature: Push mobile
 
   Scenario: Cancel push notification is triggered when caller hangs up mobile session
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone | username | password |
-      | Rick      | Grimes   |        |         |            | rick     | gR1m3    |
-      | Daryl     | Dixon    | 1802   | default | yes        | daryl    | d1x0N    |
+      | firstname | lastname | exten | context | with_phone | username | password |
+      | Rick      | Grimes   |       |         |            | rick     | gR1m3    |
+      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | yes        | no     |
@@ -87,9 +87,9 @@ Feature: Push mobile
 
   Scenario: Cancel push notification is triggered when caller hangs up mobile refresh token
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone | username | password |
-      | Rick      | Grimes   |        |         |            | rick     | gR1m3    |
-      | Daryl     | Dixon    | 1802   | default | yes        | daryl    | d1x0N    |
+      | firstname | lastname | exten | context | with_phone | username | password |
+      | Rick      | Grimes   |       |         |            | rick     | gR1m3    |
+      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | yes        | no     |
@@ -103,9 +103,9 @@ Feature: Push mobile
 
   Scenario: Cancel push notification is triggered when the call is answered mobile session
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone | username | password |
-      | Rick      | Grimes   |        |         |            | rick     | gR1m3    |
-      | Daryl     | Dixon    | 1802   | default | yes        | daryl    | d1x0N    |
+      | firstname | lastname | exten | context | with_phone | username | password |
+      | Rick      | Grimes   |       |         |            | rick     | gR1m3    |
+      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | yes        | no     |
@@ -119,9 +119,9 @@ Feature: Push mobile
 
   Scenario: Cancel push notification is triggered when the call is answered mobile refresh token
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone | username | password |
-      | Rick      | Grimes   |        |         |            | rick     | gR1m3    |
-      | Daryl     | Dixon    | 1802   | default | yes        | daryl    | d1x0N    |
+      | firstname | lastname | exten | context | with_phone | username | password |
+      | Rick      | Grimes   |       |         |            | rick     | gR1m3    |
+      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | yes        | no     |
@@ -135,9 +135,9 @@ Feature: Push mobile
 
   Scenario: Cancel push notification is triggered when a call is not answered mobile session
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone | username | password | ring_seconds |
-      | Rick      | Grimes   |        |         |            | rick     | gR1m3    | 2            |
-      | Daryl     | Dixon    | 1802   | default | yes        | daryl    | d1x0N    |              |
+      | firstname | lastname | exten | context | with_phone | username | password | ring_seconds |
+      | Rick      | Grimes   |       |         |            | rick     | gR1m3    | 2            |
+      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |              |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | yes        | no     |
@@ -151,9 +151,9 @@ Feature: Push mobile
 
   Scenario: Cancel push notification is triggered when a call is not answered mobile refresh token
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context | with_phone | username | password | ring_seconds |
-      | Rick      | Grimes   |        |         |            | rick     | gR1m3    | 2            |
-      | Daryl     | Dixon    | 1802   | default | yes        | daryl    | d1x0N    |              |
+      | firstname | lastname | exten | context | with_phone | username | password | ring_seconds |
+      | Rick      | Grimes   |       |         |            | rick     | gR1m3    | 2            |
+      | Daryl     | Dixon    | 1802  | default | yes        | daryl    | d1x0N    |              |
     Given "Rick Grimes" has lines:
       | name  | exten | context | with_phone | webrtc |
       | rick1 | 1801  | default | yes        | no     |

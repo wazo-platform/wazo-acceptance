@@ -13,8 +13,8 @@ Feature: Call Generation
       | Alice     | 1100     | 1100  | default |
       | Bob       | 1101     | 1101  | default |
     When a call is started:
-      | caller      | dial | callee      | talk_time | hangup |
-      | Alice 1100  | 1101 | Bob 1101    | 3         | callee |
+      | caller     | dial | callee   | talk_time | hangup |
+      | Alice 1100 | 1101 | Bob 1101 | 3         | callee |
     Then I have the last call log matching:
       | destination_extension | duration | answered |
       | 1101                  | 3        | True     |
@@ -107,9 +107,9 @@ Feature: Call Generation
   Scenario: Transfer timeout is respected
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
-      | Rick      | Sanchez  |  1001 | default |
-      | Morty     | Smith    |  1002 | default |
-      | Mister    | Meeseeks |  1003 | default |
+      | Rick      | Sanchez  | 1001  | default |
+      | Morty     | Smith    | 1002  | default |
+      | Mister    | Meeseeks | 1003  | default |
     Given "Rick Sanchez" calls "1002"
     Given "Morty Smith" answers
     When "Morty Smith" does a blind transfer to "1003@default" with timeout 3 using API

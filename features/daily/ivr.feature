@@ -2,8 +2,8 @@ Feature: IVR
 
   Scenario: IVR to destination user
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context |
-      | Jake      | Gittes   | 1801   | default |
+      | firstname | lastname | exten | context |
+      | Jake      | Gittes   | 1801  | default |
     Given there are IVR with infos:
       | name | menu_sound | timeout | max_tries |
       | ivr1 | beep       | 10      | 1         |
