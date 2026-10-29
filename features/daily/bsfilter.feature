@@ -19,7 +19,7 @@ Feature: Boss Secretary Filter
     Given "Angel 001" has function keys:
       | position | destination_type | destination_filter_name | destination_filter_member |
       | 1        | bsfilter         | Charlie's Angels        | Angel 001                 |
-    When "Charlie Unknown" press function key "1"
+    When "Charlie Unknown" presses function key "1"
     When I wait 2 seconds for the call processing
     When I wait 3 seconds to play message
     Then "Charlie Unknown" has function key "1" hint enabled
@@ -30,7 +30,7 @@ Feature: Boss Secretary Filter
     Then "Angel 001" is ringing
     When "Bad Guy" hangs up
 
-    When "Charlie Unknown" press function key "1"
+    When "Charlie Unknown" presses function key "1"
     When I wait 2 seconds for the call processing
     When I wait 3 seconds to play message
     Then "Charlie Unknown" has function key "1" hint disabled
@@ -41,7 +41,7 @@ Feature: Boss Secretary Filter
     Then "Angel 001" is hungup
     When "Bad Guy" hangs up
 
-    When "Angel 001" press function key "1"
+    When "Angel 001" presses function key "1"
     When I wait 2 seconds for the call processing
     When I wait 3 seconds to play message
     Then "Charlie Unknown" has function key "1" hint enabled
@@ -52,7 +52,7 @@ Feature: Boss Secretary Filter
     Then "Angel 001" is ringing
     When "Bad Guy" hangs up
 
-    When "Angel 001" press function key "1"
+    When "Angel 001" presses function key "1"
     When I wait 2 seconds for the call processing
     When I wait 3 seconds to play message
     Then "Charlie Unknown" has function key "1" hint disabled
@@ -71,7 +71,7 @@ Feature: Boss Secretary Filter
     Given there are call filters with infos:
       | name             | strategy | recipients      | surrogates | caller_id_mode | caller_id_name |
       | Charlie's Angels | all      | Charlie Unknown | Angel 001  | prepend        | FILTER         |
-    Given "Angel 001" enable call filter "Charlie's Angels"
+    Given "Angel 001" enables call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing showing "FILTER - Bad Guy"
@@ -87,8 +87,8 @@ Feature: Boss Secretary Filter
     Given there are call filters with infos:
       | name             | strategy                              | recipients      | surrogates          | caller_id_mode | caller_id_name |
       | Charlie's Angels | all-recipients-then-linear-surrogates | Charlie Unknown | Angel 001,Angel 002 | append         | FILTER         |
-    Given "Angel 001" enable call filter "Charlie's Angels"
-    Given "Angel 002" enable call filter "Charlie's Angels"
+    Given "Angel 001" enables call filter "Charlie's Angels"
+    Given "Angel 002" enables call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing showing "Bad Guy - FILTER"
@@ -115,8 +115,8 @@ Feature: Boss Secretary Filter
     Given there are call filters with infos:
       | name             | strategy                           | recipients      | surrogates          | recipients_timeout |
       | Charlie's Angels | all-recipients-then-all-surrogates | Charlie Unknown | Angel 001,Angel 002 | 5                  |
-    Given "Angel 001" enable call filter "Charlie's Angels"
-    Given "Angel 002" enable call filter "Charlie's Angels"
+    Given "Angel 001" enables call filter "Charlie's Angels"
+    Given "Angel 002" enables call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing
@@ -137,8 +137,8 @@ Feature: Boss Secretary Filter
     Given there are call filters with infos:
       | name             | strategy                           | recipients      | surrogates          | surrogates_timeout | caller_id_mode | caller_id_name |
       | Charlie's Angels | all-surrogates-then-all-recipients | Charlie Unknown | Angel 001,Angel 002 | 5                  | overwrite      | FILTER         |
-    Given "Angel 001" enable call filter "Charlie's Angels"
-    Given "Angel 002" enable call filter "Charlie's Angels"
+    Given "Angel 001" enables call filter "Charlie's Angels"
+    Given "Angel 002" enables call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is hungup
@@ -160,8 +160,8 @@ Feature: Boss Secretary Filter
     Given there are call filters with infos:
       | name             | strategy                              | recipients      | surrogates          |
       | Charlie's Angels | linear-surrogates-then-all-recipients | Charlie Unknown | Angel 001,Angel 002 |
-    Given "Angel 001" enable call filter "Charlie's Angels"
-    Given "Angel 002" enable call filter "Charlie's Angels"
+    Given "Angel 001" enables call filter "Charlie's Angels"
+    Given "Angel 002" enables call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is hungup
@@ -195,8 +195,8 @@ Feature: Boss Secretary Filter
     Given there are call filters with infos:
         | name             | strategy | recipients      | surrogates          |
         | Charlie's Angels | all      | Charlie Unknown | Angel 001,Angel 002 |
-    Given "Angel 001" enable call filter "Charlie's Angels"
-    Given "Angel 002" enable call filter "Charlie's Angels"
+    Given "Angel 001" enables call filter "Charlie's Angels"
+    Given "Angel 002" enables call filter "Charlie's Angels"
     When "Bad Guy" calls "1001"
     When I wait 2 seconds for the call processing
     Then "Charlie Unknown" is ringing on its contact "1"

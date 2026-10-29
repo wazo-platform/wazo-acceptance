@@ -69,7 +69,7 @@ Feature: Call transfer
     Then "incall" is holding
     Then "User B" is ringing
 
-    When "User A" cancel the transfer with API
+    When "User A" cancels the transfer with API
     Then "User A" is talking
     Then "incall" is talking
     Then "User B" is hungup
@@ -91,7 +91,7 @@ Feature: Call transfer
 
     When I wait 0.5 seconds for the transfer lock release
     When "User A" does an attended transfer to "1850@default" with API
-    When "User A" complete the transfer with API
+    When "User A" completes the transfer with API
     Then "User A" is hungup
     Then "incall" is talking
     Then "User B" is hungup
@@ -107,7 +107,7 @@ Feature: Call transfer
     Then "incall" is talking
     Then "User B" is talking
 
-    When "User A" complete the transfer with API
+    When "User A" completes the transfer with API
     Then "User A" is hungup
     Then "incall" is talking
     Then "User B" is talking

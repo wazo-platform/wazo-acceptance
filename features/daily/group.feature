@@ -32,14 +32,14 @@ Feature: Groups
     Given "Flash McQueen" has function keys:
       | position | destination_type | destination_group_label | destination_action |
       | 1        | groupmember      | Dynamic                 | toggle             |
-    When "Flash McQueen" press function key "1"
+    When "Flash McQueen" presses function key "1"
     When I wait 4 seconds for the call processing
     When "Tow Mater" calls "2801"
     When I wait 2 seconds for the call processing
     Then "Flash McQueen" is ringing
     Then "Tow Mater" hangs up
     When I wait 1 seconds for the call hangs up for everyone
-    When "Flash McQueen" press function key "1"
+    When "Flash McQueen" presses function key "1"
     When I wait 4 seconds for the call processing
     When "Tow Mater" calls "2801"
     When I wait 2 seconds for the call processing
@@ -58,7 +58,7 @@ Feature: Groups
       | firstname  | lastname  |
       | Leticia    | Gendron   |
       | Bernandine | Gignac    |
-    When "Leticia Gendron" enable DND
+    When "Leticia Gendron" enables DND
     When I wait 2 seconds
     When "Arnie Douglas" calls "2515"
     When I wait 2 seconds for the call processing

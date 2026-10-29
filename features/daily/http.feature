@@ -21,7 +21,7 @@ Feature: HTTP
 
   @rate-limit
   Scenario Outline: Unauthenticated HTTP resources are throttled
-    Then "<method>" "<url>" eventually receive the answer 429 instead of <status_code>
+    Then "<method>" "<url>" eventually receives the answer 429 instead of <status_code>
 
   Examples:
     | method | url                                                                 | status_code |
