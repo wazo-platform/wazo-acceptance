@@ -111,3 +111,29 @@ Feature: Call transfer
     Then "User A" is hung up
     Then "incall" is talking
     Then "User B" is talking
+
+  Scenario: Complete attended transfer between users
+    Given there are telephony users with infos:
+      | firstname | lastname | exten | context |
+      | User      | A        | 1801  | default |
+      | User      | B        | 1802  | default |
+      | User      | C        | 1803  | default |
+    When "User A" calls "1802"
+    Then "User B" is ringing
+    When "User B" answers
+    When I wait 1 seconds for the call processing
+    When "User B" does an attended transfer to "1803@default" with API
+    Then "User C" is ringing
+    When "User C" answers
+    When "User B" completes the transfer with API
+    Then "User B" is hung up
+    Then "User A" is talking
+    Then "User C" is talking
+    When "User C" hangs up
+    # BUG-687: destination_name is the transfer initiator, whichever destination participant is picked
+    Then I have the last call log matching:
+      | source_name | destination_name | destination_extension | answered |
+      | User A      | User B           | 1802                  | True     |
+    Then the last call log has participants:
+      | role        | user   |
+      | source      | User A |
