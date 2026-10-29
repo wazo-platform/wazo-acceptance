@@ -7,7 +7,7 @@
 * in tables, align values to the left
 * some table columns are optional; it's preferable to omit them if not necessary (for example, the `protocol` column)
 * there must be an empty line after a `Feature` definition and around `Scenario` blocks
-* there must be no empty lines between steps
+* there must be no empty lines between steps, except a single one to separate logical groups of steps in a workflow
 * variable must be surrounded by double quote (e.g. `"John"`) except for numbers (e.g. `3 seconds`, not `"3" seconds`)
 * integration tests that can't go elsewhere than `wazo-acceptance` should be in a file `integration-*.feature`
 * for other rules, please refer to feature files and then write them here
