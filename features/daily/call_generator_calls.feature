@@ -62,13 +62,13 @@ Feature: Call Generation
     Then "Clark Kent" call is not "on_hold"
     Then "Bruce Wayne" call is not "on_hold"
 
-    When "Clark Kent" puts his call on hold
+    When "Clark Kent" puts their call on hold
     Then "Clark Kent" call is "on_hold"
     Then "Bruce Wayne" call is not "on_hold"
     Then I receive a "MusicOnHoldStart" event
     Then I receive no "MusicOnHoldStop" event
 
-    When "Clark Kent" resumes his call
+    When "Clark Kent" resumes their call
     Then "Clark Kent" call is not "on_hold"
     Then "Bruce Wayne" call is not "on_hold"
     Then I receive a "MusicOnHoldStop" event
@@ -83,10 +83,10 @@ Feature: Call Generation
       | line1 | 1002  | default | yes        |
       | line2 | 1002  | default | yes        |
     Given "Donald Trump" calls "1002"
-    When "Darth Vader" answers on its contact "1"
-    When "Darth Vader" relocates its call to its contact "2"
-    When "Darth Vader" answers on its contact "2"
-    Then "Darth Vader" is talking to "Donald Trump" on its contact "2"
+    When "Darth Vader" answers on their contact "1"
+    When "Darth Vader" relocates their call to their contact "2"
+    When "Darth Vader" answers on their contact "2"
+    Then "Darth Vader" is talking to "Donald Trump" on their contact "2"
 
   Scenario: Bus messages on hold and resume
     Given there are telephony users with infos:
@@ -99,9 +99,9 @@ Feature: Call Generation
       | call_resumed |
     Given "Marty McFly" calls "1002"
     Given "George McFly" answers
-    When "George McFly" puts his call on hold
+    When "George McFly" puts their call on hold
     Then I receive a "call_held" event
-    When "George McFly" resumes his call
+    When "George McFly" resumes their call
     Then I receive a "call_resumed" event
 
   Scenario: Transfer timeout is respected

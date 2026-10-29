@@ -7,7 +7,7 @@ Feature: Presence updated
     Given I listen on the bus for "chatd_presence_updated" messages
     When I create a session with username "jbond" password "secret"
     Then I receive a "chatd_presence_updated" event
-    Then "James Bond" has his presence connected
+    Then "James Bond" has their presence connected
 
   Scenario: Presence line state is updated
     Given there are telephony users with infos:
@@ -18,7 +18,7 @@ Feature: Presence updated
     Then I receive a "chatd_presence_updated" event with data:
       | line_state |
       | talking    |
-    Then "James Bond" has his line state to "talking"
+    Then "James Bond" has their line state to "talking"
 
   Scenario: Presence line holding state
     Given there are telephony users with infos:
@@ -28,15 +28,15 @@ Feature: Presence updated
     Given "James Bond" calls "1802"
     Given "Ti-Me Pare" answers
     Given I listen on the bus for "chatd_presence_updated" messages
-    When "Ti-Me Pare" puts his call on hold
+    When "Ti-Me Pare" puts their call on hold
     Then I receive a "chatd_presence_updated" event with data:
       | line_state |
       | holding    |
-    Then "Ti-Me Pare" has his line state to "holding"
-    Then "James Bond" has his line state to "talking"
-    When "Ti-Me Pare" resumes his call
+    Then "Ti-Me Pare" has their line state to "holding"
+    Then "James Bond" has their line state to "talking"
+    When "Ti-Me Pare" resumes their call
     Then I receive a "chatd_presence_updated" event with data:
       | line_state |
       | talking    |
-    Then "Ti-Me Pare" has his line state to "talking"
-    Then "James Bond" has his line state to "talking"
+    Then "Ti-Me Pare" has their line state to "talking"
+    Then "James Bond" has their line state to "talking"

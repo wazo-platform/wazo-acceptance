@@ -35,8 +35,8 @@ def given_i_create_a_refresh_token(context, username, password):
     _revoke_token(context, result['token'])
 
 
-@when('"{username}" changes its password from "{old_password}" to "{new_password}"')
-def when_user_changes_its_password_from_old_to_new(context, username, old_password, new_password):
+@when('"{username}" changes their password from "{old_password}" to "{new_password}"')
+def when_user_changes_their_password_from_old_to_new(context, username, old_password, new_password):
     token = _create_token(context, username, old_password)
     with context.helpers.utils.set_token(context.auth_client, token['token']):
         context.auth_client.users.change_password(

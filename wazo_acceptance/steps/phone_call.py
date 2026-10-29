@@ -30,7 +30,7 @@ def step_user_is_ringing_showing_callerid(context, tracking_id, callerid):
     until.true(phone.is_ringing_showing, callerid, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is ringing on its contact "{contact_number}"')
+@step('"{tracking_id}" is ringing on their contact "{contact_number}"')
 def step_user_is_ringing_on_contact_number(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     until.true(phone.is_ringing, tries=NB_RETRY)
@@ -54,8 +54,8 @@ def step_user_is_hung_up(context, tracking_id):
     until.true(phone.is_hungup, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is hung up on its contact "{contact_number}"')
-def step_user_is_hung_up_on_its_contact(context, tracking_id, contact_number):
+@step('"{tracking_id}" is hung up on their contact "{contact_number}"')
+def step_user_is_hung_up_on_their_contact(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     until.true(phone.is_hungup, tries=NB_RETRY)
 
@@ -73,7 +73,7 @@ def step_user_is_talking(context, tracking_id):
     until.true(phone.is_talking, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is talking to "{other_party_id}" on its contact "{contact_number}"')
+@step('"{tracking_id}" is talking to "{other_party_id}" on their contact "{contact_number}"')
 def step_user_is_talking_to_other_party_with_contact(context, tracking_id, other_party_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     until.true(phone.is_talking, tries=NB_RETRY)
@@ -92,8 +92,8 @@ def step_user_answers(context, tracking_id):
     phone.answer()
 
 
-@step('"{tracking_id}" answers on its contact "{contact_number}"')
-def step_user_answers_on_its_contact(context, tracking_id, contact_number):
+@step('"{tracking_id}" answers on their contact "{contact_number}"')
+def step_user_answers_on_their_contact(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     phone.answer()
 
@@ -118,7 +118,7 @@ def step_a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time
     until.true(phone.is_hungup, tries=int(time))
 
 
-@step('"{tracking_id}" puts his call on hold')
+@step('"{tracking_id}" puts their call on hold')
 def step_user_puts_call_on_hold(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     phone.hold()
@@ -126,7 +126,7 @@ def step_user_puts_call_on_hold(context, tracking_id):
     time.sleep(0.5)
 
 
-@step('"{tracking_id}" resumes his call')
+@step('"{tracking_id}" resumes their call')
 def step_user_resumes_call(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     phone.resume()
