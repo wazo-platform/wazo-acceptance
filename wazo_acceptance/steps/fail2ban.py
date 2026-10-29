@@ -8,6 +8,7 @@ from behave import given, then, when
 from hamcrest import assert_that, has_item
 
 _JAIL_OVERRIDE_FILE = '/etc/fail2ban/jail.d/zz-wazo-acceptance.local'
+_PROVD_FAIL2BAN_LOG = '/var/log/wazo-provd-fail2ban.log'
 
 _FAIL2BAN_REGEX_ARGS = {
     'wazo-provd': {
@@ -43,17 +44,23 @@ def given_the_fail2ban_jails_are_overridden_with(context):
     # A real ban blocks every port, SSH included: tests that trigger a ban must
     # use a short bantime so that the cleanup can reach the server again
     sections = []
+    jails = []
     for row in context.table:
         options = row.as_dict()
         jail = options.pop('jail')
+        jails.append(jail)
         lines = [f'[{jail}]'] + [f'{key} = {value}' for key, value in options.items()]
         sections.append('\n'.join(lines))
     context.remote_sysutils.write_content_file(_JAIL_OVERRIDE_FILE, '\n\n'.join(sections) + '\n')
     context.remote_sysutils.send_command(['fail2ban-client', 'reload'])
 
     def remove_override():
+        # a plain reload keeps the failures counted in memory: with the restored
+        # thresholds, the next failure would ban this IP on every port
+        context.remote_sysutils.send_command(['truncate', '-s0', _PROVD_FAIL2BAN_LOG])
         context.remote_sysutils.send_command(['rm', '-f', _JAIL_OVERRIDE_FILE])
-        context.remote_sysutils.send_command(['fail2ban-client', 'reload'])
+        for jail in jails:
+            context.remote_sysutils.send_command(['fail2ban-client', 'reload', '--restart', jail])
 
     context.add_cleanup(remove_override)
 
