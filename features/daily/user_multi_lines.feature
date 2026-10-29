@@ -14,6 +14,16 @@ Feature: User multi lines
     Then "Multi Lines" is ringing on their contact "1"
     Then "Multi Lines" is ringing on their contact "2"
     Then "Multi Lines" is hung up on their contact "3"
+    When "Multi Lines" answers on their contact "2"
+    Then "Bob Field" is talking
+    When "Bob Field" hangs up
+    Then I have the last call log matching:
+      | source_name | destination_name | destination_extension | answered |
+      | Bob Field   | Multi Lines      | 1801                  | True     |
+    Then the last call log has participants:
+      | role        | user        | contact |
+      | source      | Bob Field   |         |
+      | destination | Multi Lines | 2       |
 
   Scenario: User multi lines multi extensions
     Given there are telephony users with infos:
