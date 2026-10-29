@@ -1,4 +1,4 @@
-# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then
@@ -17,7 +17,7 @@ def then_i_have_the_last_call_log_matching(context):
     expected = context.table[0].as_dict()
     expected_duration = int(expected.pop('duration', 0))
     if expected.get('answered'):
-        expected['answered'] = bool(expected['answered'])
+        expected['answered'] = expected['answered'] == 'True'
 
     def _assert():
         cdr = context.call_logd_client.cdr.list(direction='desc', limit=1, recurse=True)
