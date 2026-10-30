@@ -196,21 +196,21 @@ def given_user_has_lines(context, firstname, lastname):
 
 
 @given('"{firstname} {lastname}" has enabled "{dnd_name}" service')
-def then_the_user_has_enabled_service(context, firstname, lastname, dnd_name):
+def given_the_user_has_enabled_service(context, firstname, lastname, dnd_name):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     service = {'enabled': True}
     context.confd_client.users(confd_user).update_service(dnd_name, service)
 
 
 @given('"{firstname} {lastname}" has schedule "{schedule}"')
-def given_user_1_has_schedule_2(context, firstname, lastname, schedule):
-    confd_user = context.helpers.confd_user.get_by(firtname=firstname, lastname=lastname)
+def given_user_has_schedule(context, firstname, lastname, schedule):
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     schedule = context.helpers.schedule.get_by(name=schedule)
     context.confd_client.users(confd_user).add_schedule(schedule['id'])
 
 
 @given('"{firstname} {lastname}" has reconfigured the line "{exten}@{exten_context}"')
-def when_i_reconfigure_the_phone_on_line(context, firstname, lastname, exten, exten_context):
+def given_user_has_reconfigured_the_line(context, firstname, lastname, exten, exten_context):
     context_name = context.helpers.context.get_by(label=exten_context)['name']
     extension = context.helpers.extension.find_by(
         exten=exten,
@@ -290,7 +290,7 @@ def when_i_import_users_ignoring_errors(context):
     context.import_response = response
 
 
-@then('my import result has an error on line "{line_number}"')
+@then('my import result has an error on line {line_number}')
 def then_my_import_result_matches(context, line_number):
     for error in context.import_response['errors']:
         if error['details']['row_number'] == int(line_number):
@@ -314,14 +314,14 @@ def when_user_does_an_attended_transfer_to_exten_with_api(context, firstname, la
     context.transfer_id = transfer['id']
 
 
-@when('"{firstname} {lastname}" cancel the transfer with API')
-def when_user_cancel_the_transfer_with_api(context, firstname, lastname):
+@when('"{firstname} {lastname}" cancels the transfer with API')
+def when_user_cancels_the_transfer_with_api(context, firstname, lastname):
     # NOTE: Use a user token to GET /users/me/transfers OR implement GET /transfers
     context.calld_client.transfers.cancel_transfer(context.transfer_id)
 
 
-@when('"{firstname} {lastname}" complete the transfer with API')
-def when_user_complete_the_transfer_with_api(context, firstname, lastname):
+@when('"{firstname} {lastname}" completes the transfer with API')
+def when_user_completes_the_transfer_with_api(context, firstname, lastname):
     # NOTE: Use a user token to GET /users/me/transfers OR implement GET /transfers
     context.calld_client.transfers.complete_transfer(context.transfer_id)
 
@@ -378,8 +378,8 @@ def _build_funckey(context, row):
     }
 
 
-@when('"{firstname} {lastname}" disable all forwards')
-def when_the_user_disable_all_forwards(context, firstname, lastname):
+@when('"{firstname} {lastname}" disables all forwards')
+def when_the_user_disables_all_forwards(context, firstname, lastname):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forwards = {
         'busy': {'enabled': False},
@@ -389,57 +389,57 @@ def when_the_user_disable_all_forwards(context, firstname, lastname):
     context.confd_client.users(confd_user).update_forwards(forwards)
 
 
-@step('"{firstname} {lastname}" enable forwarding on no-answer to "{exten}"')
-def when_the_user_enable_forwarding_on_no_answer_to(context, firstname, lastname, exten):
+@step('"{firstname} {lastname}" enables forwarding on no-answer to "{exten}"')
+def step_the_user_enables_forwarding_on_no_answer_to(context, firstname, lastname, exten):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = {'destination': exten, 'enabled': True}
     context.confd_client.users(confd_user).update_forward('noanswer', forward)
 
 
-@when('"{firstname} {lastname}" enable forwarding on busy to "{exten}"')
-def when_the_user_enable_forwarding_on_busy_to(context, firstname, lastname, exten):
+@when('"{firstname} {lastname}" enables forwarding on busy to "{exten}"')
+def when_the_user_enables_forwarding_on_busy_to(context, firstname, lastname, exten):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = {'destination': exten, 'enabled': True}
     context.confd_client.users(confd_user).update_forward('busy', forward)
 
 
-@when('"{firstname} {lastname}" enable unconditional forwarding to "{exten}"')
-def when_the_user_enable_unconditional_forwarding_to(context, firstname, lastname, exten):
+@when('"{firstname} {lastname}" enables unconditional forwarding to "{exten}"')
+def when_the_user_enables_unconditional_forwarding_to(context, firstname, lastname, exten):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     forward = {'destination': exten, 'enabled': True}
     context.confd_client.users(confd_user).update_forward('unconditional', forward)
 
 
-@when('"{firstname} {lastname}" enable DND')
-def when_the_user_enable_dnd(context, firstname, lastname):
+@when('"{firstname} {lastname}" enables DND')
+def when_the_user_enables_dnd(context, firstname, lastname):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     service = {'enabled': True}
     context.confd_client.users(confd_user).update_service('dnd', service)
 
 
-@when('"{firstname} {lastname}" disable DND')
-def when_the_user_disable_dnd(context, firstname, lastname):
+@when('"{firstname} {lastname}" disables DND')
+def when_the_user_disables_dnd(context, firstname, lastname):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     service = {'enabled': False}
     context.confd_client.users(confd_user).update_service('dnd', service)
 
 
-@when('"{firstname} {lastname}" enable incoming call filtering')
-def when_the_user_enable_incoming_call_filtering(context, firstname, lastname):
+@when('"{firstname} {lastname}" enables incoming call filtering')
+def when_the_user_enables_incoming_call_filtering(context, firstname, lastname):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     service = {'enabled': True}
     context.confd_client.users(confd_user).update_service('incallfilter', service)
 
 
-@when('"{firstname} {lastname}" disable incoming call filtering')
-def when_the_user_disable_incoming_call_filtering(context, firstname, lastname):
+@when('"{firstname} {lastname}" disables incoming call filtering')
+def when_the_user_disables_incoming_call_filtering(context, firstname, lastname):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     service = {'enabled': False}
     context.confd_client.users(confd_user).update_service('incallfilter', service)
 
 
-@when('"{firstname} {lastname}" press function key "{position}"')
-def when_the_user_press_function_key(context, firstname, lastname, position):
+@when('"{firstname} {lastname}" presses function key "{position}"')
+def when_the_user_presses_function_key(context, firstname, lastname, position):
     confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     line = context.confd_client.lines.get(confd_user['lines'][0]['id'])
     device = context.provd_client.devices.get(line['device_id'])
@@ -450,8 +450,8 @@ def when_the_user_press_function_key(context, firstname, lastname, position):
     phone.call(exten)
 
 
-@given('"{firstname} {lastname}" enable call filter "{filter_name}"')
-def when_the_user_active_call_filter(context, firstname, lastname, filter_name):
+@given('"{firstname} {lastname}" enables call filter "{filter_name}"')
+def given_the_user_enables_call_filter(context, firstname, lastname, filter_name):
     call_filter = context.helpers.call_filter.get_by(name=filter_name)
     member_id = None
     for user in call_filter['surrogates']['users']:
@@ -519,7 +519,7 @@ def when_user_starts_call_recording(context, firstname, lastname):
     context.helpers.call.start_recording(call['call_id'], user['tenant_uuid'])
 
 
-@then('"{firstname} {lastname}" call is recording status is "{status}"')
+@then('"{firstname} {lastname}" call recording status is "{status}"')
 def then_user_call_recording_is(context, firstname, lastname, status):
     user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
 

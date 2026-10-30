@@ -1,4 +1,4 @@
-# Copyright 2020-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import then, when
@@ -18,8 +18,8 @@ def then_firstname_lastname_call_is_not_status(context, firstname, lastname, sta
     _assert_call_property(context, user_uuid, call_property=status, property_value=False)
 
 
-@when('"{firstname} {lastname}" relocates its call to its contact "{contact_number}"')
-def when_firstname_lastname_relocates_its_call_to_its_contact_number(
+@when('"{firstname} {lastname}" relocates their call to their contact "{contact_number}"')
+def when_firstname_lastname_relocates_their_call_to_their_contact_number(
     context, firstname, lastname, contact_number
 ):
     tracking_id = f"{firstname} {lastname}"

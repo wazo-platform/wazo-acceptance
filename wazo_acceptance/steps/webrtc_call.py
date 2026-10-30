@@ -1,4 +1,4 @@
-# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
@@ -22,7 +22,7 @@ def when_a_webrtc_endpoint_calls_sip_one(context):
 
 
 @then('webrtc channel uses following codecs:')
-def WebRTC_channel_uses_following_codecs(context):
+def then_webrtc_channel_uses_following_codecs(context):
     context.table.require_columns(['asterisk_codec', 'direct_client_codec', 'sbc_client_codec'])
     sbc = context.config.userdata.get('sbc', 'false').lower()
     for row in context.table:

@@ -1,4 +1,4 @@
-# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then, when
@@ -17,8 +17,8 @@ def given_there_are_application_with_info(context):
         context.helpers.application.create(body)
 
 
-@when('"{user_name}" picks up the call from the application "{app_name}"')
-def when_1_picks_up_the_call_from_the_application_2(context, user_name, app_name):
+@when('"{firstname}" picks up the call from the application "{app_name}"')
+def when_user_picks_up_the_call_from_the_application(context, firstname, app_name):
     application = context.helpers.application.get_by(name=app_name, recurse=True)
 
     incoming_call = until.return_(
@@ -29,7 +29,7 @@ def when_1_picks_up_the_call_from_the_application_2(context, user_name, app_name
     )
     node = context.calld_client.applications.create_node(application['uuid'], [incoming_call['id']])
 
-    user = context.helpers.confd_user.get_by(firstname=user_name)
+    user = context.helpers.confd_user.get_by(firstname=firstname)
     user_exten = user['lines'][0]['extensions'][0]['exten']
     user_context = user['lines'][0]['extensions'][0]['context']
     context.calld_client.applications.make_call_to_node(
@@ -38,11 +38,11 @@ def when_1_picks_up_the_call_from_the_application_2(context, user_name, app_name
         {'exten': user_exten, 'context': user_context},
     )
 
-    phone = context.phone_register.get_phone(user_name)
+    phone = context.phone_register.get_phone(firstname)
     phone.answer()
 
 
-@then('"{app_name}" contains a node with "{n}" calls')
+@then('"{app_name}" contains a node with {n} calls')
 def then_application_contains_node_with_n_calls(context, app_name, n):
     application = context.helpers.application.get_by(name=app_name, recurse=True)
     calls = context.calld_client.applications.list_calls(application['uuid'])['items']

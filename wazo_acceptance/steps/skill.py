@@ -1,4 +1,4 @@
-# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -21,7 +21,7 @@ def given_there_are_name_skill_rule_with_infos(context, skill_name):
     context.helpers.queue_skill_rule.create(body)
 
 
-@given('agent "{number}" has skill "{skill_name}" with weight "{weight}"')
+@given('agent "{number}" has skill "{skill_name}" with weight {weight}')
 def given_agent_number_has_skill_with_weight(context, number, skill_name, weight):
     agent = context.helpers.agent.get_by(number=number)
 

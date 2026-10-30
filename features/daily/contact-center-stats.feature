@@ -8,7 +8,7 @@ Feature: Stats generation
     Given there are queues with infos:
       | name       | exten | context | agents | option_joinempty |
       | stat-queue | 3521  | default | 021    | unavailable      |
-    Given there are no hour change in the next 30 seconds
+    Given there is no hour change in the next 30 seconds
     Given agent "021" is logged
 
     # Answered call
@@ -33,7 +33,7 @@ Feature: Stats generation
     When I generate contact center stats
     Then contact center stats for queue "stat-queue" in the current hour are:
       | answered | received | abandoned | blocked |
-      |        1 |        3 |         1 |       1 |
+      | 1        | 3        | 1         | 1       |
 
   Scenario: Agent pause and login time
     Given there is no queue_log for agent "1003"
@@ -43,7 +43,7 @@ Feature: Stats generation
     Given there are queues with infos:
       | name       | exten | context | agents |
       | stat-queue | 3521  | default | 1003   |
-    Given there are no hour change in the next 30 seconds
+    Given there is no hour change in the next 30 seconds
 
     # First cycle
     When I log agent "1003" from API
@@ -65,11 +65,10 @@ Feature: Stats generation
     When I generate contact center stats
     Then contact center stats for agent "1003" in the current hour are:
       | login_time | pause_time |
-      |          8 |          4 |
-
+      | 8          | 4          |
 
   Scenario: Agent wrapup and conversation time
-      Given there is no queue_log for agent "1003"
+    Given there is no queue_log for agent "1003"
     Given there are telephony users with infos:
       | firstname | lastname | exten | context | agent_number |
       | Stat      | Agent    | 1003  | default | 1003         |
@@ -77,7 +76,7 @@ Feature: Stats generation
       | name         | exten | context | agents | option_wrapuptime |
       | stat-queue_1 | 3521  | default | 1003   | 2                 |
       | stat-queue_2 | 3522  | default | 1003   | 0                 |
-    Given there are no hour change in the next 30 seconds
+    Given there is no hour change in the next 30 seconds
     Given agent "1003" is logged
 
     # First call 2 seconds in conversation 2 seconds wrapup
@@ -98,7 +97,7 @@ Feature: Stats generation
     When I generate contact center stats
     Then contact center stats for agent "1003" in the current hour are:
       | wrapup_time | conversation_time |
-      |           2 |                 5 |
+      | 2           | 5                 |
 
   Scenario: Placing calls make new qos stats
     Given there is no queue_log for queue "stat-queue"
@@ -108,18 +107,18 @@ Feature: Stats generation
     Given there are queues with infos:
       | name       | exten | context | agents |
       | stat-queue | 3523  | default | 023    |
-    Given there are no hour change in the next 30 seconds
+    Given there is no hour change in the next 30 seconds
     Given agent "023" is logged
 
     When chan_test places calls in order:
       | exten | context | call_id                |
-      |  3523 | default | 3523-answered-qos5     |
-      |  3523 | default | 3523-answered-qos15-1  |
-      |  3523 | default | 3523-answered-qos15-2  |
-      |  3523 | default | 3523-answered-qos20    |
-      |  3523 | default | 3523-abandoned-qos10-1 |
-      |  3523 | default | 3523-abandoned-qos10-2 |
-      |  3523 | default | 3523-abandoned-qos20   |
+      | 3523  | default | 3523-answered-qos5     |
+      | 3523  | default | 3523-answered-qos15-1  |
+      | 3523  | default | 3523-answered-qos15-2  |
+      | 3523  | default | 3523-answered-qos20    |
+      | 3523  | default | 3523-abandoned-qos10-1 |
+      | 3523  | default | 3523-abandoned-qos10-2 |
+      | 3523  | default | 3523-abandoned-qos20   |
     When I wait 1 seconds for the call processing
 
     # QoS 5s bucket: answer at ~3s holdtime
@@ -148,7 +147,7 @@ Feature: Stats generation
     When I generate contact center stats
     Then contact center qos stats for queue "stat-queue" in the current hour are:
       | qos_threshold | answered | abandoned |
-      |             5 |        1 |         0 |
-      |            10 |        0 |         2 |
-      |            15 |        2 |         0 |
-      |     remainder |        1 |         1 |
+      | 5             | 1        | 0         |
+      | 10            | 0        | 2         |
+      | 15            | 2        | 0         |
+      | remainder     | 1        | 1         |

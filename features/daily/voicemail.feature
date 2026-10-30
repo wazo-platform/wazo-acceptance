@@ -9,7 +9,7 @@ Feature: Voicemail
     Then I receive a "user_voicemail_message_created" event with "message" data:
       | caller_id_name | folder_name | folder_type |
       | Billy          | inbox       | new         |
-    Then there's the following messages in voicemail "1801@default"
+    Then there are the following messages in voicemail "1801@default"
       | caller_id_name | folder_name | folder_type |
       | Billy          | inbox       | new         |
 
@@ -22,7 +22,7 @@ Feature: Voicemail
     Then I receive a "user_voicemail_message_created" event with "message" data:
       | caller_id_name | folder_name | folder_type |
       | Billy          | inbox       | new         |
-    Then there's the following messages in voicemail "1801@default"
+    Then there are the following messages in voicemail "1801@default"
       | caller_id_name | folder_name | folder_type |
       | Billy          | inbox       | new         |
 
@@ -36,7 +36,7 @@ Feature: Voicemail
     Then I receive a "user_voicemail_message_updated" event with "message" data:
       | caller_id_name | folder_name | folder_type |
       | Billy          | old         | old         |
-    Then there's the following messages in voicemail "1801@default"
+    Then there are the following messages in voicemail "1801@default"
       | caller_id_name | folder_name | folder_type |
       | Billy          | old         | old         |
 

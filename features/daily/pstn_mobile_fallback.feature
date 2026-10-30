@@ -12,7 +12,7 @@ Feature: PSTN mobile fallback
       | rick2 | 1801  | default | no         | yes    |
     Given I create a mobile session with username "rick" password "gR1m3"
     When "Daryl Dixon" calls "1801"
-    Then "Rick Grimes" is ringing on its contact "1"
+    Then "Rick Grimes" is ringing on their contact "1"
     When I wait 12 seconds for the end of ringing time
     Then "Carol Peletier" is ringing
 
@@ -28,6 +28,6 @@ Feature: PSTN mobile fallback
       | rick2 | 1801  | default | no         | yes    |
     Given I create a mobile session with username "rick" password "gR1m3"
     When "Daryl Dixon" calls "1801"
-    Then "Rick Grimes" is ringing on its contact "1"
+    Then "Rick Grimes" is ringing on their contact "1"
     When I wait 12 seconds for the end of ringing time
     Then "Carol Peletier" is not ringing

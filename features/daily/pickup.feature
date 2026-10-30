@@ -12,7 +12,7 @@ Feature: Pickup
     When "Dilbert Bologna" calls "1002"
     Then "Wally Lasagna" is ringing
     When "Alice Wonder" calls "*8"
-    Then "Wally Lasagna" is hungup
+    Then "Wally Lasagna" is hung up
     Then "Dilbert Bologna" is talking
     Then "Alice Wonder" is talking
 
@@ -34,7 +34,7 @@ Feature: Pickup
     When "Dilbert Bologna" calls "1002"
     Then "Wally Lasagna" is ringing
     When "Dogbert Canine" calls "*8"
-    Then "Wally Lasagna" is hungup
+    Then "Wally Lasagna" is hung up
     Then "Dilbert Bologna" is talking
     Then "Dogbert Canine" is talking
 
@@ -56,7 +56,7 @@ Feature: Pickup
     When "Dilbert Bologna" calls "1003"
     Then "Dogbert Canine" is ringing
     When "Wally Lasagna" calls "*8"
-    Then "Dogbert Canine" is hungup
+    Then "Dogbert Canine" is hung up
     Then "Dilbert Bologna" is talking
     Then "Wally Lasagna" is talking
 
@@ -84,9 +84,9 @@ Feature: Pickup
 
   Scenario: Pickup a call coming from an incoming call
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context |
-      | User      | 143      | 1143   | default |
-      | User      | 148      | 1148   | default |
+      | firstname | lastname | exten | context |
+      | User      | 143      | 1143  | default |
+      | User      | 148      | 1148  | default |
     Given there are pickups:
       | name   | user_interceptor | user_target |
       | pickup | User 148         | User 143    |
@@ -106,6 +106,6 @@ Feature: Pickup
     When "Dilbert Bologna" calls "1002"
     Then "Wally Lasagna" is ringing
     When "Alice Wonder" calls "*81002"
-    Then "Wally Lasagna" is hungup
+    Then "Wally Lasagna" is hung up
     Then "Dilbert Bologna" is talking
     Then "Alice Wonder" is talking

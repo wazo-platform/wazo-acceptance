@@ -1,4 +1,4 @@
-# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given
@@ -45,7 +45,7 @@ def _table_to_body(context, name, timezone, table, destination=None):
 
         if time.get('destination_user'):
             firstname, lastname = time['destination_user'].split(" ")
-            confd_user = context.helpers.confd_user.get_by(firtname=firstname, lastname=lastname)
+            confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
             period['destination'] = {'type': 'user', 'user_id': confd_user['id']}
 
         schedule["%s_periods" % time['periods']].append(period)
@@ -54,19 +54,19 @@ def _table_to_body(context, name, timezone, table, destination=None):
 
 
 @given('I have a schedule "{name}" in "{timezone}" with the following schedules:')
-def given_i_have_a_schedule_in_certain_timezeon_with_the_following_schedules(context, name, timezone):
+def given_i_have_a_schedule_in_timezone_with_the_following_schedules(context, name, timezone):
     context.helpers.schedule.create(_table_to_body(context, name, timezone, context.table))
 
 
 @given('I have a schedule "{name}" in "{timezone}" with the following schedules towards user "{firstname} {lastname}":')
 def given_i_have_a_schedule_in_timezone_towards_a_user_with_the_following_schedules(context, name, timezone, firstname, lastname):
-    confd_user = context.helpers.confd_user.get_by(firtname=firstname, lastname=lastname)
+    confd_user = context.helpers.confd_user.get_by(firstname=firstname, lastname=lastname)
     destination = {'type': 'user', 'user_id': confd_user['id']}
     context.helpers.schedule.create(_table_to_body(context, name, timezone, context.table, destination))
 
 
 @given('I have a schedule "{name}" associated to incall "{exten}@{exten_context}"')
-def givent_i_have_a_schedule_associated_to_incall(context, name, exten, exten_context):
+def given_i_have_a_schedule_associated_to_incall(context, name, exten, exten_context):
     context_name = context.helpers.context.get_by(label=exten_context)['name']
     extension = context.helpers.extension.get_by(exten=exten, context=context_name)
     schedule = context.helpers.schedule.get_by(name=name)

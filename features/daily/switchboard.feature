@@ -13,13 +13,13 @@ Feature: Switchboards
     When incoming call received from "incall" to "1000@from-extern"
     Then I receive a "switchboard_queued_calls_updated" event
     Then switchboard "Inn" has "incall" in queued calls
-    When "Reception Clerk" answer queued call "incall" from switchboard "Inn"
+    When "Reception Clerk" answers queued call "incall" from switchboard "Inn"
     Then "Reception Clerk" is talking to "incall"
 
     When I wait 1 seconds for the call processing
-    When "Reception Clerk" put call "incall" from switchboard "Inn" on hold
+    When "Reception Clerk" puts call "incall" from switchboard "Inn" on hold
     Then switchboard "Inn" has "incall" in held calls
-    When "Reception Clerk" answer held call "incall" from switchboard "Inn"
+    When "Reception Clerk" answers held call "incall" from switchboard "Inn"
     Then "Reception Clerk" is talking to "incall"
 
     When I wait 1 seconds for the call processing
@@ -39,9 +39,9 @@ Feature: Switchboards
       | Reception | Clerk    | 1801  | default | yes        | yes        |
     Given there are switchboards with infos:
         | name                 | members         | timeout | noanswer_destination |
-        | timeout              | Reception Clerk |      15 | hangup:              |
+        | timeout              | Reception Clerk | 15      | hangup:              |
         | no-timeout           |                 |         | hangup:              |
-        | no-fallback          |                 |       1 |                      |
+        | no-fallback          |                 | 1       |                      |
         | transfer-destination |                 |         |                      |
 
     Given there is an incall "1001@from-extern" to the switchboard "timeout"
@@ -58,19 +58,19 @@ Feature: Switchboards
 
     # Transfer call to another switchboard
     Then switchboard "timeout" has "i-will-be-transferred-to-switchboard" in queued calls
-    When "Reception Clerk" answer queued call "i-will-be-transferred-to-switchboard" from switchboard "timeout"
+    When "Reception Clerk" answers queued call "i-will-be-transferred-to-switchboard" from switchboard "timeout"
     Then "Reception Clerk" is talking to "i-will-be-transferred-to-switchboard"
     When I wait 1 seconds for the call processing
     When "Reception Clerk" does a blind transfer to "1004@from-extern" with API
 
     # Answer next call
     Then switchboard "timeout" has "i-will-be-answered" in queued calls
-    When "Reception Clerk" answer queued call "i-will-be-answered" from switchboard "timeout"
+    When "Reception Clerk" answers queued call "i-will-be-answered" from switchboard "timeout"
 
     When I wait 10 seconds for the timeout to expire
 
     Then "Reception Clerk" is talking to "i-will-be-answered" from API
-    Then "i-will-timeout" is hungup
+    Then "i-will-timeout" is hung up
     Then switchboard "no-timeout" has "i-will-not-timeout-1" in queued calls
     Then switchboard "no-fallback" has "i-will-not-timeout-2" in queued calls
 

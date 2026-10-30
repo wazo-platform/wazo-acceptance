@@ -12,22 +12,22 @@ Feature: Function Key BLF
       | 4        | true | forward          | unconditional       | 5678              |
       | 5        | true | forward          | busy                |                   |
       | 6        | true | forward          | busy                | 9012              |
-    When "BLFMan Forward" enable forwarding on no-answer to "1234"
-    When "BLFMan Forward" enable unconditional forwarding to "5678"
-    When "BLFMan Forward" enable forwarding on busy to "9012"
+    When "BLFMan Forward" enables forwarding on no-answer to "1234"
+    When "BLFMan Forward" enables unconditional forwarding to "5678"
+    When "BLFMan Forward" enables forwarding on busy to "9012"
     Then "BLFMan Forward" has all forwards hints enabled
-    When "BLFMan Forward" disable all forwards
+    When "BLFMan Forward" disables all forwards
     Then "BLFMan Forward" has all forwards hints disabled
 
-    When "BLFMan Forward" enable forwarding on no-answer to "4321"
+    When "BLFMan Forward" enables forwarding on no-answer to "4321"
     Then "BLFMan Forward" has function key "1" hint enabled
     Then "BLFMan Forward" has function key "2" hint disabled
 
-    When "BLFMan Forward" enable unconditional forwarding to "8765"
+    When "BLFMan Forward" enables unconditional forwarding to "8765"
     Then "BLFMan Forward" has function key "3" hint enabled
     Then "BLFMan Forward" has function key "4" hint disabled
 
-    When "BLFMan Forward" enable forwarding on busy to "2109"
+    When "BLFMan Forward" enables forwarding on busy to "2109"
     Then "BLFMan Forward" has function key "5" hint enabled
     Then "BLFMan Forward" has function key "6" hint disabled
 
@@ -39,12 +39,12 @@ Feature: Function Key BLF
       | position | blf  | destination_type | destination_service |
       | 1        | true | service          | enablednd           |
       | 2        | true | service          | incallfilter        |
-    When "BLFMan Service" enable DND
+    When "BLFMan Service" enables DND
     Then "BLFMan Service" has function key "1" hint enabled
-    When "BLFMan Service" disable DND
+    When "BLFMan Service" disables DND
     Then "BLFMan Service" has function key "1" hint disabled
 
-    When "BLFMan Service" enable incoming call filtering
+    When "BLFMan Service" enables incoming call filtering
     Then "BLFMan Service" has function key "2" hint enabled
-    When "BLFMan Service" disable incoming call filtering
+    When "BLFMan Service" disables incoming call filtering
     Then "BLFMan Service" has function key "2" hint disabled

@@ -41,10 +41,10 @@ Feature: Agent
       | position | destination_type | destination_agent | destination_action |
       | 1        | agent            | 1003              | login              |
       | 2        | agent            | 1003              | logout             |
-    When "User 003" press function key "1"
+    When "User 003" presses function key "1"
     When I wait 3 seconds for the call processing
     Then the agent "1003" is logged
-    When "User 003" press function key "2"
+    When "User 003" presses function key "2"
     When I wait 3 seconds for the call processing
     Then the agent "1003" is not logged
 
@@ -58,10 +58,10 @@ Feature: Agent
     Given "User 003" has function keys:
       | position | destination_type | destination_agent | destination_action |
       | 1        | agent            | 1003              | toggle             |
-    When "User 003" press function key "1"
+    When "User 003" presses function key "1"
     When I wait 3 seconds for the call processing
     Then the agent "1003" is logged
-    When "User 003" press function key "1"
+    When "User 003" presses function key "1"
     When I wait 3 seconds for the call processing
     Then the agent "1003" is not logged
 
@@ -74,14 +74,14 @@ Feature: Agent
     Given there are queues with infos:
       | name | label | exten | context |
       | Pare | House | 3801  | default |
-    Given queue "Pare" has agent "1802" with penalty "1"
-    Given queue "Pare" has agent "1803" with penalty "5"
+    Given queue "Pare" has agent "1802" with penalty 1
+    Given queue "Pare" has agent "1803" with penalty 5
     Given agent "1802" is logged
     Given agent "1803" is logged
     When "James Bond" calls "3801"
     When I wait 1 seconds for the call processing
     Then "Ti-Me Pare" is ringing
-    Then "Moman Pare" is hungup
+    Then "Moman Pare" is hung up
     When "Ti-Me Pare" hangs up
     Then "Moman Pare" is ringing
     Given "James Bond" hangs up

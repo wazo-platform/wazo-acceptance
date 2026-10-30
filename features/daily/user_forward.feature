@@ -2,8 +2,8 @@ Feature: User Forward
 
   Scenario: Change unconditional forward from phone
     Given there are telephony users with infos:
-      | firstname | lastname | exten  | context |
-      | James     | Bond     | 1101   | default |
+      | firstname | lastname | exten | context |
+      | James     | Bond     | 1101  | default |
     When "James Bond" calls "*211102" and waits until the end
     Then "James Bond" has an "unconditional" forward set to "1102"
     When "James Bond" calls "*211103" and waits until the end
@@ -22,5 +22,5 @@ Feature: User Forward
       | Vincent   | Vega     | 1002  | default |
     Given "Mia Wallace" has an "unconditional" forward set to "1002"
     Given "Vincent Vega" has an "unconditional" forward set to "1001"
-    When "Mia Wallace" calls "1002" and waits "120" seconds to be hung up
-    Then "Mia Wallace" is hungup
+    When "Mia Wallace" calls "1002" and waits 120 seconds to be hung up
+    Then "Mia Wallace" is hung up

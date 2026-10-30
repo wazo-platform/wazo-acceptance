@@ -1,4 +1,4 @@
-# Copyright 2019-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, when
@@ -52,7 +52,7 @@ def given_there_are_queues(context):
             context.confd_client.queues(queue).add_schedule(schedule['id'])
 
 
-@given('queue "{queue_name}" has agent "{agent_number}" with penalty "{penalty}"')
+@given('queue "{queue_name}" has agent "{agent_number}" with penalty {penalty}')
 def given_queue_has_agent_with_penalty(context, queue_name, agent_number, penalty):
     queue = context.helpers.queue.get_by(name=queue_name)
     agent = context.helpers.agent.get_by(number=agent_number)

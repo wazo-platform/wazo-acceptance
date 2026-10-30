@@ -1,20 +1,20 @@
 Feature: Call Generation
 
-  Scenario: Call to inexistant extension
+  Scenario: Call to nonexistent extension
     Given there are telephony users with infos:
       | firstname | exten | context |
       | Alice     | 1100  | default |
     When "Alice" calls "1190"
-    Then "Alice" is hungup immediately
+    Then "Alice" is hung up immediately
 
-  Scenario: Call to existant extension with answer
+  Scenario: Call to existing extension with answer
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
       | Alice     | 1100     | 1100  | default |
       | Bob       | 1101     | 1101  | default |
     When a call is started:
-      | caller      | dial | callee      | talk_time | hangup |
-      | Alice 1100  | 1101 | Bob 1101    | 3         | callee |
+      | caller     | dial | callee   | talk_time | hangup |
+      | Alice 1100 | 1101 | Bob 1101 | 3         | callee |
     Then I have the last call log matching:
       | destination_extension | duration | answered |
       | 1101                  | 3        | True     |
@@ -62,13 +62,13 @@ Feature: Call Generation
     Then "Clark Kent" call is not "on_hold"
     Then "Bruce Wayne" call is not "on_hold"
 
-    When "Clark Kent" puts his call on hold
+    When "Clark Kent" puts their call on hold
     Then "Clark Kent" call is "on_hold"
     Then "Bruce Wayne" call is not "on_hold"
     Then I receive a "MusicOnHoldStart" event
     Then I receive no "MusicOnHoldStop" event
 
-    When "Clark Kent" resumes his call
+    When "Clark Kent" resumes their call
     Then "Clark Kent" call is not "on_hold"
     Then "Bruce Wayne" call is not "on_hold"
     Then I receive a "MusicOnHoldStop" event
@@ -83,10 +83,10 @@ Feature: Call Generation
       | line1 | 1002  | default | yes        |
       | line2 | 1002  | default | yes        |
     Given "Donald Trump" calls "1002"
-    When "Darth Vader" answers on its contact "1"
-    When "Darth Vader" relocates its call to its contact "2"
-    When "Darth Vader" answers on its contact "2"
-    Then "Darth Vader" is talking to "Donald Trump" on its contact "2"
+    When "Darth Vader" answers on their contact "1"
+    When "Darth Vader" relocates their call to their contact "2"
+    When "Darth Vader" answers on their contact "2"
+    Then "Darth Vader" is talking to "Donald Trump" on their contact "2"
 
   Scenario: Bus messages on hold and resume
     Given there are telephony users with infos:
@@ -99,20 +99,20 @@ Feature: Call Generation
       | call_resumed |
     Given "Marty McFly" calls "1002"
     Given "George McFly" answers
-    When "George McFly" puts his call on hold
+    When "George McFly" puts their call on hold
     Then I receive a "call_held" event
-    When "George McFly" resumes his call
+    When "George McFly" resumes their call
     Then I receive a "call_resumed" event
 
   Scenario: Transfer timeout is respected
     Given there are telephony users with infos:
       | firstname | lastname | exten | context |
-      | Rick      | Sanchez  |  1001 | default |
-      | Morty     | Smith    |  1002 | default |
-      | Mister    | Meeseeks |  1003 | default |
+      | Rick      | Sanchez  | 1001  | default |
+      | Morty     | Smith    | 1002  | default |
+      | Mister    | Meeseeks | 1003  | default |
     Given "Rick Sanchez" calls "1002"
     Given "Morty Smith" answers
     When "Morty Smith" does a blind transfer to "1003@default" with timeout 3 using API
     Then "Mister Meeseeks" is ringing
     When I wait 4 seconds
-    Then "Mister Meeseeks" is hungup
+    Then "Mister Meeseeks" is hung up

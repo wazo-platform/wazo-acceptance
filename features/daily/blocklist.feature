@@ -13,7 +13,7 @@ Feature: user blocklist
     Then "Charlie Blocker" is not ringing
     Then "trunk" hears the sound file "user-unreachable"
     When I wait 6 seconds for the call processing
-    Then "trunk" is hungup
+    Then "trunk" is hung up
 
   Scenario: incall to user not blocked by user blocklist
     Given tenant country is "FR"

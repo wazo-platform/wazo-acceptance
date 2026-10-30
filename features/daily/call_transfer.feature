@@ -23,7 +23,7 @@ Feature: Call transfer
     Then "User B" is ringing
 
     When "User B" answers
-    Then "User A" is hungup
+    Then "User A" is hung up
 
     When "User C" calls "1801"
     Then "User A" is ringing
@@ -35,14 +35,14 @@ Feature: Call transfer
     Then "User D" is ringing
 
     When "User D" answers
-    Then "User A" is hungup
+    Then "User A" is hung up
 
     Then "User B" is talking
     Then "User C" is talking
     Then "User D" is talking
 
     When "User D" hangs up
-    Then "User C" is hungup
+    Then "User C" is hung up
     Then "User B" is talking
 
   Scenario: Complete attended transfer, cancel transfer and parking recovery
@@ -69,10 +69,10 @@ Feature: Call transfer
     Then "incall" is holding
     Then "User B" is ringing
 
-    When "User A" cancel the transfer with API
+    When "User A" cancels the transfer with API
     Then "User A" is talking
     Then "incall" is talking
-    Then "User B" is hungup
+    Then "User B" is hung up
 
     When "User A" does an attended transfer to "1802@default" with API
     Then "User A" is talking
@@ -87,14 +87,14 @@ Feature: Call transfer
     When "User B" hangs up
     Then "User A" is talking
     Then "incall" is talking
-    Then "User B" is hungup
+    Then "User B" is hung up
 
     When I wait 0.5 seconds for the transfer lock release
     When "User A" does an attended transfer to "1850@default" with API
-    When "User A" complete the transfer with API
-    Then "User A" is hungup
+    When "User A" completes the transfer with API
+    Then "User A" is hung up
     Then "incall" is talking
-    Then "User B" is hungup
+    Then "User B" is hung up
 
     When "User A" calls "1851"
     When I wait 1 seconds for the call processing
@@ -107,7 +107,7 @@ Feature: Call transfer
     Then "incall" is talking
     Then "User B" is talking
 
-    When "User A" complete the transfer with API
-    Then "User A" is hungup
+    When "User A" completes the transfer with API
+    Then "User A" is hung up
     Then "incall" is talking
     Then "User B" is talking

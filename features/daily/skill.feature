@@ -12,19 +12,19 @@ Feature: Skill
       | name    | definition                 |
       | english | english > 90               |
       | french  | french > 0 \| french < 100 |
-    Given agent "1801" has skill "english" with weight "95"
-    Given agent "1802" has skill "french" with weight "50"
+    Given agent "1801" has skill "english" with weight 95
+    Given agent "1802" has skill "french" with weight 50
     Given there is an incall "3851@from-extern" to the queue "lobby" with skill "english"
     Given there is an incall "3852@from-extern" to the queue "lobby" with skill "french"
     Given agent "1801" is logged
     Given agent "1802" is logged
     When chan_test calls "3851@from-extern"
     Then "English Man" is ringing
-    Then "French Potato" is hungup
+    Then "French Potato" is hung up
     Given "English Man" hangs up
     When chan_test calls "3852@from-extern"
     Then "French Potato" is ringing
-    Then "English Man" is hungup
+    Then "English Man" is hung up
 
   Scenario: Skill rules based routing
     Given there are telephony users with infos:
@@ -40,41 +40,41 @@ Feature: Skill
       | WT < 10, english > 89 |
       | WT < 20, english > 79 |
       | english > 69          |
-    Given agent "1801" has skill "english" with weight "90"
-    Given agent "1802" has skill "english" with weight "80"
-    Given agent "1803" has skill "english" with weight "70"
+    Given agent "1801" has skill "english" with weight 90
+    Given agent "1802" has skill "english" with weight 80
+    Given agent "1803" has skill "english" with weight 70
     Given there is an incall "3801@from-extern" to the queue "lobby" with skill "waiting"
     Given agent "1801" is logged
     Given agent "1802" is logged
     Given agent "1803" is logged
     When chan_test calls "3801@from-extern"
     Then "English High" is ringing
-    Then "English Medium" is hungup
-    Then "English Low" is hungup
+    Then "English Medium" is hung up
+    Then "English Low" is hung up
     When I wait 11 seconds to simulate call center
     Then "English High" is ringing
-    Then "English Medium" is hungup
-    Then "English Low" is hungup
+    Then "English Medium" is hung up
+    Then "English Low" is hung up
     Then "English High" answers
 
     When chan_test calls "3801@from-extern"
     Then "English High" is talking
-    Then "English Medium" is hungup
-    Then "English Low" is hungup
+    Then "English Medium" is hung up
+    Then "English Low" is hung up
     When I wait 10 seconds to simulate call center
     Then "English High" is talking
     Then "English Medium" is ringing
-    Then "English Low" is hungup
+    Then "English Low" is hung up
     Then "English Medium" answers
 
     When chan_test calls "3801@from-extern"
     Then "English High" is talking
     Then "English Medium" is talking
-    Then "English Low" is hungup
+    Then "English Low" is hung up
     When I wait 10 seconds to simulate call center
     Then "English High" is talking
     Then "English Medium" is talking
-    Then "English Low" is hungup
+    Then "English Low" is hung up
     When I wait 10 seconds to simulate call center
     Then "English High" is talking
     Then "English Medium" is talking
@@ -87,6 +87,6 @@ Feature: Skill
     Then "English Low" is talking
     Then "English Medium" hangs up
     When I wait 5 seconds to simulate call center
-    Then "English Medium" is hungup
+    Then "English Medium" is hung up
     When I wait 5 seconds to simulate call center
     Then "English Medium" is ringing

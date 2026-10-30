@@ -1,14 +1,8 @@
-from behave import given, step, then
-from hamcrest import assert_that, contains_inanyorder, has_entries
+# Copyright 2025-2026 The Wazo Authors  (see the AUTHORS file)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
-
-@step('the user "{firstname} {lastname}" adds number "{number}" with label "{label}" to their blocklist')
-def step_user_adds_number_with_label_to_blocklist(context, firstname, lastname, number, label):
-    tracking_id = f"{firstname} {lastname}".strip()
-    user_token = context.helpers.token.get(tracking_id)['token']
-    with context.helpers.utils.set_token(context.confd_client, user_token):
-        body = {'number': number, 'label': label}
-        context.confd_client.users.my_blocklist.numbers.create(body)
+from behave import given
+from hamcrest import assert_that, has_entries
 
 
 @given('the user "{firstname} {lastname}" has a blocklist with:')
@@ -20,27 +14,6 @@ def given_user_has_blocklist_with(context, firstname, lastname):
         for row in context.table:
             body = {'number': row['number'], 'label': row['label']}
             context.confd_client.users.my_blocklist.numbers.create(body)
-
-
-@then('the user "{firstname} {lastname}" has a blocklist with:')
-def step_user_has_blocklist_with(context, firstname, lastname):
-    context.table.require_columns(['label', 'number'])
-    expected_blocklist = [row.as_dict() for row in context.table]
-    tracking_id = f"{firstname} {lastname}".strip()
-    user_token = context.helpers.token.get(tracking_id)['token']
-    with context.helpers.utils.set_token(context.confd_client, user_token):
-        blocklist = context.confd_client.users.my_blocklist.numbers.list()
-        expected_blocklist_matchers = (
-            has_entries(blocked_number)
-            for blocked_number in expected_blocklist
-        )
-        assert_that(
-            blocklist,
-            has_entries(
-                items=contains_inanyorder(*expected_blocklist_matchers),
-                total=len(expected_blocklist),
-            ),
-        )
 
 
 @given('tenant country is "{country}"')

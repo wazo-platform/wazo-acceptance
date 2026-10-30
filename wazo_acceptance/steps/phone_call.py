@@ -1,11 +1,11 @@
-# Copyright 2013-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2013-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import time
 
 from ari.exceptions import ARINotFound
 from behave import step, then, when
-from hamcrest import assert_that, has_length, not_
+from hamcrest import assert_that, has_length
 from wazo_test_helpers import until
 
 CHAN_PREFIX = 'PJSIP'
@@ -30,7 +30,7 @@ def step_user_is_ringing_showing_callerid(context, tracking_id, callerid):
     until.true(phone.is_ringing_showing, callerid, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is ringing on its contact "{contact_number}"')
+@step('"{tracking_id}" is ringing on their contact "{contact_number}"')
 def step_user_is_ringing_on_contact_number(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     until.true(phone.is_ringing, tries=NB_RETRY)
@@ -48,20 +48,20 @@ def step_user_is_holding(context, tracking_id):
     until.true(phone.is_holding, context, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is hungup')
-def step_user_is_hungup(context, tracking_id):
+@step('"{tracking_id}" is hung up')
+def step_user_is_hung_up(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     until.true(phone.is_hungup, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is hungup on its contact "{contact_number}"')
-def step_user_is_hungup_on_its_contact(context, tracking_id, contact_number):
+@step('"{tracking_id}" is hung up on their contact "{contact_number}"')
+def step_user_is_hung_up_on_their_contact(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     until.true(phone.is_hungup, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is hungup immediately')
-def step_user_is_hungup_immediately(context, tracking_id):
+@step('"{tracking_id}" is hung up immediately')
+def step_user_is_hung_up_immediately(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     time.sleep(1)
     phone.is_hungup()
@@ -73,7 +73,7 @@ def step_user_is_talking(context, tracking_id):
     until.true(phone.is_talking, tries=NB_RETRY)
 
 
-@step('"{tracking_id}" is talking to "{other_party_id}" on its contact "{contact_number}"')
+@step('"{tracking_id}" is talking to "{other_party_id}" on their contact "{contact_number}"')
 def step_user_is_talking_to_other_party_with_contact(context, tracking_id, other_party_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     until.true(phone.is_talking, tries=NB_RETRY)
@@ -92,8 +92,8 @@ def step_user_answers(context, tracking_id):
     phone.answer()
 
 
-@step('"{tracking_id}" answers on its contact "{contact_number}"')
-def step_user_answers_on_its_contact(context, tracking_id, contact_number):
+@step('"{tracking_id}" answers on their contact "{contact_number}"')
+def step_user_answers_on_their_contact(context, tracking_id, contact_number):
     phone = context.phone_register.get_phone(tracking_id, int(contact_number) - 1)
     phone.answer()
 
@@ -111,14 +111,14 @@ def step_a_calls_exten_and_waits_until_the_end(context, tracking_id, exten):
     until.true(phone.is_hungup, tries=10)
 
 
-@step('"{tracking_id}" calls "{exten}" and waits "{time}" seconds to be hung up')
+@step('"{tracking_id}" calls "{exten}" and waits {time} seconds to be hung up')
 def step_a_calls_exten_and_waits_for_x_seconds(context, tracking_id, exten, time):
     phone = context.phone_register.get_phone(tracking_id)
     phone.call(exten)
     until.true(phone.is_hungup, tries=int(time))
 
 
-@step('"{tracking_id}" puts his call on hold')
+@step('"{tracking_id}" puts their call on hold')
 def step_user_puts_call_on_hold(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     phone.hold()
@@ -126,20 +126,20 @@ def step_user_puts_call_on_hold(context, tracking_id):
     time.sleep(0.5)
 
 
-@step('"{tracking_id}" resumes his call')
+@step('"{tracking_id}" resumes their call')
 def step_user_resumes_call(context, tracking_id):
     phone = context.phone_register.get_phone(tracking_id)
     phone.resume()
 
 
 @step('"{tracking_id}" sends DTMF "{digit}"')
-def when_user_sends_dtmf(context, tracking_id, digit):
+def step_user_sends_dtmf(context, tracking_id, digit):
     phone = context.phone_register.get_phone(tracking_id)
     phone.send_dtmf(digit)
 
 
 @step('"{tracking_id}" sends multiple DTMF "{digits}"')
-def when_user_sends_multiple_dtmf(context, tracking_id, digits):
+def step_user_sends_multiple_dtmf(context, tracking_id, digits):
     phone = context.phone_register.get_phone(tracking_id)
     for digit in digits:
         phone.send_dtmf(digit)
@@ -161,14 +161,6 @@ def when_a_call_is_started(context):
 
     for call_info in context.table:
         _call(**call_info.as_dict())
-
-
-@then('"{tracking_id}" last dialed extension was not found')
-def then_user_last_dialed_extension_was_not_found(context, tracking_id):
-    # XXX(afournier): the fact that the extension does not exist is not a problem for
-    # linphone-daemon. It does not trigger an error.
-    phone = context.phone_register.get_phone(tracking_id)
-    assert_that(not_(phone.is_talking))
 
 
 @when('chan_test calls "{exten}@{exten_context}" with id "{channel_id}"')

@@ -1,4 +1,4 @@
-# Copyright 2021-2025 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2021-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from behave import given, then, when
@@ -45,8 +45,8 @@ def then_switchboard_has_callerid_in_held_calls(context, name, caller_name):
     assert caller_name in (caller_names + caller_numbers)
 
 
-@when('"{firstname} {lastname}" answer queued call "{caller_name}" from switchboard "{name}"')
-def when_user_answer_queued_call_from_switchboard(context, firstname, lastname, caller_name, name):
+@when('"{firstname} {lastname}" answers queued call "{caller_name}" from switchboard "{name}"')
+def when_user_answers_queued_call_from_switchboard(context, firstname, lastname, caller_name, name):
     switchboard = context.helpers.switchboard.get_by(name=name)
     call = context.helpers.switchboard.get_queued_call_by(
         switchboard['uuid'],
@@ -66,8 +66,8 @@ def when_user_answer_queued_call_from_switchboard(context, firstname, lastname, 
     phone.answer()
 
 
-@when('"{firstname} {lastname}" answer held call "{caller_name}" from switchboard "{name}"')
-def when_user_answer_held_call_from_switchboard(context, firstname, lastname, caller_name, name):
+@when('"{firstname} {lastname}" answers held call "{caller_name}" from switchboard "{name}"')
+def when_user_answers_held_call_from_switchboard(context, firstname, lastname, caller_name, name):
     switchboard = context.helpers.switchboard.get_by(name=name)
     call = context.helpers.switchboard.get_held_call_by(
         switchboard['uuid'],
@@ -86,8 +86,8 @@ def when_user_answer_held_call_from_switchboard(context, firstname, lastname, ca
     phone.answer()
 
 
-@when('"{firstname} {lastname}" put call "{caller_name}" from switchboard "{name}" on hold')
-def when_user_put_call_from_switchboard_on_hold(context, firstname, lastname, caller_name, name):
+@when('"{firstname} {lastname}" puts call "{caller_name}" from switchboard "{name}" on hold')
+def when_user_puts_call_from_switchboard_on_hold(context, firstname, lastname, caller_name, name):
     switchboard = context.helpers.switchboard.get_by(name=name)
     call = context.helpers.call.get_by(user_uuid=None, caller_id_number=caller_name)
     context.calld_client.switchboards.hold_call(switchboard['uuid'], call['call_id'])

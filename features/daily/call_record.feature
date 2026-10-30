@@ -57,8 +57,8 @@ Feature: Call Record
       | User      | 801      | no                                    | 1801  | default | yes        |
       | User      | 802      | yes                                   | 1802  | default | yes        |
     Given there are telephony groups with infos:
-      | label      | exten | context |
-      | incoming   |  2514 | default |
+      | label    | exten | context |
+      | incoming | 2514  | default |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | Hall     |
@@ -91,8 +91,8 @@ Feature: Call Record
       | User      | Pan      | no                                    | 1800  | default | yes        |
       | User      | 801      | yes                                   | 1801  | default | yes        |
     Given there are telephony groups with infos:
-      | label      | exten | context |
-      | incoming   |  2514 | default |
+      | label    | exten | context |
+      | incoming | 2514  | default |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | Pan      |
@@ -115,8 +115,8 @@ Feature: Call Record
       | User      | 802      | yes                                   | 1802  | default | yes        | 1234         |
     Given agent "1234" is logged
     Given there are queues with infos:
-      | name       | exten | context |
-      | incoming   |  3123 | default |
+      | name     | exten | context |
+      | incoming | 3123  | default |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | Lee      |
@@ -149,8 +149,8 @@ Feature: Call Record
       | User      | Poe      | no                                    | 1800  | default | yes        |
       | User      | 801      | yes                                   | 1801  | default | yes        |
     Given there are queues with infos:
-      | name       | exten | context |
-      | incoming   |  3123 | default |
+      | name     | exten | context |
+      | incoming | 3123  | default |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | Poe      |
@@ -173,14 +173,14 @@ Feature: Call Record
     When "User Brown" calls "1801"
     When "User 801" answers
     When "User Brown" starts call recording
-    Then "User Brown" call is recording status is "active"
-    Then "User 801" call is recording status is "inactive"
+    Then "User Brown" call recording status is "active"
+    Then "User 801" call recording status is "inactive"
     When "User 801" starts call recording
-    Then "User Brown" call is recording status is "active"
-    Then "User 801" call is recording status is "active"
+    Then "User Brown" call recording status is "active"
+    Then "User 801" call recording status is "active"
     When "User Brown" stops call recording
-    Then "User Brown" call is recording status is "inactive"
-    Then "User 801" call is recording status is "active"
+    Then "User Brown" call recording status is "inactive"
+    Then "User 801" call recording status is "active"
 
   Scenario: User to group recording status
     Given there are telephony users with infos:
@@ -188,22 +188,22 @@ Feature: Call Record
       | User      | Smith    | 1800  | default | yes        | yes                        |
       | User      | 801      | 1801  | default | yes        | yes                        |
     Given there are telephony groups with infos:
-      | label      | exten | context | dtmf_record_toggle |
-      | incoming   |  2514 | default | yes                |
+      | label    | exten | context | dtmf_record_toggle |
+      | incoming | 2514  | default | yes                |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | 801      |
     When "User Smith" calls "2514"
     When "User 801" answers
     When "User Smith" starts call recording
-    Then "User Smith" call is recording status is "active"
-    Then "User 801" call is recording status is "inactive"
+    Then "User Smith" call recording status is "active"
+    Then "User 801" call recording status is "inactive"
     When "User 801" starts call recording
-    Then "User Smith" call is recording status is "active"
-    Then "User 801" call is recording status is "active"
+    Then "User Smith" call recording status is "active"
+    Then "User 801" call recording status is "active"
     When "User Smith" stops call recording
-    Then "User Smith" call is recording status is "inactive"
-    Then "User 801" call is recording status is "active"
+    Then "User Smith" call recording status is "inactive"
+    Then "User 801" call recording status is "active"
 
   Scenario: User to queue recording status
     Given there are telephony users with infos:
@@ -211,22 +211,22 @@ Feature: Call Record
       | User      | Ray      | 1800  | default | yes        | yes                        |
       | User      | 801      | 1801  | default | yes        | yes                        |
     Given there are queues with infos:
-      | name       | exten | context | dtmf_record_toggle |
-      | incoming   |  3123 | default | yes                |
+      | name     | exten | context | dtmf_record_toggle |
+      | incoming | 3123  | default | yes                |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | 801      |
     When "User Ray" calls "3123"
     When "User 801" answers
     When "User Ray" starts call recording
-    Then "User Ray" call is recording status is "active"
-    Then "User 801" call is recording status is "inactive"
+    Then "User Ray" call recording status is "active"
+    Then "User 801" call recording status is "inactive"
     When "User 801" starts call recording
-    Then "User Ray" call is recording status is "active"
-    Then "User 801" call is recording status is "active"
+    Then "User Ray" call recording status is "active"
+    Then "User 801" call recording status is "active"
     When "User Ray" stops call recording
-    Then "User Ray" call is recording status is "inactive"
-    Then "User 801" call is recording status is "active"
+    Then "User Ray" call recording status is "inactive"
+    Then "User 801" call recording status is "active"
 
   Scenario: Incoming call to user
     Given there are telephony users with infos:
@@ -237,11 +237,11 @@ Feature: Call Record
     When incoming call received from "5551231234" to "1800@from-extern"
     Given I listen on the bus for "call_log_created" messages
     When "User Boucher" answers
-    Then "User Boucher" call is recording status is "active"
+    Then "User Boucher" call recording status is "active"
     When "User Boucher" stops call recording
-    Then "User Boucher" call is recording status is "inactive"
+    Then "User Boucher" call recording status is "inactive"
     When "User Boucher" starts call recording
-    Then "User Boucher" call is recording status is "active"
+    Then "User Boucher" call recording status is "active"
     When "User Boucher" hangs up
     Then I receive a "call_log_created" event with data:
       | destination_name |
@@ -253,8 +253,8 @@ Feature: Call Record
       | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled |
       | User      | Baker    | 1800  | default | yes        | yes                                   |
     Given there are telephony groups with infos:
-      | label      | exten | context | dtmf_record_toggle |
-      | incoming   |  2514 | default | yes                |
+      | label    | exten | context | dtmf_record_toggle |
+      | incoming | 2514  | default | yes                |
     Given the telephony group "incoming" has users:
       | firstname | lastname |
       | User      | Baker    |
@@ -263,11 +263,11 @@ Feature: Call Record
     When incoming call received from "5551231234" to "2514@from-extern"
     Given I listen on the bus for "call_log_created" messages
     When "User Baker" answers
-    Then "User Baker" call is recording status is "active"
+    Then "User Baker" call recording status is "active"
     When "User Baker" stops call recording
-    Then "User Baker" call is recording status is "inactive"
+    Then "User Baker" call recording status is "inactive"
     When "User Baker" starts call recording
-    Then "User Baker" call is recording status is "active"
+    Then "User Baker" call recording status is "active"
     When "User Baker" hangs up
     Then I receive a "call_log_created" event with data:
       | destination_name |
@@ -279,8 +279,8 @@ Feature: Call Record
       | firstname | lastname | exten | context | with_phone | call_record_incoming_external_enabled |
       | User      | Anderson | 1800  | default | yes        | yes                                   |
     Given there are queues with infos:
-      | name       | exten | context | dtmf_record_toggle |
-      | incoming   |  3123 | default | yes                |
+      | name     | exten | context | dtmf_record_toggle |
+      | incoming | 3123  | default | yes                |
     Given the queue "incoming" has users:
       | firstname | lastname |
       | User      | Anderson |
@@ -289,11 +289,11 @@ Feature: Call Record
     When incoming call received from "5551231234" to "3123@from-extern"
     Given I listen on the bus for "call_log_created" messages
     When "User Anderson" answers
-    Then "User Anderson" call is recording status is "active"
+    Then "User Anderson" call recording status is "active"
     When "User Anderson" stops call recording
-    Then "User Anderson" call is recording status is "inactive"
+    Then "User Anderson" call recording status is "inactive"
     When "User Anderson" starts call recording
-    Then "User Anderson" call is recording status is "active"
+    Then "User Anderson" call recording status is "active"
     When "User Anderson" hangs up
     Then I receive a "call_log_created" event with data:
       | destination_name |
