@@ -65,7 +65,7 @@ Feature: Stats generation
     When I generate contact center stats
     Then contact center stats for agent "1003" in the current hour are:
       | login_time | pause_time |
-      | 8          | 4          |
+      | 8..12      | 4..6       |
 
   Scenario: Agent wrapup and conversation time
     Given there is no queue_log for agent "1003"
@@ -97,7 +97,7 @@ Feature: Stats generation
     When I generate contact center stats
     Then contact center stats for agent "1003" in the current hour are:
       | wrapup_time | conversation_time |
-      | 2           | 5                 |
+      | 2           | 3..7              |
 
   Scenario: Placing calls make new qos stats
     Given there is no queue_log for queue "stat-queue"

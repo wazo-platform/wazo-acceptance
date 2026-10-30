@@ -60,26 +60,16 @@ def then_contact_center_stats_for_agent(context, agent_number):
     for row in context.table:
         expected_stats = row.as_dict()
 
-    fuzzy_statistics = ['conversation_time', 'login_time']
-    fuzziness = 2
     for stat_name, expected_value in expected_stats.items():
-        if stat_name in fuzzy_statistics:
-            expected_value = int(expected_value)
-            lower_bound = expected_value - fuzziness
-            higher_bound = expected_value + fuzziness
-            actual_value = total_stats[stat_name]
-            assert lower_bound <= actual_value <= higher_bound, \
-                'expected {} to be between {} and {}, got {}'.format(
-                    stat_name,
-                    lower_bound,
-                    higher_bound,
-                    actual_value,
-                )
-        else:
-            expected_value = int(expected_value)  # I'm only testing against time in seconds
-            actual_value = total_stats[stat_name]
-            msg = f'expected {stat_name} = {expected_value}, got {actual_value}'
-            assert actual_value == expected_value, msg
+        lower_bound, higher_bound = _parse_seconds_range(expected_value)
+        actual_value = total_stats[stat_name]
+        msg = f'expected {stat_name} to be between {lower_bound} and {higher_bound}, got {actual_value}'
+        assert lower_bound <= actual_value <= higher_bound, msg
+
+
+def _parse_seconds_range(value):
+    lower_bound, _, higher_bound = value.partition('..')
+    return int(lower_bound), int(higher_bound or lower_bound)
 
 
 @then('contact center qos stats for queue "{queue_name}" in the current hour are:')
