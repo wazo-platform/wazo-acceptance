@@ -18,6 +18,10 @@ Feature: Call Generation
     Then I have the last call log matching:
       | destination_extension | duration | answered |
       | 1101                  | 3        | True     |
+    Then the last call log has participants:
+      | role        | user       |
+      | source      | Alice 1100 |
+      | destination | Bob 1101   |
 
   Scenario: No answer destination with disabled forward exten on no answer
     Given the "fwdrna" extension is disabled

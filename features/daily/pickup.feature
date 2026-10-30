@@ -95,6 +95,14 @@ Feature: Pickup
     Then "User 143" is ringing
     When "User 148" calls "*8"
     Then "User 148" is talking
+    When "User 148" hangs up
+    # BUG-687: destination_name is the pickup target, not the destination participant
+    Then I have the last call log matching:
+      | source_name    | destination_name | destination_extension | answered |
+      | chan-test-name | User 143         | 1143                  | True     |
+    Then the last call log has participants:
+      | role        | user     |
+      | destination | User 148 |
 
   Scenario: Directed pickup
     Given the direct pickup is enabled with "*8"
