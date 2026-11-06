@@ -72,8 +72,8 @@ Feature: Call Record
     When I wait 1 seconds for the call processing
     When "User 801" hangs up
     Then I receive a "call_log_created" event with data:
-      | source_name | destination_name |
-      | User 801    | incoming         |
+      | source_name | requested_name | destination_name |
+      | User 801    | incoming       | User Hall        |
     Then "User 801" has a call recording with "User Hall"
     Given "User 802" has no call recording
     When "User 801" calls "2514"
@@ -81,8 +81,8 @@ Feature: Call Record
     When I wait 1 seconds for the call processing
     When "User 801" hangs up
     Then I receive a "call_log_created" event with data:
-      | source_name | destination_name |
-      | User 801    | incoming         |
+      | source_name | requested_name | destination_name |
+      | User 801    | incoming       | User 802         |
     Then "User 801" has a call recording with "User 802"
 
   Scenario: Group calls should be recorded if the caller is configured to be recorded
@@ -103,8 +103,8 @@ Feature: Call Record
     When I wait 1 seconds for the call processing
     When "User 801" hangs up
     Then I receive a "call_log_created" event with data:
-      | source_name | destination_name |
-      | User 801    | incoming         |
+      | source_name | requested_name | destination_name |
+      | User 801    | incoming       | User Pan         |
     Then "User 801" has a call recording with "User Pan"
 
   Scenario: Queue calls should be recorded if the answerer is configured to be recorded
@@ -270,8 +270,8 @@ Feature: Call Record
     Then "User Baker" call recording status is "active"
     When "User Baker" hangs up
     Then I receive a "call_log_created" event with data:
-      | destination_name |
-      | incoming         |
+      | requested_name | destination_name |
+      | incoming       | User Baker       |
     Then "User Baker" has 2 call recordings from incoming call "5551231234"
 
   Scenario: Incoming call to queue
