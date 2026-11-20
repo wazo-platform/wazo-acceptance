@@ -1,5 +1,8 @@
 # wazo-acceptance
 
+**DO NOT MERGE**: throwaway change to run the acceptance tests against
+https://github.com/wazo-platform/wazo-confd/pull/585.
+
 wazo-acceptance is a testing framework for running automated tests on Wazo Platform.
 These tests are used for testing features before releasing a new version of Wazo Platform.
 
